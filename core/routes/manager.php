@@ -67,6 +67,15 @@ Route::middleware('auth')->group(function () {
                 Route::get('staff/dashboard/{id}', 'staffLogin')->name('stafflogin');
             });
 
+            //Manage section
+            Route::controller('SectionController')->name('section.')->prefix('section')->group(function () {
+                Route::get('create', 'create')->name('create');
+                Route::get('list', 'index')->name('index');
+                Route::post('store', 'store')->name('store');
+                Route::get('edit/{id}', 'edit')->name('edit');
+                Route::post('update/{id}', 'update')->name('update');
+            });
+
             //Manage Producteur
             Route::controller('ProducteurController')->name('traca.producteur.')->prefix('producteur')->group(function () {
                 Route::get('list', 'index')->name('index');
