@@ -15,4 +15,8 @@ class Cooperative extends Model
         return $this->hasMany(User::class,'cooperative_id','id');
 
     }
+    public function sections()
+    {
+        return $this->hasMany(Section::class, 'cooperative_id', 'id');
+    }
 }

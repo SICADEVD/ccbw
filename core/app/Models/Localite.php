@@ -20,9 +20,12 @@ class Localite extends Model
     {
         return $this->hasMany(Localite_ecoleprimaire::class,'localite_id', 'id');
     }
-
-    public function sections()
+    public function section()
     {
-        return $this->hasMany(Section::class,'localite_id', 'id');
+        return $this->belongsTo(Section::class, 'section_id');
+    }
+    public function producteurs()
+    {
+        return $this->hasMany(Producteur::class, 'localite_id', 'id');
     }
 }

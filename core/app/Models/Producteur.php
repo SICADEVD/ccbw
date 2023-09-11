@@ -13,16 +13,9 @@ class Producteur extends Model
 
     protected $guarded = [];
 
-    // protected $fillable = [
-    //     'userid',
-    //     'age18'
-    // ];
-
     public function localite()
     {
         return $this->belongsTo(Localite::class, 'localite_id');
     }
     
-     
-     
 }

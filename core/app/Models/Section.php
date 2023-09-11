@@ -14,8 +14,12 @@ class Section extends Model
 
     protected $guarded = [];
 
-    public function localite()
+    public function cooperative()
     {
-        return $this->belongsTo(Localite::class, 'localite_id');
+        return $this->belongsTo(Cooperative::class, 'cooperative_id');
+    }
+    public function localites()
+    {
+        return $this->hasMany(Localite::class, 'section_id', 'id');
     }
 }
