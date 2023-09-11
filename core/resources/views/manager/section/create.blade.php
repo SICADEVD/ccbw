@@ -8,12 +8,12 @@
           {!! Form::open(array('route' => ['manager.section.store'],'method'=>'POST','class'=>'form-horizontal', 'id'=>'flocal', 'enctype'=>'multipart/form-data')) !!}   
 
             <div class="form-group row">
-              <label class="col-xs-12 col-sm-4">@lang('Select Localite')</label>
+              <label class="col-xs-12 col-sm-4">@lang('Select Cooperative')</label>
               <div class="col-xs-12 col-sm-8">
-                <select class="form-control" name="localite_id" required> 
-                  @foreach($localites as $localite)
-                    <option value="{{ $localite->id }}" @selected(old('localite'))>
-                      {{ __($localite->nom) }}
+                <select class="form-control" name="cooperative_id" required> 
+                  @foreach($cooperatives as $cooperative)
+                    <option value="{{ $cooperative->id }}" @selected(old('cooperative'))>
+                      {{ __($cooperative->name) }}
                     </option>
                   @endforeach
                 </select>

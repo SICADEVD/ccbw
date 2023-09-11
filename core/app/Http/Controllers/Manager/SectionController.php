@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreSectionRequest;
 use App\Http\Requests\UpdateSectionRequest;
+use App\Models\Cooperative;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class SectionController extends Controller
@@ -15,17 +16,19 @@ class SectionController extends Controller
     public function index()
     {
         $pageTitle = "Gestion des sections"; 
-        $sections = Section::orderBy('created_at','desc')->with('localite')->paginate(getPaginate());
-        $localites = Localite::active()->orderBy('nom')->get();
+        $manager   = auth()->user();
+        $cooperatives = Cooperative::active()->where('id',$manager->cooperative_id)->get();
+        $sections = Section::orderBy('created_at','desc')->with('cooperative')->paginate(getPaginate());
         
-        return view('manager.section.index',compact('pageTitle','sections','localites'));
+        return view('manager.section.index',compact('pageTitle','cooperatives','sections'));
     }
 
     public function create()
     {
         $pageTitle = "Ajouter une section";
-        $localites = Localite::active()->orderBy('nom')->get();
-        return view('manager.section.create', compact('pageTitle','localites'));
+        $manager   = auth()->user();
+        $cooperatives  = Cooperative::active()->where('id',$manager->cooperative_id)->orderBy('name')->get();
+        return view('manager.section.create', compact('pageTitle','cooperatives'));
     }
 
     public function store(StoreSectionRequest $request){
@@ -43,8 +46,9 @@ class SectionController extends Controller
 
         try {
             $section = Section::findOrFail($id);
-            $localites = Localite::active()->orderBy('nom')->get();
-            return view('manager.section.edit', compact('pageTitle','section','localites'));
+            $manager   = auth()->user();
+            $cooperatives  = Cooperative::active()->where('id',$manager->cooperative_id)->orderBy('name')->get();
+            return view('manager.section.edit', compact('pageTitle','section','cooperatives'));
         } catch (ModelNotFoundException $e) {
             // L'enregistrement n'a pas été trouvé, vous pouvez rediriger ou afficher un message d'erreur
             return redirect()->route('manager.section.index')->with('error', 'La section demandée n\'existe pas.');

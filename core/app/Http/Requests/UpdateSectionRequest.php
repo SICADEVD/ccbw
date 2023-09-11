@@ -24,7 +24,7 @@ class UpdateSectionRequest extends FormRequest
     public function rules()
     {
         return [
-            'localite_id'    => 'required|exists:localites,id',
+           'cooperative_id' =>'required|exists:cooperatives,id',
             'libelle' => 'required|max:255',
         ];
     }
@@ -32,10 +32,10 @@ class UpdateSectionRequest extends FormRequest
     public function messages()
     {
         return [
-            'localite_id.required' => 'La localité est obligatoire',
-            'localite_id.exists' => 'La localité est invalide',
-            'libelle.required' => 'Le libellé est obligatoire',
-            'libelle.max' => 'Le libellé ne doit pas dépasser 255 caractères',
+            'cooperative_id.required' => 'La coopérative est obligatoire',
+            'cooperative_id.exists' => 'La coopérative n\'existe pas',
+            'libelle.required' => 'Le nom de la section est obligatoire',
+            'libelle.max' => 'Le nom de la section ne doit pas dépasser 255 caractères',
         ];
     }
 
@@ -43,7 +43,7 @@ class UpdateSectionRequest extends FormRequest
     {
         return [
             'localite_id' => 'localité',
-            'libelle' => 'libellé',
+            'libelle' => 'Nom de la section',
         ];
     }
 }

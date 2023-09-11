@@ -6,17 +6,18 @@
                 <div class="card-body"> 
                     {!! Form::model($section, ['method' => 'POST','route' => ['manager.section.update', $section->id],'class'=>'form-horizontal', 'id'=>'flocal', 'enctype'=>'multipart/form-data']) !!}
                         <input type="hidden" name="id" value="{{ $section->id }}">
-                            
                         <div class="form-group row">
-                            <label class="col-xs-12 col-sm-4">@lang('Select localite')</label>
+                            <label class="col-xs-12 col-sm-4">@lang('Select Cooperative')</label>
                             <div class="col-xs-12 col-sm-8">
-                                <select class="form-control" name="localite_id"> 
-                                    @foreach ($localites as $localite)
-                                        <option value="{{ $localite->id }}"  @selected($localite->id==$section->localite_id) >{{ __($localite->nom) }}</option>
-                                    @endforeach
+                                <select class="form-control" name="cooperative_id" required> 
+                                @foreach($cooperatives as $cooperative)
+                                    <option value="{{ $cooperative->id }}" @selected($cooperative->id==$section->cooperative_id)>
+                                    {{ __($cooperative->name) }}
+                                    </option>
+                                @endforeach
                                 </select>
                             </div>
-                        </div>
+                        </div>  
                         <div class="form-group row">
                             <?php echo Form::label(__('Nom de la section'), null, ['class' => 'control-label col-xs-12 col-sm-4']); ?>
                             <div class="col-xs-12 col-sm-8">
