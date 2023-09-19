@@ -22,15 +22,21 @@
                     </a>
                 </li>
                 <li class="sidebar-menu-item {{ menuActive('manager.cooperative.localite*') }}">
-                                <a href="{{ route('manager.cooperative.localite.index') }}" class="nav-link">
-                                    <i class="menu-icon las la-code-branch"></i>
-                                    <span class="menu-title">@lang('Gestion des Localites')</span>
-                                </a>
+                    <a href="{{ route('manager.cooperative.localite.index') }}" class="nav-link">
+                        <i class="menu-icon las la-code-branch"></i>
+                        <span class="menu-title">@lang('Gestion des Localites')</span>
+                    </a>
                 </li>
                 <li class="sidebar-menu-item {{ menuActive('manager.section.index') }}">
                     <a href="{{ route('manager.section.index') }}" class="nav-link">
                         <i class="menu-icon las la-code-branch"></i>
                         <span class="menu-title">@lang('Gestion des sections')</span>
+                    </a>
+                </li>
+                <li class="sidebar-menu-item {{ menuActive('manager.durabilite.index') }}">
+                    <a href="{{ route('manager.durabilite.index') }}" class="nav-link">
+                        <i class="menu-icon las la-code-branch"></i>
+                        <span class="menu-title">@lang('Programmes de durabilités')</span>
                     </a>
                 </li>
                 <li class="sidebar-menu-item {{ menuActive('manager.staff.index') }}">

@@ -2,21 +2,23 @@
 
 namespace App\Http\Controllers\Manager;
 
+use Excel;
+use App\Models\Section;
 use App\Constants\Status;
-use App\Exports\ExportProducteurs;
-use App\Http\Controllers\Controller;
-use App\Imports\ProducteurImport;
-use App\Models\Cooperative;
 use App\Models\Localite; 
 use App\Models\Producteur;
-use App\Models\Producteur_info;
-use App\Models\Producteur_infos_maladieenfant;
-use App\Models\Producteur_infos_typeculture;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
+use App\Models\Cooperative;
 use Illuminate\Support\Str;
-use Excel;
+use Illuminate\Http\Request;
+use App\Models\Producteur_info;
+use App\Imports\ProducteurImport;
+use App\Exports\ExportProducteurs;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use App\Models\Producteur_infos_typeculture;
+use App\Models\Producteur_infos_maladieenfant;
+use App\Models\Programme;
 
 class ProducteurController extends Controller
 {
@@ -25,18 +27,24 @@ class ProducteurController extends Controller
     {
         $pageTitle      = "Gestion des producteurs";
         $manager   = auth()->user();
-        $cooperatives = Cooperative::active()->get();
-        $localites = Localite::active()->where('cooperative_id',$manager->cooperative_id)->get();
-        $producteurs = Producteur::dateFilter()->searchable(["nationalite","type_piece","codeProd","codeProdapp","producteurs.nom","prenoms","sexe","dateNaiss","phone1","phone2","niveau_etude","numPiece","consentement","statut","certificat"])->latest('id')->joinRelationship('localite')->where('cooperative_id',$manager->cooperative_id)->where(function ($q) {
+        $cooperative = Cooperative::with('sections.localites')->find($manager->cooperative_id);
+        $localites = $localitesFiltrees = $cooperative->sections->flatMap->localites->filter(function ($localite) {
+            return $localite->active();
+        });
+        $programmes = Programme::all();
+        $producteurs = Producteur::dateFilter()->searchable(["nationalite","type_piece","codeProd","codeProdapp","producteurs.nom","prenoms","sexe","dateNaiss","phone1","niveau_etude","numPiece","consentement","statut","certificat"])->latest('id')->joinRelationship('localite')->where(function ($q) {
             if(request()->localite != null){
                 $q->where('localite_id',request()->localite);
             }
             if(request()->status != null){
                 $q->where('statut',request()->status);
             }
+            if(request()->programme != null){
+                $q->where('programme_id',request()->programme);
+            }
+
         })->with('localite')->paginate(getPaginate());
-        
-        return view('manager.producteur.index', compact('pageTitle', 'producteurs','localites','cooperatives'));
+        return view('manager.producteur.index', compact('pageTitle', 'producteurs','localites','programmes'));
     }
 
     public function infos($id)
@@ -60,8 +68,11 @@ class ProducteurController extends Controller
     public function create()
     {
         $pageTitle = "Ajouter un producteur";
-        $localites  = Localite::active()->where('cooperative_id',auth()->user()->cooperative_id)->orderBy('nom')->get();
-        return view('manager.producteur.create', compact('pageTitle', 'localites'));
+        $manager   = auth()->user();
+        $sections = Section::where('cooperative_id',$manager->cooperative_id)->get();
+        $localites = Localite::active()->with('section')->get();
+        $programmes = Programme::all();
+        return view('manager.producteur.create', compact('pageTitle', 'localites','sections','programmes'));
     }
 
     public function store(Request $request)
@@ -282,9 +293,12 @@ class ProducteurController extends Controller
     public function edit($id)
     {
         $pageTitle = "Mise à jour de la producteur";
-        $localites  = Localite::active()->where('cooperative_id',auth()->user()->cooperative_id)->orderBy('nom')->get();
+        $manager   = auth()->user();
+        $sections = Section::where('cooperative_id',$manager->cooperative_id)->get();
+        $localites = Localite::active()->with('section')->get();
+        $programmes = Programme::all();
         $producteur   = Producteur::findOrFail($id);
-        return view('manager.producteur.edit', compact('pageTitle', 'localites', 'producteur'));
+        return view('manager.producteur.edit', compact('pageTitle', 'localites', 'producteur','programmes','sections'));
     } 
 
     private function generecodeProdApp($nom,$prenoms,$codeApp)

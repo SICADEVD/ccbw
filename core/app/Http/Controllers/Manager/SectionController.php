@@ -64,4 +64,27 @@ class SectionController extends Controller
         $notify[] = ['success', isset($message) ? $message : 'La section a été mise à jour avec succès.'];
         return back()->withNotify($notify);
     }
+    //lister les localités d'une section
+    public function localiteSection($id)
+    {
+        $pageTitle = "Gestion des localités de la section ". Section::find($id)->libelle;
+        $cooperativeLocalites = Localite::active()->where('section_id',$id)->with('section.cooperative')->paginate(getPaginate());
+        return view('manager.localite.index',compact('cooperativeLocalites','pageTitle'));
+    }
+    //traitement pour enregistrer une localité d'une section
+    public function storelocalitesection(){
+
+    }
+
+    //traitement pour modifier une localité d'une section
+    public function updatelocalitesection($id){
+
+    }
+    //affichant le formulaire de modification d'une localité d'une section
+    public function localitesectionedit($id){
+
+    }
+
+
+
 }

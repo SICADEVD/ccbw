@@ -8,6 +8,7 @@ use App\Imports\LocaliteImport;
 use App\Models\Cooperative;
 use App\Models\Localite;
 use App\Models\Localite_ecoleprimaire;
+use App\Models\Section;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -21,23 +22,24 @@ class CooperativeLocaliteController extends Controller
     {
         $pageTitle      = "Gestion des localités"; 
         $manager   = auth()->user();
-        $cooperativeLocalites = Localite::searchable(['nom', 'codeLocal', 'type_localites','sousprefecture','cooperative:name'])->latest('id')->joinRelationship('cooperative')->where('cooperative_id',$manager->cooperative_id)->with('cooperative')->paginate(getPaginate());
+        $cooperativeLocalites = Localite::searchable(['nom', 'codeLocal', 'type_localites','sousprefecture','section:libelle'])->latest('id')->joinRelationship('section')->where('cooperative_id',$manager->cooperative_id)->with('cooperative')->paginate(getPaginate());
         $cooperatives = Cooperative::active()->where('id',$manager->cooperative_id)->get();
-        return view('manager.localite.index', compact('pageTitle', 'cooperativeLocalites','cooperatives'));
+        $sections = Section::all();
+        return view('manager.localite.index', compact('pageTitle', 'cooperativeLocalites','cooperatives','sections'));
     }
 
     public function create()
     {
         $pageTitle = "Ajouter une localité";
         $manager   = auth()->user();
-        $cooperatives  = Cooperative::active()->where('id',$manager->cooperative_id)->orderBy('name')->get();
-        return view('manager.localite.create', compact('pageTitle', 'cooperatives'));
+        $sections = Section::where('cooperative_id',$manager->cooperative_id)->get();
+        return view('manager.localite.create', compact('pageTitle', 'sections','manager'));
     }
 
     public function store(Request $request)
     {
         $validationRule = [
-            'cooperative'    => 'required|exists:cooperatives,id',
+            'section_id'    => 'required|exists:sections,id',
             'nom' => 'required|max:255',
             'type_localites'  => 'required|max:255',
             'sousprefecture'  => 'required|max:255',
@@ -48,11 +50,13 @@ class CooperativeLocaliteController extends Controller
             'marche'  => 'required|max:255',
             'deversementDechets'  => 'required|max:255',
         ];
+
+        $manager   = auth()->user();
  
 
         $request->validate($validationRule);
 
-        $cooperative = Cooperative::where('id', $request->cooperative)->first();
+        $cooperative = $manager->cooperative;
 
         if ($cooperative->status == Status::NO) {
             $notify[] = ['error', 'Cette coopérative est désactivé'];
@@ -66,8 +70,7 @@ class CooperativeLocaliteController extends Controller
             $localite           = new Localite(); 
             $localite->nom = $this->verifylocalite($request->nom);
         } 
- 
-        $localite->cooperative_id = $request->cooperative;
+        $localite->section_id = $request->section_id;
         $localite->nom = $request->nom;
         $localite->type_localites  = $request->type_localites;
         $localite->sousprefecture  = $request->sousprefecture;
@@ -202,9 +205,9 @@ class CooperativeLocaliteController extends Controller
     {
         $pageTitle = "Mise à jour de la localité";
         $manager   = auth()->user();
-        $cooperatives  = Cooperative::active()->where('id',$manager->cooperative_id)->orderBy('name')->get();
         $localite   = Localite::findOrFail($id);
-        return view('manager.localite.edit', compact('pageTitle', 'cooperatives', 'localite'));
+        $sections = Section::where('cooperative_id',$manager->cooperative_id)->get();
+        return view('manager.localite.edit', compact('pageTitle', 'sections', 'localite','manager'));
     } 
 
     public function status($id)

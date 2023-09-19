@@ -21,132 +21,133 @@ class LocaliteImport implements ToCollection, WithHeadingRow, WithValidation
     */
     public function rules(): array
     {
-        return[
-            'nom' => 'required', 
+        return [
+            'nom' => 'required',
         ];
     }
     public function collection(Collection $collection)
     {
         $cooperatives_id = request()->coop_id;
-        $j=0;
-        $k='';
-        if(count($collection)){
- 
-        foreach($collection as $row)
-         { 
+        $j = 0;
+        $k = '';
+        if (count($collection)) {
 
-    $nom = $this->verifylocalite($row['nom']);
-    $codeLocal = $this->generelocalitecode($nom);   
-      
-    $insert_data = array(
-      'cooperative_id' => $cooperatives_id, 
-'codeLocal' => $codeLocal,
-'nom' => $nom,
-'type_localites' => 'N/A',
-'sousprefecture' => 'N/A',
-'centresante' => 'N/A',
-'typecentre' => 'N/A',
-'ecole' => 'N/A',
-'electricite' => 'N/A', 
-'userid' => auth('admin')->user()->id,
-'created_at' => NOW(),
-'updated_at' => NOW() 
-    ); 
+            foreach ($collection as $row) {
 
-  DB::table('localites')->insert($insert_data); 
-      $j++; 
+                $nom = $this->verifylocalite($row['nom']);
+                $codeLocal = $this->generelocalitecode($nom);
 
+                $insert_data = array(
+                    'section_id' => $cooperatives_id,
+                    'codeLocal' => $codeLocal,
+                    'nom' => $nom,
+                    'type_localites' => 'N/A',
+                    'sousprefecture' => 'N/A',
+                    'centresante' => 'N/A',
+                    'typecentre' => 'N/A',
+                    'ecole' => 'N/A',
+                    'electricite' => 'N/A',
+                    'userid' => auth('admin')->check() ? auth('admin')->user()->id : auth()->user()->id,
+                    'created_at' => NOW(),
+                    'updated_at' => NOW()
+                );
+
+                DB::table('localites')->insert($insert_data);
+                $j++;
+            }
+
+            if (!empty($j)) {
+                $notify[] = ['success', "$j Localités ont été crée avec succès."];
+                return back()->withNotify($notify);
+            } else {
+                $notify[] = ['error', "Aucune Localité n'a été ajouté à la base car ils existent déjà."];
+                return back()->withNotify($notify);
+            }
+        } else {
+
+            $notify[] = ['error', "Il n'y a aucune données dans le fichier."];
+            return back()->withNotify($notify);
+        }
     }
 
-    if(!empty($j))
+
+    private function verifylocalite($nom)
     {
-     $notify[] = ['success',"$j Localités ont été crée avec succès."];
-      return back()->withNotify($notify); 
-    }else{
-        $notify[] = ['error',"Aucune Localité n'a été ajouté à la base car ils existent déjà."];
-      return back()->withNotify($notify); 
-   } 
-}else{
-    
-    $notify[] = ['error',"Il n'y a aucune données dans le fichier."];
-      return back()->withNotify($notify); 
-}
-
-    }
-
-
-    private function verifylocalite($nom){
         $action = 'non';
-        do{
-        $data = Localite::select('nom')->where('nom',$nom)->orderby('id','desc')->first();
-        if($data !=''){
+        do {
+            $data = Localite::select('nom')->where('nom', $nom)->orderby('id', 'desc')->first();
+            if ($data != '') {
 
-            $nomLocal = $data->nom; 
-            $nom = Str::beforeLast($nomLocal,' ');
-        $chaine_number = Str::afterLast($nomLocal,' '); 
-       
-        if(is_numeric($chaine_number) && ($chaine_number<10)){$zero="00";}
-        else if(is_numeric($chaine_number) && ($chaine_number<100)){$zero="0";}
-        else{$zero="00";
-            $chaine_number=0;} 
-           
-        $sub=$nom.' ';
-        $lastCode=$chaine_number+1;
-        $nomLocal=$sub.$zero.$lastCode; 
+                $nomLocal = $data->nom;
+                $nom = Str::beforeLast($nomLocal, ' ');
+                $chaine_number = Str::afterLast($nomLocal, ' ');
 
-        }else{
-           
-            $nomLocal=$nom;
-        }
-        $verif = Localite::select('nom')->where('nom',$nomLocal)->orderby('id','desc')->first(); 
-        if($verif ==null){
-            $action = 'non';
-        }else{
-            $action = 'oui';
-            $nom = $verif->nom;
-        }
-        
-        }while($action !='non');
+                if (is_numeric($chaine_number) && ($chaine_number < 10)) {
+                    $zero = "00";
+                } else if (is_numeric($chaine_number) && ($chaine_number < 100)) {
+                    $zero = "0";
+                } else {
+                    $zero = "00";
+                    $chaine_number = 0;
+                }
 
-    return $nomLocal;
+                $sub = $nom . ' ';
+                $lastCode = $chaine_number + 1;
+                $nomLocal = $sub . $zero . $lastCode;
+            } else {
+
+                $nomLocal = $nom;
+            }
+            $verif = Localite::select('nom')->where('nom', $nomLocal)->orderby('id', 'desc')->first();
+            if ($verif == null) {
+                $action = 'non';
+            } else {
+                $action = 'oui';
+                $nom = $verif->nom;
+            }
+        } while ($action != 'non');
+
+        return $nomLocal;
     }
     private function generelocalitecode($name)
     {
         $action = 'non';
-        do{
+        do {
 
-        $data = Localite::select('codeLocal')->where('nom',$name)->orderby('id','desc')->first();
-       
-        if($data !=''){
+            $data = Localite::select('codeLocal')->where('nom', $name)->orderby('id', 'desc')->first();
 
-            $code = $data->codeLocal; 
-            
-        $chaine_number = Str::afterLast($code,'-'); 
-      
-        if($chaine_number<10){$zero="00";}
-        else if($chaine_number<100){$zero="0";}
-        else{$zero="";}
-        }else{
-            $zero="00";
-            $chaine_number=0;
-        }
-         
-        $abrege=Str::upper(Str::substr($name,0,3)); 
-        $sub=$abrege.'-';
-        $lastCode=$chaine_number+1;
-        $codeP=$sub.$zero.$lastCode;
-        
-        $verif = Localite::select('nom')->where('codeLocal',$codeP)->orderby('id','desc')->first(); 
-        if($verif ==null){
-            $action = 'non';
-        }else{
-            $action = 'oui';
-            $name = $verif->nom;
-        }
-        
-        }while($action !='non');
-          
+            if ($data != '') {
+
+                $code = $data->codeLocal;
+
+                $chaine_number = Str::afterLast($code, '-');
+
+                if ($chaine_number < 10) {
+                    $zero = "00";
+                } else if ($chaine_number < 100) {
+                    $zero = "0";
+                } else {
+                    $zero = "";
+                }
+            } else {
+                $zero = "00";
+                $chaine_number = 0;
+            }
+
+            $abrege = Str::upper(Str::substr($name, 0, 3));
+            $sub = $abrege . '-';
+            $lastCode = $chaine_number + 1;
+            $codeP = $sub . $zero . $lastCode;
+
+            $verif = Localite::select('nom')->where('codeLocal', $codeP)->orderby('id', 'desc')->first();
+            if ($verif == null) {
+                $action = 'non';
+            } else {
+                $action = 'oui';
+                $name = $verif->nom;
+            }
+        } while ($action != 'non');
+
         return $codeP;
     }
-    
 }

@@ -17,5 +17,9 @@ class Producteur extends Model
     {
         return $this->belongsTo(Localite::class, 'localite_id');
     }
+    public function programme()
+    {
+        return $this->belongsTo(Programme::class, 'programme_id');
+    }
     
 }

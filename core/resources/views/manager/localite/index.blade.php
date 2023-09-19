@@ -9,6 +9,7 @@
                             <thead>
                                 <tr>
                                     <th>@lang('Cooperative')</th>
+                                    <th>@lang('Section')</th>
                                     <th>@lang('Localite')</th>
                                     <th>@lang('Code Localite')</th>
                                     <th>@lang('Type de localites')</th>
@@ -21,12 +22,15 @@
                                 @forelse($cooperativeLocalites as $localite)
                                     <tr>
                                         <td>
-                                            <span class="fw-bold">{{ __($localite->cooperative->name) }}</span>
+                                            <span class="fw-bold">{{ __($localite->section->cooperative->name) }}</span>
                                         </td>
-                                        <td> 
+                                        <td>
+                                            <span class="fw-bold">{{ __($localite->section->libelle) }}</span>
+                                        </td>
+                                        <td>
                                             <span class="small">
-                                                <a href="{{ route('manager.cooperative.localite.edit', $localite->id) }}">
-                                                    <span>@</span>{{$localite->nom }}
+                                                <a href="">
+                                                    <span>@</span>{{ $localite->nom }}
                                                 </a>
                                             </span>
                                         </td>
@@ -42,9 +46,10 @@
                                         </td>
                                         <td> @php echo $localite->statusBadge; @endphp </td>
                                         <td>
-                                            <button type="button" class="btn btn-sm btn-outline--primary" data-bs-toggle="dropdown" aria-expanded="false"><i
+                                            <button type="button" class="btn btn-sm btn-outline--primary"
+                                                data-bs-toggle="dropdown" aria-expanded="false"><i
                                                     class="las la-ellipsis-v"></i>@lang('Action')
-                                             </button>
+                                            </button>
                                             <div class="dropdown-menu p-0">
                                                 <a href="{{ route('manager.cooperative.localite.edit', $localite->id) }}"
                                                     class="dropdown-item"><i class="la la-pen"></i>@lang('Edit')</a>
@@ -60,7 +65,7 @@
                                                         data-question="@lang('Are you sure to disable this localite?')">
                                                         <i class="la la-eye-slash"></i> @lang('Désactivé')
                                                     </button>
-                                                @endif 
+                                                @endif
                                             </div>
                                         </td>
                                     </tr>
@@ -82,7 +87,7 @@
             </div>
         </div>
     </div>
-    
+
     <div id="typeModel" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -91,32 +96,36 @@
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <i class="las la-times"></i> </button>
                 </div>
-                <form action="{{ route('manager.cooperative.localite.uploadcontent') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('manager.cooperative.localite.uploadcontent') }}" method="POST"
+                    enctype="multipart/form-data">
                     @csrf
-                    <div class="modal-body">   
-                        <p>Fichier d'exemple à utiliser :<a href="{{ asset('assets/localite-import-exemple.xlsx') }}" target="_blank">@lang('localite-import-exemple.xlsx')</a></p>
-                 
-                    <div class="form-group row">
-                                <label class="col-sm-4 control-label">@lang('Type de Formation')</label>
-                                <div class="col-xs-12 col-sm-8">
+                    <div class="modal-body">
+                        <p>Fichier d'exemple à utiliser :
+                            <a href="{{ asset('assets/localite-import-exemple.xlsx') }}" target="_blank">@lang('localite-import-exemple.xlsx')</a>
+                        </p>
+
+                        <div class="form-group row">
+                            <label class="col-sm-4 control-label">@lang('Section')</label>
+                            <div class="col-xs-12 col-sm-8">
                                 <select class="form-control" name="coop_id" required>
                                     <option value="">@lang('Selectionner une option')</option>
-                                    @foreach($cooperatives as $coop)
-                                        <option value="{{ $coop->id }}" @selected(old('cooperative'))>
-                                            {{ __($coop->name) }}</option>
+                                    @foreach ($sections as $coop)
+                                        <option value="{{ $coop->id }}" @selected(old('section'))>
+                                            {{ __($coop->libelle) }}</option>
                                     @endforeach
                                 </select>
-                                </div>
-                            </div> 
+                            </div>
+                        </div>
 
-        <div class="form-group row">
-            {{ Form::label(__('Fichier(.xls, .xlsx)'), null, ['class' => 'control-label col-sm-4']) }}
-            <div class="col-xs-12 col-sm-8 col-md-8">
-            <input type="file" name="uploaded_file" accept=".xls, .xlsx" class="form-control dropify-fr" placeholder="Choisir une image" id="image" required> 
-        </div>
-    </div>
-    
- 
+                        <div class="form-group row">
+                            {{ Form::label(__('Fichier(.xls, .xlsx)'), null, ['class' => 'control-label col-sm-4']) }}
+                            <div class="col-xs-12 col-sm-8 col-md-8">
+                                <input type="file" name="uploaded_file" accept=".xls, .xlsx"
+                                    class="form-control dropify-fr" placeholder="Choisir une image" id="image" required>
+                            </div>
+                        </div>
+
+
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn--primary w-100 h-45 ">@lang('Envoyer')</button>
@@ -124,14 +133,14 @@
                 </form>
             </div>
         </div>
-    </div>  
+    </div>
     <x-confirmation-modal />
 @endsection
 
 @push('breadcrumb-plugins')
     <x-search-form placeholder="Search here..." />
     <a href="{{ route('manager.cooperative.localite.create') }}" class="btn  btn-outline--primary h-45 addNewCooperative">
-        <i class="las la-plus"></i>@lang("Ajouter nouveau")
+        <i class="las la-plus"></i>@lang('Ajouter nouveau')
     </a>
     <a class="btn  btn-outline--info h-45 addType"><i class="las la-cloud-upload-alt"></i> Importer des Localites</a>
 @endpush
@@ -150,9 +159,8 @@
             $('.addType').on('click', function() {
                 $('#typeModel').modal('show');
             });
-              
+
 
         })(jQuery)
     </script>
 @endpush
-

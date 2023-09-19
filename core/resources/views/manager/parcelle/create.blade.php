@@ -119,7 +119,7 @@
 @endpush
 
 @push('script')
-<script type="text/javascript">
-    $("#producteur").chained("#localite");
- </script>
+    <script type="text/javascript">
+        $("#producteur").chained("#localite");
+    </script>
 @endpush

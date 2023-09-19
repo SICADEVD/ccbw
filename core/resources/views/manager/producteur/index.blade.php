@@ -2,11 +2,11 @@
 @section('panel')
     <div class="row">
         <div class="col-lg-12">
-        <div class="card b-radius--10 mb-3">
+            <div class="card b-radius--10 mb-3">
                 <div class="card-body">
                     <form action="">
                         <div class="d-flex flex-wrap gap-4">
-                            <input type="hidden" name="table" value="producteurs"/>
+                            <input type="hidden" name="table" value="producteurs" />
                             <div class="flex-grow-1">
                                 <label>@lang('Recherche par Mot(s) clé(s)')</label>
                                 <input type="text" name="search" value="{{ request()->search }}" class="form-control">
@@ -15,25 +15,36 @@
                                 <label>@lang('Localité')</label>
                                 <select name="localite" class="form-control">
                                     <option value="">@lang('Toutes')</option>
-                                    @foreach($localites as $local)
+                                    @foreach ($localites as $local)
                                     <option value="{{ $local->id }}">{{ $local->nom }}</option>
                                     @endforeach 
                                 </select>
-                            </div> 
+                            </div>
+                            <div class="flex-grow-1">
+                                <label>@lang('Programme')</label>
+                                <select name="programme" class="form-control">
+                                    <option value="">@lang('Tous')</option>
+                                    @foreach ($programmes as $local)
+                                    <option value="{{ $local->id }}">{{ $local->libelle }}</option>
+                                    @endforeach 
+                                </select>
+                            </div>
                             <div class="flex-grow-1">
                                 <label>@lang('Statut')</label>
                                 <select name="status" class="form-control">
-                                    <option value="">@lang('Tous')</option> 
+                                    <option value="">@lang('Tous')</option>
                                     <option value="Candidat">Candidat</option>
                                     <option value="Certifie">Certifie</option>
                                 </select>
-                            </div> 
+                            </div>
                             <div class="flex-grow-1">
                                 <label>@lang('Date')</label>
-                                <input name="date" type="text" class="date form-control" placeholder="@lang('Date de début - Date de fin')" autocomplete="off" value="{{ request()->date }}">
+                                <input name="date" type="text" class="date form-control"
+                                    placeholder="@lang('Date de début - Date de fin')" autocomplete="off" value="{{ request()->date }}">
                             </div>
                             <div class="flex-grow-1 align-self-end">
-                                <button class="btn btn--primary w-100 h-45"><i class="fas fa-filter"></i> @lang('Filter')</button>
+                                <button class="btn btn--primary w-100 h-45"><i class="fas fa-filter"></i>
+                                    @lang('Filter')</button>
                             </div>
                         </div>
                     </form>
@@ -44,7 +55,7 @@
                     <div class="table-responsive--sm table-responsive">
                         <table class="table table--light style--two">
                             <thead>
-                                <tr> 
+                                <tr>
                                     <th>@lang('Localite')</th>
                                     <th>@lang('Code Prod')</th>
                                     <th>@lang('Nom')</th>
@@ -61,15 +72,15 @@
                                 @forelse($producteurs as $producteur)
                                     <tr>
                                         <td>
-                                            <span class="fw-bold">{{ __($producteur->localite->nom) }}</span>
+                                            {{-- <span class="fw-bold">{{ __($producteur->localite->nom) }}</span> --}}
                                         </td>
                                         <td>
                                             <span>{{ $producteur->codeProd }}</span>
                                         </td>
-                                        <td> 
+                                        <td>
                                             <span class="small">
                                                 <a href="{{ route('manager.traca.producteur.edit', $producteur->id) }}">
-                                                    <span>@</span>{{$producteur->nom }}
+                                                    <span>@</span>{{ $producteur->nom }}
                                                 </a>
                                             </span>
                                         </td>
@@ -91,13 +102,15 @@
                                         </td>
                                         <td> @php echo $producteur->statusBadge; @endphp </td>
                                         <td>
-                                        <a href="{{route('manager.traca.producteur.infos', encrypt($producteur->id))}}" class="icon-btn btn--info ml-1">@lang('Infos producteur')</a>
-                                            <button type="button" class="btn btn-sm btn-outline--primary" data-bs-toggle="dropdown" aria-expanded="false"><i
+                                            <a href="{{ route('manager.traca.producteur.infos', encrypt($producteur->id)) }}"
+                                                class="icon-btn btn--info ml-1">@lang('Infos producteur')</a>
+                                            <button type="button" class="btn btn-sm btn-outline--primary"
+                                                data-bs-toggle="dropdown" aria-expanded="false"><i
                                                     class="las la-ellipsis-v"></i>@lang('Action')
-                                             </button>
+                                            </button>
                                             <div class="dropdown-menu p-0">
                                                 <a href="{{ route('manager.traca.producteur.edit', $producteur->id) }}"
-                                                    class="dropdown-item"><i class="la la-pen"></i>@lang('Edit')</a> 
+                                                    class="dropdown-item"><i class="la la-pen"></i>@lang('Edit')</a>
                                                 @if ($producteur->status == Status::DISABLE)
                                                     <button type="button" class="confirmationBtn  dropdown-item"
                                                         data-action="{{ route('manager.traca.producteur.status', $producteur->id) }}"
@@ -110,8 +123,8 @@
                                                         data-question="@lang('Are you sure to disable this producteur?')">
                                                         <i class="la la-eye-slash"></i> @lang('Désactivé')
                                                     </button>
-                                                @endif 
-                                                
+                                                @endif
+
                                             </div>
                                         </td>
                                     </tr>
@@ -142,38 +155,45 @@
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <i class="las la-times"></i> </button>
                 </div>
-                <form action="{{ route('manager.traca.producteur.uploadcontent') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('manager.traca.producteur.uploadcontent') }}" method="POST"
+                    enctype="multipart/form-data">
                     @csrf
-                    <div class="modal-body">   
-                        <p>Fichier d'exemple à utiliser :<a href="{{ asset('assets/producteur-import-exemple.xlsx') }}" target="_blank">@lang('producteur-import-exemple.xlsx')</a></p>
-                    <div class="alert alert-danger">
-          <p><i class="las la-exclamation-triangle"></i> Consignes à respecter avant de charger le fichier :</p>
-              <ul>
-                <li>Assurez-vous que les Localités qui sont dans le fichier sont déjà enregistrées dans la plateforme    dépuis la rubrique Localités</li>
-                <li>Assurez-vous que les Localites qui sont dans le fichier ont été affecté soit aux ADG, PR ou COACHS, DELEGUES,...</li>
-              </ul>
-          </div>
-                    <div class="form-group row">
-                                <label class="col-sm-4 control-label">@lang('Type de Formation')</label>
-                                <div class="col-xs-12 col-sm-8">
+                    <div class="modal-body">
+                        <p>Fichier d'exemple à utiliser :<a href="{{ asset('assets/producteur-import-exemple.xlsx') }}"
+                                target="_blank">@lang('producteur-import-exemple.xlsx')</a></p>
+                        <div class="alert alert-danger">
+                            <p><i class="las la-exclamation-triangle"></i> Consignes à respecter avant de charger le fichier
+                                :</p>
+                            <ul>
+                                <li>Assurez-vous que les Localités qui sont dans le fichier sont déjà enregistrées dans la
+                                    plateforme dépuis la rubrique Localités</li>
+                                <li>Assurez-vous que les Localites qui sont dans le fichier ont été affecté soit aux ADG, PR
+                                    ou COACHS, DELEGUES,...</li>
+                            </ul>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 control-label">@lang('Type de Formation')</label>
+                            <div class="col-xs-12 col-sm-8">
                                 <select class="form-control" name="coop_id" required>
                                     <option value="">@lang('Selectionner une option')</option>
-                                    @foreach($cooperatives as $coop)
+                                    {{-- @foreach ($cooperatives as $coop)
                                         <option value="{{ $coop->id }}" @selected(old('cooperative'))>
                                             {{ __($coop->name) }}</option>
-                                    @endforeach
+                                    @endforeach --}}
                                 </select>
-                                </div>
-                            </div> 
+                            </div>
+                        </div>
 
-        <div class="form-group row">
-            {{ Form::label(__('Fichier(.xls, .xlsx)'), null, ['class' => 'control-label col-sm-4']) }}
-            <div class="col-xs-12 col-sm-8 col-md-8">
-            <input type="file" name="uploaded_file" accept=".xls, .xlsx" class="form-control dropify-fr" placeholder="Choisir une image" id="image" required> 
-        </div>
-    </div>
-    
- 
+                        <div class="form-group row">
+                            {{ Form::label(__('Fichier(.xls, .xlsx)'), null, ['class' => 'control-label col-sm-4']) }}
+                            <div class="col-xs-12 col-sm-8 col-md-8">
+                                <input type="file" name="uploaded_file" accept=".xls, .xlsx"
+                                    class="form-control dropify-fr" placeholder="Choisir une image" id="image"
+                                    required>
+                            </div>
+                        </div>
+
+
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn--primary w-100 h-45 ">@lang('Envoyer')</button>
@@ -181,17 +201,17 @@
                 </form>
             </div>
         </div>
-    </div> 
+    </div>
     <x-confirmation-modal />
 @endsection
 
 @push('breadcrumb-plugins')
-    
     <a href="{{ route('manager.traca.producteur.create') }}" class="btn  btn-outline--primary h-45">
-        <i class="las la-plus"></i>@lang("Ajouter nouveau")
+        <i class="las la-plus"></i>@lang('Ajouter nouveau')
     </a>
     <a class="btn  btn-outline--info h-45 addType"><i class="las la-cloud-upload-alt"></i> Importer des Producteurs</a>
-    <a href="{{ route('manager.traca.producteur.exportExcel.producteurAll') }}" class="btn  btn-outline--warning h-45"><i class="las la-cloud-download-alt"></i> Exporter en Excel</a>
+    <a href="{{ route('manager.traca.producteur.exportExcel.producteurAll') }}" class="btn  btn-outline--warning h-45"><i
+            class="las la-cloud-download-alt"></i> Exporter en Excel</a>
 @endpush
 @push('style')
     <style>
@@ -217,18 +237,18 @@
             });
 
             $('.date').datepicker({
-                maxDate:new Date(),
-                range:true,
-                multipleDatesSeparator:"-",
-                language:'en'
+                maxDate: new Date(),
+                range: true,
+                multipleDatesSeparator: "-",
+                language: 'en'
             });
 
-            let url=new URL(window.location).searchParams;
-            if(url.get('localite') != undefined && url.get('localite') != ''){
-                $('select[name=localite]').find(`option[value=${url.get('localite')}]`).attr('selected',true);
+            let url = new URL(window.location).searchParams;
+            if (url.get('localite') != undefined && url.get('localite') != '') {
+                $('select[name=localite]').find(`option[value=${url.get('localite')}]`).attr('selected', true);
             }
-            if(url.get('status') != undefined && url.get('status') != ''){
-                $('select[name=status]').find(`option[value=${url.get('status')}]`).attr('selected',true);
+            if (url.get('status') != undefined && url.get('status') != '') {
+                $('select[name=status]').find(`option[value=${url.get('status')}]`).attr('selected', true);
             }
 
         })(jQuery)

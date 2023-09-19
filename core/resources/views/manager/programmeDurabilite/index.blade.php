@@ -8,39 +8,31 @@
                         <table class="table table--light style--two">
                             <thead>
                                 <tr>
-                                    <th>@lang('Cooperative')</th>
-                                    <th>@lang('Section')</th>
+                                    <th>@lang('Programme de durabilité')</th>
                                     <th>@lang('Ajoutée le')</th>
-                                     <th>@lang('')</th>
                                     <th>@lang('Action')</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse($sections as $section)
+                                @forelse($programmeDurabilites as $programmeDurabilite)
                                     <tr>
-                                        <td>
-                                            <span class="fw-bold">{{ __($section->cooperative->name) }}</span>
-                                        </td>
                                         <td> 
                                             <span class="small">
-                                                <a href="{{ route('manager.section.edit', $section->id) }}">
-                                                    <span>@</span>{{$section->libelle }}
+                                                <a href="{{ route('manager.durabilite.edit', $programmeDurabilite->id) }}">
+                                                    <span>@</span>{{$programmeDurabilite->libelle }}
                                                 </a>
                                             </span>
                                         </td>
                                         <td>
-                                            <span class="d-block">{{ showDateTime($section->created_at) }}</span>
-                                            <span>{{ diffForHumans($section->created_at) }}</span>
-                                        </td>
-                                        <td>
-                                            <a href="{{route('manager.section.localitesection', $section->id)}}" class="icon-btn btn--info ml-1">@lang('Voir localités')</a>
+                                            <span class="d-block">{{ showDateTime($programmeDurabilite->created_at) }}</span>
+                                            <span>{{ diffForHumans($programmeDurabilite->created_at) }}</span>
                                         </td>
                                         <td>
                                             <button type="button" class="btn btn-sm btn-outline--primary" data-bs-toggle="dropdown" aria-expanded="false"><i
                                                     class="las la-ellipsis-v"></i>@lang('Action')
                                              </button>
                                             <div class="dropdown-menu p-0">
-                                                <a href="{{ route('manager.section.edit', $section->id) }}"
+                                                <a href="{{ route('manager.durabilite.edit', $programmeDurabilite->id) }}"
                                                     class="dropdown-item"><i class="la la-pen"></i>@lang('Edit')
                                                 </a>
                                             </div>
@@ -56,15 +48,15 @@
                         </table>
                     </div>
                 </div>
-                @if ($sections->hasPages())
+                @if ($programmeDurabilites->hasPages())
                     <div class="card-footer py-4">
-                        {{ paginateLinks($sections) }}
+                        {{ paginateLinks($programmeDurabilites) }}
                     </div>
                 @endif
             </div>
         </div>
     </div>
-    {{-- modal qui permet d'importer des sections (besoins d'explication)--}}
+    {{-- modal qui permet d'importer des progragrammes de durabilités (besoins d'explication)--}}
     <div id="typeModel" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -109,10 +101,10 @@
 
 @push('breadcrumb-plugins')
     <x-search-form placeholder="Search here..." />
-    <a href="{{ route('manager.section.create') }}" class="btn  btn-outline--primary h-45 addNewCooperative">
+    <a href="{{ route('manager.durabilite.create') }}" class="btn  btn-outline--primary h-45 addNewCooperative">
         <i class="las la-plus"></i>@lang("Ajouter nouveau")
     </a>
-    <a class="btn  btn-outline--info h-45 addType"><i class="las la-cloud-upload-alt"></i> Importer des Sections</a>
+    <a class="btn  btn-outline--info h-45 addType"><i class="las la-cloud-upload-alt"></i> Importer des programmes de durabilité</a>
 @endpush
 @push('style')
     <style>
