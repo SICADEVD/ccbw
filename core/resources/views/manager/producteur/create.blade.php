@@ -15,7 +15,7 @@
                     <div class="form-group row">
                         <?php echo Form::label(__('Accord de consentement du producteur'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('consentement', ['oui' => 'Oui', 'non' => 'Non'], null, ['class' => 'form-control']); ?>
+                            <?php echo Form::select('consentement', ['oui' => 'Oui', 'non' => 'Non'], null, ['class' => 'form-control',]); ?>
                         </div>
                     </div>
                     {{-- proprietaire --}}
@@ -23,7 +23,7 @@
                     <div class="form-group row">
                         <?php echo Form::label(__('Comment vous vous definissez ?'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('proprietaires', ['Proprietaire' => 'Proprietaire', 'Exploitant' => 'Exploitant', 'Metayer(aboussan)' => 'Metayer(aboussan)', 'Planté-partager' => 'Planté-partager', 'Garantie' => 'Garantie'], null, ['class' => 'form-control proprietaires']); ?>
+                            <?php echo Form::select('proprietaires', ['Proprietaire' => 'Proprietaire', 'Exploitant' => 'Exploitant', 'Metayer(aboussan)' => 'Metayer(aboussan)', 'Planté-partager' => 'Planté-partager', 'Garantie' => 'Garantie'], null, ['class' => 'form-control proprietaires','required']); ?>
                         </div>
                     </div>
 
@@ -81,7 +81,7 @@
                             <select class="form-control" name="section" id="section" required>
                                 <option value="">@lang('Selectionner une option')</option>
                                 @foreach ($sections as $section)
-                                    <option value="{{ $section->id }}" @selected(old('localite'))>
+                                    <option value="{{ $section->id }}" @selected(old('section'))>
                                         {{ __($section->libelle) }}</option>
                                 @endforeach
                             </select>
@@ -107,10 +107,10 @@
                     <div class="form-group row">
                         <label class="col-sm-4 control-label">@lang('Selectionner un programme')</label>
                         <div class="col-xs-12 col-sm-8">
-                            <select class="form-control" name="programme_id " id="programme_id " required>
+                            <select class="form-control" name="programme_id" id="programme_id" required>
                                 <option value="">@lang('Selectionner une option')</option>
                                 @foreach ($programmes as $programme)
-                                    <option value="{{ $programme->id }}" @selected(old('programme_id '))>
+                                    <option value="{{$programme->id}}" @selected(old('programme_id'))>
                                         {{ __($programme->libelle) }}</option>
                                 @endforeach
                             </select>
@@ -128,7 +128,7 @@
                     <div class="form-group row">
                         <?php echo Form::label(__('Statut'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('statut', ['Certifie' => 'Certifie', 'Candidat' => 'Candidat'], null, ['class' => 'form-control statut']); ?>
+                            <?php echo Form::select('statut', ['Certifie' => 'Certifie', 'Candidat' => 'Candidat'], null, ['class' => 'form-control statut','required']); ?>
                         </div>
                     </div>
                     <div id="certificat">
@@ -387,7 +387,7 @@
                     <div class="form-group row">
                         <?php echo Form::label(__('Date de naissance'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::date('dateNaiss', null, ['class' => 'form-control naiss', 'id' => 'datenais', 'required']); ?>
+                            <?php echo Form::date('dateNaiss', null, ['class' => 'form-control naiss', 'id' =>'datenais', 'required']); ?>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -461,7 +461,7 @@
                     </div>
                     {{-- quel est votre carte d'assurance  --}}
                     <div class="form-group row">
-                        <?php echo Form::label(__('Votre type de carte de sécurité social ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <?php echo Form::label(__('Votre type de carte de sécurité social'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
                             <?php echo Form::select('typeCarteSecuriteSociale', [' ' => null, 'CNPS' => 'CNPS', 'CMU' => 'CMU', 'AUCUN' => 'AUCUN'], null, ['class' => 'form-control typeCarteSecuriteSociale']); ?>
                         </div>

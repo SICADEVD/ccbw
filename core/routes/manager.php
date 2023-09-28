@@ -75,14 +75,14 @@ Route::middleware('auth')->group(function () {
                 Route::get('edit/{id}', 'edit')->name('edit');
                 Route::post('update/{id}', 'update')->name('update');
 
-                //route pour créer une localité en fonction de la section
-                Route::post('localites/section/store', 'storelocalitesection')->name('storelocalitesection');
-                //route pour modifier une localité en fonction de la section
-                Route::post('localites/section/update/{id}', 'updatelocalitesection')->name('updatelocalitesection');
-                //route pour lister les localités en fonction de la section
-                Route::get('localites/section/{id}', 'localitesection')->name('localitesection');
-                //route pour modifier une localité appartenant à une section
-                Route::get('localite/section/edit/{id}', 'localitesectionedit')->name('localitesectionedit');
+                // //route pour créer une localité en fonction de la section
+                // Route::post('localites/section/store', 'storelocalitesection')->name('storelocalitesection');
+                // //route pour modifier une localité en fonction de la section
+                // Route::post('localites/section/update/{id}', 'updatelocalitesection')->name('updatelocalitesection');
+                // //route pour lister les localités en fonction de la section
+                // Route::get('localites/section/{id}', 'localitesection')->name('localitesection');
+                // //route pour modifier une localité appartenant à une section
+                // Route::get('localite/section/edit/{id}', 'localitesectionedit')->name('localitesectionedit');
             });
 
             //Manage programme durabilite

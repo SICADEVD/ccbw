@@ -28,7 +28,7 @@ class ProducteurController extends Controller
         $pageTitle      = "Gestion des producteurs";
         $manager   = auth()->user();
         $cooperative = Cooperative::with('sections.localites')->find($manager->cooperative_id);
-        $localites = $localitesFiltrees = $cooperative->sections->flatMap->localites->filter(function ($localite) {
+        $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
             return $localite->active();
         });
         $programmes = Programme::all();
@@ -78,7 +78,14 @@ class ProducteurController extends Controller
     public function store(Request $request)
     {
         $validationRule = [
-            'localite'    => 'required|exists:localites,id',
+            'programme_id' => 'required|exists:programmes,id',
+            'proprietaires' => 'required',
+            'certificats' => 'required',
+            'variete'=> 'required',
+            'habitationProducteur' => 'required',
+            'statut' => 'required',
+            'statutMatrimonial' => 'required',
+            'localite_id'    => 'required|exists:localites,id',
             'nom' => 'required|max:255',
             'prenoms'  => 'required|max:255',
             'sexe'  => 'required|max:255',
@@ -88,45 +95,63 @@ class ProducteurController extends Controller
             'niveau_etude'  => 'required|max:255',
             'type_piece'  => 'required|max:255',
             'numPiece'  => 'required|max:255',
+            'num_ccc' => 'unique:producteurs,num_ccc',
+            'numSecuriteSociale' => 'unique:producteurs,numSecuriteSociale',
         ];
- 
-
+        
         $request->validate($validationRule);
 
-        $localite = Localite::where('id', $request->localite)->first();
+        $localite = Localite::where('id', $request->localite_id)->first();
 
         if ($localite->status == Status::NO) {
             $notify[] = ['error', 'Cette localité est désactivé'];
             return back()->withNotify($notify)->withInput();
         }
-        
-        if($request->id) {
-            $producteur = Producteur::findOrFail($request->id);
-            if($producteur->codeProdapp==null){
-                $coop = DB::table('localites as l')->join('cooperatives as c','l.cooperative_id','=','c.id')->where('l.id',$request->localite)->select('c.codeApp')->first();
-            if($coop !=null)
-            { 
-            $producteur->codeProdapp = $this->generecodeProdApp($request->nom,$request->prenoms, $coop->codeApp);
+        $producteur = new Producteur(); 
+        // if($request->id) {
+        //     $producteur = Producteur::findOrFail($request->id);
+        //     if($producteur->codeProdapp==null){
+        //         $coop = DB::table('localites as l')->join('cooperatives as c','l.cooperative_id','=','c.id')->where('l.id',$request->localite)->select('c.codeApp')->first();
+        //     if($coop !=null)
+        //     { 
+        //         $producteur->codeProdapp = $this->generecodeProdApp($request->nom,$request->prenoms, $coop->codeApp);
+        //     }else{
+        //         $producteur->codeProdapp = null;
+        //     }
+        //     }
+        //     $message = "La producteur a été mise à jour avec succès";
+        // } 
+        // else {
+        //     $producteur = new Producteur(); 
+        //     $coop = DB::table('localites as l')->join('cooperatives as c','l.cooperative_id','=','c.id')->where('l.id',$request->localite)->select('c.codeApp')->first();
+        //     if($coop !=null)
+        //     { 
+        //         $producteur->codeProdapp = $this->generecodeProdApp($request->nom,$request->prenoms, $coop->codeApp);
 
-            }else{
-            $producteur->codeProdapp = null;
-            }
-            }
-            $message = "La producteur a été mise à jour avec succès";
-        } else {
-            $producteur           = new Producteur(); 
-            $coop = DB::table('localites as l')->join('cooperatives as c','l.cooperative_id','=','c.id')->where('l.id',$request->localite)->select('c.codeApp')->first();
-            if($coop !=null)
-            { 
-            $producteur->codeProdapp = $this->generecodeProdApp($request->nom,$request->prenoms, $coop->codeApp);
-
-            }else{
-            $producteur->codeProdapp = null;
-            }
-        } 
+        //     }else{
+        //         $producteur->codeProdapp = null;
+        //     }
+        // } 
         
-         
-        $producteur->localite_id = $request->localite; 
+        $producteur->proprietaires = $request->proprietaires;
+        $producteur->statutMatrimonial = $request->statutMatrimonial;
+        $producteur->variete = $request->variete;
+        $producteur->autreVariete = $request->autreVariete;
+        $producteur->programme_id = $request->programme_id;
+        $producteur->localite_id = $request->localite_id; 
+        $producteur->habitationProducteur = $request->habitationProducteur;
+        $producteur->autreMembre = $request->autreMembre;
+        $producteur->autrePhone = $request->autrePhone;
+        $producteur->numPiece = $request->numPiece;
+        $producteur->num_ccc = $request->num_ccc;
+        $producteur->carteCMU = $request->carteCMU;
+        $producteur->typeCarteSecuriteSociale = $request->typeCarteSecuriteSociale;
+        $producteur->numSecuriteSociale = $request->numSecuriteSociale;
+        $producteur->numCMU = $request->numCMU;
+        $producteur->anneeDemarrage = $request->anneeDemarrage;
+        $producteur->anneeFin = $request->anneeFin;
+        $producteur->autreCertificats = $request->autreCertificats;
+        $producteur->autreVariete = $request->autreVariete;
         $producteur->consentement  = $request->consentement;
         $producteur->statut  = $request->statut;
         $producteur->certificat     = $request->certificat;
@@ -141,6 +166,7 @@ class ProducteurController extends Controller
         $producteur->niveau_etude    = $request->niveau_etude;
         $producteur->type_piece    = $request->type_piece;
         $producteur->numPiece    = $request->numPiece;
+        $producteur->userid = auth()->user()->id;
 
         if($request->hasFile('copiecarterecto')) {
             
@@ -283,9 +309,6 @@ class ProducteurController extends Controller
             }
 
         }
-
-           
-
         $notify[] = ['success', isset($message) ? $message : "L'info du producteur a été crée avec succès."];
         return back()->withNotify($notify);
     }

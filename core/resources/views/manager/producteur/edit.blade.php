@@ -4,85 +4,21 @@
         <div class="col-lg-12 mb-30">
             <div class="card">
                 <div class="card-body">
-                    {!! Form::open([
-                        'route' => ['manager.traca.producteur.store'],
+                    {!! Form::model($producteur, [
                         'method' => 'POST',
+                        'route' => ['manager.traca.producteur.store', $producteur->id],
                         'class' => 'form-horizontal',
                         'id' => 'flocal',
                         'enctype' => 'multipart/form-data',
                     ]) !!}
-
                     <div class="form-group row">
-                        <?php echo Form::label(__('Accord de consentement du producteur'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <label class="col-sm-4 control-label">@lang('Selectionner un programme')</label>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('consentement', ['oui' => 'Oui', 'non' => 'Non'], null, ['class' => 'form-control']); ?>
-                        </div>
-                    </div>
-                    {{-- proprietaire --}}
-
-                    <div class="form-group row">
-                        <?php echo Form::label(__('Comment vous vous definissez ?'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('proprietaires', ['Proprietaire' => 'Proprietaire', 'Exploitant' => 'Exploitant', 'Metayer(aboussan)' => 'Metayer(aboussan)', 'Planté-partager' => 'Planté-partager', 'Garantie' => 'Garantie'], null, ['class' => 'form-control proprietaires']); ?>
-                        </div>
-                    </div>
-
-                    <div id="garantie">
-                        <div class="form-group row">
-                            <?php echo Form::label(__('Année démarrage'), null, ['class' => 'col-sm-4 control-label']); ?>
-                            <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::number('anneeDemarrage', null, ['class' => 'form-control garantie', 'min' => '1990', 'max' => gmdate('Y')]); ?>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <?php echo Form::label(__('Anée fin'), null, ['class' => 'col-sm-4 control-label']); ?>
-                            <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::number('anneeFin', null, ['class' => 'form-control', 'min' => '1990', 'max' => gmdate('Y')]); ?>
-                            </div>
-                        </div>
-                    </div>
-                    {{-- Selectionner le Certificat --}}
-                    <div class="form-group row">
-                        <?php echo Form::label(__('Certificat'), null, ['class' => 'col-sm-4 control-label']); ?>
-
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('certificats', ['Rainforest' => 'Rainforest', 'Fairtrade' => 'Fairtrade', 'BIO' => 'BIO', 'Autre' => 'Autre'], null, ['class' => 'form-control certificats', 'id' => 'certificats', 'required']); ?>
-                        </div>
-                    </div>
-                    <div id="autreCertificats">
-                        <div class="form-group row">
-                            <?php echo Form::label(__('Autre Certificat'), null, ['class' => 'col-sm-4 control-label']); ?>
-                            <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::text('autreCertificats', null, ['placeholder' => __('Autre certificat'), 'class' => 'form-control autreCertificats']); ?>
-                            </div>
-                        </div>
-                    </div>
-                    {{-- Selectionner la Varieté --}}
-
-                    <div class="form-group row">
-                        <?php echo Form::label(__('Varieté'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('variete', ['CNRA' => 'CNRA', 'Tout venant' => 'Tout venant', 'Autre' => 'Autre'], null, ['class' => 'form-control variete', 'id' => 'variete', 'required']); ?>
-                        </div>
-                    </div>
-                    <div id="autreVariete">
-                        <div class="form-group row">
-                            <?php echo Form::label(__('Autre Varieté'), null, ['class' => 'col-sm-4 control-label']); ?>
-                            <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::text('autreVariete', null, ['placeholder' => __('Autre varieté'), 'class' => 'form-control autreVariete']); ?>
-                            </div>
-                        </div>
-                    </div>
-
-                    {{-- selection sections --}}
-                    <div class="form-group row">
-                        <label class="col-sm-4 control-label">@lang('Selectionner une section')</label>
-                        <div class="col-xs-12 col-sm-8">
-                            <select class="form-control" name="section" id="section" required>
+                            <select class="form-control" name="programme_id" id="programme_id" required>
                                 <option value="">@lang('Selectionner une option')</option>
-                                @foreach ($sections as $section)
-                                    <option value="{{ $section->id }}" @selected(old('localite'))>
-                                        {{ __($section->libelle) }}</option>
+                                @foreach ($programmes as $programme)
+                                    <option value="{{ $programme->id }}" @selected($programme->id == $producteur->programme_id)>
+                                        {{ __($programme->libelle) }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -94,29 +30,13 @@
                             <select class="form-control" name="localite_id" id="localite_id" required>
                                 <option value="">@lang('Selectionner une option')</option>
                                 @foreach ($localites as $localite)
-                                    <option value="{{ $localite->id }}"
-                                        data-chained="{{ optional($localite->section)->id }}" @selected(old('localite_id'))>
+                                    <option value="{{ $localite->id }}" @selected($localite->id == $producteur->localite_id)>
                                         {{ __($localite->nom) }}
                                     </option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
-                    {{-- programme de durabilité --}}
-
-                    <div class="form-group row">
-                        <label class="col-sm-4 control-label">@lang('Selectionner un programme')</label>
-                        <div class="col-xs-12 col-sm-8">
-                            <select class="form-control" name="programme_id " id="programme_id " required>
-                                <option value="">@lang('Selectionner une option')</option>
-                                @foreach ($programmes as $programme)
-                                    <option value="{{ $programme->id }}" @selected(old('programme_id '))>
-                                        {{ __($programme->libelle) }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-
                     {{-- saisie où le producteur habite --}}
                     <div class="form-group row">
                         <?php echo Form::label(__('Où Habitez vous ?'), null, ['class' => 'col-sm-4 control-label']); ?>
@@ -128,7 +48,7 @@
                     <div class="form-group row">
                         <?php echo Form::label(__('Statut'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('statut', ['Certifie' => 'Certifie', 'Candidat' => 'Candidat'], null, ['class' => 'form-control statut']); ?>
+                            <?php echo Form::select('statut', ['Certifie' => 'Certifie', 'Candidat' => 'Candidat'], null, ['class' => 'form-control statut', 'required']); ?>
                         </div>
                     </div>
                     <div id="certificat">
@@ -145,7 +65,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="form-group row">
                         <?php echo Form::label(__('Nom du producteur'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
@@ -170,7 +89,7 @@
                     <div class="form-group row">
                         <?php echo Form::label(__('Statut matrimonial'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('statutMatrimonial', ['Célibataire' => 'Célibataire', 'Fiancé' => 'Fiancé','Marié(mariage civil)'=>'Marié(mariage civil)','Mariage réligieux'=>'Mariage réligieux','Mariage réligieux'=>'Mariage réligieux','Divorcé'=>'Divorcé','Veuf(ve)'=>'Veuf(ve)'], null, ['class' => 'form-control', 'required']); ?>
+                            <?php echo Form::select('statutMatrimonial', ['Célibataire' => 'Célibataire', 'Fiancé' => 'Fiancé', 'Marié(mariage civil)' => 'Marié(mariage civil)', 'Mariage réligieux' => 'Mariage réligieux', 'Mariage réligieux' => 'Mariage réligieux', 'Divorcé' => 'Divorcé', 'Veuf(ve)' => 'Veuf(ve)'], null, ['class' => 'form-control', 'required']); ?>
                         </div>
                     </div>
 
@@ -383,7 +302,6 @@
                             ); ?>
                         </div>
                     </div>
-
                     <div class="form-group row">
                         <?php echo Form::label(__('Date de naissance'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
@@ -420,7 +338,7 @@
                     <div class="form-group row">
                         <?php echo Form::label(__("Niveau d'étude"), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('niveau_etude', ['Primaire' => 'Primaire', 'Collège (6e à 3ème)' => 'Collège (6e à 3ème)','Lycée (2nde à Tle)' => 'Lycée (2nde à Tle)','Superieur (BAC et Plus)' => 'Superieur (BAC et Plus)', 'Aucun' => 'Aucun'], null, ['placeholder' => __('Selectionner une option'), 'class' => 'form-control', 'required']); ?>
+                            <?php echo Form::select('niveau_etude', ['Primaire' => 'Primaire', 'Collège (6e à 3ème)' => 'Collège (6e à 3ème)', 'Lycée (2nde à Tle)' => 'Lycée (2nde à Tle)', 'Superieur (BAC et Plus)' => 'Superieur (BAC et Plus)', 'Aucun' => 'Aucun'], null, ['placeholder' => __('Selectionner une option'), 'class' => 'form-control', 'required']); ?>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -429,7 +347,6 @@
                             <?php echo Form::select('type_piece', ['CNI' => 'CNI', 'Carte Consulaire' => 'Carte Consulaire', 'Passeport' => 'Passeport', 'Attestation' => 'Attestation', 'Extrait de naissance' => 'Extrait de naissance', 'Permis de conduire' => 'Permis de conduire', 'CMU' => 'CMU'], null, ['placeholder' => __('Selectionner une option'), 'class' => 'form-control', 'required']); ?>
                         </div>
                     </div>
-
                     <div class="form-group row">
                         <?php echo Form::label(__('N° de la pièce'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
@@ -461,7 +378,7 @@
                     </div>
                     {{-- quel est votre carte d'assurance  --}}
                     <div class="form-group row">
-                        <?php echo Form::label(__('Votre type de carte de sécurité social ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <?php echo Form::label(__('Votre type de carte de sécurité social'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
                             <?php echo Form::select('typeCarteSecuriteSociale', [' ' => null, 'CNPS' => 'CNPS', 'CMU' => 'CMU', 'AUCUN' => 'AUCUN'], null, ['class' => 'form-control typeCarteSecuriteSociale']); ?>
                         </div>
@@ -500,19 +417,13 @@
 @endpush
 
 @push('script')
-<script type="text/javascript">
-         
-        if ($('.autresCultures').val() == 'non') {
-            $('#listecultures').hide('slow');
-        } else {
-            $('#listecultures').show('slow');
-        }
-        if ($('.statut').val() == 'Candidat') {
-            $('#certificat').hide('slow');
-        } else {
-            $('#certificat').show('slow');
-        }
+    <script type="text/javascript">
+        $("#section_id").chained("#localite");
+    </script>
+@endpush
 
+@push('script')
+    <script type="text/javascript">
         $('.statut').change(function() {
             var statut = $('.statut').val();
             if (statut == 'Candidat') {
@@ -524,41 +435,155 @@
             }
         });
 
+        if ($('.statut').val() == 'Candidat') {
+            $('#certificat').hide('slow');
+            $('.certificat').val('');
+        } else {
+            $('#certificat').show('slow');
+        }
+
+
+        //afficher le champ de saisie du numero de la piece de sécurité sociale
+
+        $('.typeCarteSecuriteSociale').change(function() {
+            var typeCarteSecuriteSociale = $('.typeCarteSecuriteSociale').val();
+            if (typeCarteSecuriteSociale == 'CNPS' || typeCarteSecuriteSociale == 'CMU') {
+                $('#numSecuriteSociale').show('slow');
+                $('.numSecuriteSociale').show('slow');
+            } else {
+                $('#numSecuriteSociale').hide('slow');
+                $('.numSecuriteSociale').val('');
+            }
+        });
+
+        if ($('.typeCarteSecuriteSociale').val() == 'CNPS' || $('.typeCarteSecuriteSociale').val() == 'CMU') {
+            $('#numSecuriteSociale').show('slow');
+            $('.numSecuriteSociale').show('slow');
+        } else {
+            $('#numSecuriteSociale').hide('slow');
+            $('.numSecuriteSociale').val('');
+        }
+        //afficher le champ autre variete
+
+        $('.variete').change(function() {
+            var variete = $('.variete').val();
+            if (variete == 'Autre') {
+                $('#autreVariete').show('slow');
+                $('.autreVariete').show('slow');
+            } else {
+                $('#autreVariete').hide('slow');
+                $('.autreVariete').val('');
+            }
+        });
+        if ($('.variete').val() == 'Autre') {
+            $('#autreVariete').show('slow');
+            $('.autreVariete').show('slow');
+        } else {
+            $('#autreVariete').hide('slow');
+            $('.autreVariete').val('');
+        }
+
+        //afficher le champ autre certificat
+
+        $('.certificats').change(function() {
+            var certificats = $('.certificats').val();
+            if (certificats == 'Autre') {
+                $('#autreCertificats').show('slow');
+                $('.autreCertificats').show('slow');
+            } else {
+                $('#autreCertificats').hide('slow');
+                $('.autreCertificats').val('');
+            }
+        });
+
+        if ($('.certificats').val() == 'Autre') {
+            $('#autreCertificats').show('slow');
+            $('.autreCertificats').show('slow');
+        } else {
+            $('#autreCertificats').hide('slow');
+            $('.autreCertificats').val('');
+        }
+
+        //afficher le champ de saisie du numéro de téléphone d'une autre personne
+
+        $('.autreMembre').change(function() {
+            var autreMembre = $('.autreMembre').val();
+            if (autreMembre == 'oui') {
+                $('#autrePhone').show('slow');
+                $('.autrePhone').show('slow');
+            } else {
+                $('#autrePhone').hide('slow');
+                $('.autrePhone').val('');
+            }
+        });
+
+        if ($('.autreMembre').val() == 'oui') {
+            $('#autrePhone').show('slow');
+            $('.autrePhone').show('slow');
+        } else {
+            $('#autrePhone').hide('slow');
+            $('.autrePhone').val('');
+        }
+
+        //afficher le champ de saisie année de garantie
+
+        $('.proprietaires').change(function() {
+            var proprietaires = $('.proprietaires').val();
+            if (proprietaires == 'Garantie') {
+                $('#garantie').show('slow');
+            } else {
+                $('#garantie').hide('slow');
+                $('.garantie').val('');
+            }
+        });
+
+        if ($('.proprietaires').val() == 'Garantie') {
+            $('#garantie').show('slow');
+        } else {
+            $('#garantie').hide('slow');
+            $('.garantie').val('');
+        }
+
+        //afficher le champ de saisie du numero de la piece CMU
+        $('.carteCMU').change(function() {
+            var cmu = $('.carteCMU').val();
+            if (cmu == 'oui') {
+                $('#pieceCMU').show('slow');
+
+            } else {
+                $('#pieceCMU').hide('slow');
+                $('.pieceCMU').val('');
+            }
+        });
+
+
         $('.autresCultures').change(function() {
             var autresCultures = $('.autresCultures').val();
             if (autresCultures == 'oui') {
                 $('#listecultures').show('slow');
             } else {
                 $('#listecultures').hide('slow');
+                $('.listecultures').val('');
             }
         });
 
-        if ($('.papiersChamps').val() == 'non') {
-            $('#gardePapiersChamps').hide('slow');
-        } else {
-            $('#gardePapiersChamps').show('slow');
-        }
         $('.papiersChamps').change(function() {
             var papiersChamps = $('.papiersChamps').val();
             if (papiersChamps == 'oui') {
                 $('#gardePapiersChamps').show('slow');
             } else {
                 $('#gardePapiersChamps').hide('slow');
+                $('.gardePapiersChamps').val('');
             }
         });
 
-
-        if ($('.mobileMoney').val() == 'non') {
-            $('#numeroCompteMM').hide('slow');
-        } else {
-            $('#numeroCompteMM').show('slow');
-        }
         $('.mobileMoney').change(function() {
             var mobileMoney = $('.mobileMoney').val();
             if (mobileMoney == 'oui') {
                 $('#numeroCompteMM').show('slow');
             } else {
                 $('#numeroCompteMM').hide('slow');
+                $('.numeroCompteMM').val('');
             }
         });
     </script>
@@ -570,7 +595,11 @@
                 $('#superficie').show('slow');
             } else {
                 $('#superficie').hide('slow');
+                $('.superficie').val('');
             }
         });
     </script>
+    {{-- <script type="text/javascript">
+        $("#localite_id").chained("#section");
+    </script> --}}
 @endpush

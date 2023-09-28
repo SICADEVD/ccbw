@@ -16,7 +16,7 @@
                                 <select name="localite" class="form-control">
                                     <option value="">@lang('Toutes')</option>
                                     @foreach ($localites as $local)
-                                    <option value="{{ $local->id }}">{{ $local->nom }}</option>
+                                        <option value="{{ $local->id }}">{{ $local->nom }}</option>
                                     @endforeach 
                                 </select>
                             </div>
@@ -25,7 +25,7 @@
                                 <select name="programme" class="form-control">
                                     <option value="">@lang('Tous')</option>
                                     @foreach ($programmes as $local)
-                                    <option value="{{ $local->id }}">{{ $local->libelle }}</option>
+                                        <option value="{{ $local->id }}">{{ $local->libelle }}</option>
                                     @endforeach 
                                 </select>
                             </div>
@@ -56,8 +56,8 @@
                         <table class="table table--light style--two">
                             <thead>
                                 <tr>
+                                    <th>@lang('Section')</th>
                                     <th>@lang('Localite')</th>
-                                    <th>@lang('Code Prod')</th>
                                     <th>@lang('Nom')</th>
                                     <th>@lang('Prenoms')</th>
                                     <th>@lang('Sexe')</th>
@@ -72,10 +72,10 @@
                                 @forelse($producteurs as $producteur)
                                     <tr>
                                         <td>
-                                            {{-- <span class="fw-bold">{{ __($producteur->localite->nom) }}</span> --}}
+                                            <span class="fw-bold">{{ __($producteur->localite->section->libelle) }}</span>
                                         </td>
                                         <td>
-                                            <span>{{ $producteur->codeProd }}</span>
+                                            <span class="fw-bold">{{ __($producteur->localite->nom) }}</span>
                                         </td>
                                         <td>
                                             <span class="small">

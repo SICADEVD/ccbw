@@ -11,7 +11,6 @@
                                     <th>@lang('Cooperative')</th>
                                     <th>@lang('Section')</th>
                                     <th>@lang('Ajoutée le')</th>
-                                     <th>@lang('')</th>
                                     <th>@lang('Action')</th>
                                 </tr>
                             </thead>
@@ -32,9 +31,9 @@
                                             <span class="d-block">{{ showDateTime($section->created_at) }}</span>
                                             <span>{{ diffForHumans($section->created_at) }}</span>
                                         </td>
-                                        <td>
+                                        {{-- <td>
                                             <a href="{{route('manager.section.localitesection', $section->id)}}" class="icon-btn btn--info ml-1">@lang('Voir localités')</a>
-                                        </td>
+                                        </td> --}}
                                         <td>
                                             <button type="button" class="btn btn-sm btn-outline--primary" data-bs-toggle="dropdown" aria-expanded="false"><i
                                                     class="las la-ellipsis-v"></i>@lang('Action')

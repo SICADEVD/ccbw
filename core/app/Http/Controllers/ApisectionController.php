@@ -9,7 +9,7 @@ class ApisectionController extends Controller
 {
     public function getsections()
     {
-        $sections = Section::orderBy('created_at','desc')->with('localite')->get();
+        $sections = Section::orderBy('created_at','desc')->with('cooperative')->get();
         return response()->json($sections,201);
     }
 }
