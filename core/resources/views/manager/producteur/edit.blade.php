@@ -6,21 +6,69 @@
                 <div class="card-body">
                     {!! Form::model($producteur, [
                         'method' => 'POST',
-                        'route' => ['manager.traca.producteur.store', $producteur->id],
+                        'route' => ['manager.traca.producteur.update',$producteur->id],
                         'class' => 'form-horizontal',
                         'id' => 'flocal',
                         'enctype' => 'multipart/form-data',
                     ]) !!}
+                    <input type="hidden" name="id" value="{{ $producteur->id }}">
+
                     <div class="form-group row">
-                        <label class="col-sm-4 control-label">@lang('Selectionner un programme')</label>
+                        <?php echo Form::label(__('Accord de consentement du producteur'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <select class="form-control" name="programme_id" id="programme_id" required>
-                                <option value="">@lang('Selectionner une option')</option>
-                                @foreach ($programmes as $programme)
-                                    <option value="{{ $programme->id }}" @selected($programme->id == $producteur->programme_id)>
-                                        {{ __($programme->libelle) }}</option>
-                                @endforeach
-                            </select>
+                            <?php echo Form::select('consentement', ['oui' => 'Oui', 'non' => 'Non'], null, ['class' => 'form-control']); ?>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <?php echo Form::label(__('Comment vous vous definissez ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-12 col-sm-8">
+                            <?php echo Form::select('proprietaires', ['Proprietaire' => 'Proprietaire', 'Exploitant' => 'Exploitant', 'Metayer(aboussan)' => 'Metayer(aboussan)', 'Planté-partager' => 'Planté-partager', 'Garantie' => 'Garantie'], null, ['class' => 'form-control proprietaires', 'required']); ?>
+                        </div>
+                    </div>
+                    <div id="garantie">
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Année démarrage'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::number('anneeDemarrage', null, ['class' => 'form-control garantie', 'min' => '1990', 'max' => gmdate('Y')]); ?>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Anée fin'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::number('anneeFin', null, ['class' => 'form-control', 'min' => '1990', 'max' => gmdate('Y')]); ?>
+                            </div>
+                        </div>
+                    </div>
+                    {{-- Selectionner le Certificat --}}
+                    <div class="form-group row">
+                        <?php echo Form::label(__('Certificat'), null, ['class' => 'col-sm-4 control-label']); ?>
+
+                        <div class="col-xs-12 col-sm-8">
+                            <?php echo Form::select('certificats', ['Rainforest' => 'Rainforest', 'Fairtrade' => 'Fairtrade', 'BIO' => 'BIO', 'Autre' => 'Autre'], null, ['class' => 'form-control certificats', 'id' => 'certificats', 'required']); ?>
+                        </div>
+                    </div>
+                    <div id="autreCertificats">
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Autre Certificat'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::text('autreCertificats', null, ['placeholder' => __('Autre certificat'), 'class' => 'form-control autreCertificats']); ?>
+                            </div>
+                        </div>
+                    </div>
+                    {{-- Selectionner la Varieté --}}
+
+                    <div class="form-group row">
+                        <?php echo Form::label(__('Varieté'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-12 col-sm-8">
+                            <?php echo Form::select('variete', ['CNRA' => 'CNRA', 'Tout venant' => 'Tout venant', 'Autre' => 'Autre'], null, ['class' => 'form-control variete', 'id' => 'variete', 'required']); ?>
+                        </div>
+                    </div>
+                    <div id="autreVariete">
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Autre Varieté'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::text('autreVariete', null, ['placeholder' => __('Autre varieté'), 'class' => 'form-control autreVariete']); ?>
+                            </div>
                         </div>
                     </div>
                     {{-- selection localite --}}
@@ -37,6 +85,19 @@
                             </select>
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4 control-label">@lang('Selectionner un programme')</label>
+                        <div class="col-xs-12 col-sm-8">
+                            <select class="form-control" name="programme_id" id="programme_id" required>
+                                <option value="">@lang('Selectionner une option')</option>
+                                @foreach ($programmes as $programme)
+                                    <option value="{{ $programme->id }}" @selected($programme->id == $producteur->programme_id)>
+                                        {{ __($programme->libelle) }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
                     {{-- saisie où le producteur habite --}}
                     <div class="form-group row">
                         <?php echo Form::label(__('Où Habitez vous ?'), null, ['class' => 'col-sm-4 control-label']); ?>
@@ -555,6 +616,13 @@
                 $('.pieceCMU').val('');
             }
         });
+
+        if ($('.carteCMU').val() == 'oui') {
+            $('#pieceCMU').show('slow')
+        } else {
+            $('#pieceCMU').hide('slow');
+            $('.pieceCMU').val('');
+        }
 
 
         $('.autresCultures').change(function() {

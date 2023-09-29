@@ -106,7 +106,6 @@ class ApiproducteurController extends Controller
       'type_piece'  => 'required|max:255',
       'numPiece'  => 'required|max:255',
       'num_ccc' => 'unique:producteurs,num_ccc',
-      'numSecuriteSociale' => 'unique:producteurs,numSecuriteSociale',
     ];
     $request->validate($validationRule);
     // $coop = DB::table('localites as l')->join('cooperatives as c', 'l.cooperative_id', '=', 'c.id')->where('l.id', $input['localite_id'])->select('c.codeApp')->first();
@@ -336,27 +335,27 @@ class ApiproducteurController extends Controller
 
 
       $producteur = DB::select(DB::raw("SELECT * FROM producteurs WHERE (localite_id is null or  
-      nationalite_id is null or  
-      type_piece_id is null or 
-      codeProd is null or  
-      picture is null or 
-      nom is null or 
-      prenoms is null or 
-      sexe is null or 
-      dateNaiss is null or 
-      phone1 is null or 
-      numPiece is null or  
-      niveaux_id is null or  
-      picture is null or 
-      copiecarterecto is null or 
-      copiecarteverso is null or 
-      consentement is null or 
-      statut is null or 
-      certificat is null or 
-      esignature is null 
-    )
-      AND deleted_at IS NULL
-      "));
+    nationalite_id is null or  
+    type_piece_id is null or 
+    codeProd is null or  
+    picture is null or 
+    nom is null or 
+    prenoms is null or 
+    sexe is null or 
+    dateNaiss is null or 
+    phone1 is null or 
+    numPiece is null or  
+    niveaux_id is null or  
+    picture is null or 
+    copiecarterecto is null or 
+    copiecarteverso is null or 
+    consentement is null or 
+    statut is null or 
+    certificat is null or 
+    esignature is null 
+  )
+    AND deleted_at IS NULL
+    "));
 
       if (isset($input['id'])) {
         if ($request->picture) {
@@ -432,7 +431,7 @@ class ApiproducteurController extends Controller
   public function update(Request $request, $id)
   {
 
-    //
+    dd(Producteur::find($id));
   }
 
   /**

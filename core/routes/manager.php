@@ -102,6 +102,7 @@ Route::middleware('auth')->group(function () {
                 Route::get('infos/{id}', 'infos')->name('infos');
                 Route::get('create', 'create')->name('create');
                 Route::post('store', 'store')->name('store');
+                Route::post('update/{id}','update')->name('update');
                 Route::post('info/store', 'storeinfo')->name('storeinfo');
                 Route::get('infos/edit/{id}', 'editinfo')->name('editinfo');
                 Route::get('edit/{id}', 'edit')->name('edit');

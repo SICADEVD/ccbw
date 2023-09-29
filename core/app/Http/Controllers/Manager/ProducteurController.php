@@ -6,11 +6,13 @@ use Excel;
 use App\Models\Section;
 use App\Constants\Status;
 use App\Models\Localite; 
+use App\Models\Programme;
 use App\Models\Producteur;
 use App\Models\Cooperative;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\Producteur_info;
+use Illuminate\Validation\Rule;
 use App\Imports\ProducteurImport;
 use App\Exports\ExportProducteurs;
 use Illuminate\Support\Facades\DB;
@@ -18,7 +20,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Producteur_infos_typeculture;
 use App\Models\Producteur_infos_maladieenfant;
-use App\Models\Programme;
 
 class ProducteurController extends Controller
 {
@@ -95,8 +96,7 @@ class ProducteurController extends Controller
             'niveau_etude'  => 'required|max:255',
             'type_piece'  => 'required|max:255',
             'numPiece'  => 'required|max:255',
-            'num_ccc' => 'unique:producteurs,num_ccc',
-            'numSecuriteSociale' => 'unique:producteurs,numSecuriteSociale',
+            'num_ccc' => ['required', 'unique:producteurs,num_ccc'],
         ];
         
         $request->validate($validationRule);
@@ -155,7 +155,6 @@ class ProducteurController extends Controller
         $producteur->consentement  = $request->consentement;
         $producteur->statut  = $request->statut;
         $producteur->certificat     = $request->certificat;
-        $producteur->codeProd    = $request->codeProd;
         $producteur->nom = $request->nom;
         $producteur->prenoms    = $request->prenoms;
         $producteur->sexe    = $request->sexe;
@@ -168,26 +167,26 @@ class ProducteurController extends Controller
         $producteur->numPiece    = $request->numPiece;
         $producteur->userid = auth()->user()->id;
 
-        if($request->hasFile('copiecarterecto')) {
+        // if($request->hasFile('copiecarterecto')) {
             
-            try {
-                //$old = $producteur->copiecarterecto ?: null;
+        //     try {
+        //         //$old = $producteur->copiecarterecto ?: null;
                 
-                //$producteur->copiecarterecto = fileUploader($request->copiecarterecto, getFilePath('copiecarterecto'), getFileSize('copiecarterecto'), $old);
-                $producteur->copiecarterecto = $request->file('copiecarterecto')->store('public/producteurs/pieces');
-            } catch (\Exception $exp) {
-                $notify[] = ['error', 'Impossible de télécharger votre image'];
-                return back()->withNotify($notify);
-            }
-        }
-        if($request->hasFile('copiecarteverso')) {
-            try {
-                $producteur->copiecarteverso = $request->file('copiecarteverso')->store('public/producteurs/pieces');
-            } catch (\Exception $exp) {
-                $notify[] = ['error', 'Impossible de télécharger votre image'];
-                return back()->withNotify($notify);
-            }
-        }
+        //         //$producteur->copiecarterecto = fileUploader($request->copiecarterecto, getFilePath('copiecarterecto'), getFileSize('copiecarterecto'), $old);
+        //         $producteur->copiecarterecto = $request->file('copiecarterecto')->store('public/producteurs/pieces');
+        //     } catch (\Exception $exp) {
+        //         $notify[] = ['error', 'Impossible de télécharger votre image'];
+        //         return back()->withNotify($notify);
+        //     }
+        // }
+        // if($request->hasFile('copiecarteverso')) {
+        //     try {
+        //         $producteur->copiecarteverso = $request->file('copiecarteverso')->store('public/producteurs/pieces');
+        //     } catch (\Exception $exp) {
+        //         $notify[] = ['error', 'Impossible de télécharger votre image'];
+        //         return back()->withNotify($notify);
+        //     }
+        // }
         if($request->hasFile('picture')) {
             try {
                 $producteur->picture = $request->file('picture')->store('public/producteurs/photos');
@@ -199,6 +198,54 @@ class ProducteurController extends Controller
         $producteur->save(); 
 
         $notify[] = ['success', isset($message) ? $message : 'Le producteur a été crée avec succès.'];
+        return back()->withNotify($notify);
+    }
+    public function update(Request $request,$id){
+
+        $producteur = Producteur::findOrFail($id);
+
+        $validationRule = [
+            'programme_id' => 'required|exists:programmes,id',
+            'proprietaires' => 'required',
+            'certificats' => 'required',
+            'variete'=> 'required',
+            'habitationProducteur' => 'required',
+            'statut' => 'required',
+            'statutMatrimonial' => 'required',
+            'localite_id'    => 'required|exists:localites,id',
+            'nom' => 'required|max:255',
+            'prenoms'  => 'required|max:255',
+            'sexe'  => 'required|max:255',
+            'nationalite'  => 'required|max:255',
+            'dateNaiss'  => 'required|max:255',
+            'phone1'  => 'required|max:255',
+            'niveau_etude'  => 'required|max:255',
+            'type_piece'  => 'required|max:255',
+            'numPiece'  => 'required|max:255',
+            'num_ccc' => ['required', 'max:20', Rule::unique('producteurs', 'num_ccc')->ignore($producteur)],
+        ];
+        $valitedData = $request->validate($validationRule);
+        $producteur->anneeDemarrage = $request->anneeDemarrage;
+        $producteur->anneeFin = $request->anneeFin;
+        $producteur->autreCertificats = $request->autreCertificats;
+        $producteur->autreVariete = $request->autreVariete;
+        $producteur->autreMembre = $request->autreMembre;
+        $producteur->autrePhone = $request->autrePhone;
+        $producteur->phone2 = $request->phone2;
+        $producteur->numCMU = $request->numCMU;
+        $producteur->carteCMU = $request->carteCMU;
+        $producteur->certificats = $request->certificats;
+        
+        if($request->hasFile('picture')) {
+            try {
+                $producteur->picture = $request->file('picture')->store('public/producteurs/photos');
+            } catch (\Exception $exp) {
+                $notify[] = ['error', 'Impossible de télécharger votre image'];
+                return back()->withNotify($notify);
+            }
+        } 
+        $producteur->update($valitedData);
+        $notify[] = ['success', isset($message) ? $message : 'La producteur a été mise à jour avec succès.'];
         return back()->withNotify($notify);
     }
 
