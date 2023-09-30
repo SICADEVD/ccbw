@@ -105,7 +105,7 @@ class ApiproducteurController extends Controller
       'niveau_etude'  => 'required|max:255',
       'type_piece'  => 'required|max:255',
       'numPiece'  => 'required|max:255',
-      'num_ccc' => 'unique:producteurs,num_ccc',
+      // 'num_ccc' => 'unique:producteurs,num_ccc',
     ];
     $request->validate($validationRule);
     // $coop = DB::table('localites as l')->join('cooperatives as c', 'l.cooperative_id', '=', 'c.id')->where('l.id', $input['localite_id'])->select('c.codeApp')->first();
