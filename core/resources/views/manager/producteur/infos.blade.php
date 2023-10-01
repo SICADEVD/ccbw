@@ -107,12 +107,11 @@
                             </div>
                         </div>
 
-
+                        {{-- autres culture en dehors du cacao --}}
                         <div class="form-group row">
-                            <?php echo Form::label(__('Culture'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <?php echo Form::label(__('Avez-vous d’autres Cultures en dehors du cacao?'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
                                 <?php echo Form::select('autresCultures', ['non' => 'Non', 'oui' => 'Oui'], null, ['class' => 'form-control autresCultures', 'required']); ?>
-
                             </div>
                         </div>
                         <div class="form-group row">
@@ -162,46 +161,33 @@
                             </div>
                         </div>
 
-                        <hr class="panel-wide">
-
+                        {{-- autre activité en dehors du cacao --}}
                         <div class="form-group row">
-                            <?php echo Form::label(__("Nombre d'enfants de 5 à 17 ans présents dans le ménage ?"), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <?php echo Form::label(__('Avez-vous d’autres activités en dehors des cultures?'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::number('age18', null, ['placeholder' => 'Nombre', 'class' => 'form-control', 'min' => '0', 'required']); ?>
-                            </div>
-                        </div>
+                                <?php echo Form::select('autreActivite', ['non' => 'Non', 'oui' => 'Oui'], null, ['class' => 'form-control autreActivite', 'required']); ?>
 
-
-                        <div class="form-group row">
-                            <?php echo Form::label(__('Parmi ces personnes, combien sont scolarisés ?'), null, ['class' => 'col-sm-4 control-label']); ?>
-                            <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::number('persEcole', null, ['placeholder' => 'Nombre', 'class' => 'form-control', 'min' => '0', 'required']); ?>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <?php echo Form::label(__("Parmi les scolarisés, combien n'ont pas d'extrait de naissance ?"), null, ['class' => 'col-sm-4 control-label']); ?>
-                            <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::number('scolarisesExtrait', null, ['placeholder' => 'Nombre', 'class' => 'form-control', 'min' => '0', 'required']); ?>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <?php echo Form::label(__('Citez les maladies plus fréquentes chez vos enfants'), null, ['class' => 'col-sm-4 control-label']); ?>
-                            <div class="col-xs-12 col-sm-8">
+                            <?php echo Form::label('', null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8" id="listeactivites">
                                 <table class="table table-striped table-bordered">
-                                    <tbody id="maladies">
+                                    <tbody id="activity_area">
 
                                         <tr>
                                             <td class="row">
                                                 <div class="col-xs-12 col-sm-12 bg-success">
-                                                    <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Maladie 1')
+                                                    <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Information Activité 1')
                                                     </badge>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-12">
                                                     <div class="form-group row">
-                                                        <input type="text" name="maladiesenfants[]"
-                                                            placeholder="Rhume, Toux, ..." id="maladiesenfants-1"
-                                                            class="form-control" value="{{ old('maladiesenfants') }}">
+                                                        {{ Form::label(__('Type D\'activité'), null, ['class' => 'control-label']) }}
+                                                        <input type="text" name="typeactivite[]"
+                                                            placeholder="Elevage, Commerce, Prestation de service, ..."
+                                                            id="typeactivite-1" class="form-control"
+                                                            value="{{ old('typeactivite') }}">
                                                     </div>
                                                 </div>
 
@@ -213,7 +199,7 @@
                                         <tr>
 
                                             <td colspan="3">
-                                                <button id="addRowMal" type="button" class="btn btn-success btn-sm"><i
+                                                <button id="addRowActivite" type="button" class="btn btn-success btn-sm"><i
                                                         class="fa fa-plus"></i></button>
                                             </td>
                                         <tr>
@@ -221,16 +207,18 @@
                                 </table>
                             </div>
                         </div>
+
                         <hr class="panel-wide">
+
                         <div class="form-group row">
-                            <?php echo Form::label(__('Combien de travailleurs avez-vous ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <?php echo Form::label(__('Combien de travailleurs (rémunéré) avez-vous ?'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
                                 <?php echo Form::number('travailleurs', null, ['placeholder' => 'Nombre', 'class' => 'form-control', 'min' => '0', 'required']); ?>
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <?php echo Form::label(__('Nombre de Travailleurs Permanents'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <?php echo Form::label(__('Nombre de Travailleurs Permanents (plus de 12mois)'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
                                 <?php echo Form::number('travailleurspermanents', null, ['placeholder' => 'Nombre', 'class' => 'form-control', 'min' => '0', 'required']); ?>
                             </div>
@@ -243,28 +231,7 @@
                             </div>
                         </div>
                         <hr class="panel-wide">
-                        <div class="form-group row">
-                            <?php echo Form::label(__('Quand une personne est blessée à la maison, que fais-tu ?'), null, ['class' => 'col-sm-4 control-label']); ?>
-                            <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::select('personneBlessee', ['Je me débrouille' => 'Je me débrouille', "Je vais rapidement à l'hôpital" => "Je vais rapidement à l'hôpital", "J'appelle quelqu'un" => "J'appelle quelqu'un", "J'ai des médicaments chez moi" => "J'ai des médicaments chez moi"], null, ['placeholder' => 'Selectionner une reponse...', 'class' => 'form-control personneBlessee', 'required']); ?>
 
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <?php echo Form::label(__('Quel type de documents de tes champs possèdes-tu ?'), null, ['class' => 'col-sm-4 control-label']); ?>
-                            <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::select('typeDocuments', ['Titre foncier' => 'Titre foncier', 'Cadastre' => 'Cadastre', 'Attestation coutumières' => 'Attestation coutumières', 'Aucun' => 'Aucun'], null, ['class' => 'form-control typeDocuments', 'placeholder' => 'Selectionner une reponse...', 'required']); ?>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <?php echo Form::label(__("Comment gères-tu tes reçus d'achat ?"), null, ['class' => 'col-sm-4 control-label']); ?>
-                            <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::select('recuAchat', ['Je les jette' => 'Je les jette', 'Je les gardes dans ma maison' => 'Je les gardes dans ma maison', 'Je ne prends pas' => 'Je ne prends pas'], null, ['placeholder' => 'Selectionner une reponse...', 'class' => 'form-control recuAchat', 'required']); ?>
-                            </div>
-                        </div>
-                        <hr class="panel-wide">
                         <div class="form-group row">
                             <?php echo Form::label(__('As-tu un Compte Mobile Money ?'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
@@ -288,23 +255,28 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <?php echo Form::label(__('Accepterais tu qu’on paye ton cacao par ces moyens ?'), null, ['class' => 'col-sm-4 control-label']); ?>
-                            <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::select('paiementMM', ['Aucun' => 'Aucun', 'Virement bancaire' => 'Virement bancaire', 'Mobile Money' => 'Mobile Money'], null, ['class' => 'form-control paiementMM', 'required']); ?>
-
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <?php echo Form::label(__('As-tu un compte dans une banque ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <?php echo Form::label(__('As-tu un compte bancaire (dans une banque) ?'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
                                 <?php echo Form::select('compteBanque', ['non' => 'Non', 'oui' => 'Oui'], null, ['class' => 'form-control compteBanque', 'required']); ?>
 
                             </div>
                         </div>
+                        <div class="form-group row" id="nomBanque">
+                            <?php echo Form::label(__('Nom de la banque'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::select('nomBanque', ['Advans' => 'Advans', 'Coopec' => 'Coopec', 'Microcred' => 'Microcred','Autre'=>'Autre'], null, ['class' => 'form-control nomBanque']); ?>
+                            </div>
+                        </div>
+                        <div class="form-group row" id="autreBanque">
+                            <?php echo Form::label(__('Nom de la banque'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::text('autreBanque', null, ['placeholder' => 'Autre Banque', 'class' => 'form-control autreBanque']); ?>
+                            </div>
+                        </div>
                         <hr class="panel-wide">
                         <div class="modal-footer">
-                            <button type="button" class="btn btn--dark btnFermer" data-dismiss="modal">@lang('Fermer')</button>
+                            <button type="button" class="btn btn--dark btnFermer"
+                                data-dismiss="modal">@lang('Fermer')</button>
                             <button type="submit" class="btn btn--primary"><i
                                     class="fa fa-fw fa-paper-plane"></i>@lang('Enregistrer une info')</button>
                         </div>
@@ -382,9 +354,43 @@
 
                     productCount = parseInt(productCount) - 1;
 
-                    //    console.log($("#product_area tr").length);
+                }
+            });
 
-                    //  productCount--;
+        });
+        $(document).ready(function() {
+            var productCount = $("#activity_area tr").length + 1;
+            $(document).on('click', '#addRowActivite', function() {
+
+                //---> Start create table tr
+                var html_table = '<tr>';
+                html_table +=
+                    '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm">Information Activité ' +
+                    productCount +
+                    '</badge></div><div class="col-xs-12 col-sm-12"><div class="form-group row"><label for="Type de culture" class="control-label">Type D\'activité</label><input placeholder="Elevage, Commerce, Prestation de service, ..." class="form-control" id="typeactivite-' +
+                    productCount +
+                    '" class="form-control " value=""></div></div><div class="col-xs-12 col-sm-12"><button type="button" id="' +
+                    productCount +
+                    '" class="removeRowActivite btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></div></td>';
+
+                html_table += '</tr>';
+                //---> End create table tr
+
+                productCount = parseInt(productCount) + 1;
+                $('#activity_area').append(html_table);
+
+            });
+
+            $(document).on('click', '.removeRowActivite', function() {
+
+                var row_id = $(this).attr('id');
+
+                // delete only last row id
+                if (row_id == $("#activity_area tr").length) {
+
+                    $(this).parents('tr').remove();
+
+                    productCount = parseInt(productCount) - 1;
 
                 }
             });
@@ -429,7 +435,7 @@
             });
 
         });
-        $('#listecultures,#gardePapiersChamps,#numeroCompteMM').hide();
+        $('#listecultures,#gardePapiersChamps,#numeroCompteMM,#listeactivites,#nomBanque,#autreBanque').hide();
 
         $('.autresCultures').change(function() {
             var autresCultures = $('.autresCultures').val();
@@ -440,6 +446,36 @@
                 $('.listecultures').val('');
             }
         });
+         $('.nomBanque').change(function() {
+            var nomBanque = $('.nomBanque').val();
+            if (nomBanque == 'Autre') {
+                $('#autreBanque').show('slow');
+                 $('.autreBanque').show('slow');
+            } else {
+                $('#autreBanque').hide('slow');
+                $('.autreBanque').val('');
+            }
+        });
+        $('.compteBanque').change(function() {
+            var compteBanque = $('.compteBanque').val();
+            if (compteBanque == 'oui') {
+                $('#nomBanque').show('slow');
+                 $('.nomBanque').show('slow');
+            } else {
+                $('#nomBanque').hide('slow');
+                $('.nomBanque').val('');
+            }
+        });
+        $('.autreActivite').change(function() {
+            var autreActivite = $('.autreActivite').val();
+            if (autreActivite == 'oui') {
+                $('#listeactivites').show('slow');
+            } else {
+                $('#listeactivites').hide('slow');
+                $('.listeactivites').val('');
+            }
+        });
+
 
         $('.papiersChamps').change(function() {
             var papiersChamps = $('.papiersChamps').val();
