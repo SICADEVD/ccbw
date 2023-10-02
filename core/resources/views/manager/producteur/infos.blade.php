@@ -241,16 +241,52 @@
                         </div>
                         <div id="numeroCompteMM">
                             <div class="form-group row">
-                                <?php echo Form::label(__('Quel operateur ?'), null, ['class' => 'col-sm-4 control-label']); ?>
-                                <div class="col-xs-12 col-sm-8">
-                                    <?php echo Form::select('operateurMM', ['Orange' => 'Orange', 'MTN' => 'MTN', 'Moov' => 'Moov', 'Wave' => 'Wave'], null, ['class' => 'form-control operateurMM']); ?>
+                                <?php echo Form::label('', null, ['class' => 'col-sm-4 control-label']); ?>
+                                <div class="col-xs-12 col-sm-8" id="listeoperateurs">
+                                    <table class="table table-striped table-bordered">
+                                        <tbody id="compagny_area">
+                                            <tr>
+                                                <td class="row">
+                                                    <div class="col-xs-12 col-sm-12 bg-success">
+                                                        <badge class="btn  btn-outline--warning h-45 btn-sm">
+                                                            @lang('Numero mobile monnaie 1')
+                                                        </badge>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-12">
+                                                        <div class="form-group row">
+                                                            {{ Form::label(__('Opérateur'), null, ['class' => 'control-label']) }}
+                                                            <select name="operateurMM[]" class="form-control operateurMM"
+                                                                id="operateurMM-1">
+                                                                <option value="Orange">Orange</option>
+                                                                <option value="MTN">MTN</option>
+                                                                <option value="Moov">Moov</option>
+                                                                <option value="Wave">Wave</option>
+                                                                <option value="Push">Push</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-12">
+                                                        <div class="form-group row">
+                                                            {{ Form::label(__('Numéro'), null, ['class' => 'control-label']) }}
+                                                            <input type="text" name="numeros[]"
+                                                                placeholder="Numéro de téléphone" id="numeros-1"
+                                                                class="form-control" value="{{ old('numeros') }}">
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
 
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <?php echo Form::label(__('Numéro du Compte Mobile Money'), null, ['class' => 'col-sm-4 control-label']); ?>
-                                <div class="col-xs-12 col-sm-8">
-                                    <?php echo Form::text('numeroCompteMM', null, ['placeholder' => __('Numéro du Compte Mobile Money'), 'class' => 'form-control phone numeroCompteMM']); ?>
+                                        </tbody>
+                                        <tfoot style="background: #e3e3e3;">
+                                            <tr>
+
+                                                <td colspan="3">
+                                                    <button id="addRowOperateur" type="button"
+                                                        class="btn btn-success btn-sm"><i class="fa fa-plus"></i></button>
+                                                </td>
+                                            <tr>
+                                        </tfoot>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -264,7 +300,7 @@
                         <div class="form-group row" id="nomBanque">
                             <?php echo Form::label(__('Nom de la banque'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::select('nomBanque', ['Advans' => 'Advans', 'Coopec' => 'Coopec', 'Microcred' => 'Microcred','Autre'=>'Autre'], null, ['class' => 'form-control nomBanque']); ?>
+                                <?php echo Form::select('nomBanque', ['Advans' => 'Advans', 'Coopec' => 'Coopec', 'Microcred' => 'Microcred', 'Autre' => 'Autre'], null, ['class' => 'form-control nomBanque']); ?>
                             </div>
                         </div>
                         <div class="form-group row" id="autreBanque">
@@ -397,6 +433,47 @@
 
         });
         $(document).ready(function() {
+            var productCount = $("#compagny_area tr").length + 1;
+            $(document).on('click', '#addRowOperateur', function() {
+
+                //---> Start create table tr
+                var html_table = '<tr>';
+                html_table +=
+                    '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm">Numéro mobile monnaie ' +
+                    productCount +
+                    '</badge></div><div class="col-xs-12 col-sm-12"><div class="form-group row"><label for="operateurMM" class="control-label">Opérateur</label><select class="form-control" id="operateurMM-' +
+                    productCount +
+                    '" name="operateurMM[]"><option value="Orange">Orange</option><option value="MTN">MTN</option><option value="Moov">Moov</option><option value="Wave">Wave</option><option value="Push">Push</option></select></div></div><div class="col-xs-12 col-sm-12"><div class="form-group row"><label for="numeros" class="control-label">Numéro</label><input type="text" name="numeros[]" placeholder="Numéro téléphonique" id="numeros-' +
+                    productCount +
+                    '" class="form-control " value=""></div></div><div class="col-xs-12 col-sm-12"><button type="button" id="' +
+                    productCount +
+                    '" class="removeRowOperateur btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></div></td>';
+
+                html_table += '</tr>';
+                //---> End create table tr
+            
+                //---> End create table tr
+                productCount = parseInt(productCount) + 1;
+                $('#compagny_area').append(html_table);
+
+            });
+
+            $(document).on('click', '.removeRowOperateur', function() {
+
+                var row_id = $(this).attr('id');
+
+                // delete only last row id
+                if (row_id == $("#compagny_area tr").length) {
+
+                    $(this).parents('tr').remove();
+
+                    productCount = parseInt(productCount) - 1;
+
+                }
+            });
+
+        });
+        $(document).ready(function() {
 
             var maladiesCount = $("#maladies tr").length + 1;
             $(document).on('click', '#addRowMal', function() {
@@ -446,11 +523,11 @@
                 $('.listecultures').val('');
             }
         });
-         $('.nomBanque').change(function() {
+        $('.nomBanque').change(function() {
             var nomBanque = $('.nomBanque').val();
             if (nomBanque == 'Autre') {
                 $('#autreBanque').show('slow');
-                 $('.autreBanque').show('slow');
+                $('.autreBanque').show('slow');
             } else {
                 $('#autreBanque').hide('slow');
                 $('.autreBanque').val('');
@@ -460,7 +537,7 @@
             var compteBanque = $('.compteBanque').val();
             if (compteBanque == 'oui') {
                 $('#nomBanque').show('slow');
-                 $('.nomBanque').show('slow');
+                $('.nomBanque').show('slow');
             } else {
                 $('#nomBanque').hide('slow');
                 $('.nomBanque').val('');
