@@ -84,7 +84,4 @@ class SectionController extends Controller
     public function localitesectionedit($id){
 
     }
-
-
-
 }
