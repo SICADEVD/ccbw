@@ -1,6 +1,6 @@
 @extends('admin.layouts.master')
 @section('content')
-    <div class="login-main" style="background-image: url('{{ asset('assets/fcadmin/images/login.jpg') }}')">
+    <div class="login-main">
         <div class="container custom-container">
             <div class="row justify-content-center">
                 <div class="col-xxl-5 col-xl-5 col-lg-6 col-md-8 col-sm-11">
