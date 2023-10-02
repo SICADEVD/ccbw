@@ -10,7 +10,7 @@ class ApisectionController extends Controller
 {
     public function getsections()
     {
-        //$manager   = auth()->user();
+        dd($manager   = auth()->user()->cooperative_id);
         $sections = Section::where('cooperative_id',3)->with('cooperative')->get();
         return response()->json($sections,201);
     }
