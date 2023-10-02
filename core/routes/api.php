@@ -15,6 +15,7 @@ use App\Http\Controllers\ApiestimationController;
 use App\Http\Controllers\ApissrteclrmsController; 
 use App\Http\Controllers\ApiapplicationController;
 use App\Http\Controllers\ApievaluationController;
+use App\Http\Controllers\ApiProgrammeController;
 use App\Http\Controllers\ApisectionController;
 
 /*
@@ -71,4 +72,9 @@ Route::match(['POST'],'getcampagne', [AuthController::class, 'getCampagne']);
 //route pour la gestion des sections
 
 Route::match(['POST'],'getsections',[ApisectionController::class, 'getsections']);
+
+//route pour la gestion des programmes
+
+Route::match(['POST'],'getprogrammes',[ApiProgrammeController::class, 'index']);
+
 
