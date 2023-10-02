@@ -6290,7 +6290,7 @@ th.w-85 {
     position: relative;
     z-index: 1;
     overflow: hidden;
-    background-color: #3d2bfb;
+    background-color: var(--main-color);
 }
 
 @media (max-width: 575px) {
@@ -6316,7 +6316,7 @@ th.w-85 {
 }
 
 .login-area::after {
-    position: absolute;
+   
     content: '';
     width: 247px;
     height: 247px;
@@ -6345,7 +6345,7 @@ th.w-85 {
 .login-wrapper__top {
     padding: 60px 30px 40px 30px;
     text-align: center;
-    background-color: #3D2BFB;
+    background-color: var(--main-color);
     border-radius: 10px;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
@@ -6362,15 +6362,14 @@ th.w-85 {
 }
 
 .login-wrapper__top::after {
-    position: absolute;
-    content: '';
+    
     bottom: -25px;
     left: 5px;
     right: 5px;
     z-index: -1;
     border-width: 25px 256px 0px 256px;
     border-style: solid;
-    border-color: #3d2bfb transparent transparent transparent;
+    border-color: var(--main-color) transparent transparent transparent;
 }
 
 @media (max-width: 1399px) {
@@ -6464,7 +6463,7 @@ th.w-85 {
 
 .login-form .form-control:focus {
     background-color: transparent;
-    border-color: #3D2BFB;
+    border-color: var(--main-color);
 }
 
 .login-form .forget-text {
@@ -6477,7 +6476,7 @@ th.w-85 {
 }
 
 .cmn-btn {
-    background-color: #3D2BFB;
+    background-color: var(--main-color);
     color: #fff;
     height: 50px;
 }
@@ -6527,8 +6526,8 @@ th.w-85 {
 
 .login-form .form-check .form-check-input:checked~.form-check-label::before {
     content: "\f00c";
-    background-color: #3D2BFB;
-    border-color: #3D2BFB;
+    background-color: var(--main-color);
+    border-color: var(--main-color);
 }
 
 /* login css end */
