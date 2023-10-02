@@ -23,14 +23,6 @@ class CooperativeLocaliteController extends Controller
         $pageTitle      = "Gestion des localités"; 
         $manager   = auth()->user();
         $cooperativeLocalites = Localite::searchable(['localites.nom', 'localites.codeLocal', 'localites.type_localites', 'localites.sousprefecture', 'sections.libelle'])->latest('id')->joinRelationship('section')->where('cooperative_id',$manager->cooperative_id)->with('cooperative')->paginate(getPaginate());
-
-        // $cooperativeLocalites = Localite::searchable(['localites.nom', 'localites.codeLocal', 'localites.type_localites', 'localites.sousprefecture', 'sections.libelle'])
-        // ->latest('localites.id')
-        // ->joinRelationship('section')
-        // ->where('localites.cooperative_id', $manager->cooperative_id)
-        // ->with('cooperative')
-        // ->paginate(getPaginate());
-
         $cooperatives = Cooperative::active()->where('id',$manager->cooperative_id)->get();
         $sections = Section::all();
         return view('manager.localite.index', compact('pageTitle', 'cooperativeLocalites','cooperatives','sections'));
@@ -79,6 +71,7 @@ class CooperativeLocaliteController extends Controller
             $localite->nom = $this->verifylocalite($request->nom);
         } 
         $localite->section_id = $request->section_id;
+        $localite->userid = $manager->id;
         $localite->nom = $request->nom;
         $localite->type_localites  = $request->type_localites;
         $localite->sousprefecture  = $request->sousprefecture;
