@@ -102,7 +102,7 @@
                     <div class="form-group row" id="nomEcoleproche">
                         <?php echo Form::label(__('Nom Ecole primaire'), null, ['class' => 'control-label col-xs-12 col-sm-4']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::text('nomEcoleproche', null, ['placeholder' => '...', 'class' => 'form-control nomEcoleproche']); ?>
+                            <?php echo Form::text('nomEcoleproche', null, ['placeholder' => '...', 'class' => 'form-control nomEcoleproche','required']); ?>
                         </div>
                     </div>
 
