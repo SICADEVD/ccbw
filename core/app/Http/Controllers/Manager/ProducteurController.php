@@ -17,6 +17,7 @@ use App\Imports\ProducteurImport;
 use App\Exports\ExportProducteurs;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreInfoRequest;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Producteur_infos_typeculture;
 use App\Models\Producteur_infos_maladieenfant;
@@ -250,28 +251,9 @@ class ProducteurController extends Controller
     }
 
 
-    public function storeinfo(Request $request)
+    public function storeinfo(StoreInfoRequest $request)
     {
-        $validationRule = [
-            'producteur_id' => 'required|max:255',
-            'autresCultures'  => 'required|max:255',
-            'age18'  => 'required|max:255',
-            'persEcole'  => 'required|max:255',
-            'scolarisesExtrait'  => 'required|max:255',
-            'travailleurs'  => 'required|max:255',
-            'travailleurspermanents'  => 'required|max:255',
-            'travailleurstemporaires'  => 'required|max:255',
-            'personneBlessee'  => 'required|max:255',
-            'typeDocuments'  => 'required|max:255',
-            'recuAchat'  => 'required|max:255',
-            'mobileMoney'  => 'required|max:255',
-            'paiementMM'  => 'required|max:255',
-            'compteBanque'  => 'required|max:255',
-        ];
-
-
-        $request->validate($validationRule);
-
+        
         $producteur = Producteur::where('id', $request->producteur_id)->first();
 
         if ($producteur->status == Status::NO) {
@@ -292,27 +274,18 @@ class ProducteurController extends Controller
                 return back()->withNotify($notify);
             }
         }
-
-
         $infoproducteur->producteur_id = $request->producteur_id;
         $infoproducteur->foretsjachere  = $request->foretsjachere;
         $infoproducteur->superficie  = $request->superficie;
-        $infoproducteur->autresCultures     = $request->autresCultures;
-        $infoproducteur->age18    = $request->age18;
-        $infoproducteur->persEcole = $request->persEcole;
-        $infoproducteur->scolarisesExtrait    = $request->scolarisesExtrait;
-        $infoproducteur->travailleurs    = $request->travailleurs;
-        $infoproducteur->travailleurspermanents    = $request->travailleurspermanents;
+        $infoproducteur->autresCultures = $request->autresCultures;
+        $infoproducteur->autreActivite = $request->autreActivite;
+        $infoproducteur->travailleurs = $request->travailleurs;
+        $infoproducteur->travailleurspermanents = $request->travailleurspermanents;
         $infoproducteur->travailleurstemporaires = $request->travailleurstemporaires;
-        $infoproducteur->personneBlessee    = $request->personneBlessee;
-        $infoproducteur->typeDocuments    = $request->typeDocuments;
-        $infoproducteur->recuAchat    = $request->recuAchat;
-        $infoproducteur->mobileMoney    = $request->mobileMoney;
-        $infoproducteur->operateurMM    = $request->operateurMM;
-        $infoproducteur->numeroCompteMM    = $request->numeroCompteMM;
-        $infoproducteur->paiementMM    = $request->paiementMM;
+        $infoproducteur->travailleurspermanents    = $request->travailleurspermanents;
+        $infoproducteur->mobileMoney = $request->mobileMoney;
         $infoproducteur->compteBanque    = $request->compteBanque;
-
+        dd($infoproducteur);
         $infoproducteur->save();
 
         if ($infoproducteur != null) {
@@ -335,21 +308,21 @@ class ProducteurController extends Controller
                 }
             }
 
-            if (($request->maladiesenfants != null)) {
+            // if (($request->maladiesenfants != null)) {
 
-                $verification   = Producteur_infos_maladieenfant::where('producteur_info_id', $id)->get();
-                if ($verification->count()) {
-                    DB::table('producteur_infos_maladieenfants')->where('producteur_info_id', $id)->delete();
-                }
-                $i = 0;
+            //     $verification   = Producteur_infos_maladieenfant::where('producteur_info_id', $id)->get();
+            //     if ($verification->count()) {
+            //         DB::table('producteur_infos_maladieenfants')->where('producteur_info_id', $id)->delete();
+            //     }
+            //     $i = 0;
 
-                foreach ($request->maladiesenfants as $data) {
-                    if ($data != null) {
-                        DB::table('producteur_infos_maladieenfants')->insert(['producteur_info_id' => $id, 'maladieenfant' => $data]);
-                    }
-                    $i++;
-                }
-            }
+            //     foreach ($request->maladiesenfants as $data) {
+            //         if ($data != null) {
+            //             DB::table('producteur_infos_maladieenfants')->insert(['producteur_info_id' => $id, 'maladieenfant' => $data]);
+            //         }
+            //         $i++;
+            //     }
+            // }
         }
         $notify[] = ['success', isset($message) ? $message : "L'info du producteur a été crée avec succès."];
         return back()->withNotify($notify);
