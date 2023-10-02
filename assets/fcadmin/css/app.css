@@ -4,6 +4,8 @@
     --main-color-hover: #a4da2259;
     --main-bg-dark: #013f17;
     --main-btn-primary: #056526;
+    --main-sidebar-bg: #f9f9f9;
+    --main-outline-info: #ffc06b;
   }
 .my-5 {
     margin: 5px 0;
@@ -1734,7 +1736,7 @@ a {
 }
 
 .text--info {
-    color: #1e9ff2 !important;
+    color: var(--main-outline-info) !important;
 }
 
 .text--dark {
@@ -1933,7 +1935,7 @@ a {
 }
 
 .bg--info {
-    background-color: #1e9ff2 !important;
+    background-color: var(--main-outline-info) !important;
 }
 
 .bg--dark {
@@ -2501,7 +2503,7 @@ a {
 }
 
 [class*="overlay"].overlay--info::before {
-    background-color: #1e9ff2 !important;
+    background-color: var(--main-outline-info) !important;
 }
 
 [class*="overlay"].overlay--dark::before {
@@ -2756,7 +2758,7 @@ a {
 }
 
 .border--info {
-    border-color: #1e9ff2 !important;
+    border-color: var(--main-outline-info) !important;
 }
 
 .border--dark {
@@ -2998,7 +3000,7 @@ a {
 }
 
 .btn--info {
-    background-color: #1e9ff2 !important;
+    background-color: var(--main-outline-info) !important;
 }
 
 .btn--info:hover {
@@ -3089,12 +3091,12 @@ a {
 }
 
 .btn-outline--info {
-    color: #1e9ff2;
-    border-color: #1e9ff2;
+    color: var(--main-outline-info);
+    border-color: var(--main-outline-info);
 }
 
 .btn-outline--info:hover {
-    background-color: #1e9ff2;
+    background-color: var(--main-outline-info);
 }
 
 .btn-outline--dark {
@@ -3586,8 +3588,8 @@ select:focus-within {
 }
 
 .form-check-info .custom-control-input:checked~.custom-control-label::before {
-    border-color: #1e9ff2;
-    background-color: #1e9ff2;
+    border-color: var(--main-outline-info);
+    background-color: var(--main-outline-info);
 }
 
 .form-check-warning .custom-control-input:checked~.custom-control-label::before {
@@ -5194,7 +5196,7 @@ th.w-85 {
 
 .sidebar[class*="bg--"] .sidebar__menu .sidebar-menu-item .menu-icon,
 .sidebar[class*="bg--"] .sidebar__menu .sidebar-menu-item .menu-title {
-    color: #e0e0e0;
+    color: var(--main-sidebar-bg);
 }
 
 .sidebar[class*="bg--"] .sidebar__menu .sidebar-menu-item .side-menu--open {
@@ -5202,7 +5204,7 @@ th.w-85 {
 }
 
 .sidebar[class*="bg--"] .sidebar__menu .sidebar-dropdown>a::before {
-    color: #e0e0e0;
+    color: var(--main-sidebar-bg);
 }
 
 .sidebar[class*="bg--"] .sidebar__menu .sidebar-submenu::before {
@@ -5265,7 +5267,7 @@ th.w-85 {
 
 .sidebar.pill--bg-2 .sidebar-menu-item .side-menu--open,
 .sidebar.pill--bg-2 .sidebar-menu-item.active>a {
-    background-color: #1e9ff2;
+    background-color: var(--main-outline-info);
 }
 
 .sidebar.pill--bg-3 .sidebar-menu-item .side-menu--open,
@@ -5862,7 +5864,7 @@ th.w-85 {
     width: 7px;
     height: 7px;
     border-radius: 50%;
-    background: #1e9ff2;
+    background: var(--main-outline-info);
     cursor: pointer;
     box-shadow: 0 0 0 rgba(30, 159, 242, 0.9);
     animation: pulse-info 2s infinite;
