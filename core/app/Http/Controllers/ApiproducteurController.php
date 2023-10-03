@@ -44,8 +44,13 @@ class ApiproducteurController extends Controller
     //       $producteur = Producteur::select('id','nom','prenoms','codeProdapp as codeProd','localite_id')->whereIn('localite_id', $idlocal)->get(); 
 
     // }
-    $producteur = DB::table('producteurs')->select('id', 'prenoms', 'nom', 'codeProd', 'localite_id')->get();
-    return response()->json($producteur, 201);
+    
+    $producteurs = Producteur::join('localites', 'producteurs.localite_id', '=', 'localites.id')
+    ->select('producteurs.nom', 'producteurs.prenoms', 'localites.section_id as section_id', 'localites.id as localite_id', 'producteurs.id as producteur_id', 'producteurs.codeProd as codeProd', )
+    ->get();
+
+
+    return response()->json($producteurs, 201);
   }
   //creation de getstaff(elle retourne les staff d'une cooperative donnée)
   public function getstaff(Request $request)
