@@ -73,7 +73,7 @@ class LoginController extends Controller
         // to login and redirect the user back to the login form. Of course, when this
         // user surpasses their maximum number of attempts they will get locked out.
         $this->incrementLoginAttempts($request);
-
+ 
         return $this->sendFailedLoginResponse($request);
     }
 
@@ -123,26 +123,26 @@ class LoginController extends Controller
         $request->validate($validation_rule);
     }
 
-    public function logout()
-    {
-        $this->guard()->logout();
-        request()->session()->invalidate();
-        $notify[] = ['success', 'Vous avez été déconnecté(e).'];
-        return redirect()->route('manager.login')->withNotify($notify);
-    }
+    // public function logout()
+    // {
+    //     $this->guard()->logout();
+    //     request()->session()->invalidate();
+    //     $notify[] = ['success', 'Vous avez été déconnecté(e).'];
+    //     return redirect()->route('login')->withNotify($notify);
+    // }
 
     public function authenticated(Request $request, $user)
     {
         if ($user->status == Status::BAN_USER) {
             $this->guard()->logout();
             $notify[] = ['error', 'Votre compte a été désactivé.'];
-            return redirect()->route('manager.login')->withNotify($notify);
+            return redirect()->route('login')->withNotify($notify);
         }
-        if (auth()->user()->user_type != "manager") {
-            $this->guard()->logout();
-            $notify[] = ['error', 'Vous n\'arrivez pas à vous connecter à votre tableau de bord.'];
-            return redirect()->route('manager.login')->withNotify($notify);
-        }
+        // if (auth()->user()->user_type != "manager") {
+        //     $this->guard()->logout();
+        //     $notify[] = ['error', 'Vous n\'arrivez pas à vous connecter à votre tableau de bord.'];
+        //     return redirect()->route('manager.login')->withNotify($notify);
+        // }
         $user     = auth()->user();
 
         $user->save();
@@ -172,5 +172,16 @@ class LoginController extends Controller
         $userLogin->os      = @$userAgent['os_platform'];
         $userLogin->save();
         return redirect()->route('manager.dashboard');
+    }
+
+    protected function logout(Request $request)
+    {
+        $this->guard()->logout();
+
+        $request->session()->flush();
+
+        $request->session()->regenerate();
+
+        return redirect('/login');
     }
 }

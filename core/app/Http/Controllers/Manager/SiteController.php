@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Manager;
 
+use App\Http\Controllers\Controller;
 use App\Constants\Status;
 use App\Models\AdminNotification;
 use App\Models\CourierInfo;

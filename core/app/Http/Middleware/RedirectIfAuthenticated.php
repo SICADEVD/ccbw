@@ -12,12 +12,12 @@ class RedirectIfAuthenticated
 
         if (auth()->guard($guard)->check()) {
             $user =auth()->user();
-            if($user->user_type == "manager"){
+            if($user){
                 return redirect()->route('manager.dashboard');
             }
-            elseif($user->user_type == "staff"){
-                return redirect()->route('staff.dashboard');
-            }
+            // elseif($user->user_type == "staff"){
+            //     return redirect()->route('staff.dashboard');
+            // }
         }
         return $next($request);
 

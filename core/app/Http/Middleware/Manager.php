@@ -16,10 +16,10 @@ class Manager
      */
     public function handle(Request $request, Closure $next)
     {
-        if(auth()->user() && auth()->user()->user_type=='manager'){
+        if(auth()->user()){
             return $next($request);
         }else{
-            return to_route('manager.login');
+            return to_route('login');
         }
     }
 }
