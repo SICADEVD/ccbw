@@ -257,6 +257,7 @@
                                                             {{ Form::label(__('Opérateur'), null, ['class' => 'control-label']) }}
                                                             <select name="operateurMM[]" class="form-control operateurMM"
                                                                 id="operateurMM-1">
+                                                                <option value=""></option>
                                                                 <option value="Orange">Orange</option>
                                                                 <option value="MTN">MTN</option>
                                                                 <option value="Moov">Moov</option>
@@ -398,19 +399,17 @@
             var productCount = $("#activity_area tr").length + 1;
             $(document).on('click', '#addRowActivite', function() {
 
-                //---> Start create table tr
                 var html_table = '<tr>';
                 html_table +=
                     '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm">Information Activité ' +
                     productCount +
-                    '</badge></div><div class="col-xs-12 col-sm-12"><div class="form-group row"><label for="Type de culture" class="control-label">Type D\'activité</label><input placeholder="Elevage, Commerce, Prestation de service, ..." class="form-control" id="typeactivite-' +
+                    '</badge></div><div class="col-xs-12 col-sm-12"><div class="form-group row"><label for="" class="control-label">Type D\'activité</label><input placeholder="Elevage, Commerce, Prestation de service, ..." class="form-control" id="typeactivite-' +
                     productCount +
-                    '" class="form-control " value=""></div></div><div class="col-xs-12 col-sm-12"><button type="button" id="' +
+                    '" name="typeactivite[]" type="text"></div></div><div class="col-xs-12 col-sm-12"><button type="button" id="' +
                     productCount +
                     '" class="removeRowActivite btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></div></td>';
 
                 html_table += '</tr>';
-                //---> End create table tr
 
                 productCount = parseInt(productCount) + 1;
                 $('#activity_area').append(html_table);
@@ -451,7 +450,7 @@
 
                 html_table += '</tr>';
                 //---> End create table tr
-            
+
                 //---> End create table tr
                 productCount = parseInt(productCount) + 1;
                 $('#compagny_area').append(html_table);
