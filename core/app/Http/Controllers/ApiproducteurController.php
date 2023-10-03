@@ -44,13 +44,9 @@ class ApiproducteurController extends Controller
 
     // }
     
-    // $producteurs = Producteur::join('localites', 'producteurs.localite_id', '=', 'localites.id')
-    // ->select('producteurs.nom', 'producteurs.prenoms', 'localites.section_id as section_id', 'localites.id as localite_id', 'producteurs.id as producteur_id', 'producteurs.codeProd as codeProd', )
-    // ->get();
-
     $producteurs = Producteur::join('localites', 'producteurs.localite_id', '=', 'localites.id')
-    ->where('producteurs.userid', $userid) // Ajoutez cette condition
-    ->select('producteurs.nom', 'producteurs.prenoms', 'localites.section_id as section_id', 'localites.id as localite_id', 'producteurs.id as producteur_id', 'producteurs.codeProd as codeProd')
+    ->where('producteurs.userid', $userid)
+    ->select('producteurs.nom', 'producteurs.prenoms', 'localites.section_id as section_id', 'localites.id as localite_id', 'producteurs.id as id', 'producteurs.codeProd as codeProd')
     ->get();
 
 
