@@ -256,94 +256,100 @@ class ProducteurController extends Controller
 
     public function storeinfo(StoreInfoRequest $request)
     {
-        
+
         DB::beginTransaction();
-            try {
-                $producteur = Producteur::where('id', $request->producteur_id)->first();
 
-                if ($producteur->status == Status::NO) {
-                    $notify[] = ['error', 'Ce producteur est désactivé'];
-                    return back()->withNotify($notify)->withInput();
-                }
+        try {
 
-                if ($request->id) {
-                    $infoproducteur = Producteur_info::findOrFail($request->id);
-                    $message = "L'info du producteur a été mise à jour avec succès";
-                } else {
-                    $infoproducteur = new Producteur_info();
+            $request->validated();
 
-                    $hasInfoProd = Producteur_info::where('producteur_id', $request->producteur_id)->exists();
-
-                    if ($hasInfoProd) {
-                        $notify[] = ['error', "L'info existe déjà pour ce producteur. Veuillez apporter des mises à jour."];
-                        return back()->withNotify($notify);
-                    }
-                }
-                $infoproducteur->producteur_id = $request->producteur_id;
-                $infoproducteur->foretsjachere  = $request->foretsjachere;
-                $infoproducteur->superficie  = $request->superficie;
-                $infoproducteur->autresCultures = $request->autresCultures;
-                $infoproducteur->autreActivite = $request->autreActivite;
-                $infoproducteur->travailleurs = $request->travailleurs;
-                $infoproducteur->travailleurspermanents = $request->travailleurspermanents;
-                $infoproducteur->travailleurstemporaires = $request->travailleurstemporaires;
-                $infoproducteur->mobileMoney = $request->mobileMoney;
-                $infoproducteur->compteBanque    = $request->compteBanque;
-                $infoproducteur->nomBanque    = $request->nomBanque;
-                $infoproducteur->userid = auth()->user()->id;
-                $infoproducteur->save();
-
-                if ($infoproducteur != null) {
-
-                    $id = $infoproducteur->id;
-
-                    if (($request->typeculture != null)) {
-
-                        $verification   = Producteur_infos_typeculture::where('producteur_info_id', $id)->get();
-                        if ($verification->count()) {
-                            DB::table('producteur_infos_typecultures')->where('producteur_info_id', $id)->delete();
-                        }
-                        $i = 0;
-
-                        foreach ($request->typeculture as $data) {
-                            if ($data != null) {
-                                DB::table('producteur_infos_typecultures')->insert(['producteur_info_id' => $id, 'typeculture' => $data, 'superficieculture' => $request->superficieculture[$i]]);
-                            }
-                            $i++;
-                        }
-                    }
-                    if ($request->typeactivite != null) {
-                        $verification   = Producteur_infos_autresactivite::where('producteur_info_id', $id)->get();
-                        if ($verification->count()) {
-                            DB::table('producteur_infos_autresactivites')->where('producteur_info_id', $id)->delete();
-                        }
-                        $i = 0;
-                        foreach ($request->typeactivite as $data) {
-                            if ($data != null) {
-                                DB::table('producteur_infos_autresactivites')->insert(['producteur_info_id' => $id, 'typeactivite' => $data]);
-                            }
-                            $i++;
-                        }
-                    }
-                    if ($request->operateurMM != null && $request->numeros != null) {
-                        $verification   = Producteur_infos_mobile::where('producteur_info_id', $id)->get();
-                        if ($verification->count()) {
-                            DB::table('producteur_infos_mobiles')->where('producteur_info_id', $id)->delete();
-                        }
-                        $i = 0;
-                        foreach ($request->operateurMM as $data) {
-                            if ($data != null) {
-                                DB::table('producteur_infos_mobiles')->insert(['producteur_info_id' => $id, 'operateur' => $data, 'numero' => $request->numeros[$i]]);
-                            }
-                            $i++;
-                        }
-                    }
-                }
-            } catch (ValidationException $e) {
-                DB::rollBack();
-                dd($e->getErrors());
+            $producteur = Producteur::where('id', $request->producteur_id)->first();
+    
+            if ($producteur->status == Status::NO) {
+                $notify[] = ['error', 'Ce producteur est désactivé'];
+                return back()->withNotify($notify)->withInput();
             }
+    
+            if ($request->id) {
+                $infoproducteur = Producteur_info::findOrFail($request->id);
+                $message = "L'info du producteur a été mise à jour avec succès";
+            } else {
+                $infoproducteur = new Producteur_info();
+    
+                $hasInfoProd = Producteur_info::where('producteur_id', $request->producteur_id)->exists();
+    
+                if ($hasInfoProd) {
+                    $notify[] = ['error', "L'info existe déjà pour ce producteur. Veuillez apporter des mises à jour."];
+                    return back()->withNotify($notify);
+                }
+            }
+            $infoproducteur->producteur_id = $request->producteur_id;
+            $infoproducteur->foretsjachere  = $request->foretsjachere;
+            $infoproducteur->superficie  = $request->superficie;
+            $infoproducteur->autresCultures = $request->autresCultures;
+            $infoproducteur->autreActivite = $request->autreActivite;
+            $infoproducteur->travailleurs = $request->travailleurs;
+            $infoproducteur->travailleurspermanents = $request->travailleurspermanents;
+            $infoproducteur->travailleurstemporaires = $request->travailleurstemporaires;
+            $infoproducteur->mobileMoney = $request->mobileMoney;
+            $infoproducteur->compteBanque    = $request->compteBanque;
+            $infoproducteur->nomBanque    = $request->nomBanque;
+            $infoproducteur->userid = auth()->user()->id;
+            $infoproducteur->save();
+    
+            if ($infoproducteur != null) {
+    
+                $id = $infoproducteur->id;
+    
+                if (($request->typeculture != null)) {
+    
+                    $verification   = Producteur_infos_typeculture::where('producteur_info_id', $id)->get();
+                    if ($verification->count()) {
+                        DB::table('producteur_infos_typecultures')->where('producteur_info_id', $id)->delete();
+                    }
+                    $i = 0;
+    
+                    foreach ($request->typeculture as $data) {
+                        if ($data != null) {
+                            DB::table('producteur_infos_typecultures')->insert(['producteur_info_id' => $id, 'typeculture' => $data, 'superficieculture' => $request->superficieculture[$i]]);
+                        }
+                        $i++;
+                    }
+                }
+                if ($request->typeactivite != null) {
+                    $verification   = Producteur_infos_autresactivite::where('producteur_info_id', $id)->get();
+                    if ($verification->count()) {
+                        DB::table('producteur_infos_autresactivites')->where('producteur_info_id', $id)->delete();
+                    }
+                    $i = 0;
+                    foreach ($request->typeactivite as $data) {
+                        if ($data != null) {
+                            DB::table('producteur_infos_autresactivites')->insert(['producteur_info_id' => $id, 'typeactivite' => $data]);
+                        }
+                        $i++;
+                    }
+                }
+                if ($request->operateurMM != null && $request->numeros != null) {
+                    $verification   = Producteur_infos_mobile::where('producteur_info_id', $id)->get();
+                    if ($verification->count()) {
+                        DB::table('producteur_infos_mobiles')->where('producteur_info_id', $id)->delete();
+                    }
+                    $i = 0;
+                    foreach ($request->operateurMM as $data) {
+                        if ($data != null) {
+                            DB::table('producteur_infos_mobiles')->insert(['producteur_info_id' => $id, 'operateur' => $data, 'numero' => $request->numeros[$i]]);
+                        }
+                        $i++;
+                    }
+                }
+            }
+
+
+        } catch (ValidationException $e) {
+            DB::rollBack();
+        }
         DB::commit();
+       
         $notify[] = ['success', isset($message) ? $message : "L'info du producteur a été crée avec succès."];
         return back()->withNotify($notify);
     }

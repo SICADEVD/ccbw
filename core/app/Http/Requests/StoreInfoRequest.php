@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\ValidTravailleurs;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreInfoRequest extends FormRequest
@@ -28,10 +29,36 @@ class StoreInfoRequest extends FormRequest
             'autresCultures'  => 'required|max:255',
             'autreActivite' => 'required|max:255',
             'travailleurs'  => 'required|max:255',
-            'travailleurspermanents'  => 'required|max:255',
-            'travailleurstemporaires'  => 'required|max:255',
+            'travailleurspermanents'  => ['required', 'integer', new ValidTravailleurs],
+            'travailleurstemporaires'  => ['required', 'integer', new ValidTravailleurs],
             'mobileMoney'  => 'required|max:255',
             'compteBanque'=> 'required|max:255',
+        ];
+    }
+    public function messages()
+    {
+        return [
+            'foretsjachere.required' => 'Le champ foretsjachere est obligatoire',
+            'autresCultures.required' => 'Le champ autresCultures est obligatoire',
+            'autreActivite.required' => 'Le champ autreActivite est obligatoire',
+            'travailleurs.required' => 'Le champ travailleurs est obligatoire',
+            'travailleurspermanents.required' => 'Le champ travailleurspermanents est obligatoire',
+            'travailleurstemporaires.required' => 'Le champ travailleurstemporaires est obligatoire',
+            'mobileMoney.required' => 'Le champ mobileMoney est obligatoire',
+            'compteBanque.required' => 'Le champ compteBanque est obligatoire',
+        ];
+    }
+    public function attributes()
+    {
+        return [
+            'foretsjachere' => 'Forets jachere',
+            'autresCultures' => 'Autres cultures',
+            'autreActivite' => 'Autre activite',
+            'travailleurs' => 'Travailleurs',
+            'travailleurspermanents' => 'Travailleurs permanents',
+            'travailleurstemporaires' => 'Travailleurs temporaires',
+            'mobileMoney' => 'Mobile money',
+            'compteBanque' => 'Compte banque',
         ];
     }
 }

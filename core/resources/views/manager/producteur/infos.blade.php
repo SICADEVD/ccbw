@@ -123,29 +123,34 @@
                                         <tr>
                                             <td class="row">
                                                 <div class="col-xs-12 col-sm-12 bg-success">
-                                                    <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Information Culture 1')
+                                                    <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Information Culture')
                                                     </badge>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-12">
                                                     <div class="form-group row">
-                                                        {{ Form::label(__('Type de culture'), null, ['class' => 'control-label']) }}
-                                                        <input type="text" name="typeculture[]"
-                                                            placeholder="Riz, Maïs, Igname, Banane, ..." id="typeculture-1"
-                                                            class="form-control" value="{{ old('typeculture') }}">
+                                                        {{ Form::label(__('Ajouter un Type de culture'), null, ['class' => 'control-label']) }}
+                                                        @foreach (old('typeculture', []) as $typeculture)
+                                                            <input type="text" name="typeculture[]"
+                                                                placeholder="Riz, Maïs, Igname, Banane, ..."
+                                                                id="typeculture-0" class="form-control"
+                                                                value="{{ $typeculture }}">
+                                                        @endforeach
                                                     </div>
                                                 </div>
 
                                                 <div class="col-xs-12 col-sm-12">
                                                     <div class="form-group row">
-                                                        {{ Form::label(__('Superficie de culture'), null, ['class' => 'control-label']) }}
-                                                        <input type="text" name="superficieculture[]"
-                                                            placeholder="Superficie de culture" id="superficieculture-1"
-                                                            class="form-control " value="{{ old('superficieculture') }}">
+                                                        
+                                                        @foreach (old('superficieculture', []) as $superficieculture)
+                                                            <input type="text" name="superficieculture[]"
+                                                                placeholder="Superficie de culture" id="superficieculture-1"
+                                                                class="form-control " value="{{ $superficieculture }}">
+                                                        @endforeach
                                                     </div>
                                                 </div>
-
                                             </td>
                                         </tr>
+
 
                                     </tbody>
                                     <tfoot style="background: #e3e3e3;">
@@ -178,19 +183,20 @@
                                         <tr>
                                             <td class="row">
                                                 <div class="col-xs-12 col-sm-12 bg-success">
-                                                    <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Information Activité 1')
+                                                    <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Information Activité')
                                                     </badge>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-12">
                                                     <div class="form-group row">
-                                                        {{ Form::label(__('Type D\'activité'), null, ['class' => 'control-label']) }}
-                                                        <input type="text" name="typeactivite[]"
-                                                            placeholder="Elevage, Commerce, Prestation de service, ..."
-                                                            id="typeactivite-1" class="form-control"
-                                                            value="{{ old('typeactivite') }}">
+                                                        {{ Form::label(__('Ajouter une activité'), null, ['class' => 'control-label']) }}
+                                                        @foreach (old('typeactivite', []) as $typeactivite)
+                                                            <input type="text" name="typeactivite[]"
+                                                                placeholder="Elevage, Commerce, Prestation de service, ..."
+                                                                id="typeactivite-0" class="form-control"
+                                                                value="{{ $typeactivite }}">
+                                                        @endforeach
                                                     </div>
                                                 </div>
-
                                             </td>
                                         </tr>
 
@@ -227,7 +233,7 @@
                         <div class="form-group row">
                             <?php echo Form::label(__('Nombre de Travailleurs Non Permanents'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::number('travailleurstemporaires', null, ['placeholder' => 'Nombre', 'class' => 'form-control', 'min' => '0', 'required']); ?>
+                                <?php echo Form::number('travailleurstemporaires', null, ['placeholder' => 'Nombre', 'class' => 'form-control', 'min' => '0']); ?>
                             </div>
                         </div>
                         <hr class="panel-wide">
@@ -249,29 +255,23 @@
                                                 <td class="row">
                                                     <div class="col-xs-12 col-sm-12 bg-success">
                                                         <badge class="btn  btn-outline--warning h-45 btn-sm">
-                                                            @lang('Numero mobile monnaie 1')
+                                                            @lang('Information mobile monnaie')
                                                         </badge>
                                                     </div>
                                                     <div class="col-xs-12 col-sm-12">
                                                         <div class="form-group row">
-                                                            {{ Form::label(__('Opérateur'), null, ['class' => 'control-label']) }}
-                                                            <select name="operateurMM[]" class="form-control operateurMM"
-                                                                id="operateurMM-1">
-                                                                <option value=""></option>
-                                                                <option value="Orange">Orange</option>
-                                                                <option value="MTN">MTN</option>
-                                                                <option value="Moov">Moov</option>
-                                                                <option value="Wave">Wave</option>
-                                                                <option value="Push">Push</option>
-                                                            </select>
+                                                            {{ Form::label(__('Ajouter un opérateur'), null, ['class' => 'control-label']) }}
+                                                           
                                                         </div>
                                                     </div>
                                                     <div class="col-xs-12 col-sm-12">
                                                         <div class="form-group row">
-                                                            {{ Form::label(__('Numéro'), null, ['class' => 'control-label']) }}
-                                                            <input type="text" name="numeros[]"
-                                                                placeholder="Numéro de téléphone" id="numeros-1"
-                                                                class="form-control" value="{{ old('numeros') }}">
+                                                           
+                                                            @foreach (old('numeros', []) as $numero)
+                                                                <input type="text" name="numeros[]"
+                                                                    placeholder="Numéro de téléphone" id="numeros-1"
+                                                                    class="form-control" value="{{ $numero }}">
+                                                            @endforeach
                                                         </div>
                                                     </div>
                                                 </td>
@@ -356,7 +356,7 @@
     <script type="text/javascript">
         $(document).ready(function() {
 
-            var productCount = $("#product_area tr").length + 1;
+            var productCount = $("#product_area tr").length;
             $(document).on('click', '#addRow', function() {
 
                 //---> Start create table tr
@@ -396,7 +396,7 @@
 
         });
         $(document).ready(function() {
-            var productCount = $("#activity_area tr").length + 1;
+            var productCount = $("#activity_area tr").length;
             $(document).on('click', '#addRowActivite', function() {
 
                 var html_table = '<tr>';
@@ -432,7 +432,7 @@
 
         });
         $(document).ready(function() {
-            var productCount = $("#compagny_area tr").length + 1;
+            var productCount = $("#compagny_area tr").length;
             $(document).on('click', '#addRowOperateur', function() {
 
                 //---> Start create table tr
