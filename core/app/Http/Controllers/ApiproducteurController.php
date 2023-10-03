@@ -30,8 +30,7 @@ class ApiproducteurController extends Controller
 
   public function getproducteurs(Request $request)
   {
-    //
-    $input = $request->all();
+    $userid = $request->userid;
     // $producteur = array();
     // $localite = DB::table('user_localites as rl')->join('localites as l', 'rl.localite_id','=','l.id')->where('user_id', $input['userid'])->select('l.id')->get();
     // if(isset($localite) && count($localite)){
@@ -45,8 +44,13 @@ class ApiproducteurController extends Controller
 
     // }
     
+    // $producteurs = Producteur::join('localites', 'producteurs.localite_id', '=', 'localites.id')
+    // ->select('producteurs.nom', 'producteurs.prenoms', 'localites.section_id as section_id', 'localites.id as localite_id', 'producteurs.id as producteur_id', 'producteurs.codeProd as codeProd', )
+    // ->get();
+
     $producteurs = Producteur::join('localites', 'producteurs.localite_id', '=', 'localites.id')
-    ->select('producteurs.nom', 'producteurs.prenoms', 'localites.section_id as section_id', 'localites.id as localite_id', 'producteurs.id as producteur_id', 'producteurs.codeProd as codeProd', )
+    ->where('producteurs.userid', $userid) // Ajoutez cette condition
+    ->select('producteurs.nom', 'producteurs.prenoms', 'localites.section_id as section_id', 'localites.id as localite_id', 'producteurs.id as producteur_id', 'producteurs.codeProd as codeProd')
     ->get();
 
 
