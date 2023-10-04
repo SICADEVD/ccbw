@@ -208,7 +208,10 @@ class ApiproducteurController extends Controller
       $infoproducteur->mobileMoney = $request->mobileMoney;
       $infoproducteur->compteBanque    = $request->compteBanque;
       $infoproducteur->nomBanque    = $request->nomBanque;
-
+      if (auth()->check()) {
+        // Utilisateur authentifié, attribuer l'ID de l'utilisateur
+        $infoproducteur->userid = auth()->user()->id;
+      }
       $infoproducteur->save();
       if ($infoproducteur != null) {
         $id = $infoproducteur->id;
