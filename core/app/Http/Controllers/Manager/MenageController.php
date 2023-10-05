@@ -2,16 +2,19 @@
 
 namespace App\Http\Controllers\Manager;
 
-use App\Constants\Status;
-use App\Exports\ExportMenages;
-use App\Http\Controllers\Controller;
-use App\Models\Localite; 
-use App\Models\Producteur; 
 use App\Models\Menage; 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
+use App\Models\Section;
+use App\Constants\Status;
+use App\Models\Localite; 
+use App\Models\Cooperative;
+use App\Models\Producteur; 
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Exports\ExportMenages;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\StoreMenageRequest;
 
 class MenageController extends Controller
 {
@@ -20,8 +23,11 @@ class MenageController extends Controller
     {
         $pageTitle      = "Gestion des menages";
         $manager   = auth()->user();
-        $localites = Localite::active()->where('cooperative_id',$manager->cooperative_id)->get();
-        $menages = Menage::dateFilter()->searchable(["quartier","sources_energies","boisChauffe","ordures_menageres","separationMenage","eauxToillette","eauxVaisselle","wc","menages.sources_eaux","machine","type_machines","garde_machines","equipements","traitementChamps","nomPersonneTraitant","numeroPersonneTraitant","empruntMachine","gardeEmpruntMachine","activiteFemme","nomActiviteFemme","superficieCacaoFemme","champFemme","nombreHectareFemme"])->latest('id')->joinRelationship('producteur.localite')->where('cooperative_id',$manager->cooperative_id)->where(function ($q) {
+        $cooperative = Cooperative::with('sections.localites')->find($manager->cooperative_id);
+        $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
+            return $localite->active();
+        });
+        $menages = Menage::dateFilter()->searchable(["quartier","sources_energies","boisChauffe","ordures_menageres","separationMenage","eauxToillette","eauxVaisselle","wc","menages.sources_eaux","type_machines","garde_machines","equipements","traitementChamps","activiteFemme","nomActiviteFemme","champFemme","nombreHectareFemme"])->latest('id')->joinRelationship('producteur.localite.section')->where('cooperative_id',$manager->cooperative_id)->where(function ($q) {
             if(request()->localite != null){
                 $q->where('localite_id',request()->localite);
             }
@@ -34,32 +40,18 @@ class MenageController extends Controller
     {
         $pageTitle = "Ajouter un menage";
         $manager   = auth()->user();
+        $cooperative = Cooperative::with('sections.localites')->find($manager->cooperative_id);
+        $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
+            return $localite->active();
+        });
         $producteurs  = Producteur::with('localite')->get();
-        $localites  = Localite::active()->where('cooperative_id',auth()->user()->cooperative_id)->orderBy('nom')->get();
+        
         return view('manager.menage.create', compact('pageTitle', 'producteurs','localites'));
     }
 
-    public function store(Request $request)
+    public function store(StoreMenageRequest $request)
     {
-        $validationRule = [
-            'producteur'    => 'required|exists:producteurs,id',
-            'quartier' => 'required|max:255',
-            'sources_energies'  => 'required|max:255',
-            'ordures_menageres'  => 'required|max:255',
-            'separationMenage'  => 'required|max:255', 
-            'eauxToillette'  => 'required|max:255', 
-            'eauxVaisselle'  => 'required|max:255', 
-            'wc'  => 'required|max:255', 
-            'sources_eaux'  => 'required|max:255', 
-            'traitementChamps'  => 'required|max:255', 
-            'equipements'  => 'required|max:255',
-            'activiteFemme'  => 'required|max:255',
-            'superficieCacaoFemme'  => 'required|max:255', 
-        ];
- 
-
-        $request->validate($validationRule);
-
+        $request->validated();
         $localite = Localite::where('id', $request->localite)->first();
 
         if ($localite->status == Status::NO) {
@@ -84,6 +76,10 @@ class MenageController extends Controller
 
         $menage->producteur_id  = $request->producteur;  
         $menage->quartier  = $request->quartier;
+        $menage->ageEnfant0A5  = $request->ageEnfant0A5;
+        $menage->ageEnfant6A17  = $request->ageEnfant6A17;
+        $menage->enfantscolarises  = $request->enfantscolarises;
+        $menage->enfantsPasExtrait = $request->enfantsPasExtrait;
         $menage->sources_energies  = $request->sources_energies;
         $menage->boisChauffe     = $request->boisChauffe;
         $menage->ordures_menageres    = $request->ordures_menageres;
@@ -91,22 +87,20 @@ class MenageController extends Controller
         $menage->eauxToillette    = $request->eauxToillette;
         $menage->eauxVaisselle    = $request->eauxVaisselle; 
         $menage->wc    = $request->wc; 
-        $menage->sources_eaux    = $request->sources_eaux; 
-        $menage->machine    = $request->machine; 
+        $menage->sources_eaux    = $request->sources_eaux;  
         $menage->type_machines    = $request->type_machines; 
         $menage->garde_machines    = $request->garde_machines; 
         $menage->equipements    = $request->equipements; 
         $menage->traitementChamps    = $request->traitementChamps; 
-        $menage->nomPersonneTraitant    = $request->nomPersonneTraitant; 
-        $menage->numeroPersonneTraitant    = $request->numeroPersonneTraitant; 
-        $menage->empruntMachine    = $request->empruntMachine; 
-        $menage->gardeEmpruntMachine    = $request->gardeEmpruntMachine; 
+        $menage->nomApplicateur   = $request->nomApplicateur;
+        $menage->numeroApplicateur   = $request->numeroApplicateur;
         $menage->activiteFemme    = $request->activiteFemme; 
         $menage->nomActiviteFemme    = $request->nomActiviteFemme; 
-        $menage->superficieCacaoFemme    = $request->superficieCacaoFemme; 
         $menage->champFemme    = $request->champFemme; 
         $menage->nombreHectareFemme    = $request->nombreHectareFemme;
-       
+        $menage->autreMachine    = $request->autreMachine;
+        $menage->autreEndroit    = $request->autreEndroit;
+        // dd($menage);
         $menage->save(); 
 
         $notify[] = ['success', isset($message) ? $message : 'Le menage a été crée avec succès.'];
@@ -117,8 +111,13 @@ class MenageController extends Controller
     public function edit($id)
     {
         $pageTitle = "Mise à jour de le menage";
-        $localites  = Localite::active()->where('cooperative_id',auth()->user()->cooperative_id)->orderBy('nom')->get();
+        $manager   = auth()->user();
+        // $localites  = Localite::active()->where('cooperative_id',auth()->user()->cooperative_id)->orderBy('nom')->get();
         $producteurs  = Producteur::with('localite')->get();
+        $cooperative = Cooperative::with('sections.localites')->find($manager->cooperative_id);
+        $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
+            return $localite->active();
+        });
         $menage   = Menage::findOrFail($id);
         return view('manager.menage.edit', compact('pageTitle', 'localites', 'menage','producteurs'));
     } 

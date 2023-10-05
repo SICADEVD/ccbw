@@ -41,6 +41,6 @@ class ValidTravailleurs implements Rule
      */
     public function message()
     {
-        return 'La somme des travailleurs permanents et non permanents ne doit pas dépasser le nombre total de travailleurs.';
+        return 'La somme des travailleurs permanents et non permanents ne doit pas être supérieure au nombre total de travailleurs.';
     }
 }

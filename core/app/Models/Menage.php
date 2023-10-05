@@ -13,7 +13,7 @@ class Menage extends Model
 
     public function producteur()
     {
-        return $this->belongsTo(Producteur::class);
+        return $this->belongsTo(Producteur::class,);
     }
      
      

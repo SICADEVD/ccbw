@@ -21,5 +21,9 @@ class Producteur extends Model
     {
         return $this->belongsTo(Programme::class, 'programme_id');
     }
+    public function menages()
+    {
+        return $this->hasMany(Menage::class, 'producteur_id', 'id');
+    }
     
 }
