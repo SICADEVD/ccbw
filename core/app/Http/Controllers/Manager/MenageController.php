@@ -100,7 +100,7 @@ class MenageController extends Controller
         $menage->nombreHectareFemme    = $request->nombreHectareFemme;
         $menage->autreMachine    = $request->autreMachine;
         $menage->autreEndroit    = $request->autreEndroit;
-        // dd($menage);
+        $menage->userid = auth()->user()->id;
         $menage->save(); 
 
         $notify[] = ['success', isset($message) ? $message : 'Le menage a été crée avec succès.'];

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Menage;
 use App\Models\Localite;
 use App\Constants\Status;
+use App\Http\Requests\StoreMenageRequest;
 use App\Models\Producteur;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -40,30 +41,10 @@ class ApimenageController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreMenageRequest $request)
     {
-		
-        
-        // $input = $request->all();   
-        // $menage = Menage::create($input);
-        $validationRule = [
-            'producteur'    => 'required|exists:producteurs,id',
-            'quartier' => 'required|max:255',
-            'sources_energies'  => 'required|max:255',
-            'ordures_menageres'  => 'required|max:255',
-            'separationMenage'  => 'required|max:255', 
-            'eauxToillette'  => 'required|max:255', 
-            'eauxVaisselle'  => 'required|max:255', 
-            'wc'  => 'required|max:255', 
-            'sources_eaux'  => 'required|max:255', 
-            'traitementChamps'  => 'required|max:255', 
-            'equipements'  => 'required|max:255',
-            'activiteFemme'  => 'required|max:255',
-            'superficieCacaoFemme'  => 'required|max:255', 
-        ];
- 
 
-        $request->validate($validationRule);
+        $request->validated();
 
          
         if($request->id !=null) {
@@ -78,9 +59,12 @@ class ApimenageController extends Controller
                 return response()->json("Ce producteur a déjà un menage enregistré", 501);
             }
         }
-        
         $menage->producteur_id  = $request->producteur;  
         $menage->quartier  = $request->quartier;
+        $menage->ageEnfant0A5  = $request->ageEnfant0A5;
+        $menage->ageEnfant6A17  = $request->ageEnfant6A17;
+        $menage->enfantscolarises  = $request->enfantscolarises;
+        $menage->enfantsPasExtrait = $request->enfantsPasExtrait;
         $menage->sources_energies  = $request->sources_energies;
         $menage->boisChauffe     = $request->boisChauffe;
         $menage->ordures_menageres    = $request->ordures_menageres;
@@ -88,23 +72,24 @@ class ApimenageController extends Controller
         $menage->eauxToillette    = $request->eauxToillette;
         $menage->eauxVaisselle    = $request->eauxVaisselle; 
         $menage->wc    = $request->wc; 
-        $menage->sources_eaux    = $request->sources_eaux; 
-        $menage->machine    = $request->machine; 
+        $menage->sources_eaux    = $request->sources_eaux;  
         $menage->type_machines    = $request->type_machines; 
         $menage->garde_machines    = $request->garde_machines; 
         $menage->equipements    = $request->equipements; 
         $menage->traitementChamps    = $request->traitementChamps; 
-        $menage->nomPersonneTraitant    = $request->nomPersonneTraitant; 
-        $menage->numeroPersonneTraitant    = $request->numeroPersonneTraitant; 
-        $menage->empruntMachine    = $request->empruntMachine; 
-        $menage->gardeEmpruntMachine    = $request->gardeEmpruntMachine; 
+        $menage->nomApplicateur   = $request->nomApplicateur;
+        $menage->numeroApplicateur   = $request->numeroApplicateur;
         $menage->activiteFemme    = $request->activiteFemme; 
         $menage->nomActiviteFemme    = $request->nomActiviteFemme; 
-        $menage->superficieCacaoFemme    = $request->superficieCacaoFemme; 
         $menage->champFemme    = $request->champFemme; 
         $menage->nombreHectareFemme    = $request->nombreHectareFemme;
-       
-        $menage->save(); 
+        $menage->autreMachine    = $request->autreMachine;
+        $menage->autreEndroit    = $request->autreEndroit;
+        if (auth()->check()) {
+            // Utilisateur authentifié, attribuer l'ID de l'utilisateur
+            $menage->userid = auth()->user()->id;
+        }
+        $menage->save();  
 
         if($menage ==null ){
             return response()->json("Le ménage n'a pas été enregistré", 501);
