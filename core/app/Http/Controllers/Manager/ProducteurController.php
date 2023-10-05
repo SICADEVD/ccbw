@@ -262,6 +262,7 @@ class ProducteurController extends Controller
         try {
 
             $request->validated();
+            
 
             $producteur = Producteur::where('id', $request->producteur_id)->first();
 

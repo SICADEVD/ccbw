@@ -262,6 +262,7 @@ class ApiproducteurController extends Controller
     } catch (ValidationException $e) {
       DB::rollBack();
     }
+    
     DB::commit();
     return response()->json($infoproducteur, 201);
   }

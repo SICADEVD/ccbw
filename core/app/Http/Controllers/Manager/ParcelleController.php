@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers\Manager;
 
-use App\Constants\Status;
-use App\Exports\ExportParcelles;
-use App\Http\Controllers\Controller;
-use App\Imports\ParcelleImport;
-use App\Models\Localite; 
-use App\Models\Producteur; 
-use App\Models\Parcelle; 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 use Excel;
+use App\Constants\Status;
+use App\Models\Localite; 
+use App\Models\Parcelle; 
+use App\Models\Cooperative;
+use App\Models\Producteur; 
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Imports\ParcelleImport;
+use App\Exports\ExportParcelles;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 
 class ParcelleController extends Controller
 {
@@ -22,8 +23,12 @@ class ParcelleController extends Controller
     {
         $pageTitle      = "Gestion des parcelles";
         $manager   = auth()->user();
-        $localites = Localite::active()->where('cooperative_id',$manager->cooperative_id)->get();
-        $parcelles = Parcelle::dateFilter()->searchable(['codeParc', 'typedeclaration','anneeCreation','culture'])->latest('id')->joinRelationship('producteur.localite')->where('cooperative_id',$manager->cooperative_id)->where(function ($q) {
+        // $localites = Localite::active()->where('cooperative_id',$manager->cooperative_id)->get();
+        $cooperative = Cooperative::with('sections.localites')->find($manager->cooperative_id);
+        $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
+            return $localite->active();
+        });
+        $parcelles = Parcelle::dateFilter()->searchable(['codeParc', 'typedeclaration','anneeCreation','culture'])->latest('id')->joinRelationship('producteur.localite.section')->where('cooperative_id',$manager->cooperative_id)->where(function ($q) {
             if(request()->localite != null){
                 $q->where('localite_id',request()->localite);
             }
