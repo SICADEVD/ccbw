@@ -208,6 +208,8 @@ class ApiproducteurController extends Controller
       $infoproducteur->mobileMoney = $request->mobileMoney;
       $infoproducteur->compteBanque    = $request->compteBanque;
       $infoproducteur->nomBanque    = $request->nomBanque;
+      $infoproducteur->mainOeuvreFamilial = $request->mainOeuvreFamilial;
+      $infoproducteur->travailleurFamilial    = $request->travailleurFamilial;
       if (auth()->check()) {
         // Utilisateur authentifié, attribuer l'ID de l'utilisateur
         $infoproducteur->userid = auth()->user()->id;

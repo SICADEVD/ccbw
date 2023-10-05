@@ -140,7 +140,7 @@
 
                                                 <div class="col-xs-12 col-sm-12">
                                                     <div class="form-group row">
-                                                        
+
                                                         @foreach (old('superficieculture', []) as $superficieculture)
                                                             <input type="text" name="superficieculture[]"
                                                                 placeholder="Superficie de culture" id="superficieculture-1"
@@ -217,6 +217,20 @@
                         <hr class="panel-wide">
 
                         <div class="form-group row">
+                            <?php echo Form::label(__('Avez-vous recours à une main d\'œuvre familiale  ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::select('mainOeuvreFamilial', ['non' => 'non', 'oui' => 'oui'], null, ['class' => 'form-control mainOeuvreFamilial', 'required']); ?>
+                            </div>
+                        </div>
+
+                        <div class="form-group row" id="travailleurFamilial">
+                            <?php echo Form::label(__('Combien de personnes (de la famille travaillent)'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::number('travailleurFamilial', null, ['placeholder' => 'Nombre', 'class' => 'form-control travailleurFamilial', 'min' => '0']); ?>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
                             <?php echo Form::label(__('Combien de travailleurs (rémunéré) avez-vous ?'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
                                 <?php echo Form::number('travailleurs', null, ['placeholder' => 'Nombre', 'class' => 'form-control', 'min' => '0', 'required']); ?>
@@ -261,12 +275,12 @@
                                                     <div class="col-xs-12 col-sm-12">
                                                         <div class="form-group row">
                                                             {{ Form::label(__('Ajouter un opérateur'), null, ['class' => 'control-label']) }}
-                                                           
+
                                                         </div>
                                                     </div>
                                                     <div class="col-xs-12 col-sm-12">
                                                         <div class="form-group row">
-                                                           
+
                                                             @foreach (old('numeros', []) as $numero)
                                                                 <input type="text" name="numeros[]"
                                                                     placeholder="Numéro de téléphone" id="numeros-1"
@@ -511,7 +525,7 @@
             });
 
         });
-        $('#listecultures,#gardePapiersChamps,#numeroCompteMM,#listeactivites,#nomBanque,#autreBanque').hide();
+        $('#listecultures,#gardePapiersChamps,#numeroCompteMM,#listeactivites,#nomBanque,#autreBanque,#travailleurFamilial').hide();
 
         $('.autresCultures').change(function() {
             var autresCultures = $('.autresCultures').val();
@@ -522,6 +536,17 @@
                 $('.listecultures').val('');
             }
         });
+        $('.mainOeuvreFamilial').change(function() {
+            var mainOeuvreFamilial = $('.mainOeuvreFamilial').val();
+            if ( mainOeuvreFamilial == 'oui') {
+                $('#travailleurFamilial').show('slow');
+                $('.travailleurFamilial').show('slow');
+            } else {
+                $('#travailleurFamilial').hide('slow');
+                $('.travailleurFamilial').val('');
+            }
+        });
+
         $('.nomBanque').change(function() {
             var nomBanque = $('.nomBanque').val();
             if (nomBanque == 'Autre') {

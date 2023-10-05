@@ -32,7 +32,7 @@ class StoreInfoRequest extends FormRequest
             'travailleurspermanents'  => ['required', 'integer', new ValidTravailleurs],
             'travailleurstemporaires'  => ['required', 'integer', new ValidTravailleurs],
             'mobileMoney'  => 'required|max:255',
-            'compteBanque'=> 'required|max:255',
+            'mainOeuvreFamilial'  => 'required|max:255',
         ];
     }
     public function messages()
@@ -46,6 +46,7 @@ class StoreInfoRequest extends FormRequest
             'travailleurstemporaires.required' => 'Le champ travailleurstemporaires est obligatoire',
             'mobileMoney.required' => 'Le champ mobileMoney est obligatoire',
             'compteBanque.required' => 'Le champ compteBanque est obligatoire',
+            'mainOeuvreFamilial.required' => 'Le champ mainOeuvreFamilial est obligatoire',
         ];
     }
     public function attributes()
@@ -59,6 +60,7 @@ class StoreInfoRequest extends FormRequest
             'travailleurstemporaires' => 'Travailleurs temporaires',
             'mobileMoney' => 'Mobile money',
             'compteBanque' => 'Compte banque',
+            'mainOeuvreFamilial' => 'Main oeuvre familiale',
         ];
     }
 }
