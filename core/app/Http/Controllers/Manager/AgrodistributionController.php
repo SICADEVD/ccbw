@@ -9,6 +9,7 @@ use App\Imports\AgrodistributionImport;
 use App\Models\Agroapprovisionnement;
 use App\Models\AgroapprovisionnementEspece;
 use App\Models\Localite; 
+use App\Models\Section; 
 use App\Models\Producteur; 
 use App\Models\Agrodistribution;
 use App\Models\AgrodistributionEspece;
@@ -27,8 +28,8 @@ class AgrodistributionController extends Controller
     {
         $pageTitle      = "Gestion des distributions";
         $manager   = auth()->user();
-        $localites = Localite::active()->where('cooperative_id',$manager->cooperative_id)->get();
-        $distributions = Agrodistribution::dateFilter()->searchable([])->latest('id')->joinRelationship('parcelle.producteur')->where('cooperative_id',$manager->cooperative_id)->where(function ($q) {
+        $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->get();
+        $distributions = Agrodistribution::dateFilter()->searchable([])->latest('id')->joinRelationship('parcelle.producteur.localite.section')->where('sections.cooperative_id',$manager->cooperative_id)->where(function ($q) {
             if(request()->localite != null){
                 $q->where('localite_id',request()->localite);
             }

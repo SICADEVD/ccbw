@@ -22,8 +22,8 @@ class AgrodeforestationController extends Controller
     {
         $pageTitle      = "Gestion des parcelles";
         $manager   = auth()->user();
-        $localites = Localite::active()->where('cooperative_id',$manager->cooperative_id)->get();
-        $parcelles = Parcelle::dateFilter()->searchable(['codeParc', 'typedeclaration','anneeCreation','culture'])->latest('id')->joinRelationship('producteur.localite')->where('cooperative_id',$manager->cooperative_id)->where(function ($q) {
+        $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->get();
+        $parcelles = Parcelle::dateFilter()->searchable(['codeParc', 'typedeclaration','anneeCreation','culture'])->latest('id')->joinRelationship('parcelle.producteur.localite.section')->where('sections.cooperative_id',$manager->cooperative_id)->where(function ($q) {
             if(request()->localite != null){
                 $q->where('localite_id',request()->localite);
             }
