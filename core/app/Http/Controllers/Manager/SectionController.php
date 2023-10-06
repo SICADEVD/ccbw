@@ -18,7 +18,9 @@ class SectionController extends Controller
         $pageTitle = "Gestion des sections"; 
         $manager   = auth()->user();
         $cooperatives = Cooperative::active()->where('id',$manager->cooperative_id)->get();
-        $sections = Section::orderBy('created_at','desc')->with('cooperative')->paginate(getPaginate());
+        // $sections = Section::orderBy('created_at','desc')->with('cooperative')->paginate(getPaginate());
+
+        $sections = Section::latest('id')->joinRelationship('cooperative')->where('cooperative_id',$manager->cooperative_id)->with('cooperative')->paginate(getPaginate());
         
         return view('manager.section.index',compact('pageTitle','cooperatives','sections'));
     }
