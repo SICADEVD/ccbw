@@ -104,6 +104,7 @@ class ProducteurController extends Controller
             'anneeFin' =>'required_if:proprietaires,==,Garantie',
             'plantePartage'=>'required_if:proprietaires,==,Planté-partager',
             'typeCarteSecuriteSociale'=>'required',
+            'autreCertificats'=>'required_if:certificats,==,Autre',
             // 'required_if:carteCMU,==,oui'
         ];
 

@@ -56,11 +56,11 @@
                             <?php echo Form::select('certificats', ['Rainforest' => 'Rainforest', 'Fairtrade' => 'Fairtrade', 'BIO' => 'BIO', 'Autre' => 'Autre'], null, ['class' => 'form-control certificats', 'id' => 'certificats', 'required']); ?>
                         </div>
                     </div>
-                    <div id="autreCertificats">
+                    <div id="autreCertificat">
                         <div class="form-group row">
                             <?php echo Form::label(__('Autre Certificat'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::text('autreCertificats', null, ['placeholder' => __('Autre certificat'), 'class' => 'form-control autreCertificats']); ?>
+                                <?php echo Form::text('autreCertificats', null, ['id'=>'autreCertificats','placeholder' => __('Autre certificat'), 'class' => 'form-control autreCertificats']); ?>
                             </div>
                         </div>
                     </div>
@@ -514,7 +514,7 @@
 
 @push('script')
     <script type="text/javascript">
-        $('#listecultures,#gardePapiersChamps,#numeroCompteMM,#numSecuriteSociale,#garantie,#autrePhone,#autreCertificats,#autreVariete,#plantePartager')
+        $('#listecultures,#gardePapiersChamps,#numeroCompteMM,#numSecuriteSociale,#garantie,#autrePhone,#autreCertificat,#autreVariete,#plantePartager')
             .hide();
 
         $('.statut').change(function() {
@@ -557,11 +557,12 @@
         $('.certificats').change(function() {
             var certificats = $('.certificats').val();
             if (certificats == 'Autre') {
-                $('#autreCertificats').show('slow');
-                $('.autreCertificats').show('slow');
+                $('#autreCertificat').show('slow');
+                $("#autreCertificats").prop("required", true);
             } else {
-                $('#autreCertificats').hide('slow');
+                $('#autreCertificat').hide('slow');
                 $('.autreCertificats').val('');
+                $("#autreCertificats").prop("required", false);
             }
         });
 
