@@ -99,7 +99,12 @@ class ProducteurController extends Controller
             'niveau_etude'  => 'required|max:255',
             'type_piece'  => 'required|max:255',
             'numPiece'  => 'required|max:255',
-            'num_ccc' => ['required', 'unique:producteurs,num_ccc'],
+            'num_ccc' => ['unique:producteurs,num_ccc'],
+            'anneeDemarrage' =>'required_if:proprietaires,==,Garantie',
+            'anneeFin' =>'required_if:proprietaires,==,Garantie',
+            'plantePartage'=>'required_if:proprietaires,==,Planté-partager',
+            'typeCarteSecuriteSociale'=>'required',
+            // 'required_if:carteCMU,==,oui'
         ];
 
         $request->validate($validationRule);
@@ -111,30 +116,30 @@ class ProducteurController extends Controller
             return back()->withNotify($notify)->withInput();
         }
         $producteur = new Producteur();
-        // if($request->id) {
-        //     $producteur = Producteur::findOrFail($request->id);
-        //     if($producteur->codeProdapp==null){
-        //         $coop = DB::table('localites as l')->join('cooperatives as c','l.cooperative_id','=','c.id')->where('l.id',$request->localite)->select('c.codeApp')->first();
-        //     if($coop !=null)
-        //     { 
-        //         $producteur->codeProdapp = $this->generecodeProdApp($request->nom,$request->prenoms, $coop->codeApp);
-        //     }else{
-        //         $producteur->codeProdapp = null;
-        //     }
-        //     }
-        //     $message = "La producteur a été mise à jour avec succès";
-        // } 
-        // else {
-        //     $producteur = new Producteur(); 
-        //     $coop = DB::table('localites as l')->join('cooperatives as c','l.cooperative_id','=','c.id')->where('l.id',$request->localite)->select('c.codeApp')->first();
-        //     if($coop !=null)
-        //     { 
-        //         $producteur->codeProdapp = $this->generecodeProdApp($request->nom,$request->prenoms, $coop->codeApp);
+        if($request->id) {
+            $producteur = Producteur::findOrFail($request->id);
+            if($producteur->codeProdapp==null){
+                $coop = DB::table('localites as l')->join('cooperatives as c','l.cooperative_id','=','c.id')->where('l.id',$request->localite)->select('c.codeApp')->first();
+            if($coop !=null)
+            { 
+                $producteur->codeProdapp = $this->generecodeProdApp($request->nom,$request->prenoms, $coop->codeApp);
+            }else{
+                $producteur->codeProdapp = null;
+            }
+            }
+            $message = "La producteur a été mise à jour avec succès";
+        } 
+        else {
+            $producteur = new Producteur(); 
+            // $coop = DB::table('localites as l')->join('sections as s','l.section_id','=','s.id')->where('l.id',$request->localite)->select('c.codeApp')->first();
+            // if($coop !=null)
+            // { 
+            //     $producteur->codeProdapp = $this->generecodeProdApp($request->nom,$request->prenoms, $coop->codeApp);
 
-        //     }else{
-        //         $producteur->codeProdapp = null;
-        //     }
-        // } 
+            // }else{
+            //     $producteur->codeProdapp = null;
+            // }
+        } 
 
         $producteur->proprietaires = $request->proprietaires;
         $producteur->statutMatrimonial = $request->statutMatrimonial;
@@ -169,27 +174,7 @@ class ProducteurController extends Controller
         $producteur->type_piece    = $request->type_piece;
         $producteur->numPiece    = $request->numPiece;
         $producteur->userid = auth()->user()->id;
-
-        // if($request->hasFile('copiecarterecto')) {
-
-        //     try {
-        //         //$old = $producteur->copiecarterecto ?: null;
-
-        //         //$producteur->copiecarterecto = fileUploader($request->copiecarterecto, getFilePath('copiecarterecto'), getFileSize('copiecarterecto'), $old);
-        //         $producteur->copiecarterecto = $request->file('copiecarterecto')->store('public/producteurs/pieces');
-        //     } catch (\Exception $exp) {
-        //         $notify[] = ['error', 'Impossible de télécharger votre image'];
-        //         return back()->withNotify($notify);
-        //     }
-        // }
-        // if($request->hasFile('copiecarteverso')) {
-        //     try {
-        //         $producteur->copiecarteverso = $request->file('copiecarteverso')->store('public/producteurs/pieces');
-        //     } catch (\Exception $exp) {
-        //         $notify[] = ['error', 'Impossible de télécharger votre image'];
-        //         return back()->withNotify($notify);
-        //     }
-        // }
+        $producteur->plantePartage = $request->plantePartage;
         if ($request->hasFile('picture')) {
             try {
                 $producteur->picture = $request->file('picture')->store('public/producteurs/photos');
@@ -198,60 +183,85 @@ class ProducteurController extends Controller
                 return back()->withNotify($notify);
             }
         }
+        dd($request->all());
         $producteur->save();
 
         $notify[] = ['success', isset($message) ? $message : 'Le producteur a été crée avec succès.'];
         return back()->withNotify($notify);
     }
-    public function update(Request $request, $id)
-    {
+    // public function update(Request $request, $id)
+    // {
 
-        $producteur = Producteur::findOrFail($id);
+    //     $producteur = Producteur::findOrFail($id);
 
-        $validationRule = [
-            'programme_id' => 'required|exists:programmes,id',
-            'proprietaires' => 'required',
-            'certificats' => 'required',
-            'variete' => 'required',
-            'habitationProducteur' => 'required',
-            'statut' => 'required',
-            'statutMatrimonial' => 'required',
-            'localite_id'    => 'required|exists:localites,id',
-            'nom' => 'required|max:255',
-            'prenoms'  => 'required|max:255',
-            'sexe'  => 'required|max:255',
-            'nationalite'  => 'required|max:255',
-            'dateNaiss'  => 'required|max:255',
-            'phone1'  => 'required|max:255',
-            'niveau_etude'  => 'required|max:255',
-            'type_piece'  => 'required|max:255',
-            'numPiece'  => 'required|max:255',
-            'num_ccc' => ['required', 'max:20', Rule::unique('producteurs', 'num_ccc')->ignore($producteur)],
-        ];
-        $valitedData = $request->validate($validationRule);
-        $producteur->anneeDemarrage = $request->anneeDemarrage;
-        $producteur->anneeFin = $request->anneeFin;
-        $producteur->autreCertificats = $request->autreCertificats;
-        $producteur->autreVariete = $request->autreVariete;
-        $producteur->autreMembre = $request->autreMembre;
-        $producteur->autrePhone = $request->autrePhone;
-        $producteur->phone2 = $request->phone2;
-        $producteur->numCMU = $request->numCMU;
-        $producteur->carteCMU = $request->carteCMU;
-        $producteur->certificats = $request->certificats;
+    //     $validationRule = [
+    //         'programme_id' => 'required|exists:programmes,id',
+    //         'proprietaires' => 'required',
+    //         'certificats' => 'required',
+    //         'variete' => 'required',
+    //         'habitationProducteur' => 'required',
+    //         'statut' => 'required',
+    //         'statutMatrimonial' => 'required',
+    //         'localite_id'    => 'required|exists:localites,id',
+    //         'nom' => 'required|max:255',
+    //         'prenoms'  => 'required|max:255',
+    //         'sexe'  => 'required|max:255',
+    //         'nationalite'  => 'required|max:255',
+    //         'dateNaiss'  => 'required|max:255',
+    //         'phone1'  => 'required|max:255',
+    //         'niveau_etude'  => 'required|max:255',
+    //         'type_piece'  => 'required|max:255',
+    //         'numPiece'  => 'required|max:255',
+    //         'num_ccc' => ['required', 'max:20', Rule::unique('producteurs', 'num_ccc')->ignore($producteur)],
+    //     ];
+    //     $valitedData = $request->validate($validationRule);
+    //     $producteur->proprietaires = $request->proprietaires;
+    //     $producteur->statutMatrimonial = $request->statutMatrimonial;
+    //     $producteur->variete = $request->variete;
+    //     $producteur->autreVariete = $request->autreVariete;
+    //     $producteur->programme_id = $request->programme_id;
+    //     $producteur->localite_id = $request->localite_id;
+    //     $producteur->habitationProducteur = $request->habitationProducteur;
+    //     $producteur->autreMembre = $request->autreMembre;
+    //     $producteur->autrePhone = $request->autrePhone;
+    //     $producteur->numPiece = $request->numPiece;
+    //     $producteur->num_ccc = $request->num_ccc;
+    //     $producteur->carteCMU = $request->carteCMU;
+    //     $producteur->typeCarteSecuriteSociale = $request->typeCarteSecuriteSociale;
+    //     $producteur->numSecuriteSociale = $request->numSecuriteSociale;
+    //     $producteur->numCMU = $request->numCMU;
+    //     $producteur->anneeDemarrage = $request->anneeDemarrage;
+    //     $producteur->anneeFin = $request->anneeFin;
+    //     $producteur->autreCertificats = $request->autreCertificats;
+    //     $producteur->autreVariete = $request->autreVariete;
+    //     $producteur->consentement  = $request->consentement;
+    //     $producteur->statut  = $request->statut;
+    //     $producteur->certificat     = $request->certificat;
+    //     $producteur->nom = $request->nom;
+    //     $producteur->prenoms    = $request->prenoms;
+    //     $producteur->sexe    = $request->sexe;
+    //     $producteur->nationalite    = $request->nationalite;
+    //     $producteur->dateNaiss    = $request->dateNaiss;
+    //     $producteur->phone1    = $request->phone1;
+    //     $producteur->phone2    = $request->phone2;
+    //     $producteur->niveau_etude    = $request->niveau_etude;
+    //     $producteur->type_piece    = $request->type_piece;
+    //     $producteur->numPiece    = $request->numPiece;
+    //     $producteur->userid = auth()->user()->id;
+    //     $producteur->plantePartage = $request->plantePartage;
 
-        if ($request->hasFile('picture')) {
-            try {
-                $producteur->picture = $request->file('picture')->store('public/producteurs/photos');
-            } catch (\Exception $exp) {
-                $notify[] = ['error', 'Impossible de télécharger votre image'];
-                return back()->withNotify($notify);
-            }
-        }
-        $producteur->update($valitedData);
-        $notify[] = ['success', isset($message) ? $message : 'La producteur a été mise à jour avec succès.'];
-        return back()->withNotify($notify);
-    }
+    //     if ($request->hasFile('picture')) {
+    //         try {
+    //             $producteur->picture = $request->file('picture')->store('public/producteurs/photos');
+    //         } catch (\Exception $exp) {
+    //             $notify[] = ['error', 'Impossible de télécharger votre image'];
+    //             return back()->withNotify($notify);
+    //         }
+    //     }
+    //     $producteur->update($valitedData);
+    //     $notify[] = ['success', isset($message) ? $message : 'La producteur a été mise à jour avec succès.'];
+    //     return back()->withNotify($notify);
+    // }
 
 
     public function storeinfo(StoreInfoRequest $request)
