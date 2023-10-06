@@ -25,8 +25,8 @@ class AgroevaluationController extends Controller
     {
         $pageTitle      = "Evaluation des besoins en arbres";
         $manager   = auth()->user();
-        $localites = Localite::active()->where('cooperative_id',$manager->cooperative_id)->get();
-        $agroevaluations = Agroevaluation::dateFilter()->searchable([])->latest('id')->joinRelationship('parcelle.producteur.localite')->where('cooperative_id',$manager->cooperative_id)->where(function ($q) {
+        $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->get();
+        $agroevaluations = Agroevaluation::dateFilter()->searchable([])->latest('id')->joinRelationship('parcelle.producteur.localite.section')->where('sections.cooperative_id',$manager->cooperative_id)->where(function ($q) {
             if(request()->localite != null){
                 $q->where('localite_id',request()->localite);
             }
