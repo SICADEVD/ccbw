@@ -17,7 +17,8 @@ class Section extends Model
     public function cooperative()
     {
         return $this->belongsTo(Cooperative::class, 'cooperative_id');
-    }
+    } 
+	
     public function localites()
     {
         return $this->hasMany(Localite::class, 'section_id', 'id');

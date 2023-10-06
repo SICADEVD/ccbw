@@ -10,12 +10,7 @@ use Kirschbaum\PowerJoins\PowerJoins;
 class Localite extends Model
 {
     use Searchable, GlobalStatus, PowerJoins;
-
-    public function cooperative()
-    {
-        return $this->belongsTo(Cooperative::class, 'cooperative_id');
-    }
-    
+ 
     public function ecoleprimaires()
     {
         return $this->hasMany(Localite_ecoleprimaire::class,'localite_id', 'id');
