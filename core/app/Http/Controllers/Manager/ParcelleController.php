@@ -42,7 +42,11 @@ class ParcelleController extends Controller
         $pageTitle = "Ajouter un parcelle";
         $manager   = auth()->user();
         $producteurs  = Producteur::with('localite')->get();
-        $localites  = Localite::active()->where('cooperative_id',auth()->user()->cooperative_id)->orderBy('nom')->get();
+        // $localites  = Localite::active()->where('cooperative_id',auth()->user()->cooperative_id)->orderBy('nom')->get();
+        $cooperative = Cooperative::with('sections.localites')->find($manager->cooperative_id);
+        $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
+            return $localite->active();
+        });
         return view('manager.parcelle.create', compact('pageTitle', 'producteurs','localites'));
     }
 
@@ -108,7 +112,7 @@ class ParcelleController extends Controller
                 return back()->withNotify($notify);
             }
         } 
-
+        dd(json_encode($request->all()));
         $parcelle->save(); 
 
         $notify[] = ['success', isset($message) ? $message : 'Le parcelle a été crée avec succès.'];
