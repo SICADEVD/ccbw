@@ -29,7 +29,7 @@ class AgrodistributionController extends Controller
         $pageTitle      = "Gestion des distributions";
         $manager   = auth()->user();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->get();
-        $distributions = Agrodistribution::dateFilter()->searchable([])->latest('id')->joinRelationship('parcelle.producteur.localite.section')->where('cooperative_id',$manager->cooperative_id)->where(function ($q) {
+        $distributions = Agrodistribution::dateFilter()->searchable([])->latest('id')->joinRelationship('parcelle.producteur.localite.section')->where('sections.cooperative_id',$manager->cooperative_id)->where(function ($q) {
             if(request()->localite != null){
                 $q->where('localite_id',request()->localite);
             }
