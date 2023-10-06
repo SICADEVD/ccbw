@@ -7,6 +7,7 @@ use App\Exports\ExportAgroapprovisionnements;
 use App\Http\Controllers\Controller;
 use App\Imports\AgroapprovisionnementImport;
 use App\Models\Localite; 
+use App\Models\Section; 
 use App\Models\Producteur; 
 use App\Models\Agroapprovisionnement;
 use App\Models\AgroapprovisionnementEspece;
@@ -26,7 +27,7 @@ class AgroapprovisionnementController extends Controller
     {
         $pageTitle      = "Gestion des approvisionnements";
         $manager   = auth()->user();
-        $localites = Localite::active()->where('cooperative_id',$manager->cooperative_id)->get();
+        $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->get();
         $approvisionnements = Agroapprovisionnement::dateFilter()->searchable([])->latest('id')->where('cooperative_id',$manager->cooperative_id)->where(function ($q) {
             if(request()->localite != null){
                 $q->where('localite_id',request()->localite);
