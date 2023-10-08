@@ -18,6 +18,7 @@ use App\Exports\ExportProducteurs;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreInfoRequest;
+use App\Http\Requests\StoreProducteurRequest;
 use App\Models\Producteur_infos_autresactivite;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Producteur_infos_typeculture;
@@ -79,41 +80,10 @@ class ProducteurController extends Controller
         return view('manager.producteur.create', compact('pageTitle', 'localites', 'sections', 'programmes'));
     }
 
-    public function store(Request $request)
+    public function store(StoreProducteurRequest $request)
     {
-        $validationRule = [
-            'programme_id' => 'required|exists:programmes,id',
-            'proprietaires' => 'required',
-            'certificats' => 'required',
-            'variete' => 'required',
-            'habitationProducteur' => 'required',
-            'statut' => 'required',
-            'statutMatrimonial' => 'required',
-            'localite_id'    => 'required|exists:localites,id',
-            'nom' => 'required|max:255',
-            'prenoms'  => 'required|max:255',
-            'sexe'  => 'required|max:255',
-            'nationalite'  => 'required|max:255',
-            'dateNaiss'  => 'required|max:255',
-            'phone1'  => 'required|max:255',
-            'niveau_etude'  => 'required|max:255',
-            'type_piece'  => 'required|max:255',
-            'numPiece'  => 'required|max:255',
-            'num_ccc' => ['unique:producteurs,num_ccc'],
-            'anneeDemarrage' =>'required_if:proprietaires,==,Garantie',
-            'anneeFin' =>'required_if:proprietaires,==,Garantie',
-            'plantePartage'=>'required_if:proprietaires,==,Planté-partager',
-            'typeCarteSecuriteSociale'=>'required',
-            'autreCertificats'=>'required_if:certificats,==,Autre',
-            'autreVariete'=>'required_if:variete,==,Autre',
-            'codeProdapp'=>'required_if:statut,==,Certifie',
-            'certificat'=>'required_if:statut,==,Certifie',
-            'phone2'=>'required_if:autreMembre,==,oui',
-            'autrePhone'=>'required_if:autreMembre,==,oui',
-            'numCMU'=>'required_if:carteCMU,==,oui',
-        ];
-
-        $request->validate($validationRule);
+       
+        $request->validated();
 
         $localite = Localite::where('id', $request->localite_id)->first();
 
@@ -189,7 +159,6 @@ class ProducteurController extends Controller
                 return back()->withNotify($notify);
             }
         }
-        dd($request->all());
         $producteur->save();
 
         $notify[] = ['success', isset($message) ? $message : 'Le producteur a été crée avec succès.'];
