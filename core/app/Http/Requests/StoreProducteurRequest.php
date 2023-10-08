@@ -48,7 +48,7 @@ class StoreProducteurRequest extends FormRequest
             'typeCarteSecuriteSociale'=>'required',
             'autreCertificats'=>'required_if:certificats,==,Autre',
             'autreVariete'=>'required_if:variete,==,Autre',
-            'codeProdapp'=>'required_if:statut,==,Certifie',
+            'codeProd'=>'required_if:statut,==,Certifie',
             'certificat'=>'required_if:statut,==,Certifie',
             'phone2'=>'required_if:autreMembre,==,oui',
             'autrePhone'=>'required_if:autreMembre,==,oui',
