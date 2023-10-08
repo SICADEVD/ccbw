@@ -15,56 +15,7 @@
                         <span class="menu-title">@lang("Tableau de bord")</span>
                     </a>
                 </li>
-
-                <li class="sidebar-menu-item {{ menuActive('admin.roles.index') }}">
-                    <a href="{{ route('admin.roles.index') }}" class="nav-link ">
-                        <i class="menu-icon las la-university"></i>
-                        <span class="menu-title">@lang('Gestion des Roles')</span>
-                    </a>
-                </li>
-
-                <li class="sidebar-menu-item {{ menuActive('admin.permissions.index') }}">
-                    <a href="{{ route('admin.permissions.index') }}" class="nav-link ">
-                        <i class="menu-icon las la-university"></i>
-                        <span class="menu-title">@lang('Gestion des Permissions')</span>
-                    </a>
-                </li>
-
-                <li class="sidebar-menu-item sidebar-dropdown">
-                    <a href="javascript:void(0)" class="{{ menuActive('system*', 3) }}">
-                        <i class="menu-icon la la-server"></i>
-                        <span class="menu-title">@lang('System')</span>
-                    </a>
-                    <div class="sidebar-submenu {{ menuActive('system*', 2) }} ">
-                        <ul>
-                            <li class="sidebar-menu-item {{ menuActive('admin.system.info') }} ">
-                                <a href="{{ route('admin.system.info') }}" class="nav-link">
-                                    <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('Application')</span>
-                                </a>
-                            </li>
-                            <li class="sidebar-menu-item {{ menuActive('admin.system.server.info') }} ">
-                                <a href="{{ route('admin.system.server.info') }}" class="nav-link">
-                                    <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('Server')</span>
-                                </a>
-                            </li>
-                            <li class="sidebar-menu-item {{ menuActive('admin.system.optimize') }} ">
-                                <a href="{{ route('admin.system.optimize') }}" class="nav-link">
-                                    <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('Cache')</span>
-                                </a>
-                            </li>
-                            <li class="sidebar-menu-item {{ menuActive('admin.system.permission') }} ">
-                                <a href="{{ route('admin.system.permission') }}" class="nav-link">
-                                    <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('Permission de routes')</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-
+ 
                 <li class="sidebar-menu-item {{ menuActive('admin.all') }}">
                     <a href="{{ route('admin.all') }}" class="nav-link ">
                         <i class="menu-icon las la-users"></i>
@@ -100,14 +51,7 @@
                                     <i class="menu-icon las la-dot-circle"></i>
                                     <span class="menu-title">@lang('Gestion des Localites')</span>
                                 </a>
-                            </li>
-
-                            <li class="sidebar-menu-item {{ menuActive('admin.livraison.income') }}">
-                                <a href="{{ route('admin.livraison.income') }}" class="nav-link">
-                                    <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('Cooperative Revenus')</span>
-                                </a>
-                            </li>
+                            </li> 
 
                         </ul>
                     </div>
@@ -182,6 +126,20 @@
                                     <span class="menu-title">@lang('Questionnaire')</span>
                                 </a>
                             </li>
+                            <li class="sidebar-menu-item {{ menuActive('admin.roles.index') }}">
+                    <a href="{{ route('admin.roles.index') }}" class="nav-link ">
+                        <i class="menu-icon las la-university"></i>
+                        <span class="menu-title">@lang('Gestion des Roles')</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-menu-item {{ menuActive('admin.permissions.index') }}">
+                    <a href="{{ route('admin.permissions.index') }}" class="nav-link ">
+                        <i class="menu-icon las la-university"></i>
+                        <span class="menu-title">@lang('Gestion des Permissions')</span>
+                    </a>
+                </li>
+
                         </ul>
                     </div>
                 </li>
@@ -362,6 +320,12 @@
                     </a>
                     <div class="sidebar-submenu {{ menuActive('admin.system*', 2) }} ">
                         <ul>
+                        <li class="sidebar-menu-item {{ menuActive('admin.system.permission') }} ">
+                                <a href="{{ route('admin.system.permission') }}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('Permission de routes')</span>
+                                </a>
+                            </li>
                             <li class="sidebar-menu-item {{ menuActive('admin.system.info') }} ">
                                 <a href="{{ route('admin.system.info') }}" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>

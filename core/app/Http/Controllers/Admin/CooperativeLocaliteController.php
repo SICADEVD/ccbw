@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Constants\Status;
-use App\Http\Controllers\Controller;
-use App\Imports\LocaliteImport;
-use App\Models\Cooperative;
-use App\Models\Localite;
-use App\Models\Localite_ecoleprimaire;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 use Excel;
+use App\Models\Section;
+use App\Models\Localite;
+use App\Constants\Status;
+use App\Models\Cooperative;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Imports\LocaliteImport;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use App\Models\Localite_ecoleprimaire;
 
 class CooperativeLocaliteController extends Controller
 {
@@ -20,9 +21,10 @@ class CooperativeLocaliteController extends Controller
     public function index()
     {
         $pageTitle      = "Gestion des localités";
-        $cooperativeLocalites = Localite::searchable(['nom', 'codeLocal', 'type_localites','sousprefecture','cooperative:name'])->latest('id')->with('cooperative')->paginate(getPaginate());
+        $cooperativeLocalites = Localite::searchable(['nom', 'codeLocal', 'type_localites','sousprefecture','section:libelle'])->latest('id')->with('section')->paginate(getPaginate());
         $cooperatives = Cooperative::active()->get();
-        return view('admin.localite.index', compact('pageTitle', 'cooperativeLocalites','cooperatives'));
+        $sections = Section::active()->get();
+        return view('admin.localite.index', compact('pageTitle', 'cooperativeLocalites','cooperatives','sections'));
     }
 
     public function create()
