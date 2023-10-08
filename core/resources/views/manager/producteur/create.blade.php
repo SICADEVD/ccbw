@@ -15,7 +15,7 @@
                     <div class="form-group row">
                         <?php echo Form::label(__('Accord de consentement du producteur'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('consentement', ['oui' => 'Oui', 'non' => 'Non'], null, ['class' => 'form-control']); ?>
+                            <?php echo Form::select('consentement', ['non' => 'Non','oui' => 'Oui'], null, ['class' => 'form-control']); ?>
                         </div>
                     </div>
                     {{-- proprietaire --}}
@@ -414,7 +414,7 @@
                         <div class="form-group row">
                             <?php echo Form::label(__(''), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::select('autrePhone', ['Membre de famille' => 'Membre de famille', 'Délégué' => 'Délégué', 'Autre' => 'Autre'], null, ['id'=>'autrePhone','class' => 'form-control autrePhone']); ?>
+                                <?php echo Form::select('autrePhone', [''=>null,'Membre de famille' => 'Membre de famille', 'Délégué' => 'Délégué', 'Autre' => 'Autre'], null, ['id'=>'autrePhone','class' => 'form-control autrePhone']); ?>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -455,7 +455,7 @@
                     <div class="form-group row">
                         <?php echo Form::label(__('Avez-vous une carte CMU ?'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('carteCMU', ['oui' => 'Oui', 'non' => 'Non'], null, ['class' => 'form-control carteCMU']); ?>
+                            <?php echo Form::select('carteCMU', ['non' => 'Non','oui' => 'Oui'], null, ['class' => 'form-control carteCMU']); ?>
                         </div>
                     </div>
                     <div id="pieceCMU">
@@ -470,7 +470,7 @@
                     <div class="form-group row">
                         <?php echo Form::label(__('Votre type de carte de sécurité social'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('typeCarteSecuriteSociale', ['CNPS' => 'CNPS', 'CMU' => 'CMU', 'AUCUN' => 'AUCUN'], null, ['class' => 'form-control typeCarteSecuriteSociale','required']); ?>
+                            <?php echo Form::select('typeCarteSecuriteSociale', ['AUCUN' => 'AUCUN','CNPS' => 'CNPS', 'CMU' => 'CMU'], null, ['class' => 'form-control typeCarteSecuriteSociale','required']); ?>
                         </div>
                     </div>
                     <div id="typeCarteSecuriteSociales">
