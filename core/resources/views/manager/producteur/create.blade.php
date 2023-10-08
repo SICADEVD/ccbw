@@ -72,11 +72,11 @@
                             <?php echo Form::select('variete', ['CNRA' => 'CNRA', 'Tout venant' => 'Tout venant', 'Autre' => 'Autre'], null, ['class' => 'form-control variete', 'id' => 'variete', 'required']); ?>
                         </div>
                     </div>
-                    <div id="autreVariete">
+                    <div id="autreVarietes">
                         <div class="form-group row">
                             <?php echo Form::label(__('Autre Varieté'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::text('autreVariete', null, ['placeholder' => __('Autre varieté'), 'class' => 'form-control autreVariete']); ?>
+                                <?php echo Form::text('autreVariete', null, ['id'=>'autreVariete','placeholder' => __('Autre varieté'), 'class' => 'form-control autreVariete']); ?>
                             </div>
                         </div>
                     </div>
@@ -135,20 +135,20 @@
                     <div class="form-group row">
                         <?php echo Form::label(__('Statut'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('statut', ['Certifie' => 'Certifie', 'Candidat' => 'Candidat'], null, ['class' => 'form-control statut', 'required']); ?>
+                            <?php echo Form::select('statut', ['Candidat' => 'Candidat','Certifie' => 'Certifie'], null, ['class' => 'form-control statut', 'required']); ?>
                         </div>
                     </div>
-                    <div id="certificat">
+                    <div id="statutCertifie">
                         <div class="form-group row">
                             <?php echo Form::label(__('Année de certification'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::number('certificat', null, ['class' => 'form-control certificat', 'min' => '1990']); ?>
+                                <?php echo Form::number('certificat', null, ['id'=>'certificat','class' => 'form-control certificat', 'min' => '1990']); ?>
                             </div>
                         </div>
                         <div class="form-group row">
                             <?php echo Form::label(__('Code producteur'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::text('codeProd', null, ['placeholder' => __('Code producteur'), 'class' => 'form-control']); ?>
+                                <?php echo Form::text('codeProd', null, ['id'=>'codeProd','placeholder' => __('Code producteur'), 'class' => 'form-control codeProd']); ?>
                             </div>
                         </div>
                     </div>
@@ -410,17 +410,17 @@
                             <?php echo Form::select('autreMembre', ['non' => 'Non', 'oui' => 'Oui'], null, ['class' => 'form-control autreMembre']); ?>
                         </div>
                     </div>
-                    <div id="autrePhone">
+                    <div id="autrePhones">
                         <div class="form-group row">
                             <?php echo Form::label(__(''), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::select('autrePhone', ['Membre de famille' => 'Membre de famille', 'Délégué' => 'Délégué', 'Autre' => 'Autre'], null, ['class' => 'form-control autrePhone']); ?>
+                                <?php echo Form::select('autrePhone', ['Membre de famille' => 'Membre de famille', 'Délégué' => 'Délégué', 'Autre' => 'Autre'], null, ['id'=>'autrePhone','class' => 'form-control autrePhone']); ?>
                             </div>
                         </div>
                         <div class="form-group row">
                             <?php echo Form::label(__('Numero de téléphone'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::text('phone2', null, ['placeholder' => __('Numéro de téléphone'), 'class' => 'form-control phone']); ?>
+                                <?php echo Form::text('phone2', null, ['id'=>'phone2','placeholder' => __('Numéro de téléphone'), 'class' => 'form-control phone2']); ?>
                             </div>
                         </div>
                     </div>
@@ -462,7 +462,7 @@
                         <div class="form-group row">
                             <?php echo Form::label(__('N° de la pièce CMU'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::text('numCMU', null, ['placeholder' => __('N° de la pièce CMU'), 'class' => 'form-control pieceCMU']); ?>
+                                <?php echo Form::text('numCMU', null, ['id'=>'numCMU','placeholder' => __('N° de la pièce CMU'), 'class' => 'form-control numCMU']); ?>
                             </div>
                         </div>
                     </div>
@@ -470,15 +470,15 @@
                     <div class="form-group row">
                         <?php echo Form::label(__('Votre type de carte de sécurité social'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('typeCarteSecuriteSociale', [' ' => null, 'CNPS' => 'CNPS', 'CMU' => 'CMU', 'AUCUN' => 'AUCUN'], null, ['class' => 'form-control typeCarteSecuriteSociale','required']); ?>
+                            <?php echo Form::select('typeCarteSecuriteSociale', ['CNPS' => 'CNPS', 'CMU' => 'CMU', 'AUCUN' => 'AUCUN'], null, ['class' => 'form-control typeCarteSecuriteSociale','required']); ?>
                         </div>
                     </div>
-                    <div id="numSecuriteSociale">
+                    <div id="typeCarteSecuriteSociales">
                         <div class="form-group row">
                             <?php echo Form::label(__('N° de carte de sécurité sociale'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
 
-                                <?php echo Form::text('numSecuriteSociale', null, ['placeholder' => __('N° de carte de sécurité sociale'), 'class' => 'form-control numSecuriteSociale']); ?>
+                                <?php echo Form::text('numSecuriteSociale', null, ['id'=>'numSecuriteSociale','placeholder' => __('N° de carte de sécurité sociale'), 'class' => 'form-control numSecuriteSociale']); ?>
                             </div>
                         </div>
                     </div>
@@ -514,29 +514,38 @@
 
 @push('script')
     <script type="text/javascript">
-        $('#listecultures,#gardePapiersChamps,#numeroCompteMM,#numSecuriteSociale,#garantie,#autrePhone,#autreCertificat,#autreVariete,#plantePartager')
-            .hide();
-
-        $('.statut').change(function() {
-            var statut = $('.statut').val();
-            if (statut == 'Candidat') {
-                $('#certificat').hide('slow');
-                $('.certificat').val('');
-            } else {
-                $('#certificat').show('slow');
-
-            }
-        });
+        $('#listecultures,#gardePapiersChamps,#numeroCompteMM,#typeCarteSecuriteSociales,#garantie,#autrePhones,#autreCertificat,#autreVarietes,#plantePartager,#statutCertifie').hide();
         //afficher le champ de saisie du numero de la piece de sécurité sociale
-
         $('.typeCarteSecuriteSociale').change(function() {
             var typeCarteSecuriteSociale = $('.typeCarteSecuriteSociale').val();
-            if (typeCarteSecuriteSociale == 'CNPS' || typeCarteSecuriteSociale == 'CMU') {
-                $('#numSecuriteSociale').show('slow');
-                $('.numSecuriteSociale').show('slow');
-            } else {
-                $('#numSecuriteSociale').hide('slow');
+            if (typeCarteSecuriteSociale == 'AUCUN') {
+
+                $('#typeCarteSecuriteSociales').hide('slow');
                 $('.numSecuriteSociale').val('');
+                $("#numSecuriteSociale").prop("required", false);
+            } else {
+                $('#typeCarteSecuriteSociales').show('slow');
+                $('.numSecuriteSociale').show('slow');
+                $("#numSecuriteSociale").prop("required", true);   
+            }
+        });
+
+         $('.statut').change(function() {
+            var statut = $('.statut').val();
+            if (statut == 'Certifie') {
+                $('#statutCertifie').show('slow');
+                $('.certificat').show('slow');
+                $('.codeProd').show('slow');
+                $('#certificat').prop('required', true);
+                $('#codeProd').prop('required', true);
+               
+            } else {
+                $('#statutCertifie').hide('slow');
+                $('#certificat').val('');
+                $('#codeProd').val('');
+                $('#certificat').prop('required', false);
+                $('#codeProd').prop('required', false);
+                
             }
         });
         //afficher le champ autre variete
@@ -544,11 +553,13 @@
         $('.variete').change(function() {
             var variete = $('.variete').val();
             if (variete == 'Autre') {
-                $('#autreVariete').show('slow');
+                $('#autreVarietes').show('slow');
                 $('.autreVariete').show('slow');
+                $("#autreVariete").prop("required", true);
             } else {
-                $('#autreVariete').hide('slow');
+                $('#autreVarietes').hide('slow');
                 $('.autreVariete').val('');
+                $("#autreVariete").prop("required", false);
             }
         });
 
@@ -571,11 +582,17 @@
         $('.autreMembre').change(function() {
             var autreMembre = $('.autreMembre').val();
             if (autreMembre == 'oui') {
-                $('#autrePhone').show('slow');
+                $('#autrePhones').show('slow');
                 $('.autrePhone').show('slow');
+                $("#autrePhone").prop("required", true);
+                $('.phone2').show('slow');
+                $("#phone2").prop("required", true);
             } else {
-                $('#autrePhone').hide('slow');
+                $('#autrePhones').hide('slow');
                 $('.autrePhone').val('');
+                $('.phone2').val('');
+                $("#autrePhone").prop("required", false);
+                $("#phone2").prop("required", false);
             }
         });
 
@@ -590,6 +607,8 @@
 
             } else {
                 $('#garantie').hide('slow');
+                $('anneeDemarrage').val('');
+                $('anneeFin').val('');
                 $("#anneeDemarrage").prop("required", false);
                 $("#anneeFin").prop("required", false);
             }
@@ -613,10 +632,13 @@
             var cmu = $('.carteCMU').val();
             if (cmu == 'oui') {
                 $('#pieceCMU').show('slow');
+                $('.numCMU').show('slow');
+                $("#numCMU").prop("required", true);
 
             } else {
                 $('#pieceCMU').hide('slow');
-                $('.pieceCMU').val('');
+                $('.numCMU').val('');
+                $("#numCMU").prop("required", false);
             }
         });
 

@@ -105,7 +105,12 @@ class ProducteurController extends Controller
             'plantePartage'=>'required_if:proprietaires,==,Planté-partager',
             'typeCarteSecuriteSociale'=>'required',
             'autreCertificats'=>'required_if:certificats,==,Autre',
-            // 'required_if:carteCMU,==,oui'
+            'autreVariete'=>'required_if:variete,==,Autre',
+            'codeProdapp'=>'required_if:statut,==,Certifie',
+            'certificat'=>'required_if:statut,==,Certifie',
+            'phone2'=>'required_if:autreMembre,==,oui',
+            'autrePhone'=>'required_if:autreMembre,==,oui',
+            'numCMU'=>'required_if:carteCMU,==,oui',
         ];
 
         $request->validate($validationRule);
