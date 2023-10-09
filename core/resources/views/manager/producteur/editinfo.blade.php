@@ -135,92 +135,46 @@
                             </div>
                         </div>
 
-                        <hr class="panel-wide">
-
+                        {{-- autre activité en dehors du cacao --}}
                         <div class="form-group row">
-                            <?php echo Form::label(__("Nombre d'enfants de 5 à 17 ans présents dans le ménage ?"), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <?php echo Form::label(__('Avez-vous d’autres activités en dehors des cultures?'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::number('age18', null, ['placeholder' => 'Nombre', 'class' => 'form-control', 'min' => '0', 'required']); ?>
-                            </div>
-                        </div>
+                                <?php echo Form::select('autreActivite', ['non' => 'Non', 'oui' => 'Oui'], null, ['class' => 'form-control autreActivite', 'required']); ?>
 
-
-                        <div class="form-group row">
-                            <?php echo Form::label(__('Parmi ces personnes, combien sont scolarisés ?'), null, ['class' => 'col-sm-4 control-label']); ?>
-                            <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::number('persEcole', null, ['placeholder' => 'Nombre', 'class' => 'form-control', 'min' => '0', 'required']); ?>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <?php echo Form::label(__("Parmi les scolarisés, combien n'ont pas d'extrait de naissance ?"), null, ['class' => 'col-sm-4 control-label']); ?>
-                            <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::number('scolarisesExtrait', null, ['placeholder' => 'Nombre', 'class' => 'form-control', 'min' => '0', 'required']); ?>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <?php echo Form::label(__('Citez les maladies plus fréquentes chez vos enfants'), null, ['class' => 'col-sm-4 control-label']); ?>
-                            <div class="col-xs-12 col-sm-8">
+                            <?php echo Form::label('', null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8" id="listeactivites">
                                 <table class="table table-striped table-bordered">
-                                    <tbody id="maladies">
-                                        <?php
-   
-        if($infosproducteur->maladiesenfant)
-        {  
-       $a=1;
-        foreach ($infosproducteur->maladiesenfant as $data) {
-           ?>
+                                    <tbody id="activity_area">
+
                                         <tr>
                                             <td class="row">
-                                                <div class="col-xs-12 col-sm-8 bg-success">
-                                                    <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Maladie')
-                                                        <?php echo $a; ?></badge>
-                                                </div>
-                                                <div class="col-xs-12 col-sm-8">
-                                                    <div class="form-group">
-                                                        <input type="text" name="maladiesenfants[]"
-                                                            placeholder="Rhume, Toux, ..." id="maladiesenfants-1"
-                                                            class="form-control" value="<?php echo $data->maladieenfant; ?>">
-                                                    </div>
-                                                </div>
-                                                <?php if($a>1):?>
-                                                <div class="col-xs-12 col-sm-6"><button type="button"
-                                                        id="<?php echo $a; ?>"
-                                                        class="removeRowMal btn btn-danger btn-sm"><i
-                                                            class="fa fa-minus"></i></button></div>
-                                                <?php endif; ?>
-                                            </td>
-                                        </tr>
-                                        <?php
-           $a++;
-        }
-    }else{
-        ?>
-                                        <tr>
-                                            <td class="row">
-                                                <div class="col-xs-12 col-sm-8 bg-success">
-                                                    <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Maladie 1')
+                                                <div class="col-xs-12 col-sm-12 bg-success">
+                                                    <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Information Activité')
                                                     </badge>
                                                 </div>
-                                                <div class="col-xs-12 col-sm-8">
-                                                    <div class="form-group">
-                                                        <input type="text" name="maladiesenfants[]"
-                                                            placeholder="Rhume, Toux, ..." id="maladiesenfants-1"
-                                                            class="form-control" value="">
+                                                <div class="col-xs-12 col-sm-12">
+                                                    <div class="form-group row">
+                                                        {{ Form::label(__('Ajouter une activité'), null, ['class' => 'control-label']) }}
+                                                        @foreach (old('typeactivite', []) as $typeactivite)
+                                                            <input type="text" name="typeactivite[]"
+                                                                placeholder="Elevage, Commerce, Prestation de service, ..."
+                                                                id="typeactivite-0" class="form-control"
+                                                                value="{{ $typeactivite }}">
+                                                        @endforeach
                                                     </div>
                                                 </div>
-
                                             </td>
                                         </tr>
-                                        <?php
-        }
-        ?>
+
                                     </tbody>
                                     <tfoot style="background: #e3e3e3;">
                                         <tr>
 
                                             <td colspan="3">
-                                                <button id="addRowMal" type="button" class="btn btn-success btn-sm"><i
+                                                <button id="addRowActivite" type="button" class="btn btn-success btn-sm"><i
                                                         class="fa fa-plus"></i></button>
                                             </td>
                                         <tr>
@@ -229,15 +183,16 @@
                             </div>
                         </div>
                         <hr class="panel-wide">
+
                         <div class="form-group row">
-                            <?php echo Form::label(__('Combien de travailleurs avez-vous ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <?php echo Form::label(__('Combien de travailleurs (rémunéré) avez-vous ?'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
                                 <?php echo Form::number('travailleurs', null, ['placeholder' => 'Nombre', 'class' => 'form-control', 'min' => '0', 'required']); ?>
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <?php echo Form::label(__('Nombre de Travailleurs Permanents'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <?php echo Form::label(__('Nombre de Travailleurs Permanents (plus de 12mois)'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
                                 <?php echo Form::number('travailleurspermanents', null, ['placeholder' => 'Nombre', 'class' => 'form-control', 'min' => '0', 'required']); ?>
                             </div>
@@ -246,32 +201,12 @@
                         <div class="form-group row">
                             <?php echo Form::label(__('Nombre de Travailleurs Non Permanents'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::number('travailleurstemporaires', null, ['placeholder' => 'Nombre', 'class' => 'form-control', 'min' => '0', 'required']); ?>
+                                <?php echo Form::number('travailleurstemporaires', null, ['placeholder' => 'Nombre', 'class' => 'form-control', 'min' => '0']); ?>
                             </div>
                         </div>
+
                         <hr class="panel-wide">
-                        <div class="form-group row">
-                            <?php echo Form::label(__('Quand une personne est blessée à la maison, que fais-tu ?'), null, ['class' => 'col-sm-4 control-label']); ?>
-                            <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::select('personneBlessee', ['Je me débrouille' => 'Je me débrouille', "Je vais rapidement à l'hôpital" => "Je vais rapidement à l'hôpital", "J'appelle quelqu'un" => "J'appelle quelqu'un", "J'ai des médicaments chez moi" => "J'ai des médicaments chez moi"], null, ['placeholder' => 'Selectionner une reponse...', 'class' => 'form-control personneBlessee', 'required']); ?>
 
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <?php echo Form::label(__('Quel type de documents de tes champs possèdes-tu ?'), null, ['class' => 'col-sm-4 control-label']); ?>
-                            <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::select('typeDocuments', ['Titre foncier' => 'Titre foncier', 'Cadastre' => 'Cadastre', 'Attestation coutumières' => 'Attestation coutumières', 'Aucun' => 'Aucun'], null, ['class' => 'form-control typeDocuments', 'placeholder' => 'Selectionner une reponse...', 'required']); ?>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <?php echo Form::label(__("Comment gères-tu tes reçus d'achat ?"), null, ['class' => 'col-sm-4 control-label']); ?>
-                            <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::select('recuAchat', ['Je les jette' => 'Je les jette', 'Je les gardes dans ma maison' => 'Je les gardes dans ma maison', 'Je ne prends pas' => 'Je ne prends pas'], null, ['placeholder' => 'Selectionner une reponse...', 'class' => 'form-control recuAchat', 'required']); ?>
-                            </div>
-                        </div>
-                        <hr class="panel-wide">
                         <div class="form-group row">
                             <?php echo Form::label(__('As-tu un Compte Mobile Money ?'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
@@ -281,34 +216,70 @@
                         </div>
                         <div id="numeroCompteMM">
                             <div class="form-group row">
-                                <?php echo Form::label(__('Quel operateur ?'), null, ['class' => 'col-sm-4 control-label']); ?>
-                                <div class="col-xs-12 col-sm-8">
-                                    <?php echo Form::select('operateurMM', ['Orange' => 'Orange', 'MTN' => 'MTN', 'Moov' => 'Moov', 'Wave' => 'Wave'], null, ['class' => 'form-control operateurMM']); ?>
+                                <?php echo Form::label('', null, ['class' => 'col-sm-4 control-label']); ?>
+                                <div class="col-xs-12 col-sm-8" id="listeoperateurs">
+                                    <table class="table table-striped table-bordered">
+                                        <tbody id="compagny_area">
+                                            <tr>
+                                                <td class="row">
+                                                    <div class="col-xs-12 col-sm-12 bg-success">
+                                                        <badge class="btn  btn-outline--warning h-45 btn-sm">
+                                                            @lang('Information mobile monnaie')
+                                                        </badge>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-12">
+                                                        <div class="form-group row">
+                                                            {{ Form::label(__('Ajouter un opérateur'), null, ['class' => 'control-label']) }}
 
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <?php echo Form::label(__('Numéro du Compte Mobile Money'), null, ['class' => 'col-sm-4 control-label']); ?>
-                                <div class="col-xs-12 col-sm-8">
-                                    <?php echo Form::text('numeroCompteMM', null, ['placeholder' => __('Numéro du Compte Mobile Money'), 'class' => 'form-control phone numeroCompteMM']); ?>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-12">
+                                                        <div class="form-group row">
+
+                                                            @foreach (old('numeros', []) as $numero)
+                                                                <input type="text" name="numeros[]"
+                                                                    placeholder="Numéro de téléphone" id="numeros-1"
+                                                                    class="form-control" value="{{ $numero }}">
+                                                            @endforeach
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                        </tbody>
+                                        <tfoot style="background: #e3e3e3;">
+                                            <tr>
+
+                                                <td colspan="3">
+                                                    <button id="addRowOperateur" type="button"
+                                                        class="btn btn-success btn-sm"><i class="fa fa-plus"></i></button>
+                                                </td>
+                                            <tr>
+                                        </tfoot>
+                                    </table>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <?php echo Form::label(__('Accepterais tu qu’on paye ton cacao par ces moyens ?'), null, ['class' => 'col-sm-4 control-label']); ?>
-                            <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::select('paiementMM', ['Aucun' => 'Aucun', 'Virement bancaire' => 'Virement bancaire', 'Mobile Money' => 'Mobile Money'], null, ['class' => 'form-control paiementMM', 'required']); ?>
-
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <?php echo Form::label(__('As-tu un compte dans une banque ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <?php echo Form::label(__('As-tu un compte bancaire (dans une banque) ?'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
                                 <?php echo Form::select('compteBanque', ['non' => 'Non', 'oui' => 'Oui'], null, ['class' => 'form-control compteBanque', 'required']); ?>
 
                             </div>
                         </div>
+                        <div class="form-group row" id="nomBanque">
+                            <?php echo Form::label(__('Nom de la banque'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::select('nomBanque', ['Advans' => 'Advans', 'Coopec' => 'Coopec', 'Microcred' => 'Microcred', 'Autre' => 'Autre'], null, ['class' => 'form-control nomBanque']); ?>
+                            </div>
+                        </div>
+                        <div class="form-group row" id="autreBanque">
+                            <?php echo Form::label(__('Nom de la banque'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::text('autreBanque', null, ['placeholder' => 'Autre Banque', 'class' => 'form-control autreBanque']); ?>
+                            </div>
+                        </div>
+
                         <hr class="panel-wide">
                         <div class="modal-footer">
                             <button type="button" class="btn btn--dark" data-dismiss="modal">@lang('Fermer')</button>
@@ -377,87 +348,6 @@
                 });
 
             });
-            $(document).ready(function() {
-
-                var maladiesCount = $("#maladies tr").length + 1;
-                $(document).on('click', '#addRowMal', function() {
-
-                    //---> Start create table tr
-                    var html_table = '<tr>';
-                    html_table +=
-                        '<td class="row"><div class="col-xs-12 col-sm-8 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm">Maladie ' +
-                        maladiesCount +
-                        '</badge></div><div class="col-xs-12 col-sm-8"><div class="form-group"><input placeholder="Rhume, Toux, ..." class="form-control" id="maladiesenfants-' +
-                        maladiesCount +
-                        '" name="maladiesenfants[]" type="text"></div></div><div class="col-xs-12 col-sm-8"><button type="button" id="' +
-                        maladiesCount +
-                        '" class="removeRowMal btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></div></td>';
-
-                    html_table += '</tr>';
-                    //---> End create table tr
-
-                    maladiesCount = parseInt(maladiesCount) + 1;
-                    $('#maladies').append(html_table);
-
-                });
-
-                $(document).on('click', '.removeRowMal', function() {
-
-                    var row_id = $(this).attr('id');
-
-                    // delete only last row id
-                    if (row_id == $("#maladies tr").length) {
-
-                        $(this).parents('tr').remove();
-
-                        maladiesCount = parseInt(maladiesCount) - 1;
-
-                    }
-                });
-
-            });
-            if ($('.autresCultures').val() == 'non') {
-                $('#listecultures').hide('slow');
-            } else {
-                $('#listecultures').show('slow');
-            }
-            $('.autresCultures').change(function() {
-                var autresCultures = $('.autresCultures').val();
-                if (autresCultures == 'oui') {
-                    $('#listecultures').show('slow');
-                } else {
-                    $('#listecultures').hide('slow');
-                }
-            });
-
-            if ($('.papiersChamps').val() == 'non') {
-                $('#gardePapiersChamps').hide('slow');
-            } else {
-                $('#gardePapiersChamps').show('slow');
-            }
-            $('.papiersChamps').change(function() {
-                var papiersChamps = $('.papiersChamps').val();
-                if (papiersChamps == 'oui') {
-                    $('#gardePapiersChamps').show('slow');
-                } else {
-                    $('#gardePapiersChamps').hide('slow');
-                }
-            });
-
-
-            if ($('.mobileMoney').val() == 'non') {
-                $('#numeroCompteMM').hide('slow');
-            } else {
-                $('#numeroCompteMM').show('slow');
-            }
-            $('.mobileMoney').change(function() {
-                var mobileMoney = $('.mobileMoney').val();
-                if (mobileMoney == 'oui') {
-                    $('#numeroCompteMM').show('slow');
-                } else {
-                    $('#numeroCompteMM').hide('slow');
-                }
-            });
         </script>
         <script type="text/javascript">
             $('#superficie').hide();
@@ -469,5 +359,113 @@
                     $('#superficie').hide('slow');
                 }
             });
+            if ($('.foretsjachere').val() == 'oui') {
+                $('#superficie').show('slow');
+            } else {
+                $('#superficie').hide('slow');
+            }
+            $('.autresCultures').change(function() {
+                var autresCultures = $('.autresCultures').val();
+                if (autresCultures == 'oui') {
+                    $('#listecultures').show('slow');
+                } else {
+                    $('#listecultures').hide('slow');
+                    $('.listecultures').val('');
+                }
+            });
+            if($('.autresCultures').val() == 'oui'){
+                $('#listecultures').show('slow');
+            }else{
+                $('#listecultures').hide('slow');
+                $('.listecultures').val('');
+            }
+            $('.mainOeuvreFamilial').change(function() {
+                var mainOeuvreFamilial = $('.mainOeuvreFamilial').val();
+                if (mainOeuvreFamilial == 'oui') {
+                    $('#travailleurFamilial').show('slow');
+                    $('.travailleurFamilial').show('slow');
+                } else {
+                    $('#travailleurFamilial').hide('slow');
+                    $('.travailleurFamilial').val('');
+                }
+            });
+            $('.mainOeuvreNonFamilial').change(function() {
+                var mainOeuvreNonFamilial = $('.mainOeuvreNonFamilial').val();
+                if (mainOeuvreNonFamilial == 'oui') {
+                    $('#travailleurNonFamilial').show('slow');
+                    $('.travailleurNonFamilial').show('slow');
+                } else {
+                    $('#travailleurNonFamilial').hide('slow');
+                    $('.travailleurNonFamilial').val('');
+                }
+            });
+
+            $('.nomBanque').change(function() {
+                var nomBanque = $('.nomBanque').val();
+                if (nomBanque == 'Autre') {
+                    $('#autreBanque').show('slow');
+                    $('.autreBanque').show('slow');
+                } else {
+                    $('#autreBanque').hide('slow');
+                    $('.autreBanque').val('');
+                }
+            });
+            if($('.nomBanque').val() == 'Autre'){
+                $('#autreBanque').show('slow');
+                $('.autreBanque').show('slow');
+            }else{
+                $('#autreBanque').hide('slow');
+                $('.autreBanque').val('');
+            }
+            $('.compteBanque').change(function() {
+                var compteBanque = $('.compteBanque').val();
+                if (compteBanque == 'oui') {
+                    $('#nomBanque').show('slow');
+                    $('.nomBanque').show('slow');
+                } else {
+                    $('#nomBanque').hide('slow');
+                    $('.nomBanque').val('');
+                }
+            });
+            if($('.compteBanque').val() == 'oui'){
+                $('#nomBanque').show('slow');
+                $('.nomBanque').show('slow');
+            }else{
+                $('#nomBanque').hide('slow');
+                $('.nomBanque').val('');
+            }
+            $('.autreActivite').change(function() {
+                var autreActivite = $('.autreActivite').val();
+                if (autreActivite == 'oui') {
+                    $('#listeactivites').show('slow');
+                } else {
+                    $('#listeactivites').hide('slow');
+                    $('.listeactivites').val('');
+                }
+            });
+            if($('.autreActivite').val() == 'oui'){
+                $('#listeactivites').show('slow');
+            }else{
+                $('#listeactivites').hide('slow');
+                $('.listeactivites').val('');
+            }
+
+            $('.mobileMoney').change(function() {
+                var mobileMoney = $('.mobileMoney').val();
+                if (mobileMoney == 'oui') {
+                    $('#numeroCompteMM').show('slow');
+                    $('.numeroCompteMM').css('display', 'block');
+                } else {
+                    $('#numeroCompteMM').hide('slow');
+                    $('.numeroCompteMM').val('');
+                }
+            });
+            if($('.mobileMoney').val() == 'oui'){
+                $('#numeroCompteMM').show('slow');
+                $('.numeroCompteMM').css('display', 'block');
+            }else{
+                $('#numeroCompteMM').hide('slow');
+                $('.numeroCompteMM').val('');
+            }
         </script>
     @endpush
