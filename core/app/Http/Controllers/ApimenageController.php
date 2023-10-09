@@ -5,11 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Menage;
 use App\Models\Localite;
 use App\Constants\Status;
-use App\Http\Requests\StoreMenageRequest;
 use App\Models\Producteur;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Rules\VlidateEnfantTotal;
 use Illuminate\Support\Facades\DB;
+use App\Http\Requests\StoreMenageRequest;
 
 class ApimenageController extends Controller
 {
@@ -41,17 +42,50 @@ class ApimenageController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreMenageRequest $request)
+    public function store(Request $request)
     {
 
-        $request->validated();
-
-         
         if($request->id !=null) {
-            $menage = Menage::find($request->id);  
-
+            $menage = Menage::find($request->id);
         } else {
-            $menage = new Menage();  
+            $menage = new Menage(); 
+            $validationRule = [
+                'producteur'    => 'required|exists:producteurs,id',
+                'quartier' => 'required|max:255',
+                'ageEnfant0A5' => ['required','integer', new VlidateEnfantTotal],
+                'ageEnfant6A17' => ['required','integer', new VlidateEnfantTotal],
+                'enfantscolarises' => ['required','integer', new VlidateEnfantTotal],
+                'enfantsPasExtrait' => ['required','integer', new VlidateEnfantTotal],
+                'sources_energies'  => 'required|max:255',
+                'ordures_menageres'  => 'required|max:255',
+                'separationMenage'  => 'required|max:255',
+                'eauxToillette'  => 'required|max:255',
+                'eauxVaisselle'  => 'required|max:255',
+                'wc'  => 'required|max:255',
+                'sources_eaux'  => 'required|max:255',
+                'equipements'  => 'required|max:255',
+                'traitementChamps'  => 'required|max:255',
+                'activiteFemme'  => 'required|max:255',
+            ];
+            $validationMessage = [
+                'producteur.required' => 'Le champ producteur est obligatoire',
+                'quartier.required' => 'Le champ quartier est obligatoire',
+                'ageEnfant0A5.required' => 'Le champ ageEnfant0A5 est obligatoire',
+                'ageEnfant6A17.required' => 'Le champ ageEnfant6A17 est obligatoire',
+                'enfantscolarises.required' => 'Le champ enfantscolarises est obligatoire',
+                'enfantsPasExtrait.required' => 'Le champ enfantsPasExtrait est obligatoire',
+                'sources_energies.required' => 'Le champ sources_energies est obligatoire',
+                'ordures_menageres.required' => 'Le champ ordures_menageres est obligatoire',
+                'separationMenage.required' => 'Le champ separationMenage est obligatoire',
+                'eauxToillette.required' => 'Le champ eauxToillette est obligatoire',
+                'eauxVaisselle.required' => 'Le champ eauxVaisselle est obligatoire',
+                'wc.required' => 'Le champ wc est obligatoire',
+                'sources_eaux.required' => 'Le champ sources_eaux est obligatoire',
+                'equipements.required' => 'Le champ equipements est obligatoire',
+                'traitementChamps.required' => 'Le champ traitementChamps est obligatoire',
+                'activiteFemme.required' => 'Le champ activiteFemme est obligatoire',
+            ];
+            $request->validate($validationRule, $validationMessage); 
         } 
         if($menage->producteur_id != $request->producteur) {
             $hasMenage = Menage::where('producteur_id', $request->producteur)->exists();
@@ -85,10 +119,7 @@ class ApimenageController extends Controller
         $menage->nombreHectareFemme    = $request->nombreHectareFemme;
         $menage->autreMachine    = $request->autreMachine;
         $menage->autreEndroit    = $request->autreEndroit;
-        if (auth()->check()) {
-            // Utilisateur authentifié, attribuer l'ID de l'utilisateur
-            $menage->userid = auth()->user()->id;
-        }
+        $menage->userid = $request->userid;
         $menage->save();  
 
         if($menage ==null ){

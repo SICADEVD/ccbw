@@ -41,6 +41,7 @@ class StoreProducteurRequest extends FormRequest
             'niveau_etude'  => 'required|max:255',
             'type_piece'  => 'required|max:255',
             'numPiece'  => 'required|max:255',
+            'num_ccc' => ['unique:producteurs,num_ccc'],
             'anneeDemarrage' =>'required_if:proprietaires,==,Garantie',
             'anneeFin' =>'required_if:proprietaires,==,Garantie',
             'plantePartage'=>'required_if:proprietaires,==,Planté-partager',

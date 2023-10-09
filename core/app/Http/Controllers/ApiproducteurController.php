@@ -164,10 +164,9 @@ class ApiproducteurController extends Controller
         $image = Str::after($image, 'base64,');
         $image = str_replace(' ', '+', $image);
         $imageName = (string) Str::uuid() . '.' . 'jpg';
-        File::put(storage_path() . "/app/public/producteurs/pieces/" . $imageName, base64_decode($image));
-        $picture = "public/producteurs/pieces/$imageName";
-        $input['picture'] = $picture;
-        $validationRule['picture'] = $picture;
+        File::put(storage_path() . "/app/public/producteurs/" . $imageName, base64_decode($image));
+        $picture = "public/producteurs/$imageName";
+        $producteur->picture = $picture;
       }
       if ($request->esignature) {
 
@@ -175,10 +174,10 @@ class ApiproducteurController extends Controller
         $image = Str::after($image, 'base64,');
         $image = str_replace(' ', '+', $image);
         $imageName = (string) Str::uuid() . '.' . 'jpg';
-        File::put(storage_path() . "/app/public/producteurs/pieces/" . $imageName, base64_decode($image));
-        $esignature = "public/producteurs/pieces/$imageName";
+        File::put(storage_path() . "/app/public/producteurs/" . $imageName, base64_decode($image));
+        $esignature = "public/producteurs/$imageName";
 
-        $validationRule['esignature'] = $esignature;
+        $producteur->esignature = $esignature;
       }
       $producteur->proprietaires = $request->proprietaires;
       $producteur->statutMatrimonial = $request->statutMatrimonial;
@@ -213,10 +212,7 @@ class ApiproducteurController extends Controller
       $producteur->type_piece    = $request->type_piece;
       $producteur->numPiece    = $request->numPiece;
       $producteur->certificats   = $request->certificats;
-      if (auth()->check()) {
-        // Utilisateur authentifié, attribuer l'ID de l'utilisateur
-        $producteur->userid = auth()->user()->id;
-      }
+      $producteur->userid = $request->userid;
       $producteur->codeProd = $request->codeProd;
       $producteur->plantePartage = $request->plantePartage;
       $producteur->update($request->all());
@@ -319,10 +315,8 @@ class ApiproducteurController extends Controller
       $producteur->niveau_etude    = $request->niveau_etude;
       $producteur->type_piece    = $request->type_piece;
       $producteur->numPiece    = $request->numPiece;
-      if (auth()->check()) {
-        // Utilisateur authentifié, attribuer l'ID de l'utilisateur
-        $producteur->userid = auth()->user()->id;
-      }
+      $producteur->certificats   = $request->certificats;
+      $producteur->userid = $request->userid;
       $producteur->codeProd = $request->codeProd;
       $producteur->plantePartage = $request->plantePartage;
       if (!file_exists(storage_path() . "/app/public/producteurs/pieces")) {
@@ -390,10 +384,7 @@ class ApiproducteurController extends Controller
       $infoproducteur->nomBanque    = $request->nomBanque;
       $infoproducteur->mainOeuvreFamilial = $request->mainOeuvreFamilial;
       $infoproducteur->travailleurFamilial    = $request->travailleurFamilial;
-      if (auth()->check()) {
-        // Utilisateur authentifié, attribuer l'ID de l'utilisateur
-        $infoproducteur->userid = auth()->user()->id;
-      }
+      $infoproducteur->userid = $request->userid;
       $infoproducteur->save();
       if ($infoproducteur != null) {
         $id = $infoproducteur->id;

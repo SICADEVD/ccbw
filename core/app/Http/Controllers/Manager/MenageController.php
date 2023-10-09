@@ -48,15 +48,17 @@ class MenageController extends Controller
 
     public function create()
     {
-        $pageTitle = "Ajouter un menage";
-        $manager   = auth()->user();
-        $cooperative = Cooperative::with('sections.localites')->find($manager->cooperative_id);
+        $pageTitle = "Ajouter un ménage";
+        $manager = auth()->user();
+        $cooperative = Cooperative::with('sections.localites', 'sections.localites.section')->find($manager->cooperative_id);
+        $sections = $cooperative->sections;
         $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
             return $localite->active();
         });
-        $producteurs  = Producteur::with('localite')->get();
+        $producteurs = Producteur::with('localite')->get();
 
-        return view('manager.menage.create', compact('pageTitle', 'producteurs', 'localites'));
+        return view('manager.menage.create', compact('pageTitle', 'producteurs', 'sections', 'localites'));
+
     }
 
     public function store(StoreMenageRequest $request)
