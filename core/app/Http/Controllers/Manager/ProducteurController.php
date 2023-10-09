@@ -125,6 +125,7 @@ class ProducteurController extends Controller
         $producteur->niveau_etude    = $request->niveau_etude;
         $producteur->type_piece    = $request->type_piece;
         $producteur->numPiece    = $request->numPiece;
+        $producteur->certificats    = $request->certificats;
         $producteur->userid = auth()->user()->id;
         $producteur->codeProd = $request->codeProd;
         $producteur->plantePartage = $request->plantePartage;
@@ -192,6 +193,7 @@ class ProducteurController extends Controller
         $producteur->numCMU = $request->numCMU;
         $producteur->anneeDemarrage = $request->anneeDemarrage;
         $producteur->anneeFin = $request->anneeFin;
+        $producteur->certificats = $request->certificats;
         $producteur->autreCertificats = $request->autreCertificats;
         $producteur->autreVariete = $request->autreVariete;
         $producteur->consentement  = $request->consentement;

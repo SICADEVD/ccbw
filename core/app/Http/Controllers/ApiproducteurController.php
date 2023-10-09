@@ -99,11 +99,34 @@ class ApiproducteurController extends Controller
       $producteur = Producteur::findOrFail($request->id);
       $validationRule = [
         'programme_id' => 'required|exists:programmes,id',
-        'localite_id'    => 'required|exists:localites,id',
-        'proprietaires' => 'required',
-        'certificats' => 'required',
-        'habitationProducteur' => 'required',
-        'num_ccc' => ['max:20', Rule::unique('producteurs', 'num_ccc')->ignore($producteur)],
+            'proprietaires' => 'required',
+            'certificats' => 'required',
+            'variete' => 'required',
+            'habitationProducteur' => 'required',
+            'statut' => 'required',
+            'statutMatrimonial' => 'required',
+            'localite_id'    => 'required|exists:localites,id',
+            'nom' => 'required|max:255',
+            'prenoms'  => 'required|max:255',
+            'sexe'  => 'required|max:255',
+            'nationalite'  => 'required|max:255',
+            'dateNaiss'  => 'required|max:255',
+            'phone1'  => 'required|max:255',
+            'niveau_etude'  => 'required|max:255',
+            'type_piece'  => 'required|max:255',
+            'numPiece'  => 'required|max:255',
+            'anneeDemarrage' =>'required_if:proprietaires,==,Garantie',
+            'anneeFin' =>'required_if:proprietaires,==,Garantie',
+            'plantePartage'=>'required_if:proprietaires,==,Planté-partager',
+            'typeCarteSecuriteSociale'=>'required',
+            'autreCertificats'=>'required_if:certificats,==,Autre',
+            'autreVariete'=>'required_if:variete,==,Autre',
+            'codeProd'=>'required_if:statut,==,Certifie',
+            'certificat'=>'required_if:statut,==,Certifie',
+            'phone2'=>'required_if:autreMembre,==,oui',
+            'autrePhone'=>'required_if:autreMembre,==,oui',
+            'numCMU'=>'required_if:carteCMU,==,oui',
+            'num_ccc' => ['max:20', Rule::unique('producteurs', 'num_ccc')->ignore($producteur)],
       ];
       $messages = [
         'programme_id.required' => 'Le programme est obligatoire',
@@ -281,6 +304,7 @@ class ApiproducteurController extends Controller
       $producteur->numCMU = $request->numCMU;
       $producteur->anneeDemarrage = $request->anneeDemarrage;
       $producteur->anneeFin = $request->anneeFin;
+      $producteur->certificats   = $request->certificats;
       $producteur->autreCertificats = $request->autreCertificats;
       $producteur->autreVariete = $request->autreVariete;
       $producteur->consentement  = $request->consentement;
