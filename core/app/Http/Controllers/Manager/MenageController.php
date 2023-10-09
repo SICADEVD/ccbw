@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Manager;
 
-use App\Models\Menage; 
+use App\Models\Menage;
 use App\Models\Section;
 use App\Constants\Status;
-use App\Models\Localite; 
+use App\Models\Localite;
 use App\Models\Cooperative;
-use App\Models\Producteur; 
+use App\Models\Producteur;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Exports\ExportMenages;
@@ -21,21 +21,26 @@ class MenageController extends Controller
 
     public function index()
     {
-        $pageTitle      = "Gestion des menages";
-        $manager   = auth()->user();
+        $pageTitle = "Gestion des ménages";
+        $manager = auth()->user();
         $cooperative = Cooperative::with('sections.localites')->find($manager->cooperative_id);
         $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
             return $localite->active();
         });
-        $menages = Menage::dateFilter()->searchable(["quartier","sources_energies","boisChauffe","ordures_menageres","separationMenage","eauxToillette","eauxVaisselle","wc","menages.sources_eaux","type_machines","garde_machines","equipements","traitementChamps","activiteFemme","nomActiviteFemme","champFemme","nombreHectareFemme"])->latest('id')->joinRelationship('producteur.localite.section')->where('cooperative_id',$manager->cooperative_id)->where(function ($q) {
-            if(request()->localite != null){
-                $q->where('localite_id',request()->localite);
-            }
-        })->with('producteur')->paginate(getPaginate());
-         
-        return view('manager.menage.index', compact('pageTitle', 'menages','localites'));
+        $menages = Menage::dateFilter()->searchable(["quartier","sources_energies","boisChauffe","ordures_menageres","separationMenage","eauxToillette","eauxVaisselle","wc","menages.sources_eaux","type_machines","garde_machines","equipements","traitementChamps","activiteFemme","nomActiviteFemme","champFemme","nombreHectareFemme"])->latest('id')
+            ->joinRelationship('producteur.localite.section')
+            ->where('cooperative_id', $manager->cooperative_id)
+            ->where(function ($q) {
+                if (request()->localite != null) {
+                    $q->where('localite_id', request()->localite);
+                }
+            })
+            ->with(['producteur.localite']) // Charger la relation "localite" des producteurs
+            ->paginate(getPaginate());
+
+        return view('manager.menage.index', compact('pageTitle', 'menages', 'localites'));
     }
- 
+
     public function create()
     {
         $pageTitle = "Ajouter un menage";
@@ -45,8 +50,8 @@ class MenageController extends Controller
             return $localite->active();
         });
         $producteurs  = Producteur::with('localite')->get();
-        
-        return view('manager.menage.create', compact('pageTitle', 'producteurs','localites'));
+
+        return view('manager.menage.create', compact('pageTitle', 'producteurs', 'localites'));
     }
 
     public function store(StoreMenageRequest $request)
@@ -58,15 +63,14 @@ class MenageController extends Controller
             $notify[] = ['error', 'Cette localité est désactivé'];
             return back()->withNotify($notify)->withInput();
         }
-        
-        if($request->id) {
-            $menage = Menage::findOrFail($request->id); 
-            $message = "Le menage a été mise à jour avec succès";
 
+        if ($request->id) {
+            $menage = Menage::findOrFail($request->id);
+            $message = "Le menage a été mise à jour avec succès";
         } else {
-            $menage = new Menage();  
-        } 
-        if($menage->producteur_id != $request->producteur) {
+            $menage = new Menage();
+        }
+        if ($menage->producteur_id != $request->producteur) {
             $hasMenage = Menage::where('producteur_id', $request->producteur)->exists();
             if ($hasMenage) {
                 $notify[] = ['error', 'Ce producteur a déjà un menage enregistré'];
@@ -74,7 +78,7 @@ class MenageController extends Controller
             }
         }
 
-        $menage->producteur_id  = $request->producteur;  
+        $menage->producteur_id  = $request->producteur;
         $menage->quartier  = $request->quartier;
         $menage->ageEnfant0A5  = $request->ageEnfant0A5;
         $menage->ageEnfant6A17  = $request->ageEnfant6A17;
@@ -83,30 +87,30 @@ class MenageController extends Controller
         $menage->sources_energies  = $request->sources_energies;
         $menage->boisChauffe     = $request->boisChauffe;
         $menage->ordures_menageres    = $request->ordures_menageres;
-        $menage->separationMenage = $request->separationMenage; 
+        $menage->separationMenage = $request->separationMenage;
         $menage->eauxToillette    = $request->eauxToillette;
-        $menage->eauxVaisselle    = $request->eauxVaisselle; 
-        $menage->wc    = $request->wc; 
-        $menage->sources_eaux    = $request->sources_eaux;  
-        $menage->type_machines    = $request->type_machines; 
-        $menage->garde_machines    = $request->garde_machines; 
-        $menage->equipements    = $request->equipements; 
-        $menage->traitementChamps    = $request->traitementChamps; 
+        $menage->eauxVaisselle    = $request->eauxVaisselle;
+        $menage->wc    = $request->wc;
+        $menage->sources_eaux    = $request->sources_eaux;
+        $menage->type_machines    = $request->type_machines;
+        $menage->garde_machines    = $request->garde_machines;
+        $menage->equipements    = $request->equipements;
+        $menage->traitementChamps    = $request->traitementChamps;
         $menage->nomApplicateur   = $request->nomApplicateur;
         $menage->numeroApplicateur   = $request->numeroApplicateur;
-        $menage->activiteFemme    = $request->activiteFemme; 
-        $menage->nomActiviteFemme    = $request->nomActiviteFemme; 
-        $menage->champFemme    = $request->champFemme; 
+        $menage->activiteFemme    = $request->activiteFemme;
+        $menage->nomActiviteFemme    = $request->nomActiviteFemme;
+        $menage->champFemme    = $request->champFemme;
         $menage->nombreHectareFemme    = $request->nombreHectareFemme;
         $menage->autreMachine    = $request->autreMachine;
         $menage->autreEndroit    = $request->autreEndroit;
         $menage->userid = auth()->user()->id;
-        $menage->save(); 
+        $menage->save();
 
         $notify[] = ['success', isset($message) ? $message : 'Le menage a été crée avec succès.'];
         return back()->withNotify($notify);
     }
- 
+
 
     public function edit($id)
     {
@@ -119,8 +123,8 @@ class MenageController extends Controller
             return $localite->active();
         });
         $menage   = Menage::findOrFail($id);
-        return view('manager.menage.edit', compact('pageTitle', 'localites', 'menage','producteurs'));
-    } 
+        return view('manager.menage.edit', compact('pageTitle', 'localites', 'menage', 'producteurs'));
+    }
 
     public function status($id)
     {
@@ -131,5 +135,4 @@ class MenageController extends Controller
     {
         return (new ExportMenages())->download('menages.xlsx');
     }
-
 }
