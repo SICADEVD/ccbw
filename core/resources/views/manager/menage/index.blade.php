@@ -2,11 +2,11 @@
 @section('panel')
     <div class="row">
         <div class="col-lg-12">
-        <div class="card b-radius--10 mb-3">
+            <div class="card b-radius--10 mb-3">
                 <div class="card-body">
                     <form action="">
                         <div class="d-flex flex-wrap gap-4">
-                            <input type="hidden" name="table" value="menages"/>
+                            <input type="hidden" name="table" value="menages" />
                             <div class="flex-grow-1">
                                 <label>@lang('Recherche par Mot(s) clé(s)')</label>
                                 <input type="text" name="search" value="{{ request()->search }}" class="form-control">
@@ -15,17 +15,19 @@
                                 <label>@lang('Localité')</label>
                                 <select name="localite" class="form-control">
                                     <option value="">@lang('Toutes')</option>
-                                    @foreach($localites as $local)
-                                    <option value="{{ $local->id }}">{{ $local->nom }}</option>
-                                    @endforeach 
+                                    @foreach ($localites as $local)
+                                        <option value="{{ $local->id }}">{{ $local->nom }}</option>
+                                    @endforeach
                                 </select>
-                            </div> 
+                            </div>
                             <div class="flex-grow-1">
                                 <label>@lang('Date')</label>
-                                <input name="date" type="text" class="date form-control" placeholder="@lang('Date de début - Date de fin')" autocomplete="off" value="{{ request()->date }}">
+                                <input name="date" type="text" class="date form-control"
+                                    placeholder="@lang('Date de début - Date de fin')" autocomplete="off" value="{{ request()->date }}">
                             </div>
                             <div class="flex-grow-1 align-self-end">
-                                <button class="btn btn--primary w-100 h-45"><i class="fas fa-filter"></i> @lang('Filter')</button>
+                                <button class="btn btn--primary w-100 h-45"><i class="fas fa-filter"></i>
+                                    @lang('Filter')</button>
                             </div>
                         </div>
                     </form>
@@ -36,10 +38,11 @@
                     <div class="table-responsive--sm table-responsive">
                         <table class="table table--light style--two">
                             <thead>
-                                <tr> 
-                                    <th>@lang('Localite')</th> 
+                                <tr>
+                                    <th>@lang('Section')</th>
+                                    <th>@lang('Localite')</th>
                                     <th>@lang('Producteur')</th>
-                                    <th>@lang('Quartier')</th> 
+                                    <th>@lang('Quartier')</th>
                                     <th>@lang('Ajoutée le')</th>
                                     <th>@lang('Status')</th>
                                     <th>@lang('Action')</th>
@@ -49,30 +52,34 @@
                                 @forelse($menages as $menage)
                                     <tr>
                                         <td>
+                                            <span class="fw-bold">{{ $menage->producteur->localite->section->libelle }}</span>
+                                        </td>
+                                        <td>
                                             <span class="fw-bold">{{ $menage->producteur->localite->nom }}</span>
-                                        </td> 
-                                        <td> 
+                                        </td>
+                                        <td>
                                             <span class="small">
-                                            {{ $menage->producteur->nom }} {{ $menage->producteur->prenoms }}
+                                                {{ $menage->producteur->nom }} {{ $menage->producteur->prenoms }}
                                             </span>
                                         </td>
                                         <td>
                                             <span>{{ $menage->quartier }}</span>
                                         </td>
-                                        
+
                                         <td>
                                             <span class="d-block">{{ showDateTime($menage->created_at) }}</span>
                                             <span>{{ diffForHumans($menage->created_at) }}</span>
                                         </td>
                                         <td> @php echo $menage->statusBadge; @endphp </td>
                                         <td>
-                                         
-                                            <button type="button" class="btn btn-sm btn-outline--primary" data-bs-toggle="dropdown" aria-expanded="false"><i
+
+                                            <button type="button" class="btn btn-sm btn-outline--primary"
+                                                data-bs-toggle="dropdown" aria-expanded="false"><i
                                                     class="las la-ellipsis-v"></i>@lang('Action')
-                                             </button>
+                                            </button>
                                             <div class="dropdown-menu p-0">
                                                 <a href="{{ route('manager.suivi.menage.edit', $menage->id) }}"
-                                                    class="dropdown-item"><i class="la la-pen"></i>@lang('Edit')</a> 
+                                                    class="dropdown-item"><i class="la la-pen"></i>@lang('Edit')</a>
                                                 @if ($menage->status == Status::DISABLE)
                                                     <button type="button" class="confirmationBtn  dropdown-item"
                                                         data-action="{{ route('manager.suivi.menage.status', $menage->id) }}"
@@ -85,8 +92,8 @@
                                                         data-question="@lang('Are you sure to disable this menage?')">
                                                         <i class="la la-eye-slash"></i> @lang('Désactivé')
                                                     </button>
-                                                @endif 
-                                                
+                                                @endif
+
                                             </div>
                                         </td>
                                     </tr>
@@ -112,11 +119,11 @@
 @endsection
 
 @push('breadcrumb-plugins')
-  
     <a href="{{ route('manager.suivi.menage.create') }}" class="btn  btn-outline--primary h-45 addNewCooperative">
-        <i class="las la-plus"></i>@lang("Ajouter nouveau")
+        <i class="las la-plus"></i>@lang('Ajouter nouveau')
     </a>
-    <a href="{{ route('manager.suivi.menage.exportExcel.menageAll') }}" class="btn  btn-outline--warning h-45"><i class="las la-cloud-download-alt"></i> Exporter en Excel</a>
+    <a href="{{ route('manager.suivi.menage.exportExcel.menageAll') }}" class="btn  btn-outline--warning h-45"><i
+            class="las la-cloud-download-alt"></i> Exporter en Excel</a>
 @endpush
 @push('style')
     <style>
@@ -138,18 +145,19 @@
             "use strict";
 
             $('.date').datepicker({
-                maxDate:new Date(),
-                range:true,
-                multipleDatesSeparator:"-",
-                language:'en'
+                maxDate: new Date(),
+                range: true,
+                multipleDatesSeparator: "-",
+                language: 'en'
             });
 
-            let url=new URL(window.location).searchParams;
-            if(url.get('localite') != undefined && url.get('localite') != ''){
-                $('select[name=localite]').find(`option[value=${url.get('localite')}]`).attr('selected',true);
+            let url = new URL(window.location).searchParams;
+            if (url.get('localite') != undefined && url.get('localite') != '') {
+                $('select[name=localite]').find(`option[value=${url.get('localite')}]`).attr('selected', true);
             }
-            if(url.get('payment_status') != undefined && url.get('payment_status') != ''){
-                $('select[name=payment_status]').find(`option[value=${url.get('payment_status')}]`).attr('selected',true);
+            if (url.get('payment_status') != undefined && url.get('payment_status') != '') {
+                $('select[name=payment_status]').find(`option[value=${url.get('payment_status')}]`).attr('selected',
+                    true);
             }
 
         })(jQuery)

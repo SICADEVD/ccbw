@@ -27,7 +27,12 @@ class MenageController extends Controller
         $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
             return $localite->active();
         });
-        $menages = Menage::dateFilter()->searchable(["quartier","sources_energies","boisChauffe","ordures_menageres","separationMenage","eauxToillette","eauxVaisselle","wc","menages.sources_eaux","type_machines","garde_machines","equipements","traitementChamps","activiteFemme","nomActiviteFemme","champFemme","nombreHectareFemme"])->latest('id')
+        $menages = Menage::dateFilter()->searchable([
+            "quartier", "sources_energies", "boisChauffe", "ordures_menageres",
+            "separationMenage", "eauxToillette", "eauxVaisselle", "wc",
+            "menages.sources_eaux", "type_machines", "garde_machines", "equipements",
+            "traitementChamps", "activiteFemme", "nomActiviteFemme", "champFemme", "nombreHectareFemme"
+        ])->latest('id')
             ->joinRelationship('producteur.localite.section')
             ->where('cooperative_id', $manager->cooperative_id)
             ->where(function ($q) {
@@ -35,7 +40,7 @@ class MenageController extends Controller
                     $q->where('localite_id', request()->localite);
                 }
             })
-            ->with(['producteur.localite']) // Charger la relation "localite" des producteurs
+            ->with(['producteur.localite', 'producteur.localite.section']) // Charger les relations "localite" et "section" des producteurs
             ->paginate(getPaginate());
 
         return view('manager.menage.index', compact('pageTitle', 'menages', 'localites'));
