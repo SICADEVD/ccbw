@@ -2,22 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
+use App\Models\User;
 use App\Constants\Status;
-use App\Http\Requests\StoreInfoRequest;
 use App\Models\Producteur;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\Producteur_info;
+use Illuminate\Validation\Rule;
 use App\Models\Infos_producteur;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
-use App\Models\Producteur_infos_typeculture;
+use App\Http\Requests\StoreInfoRequest;
 use App\Models\Producteur_infos_mobile;
+use App\Models\Producteur_infos_typeculture;
+use App\Http\Requests\UpdateProducteurRequest;
+use App\Models\Producteur_infos_maladieenfant;
 use Illuminate\Validation\ValidationException;
 use App\Models\Producteur_infos_autresactivite;
-use App\Models\Producteur_infos_maladieenfant;
-use App\Models\User;
-use Exception;
 
 class ApiproducteurController extends Controller
 {
@@ -93,84 +95,227 @@ class ApiproducteurController extends Controller
    */
   public function store(Request $request)
   {
+    if ($request->id) {
+      $producteur = Producteur::findOrFail($request->id);
+      $validationRule = [
+        'programme_id' => 'required|exists:programmes,id',
+        'localite_id'    => 'required|exists:localites,id',
+        'proprietaires' => 'required',
+        'certificats' => 'required',
+        'habitationProducteur' => 'required',
+        'num_ccc' => ['max:20', Rule::unique('producteurs', 'num_ccc')->ignore($producteur)],
+      ];
+      $messages = [
+        'programme_id.required' => 'Le programme est obligatoire',
+        'proprietaires.required' => 'Le type de propriétaire est obligatoire',
+        'certificats.required' => 'Le type de certificat est obligatoire',
+        'variete.required' => 'Le type de variété est obligatoire',
+        'habitationProducteur.required' => 'Le type d\'habitation est obligatoire',
+        'statut.required' => 'Le statut est obligatoire',
+        'statutMatrimonial.required' => 'Le statut matrimonial est obligatoire',
+        'localite_id.required' => 'La localité est obligatoire',
+        'nom.required' => 'Le nom est obligatoire',
+        'prenoms.required' => 'Le prénom est obligatoire',
+        'sexe.required' => 'Le sexe est obligatoire',
+        'nationalite.required' => 'La nationalité est obligatoire',
+        'dateNaiss.required' => 'La date de naissance est obligatoire',
+        'phone1.required' => 'Le numéro de téléphone est obligatoire',
+        'niveau_etude.required' => 'Le niveau d\'étude est obligatoire',
+        'type_piece.required' => 'Le type de pièce est obligatoire',
+        'numPiece.required' => 'Le numéro de pièce est obligatoire',
+        'num_ccc.unique' => 'Le numéro de CCC existe déjà',
+        'anneeDemarrage.required_if' => 'L\'année de démarrage est obligatoire',
+        'anneeFin.required_if' => 'L\'année de fin est obligatoire',
+        'plantePartage.required_if' => 'Le type de plante est obligatoire',
+        'typeCarteSecuriteSociale.required' => 'Le type de carte de sécurité sociale est obligatoire',
+        'autreCertificats.required_if' => 'Le type de certificat est obligatoire',
+        'autreVariete.required_if' => 'Le type de variété est obligatoire',
+        'codeProdapp.required_if' => 'Le code Prodapp est obligatoire',
+        'certificat.required_if' => 'Le certificat est obligatoire',
+        'phone2.required_if' => 'Le numéro de téléphone est obligatoire',
+        'autrePhone.required_if' => 'Le champ membre de famille est obligatoire',
+      ];
+      $request->validate($validationRule, $messages);
+      if ($request->picture) {
+        $image = $request->picture;
+        $image = Str::after($image, 'base64,');
+        $image = str_replace(' ', '+', $image);
+        $imageName = (string) Str::uuid() . '.' . 'jpg';
+        File::put(storage_path() . "/app/public/producteurs/pieces/" . $imageName, base64_decode($image));
+        $picture = "public/producteurs/pieces/$imageName";
+        $input['picture'] = $picture;
+        $validationRule['picture'] = $picture;
+      }
+      if ($request->esignature) {
 
-    //
-    $input = $request->all();
-    $validationRule = [
-      'programme_id' => 'required|exists:programmes,id',
-      'proprietaires' => 'required',
-      'certificats' => 'required',
-      'variete' => 'required',
-      'habitationProducteur' => 'required',
-      'statut' => 'required',
-      'statutMatrimonial' => 'required',
-      'localite_id'    => 'required|exists:localites,id',
-      'nom' => 'required|max:255',
-      'prenoms'  => 'required|max:255',
-      'sexe'  => 'required|max:255',
-      'nationalite'  => 'required|max:255',
-      'dateNaiss'  => 'required|max:255',
-      'phone1'  => 'required|max:255',
-      'niveau_etude'  => 'required|max:255',
-      'type_piece'  => 'required|max:255',
-      'numPiece'  => 'required|max:255',
-      // 'num_ccc' => 'unique:producteurs,num_ccc',
-    ];
-    $request->validate($validationRule);
-    // $coop = DB::table('localites as l')->join('cooperatives as c', 'l.cooperative_id', '=', 'c.id')->where('l.id', $input['localite_id'])->select('c.codeApp')->first();
-    // if ($coop != null) {
-    //   $input['codeProdapp'] = $this->generecodeProdApp($input['nom'], $input['prenoms'], $coop->codeApp);
-    // } else {
-    //   $input['codeProdapp'] = null;
-    // }
+        $image = $request->esignature;
+        $image = Str::after($image, 'base64,');
+        $image = str_replace(' ', '+', $image);
+        $imageName = (string) Str::uuid() . '.' . 'jpg';
+        File::put(storage_path() . "/app/public/producteurs/pieces/" . $imageName, base64_decode($image));
+        $esignature = "public/producteurs/pieces/$imageName";
 
-    if (!file_exists(storage_path() . "/app/public/producteurs/pieces")) {
-      File::makeDirectory(storage_path() . "/app/public/producteurs/pieces", 0777, true);
+        $validationRule['esignature'] = $esignature;
+      }
+      $producteur->proprietaires = $request->proprietaires;
+      $producteur->statutMatrimonial = $request->statutMatrimonial;
+      $producteur->variete = $request->variete;
+      $producteur->autreVariete = $request->autreVariete;
+      $producteur->programme_id = $request->programme_id;
+      $producteur->localite_id = $request->localite_id;
+      $producteur->habitationProducteur = $request->habitationProducteur;
+      $producteur->autreMembre = $request->autreMembre;
+      $producteur->autrePhone = $request->autrePhone;
+      $producteur->numPiece = $request->numPiece;
+      $producteur->num_ccc = $request->num_ccc;
+      $producteur->carteCMU = $request->carteCMU;
+      $producteur->typeCarteSecuriteSociale = $request->typeCarteSecuriteSociale;
+      $producteur->numSecuriteSociale = $request->numSecuriteSociale;
+      $producteur->numCMU = $request->numCMU;
+      $producteur->anneeDemarrage = $request->anneeDemarrage;
+      $producteur->anneeFin = $request->anneeFin;
+      $producteur->autreCertificats = $request->autreCertificats;
+      $producteur->autreVariete = $request->autreVariete;
+      $producteur->consentement  = $request->consentement;
+      $producteur->statut  = $request->statut;
+      $producteur->certificat     = $request->certificat;
+      $producteur->nom = $request->nom;
+      $producteur->prenoms    = $request->prenoms;
+      $producteur->sexe    = $request->sexe;
+      $producteur->nationalite    = $request->nationalite;
+      $producteur->dateNaiss    = $request->dateNaiss;
+      $producteur->phone1    = $request->phone1;
+      $producteur->phone2    = $request->phone2;
+      $producteur->niveau_etude    = $request->niveau_etude;
+      $producteur->type_piece    = $request->type_piece;
+      $producteur->numPiece    = $request->numPiece;
+      $producteur->certificats   = $request->certificats;
+      if (auth()->check()) {
+        // Utilisateur authentifié, attribuer l'ID de l'utilisateur
+        $producteur->userid = auth()->user()->id;
+      }
+      $producteur->codeProd = $request->codeProd;
+      $producteur->plantePartage = $request->plantePartage;
+      $producteur->update($request->all());
+
+      $message = "Le producteur a été mis à jour avec succès";
+    } 
+    else {
+      $validationRule = [
+        'programme_id' => 'required|exists:programmes,id',
+        'proprietaires' => 'required',
+        'certificats' => 'required',
+        'variete' => 'required',
+        'habitationProducteur' => 'required',
+        'statut' => 'required',
+        'statutMatrimonial' => 'required',
+        'localite_id'    => 'required|exists:localites,id',
+        'nom' => 'required|max:255',
+        'prenoms'  => 'required|max:255',
+        'sexe'  => 'required|max:255',
+        'nationalite'  => 'required|max:255',
+        'dateNaiss'  => 'required|max:255',
+        'phone1'  => 'required|max:255',
+        'niveau_etude'  => 'required|max:255',
+        'type_piece'  => 'required|max:255',
+        'numPiece'  => 'required|max:255',
+        'num_ccc' => ['unique:producteurs,num_ccc'],
+        'anneeDemarrage' => 'required_if:proprietaires,==,Garantie',
+        'anneeFin' => 'required_if:proprietaires,==,Garantie',
+        'plantePartage' => 'required_if:proprietaires,==,Planté-partager',
+        'typeCarteSecuriteSociale' => 'required',
+        'autreCertificats' => 'required_if:certificats,==,Autre',
+        'autreVariete' => 'required_if:variete,==,Autre',
+        'codeProd' => 'required_if:statut,==,Certifie',
+        'certificat' => 'required_if:statut,==,Certifie',
+        'phone2' => 'required_if:autreMembre,==,oui',
+        'autrePhone' => 'required_if:autreMembre,==,oui',
+        'numCMU' => 'required_if:carteCMU,==,oui',
+      ];
+      $message = [
+        'programme_id.required' => 'Le programme est obligatoire',
+        'proprietaires.required' => 'Le type de propriétaire est obligatoire',
+        'certificats.required' => 'Le type de certificat est obligatoire',
+        'variete.required' => 'Le type de variété est obligatoire',
+        'habitationProducteur.required' => 'Le type d\'habitation est obligatoire',
+        'statut.required' => 'Le statut est obligatoire',
+        'statutMatrimonial.required' => 'Le statut matrimonial est obligatoire',
+        'localite_id.required' => 'La localité est obligatoire',
+        'nom.required' => 'Le nom est obligatoire',
+        'prenoms.required' => 'Le prénom est obligatoire',
+        'sexe.required' => 'Le sexe est obligatoire',
+        'nationalite.required' => 'La nationalité est obligatoire',
+        'dateNaiss.required' => 'La date de naissance est obligatoire',
+        'phone1.required' => 'Le numéro de téléphone est obligatoire',
+        'niveau_etude.required' => 'Le niveau d\'étude est obligatoire',
+        'type_piece.required' => 'Le type de pièce est obligatoire',
+        'numPiece.required' => 'Le numéro de pièce est obligatoire',
+        'num_ccc.unique' => 'Le numéro de CCC existe déjà',
+        'anneeDemarrage.required_if' => 'L\'année de démarrage est obligatoire',
+        'anneeFin.required_if' => 'L\'année de fin est obligatoire',
+        'plantePartage.required_if' => 'Le type de plante est obligatoire',
+        'typeCarteSecuriteSociale.required' => 'Le type de carte de sécurité sociale est obligatoire',
+        'autreCertificats.required_if' => 'Le type de certificat est obligatoire',
+        'autreVariete.required_if' => 'Le type de variété est obligatoire',
+        'codeProdapp.required_if' => 'Le code Prodapp est obligatoire',
+        'certificat.required_if' => 'Le certificat est obligatoire',
+        'phone2.required_if' => 'Le numéro de téléphone est obligatoire',
+        'autrePhone.required_if' => 'Le champ membre de famille est obligatoire',
+      ];
+      $request->validate($validationRule, $message);
+      $producteur = new Producteur();
+      $producteur->proprietaires = $request->proprietaires;
+      $producteur->statutMatrimonial = $request->statutMatrimonial;
+      $producteur->variete = $request->variete;
+      $producteur->autreVariete = $request->autreVariete;
+      $producteur->programme_id = $request->programme_id;
+      $producteur->localite_id = $request->localite_id;
+      $producteur->habitationProducteur = $request->habitationProducteur;
+      $producteur->autreMembre = $request->autreMembre;
+      $producteur->autrePhone = $request->autrePhone;
+      $producteur->numPiece = $request->numPiece;
+      $producteur->num_ccc = $request->num_ccc;
+      $producteur->carteCMU = $request->carteCMU;
+      $producteur->typeCarteSecuriteSociale = $request->typeCarteSecuriteSociale;
+      $producteur->numSecuriteSociale = $request->numSecuriteSociale;
+      $producteur->numCMU = $request->numCMU;
+      $producteur->anneeDemarrage = $request->anneeDemarrage;
+      $producteur->anneeFin = $request->anneeFin;
+      $producteur->autreCertificats = $request->autreCertificats;
+      $producteur->autreVariete = $request->autreVariete;
+      $producteur->consentement  = $request->consentement;
+      $producteur->statut  = $request->statut;
+      $producteur->certificat     = $request->certificat;
+      $producteur->nom = $request->nom;
+      $producteur->prenoms    = $request->prenoms;
+      $producteur->sexe    = $request->sexe;
+      $producteur->nationalite    = $request->nationalite;
+      $producteur->dateNaiss    = $request->dateNaiss;
+      $producteur->phone1    = $request->phone1;
+      $producteur->phone2    = $request->phone2;
+      $producteur->niveau_etude    = $request->niveau_etude;
+      $producteur->type_piece    = $request->type_piece;
+      $producteur->numPiece    = $request->numPiece;
+      if (auth()->check()) {
+        // Utilisateur authentifié, attribuer l'ID de l'utilisateur
+        $producteur->userid = auth()->user()->id;
+      }
+      $producteur->codeProd = $request->codeProd;
+      $producteur->plantePartage = $request->plantePartage;
+      if (!file_exists(storage_path() . "/app/public/producteurs/pieces")) {
+        File::makeDirectory(storage_path() . "/app/public/producteurs/pieces", 0777, true);
+      }
+      if ($request->hasFile('picture')) {
+        try {
+          $producteur->picture = $request->file('picture')->store('public/producteurs/photos');
+        } catch (\Exception $exp) {
+          $notify[] = ['error', 'Impossible de télécharger votre image'];
+          return back()->withNotify($notify);
+        }
+      }
+      $producteur->save();
+      $message = "Le producteur a été créé avec succès";
     }
-
-    if ($request->picture) {
-      $image = $request->picture;
-      $image = Str::after($image, 'base64,');
-      $image = str_replace(' ', '+', $image);
-      $imageName = (string) Str::uuid() . '.' . 'jpg';
-      File::put(storage_path() . "/app/public/producteurs/pieces/" . $imageName, base64_decode($image));
-      $picture = "public/producteurs/pieces/$imageName";
-      $input['picture'] = $picture;
-    }
-    // if ($request->copiecarterecto) {
-    //   $image = $request->copiecarterecto;
-    //   $image = Str::after($image, 'base64,');
-    //   $image = str_replace(' ', '+', $image);
-    //   $imageName = (string) Str::uuid() . '.' . 'jpg';
-
-    //   File::put(storage_path() . "/app/public/producteurs/pieces/" . $imageName, base64_decode($image));
-    //   $copiecarterecto = "public/producteurs/pieces/$imageName";
-    //   $input['copiecarterecto'] = $copiecarterecto;
-    // }
-    // if ($request->copiecarteverso) {
-
-    //   $image = $request->copiecarteverso;
-    //   $image = Str::after($image, 'base64,');
-    //   $image = str_replace(' ', '+', $image);
-    //   $imageName = (string) Str::uuid() . '.' . 'jpg';
-    //   File::put(storage_path() . "/app/public/producteurs/pieces/" . $imageName, base64_decode($image));
-    //   $copiecarteverso = "public/producteurs/pieces/$imageName";
-    //   $input['copiecarteverso'] = $copiecarteverso;
-    // }
-    if ($request->esignature) {
-
-      $image = $request->esignature;
-      $image = Str::after($image, 'base64,');
-      $image = str_replace(' ', '+', $image);
-      $imageName = (string) Str::uuid() . '.' . 'jpg';
-      File::put(storage_path() . "/app/public/producteurs/pieces/" . $imageName, base64_decode($image));
-      $esignature = "public/producteurs/pieces/$imageName";
-
-      $input['esignature'] = $esignature;
-    }
-
-    $producteur = Producteur::create($input);
-
     return response()->json($producteur, 201);
   }
 
@@ -262,7 +407,7 @@ class ApiproducteurController extends Controller
     } catch (ValidationException $e) {
       DB::rollBack();
     }
-    
+
     DB::commit();
     return response()->json($infoproducteur, 201);
   }

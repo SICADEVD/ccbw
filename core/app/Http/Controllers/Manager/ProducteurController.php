@@ -93,31 +93,6 @@ class ProducteurController extends Controller
             return back()->withNotify($notify)->withInput();
         }
         $producteur = new Producteur();
-        // if($request->id) {
-        //     $producteur = Producteur::findOrFail($request->id);
-        //     if($producteur->codeProdapp==null){
-        //         $coop = DB::table('localites as l')->join('cooperatives as c','l.cooperative_id','=','c.id')->where('l.id',$request->localite)->select('c.codeApp')->first();
-        //     if($coop !=null)
-        //     { 
-        //         $producteur->codeProdapp = $this->generecodeProdApp($request->nom,$request->prenoms, $coop->codeApp);
-        //     }else{
-        //         $producteur->codeProdapp = null;
-        //     }
-        //     }
-        //     $message = "La producteur a été mise à jour avec succès";
-        // } 
-        // else {
-        //     $producteur = new Producteur(); 
-        //     $coop = DB::table('localites as l')->join('sections as s','l.section_id','=','s.id')->where('l.id',$request->localite)->select('c.codeApp')->first();
-        //     if($coop !=null)
-        //     { 
-        //         $producteur->codeProdapp = $this->generecodeProdApp($request->nom,$request->prenoms, $coop->codeApp);
-
-        //     }else{
-        //         $producteur->codeProdapp = null;
-        //     }
-        // } 
-
         $producteur->proprietaires = $request->proprietaires;
         $producteur->statutMatrimonial = $request->statutMatrimonial;
         $producteur->variete = $request->variete;
@@ -197,9 +172,9 @@ class ProducteurController extends Controller
             'phone2'=>'required_if:autreMembre,==,oui',
             'autrePhone'=>'required_if:autreMembre,==,oui',
             'numCMU'=>'required_if:carteCMU,==,oui',
-            'num_ccc' => ['required', 'max:20', Rule::unique('producteurs', 'num_ccc')->ignore($producteur)],
+            'num_ccc' => ['max:20', Rule::unique('producteurs', 'num_ccc')->ignore($producteur)],
         ];
-        
+        $request->validate($validationRule);
         $producteur->proprietaires = $request->proprietaires;
         $producteur->statutMatrimonial = $request->statutMatrimonial;
         $producteur->variete = $request->variete;
