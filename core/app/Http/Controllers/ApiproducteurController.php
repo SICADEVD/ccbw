@@ -242,7 +242,6 @@ class ApiproducteurController extends Controller
         'niveau_etude'  => 'required|max:255',
         'type_piece'  => 'required|max:255',
         'numPiece'  => 'required|max:255',
-        'num_ccc' => ['unique:producteurs,num_ccc'],
         'anneeDemarrage' => 'required_if:proprietaires,==,Garantie',
         'anneeFin' => 'required_if:proprietaires,==,Garantie',
         'plantePartage' => 'required_if:proprietaires,==,Planté-partager',
@@ -329,13 +328,25 @@ class ApiproducteurController extends Controller
       if (!file_exists(storage_path() . "/app/public/producteurs/pieces")) {
         File::makeDirectory(storage_path() . "/app/public/producteurs/pieces", 0777, true);
       }
-      if ($request->hasFile('picture')) {
-        try {
-          $producteur->picture = $request->file('picture')->store('public/producteurs/photos');
-        } catch (\Exception $exp) {
-          $notify[] = ['error', 'Impossible de télécharger votre image'];
-          return back()->withNotify($notify);
-        }
+      if ($request->picture) {
+        $image = $request->picture;
+        $image = Str::after($image, 'base64,');
+        $image = str_replace(' ', '+', $image);
+        $imageName = (string) Str::uuid() . '.' . 'jpg';
+        File::put(storage_path() . "/app/public/producteurs/pieces/" . $imageName, base64_decode($image));
+        $picture = "public/producteurs/pieces/$imageName";
+        $producteur->picture = $picture;
+      }
+      if ($request->esignature) {
+
+        $image = $request->esignature;
+        $image = Str::after($image, 'base64,');
+        $image = str_replace(' ', '+', $image);
+        $imageName = (string) Str::uuid() . '.' . 'jpg';
+        File::put(storage_path() . "/app/public/producteurs/pieces/" . $imageName, base64_decode($image));
+        $esignature = "public/producteurs/pieces/$imageName";
+
+        $producteur->esignature = $esignature;
       }
       $producteur->save();
       $message = "Le producteur a été créé avec succès";
