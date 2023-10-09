@@ -331,6 +331,7 @@
                             <button type="submit" class="btn btn--primary"><i
                                     class="fa fa-fw fa-paper-plane"></i>@lang('Enregistrer une info')</button>
                         </div>
+                    </div>
                 </form>
             </div>
         </div>
@@ -525,7 +526,8 @@
             });
 
         });
-        $('#listecultures,#gardePapiersChamps,#numeroCompteMM,#listeactivites,#nomBanque,#autreBanque,#travailleurFamilial').hide();
+        $('#listecultures,#gardePapiersChamps,#numeroCompteMM,#listeactivites,#nomBanque,#autreBanque,#travailleurFamilial')
+            .hide();
 
         $('.autresCultures').change(function() {
             var autresCultures = $('.autresCultures').val();
@@ -538,7 +540,7 @@
         });
         $('.mainOeuvreFamilial').change(function() {
             var mainOeuvreFamilial = $('.mainOeuvreFamilial').val();
-            if ( mainOeuvreFamilial == 'oui') {
+            if (mainOeuvreFamilial == 'oui') {
                 $('#travailleurFamilial').show('slow');
                 $('.travailleurFamilial').show('slow');
             } else {
@@ -574,17 +576,6 @@
             } else {
                 $('#listeactivites').hide('slow');
                 $('.listeactivites').val('');
-            }
-        });
-
-
-        $('.papiersChamps').change(function() {
-            var papiersChamps = $('.papiersChamps').val();
-            if (papiersChamps == 'oui') {
-                $('#gardePapiersChamps').show('slow');
-            } else {
-                $('#gardePapiersChamps').hide('slow');
-                $('.gardePapiersChamps').val('');
             }
         });
 

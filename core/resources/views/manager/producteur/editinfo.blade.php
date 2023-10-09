@@ -77,7 +77,7 @@
                                                             class="form-control " value="<?php echo $data->superficieculture; ?>">
                                                     </div>
                                                 </div>
-                                                <?php if($a>1):?>
+                                                <?php if($a>=1):?>
                                                 <div class="col-xs-12 col-sm-12"><button type="button"
                                                         id="<?php echo $a; ?>" class="removeRow btn btn-danger btn-sm"><i
                                                             class="fa fa-minus"></i></button></div>
@@ -346,7 +346,6 @@
 
                     }
                 });
-
             });
         </script>
         <script type="text/javascript">
@@ -373,9 +372,9 @@
                     $('.listecultures').val('');
                 }
             });
-            if($('.autresCultures').val() == 'oui'){
+            if ($('.autresCultures').val() == 'oui') {
                 $('#listecultures').show('slow');
-            }else{
+            } else {
                 $('#listecultures').hide('slow');
                 $('.listecultures').val('');
             }
@@ -410,10 +409,10 @@
                     $('.autreBanque').val('');
                 }
             });
-            if($('.nomBanque').val() == 'Autre'){
+            if ($('.nomBanque').val() == 'Autre') {
                 $('#autreBanque').show('slow');
                 $('.autreBanque').show('slow');
-            }else{
+            } else {
                 $('#autreBanque').hide('slow');
                 $('.autreBanque').val('');
             }
@@ -427,10 +426,10 @@
                     $('.nomBanque').val('');
                 }
             });
-            if($('.compteBanque').val() == 'oui'){
+            if ($('.compteBanque').val() == 'oui') {
                 $('#nomBanque').show('slow');
                 $('.nomBanque').show('slow');
-            }else{
+            } else {
                 $('#nomBanque').hide('slow');
                 $('.nomBanque').val('');
             }
@@ -443,9 +442,9 @@
                     $('.listeactivites').val('');
                 }
             });
-            if($('.autreActivite').val() == 'oui'){
+            if ($('.autreActivite').val() == 'oui') {
                 $('#listeactivites').show('slow');
-            }else{
+            } else {
                 $('#listeactivites').hide('slow');
                 $('.listeactivites').val('');
             }
@@ -460,10 +459,10 @@
                     $('.numeroCompteMM').val('');
                 }
             });
-            if($('.mobileMoney').val() == 'oui'){
+            if ($('.mobileMoney').val() == 'oui') {
                 $('#numeroCompteMM').show('slow');
                 $('.numeroCompteMM').css('display', 'block');
-            }else{
+            } else {
                 $('#numeroCompteMM').hide('slow');
                 $('.numeroCompteMM').val('');
             }
