@@ -123,14 +123,14 @@ class MenageController extends Controller
     {
         $pageTitle = "Mise à jour de le menage";
         $manager   = auth()->user();
-        // $localites  = Localite::active()->where('cooperative_id',auth()->user()->cooperative_id)->orderBy('nom')->get();
-        $producteurs  = Producteur::with('localite')->get();
-        $cooperative = Cooperative::with('sections.localites')->find($manager->cooperative_id);
+        $cooperative = Cooperative::with('sections.localites', 'sections.localites.section')->find($manager->cooperative_id);
         $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
             return $localite->active();
         });
+        $producteurs  = Producteur::with('localite')->get();
+        $sections = $cooperative->sections;
         $menage   = Menage::findOrFail($id);
-        return view('manager.menage.edit', compact('pageTitle', 'localites', 'menage', 'producteurs'));
+        return view('manager.menage.edit', compact('pageTitle', 'localites', 'menage', 'producteurs','sections'));
     }
 
     public function status($id)
