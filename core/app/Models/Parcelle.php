@@ -11,11 +11,6 @@ class Parcelle extends Model
 {
     use Searchable, GlobalStatus, PowerJoins;
     protected $guarded = ['section','localite',];
-    protected $casts = [
-        'superficie' => 'float',
-        'latitude' => 'float',
-        'longitude' => 'float',
-    ];
 
     public function producteur()
     {

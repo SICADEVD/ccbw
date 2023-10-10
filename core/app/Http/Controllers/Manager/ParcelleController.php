@@ -105,6 +105,7 @@ class ParcelleController extends Controller
             'nbCacaoParHectare'=>'nombre de cacao par hectare',
             'superficieConcerne'=>'superficie concerné',
         ];
+        $request->validate($validationRule, $messages, $attributes);
         $localite = Localite::where('id', $request->localite)->first();
 
         if ($localite->status == Status::NO) {
@@ -127,7 +128,7 @@ class ParcelleController extends Controller
             $message = "La parcelle a été mise à jour avec succès";
 
         } else {
-            // $parcelle = new Parcelle(); 
+            $parcelle = new Parcelle(); 
             
             $produc=Producteur::select('codeProdapp')->find($request->producteur);
             if($produc !=null){
@@ -135,26 +136,25 @@ class ParcelleController extends Controller
             }else{
             $codeProd='';
             }
-            $parcelle = Parcelle::create($request->validate($validationRule, $messages, $attributes));
             $parcelle->codeParc  =  $this->generecodeparc($request->producteur, $codeProd);
         } 
-        // $parcelle->producteur_id  = $request->producteur_id;
-        // $parcelle->niveauPente  = $request->niveauPente;
-        // $parcelle->anneeCreation  = $request->anneeCreation;
-        // $parcelle->ageMoyenCacao  = $request->ageMoyenCacao;
-        // $parcelle->parcelleRegenerer  = $request->parcelleRegenerer;
-        // $parcelle->anneeRegenerer  = $request->anneeRegenerer;
-        // $parcelle->superficieConcerne  = $request->superficieConcerne;
-        // $parcelle->typeDoc  = $request->typeDoc;
-        // $parcelle->presenceCourDeau  = $request->presenceCourDeau;
-        // $parcelle->courDeau  = $request->courDeau;
-        // $parcelle->existeMesureProtection  = $request->existeMesureProtection;
-        // $parcelle->existePente  = $request->existePente;
-        // $parcelle->superficie  = $request->superficie;
-        // $parcelle->latitude  = $request->latitude;
-        // $parcelle->Longitude  = $request->Longitude;
-        // $parcelle->userid = auth()->user()->id;
-        // $parcelle->nbCacaoParHectare  = $request->nbCacaoParHectare;
+        $parcelle->producteur_id  = $request->producteur_id;
+        $parcelle->niveauPente  = $request->niveauPente;
+        $parcelle->anneeCreation  = $request->anneeCreation;
+        $parcelle->ageMoyenCacao  = $request->ageMoyenCacao;
+        $parcelle->parcelleRegenerer  = $request->parcelleRegenerer;
+        $parcelle->anneeRegenerer  = $request->anneeRegenerer;
+        $parcelle->superficieConcerne  = $request->superficieConcerne;
+        $parcelle->typeDoc  = $request->typeDoc;
+        $parcelle->presenceCourDeau  = $request->presenceCourDeau;
+        $parcelle->courDeau  = $request->courDeau;
+        $parcelle->existeMesureProtection  = $request->existeMesureProtection;
+        $parcelle->existePente  = $request->existePente;
+        $parcelle->superficie  = $request->superficie;
+        $parcelle->latitude  = $request->latitude;
+        $parcelle->Longitude  = $request->Longitude;
+        $parcelle->userid = auth()->user()->id;
+        $parcelle->nbCacaoParHectare  = $request->nbCacaoParHectare;
         
 
         if($request->hasFile('fichier_kml_gpx')) {
