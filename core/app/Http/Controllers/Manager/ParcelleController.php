@@ -129,6 +129,7 @@ class ParcelleController extends Controller
 
         } else {
             $parcelle = new Parcelle(); 
+            
             $produc=Producteur::select('codeProdapp')->find($request->producteur);
             if($produc !=null){
             $codeProd = $produc->codeProdapp;
@@ -166,24 +167,6 @@ class ParcelleController extends Controller
         } 
 
         $parcelle->save(); 
-        dd($parcelle);
-        if($parcelle !=null ){
-            $id = $formation->id;
-            $datas = $datas2 = $datas3 = $datas4 = [];
-            if(($request->producteur !=null)) { 
-                SuiviFormationProducteur::where('suivi_formation_id',$id)->delete();
-                $i=0; 
-                foreach($request->producteur as $data){
-                    if($data !=null)
-                    {
-                        $datas[] = [
-                        'suivi_formation_id' => $id, 
-                        'producteur_id' => $data,  
-                    ];
-                    } 
-                  $i++;
-                } 
-            }
 
         $notify[] = ['success', isset($message) ? $message : 'Le parcelle a été crée avec succès.'];
         return back()->withNotify($notify);
