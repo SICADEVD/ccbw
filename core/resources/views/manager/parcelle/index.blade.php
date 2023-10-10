@@ -43,10 +43,9 @@
                                     <th>@lang('Localite')</th>
                                     <th>@lang('Code Parcelle')</th>
                                     <th>@lang('Producteur')</th>
-                                    <th>@lang('Culture')</th>
                                     <th>@lang('Type de document')</th>
                                     <th>@lang('Superficie')</th>
-                                    <th>@lang('Année')</th>
+                                    <th>@lang('Année de création')</th>
                                     <th>@lang('Ajoutée le')</th>
                                     <th>@lang('Status')</th>
                                     <th>@lang('Action')</th>
@@ -71,9 +70,7 @@
                                                 {{ $parcelle->producteur->nom }} {{ $parcelle->producteur->prenoms }}
                                             </span>
                                         </td>
-                                        <td>
-                                            <span>{{ $parcelle->culture }}</span>
-                                        </td>
+                                       
                                         <td>
                                             <span>{{ $parcelle->typeDoc }}</span>
                                         </td>
