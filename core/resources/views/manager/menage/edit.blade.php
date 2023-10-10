@@ -19,7 +19,7 @@
                             <select class="form-control" name="section" id="section" required>
                                 <option value="">@lang('Selectionner une option')</option>
                                 @foreach ($sections as $section)
-                                    <option value="{{ $section->id }}" @selected(old('section'))>
+                                    <option value="{{ $section->id }}" @selected($section->id == $menage->producteur->localite->section_id)>
                                         {{ $section->libelle }}</option>
                                 @endforeach
                             </select>
@@ -33,7 +33,7 @@
                                 <option value="">@lang('Selectionner une option')</option>
                                 @foreach ($localites as $localite)
                                     <option value="{{ $localite->id }}" data-chained="{{ $localite->section->id }}"
-                                        @selected(old('localite'))>
+                                        @selected($localite->id == $menage->producteur->localite_id)>
                                         {{ $localite->nom }}</option>
                                 @endforeach
                             </select>
@@ -47,7 +47,7 @@
                                 <option value="">@lang('Selectionner une option')</option>
                                 @foreach ($producteurs as $producteur)
                                     <option value="{{ $producteur->id }}" data-chained="{{ $producteur->localite->id }}"
-                                        @selected(old('producteur'))>
+                                        @selected($producteur->id == $menage->producteur_id)>
                                         {{ $producteur->nom }} {{ $producteur->prenoms }}</option>
                                 @endforeach
                             </select>
@@ -179,7 +179,7 @@
                             </div>
                         </div>
                         <div class="form-group row" id="etatatomiseurs">
-                            <?php echo Form::label(__("L'Atomiseur est-il en bon état?"), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <?php echo Form::label(__('La machine est-elle en bon état?'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
                                 <?php echo Form::select('etatatomiseur', ['oui' => __('oui'), 'non' => __('non')], null, ['id' => 'etatatomiseur', 'class' => 'form-control etatatomiseur']); ?>
                             </div>
@@ -226,9 +226,7 @@
                     <div class="form-group row" id="nomActiviteFemmes">
                         <?php echo Form::label(__('Quelle Activité ?'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <input type="text" id="nomActiviteFemme" name="nomActiviteFemme"
-                                placeholder="Quelle Activité ?" class="form-control nomActiviteFemme"
-                                value="{{ old('nomActiviteFemme') }}">
+                            <?php echo Form::text('nomActiviteFemme', null, ['id' => 'nomActiviteFemme', 'class' => 'form-control nomActiviteFemme', 'placeholder' => __('Quelle Activité ?')]); ?>
                         </div>
                     </div>
                     <div class="form-group row" id="champFemmes">
@@ -292,7 +290,28 @@
                     $('#numeroApplicateur').prop('required', true);
                 }
             });
-            
+            if ($('.traitementChamps').val() == 'oui') {
+                $('#infosPersonneTraitant').hide('slow');
+                $('.nomApplicateur').hide('slow');
+                $('#nomApplicateur').prop('required', false);
+                $('.nomApplicateur').val('');
+                $('.numeroApplicateur').hide('slow');
+                $('#numeroApplicateur').prop('required', false);
+                $('.numeroApplicateur').val('');
+                $('#avoirMachine').show('slow');
+                $('#etatatomiseurs').show('slow');
+
+            } else {
+                $('#infosPersonneTraitant').show('slow');
+                $('.nomApplicateur').show('slow');
+                $('#nomApplicateur').prop('required', true);
+                $('.numeroApplicateur').show('slow');
+                $('#numeroApplicateur').prop('required', true);
+                $('#avoirMachine').hide('slow');
+                $('#etatatomiseurs').hide('slow');
+
+            }
+
             $('.garde_machines').change(function() {
                 var garde_machines = $('.garde_machines').val();
                 if (garde_machines == 'Autre') {
@@ -305,7 +324,16 @@
                     $('.autreEndroit').val('');
                 }
             });
-            
+            if ($('.garde_machines').val() == 'Autre') {
+                $('#autreEndroits').show('slow');
+                $('.autreEndroit').show('slow');
+                $('#autreEndroit').prop('required', true);
+            } else {
+                $('#autreEndroits').hide('slow');
+                $('#autreEndroit').prop('required', false);
+                $('.autreEndroit').val('');
+            }
+
             $('.type_machines').change(function() {
                 var type_machines = $('.type_machines').val();
                 if (type_machines == 'Atomiseur' || type_machines == 'Pulverisateur') {
@@ -325,7 +353,24 @@
                     $('.autreMachine').val('');
                 }
             });
-            
+            if ($('.type_machines').val() == 'Atomiseur' || $('.type_machines').val() == 'Pulverisateur') {
+                $('#etatatomiseurs').show('slow');
+                $('.etatatomiseur').show('slow');
+                $('#etatatomiseur').prop('required', true);
+            } else {
+                $('#etatatomiseur').hide('slow');
+                $('.etatatomiseur').val('');
+                $('#etatatomiseur').prop('required', false);
+            }
+
+            if ($('.type_machines').val() == 'Autre') {
+                $('#autreMachine').show('slow');
+                $('.autreMachine').show('slow');
+            } else {
+                $('#autreMachine').hide('slow');
+                $('.autreMachine').val('');
+            }
+
 
             $('.sources_energies').change(function() {
                 var sources_energies = $('.sources_energies').val();
@@ -340,12 +385,12 @@
                     $('#boisChauffe').prop('required', false);
                 }
             });
-            if($('.sources_energies').val() == 'Bois de chauffe'){
+            if ($('.sources_energies').val() == 'Bois de chauffe') {
                 $('#boisChauffes').show('slow');
                 $('.boisChauffe').show('slow');
                 $('#boisChauffe').prop('required', true);
                 $('.boisChauffe').css('display', 'block');
-            }else{
+            } else {
                 $('#boisChauffes').hide('slow');
                 $('.boisChauffe').val('');
                 $('#boisChauffe').prop('required', false);
@@ -373,7 +418,27 @@
                     $('#champFemme').prop('required', true);
                 }
             });
-            
+
+            if ($('.activiteFemme').val() == 'oui') {
+                $('#nomActiviteFemmes').show('slow');
+                $('.nomActiviteFemme').show('slow');
+                $('#nomActiviteFemme').prop('required', true);
+                $('.nomActiviteFemme').css('display', 'block');
+
+                $('#champFemmes').hide('slow');
+                $('.champFemme').val('');
+                $('#champFemme').prop('required', false);
+            } else {
+                $('#nomActiviteFemmes').hide('slow');
+                $('.nomActiviteFemme').val('');
+                $('#nomActiviteFemme').prop('required', false);
+                $('.nomActiviteFemme').hide('slow');
+
+                $('#champFemmes').show('slow');
+                $('.champFemme').show('slow');
+                $('#champFemme').prop('required', true);
+            }
+
 
             $('.champFemme').change(function() {
                 var champFemme = $('.champFemme').val();
@@ -390,8 +455,7 @@
                     $('#nombreHectareFemme').prop('required', false);
                 }
             });
-            
+
         });
     </script>
 @endpush
-
