@@ -17,5 +17,4 @@ class Parcelle extends Model
         return $this->belongsTo(Producteur::class);
     }
      
-     
 }

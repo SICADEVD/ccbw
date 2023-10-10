@@ -28,7 +28,7 @@ class ParcelleController extends Controller
         $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
             return $localite->active();
         });
-        $parcelles = Parcelle::dateFilter()->searchable(['codeParc',''])->latest('id')->joinRelationship('producteur.localite.section')->where('cooperative_id',$manager->cooperative_id)->where(function ($q) {
+        $parcelles = Parcelle::dateFilter()->searchable(['codeParc'])->latest('id')->joinRelationship('producteur.localite.section')->where('cooperative_id',$manager->cooperative_id)->where(function ($q) {
             if(request()->localite != null){
                 $q->where('localite_id',request()->localite);
             }
