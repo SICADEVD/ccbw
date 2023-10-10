@@ -60,7 +60,7 @@ class ParcelleController extends Controller
             'ageMoyenCacao' => 'required',
             'parcelleRegenerer' => 'required',
             'anneeRegenerer'=>'required_if:parcelleRegenerer,==,oui',
-            'superficieRegenerer'=>'required_if:parcelleRegenerer,==,oui',
+            'superficieConcerne'=>'required_if:parcelleRegenerer,==,oui',
             'typeDoc'=>'required',
             'presenceCourDeau'=>'required',
             'courDeau'=>'required_if:presenceCourDeau,==,oui',
@@ -85,6 +85,7 @@ class ParcelleController extends Controller
             'existePente.required' => 'Le champ existence de pente est obligatoire',
             'superficie.required' => 'Le champ superficie est obligatoire',
             'nbCacaoParHectare.required' => 'Le champ nombre de cacao par hectare est obligatoire',
+            'superficieConcerne.required_if' => 'Le champ superficie concerné est obligatoire',
         ];
         $attributes = [
             'section' => 'section',
@@ -102,6 +103,7 @@ class ParcelleController extends Controller
             'existePente'=>'existence de pente',
             'superficie'=>'superficie',
             'nbCacaoParHectare'=>'nombre de cacao par hectare',
+            'superficieConcerne'=>'superficie concerné',
         ];
         $localite = Localite::where('id', $request->localite)->first();
 
