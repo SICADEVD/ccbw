@@ -13,12 +13,26 @@
                     ]) !!}
 
                     <div class="form-group row">
+                        <label class="col-sm-4 control-label">@lang('Selectionner une section')</label>
+                        <div class="col-xs-12 col-sm-8">
+                            <select class="form-control" name="section" id="section" required>
+                                <option value="">@lang('Selectionner une option')</option>
+                                @foreach ($sections as $section)
+                                    <option value="{{ $section->id }}" @selected(old('section'))>
+                                        {{ $section->libelle }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
                         <label class="col-sm-4 control-label">@lang('Selectionner une localite')</label>
                         <div class="col-xs-12 col-sm-8">
                             <select class="form-control" name="localite" id="localite" required>
                                 <option value="">@lang('Selectionner une option')</option>
                                 @foreach ($localites as $localite)
-                                    <option value="{{ $localite->id }}" @selected(old('localite'))>
+                                    <option value="{{ $localite->id }}" data-chained="{{ $localite->section->id }}"
+                                        @selected(old('localite'))>
                                         {{ $localite->nom }}</option>
                                 @endforeach
                             </select>
@@ -27,7 +41,7 @@
                     <div class="form-group row">
                         <label class="col-sm-4 control-label">@lang('Selectionner un producteur')</label>
                         <div class="col-xs-12 col-sm-8">
-                            <select class="form-control" name="producteur" id="producteur" required>
+                            <select class="form-control" name="producteur_id" id="producteur_id" required>
                                 <option value="">@lang('Selectionner une option')</option>
                                 @foreach ($producteurs as $producteur)
                                     <option value="{{ $producteur->id }}" data-chained="{{ $producteur->localite->id }}"
@@ -48,7 +62,7 @@
                     <div class="form-group row">
                         {{ Form::label(__('Quel est l\'âge moyen des cacaoyers ?'), null, ['class' => 'col-sm-4 control-label']) }}
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::text('ageMoyenCacao', null, ['placeholder' => 'Age moyen des cacaoyers', 'class' => 'form-control', 'id' => 'ageMoyenCacao', 'required']); ?>
+                            <?php echo Form::number('ageMoyenCacao', null, ['placeholder' => 'Age moyen des cacaoyers', 'class' => 'form-control', 'id' => 'ageMoyenCacao', 'required']); ?>
                         </div>
                     </div>
 
@@ -59,18 +73,18 @@
                             <?php echo Form::select('parcelleRegenerer', ['non' => __('non'), 'oui' => __('oui')], null, ['class' => 'form-control parcelleRegenerer', 'required']); ?>
                         </div>
                     </div>
-                    <div id="anneeRegenerer">
+                    <div id="anneeRegenerers">
                         <div class="form-group row">
                             {{ Form::label(__('Année de régéneration'), null, ['class' => 'col-sm-4 control-label']) }}
                             <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::number('anneeRegenerer', null, ['placeholder' => 'Année de régéneration', 'class' => 'form-control anneeRegenerer']); ?>
+                                <?php echo Form::number('anneeRegenerer', null, ['id' => 'anneeRegenerer', 'placeholder' => 'Année de régéneration', 'class' => 'form-control anneeRegenerer']); ?>
                             </div>
                         </div>
 
                         <div class="form-group row">
                             {{ Form::label(__('Superficie concerné'), null, ['class' => 'col-sm-4 control-label']) }}
                             <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::number('superficieConcerne', null, ['placeholder' => 'Superficie concernée', 'class' => 'form-control superficieConcerne']); ?>
+                                <?php echo Form::number('superficieConcerne', null, ['id' => 'superficieConcerne', 'placeholder' => 'Superficie concernée', 'class' => 'form-control superficieConcerne']); ?>
                             </div>
                         </div>
                     </div>
@@ -87,10 +101,12 @@
                             <?php echo Form::select('presenceCourDeau', ['non' => __('non'), 'oui' => __('oui')], null, ['class' => 'form-control presenceCourDeau', 'required']); ?>
                         </div>
                     </div>
-                    <div class="form-group row" id="courDeau">
-                        {{ Form::label(__('Quel est le cour ou plan d\'eau'), null, ['class' => 'col-sm-4 control-label']) }}
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('courDeau', ['Bas-fond' => 'Bas-fond', 'Marigot' => 'Marigot', 'Rivière' => 'Rivière', 'Source d’eau' => 'Source d’eau', 'Autre' => 'Autre'], null, ['class' => 'form-control courDeau']); ?>
+                    <div id="courDeaus">
+                        <div class="form-group row" id="">
+                            {{ Form::label(__('Quel est le cour ou plan d\'eau'), null, ['class' => 'col-sm-4 control-label']) }}
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::select('courDeau', ['Bas-fond' => 'Bas-fond', 'Marigot' => 'Marigot', 'Rivière' => 'Rivière', 'Source d’eau' => 'Source d’eau', 'Autre' => 'Autre'], null, ['id' => 'courDeau', 'class' => 'form-control courDeau']); ?>
+                            </div>
                         </div>
                     </div>
 
@@ -101,7 +117,7 @@
                         </div>
                     </div>
 
-                    
+
                     <div class="form-group row" id="protection">
                         <label class="col-sm-4 control-label">@lang('Sélectionner les protections')</label>
                         <div class="col-xs-12 col-sm-8">
@@ -112,6 +128,15 @@
                                 <option value="autre">Autre</option>
                             </select>
                         </div>
+                        {{-- <div class="form-group row">
+                            {!! Form::label('protection', __('Sélectionner les protections'), ['class' => 'col-sm-4 control-label']) !!}
+                            <div class="col-xs-12 col-sm-8">
+                                {!! Form::select(
+                                    'protection[]',['barriere de végétation' =>'Barrière de végétation','zone tampon' => 'Zone tampon','autre' => 'Autre',],null,['class' => 'form-control select2-multi-select', 'multiple' => true],
+                                ) !!}
+                            </div>
+                        </div> --}}
+
                     </div>
 
 
@@ -121,13 +146,13 @@
                             <?php echo Form::select('existePente', ['non' => __('non'), 'oui' => __('oui')], null, ['class' => 'form-control existePente', 'required']); ?>
                         </div>
                     </div>
-                    <div class="form-group row" id="niveauPente">
+                    <div class="form-group row" id="niveauPentes">
                         {{ Form::label(__('Quel est le niveau de la pente?'), null, ['class' => 'col-sm-4 control-label']) }}
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('niveauPente', ['Douce' => 'Douce', 'Moyenne' => 'Moyenne', 'Forte' => 'Forte'], null, ['class' => 'form-control niveauPente']); ?>
+                            <?php echo Form::select('niveauPente', ['Douce' => 'Douce', 'Moyenne' => 'Moyenne', 'Forte' => 'Forte'], null, ['id'=>'niveauPente','class' => 'form-control niveauPente']); ?>
                         </div>
                     </div>
-                    
+
                     <hr class="panel-wide">
                     <div class="form-group row">
                         {{ Form::label(__('Information GPS de la parcelle'), null, ['class' => 'col-sm-4 control-label']) }}
@@ -172,6 +197,16 @@
                                                     ]) !!}
                                                 </div>
                                             </div>
+                                            <div class="col-xs-12 col-sm-12">
+                                                <div class="form-group row">
+                                                    {{ Form::label(__('Nombre de Cacao / Hectare'), null, ['class' => 'col-sm-4 control-label']) }}
+                                                    {!! Form::number('nbCacaoParHectare', null, [
+                                                        'placeholder' => __('Nombre de Cacao / Hectare'),
+                                                        'class' => 'form-control',
+                                                        'id' => 'nbCacaoParHectare-1',
+                                                    ]) !!}
+                                                </div>
+                                            </div>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -207,58 +242,69 @@
 
 @push('script')
     <script type="text/javascript">
-        $("#producteur").chained("#localite");
+        $("#localite").chained("#section");
+        $("#producteur_id").chained("#localite");
     </script>
 
     <script type="text/javascript">
         $(document).ready(function() {
-            $('#anneeRegenerer,#courDeau,#protection,#niveauPente').hide();
+            $('#anneeRegenerers,#courDeaus,#protection,#niveauPentes').hide();
 
             $('.parcelleRegenerer').change(function() {
                 var parcelleRegenerer = $('.parcelleRegenerer').val();
                 if (parcelleRegenerer == 'oui') {
-                    $('#anneeRegenerer').show('slow');
+                    $('#anneeRegenerers').show('slow');
                     $('.anneeRegenerer').show('slow');
+                    $('.superficieConcerne').show('slow');
+                    $('#anneeRegenerer').prop('required', true);
+                    $('#superficieConcerne').prop('required', true);
                 } else {
-                    $('#anneeRegenerer').hide('slow');
+                    $('#anneeRegenerers').hide('slow');
                     $('.anneeRegenerer').val('');
                     $('.superficieConcerne').val('');
-
+                    $('#anneeRegenerer').prop('required', false);
+                    $('#superficieConcerne').prop('required', false);
                 }
             });
 
             $('.presenceCourDeau').change(function() {
                 var presenceCourDeau = $('.presenceCourDeau').val();
                 if (presenceCourDeau == 'oui') {
-                    $('#courDeau').show('slow');
+                    $('#courDeaus').show('slow');
                     $('.courDeau').show('slow');
+                    $('#courDeau').prop('required', true);
 
                 } else {
-                    $('#courDeau').hide('slow');
+                    $('#courDeaus').hide('slow');
+                    $('.courDeau').hide('slow');
                     $('.courDeau').val('');
-
+                    $('#courDeau').prop('required', false);
                 }
             });
             $('.existePente').change(function() {
                 var existPente = $('.existePente').val();
                 if (existPente == 'oui') {
-                    $('#niveauPente').show('slow');
+                    $('#niveauPentes').show('slow');
                     $('.niveauPente').show('slow');
+                    $('#niveauPente').prop('required', true);
 
                 } else {
-                    $('#niveauPente').hide('slow');
+                    $('#niveauPentes').hide('slow');
+                    $('.niveauPente').hide('slow');
                     $('.niveauPente').val('');
-
+                    $('#niveauPente').prop('required', false);
                 }
             });
             $('.existeMesureProtection').change(function() {
                 var existeMesureProtection = $('.existeMesureProtection').val();
                 if (existeMesureProtection == 'oui') {
                     $('#protection').show('slow');
+                    $('select[name="protection[]"]').prop('required', true);
 
                 } else {
                     $('#protection').hide('slow');
                     $('select[name="protection[]"]').empty();
+                    $('select[name="protection[]"]').prop('required', false);
 
                 }
             });

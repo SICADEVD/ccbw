@@ -41,29 +41,76 @@ class ParcelleController extends Controller
     {
         $pageTitle = "Ajouter un parcelle";
         $manager   = auth()->user();
-        $producteurs  = Producteur::with('localite')->get();
-        // $localites  = Localite::active()->where('cooperative_id',auth()->user()->cooperative_id)->orderBy('nom')->get();
-        $cooperative = Cooperative::with('sections.localites')->find($manager->cooperative_id);
+        $cooperative = Cooperative::with('sections.localites', 'sections.localites.section')->find($manager->cooperative_id);
+        $sections = $cooperative->sections;
         $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
             return $localite->active();
         });
-        return view('manager.parcelle.create', compact('pageTitle', 'producteurs','localites'));
+        $producteurs  = Producteur::with('localite')->get();
+        return view('manager.parcelle.create', compact('pageTitle', 'producteurs','localites','sections'));
     }
 
     public function store(Request $request)
     {
         $validationRule = [
-            'producteur'    => 'required|exists:producteurs,id',
-            'typedeclaration' => 'required|max:255',
-            'anneeCreation'  => 'required|max:255',
-            'culture'  => 'required|max:255',
-            'superficie'  => 'required|max:255', 
+            'section' => 'required',
+            'localite' => 'required',
+            'producteur_id' => 'required',
+            'anneeCreation' => 'required',
+            'ageMoyenCacao' => 'required',
+            'parcelleRegenerer' => 'required',
+            'anneeRegenerer'=>'required_if:parcelleRegenerer,==,oui',
+            'superficieRegenerer'=>'required_if:parcelleRegenerer,==,oui',
+            'typeDoc'=>'required',
+            'presenceCourDeau'=>'required',
+            'courDeau'=>'required_if:presenceCourDeau,==,oui',
+            'existeMesureProtection'=>'required',
+            'existePente'=>'required',
+            'superficie'=>'required',
+            'latitude'=>'required',
+            'Longitude'=>'required',
+            'nbCacaoParHectare'=>'required|numeric',
         ];
- 
-         
-        $request->validate($validationRule);
-
-        
+        $messages = [
+            'section.required' => 'Le champ section est obligatoire',
+            'localite.required' => 'Le champ localité est obligatoire',
+            'producteur_id.required' => 'Le champ producteur est obligatoire',
+            'anneeCreation.required' => 'Le champ année de création est obligatoire',
+            'ageMoyenCacao.required' => 'Le champ age moyen du cacao est obligatoire',
+            'parcelleRegenerer.required' => 'Le champ parcelle à regénérer est obligatoire',
+            'anneeRegenerer.required_if' => 'Le champ année de régénération est obligatoire',
+            'superficieRegenerer.required_if' => 'Le champ superficie de régénération est obligatoire',
+            'typeDoc.required' => 'Le champ type de document est obligatoire',
+            'presenceCourDeau.required' => 'Le champ présence de cours d\'eau est obligatoire',
+            'courDeau.required_if' => 'Le champ cours d\'eau est obligatoire',
+            'existeMesureProtection.required' => 'Le champ existence de mesure de protection est obligatoire',
+            'existePente.required' => 'Le champ existence de pente est obligatoire',
+            'superficie.required' => 'Le champ superficie est obligatoire',
+            'latitude.required' => 'Le champ latitude est obligatoire',
+            'Longitude.required' => 'Le champ longitude est obligatoire',
+            'nbCacaoParHectare.required' => 'Le champ nombre de cacao par hectare est obligatoire',
+        ];
+        $attributes = [
+            'section' => 'section',
+            'localite' => 'localité',
+            'producteur_id' => 'producteur',
+            'anneeCreation' => 'année de création',
+            'ageMoyenCacao' => 'age moyen du cacao',
+            'parcelleRegenerer' => 'parcelle regénéré',
+            'anneeRegenerer'=>'L\'année de régénération',
+            'superficieRegenerer'=>'superficie de régénérer',
+            'typeDoc'=>'type de document',
+            'presenceCourDeau'=>'présence de cours d\'eau',
+            'courDeau'=>'cours d\'eau',
+            'existeMesureProtection'=>'existence de mesure de protection',
+            'existePente'=>'existence de pente',
+            'superficie'=>'superficie',
+            'latitude'=>'latitude',
+            'Longitude'=>'longitude',
+            'nbCacaoParHectare'=>'nombre de cacao par hectare',
+        ];
+        $request->validate($validationRule, $messages, $attributes);
+  
 
         $localite = Localite::where('id', $request->localite)->first();
 
