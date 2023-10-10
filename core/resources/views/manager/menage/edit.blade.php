@@ -239,9 +239,7 @@
                     <div class="form-group row" id="nombreHectareFemmes">
                         <?php echo Form::label(__("Combien d'hectare ?"), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <input type="text" name="nombreHectareFemme" id="nombreHectareFemme"
-                                placeholder="Ex: 2 ha" class="form-control nombreHectareFemme"
-                                value="{{ old('nombreHectareFemme') }}">
+                            <?php echo Form::text('nombreHectareFemme', null, ['id' => 'nombreHectareFemme', 'class' => 'form-control nombreHectareFemme', 'placeholder' => __('Ex: 2 ha')]); ?>
                         </div>
                     </div>
 
@@ -455,6 +453,17 @@
                     $('#nombreHectareFemme').prop('required', false);
                 }
             });
+            if($('.champFemme').val() == 'oui'){
+                $('#nombreHectareFemmes').show('slow');
+                $('.nombreHectareFemme').css('display', 'block');
+                $('.nombreHectareFemme').show('slow');
+                $('#nombreHectareFemme').prop('required', true);
+            }else{
+                $('#nombreHectareFemmes').hide('slow');
+                $('.nombreHectareFemme').val('');
+                $('.nombreHectareFemme').hide('slow');
+                $('#nombreHectareFemme').prop('required', false);
+            }
 
         });
     </script>
