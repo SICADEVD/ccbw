@@ -44,7 +44,7 @@
                                     <th>@lang('Code Parcelle')</th>
                                     <th>@lang('Producteur')</th>
                                     <th>@lang('Culture')</th>
-                                    <th>@lang('Type déclaration')</th>
+                                    <th>@lang('Type de document')</th>
                                     <th>@lang('Superficie')</th>
                                     <th>@lang('Année')</th>
                                     <th>@lang('Ajoutée le')</th>
@@ -75,7 +75,7 @@
                                             <span>{{ $parcelle->culture }}</span>
                                         </td>
                                         <td>
-                                            <span>{{ $parcelle->typedeclaration }}</span>
+                                            <span>{{ $parcelle->typeDoc }}</span>
                                         </td>
                                         <td>
                                             <span>{{ $parcelle->superficie }}</span>
