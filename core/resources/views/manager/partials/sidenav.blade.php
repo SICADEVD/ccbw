@@ -46,6 +46,48 @@
                     </a>
                 </li>
                 <li class="sidebar-menu-item sidebar-dropdown">
+                    <a href="javascript:void(0)" class="{{ menuActive('manager.hr.*', 3) }}">
+                        <i class="menu-icon las la-users"></i>
+                        <span class="menu-title">@lang('Ressources Humaines') </span>
+                    </a>
+                    <div class="sidebar-submenu {{ menuActive('manager.hr.*', 2) }} ">
+                        <ul>
+
+                            <li class="sidebar-menu-item {{ menuActive('manager.hr.') }}">
+                                <a href="#" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('Tous les employés')</span>
+                                </a>
+                            </li> 
+                            <li class="sidebar-menu-item {{ menuActive('manager.hr.') }}">
+                                <a href="#" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('Présences')</span>
+                                </a>
+                            </li> 
+                            <li class="sidebar-menu-item {{ menuActive('manager.hr.') }}">
+                                <a href="#" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('Congés')</span>
+                                </a>
+                            </li> 
+                            <li class="sidebar-menu-item {{ menuActive('manager.hr.') }}">
+                                <a href="#" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('Départements')</span>
+                                </a>
+                            </li> 
+                            <li class="sidebar-menu-item {{ menuActive('manager.hr.') }}">
+                                <a href="#" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('Timesheet')</span>
+                                </a>
+                            </li> 
+
+                        </ul>
+                    </div>
+                </li>
+                <li class="sidebar-menu-item sidebar-dropdown">
                     <a href="javascript:void(0)" class="{{ menuActive('manager.traca.*', 3) }}">
                         <i class="menu-icon las la-users"></i>
                         <span class="menu-title">@lang('Gestion de la Traçabilites') </span>
