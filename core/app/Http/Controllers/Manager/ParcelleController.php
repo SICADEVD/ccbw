@@ -28,7 +28,7 @@ class ParcelleController extends Controller
         $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
             return $localite->active();
         });
-        $parcelles = Parcelle::dateFilter()->searchable(['codeParc', 'typedeclaration','anneeCreation','culture'])->latest('id')->joinRelationship('producteur.localite.section')->where('cooperative_id',$manager->cooperative_id)->where(function ($q) {
+        $parcelles = Parcelle::dateFilter()->searchable(['codeParc'])->latest('id')->joinRelationship('producteur.localite.section')->where('cooperative_id',$manager->cooperative_id)->where(function ($q) {
             if(request()->localite != null){
                 $q->where('localite_id',request()->localite);
             }
@@ -67,8 +67,6 @@ class ParcelleController extends Controller
             'existeMesureProtection'=>'required',
             'existePente'=>'required',
             'superficie'=>'required',
-            'latitude'=>'required',
-            'Longitude'=>'required',
             'nbCacaoParHectare'=>'required|numeric',
         ];
         $messages = [
@@ -86,8 +84,6 @@ class ParcelleController extends Controller
             'existeMesureProtection.required' => 'Le champ existence de mesure de protection est obligatoire',
             'existePente.required' => 'Le champ existence de pente est obligatoire',
             'superficie.required' => 'Le champ superficie est obligatoire',
-            'latitude.required' => 'Le champ latitude est obligatoire',
-            'Longitude.required' => 'Le champ longitude est obligatoire',
             'nbCacaoParHectare.required' => 'Le champ nombre de cacao par hectare est obligatoire',
         ];
         $attributes = [
@@ -105,12 +101,9 @@ class ParcelleController extends Controller
             'existeMesureProtection'=>'existence de mesure de protection',
             'existePente'=>'existence de pente',
             'superficie'=>'superficie',
-            'latitude'=>'latitude',
-            'Longitude'=>'longitude',
             'nbCacaoParHectare'=>'nombre de cacao par hectare',
         ];
         $request->validate($validationRule, $messages, $attributes);
-  
 
         $localite = Localite::where('id', $request->localite)->first();
 
@@ -143,14 +136,25 @@ class ParcelleController extends Controller
             }
             $parcelle->codeParc  =  $this->generecodeparc($request->producteur, $codeProd);
         } 
-        
-        $parcelle->producteur_id  = $request->producteur;  
-        $parcelle->typedeclaration  = $request->typedeclaration;
+        $parcelle->producteur_id  = $request->producteur_id;
+        $parcelle->niveauPente  = $request->niveauPente;
         $parcelle->anneeCreation  = $request->anneeCreation;
-        $parcelle->culture     = $request->culture;
-        $parcelle->superficie    = $request->superficie;
-        $parcelle->latitude = $request->latitude; 
-        $parcelle->longitude    = $request->longitude; 
+        $parcelle->ageMoyenCacao  = $request->ageMoyenCacao;
+        $parcelle->parcelleRegenerer  = $request->parcelleRegenerer;
+        $parcelle->anneeRegenerer  = $request->anneeRegenerer;
+        $parcelle->superficieConcerne  = $request->superficieConcerne;
+        $parcelle->typeDoc  = $request->typeDoc;
+        $parcelle->presenceCourDeau  = $request->presenceCourDeau;
+        $parcelle->courDeau  = $request->courDeau;
+        $parcelle->existeMesureProtection  = $request->existeMesureProtection;
+        $parcelle->existePente  = $request->existePente;
+        $parcelle->superficie  = $request->superficie;
+        $parcelle->latitude  = $request->latitude;
+        $parcelle->Longitude  = $request->Longitude;
+        $parcelle->userid = auth()->user()->id;
+        $parcelle->nbCacaoParHectare  = $request->nbCacaoParHectare;
+        
+
         if($request->hasFile('fichier_kml_gpx')) {
             try {
                 $parcelle->fichier_kml_gpx = $request->file('fichier_kml_gpx')->store('public/parcelles/kmlgpx');
@@ -159,7 +163,7 @@ class ParcelleController extends Controller
                 return back()->withNotify($notify);
             }
         } 
-        dd(json_encode($request->all()));
+
         $parcelle->save(); 
 
         $notify[] = ['success', isset($message) ? $message : 'Le parcelle a été crée avec succès.'];
