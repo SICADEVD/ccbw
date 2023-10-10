@@ -14,6 +14,7 @@ use App\Imports\ParcelleImport;
 use App\Exports\ExportParcelles;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\Parcelle_type_protection;
 use Illuminate\Support\Facades\Hash;
 
 class ParcelleController extends Controller
@@ -176,8 +177,27 @@ class ParcelleController extends Controller
                 return back()->withNotify($notify);
             }
         }
-
+        
         $parcelle->save();
+        if($parcelle !=null ){
+            $id = $parcelle->id;
+            $datas  = [];
+            if(($request->protection !=null)) { 
+                Parcelle_type_protection::where('parcelle_id',$id)->delete();
+                $i=0; 
+                foreach($request->protection as $data){
+                    if($data !=null)
+                    {
+                        $datas[] = [
+                        'parcelle_id' => $id, 
+                        'typeProtection' => $data,  
+                    ];
+                    } 
+                  $i++;
+                } 
+            }
+        }
+        Parcelle_type_protection::insert($datas);
 
         $notify[] = ['success', isset($message) ? $message : 'Le parcelle a été crée avec succès.'];
         return back()->withNotify($notify);
