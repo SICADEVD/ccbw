@@ -169,7 +169,7 @@ class ApiparcelleController extends Controller
     $parcelle->save();
     if ($parcelle != null) {
       $id = $parcelle->id;
-      $datas  = [];
+      $datas  = $data2 = [];
       if (($request->protection != null)) {
         Parcelle_type_protection::where('parcelle_id', $id)->delete();
         $i = 0;
@@ -184,6 +184,7 @@ class ApiparcelleController extends Controller
         }
       }
       if ($request->abre != null && $request->nombre != null) {
+        agroespeceabre_parcelle::where('parcelle_id',$id)->delete();
         $data2[] = [
           'parcelle_id' => $id,
           'agroespeceabre_id' => $request->abre,

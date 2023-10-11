@@ -215,7 +215,6 @@ class ParcelleController extends Controller
         }
         Parcelle_type_protection::insert($datas);
         agroespeceabre_parcelle::insert($data2);
-
         $notify[] = ['success', isset($message) ? $message : 'Le parcelle a été crée avec succès.'];
         return back()->withNotify($notify);
     }
