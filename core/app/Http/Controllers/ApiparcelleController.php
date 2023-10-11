@@ -9,6 +9,7 @@ use App\Models\Producteur;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\Parcelle_type_protection;
+use App\Models\agroespeceabre_parcelle;
 use Illuminate\Support\Facades\DB;
 
 class ApiparcelleController extends Controller
@@ -145,6 +146,7 @@ class ApiparcelleController extends Controller
     $parcelle->Longitude  = $request->Longitude;
     $parcelle->userid = $request->userid;
     $parcelle->nbCacaoParHectare  = $request->nbCacaoParHectare;
+    $parcelle->erosion = $request->erosion;
 
     if (isset($request->waypoints) && count($request->waypoints) > 0) {
       $parcelle->waypoints = implode(',', $request->waypoints);
@@ -181,8 +183,17 @@ class ApiparcelleController extends Controller
           $i++;
         }
       }
+      if ($request->abre != null && $request->nombre != null) {
+        $data2[] = [
+          'parcelle_id' => $id,
+          'agroespeceabre_id' => $request->abre,
+          'nombre' => $request->nombre,
+        ];
+      }
     }
     Parcelle_type_protection::insert($datas);
+    agroespeceabre_parcelle::insert($data2);
+    // Parcelle::find($id)->agroespeceabre()->sync($data2);
     if ($parcelle == null) {
       return response()->json("La parcelle n'a pas été enregistré", 501);
     }

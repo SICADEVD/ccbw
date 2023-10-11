@@ -14,7 +14,10 @@ use App\Imports\ParcelleImport;
 use App\Exports\ExportParcelles;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\agroespeceabre_parcelle;
+use App\Models\Agroespecesarbre;
 use App\Models\Parcelle_type_protection;
+use App\Models\Producteur_infos_typeculture;
 use Illuminate\Support\Facades\Hash;
 
 class ParcelleController extends Controller
@@ -60,7 +63,8 @@ class ParcelleController extends Controller
             return $localite->active();
         });
         $producteurs  = Producteur::with('localite')->get();
-        return view('manager.parcelle.create', compact('pageTitle', 'producteurs', 'localites', 'sections'));
+        $abres = Agroespecesarbre::all();
+        return view('manager.parcelle.create', compact('pageTitle', 'producteurs', 'localites', 'sections', 'abres'));
     }
 
     public function store(Request $request)
@@ -81,6 +85,7 @@ class ParcelleController extends Controller
             'existePente' => 'required',
             'superficie' => 'required',
             'nbCacaoParHectare' => 'required|numeric',
+            'erosion' => 'required',
         ];
         $messages = [
             'section.required' => 'Le champ section est obligatoire',
@@ -99,6 +104,7 @@ class ParcelleController extends Controller
             'superficie.required' => 'Le champ superficie est obligatoire',
             'nbCacaoParHectare.required' => 'Le champ nombre de cacao par hectare est obligatoire',
             'superficieConcerne.required_if' => 'Le champ superficie concerné est obligatoire',
+            'erosion.required' => 'Le champ érosion est obligatoire',
         ];
         $attributes = [
             'section' => 'section',
@@ -117,6 +123,7 @@ class ParcelleController extends Controller
             'superficie' => 'superficie',
             'nbCacaoParHectare' => 'nombre de cacao par hectare',
             'superficieConcerne' => 'superficie concerné',
+            'erosion' => 'érosion',
         ];
         $request->validate($validationRule, $messages, $attributes);
         $localite = Localite::where('id', $request->localite)->first();
@@ -167,6 +174,7 @@ class ParcelleController extends Controller
         $parcelle->Longitude  = $request->Longitude;
         $parcelle->userid = auth()->user()->id;
         $parcelle->nbCacaoParHectare  = $request->nbCacaoParHectare;
+        $parcelle->erosion  = $request->erosion;
 
 
         if ($request->hasFile('fichier_kml_gpx')) {
@@ -181,7 +189,7 @@ class ParcelleController extends Controller
         $parcelle->save();
         if($parcelle !=null ){
             $id = $parcelle->id;
-            $datas  = [];
+            $datas  = $data2 = [];
             if(($request->protection !=null)) { 
                 Parcelle_type_protection::where('parcelle_id',$id)->delete();
                 $i=0; 
@@ -196,8 +204,16 @@ class ParcelleController extends Controller
                   $i++;
                 } 
             }
+            if($request->abre !=null && $request->nombre !=null){
+                $data2[]= [
+                    'parcelle_id' => $id,
+                    'agroespeceabre_id' => $request->abre,
+                    'nombre' => $request->nombre,
+                ];
+            }
         }
         Parcelle_type_protection::insert($datas);
+        agroespeceabre_parcelle::insert($data2);
 
         $notify[] = ['success', isset($message) ? $message : 'Le parcelle a été crée avec succès.'];
         return back()->withNotify($notify);

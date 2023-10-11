@@ -10,6 +10,9 @@ use Kirschbaum\PowerJoins\PowerJoins;
 class Agroespecesarbre extends Model
 {
     use Searchable, GlobalStatus, PowerJoins;
- 
-     
+
+    public function agroespeceabre_parcelles()
+    {
+        return $this->hasMany(agroespeceabre_parcelle::class, 'agroespeceabre_id');
+    }
 }

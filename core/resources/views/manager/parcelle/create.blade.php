@@ -138,8 +138,6 @@
                         </div> --}}
 
                     </div>
-
-
                     <div class="form-group row">
                         {{ Form::label(__('Ya-t-il une pente dans la Parcelle ?'), null, ['class' => 'col-sm-4 control-label']) }}
                         <div class="col-xs-12 col-sm-8">
@@ -149,7 +147,29 @@
                     <div class="form-group row" id="niveauPentes">
                         {{ Form::label(__('Quel est le niveau de la pente?'), null, ['class' => 'col-sm-4 control-label']) }}
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('niveauPente', ['Douce' => 'Douce', 'Moyenne' => 'Moyenne', 'Forte' => 'Forte'], null, ['id'=>'niveauPente','class' => 'form-control niveauPente']); ?>
+                            <?php echo Form::select('niveauPente', ['Douce' => 'Douce', 'Moyenne' => 'Moyenne', 'Forte' => 'Forte'], null, ['id' => 'niveauPente', 'class' => 'form-control niveauPente']); ?>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        {{ Form::label(__('Présence de signe d\'érosion?'), null, ['class' => 'col-sm-4 control-label']) }}
+                        <div class="col-xs-12 col-sm-8">
+                            <?php echo Form::select('erosion', ['non' => __('non'), 'oui' => __('oui')], null, ['class' => 'form-control', 'required']); ?>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <?php echo Form::label('Quels sont les arbres à Ombrages observés ?', null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-12 col-sm-4">
+                            <select class="form-control select2-multi-select" name="abre" id="abre" required>
+                                <option value="">@lang('Selectionner une option')</option>
+                                @foreach ($abres as $abre)
+                                    <option value="{{ $abre->id }}" @selected(old('abre'))>
+                                        {{ $abre->nom }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-xs-12 col-sm-4">
+                            <?php echo Form::number('nombre', null, ['placeholder' => 'Nombre', 'class' => 'form-control']); ?>
                         </div>
                     </div>
 
@@ -303,9 +323,7 @@
 
                 } else {
                     $('#protection').hide('slow');
-                    $('select[name="protection[]"]').empty();
                     $('select[name="protection[]"]').prop('required', false);
-
                 }
             });
 
