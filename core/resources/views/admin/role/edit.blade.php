@@ -1,3 +1,4 @@
+
 @extends('admin.layouts.app')
 @section('panel')
 <div class="row mb-none-30">
@@ -7,42 +8,63 @@
             <form method="POST" action="{{ route('admin.roles.update', $role->id) }}">
                 @method('patch')
                 @csrf
-                <div class="mb-3">
-                    <label for="name" class="form-label">Nom</label>
-                    <input value="{{ $role->name }}" 
-                        type="text" 
+                <input value="{{ $role->name }}" 
+                        type="hidden" 
                         class="form-control" 
                         name="name" 
-                        placeholder="Name" required>
-                </div>
-                <label for="permissions" class="form-label">Assigner Permissions</label>
+                        placeholder="Name" >
+                <table class="table table-bordered permission-table">
+						        <thead>
+						        <tr>
+						            <th class="text-center">{{ $role->name }} Group Permission</th>
+						        </tr>
+						        <tr>
+						            <th class="text-center"> <div class="checkbox">
+                                        <input type="checkbox" class="checkAll" name="all_permission">
+                                        <label for="select_all">Selectionner toutes les Permissions</label>
+						            	</div></th> 
+						        </tr>
+						         
+						        </thead>
+                                <tbody>
+                                <?php
+                                use Illuminate\Support\Str;
+            $i=1;
+            $existe =array();
 
-                <table class="table table-striped">
-                    <thead>
-                        <th scope="col" width="1%"><input type="checkbox" class="checkAll" name="all_permission"></th>
-                        <th scope="col" width="20%">Nom permission</th>
-                        <th scope="col" width="1%">Guard</th> 
-                    </thead>
-                    @forelse($permissions as $permission)
-                        <tr>
-                            <td>
-                                <input type="checkbox" 
-                                name="permission[{{ $permission->name }}]"
-                                value="{{ $permission->name }}"
-                                class='permission'
-                                {{ in_array($permission->name, $rolePermissions) 
-                                    ? 'checked'
-                                    : '' }}>
-                            </td>
-                            <td>{{ $permission->name }}</td>
-                            <td>{{ $permission->guard_name }}</td>
-                        </tr>
-                        @empty
+            ?>
+                                @forelse($permissions as $permission)
+                                <?php
+             if(!in_array(Str::before($permission->name,"."),$existe)) {
+               echo "<tr style='background:#C1C1C1'>";
+               echo '<td>'.strtoupper(Str::before($permission->name,".")).'</td></tr>';
+              }
+             ?>     
+                  <tr> 
+                                    <td class="text-left">
+						                <div class="icheckbox_square-blue checked" aria-checked="false" aria-disabled="false">
+							                <div class="checkbox">
+								            <input type="checkbox" value="{{ $permission->name }}" id="permission[{{ $permission->name }}]"
+                                            class='permission'
+                                             name="permission[{{ $permission->name }}]" {{ in_array($permission->name, $rolePermissions) ? 'checked' : '' }}
+                                            >
+								            <label for="products-index">{{ Str::after($permission->name,".") }}</label>
+							            	</div>
+						            	</div>
+						            </td>
+                                    </tr>
+                                <?php
+              $existe[] = Str::before($permission->name,".");
+               ?>
+						        
+                                @empty
                                 <tr>
                                     <td class="text-muted text-center" colspan="100%">{{ __($emptyMessage) }}</td>
                                 </tr>
                         @endforelse
+                                </tbody>
                 </table>
+                
                 <button type="submit" class="btn btn-primary mt-4 w-100 h-45">Enregister</button>
             </form>
             </div>

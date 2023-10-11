@@ -10,6 +10,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/global/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/fcadmin/css/vendor/bootstrap-toggle.min.css') }}">
+    <!-- Datatable CSS -->
+	<link rel="stylesheet" href="{{ asset('assets/fcadmin/css/dataTables.bootstrap4.min.css') }}">
+    <!-- Main CSS -->
+	<link rel="stylesheet" href="{{ asset('assets/fcadmin/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/global/css/all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/global/css/line-awesome.min.css') }}">
     @stack('style-lib')
@@ -17,7 +21,12 @@
     <link rel="stylesheet" href="{{ asset('assets/fcadmin/css/vendor/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/fcadmin/css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/dropify/css/dropify.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/templates/basic/css/custom.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/templates/basic/css/custom.css') }}"> 
+
+    <link rel="stylesheet" href="{{ asset('assets/fcadmin/js/toastr/toastr.css') }}">
+	<script src="{{ asset('assets/fcadmin/js/toastr/jquery.min.js') }}"></script> 
+    <script src="{{ asset('assets/fcadmin/js/toastr/toastr.min.js') }}"></script> 
+  
     @stack('style')
     <style>
         hr {
@@ -37,9 +46,12 @@
 </head>
 
 <body>
+    
     @yield('content')
 
     <script src="{{ asset('assets/global/js/jquery-3.6.0.min.js') }}"></script>
+    <script src="{{ asset('assets/fcadmin/js/popper.min.js') }}"></script>
+    <script src="{{ asset('assets/global/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('assets/global/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/fcadmin/js/vendor/bootstrap-toggle.min.js') }}"></script>
     <script src="{{ asset('assets/global/js/jquery.validate.js') }}"></script>
@@ -53,6 +65,9 @@
     <script src="{{ asset('assets/fcadmin/js/vendor/select2.min.js') }}"></script>
     <script src="{{ asset('assets/dropify/js/dropify.min.js') }}"></script>
     <script src="{{ asset('assets/fcadmin/js/jquery.chained.js') }}"></script>
+    <script src="{{ asset('assets/fcadmin/js/jquery.dataTables.min.js') }}"></script>
+	<script src="{{ asset('assets/fcadmin/js/dataTables.bootstrap4.min.js') }}"></script> 
+    
     <script src="{{ asset('assets/fcadmin/js/app.js') }}"></script>
 
 
