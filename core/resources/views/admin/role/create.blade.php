@@ -6,38 +6,64 @@
                 <div class="card-body">
                     <form method="POST" action="{{ route('admin.roles.store') }}">
                         @csrf
-                        <div class="mb-3">
-                            <label for="name" class="form-label">Nom de rôle</label>
+                     
+                        <table class="table table-bordered permission-table">
+						        <thead>
+						        <tr>
+						            <th class="text-center"><label for="name" class="form-label">Nom de rôle</label>
                             <input value="{{ old('name') }}" 
                                 type="text" 
                                 class="form-control" 
                                 name="name" 
-                                placeholder="Name" required>
-                        </div>
-                        <label for="permissions" class="form-label">Attribuer permission</label>
-                        <table class="table table-striped">
-                            <thead>
-                                <th scope="col" width="1%"><input type="checkbox" class="checkAll"  name="all_permission"></th>
-                                <th scope="col" width="20%">Nom</th>
-                                <th scope="col" width="1%">Guard</th> 
-                            </thead>
-                            @forelse($permissions as $permission)
-                                <tr>
-                                    <td>
-                                        <input type="checkbox" 
-                                        name="permission[{{ $permission->name }}]"
-                                        value="{{ $permission->name }}"
-                                        class='permission'>
-                                    </td>
-                                    <td>{{ $permission->name }}</td>
-                                    <td>{{ $permission->guard_name }}</td>
-                                </tr>
-                            @empty
-                                    <tr>
-                                        <td class="text-muted text-center" colspan="100%">{{ __($emptyMessage) }}</td>
+                                placeholder="Name" required></th>
+						        </tr>
+						        <tr>
+						            <th class="text-center"> <div class="checkbox">
+                                        <input type="checkbox" class="checkAll" name="all_permission">
+                                        <label for="select_all">Selectionner toutes les Permissions</label>
+						            	</div></th> 
+						        </tr>
+						         
+						        </thead>
+                                <tbody>
+                                <?php
+                                use Illuminate\Support\Str;
+            $i=1;
+            $existe =array();
+
+            ?>
+                                @forelse($permissions as $permission)
+                                <?php
+             if(!in_array(Str::before($permission->name,"."),$existe)) {
+               echo "<tr style='background:#C1C1C1'>";
+               echo '<td>'.strtoupper(Str::before($permission->name,".")).'</td></tr>';
+              }
+             ?>     
+                  <tr> 
+                                    <td class="text-left">
+						                <div class="icheckbox_square-blue checked" aria-checked="false" aria-disabled="false">
+							                <div class="checkbox">
+								            <input type="checkbox" value="{{ $permission->name }}" id="permission[{{ $permission->name }}]"
+                                            class='permission'
+                                             name="permission[{{ $permission->name }}]"
+                                            >
+								            <label for="products-index">{{ Str::after($permission->name,".") }}</label>
+							            	</div>
+						            	</div>
+						            </td>
                                     </tr>
-                            @endforelse
-                        </table>
+                                <?php
+              $existe[] = Str::before($permission->name,".");
+               ?>
+						        
+                                @empty
+                                <tr>
+                                    <td class="text-muted text-center" colspan="100%">{{ __($emptyMessage) }}</td>
+                                </tr>
+                        @endforelse
+                                </tbody>
+                </table>
+ 
                         <div class="form-group mt-3">
                             <button type="submit" class="btn btn--primary w-100 h-45 "> @lang('Envoyer')</button>
                         </div>
@@ -48,23 +74,36 @@
     </div>
 @endsection
 @section('scripts')
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $('[name="all_permission"]').on('click', function() {
-
-                if($(this).is(':checked')) {
-                    $.each($('.permission'), function() {
-                        $(this).prop('checked',true);
-                    });
+<script type="text/javascript">
+        (function($) {
+            "use strict";
+           
+            $(".permission").on('change', function(e) {
+                let totalLength = $(".permission").length;
+                let checkedLength = $(".permission:checked").length;
+                if (totalLength == checkedLength) {
+                    $('.checkAll').prop('checked', true);
                 } else {
-                    $.each($('.permission'), function() {
-                        $(this).prop('checked',false);
-                    });
+                    $('.checkAll').prop('checked', false);
                 }
-                
+                if (checkedLength) {
+                    $('.dispatch').removeClass('d-none')
+                } else {
+                    $('.dispatch').addClass('d-none')
+                }
             });
-        });
-    </script> 
+
+            $('.checkAll').on('change', function() {
+                if ($('.checkAll:checked').length) {
+                    $('.permission').prop('checked', true);
+                } else {
+                    $('.permission').prop('checked', false);
+                }
+                $(".permission").change();
+            });
+
+        })(jQuery)
+    </script>
 @endsection
 @push('breadcrumb-plugins')
     <x-back route="{{ route('admin.roles.index') }}" />

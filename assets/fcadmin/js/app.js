@@ -211,6 +211,81 @@ $.each($("input, select, textarea"), function (i, element) {
   }
 });
 
+if($('.datatable').length > 0) {
+  $('.datatable').DataTable({
+    "bFilter": false,
+  });
+}
+// Leave Settings button show
+	
+$(document).on('click', '.leave-edit-btn', function() {
+  $(this).removeClass('leave-edit-btn').addClass('btn btn-white leave-cancel-btn').text('Cancel');
+  $(this).closest("div.leave-right").append('<button class="btn btn-primary leave-save-btn" type="submit">Save</button>');
+  $(this).parent().parent().find("input").prop('disabled', false);
+  return false;
+});
+$(document).on('click', '.leave-cancel-btn', function() {
+  $(this).removeClass('btn btn-white leave-cancel-btn').addClass('leave-edit-btn').text('Edit');
+  $(this).closest("div.leave-right").find(".leave-save-btn").remove();
+  $(this).parent().parent().find("input").prop('disabled', true);
+  return false;
+});
+
+$(document).on('change', '.leave-box .onoffswitch-checkbox', function() {
+  var id = $(this).attr('id').split('_')[1];
+  if ($(this).prop("checked") == true) {
+    $("#leave_"+id+" .leave-edit-btn").prop('disabled', false);
+    $("#leave_"+id+" .leave-action .btn").prop('disabled', false);
+  }
+    else {
+    $("#leave_"+id+" .leave-action .btn").prop('disabled', true);	
+    $("#leave_"+id+" .leave-cancel-btn").parent().parent().find("input").prop('disabled', true);
+    $("#leave_"+id+" .leave-cancel-btn").closest("div.leave-right").find(".leave-save-btn").remove();
+    $("#leave_"+id+" .leave-cancel-btn").removeClass('btn btn-white leave-cancel-btn').addClass('leave-edit-btn').text('Edit');
+    $("#leave_"+id+" .leave-edit-btn").prop('disabled', true);
+  }
+});
+
+$('.leave-box .onoffswitch-checkbox').each(function() {
+  var id = $(this).attr('id').split('_')[1];
+  if ($(this).prop("checked") == true) {
+    $("#leave_"+id+" .leave-edit-btn").prop('disabled', false);
+    $("#leave_"+id+" .leave-action .btn").prop('disabled', false);
+  }
+    else {
+    $("#leave_"+id+" .leave-action .btn").prop('disabled', true);	
+    $("#leave_"+id+" .leave-cancel-btn").parent().parent().find("input").prop('disabled', true);
+    $("#leave_"+id+" .leave-cancel-btn").closest("div.leave-right").find(".leave-save-btn").remove();
+    $("#leave_"+id+" .leave-cancel-btn").removeClass('btn btn-white leave-cancel-btn').addClass('leave-edit-btn').text('Edit');
+    $("#leave_"+id+" .leave-edit-btn").prop('disabled', true);
+  }
+});
+
+// Placeholder Hide
+
+if ($('.otp-input, .zipcode-input input, .noborder-input input').length > 0) {
+  $('.otp-input, .zipcode-input input, .noborder-input input').focus(function () {
+    $(this).data('placeholder', $(this).attr('placeholder'))
+         .attr('placeholder', '');
+  }).blur(function () {
+    $(this).attr('placeholder', $(this).data('placeholder'));
+  });
+}
+
+// OTP Input
+
+if ($('.otp-input').length > 0) {
+  $(".otp-input").keyup(function(e) {
+    if ((e.which >= 48 && e.which <= 57) || (e.which >= 96 && e.which <= 105)) {
+      $(e.target).next('.otp-input').focus();
+    } else if (e.which == 8) {
+      $(e.target).prev('.otp-input').focus();
+    }
+  });
+}
+
+
+
 //Custom Data Table
 $(".custom-data-table")
   .closest(".card")

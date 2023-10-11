@@ -181,7 +181,7 @@ return [
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
+        App\Providers\RouteServiceProvider::class, 
         
 
     ],
@@ -202,7 +202,7 @@ return [
         'Location' => 'Stevebauman\Location\Facades\Location',
         'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
-        'PDF' => Barryvdh\DomPDF\Facade::class, 
+        'PDF' => Barryvdh\DomPDF\Facade::class,  
     ])->toArray(),
 
 ];

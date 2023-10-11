@@ -47,7 +47,7 @@ class CreateRoutePermissionsCommand extends Command
             
             if ($route->getName() != '') {
                 $nameRoute = Str::before($route->getName(), '.');
-                if($nameRoute=='staff'){
+                if($nameRoute !='admin'){
                 $permission = Permission::where('name', $route->getName())->first();
                 
 
