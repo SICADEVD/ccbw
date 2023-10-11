@@ -205,6 +205,7 @@ class ParcelleController extends Controller
                 } 
             }
             if($request->abre !=null && $request->nombre !=null){
+                agroespeceabre_parcelle::where('parcelle_id',$id)->delete();
                 $data2[]= [
                     'parcelle_id' => $id,
                     'agroespeceabre_id' => $request->abre,
@@ -274,10 +275,24 @@ class ParcelleController extends Controller
     public function edit($id)
     {
         $pageTitle = "Mise à jour de la parcelle";
-        $localites  = Localite::active()->where('cooperative_id', auth()->user()->cooperative_id)->orderBy('nom')->get();
-        $producteurs  = Producteur::with('localite')->get();
         $parcelle   = Parcelle::findOrFail($id);
-        return view('manager.parcelle.edit', compact('pageTitle', 'localites', 'parcelle', 'producteurs'));
+        $manager   = auth()->user();
+        $cooperative = Cooperative::with('sections.localites', 'sections.localites.section')->find($manager->cooperative_id);
+        $sections = $cooperative->sections;
+        $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
+            return $localite->active();
+        });
+        $producteurs  = Producteur::with('localite')->get();
+        $protections = $parcelle->parcelleTypeProtections->pluck('typeProtection')->all();
+        $abres = Agroespecesarbre::all();
+        $abres_parcelle = agroespeceabre_parcelle::where('parcelle_id',$id)->get();
+        return view('manager.parcelle.edit', compact('pageTitle', 'localites', 'parcelle', 'producteurs','sections','protections','abres','abres_parcelle'));
+
+         // $protections = Parcelle_type_protection::where('parcelle_id',$id)->get();
+        
+        // $protections = Parcelle_type_protection::where('parcelle_id', $id)->get()->map(function ($protection) {
+        //     return $protection->typeProtection;
+        // });
     }
 
     public function status($id)

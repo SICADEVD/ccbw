@@ -16,8 +16,12 @@ class Parcelle extends Model
     {
         return $this->belongsTo(Producteur::class);
     }
-    public function parcelleTypeProtection()
+    public function parcelleTypeProtections()
     {
         return $this->hasMany(Parcelle_type_protection::class,'parcelle_id');
+    }
+    public function agroespeceabre_parcelles()
+    {
+        return $this->hasMany(agroespeceabre_parcelle::class,'parcelle_id');
     }
 }
