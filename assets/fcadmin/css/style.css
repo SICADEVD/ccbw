@@ -3464,9 +3464,6 @@ table.dataTable thead > tr > td.sorting {
 .roles-menu > ul > li a:hover .role-action {
 	display: block;
 }
-.slide-nav .sidebar {
-	margin-left: 0;
-}
 
 /*-----------------
 	27. Chat Right Sidebar
@@ -4123,35 +4120,7 @@ table.dataTable thead > tr > td.sorting {
 	opacity: 0;
 	visibility: hidden;
 }
-.sidebar-overlay {
-	display: none;
-	position: fixed;
-	z-index: 90;
-	height: 100%;
-	left: 0;
-	top: 60px;
-	width: 100%;
-	z-index: 1040;
-	background-color: rgba(0, 0, 0, 0.6);
-}
-.sidebar-overlay.opened {
-	display: block;
-}
-.sidebar-menu.opened {
-	opacity: 1;
-	-webkit-transform: translateX(0px);
-	-moz-transform: translateX(0px);
-	-ms-transform: translateX(0px);
-	-o-transform: translateX(0px);
-	transform: translateX(0px);
-	margin-left: 0;
-}
-html.menu-opened {
-	overflow: hidden;
-}
-html.menu-opened body {
-	overflow: hidden;
-}
+
 .task-chat-view.opened {
 	margin-right: 0;
 }
@@ -5835,9 +5804,7 @@ table.table-inbox tbody tr.checked {
 .progress.progress-lg {
 	height: 18px;
 }
-.stickyside .sidebar-menu > ul > li > a.active {
-	color: #f43b48;
-}
+
 .comp-section {
     margin-bottom: 30px;
     padding-bottom: 30px;
@@ -7614,19 +7581,7 @@ ul.comment-list li ul.children {
 	.page-title-box {
 		display: none;
 	}
-	.sidebar {
-		margin-left: -225px;
-		width: 225px;
-		-webkit-transition: all 0.4s ease;
-		-moz-transition: all 0.4s ease;
-		transition: all 0.4s ease;
-		z-index: 1041;
-	}
-	.page-wrapper {
-		margin-left: 0;
-		padding-left: 0;
-		padding-right: 0;
-	}
+	
 	a.mobile_btn {
 		color: #fff;
 		font-size: 24px;

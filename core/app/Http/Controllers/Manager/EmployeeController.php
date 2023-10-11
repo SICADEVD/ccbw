@@ -1,14 +1,15 @@
 <?php
 namespace App\Http\Controllers\Manager;
-use App\Http\Controllers\Controller;
 use DB; 
 use App\Models\User;
 use App\Models\Employee;
 use App\Models\Department;
 use App\Models\Designation;
 use Illuminate\Http\Request;
+use App\Models\EmployeeDetail;
 use App\Models\module_permission;
 
+use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
 
 class EmployeeController extends Controller
@@ -16,24 +17,16 @@ class EmployeeController extends Controller
     // all employee card view
     public function cardAllEmployee(Request $request)
     {
-        $users = DB::table('users')
-                    ->join('employees', 'users.user_id', '=', 'employees.employee_id')
-                    ->select('users.*', 'employees.birth_date', 'employees.gender', 'employees.company')
-                    ->get(); 
-        $userList = DB::table('users')->get();
-        $permission_lists = DB::table('permission_lists')->get();
-        return view('manager.form.allemployeecard',compact('users','userList','permission_lists'));
+        $users = EmployeeDetail::with('user')->get();
+        return view('manager.form.allemployeecard',compact('users'));
     }
     // all employee list
     public function listAllEmployee()
     {
-        $users = DB::table('users')
-                    ->join('employees', 'users.user_id', '=', 'employees.employee_id')
-                    ->select('users.*', 'employees.birth_date', 'employees.gender', 'employees.company')
-                    ->get();
-        $userList = DB::table('users')->get();
-        $permission_lists = DB::table('permission_lists')->get();
-        return view('manager.form.employeelist',compact('users','userList','permission_lists'));
+        
+        $users = EmployeeDetail::with('user')->get(); 
+        
+        return view('manager.form.employeelist',compact('users'));
     }
 
     // save data employee

@@ -54,7 +54,7 @@
                         <ul>
 
                             <li class="sidebar-menu-item {{ menuActive('manager.hr.') }}">
-                                <a href="#" class="nav-link">
+                                <a href="{{ route('manager.hr.all.employee.list') }}" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>
                                     <span class="menu-title">@lang('Tous les employés')</span>
                                 </a>
