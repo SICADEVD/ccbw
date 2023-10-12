@@ -10,6 +10,7 @@ use App\Models\EmployeeDetail;
 use App\Models\module_permission;
 
 use App\Http\Controllers\Controller;
+use App\Models\Countrie;
 use Brian2694\Toastr\Facades\Toastr;
 
 class EmployeeController extends Controller
@@ -25,8 +26,10 @@ class EmployeeController extends Controller
     {
         
         $users = EmployeeDetail::with('user')->get(); 
-        
-        return view('manager.form.employeelist',compact('users'));
+        $designations = Designation::get();
+        $teams = Department::get();
+        $countries = Countrie::get();
+        return view('manager.form.employeelist',compact('users','designations','teams','countries'));
     }
 
     // save data employee
