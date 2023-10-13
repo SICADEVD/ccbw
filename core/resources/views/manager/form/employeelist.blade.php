@@ -1,6 +1,115 @@
 @extends('manager.layouts.app')
 @section('panel')
-  
+@section('filter-section')
+<div id="filter-bloc">
+<x-filters.filter-box>
+    <!-- CLIENT START -->
+    <div class="select-box py-2 d-flex pr-2 border-right-grey border-right-grey-sm-0">
+        <p class="mb-0 pr-2 f-14 text-dark-grey d-flex align-items-center">Employé(e)</p>
+        <div class="select-status">
+            <select class="form-control select-picker" name="employee" id="employee" data-live-search="true"
+                    data-size="8">
+                @if ($users->count() > 1)
+                    <option value="all">Tous</option>
+                @endif
+                @foreach ($users as $employee)
+                    <x-user-option :user="$employee"/>
+                @endforeach
+            </select>
+        </div>
+    </div>
+
+    <!-- CLIENT END -->
+
+    <!-- DESIGNATION START -->
+    <div class="select-box d-flex py-2 px-lg-2 px-md-2 px-0 border-right-grey border-right-grey-sm-0">
+        <p class="mb-0 pr-2 f-14 text-dark-grey d-flex align-items-center">Désignation</p>
+        <div class="select-status">
+            <select class="form-control select-picker" name="designation" id="designation">
+                <option value="all">Tous</option>
+                @foreach ($designations as $designation)
+                    <option value="{{ $designation->id }}">{{ $designation->name }}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+    <!-- DESIGNATION END -->
+
+
+    <!-- SEARCH BY TASK START -->
+    <div class="task-search d-flex  py-1 px-lg-3 px-0 border-right-grey align-items-center">
+        <form class="w-100 mr-1 mr-lg-0 mr-md-1 ml-md-1 ml-0 ml-lg-0">
+            <div class="input-group bg-grey rounded">
+                <div class="input-group-prepend">
+                    <span class="input-group-text border-0 bg-additional-grey">
+                        <i class="fa fa-search f-13 text-dark-grey"></i>
+                    </span>
+                </div>
+                <input type="text" class="form-control f-14 p-1 border-additional-grey" id="search-text-field"
+                       placeholder="Tapez pour rechercher">
+            </div>
+        </form>
+    </div>
+    <!-- SEARCH BY TASK END -->
+
+    <!-- RESET START -->
+    <!-- <div class="select-box d-flex py-1 px-lg-2 px-md-2 px-0">
+        <x-forms.button-secondary class="btn-xs d-none" id="reset-filters" icon="times-circle">
+            Filtres
+        </x-forms.button-secondary>
+    </div> -->
+    <!-- RESET END -->
+
+    <!-- MORE FILTERS START -->
+    <x-filters.more-filter-box>
+        <div class="more-filter-items">
+            <label class="f-14 text-dark-grey mb-12 text-capitalize" for="usr">Département</label>
+            <div class="select-filter mb-4">
+                <div class="select-others">
+                    <select class="form-control select-picker" name="department" data-container="body"
+                            id="department">
+                        <option value="all">Tous</option>
+                        @foreach ($teams as $department)
+                            <option value="{{ $department->id }}">{{ $department->department }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+        </div>
+
+         
+
+        <div class="more-filter-items">
+            <label class="f-14 text-dark-grey mb-12 text-capitalize" for="usr">Statut</label>
+            <div class="select-filter mb-4">
+                <div class="select-others">
+                    <select class="form-control select-picker" name="status" id="status" data-container="body">
+                        <option value="all">@lang('app.all')</option>
+                        <option selected value="active">Activé</option>
+                        <option value="deactive">Désactivé</option> 
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="more-filter-items">
+            <label class="f-14 text-dark-grey mb-12 text-capitalize" for="usr">Genre</label>
+            <div class="select-filter mb-4">
+                <div class="select-others">
+                    <select class="form-control select-picker" name="gender" id="gender" data-container="body">
+                        <option value="all">Tous</option>
+                        <option value="homme">Homme</option>
+                        <option value="femme">Femme</option> 
+                    </select>
+                </div>
+            </div>
+        </div>
+
+    </x-filters.more-filter-box>
+    <!-- MORE FILTERS END -->
+</x-filters.filter-box>
+</div>
+@endsection
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <!-- Page Content -->
@@ -8,13 +117,7 @@
             <!-- Page Header -->
             <div class="page-header">
                 <div class="row align-items-center">
-                    <div class="col">
-                        <h3 class="page-title">Employee</h3>
-                        <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Employee</li>
-                        </ul>
-                    </div>
+                    
                     <div class="col-auto float-right ml-auto">
                         <a href="#" class="btn add-btn" data-toggle="modal" data-target="#add_employee"><i class="fa fa-plus"></i> Add Employee</a>
                         <div class="view-icons">
@@ -26,35 +129,7 @@
             </div>
 			<!-- /Page Header -->{!! Toastr::message() !!}
 
-            <!-- Search Filter -->
-            <form action="{{ route('manager.hr.all.employee.list.search') }}" method="POST">
-                @csrf
-                <div class="row filter-row">
-                    <div class="col-sm-6 col-md-3">  
-                        <div class="form-group form-focus">
-                            <input type="text" class="form-control floating" name="employee_id">
-                            <label class="focus-label">Employee ID</label>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-md-3">  
-                        <div class="form-group form-focus">
-                            <input type="text" class="form-control floating">
-                            <label class="focus-label">Employee Name</label>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-md-3"> 
-                        <div class="form-group form-focus">
-                            <input type="text" class="form-control floating">
-                            <label class="focus-label">Position</label>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-md-3">  
-                        <button type="sumit" class="btn btn-success btn-block"> Search </button>  
-                    </div>
-                </div>
-            </form>
-            <!-- Search Filter -->
-            {{-- message --}}
+           
             
 
             <div class="row">

@@ -28551,6 +28551,13 @@ button.disabled,button:disabled
     {
     box-shadow:0 1px 0 0 #e8eef3;position:sticky;top:63px;width:100%;z-index:1
 }
+#filter-bloc{ 
+    margin-left: 250px;
+    position: sticky;
+    padding-left: 10px;
+    padding-right: 10px;
+    background: #FFF;
+}
 @media (max-width:991.98px)
     {
     .filter-box
@@ -29561,7 +29568,7 @@ table.dataTable
 }
 .select-box,.task-search
     {
-    width:26%
+    width:29%
 }
 @media (max-width:991.98px)
     {
