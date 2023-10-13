@@ -167,7 +167,6 @@
                                     </select>
                                 </x-forms.input-group>
                             </div>
-
                             
                     </div>
                 </div>
@@ -209,10 +208,83 @@
                                 name="mobile" id="mobile">
                         </x-forms.input-group>
                     </div>
+                    <div class="col-lg-3 col-md-6">
+                        <x-forms.select fieldId="gender" :fieldLabel="__('Genre')"
+                            fieldName="gender">
+                            <option value="homme">Homme</option>
+                            <option value="femme">Femme</option> 
+                        </x-forms.select>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                        <x-forms.datepicker fieldId="joining_date" :fieldLabel="__('Date Entree')"
+                            fieldName="joining_date" :fieldPlaceholder="__('Select Date')" fieldRequired="true" />
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                        <x-forms.select fieldId="reporting_to" :fieldLabel="__('Superieur(e) Hierachique')"
+                            fieldName="reporting_to" :fieldPlaceholder="__('placeholders.date')" search="true">
+                            <option value="">--</option>
+                            @foreach ($users as $item)
+                                <x-user-option :user="$item" />
+                            @endforeach
+                        </x-forms.select>
+                    </div>     
+                    <div class="col-md-12">
+                        <div class="form-group my-3">
+                            <x-forms.textarea class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('Adresse')"
+                                fieldName="address" fieldId="address" :fieldPlaceholder="__('e.g. 132, My Street, Kingston, New York 12401')">
+                            </x-forms.textarea>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group my-3">
+                            <x-forms.textarea class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('A propos')"
+                                fieldName="about_me" fieldId="about_me" fieldPlaceholder="">
+                            </x-forms.textarea>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <x-forms.select fieldId="employment_type" :fieldLabel="__('Type de Contrat')"
+                            fieldName="employment_type" :fieldPlaceholder="__('Selectionner')">
+                            <option value="">--</option>
+                            <option value="plein_temps">Plein Temps</option>
+                            <option value="temps_partiel">Temps Partiel</option>
+                            <option value="contractuel">Contractuel</option>
+                            <option value="interimaire">Interimaire</option>
+                            <option value="stagiaire">Stagiaire</option>
+                        </x-forms.select>
+                    </div>
+                    <div class="col-lg-3 col-md-6 d-none internship-date"> 
+                    <x-forms.datepicker fieldId="internship_end_date" :fieldLabel="__('Date fin Interim')"
+                            fieldName="internship_end_date" :fieldPlaceholder="__('Select Date')"/>
+                    </div>
+                    <div class="col-lg-3 col-md-6 d-none contract-date">
+                        <x-forms.datepicker fieldId="contract_end_date" :fieldLabel="__('Date fin de contrat')"
+                            fieldName="contract_end_date" :fieldPlaceholder="__('Select Date')"/>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <x-forms.select fieldId="marital_status" :fieldLabel="__('Statut matrimonial')"
+                            fieldName="marital_status" :fieldPlaceholder="__('Selectionner')">
+                            <option value="">--</option>
+                            <option value="celibataire">Celibataire</option>
+                            <option value="marie">Marié</option>
+                        </x-forms.select>
+                    </div>
 
-
+                    <div class="col-lg-3 col-md-6 d-none marriage_date">
+                        <x-forms.datepicker fieldId="marriage_anniversary_date" :fieldLabel="__('Date de mariage')"
+                            fieldName="marriage_anniversary_date" :fieldPlaceholder="__('Selectionner')"/>
+                    </div>
+ 
             </div>
+            <x-form-actions>
+            <x-forms.button-primary id="save-employee-form" class="mr-3" icon="check">
+                        @lang('Enregistrer')
+                    </x-forms.button-primary>
+                     
+                    <x-forms.button-cancel class="border-0 " data-dismiss="modal">@lang('Annuler')
+                    </x-forms.button-cancel>
 
+                </x-form-actions>
         </div>
         </x-form>
                     </div>
@@ -222,7 +294,9 @@
         <!-- /Add Employee Modal -->
     </div>
     <!-- /Page Wrapper -->
-    @section('script')
+    
+@endsection 
+@push('script')
     <script>
         $("input:checkbox").on('click', function()
         {
@@ -240,17 +314,63 @@
         });
         $('#country').change(function(){
             var phonecode = $(this).find(':selected').data('phonecode');
+            console.log(phonecode);
             $('#country_phonecode').val(phonecode);
-            $('.select-picker').selectpicker('refresh');
-        });
-    </script>
-    <script>
+            $('.select-picker').selectpicker('refresh'); 
+        }); 
         // select auto id and email
         $('#name').on('change',function()
         {
             $('#employee_id').val($(this).find(':selected').data('employee_id'));
             $('#email').val($(this).find(':selected').data('email'));
         });
+        $('#marital_status').change(function(){
+            var value = $(this).val();
+            if(value == 'marie') {
+                $('.marriage_date').removeClass('d-none');
+            }
+            else {
+                $('.marriage_date').addClass('d-none');
+            }
+        });
+        $('#employment_type').change(function(){
+            var value = $(this).val();
+            if(value == 'contractuel') {
+                $('.contract-date').removeClass('d-none');
+            }
+            else {
+                $('.contract-date').addClass('d-none');
+            }
+
+            if(value == 'interimaire') {
+                $('.internship-date').removeClass('d-none');
+            }
+            else {
+                $('.internship-date').addClass('d-none');
+            }
+        });
+    //     $('#date_of_birth,#marriage_anniversary_date,#contract_end_date,#internship_end_date').datepicker({    
+    //  format: 'dd-mm-yyyy'});  
+    datepicker('#date_of_birth', {
+            position: 'bl',
+            dateFormat: 'dd-mm-yyyy',
+            maxDate: new Date(), 
+        });
+        datepicker('#marriage_anniversary_date', {
+            position: 'bl',
+            maxDate: new Date(), 
+        });
+        datepicker('#contract_end_date', {
+            position: 'bl',
+            maxDate: new Date(), 
+        });
+        datepicker('#internship_end_date', {
+            position: 'bl',
+            maxDate: new Date(), 
+        });
+        datepicker('#joining_date', {
+            position: 'bl',
+            maxDate: new Date(), 
+        });
     </script>
-    @endsection
-@endsection
+    @endpush

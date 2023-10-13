@@ -13,21 +13,24 @@
     <!-- Datatable CSS -->
 	<link rel="stylesheet" href="{{ asset('assets/fcadmin/css/dataTables.bootstrap4.min.css') }}">
     <!-- Main CSS -->
+     <!-- Datepicker -->
+ 
 	<link rel="stylesheet" href="{{ asset('assets/fcadmin/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/global/css/all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/global/css/line-awesome.min.css') }}">
     @stack('style-lib')
-
+    <link type="text/css" rel="stylesheet" media="all" href="{{ asset('assets/css/main.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/fcadmin/css/vendor/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/fcadmin/css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/dropify/css/dropify.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/templates/basic/css/custom.css') }}"> 
- <!-- Datepicker -->
- <link rel="stylesheet" href="{{ asset('assets/vendor/css/datepicker.min.css') }}">
 
+  
 <!-- TimePicker -->
 <link rel="stylesheet" href="{{ asset('assets/vendor/css/bootstrap-timepicker.min.css') }}">
-
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+<link rel="stylesheet" href="{{ asset('assets/vendor/css/datepicker.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/fcadmin/js/toastr/toastr.css') }}">
 	<script src="{{ asset('assets/fcadmin/js/toastr/jquery.min.js') }}"></script> 
     <script src="{{ asset('assets/fcadmin/js/toastr/toastr.min.js') }}"></script> 
@@ -75,6 +78,11 @@
     <script src="{{ asset('assets/vendor/jquery/bootstrap-datepicker.min.js') }}"></script>
 <script src="{{ asset('assets/vendor/jquery/dropzone.min.js') }}"></script>
 <script src="{{ asset('assets/vendor/jquery/daterangepicker.min.js')}}" defer=""></script> 
+ <script src="{{ asset('assets/vendor/jquery/datepicker.min.js') }}"></script>
+<!-- Latest compiled and minified JavaScript --> 
+ 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+<script src="{{ asset('assets/js/main.js') }}"></script>
     <script src="{{ asset('assets/fcadmin/js/app.js') }}"></script>
 
 
@@ -99,7 +107,7 @@
     </script>
     <script>
         $(document).ready(function() {
-            $('#save-data-form select').select2();
+            // $('#save-data-form select').select2();
             // Basic
             $('.dropify').dropify();
 
@@ -139,94 +147,25 @@
                 }
             })
         });
-        $('.custom-date-picker').each(function(ind, el) {
-            datepicker(el, {
-                position: 'bl',
-                ...datepickerConfig
-            });
-        });
-
-        datepicker('#joining_date', {
-            position: 'bl',
-            ...datepickerConfig
-        });
-
-        datepicker('#probation_end_date', {
-            position: 'bl',
-            ...datepickerConfig
-        });
-
-        datepicker('#notice_period_start_date', {
-            position: 'bl',
-            ...datepickerConfig
-        });
-
-        datepicker('#notice_period_end_date', {
-            position: 'bl',
-            ...datepickerConfig
-        });
-
-        datepicker('#marriage_anniversary_date', {
-            position: 'bl',
-            ...datepickerConfig
-        });
-
-        datepicker('#date_of_birth', {
-            position: 'bl',
-            maxDate: new Date(),
-            ...datepickerConfig
-        });
-
-        datepicker('#internship_end_date', {
-            position: 'bl',
-            ...datepickerConfig
-        });
-
-        datepicker('#contract_end_date', {
-            position: 'bl',
-            ...datepickerConfig
-        });
-
-        $('#marital_status').change(function(){
-            var value = $(this).val();
-            if(value == 'married') {
-                $('.marriage_date').removeClass('d-none');
-            }
-            else {
-                $('.marriage_date').addClass('d-none');
-            }
-        });
-
-        $('#employment_type').change(function(){
-            var value = $(this).val();
-            if(value == 'on_contract') {
-                $('.contract-date').removeClass('d-none');
-            }
-            else {
-                $('.contract-date').addClass('d-none');
-            }
-
-            if(value == 'internship') {
-                $('.internship-date').removeClass('d-none');
-            }
-            else {
-                $('.internship-date').addClass('d-none');
-            }
-        });
-        $('#save-more-employee-form').click(function() {
-
-        $('#add_more').val(true); 
-        var data = $('#save-employee-data-form').serialize();
-        saveEmployee(data, url, "#save-more-employee-form"); 
-        });
+      
         $(document).ready(function() {
             $("#flocal").validate();
         });
+        
     </script>
  
     @stack('script')
-
-
+    <script>
+        document.loading = '@lang('app.loading')';
+        const MODAL_DEFAULT = '#myModalDefault';
+        const MODAL_LG = '#myModal';
+        const MODAL_XL = '#myModalXl';
+        const MODAL_HEADING = '#modelHeading';
+        const RIGHT_MODAL = '#task-detail-1';
+        const RIGHT_MODAL_CONTENT = '#right-modal-content';
+        const RIGHT_MODAL_TITLE = '#right-modal-title';
+    </script>
+     
 </body>
 
 </html>

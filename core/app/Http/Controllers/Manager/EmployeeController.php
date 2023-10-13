@@ -18,8 +18,11 @@ class EmployeeController extends Controller
     // all employee card view
     public function cardAllEmployee(Request $request)
     {
-        $users = EmployeeDetail::with('user')->get();
-        return view('manager.form.allemployeecard',compact('users'));
+        $users = EmployeeDetail::with('user')->get(); 
+        $designations = Designation::get();
+        $teams = Department::get();
+        $countries = Countrie::get();
+        return view('manager.form.allemployeecard',compact('users','designations','teams','countries'));
     }
     // all employee list
     public function listAllEmployee()

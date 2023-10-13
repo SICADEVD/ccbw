@@ -12,6 +12,7 @@
         "brian2694/laravel-toastr": "^5.57",
         "coingate/coingate-php": "^3.0",
         "ezyang/htmlpurifier": "^4.13",
+        "froiden/laravel-rest-api": "^10.0",
         "guzzlehttp/guzzle": "^7.2",
         "intervention/image": "^2.5",
         "kirschbaum-development/eloquent-power-joins": "^3.0",

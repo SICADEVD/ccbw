@@ -182,6 +182,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class, 
+        Froiden\RestAPI\Providers\ApiServiceProvider::class,
         
 
     ],
@@ -202,7 +203,8 @@ return [
         'Location' => 'Stevebauman\Location\Facades\Location',
         'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
-        'PDF' => Barryvdh\DomPDF\Facade::class,  
+        'PDF' => Barryvdh\DomPDF\Facade::class, 
+        'ApiRoute' => \Froiden\RestAPI\Facades\ApiRoute::class, 
     ])->toArray(),
 
 ];
