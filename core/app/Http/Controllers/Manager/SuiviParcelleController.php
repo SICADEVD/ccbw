@@ -2,23 +2,24 @@
 
 namespace App\Http\Controllers\Manager;
 
-use App\Constants\Status;
-use App\Exports\ExportSuiviParcelles;
-use App\Http\Controllers\Controller;
-use App\Models\Localite; 
-use App\Models\Producteur; 
-use App\Models\SuiviParcelle; 
-use App\Models\Parcelle; 
+use Excel;
 use App\Models\Campagne;
-use App\Models\SuiviParcellesAgroforesterie;
+use App\Constants\Status;
+use App\Models\Localite; 
+use App\Models\Parcelle; 
+use App\Models\Cooperative;
+use App\Models\Producteur; 
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Models\SuiviParcelle; 
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use App\Models\SuiviParcellesAnimal;
+use Illuminate\Support\Facades\Hash;
+use App\Exports\ExportSuiviParcelles;
 use App\Models\SuiviParcellesOmbrage;
 use App\Models\SuiviParcellesParasite;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
-use Excel;
+use App\Models\SuiviParcellesAgroforesterie;
 
 class SuiviParcelleController extends Controller
 {
@@ -27,8 +28,12 @@ class SuiviParcelleController extends Controller
     {
         $pageTitle      = "Gestion des suivi parcelles";
         $manager   = auth()->user();
-        $localites = Localite::active()->where('cooperative_id',$manager->cooperative_id)->get();
-        $suiviparcelles = SuiviParcelle::dateFilter()->searchable(["varietes_cacao","autreVariete","existeCoursEaux","cours_eaux","pente","varieteAbres","nombreSauvageons","arbresagroforestiers","activiteTaille","activiteEgourmandage","activiteDesherbageManuel","activiteRecolteSanitaire","intrantNPK","nombresacsNPK","intrantFiente","nombresacsFiente","intrantComposte","nombresacsComposte","presencePourritureBrune","presenceBioAgresseur","presenceInsectesRavageurs","presenceFourmisRouge","presenceAraignee","presenceVerTerre","presenceMenteReligieuse","presenceSwollenShoot","presenceInsectesParasites","nomInsecticide","nombreInsecticide","nomFongicide","nombreFongicide","nomHerbicide","nombreHerbicide","nombreDesherbage"])->latest('id')->joinRelationship('parcelle.producteur.localite')->where('cooperative_id',$manager->cooperative_id)->where(function ($q) {
+        $cooperative = Cooperative::with('sections.localites', 'sections.localites.section')->find($manager->cooperative_id);
+        $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
+            return $localite->active();
+        });
+        $sections = $cooperative->sections;
+        $suiviparcelles = SuiviParcelle::dateFilter()->searchable(["varietes_cacao","existeCoursEaux","cours_eaux","pente","varieteAbres","nombreSauvageons","arbresagroforestiers","activiteTaille","activiteEgourmandage","activiteDesherbageManuel","activiteRecolteSanitaire","intrantNPK","nombresacsNPK","intrantFiente","nombresacsFiente","intrantComposte","nombresacsComposte","presencePourritureBrune","presenceBioAgresseur","presenceInsectesRavageurs","presenceFourmisRouge","presenceAraignee","presenceVerTerre","presenceMenteReligieuse","presenceSwollenShoot","presenceInsectesParasites","nomInsecticide","nombreInsecticide","nomFongicide","nombreFongicide","nomHerbicide","nombreHerbicide","nombreDesherbage"])->latest('id')->joinRelationship('parcelle.producteur.localite')->where(function ($q) {
             if(request()->localite != null){
                 $q->where('localite_id',request()->localite);
             }
@@ -42,10 +47,14 @@ class SuiviParcelleController extends Controller
         $pageTitle = "Ajouter un suivi parcelle";
         $manager   = auth()->user();
         $producteurs  = Producteur::with('localite')->get();
-        $localites  = Localite::active()->where('cooperative_id',auth()->user()->cooperative_id)->orderBy('nom')->get();
+        $cooperative = Cooperative::with('sections.localites', 'sections.localites.section')->find($manager->cooperative_id);
+        $sections = $cooperative->sections;
+        $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
+            return $localite->active();
+        });
         $campagnes = Campagne::active()->pluck('nom','id');
         $parcelles  = Parcelle::with('producteur')->get();
-        return view('manager.suiviparcelle.create', compact('pageTitle', 'producteurs','localites','campagnes','parcelles'));
+        return view('manager.suiviparcelle.create', compact('pageTitle', 'producteurs','localites','campagnes','parcelles','sections'));
     }
 
     public function store(Request $request)
