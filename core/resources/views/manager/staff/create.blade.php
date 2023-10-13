@@ -7,38 +7,50 @@
                     <form action="{{ route('manager.staff.store') }}" method="POST">
                         @csrf
                         <div class="row">
-                        <div class="form-group col-lg-4">
-                                <label>@lang('Localite')</label>
-                                <select class="form-control select2-multi-select" name="localite[]" multiple required>
+                            <div class="form-group col-lg-4">
+                                <label>@lang('Section')</label>
+                                <select class="form-control" name="section" required>
                                     <option value="">@lang('Selectionner une option')</option>
-                                    @foreach($localites as $localite)
-                                        <option value="{{ $localite->id }}" @selected(old('localite'))>
+                                    @foreach ($sections as $section)
+                                        <option value="{{ $section->id }}" @selected(old('section'))>
+                                            {{ __($section->libelle) }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group col-lg-4">
+                                <label>@lang('Localite')</label>
+                                <select class="form-control select2-multi-select" id="localite" name="localite[]" multiple
+                                    required>
+
+                                    @foreach ($localites as $localite)
+                                        <option value="{{ $localite->id }}" data-chained="{{ $localite->section->id }}"
+                                            @selected(old('localite'))>
                                             {{ __($localite->nom) }}</option>
                                     @endforeach
                                 </select>
-                            </div>  
+                            </div>
                             <div class="form-group col-lg-4">
                                 <label for="rolePermission" class="form-label">Role</label>
-                                <select class="form-control" 
-                                    name="role" required>
+                                <select class="form-control" name="role" required>
                                     <option value="">Selectionner un rôle</option>
-                                    @foreach($roles as $role)
+                                    @foreach ($roles as $role)
                                         <option value="{{ $role->id }}">{{ $role->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
+                        </div>
+                        <div class="row">
+
                             <div class="form-group col-lg-4">
                                 <label>@lang('Type de compte')</label>
                                 <select class="form-control" name="type_compte" required>
-                                    <option value="">@lang('Selectionner une option')</option> 
-                                        <option value="web" @selected(old('type_compte'))>Web</option> 
-                                        <option value="mobile" @selected(old('type_compte'))>Mobile</option> 
-                                        <option value="mobile-web" @selected(old('type_compte'))>Mobile & Web</option>  
+                                    <option value="">@lang('Selectionner une option')</option>
+                                    <option value="web" @selected(old('type_compte'))>Web</option>
+                                    <option value="mobile" @selected(old('type_compte'))>Mobile</option>
+                                    <option value="mobile-web" @selected(old('type_compte'))>Mobile & Web</option>
                                 </select>
                             </div>
-                        </div>
-                        <div class="row">
-                      
+
                             <div class="form-group col-lg-4">
                                 <label>@lang('Prenom(s)')</label>
                                 <input type="text" class="form-control" name="firstname" value="{{ old('firstname') }}"
@@ -50,14 +62,16 @@
                                 <input type="text" class="form-control" value="{{ old('lastname') }}" name="lastname"
                                     required>
                             </div>
+
+                        </div>
+
+                        <div class="row">
+
                             <div class="form-group col-lg-4">
                                 <label>@lang("Nom d'utilisateur")</label>
                                 <input type="text" class="form-control" name="username" value="{{ old('username') }}"
                                     required>
                             </div>
-                        </div>
-
-                        <div class="row">
                             <div class="form-group col-lg-4">
                                 <label>@lang('Email Adresse')</label>
                                 <input type="email" class="form-control" name="email" value="{{ old('email') }}"
@@ -68,19 +82,19 @@
                                 <input type="text" class="form-control" name="mobile" value="{{ old('mobile') }}"
                                     required>
                             </div>
-                            <div class="form-group col-lg-4">
-                                <label>@lang('Adresse')</label>
-                                <input type="text" class="form-control" name="adresse" value="{{ old('adresse') }}"
-                                    >
-                            </div>
+                            
                         </div>
                         <div class="row">
-                            <div class="form-group col-lg-6">
-                                <label>@lang("Mot de passe")</label>
+                            <div class="form-group col-lg-4">
+                                <label>@lang('Adresse')</label>
+                                <input type="text" class="form-control" name="adresse" value="{{ old('adresse') }}">
+                            </div>
+                            <div class="form-group col-lg-4">
+                                <label>@lang('Mot de passe')</label>
                                 <input type="password" class="form-control" name="password" required>
                             </div>
 
-                            <div class="form-group col-lg-6">
+                            <div class="form-group col-lg-4">
                                 <label>@lang('Confirm Password')</label>
                                 <input type="password" class="form-control" name="password_confirmation" required>
                             </div>
@@ -97,5 +111,12 @@
 @endsection
 
 @push('breadcrumb-plugins')
-    <x-back route="{{ route('manager.staff.index') }}"/>
+    <x-back route="{{ route('manager.staff.index') }}" />
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+            $('#localite').chained("#section")
+        });
+    </script>
 @endpush

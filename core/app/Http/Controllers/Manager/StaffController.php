@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers\Manager;
 
-use App\Exports\ExportStaffs;
-use App\Http\Controllers\Controller;
-use App\Models\Localite;
-use App\Models\Magasin_section;
-use App\Models\User;
-use App\Models\User_localite;
 use Exception;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+use App\Models\Localite;
+use App\Models\Cooperative;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Exports\ExportStaffs;
+use App\Models\User_localite;
+use App\Models\Magasin_section;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 
 class StaffController extends Controller
 {
@@ -23,9 +24,15 @@ class StaffController extends Controller
         //recuperation des roles
         $roles = Role::latest()->get();
         //fin recuperation
-        $localites  = Localite::where('cooperative_id',auth()->user()->cooperative_id)->active()->orderBy('nom')->get();
+        $manager   = auth()->user();
+        $cooperative = Cooperative::with('sections.localites', 'sections.localites.section')->find($manager->cooperative_id);
+        $sections = $cooperative->sections;
+        $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
+            return $localite->active();
+        });
         
-        return view('manager.staff.create', compact('pageTitle','localites','roles'));
+        return view('manager.staff.create', compact('pageTitle','localites','roles','sections'));
+        
     }
 
     public function index()
@@ -58,21 +65,28 @@ class StaffController extends Controller
 
         $pageTitle = "Mise à jour du Staff";
         $manager   = auth()->user();
+        $cooperative = Cooperative::with('sections.localites', 'sections.localites.section')->find($manager->cooperative_id);
+        $sections = $cooperative->sections;
+        $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
+            return $localite->active();
+        });
         $staff     = User::where('id', $id)->where('cooperative_id', $manager->cooperative_id)->firstOrFail();
-        $localites  = Localite::where('cooperative_id',auth()->user()->cooperative_id)->active()->orderBy('nom')->get();
         //ajout des roles et le role de l'étulisateur dans la vue manager.staff.edit
         $userRole = $staff->roles->pluck('name')->toArray();
-
         $roles = Role::latest()->get();
         //fin
         $userLocalite = array();
+        $userSection = array();
         $dataLocalite = $staff->userLocalites;
         if($dataLocalite->count()){
             foreach($dataLocalite as $data){
                 $userLocalite[]=$data->localite_id;
             }
+            foreach($dataLocalite as $data){
+                $userSection[]=$data->section_id;
+            }
         }
-        return view('manager.staff.edit', compact('pageTitle', 'staff','localites','userLocalite','userRole','roles'));
+        return view('manager.staff.edit', compact('pageTitle', 'staff','localites','userLocalite','userRole','roles','sections','userSection'));
     }
 
     public function store(Request $request)
@@ -165,11 +179,11 @@ class StaffController extends Controller
                 foreach($request->localite as $data){
                     if($data !=null)
                     {
-                        DB::table('user_localites')->insert(['user_id'=>$id,'localite_id'=>$data]);
+                        DB::table('user_localites')->insert(['user_id'=>$id,'localite_id'=>$data,'section_id'=>$request->section]);
                     } 
                   $i++;
                 }
-
+                
             }
         }else{
             DB::table('model_has_roles')->where('model_id',$request->id)->delete();
