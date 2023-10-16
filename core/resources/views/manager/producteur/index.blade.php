@@ -17,7 +17,7 @@
                                     <option value="">@lang('Toutes')</option>
                                     @foreach ($localites as $local)
                                         <option value="{{ $local->id }}">{{ $local->nom }}</option>
-                                    @endforeach 
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="flex-grow-1">
@@ -26,7 +26,7 @@
                                     <option value="">@lang('Tous')</option>
                                     @foreach ($programmes as $local)
                                         <option value="{{ $local->id }}">{{ $local->libelle }}</option>
-                                    @endforeach 
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="flex-grow-1">
@@ -56,8 +56,10 @@
                         <table class="table table--light style--two">
                             <thead>
                                 <tr>
+                                    <th>@lang('Photo')</th>
                                     <th>@lang('Section')</th>
                                     <th>@lang('Localite')</th>
+                                    
                                     <th>@lang('Nom')</th>
                                     <th>@lang('Prenoms')</th>
                                     <th>@lang('Sexe')</th>
@@ -72,11 +74,23 @@
                                 @forelse($producteurs as $producteur)
                                     <tr>
                                         <td>
+                                            @if ($producteur->picture != null)
+                                                <img src="{{ url('core/storage/app/' . $producteur->picture) }}"
+                                                    alt="image" style = " width: 100px;">
+                                            @else
+                                                <img src="{{ asset('assets/images/default.png') }}"
+                                                    alt="image" style = " width: 100px;">
+                                            @endif
+
+
+                                        </td>
+                                        <td>
                                             <span class="fw-bold">{{ __($producteur->localite->section->libelle) }}</span>
                                         </td>
                                         <td>
                                             <span class="fw-bold">{{ __($producteur->localite->nom) }}</span>
                                         </td>
+
                                         <td>
                                             <span class="small">
                                                 <a href="{{ route('manager.traca.producteur.edit', $producteur->id) }}">
@@ -162,7 +176,8 @@
                         <p>Fichier d'exemple à utiliser :<a href="{{ asset('assets/producteur-import-exemple.xlsx') }}"
                                 target="_blank">@lang('producteur-import-exemple.xlsx')</a></p>
                         <div class="alert alert-danger">
-                            <p><i class="las la-exclamation-triangle"></i> Consignes à respecter avant de charger le fichier
+                            <p><i class="las la-exclamation-triangle"></i> Consignes à respecter avant de charger le
+                                fichier
                                 :</p>
                             <ul>
                                 <li>Assurez-vous que les Localités qui sont dans le fichier sont déjà enregistrées dans la
