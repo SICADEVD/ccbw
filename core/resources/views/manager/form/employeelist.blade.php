@@ -110,32 +110,51 @@
 </x-filters.filter-box>
 </div>
 @endsection
-    <!-- Page Wrapper -->
+
+ 
+    <!-- CONTENT WRAPPER START -->
     <div class="page-wrapper">
-        <!-- Page Content -->
-        <div class="content container-fluid">
-            <!-- Page Header -->
-            <div class="page-header">
-                <div class="row align-items-center">
-                    
-                    <div class="col-auto float-right ml-auto">
-                        <a href="#" class="btn add-btn" data-toggle="modal" data-target="#add_employee"><i class="fa fa-plus"></i> Add Employee</a>
-                        <div class="view-icons">
-                            <a href="{{ route('manager.hr.all.employee.card') }}" class="grid-view btn btn-link active"><i class="fa fa-th"></i></a>
-                            <a href="{{ route('manager.hr.all.employee.list') }}" class="list-view btn btn-link"><i class="fa fa-bars"></i></a>
-                        </div>
-                    </div>
-                </div>
+        <!-- Add Task Export Buttons Start -->
+        <div class="d-flex justify-content-between action-bar">
+
+            <div id="table-actions" class="d-block d-lg-flex align-items-center">
+               
+                    <x-forms.link-primary :link="route('manager.hr.all.employee.save')" class="mr-3" icon="plus" data-toggle="modal" data-target="#add_employee">
+                        Ajouter un Employé
+                    </x-forms.link-primary> 
+                    <x-forms.link-secondary  :link="route('manager.hr.all.employee.save')" class="mr-3 mb-2 mb-lg-0 d-none d-lg-block"
+                                            icon="file-download">
+                       Exporter
+                    </x-forms.link-secondary>
+                    <x-forms.link-secondary  :link="route('manager.hr.all.employee.save')" class="mr-3 mb-2 mb-lg-0 d-none d-lg-block"
+                                            icon="file-upload">
+                       Importer
+                    </x-forms.link-secondary>
+               
             </div>
-			<!-- /Page Header -->{!! Toastr::message() !!}
 
-           
-            
+            <x-datatable.actions>
+                <div class="select-status mr-3 pl-3">
+                    <select name="action_type" class="form-control select-picker" id="quick-action-type" disabled>
+                        <option value="">@lang('app.selectAction')</option>
+                        <option value="change-status">@lang('modules.tasks.changeStatus')</option>
+                        <option value="delete">@lang('app.delete')</option>
+                    </select>
+                </div>
+                <div class="select-status mr-3 d-none quick-action-field" id="change-status-action">
+                    <select name="status" class="form-control select-picker">
+                        <option value="deactive">@lang('app.inactive')</option>
+                        <option value="active">@lang('app.active')</option>
+                    </select>
+                </div>
+            </x-datatable.actions>
 
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="table-responsive">
-                        <table class="table table-striped custom-table datatable">
+        </div>
+        <!-- Add Task Export Buttons End -->
+        <!-- Task Box Start -->
+        <div class="d-flex flex-column w-tables rounded mt-3 bg-white table-responsive">
+
+        <table class="table table-striped custom-table datatable">
                             <thead>
                                 <tr>
                                     <th>Name</th>
@@ -174,18 +193,19 @@
                                 @endforeach
                             </tbody>
                         </table>
-                    </div>
-                </div>
-            </div>
+
         </div>
-        <!-- /Page Content -->
+        <!-- Task Box End -->
+    </div>
+    <!-- CONTENT WRAPPER END -->
+ 
       
         <!-- Add Employee Modal -->
         <div id="add_employee" class="modal custom-modal fade" role="dialog">
             <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Add Employee</h5>
+                        <h5 class="modal-title">Ajouter un employé</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -195,7 +215,7 @@
                            // @csrf
                      
                         </form> -->
-                        <x-form id="save-data-form">
+                        <x-form id="save-data-form" :action="route('manager.hr.all.employee.save')">
         <div class="add-client bg-white rounded">
             <div class="row p-20">
                 <div class="col-lg-9">
@@ -248,7 +268,7 @@
 
                 <div class="col-lg-3">
                         <x-forms.file allowedFileExtensions="png jpg jpeg svg bmp" class="mr-0 mr-lg-2 mr-md-2 cropper"
-                            :fieldLabel="__('modules.profile.profilePicture')" fieldName="image" fieldId="image"
+                            :fieldLabel="__('Image de profile')" fieldName="image" fieldId="image"
                             fieldHeight="119" :popover="__('messages.fileFormat.ImageFile')" />
                     </div>
                     <div class="col-lg-3 col-md-6">
@@ -352,9 +372,10 @@
  
             </div>
             <x-form-actions>
-            <x-forms.button-primary id="save-employee-form" class="mr-3" icon="check">
+              
+            <x-form-button id="save-employee-form" class="mr-3 btn btn-primary" icon="check">
                         @lang('Enregistrer')
-                    </x-forms.button-primary>
+                    </x-form-button>
                      
                     <x-forms.button-cancel class="border-0 " data-dismiss="modal">@lang('Annuler')
                     </x-forms.button-cancel>
@@ -367,8 +388,7 @@
             </div>
         </div>
         <!-- /Add Employee Modal -->
-    </div>
-    <!-- /Page Wrapper -->
+    
     
 @endsection 
 @push('script')
@@ -428,7 +448,7 @@
     //  format: 'dd-mm-yyyy'});  
     datepicker('#date_of_birth', {
             position: 'bl',
-            dateFormat: 'dd-mm-yyyy',
+            dateFormat: 'dd-mm-yyyy', 
             maxDate: new Date(), 
         });
         datepicker('#marriage_anniversary_date', {
