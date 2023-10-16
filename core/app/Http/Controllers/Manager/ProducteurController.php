@@ -173,7 +173,6 @@ class ProducteurController extends Controller
             'phone2'=>'required_if:autreMembre,==,oui',
             'autrePhone'=>'required_if:autreMembre,==,oui',
             'numCMU'=>'required_if:carteCMU,==,oui',
-            'num_ccc' => ['max:20', Rule::unique('producteurs', 'num_ccc')->ignore($producteur)],
         ];
         $request->validate($validationRule);
         $producteur->proprietaires = $request->proprietaires;
