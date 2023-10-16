@@ -28564,7 +28564,13 @@ button.disabled,button:disabled
     {
     position:static;width:100%
 }
-
+#filter-bloc {
+    margin-left: 0px;
+    position: sticky;
+    padding-left: 10px;
+    padding-right: 10px;
+    background: #FFF;
+}
 
 }
 .more-filters
@@ -28932,7 +28938,13 @@ button.disabled,button:disabled
     {
     padding-left:0;padding-right:0
 }
-
+#filter-bloc {
+    margin-left:0px;
+    position: sticky;
+    padding-left: 10px;
+    padding-right: 10px;
+    background: #FFF;
+}
 
 }
 .choose_ui_color .ui_color_title
@@ -29003,7 +29015,13 @@ button.disabled,button:disabled
     {
     width:100%
 }
-
+#filter-bloc {
+    margin-left:0px;
+    position: sticky;
+    padding-left: 10px;
+    padding-right: 10px;
+    background: #FFF;
+}
 
 }
 .ui_cards_tables
@@ -29762,7 +29780,13 @@ table.dataTable
     flex-wrap:nowrap;overflow:auto;overflow-x:scroll;overflow-y:hidden
 }
 
-
+#filter-bloc {
+    margin-left:0px;
+    position: sticky;
+    padding-left: 10px;
+    padding-right: 10px;
+    background: #FFF;
+}
 }
 .settings-box .s-b-inner .s-b-n-content .ntfcn-tab-content-right
     {

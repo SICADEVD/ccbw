@@ -183,7 +183,12 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class, 
         Froiden\RestAPI\Providers\ApiServiceProvider::class,
-        
+        Yajra\DataTables\DataTablesServiceProvider::class,
+        Yajra\DataTables\DataTablesServiceProvider::class,
+        Yajra\DataTables\HtmlServiceProvider::class,
+        Yajra\DataTables\DataTablesServiceProvider::class,
+        Yajra\DataTables\ButtonsServiceProvider::class,
+        Yajra\DataTables\ExportServiceProvider::class
 
     ],
 
