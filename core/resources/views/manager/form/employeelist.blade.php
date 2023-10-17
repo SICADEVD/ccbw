@@ -157,7 +157,7 @@
         <table class="table table-striped custom-table datatable">
                             <thead>
                                 <tr>
-                                    <th>Name</th>
+                                    <th>Nom & Prenom</th>
                                     <th>Employee ID</th>
                                     <th>Email</th>
                                     <th>Mobile</th>
@@ -172,14 +172,15 @@
                                     <td>
                                         <h2 class="table-avatar">
                                             <a href="{{ url('employee/profile/'.$items->user_id) }}" class="avatar"><img alt="" src="{{ URL::to('/assets/images/'. $items->avatar) }}"></a>
-                                            <a href="{{ url('employee/profile/'.$items->user_id) }}">{{ $items->name }}<span>{{ $items->position }}</span></a>
+                                            <a href="{{ url('employee/profile/'.$items->user_id) }}">{{ $items->user->lastname }}<span>{{ $items->user->firstname }}</span></a>
                                         </h2>
-                                    </td>
-                                    <td>{{ $items->user_id }}</td>
-                                    <td>{{ $items->email }}</td>
-                                    <td>{{ $items->phone_number }}</td>
-                                    <td>{{ $items->join_date }}</td>
-                                    <td>{{ $items->role_name }}</td>
+                                    </td> 
+                                    <td>{{ $items->employee_matricule }}</td>
+
+                                    <td>{{ $items->user->email }}</td>
+                                    <td>{{ $items->user->mobile }}</td>
+                                    <td>{{ $items->joining_date }}</td>
+                                    <td>{{ $items->user->user_type }}</td>
                                     <td class="text-right">
                                         <div class="dropdown dropdown-action">
                                             <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
@@ -220,9 +221,19 @@
             <div class="row p-20">
                 <div class="col-lg-9">
                     <div class="row">
+                        <div class="col-lg-6 col-md-6">
+                                <x-forms.text fieldId="matricule" :fieldLabel="__('Matricule Employe')"
+                                    fieldName="matricule" fieldRequired="true" :fieldPlaceholder="__('e.g CXV-163')">
+                                </x-forms.text>
+                            </div>
                     <div class="col-lg-6 col-md-6">
-                                <x-forms.text fieldId="name" :fieldLabel="__('Nom Employe')"
-                                    fieldName="name" fieldRequired="true" :fieldPlaceholder="__('e.g John Doe')">
+                                <x-forms.text fieldId="nom" :fieldLabel="__('Nom Employe')"
+                                    fieldName="nom" fieldRequired="true" :fieldPlaceholder="__('e.g Kouame')">
+                                </x-forms.text>
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                <x-forms.text fieldId="prenom" :fieldLabel="__('Prenom Employe')"
+                                    fieldName="prenom" fieldRequired="true" :fieldPlaceholder="__('e.g Gildas')">
                                 </x-forms.text>
                             </div>
                             <div class="col-lg-6 col-md-6">

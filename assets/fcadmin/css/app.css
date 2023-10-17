@@ -3440,7 +3440,7 @@ textarea {
     -moz-border-radius: 5px;
     -ms-border-radius: 5px;
     -o-border-radius: 5px;
-    background-color: #fff !important;
+    background-color: transparent;
     font-size: 0.875rem !important;
 }
 
