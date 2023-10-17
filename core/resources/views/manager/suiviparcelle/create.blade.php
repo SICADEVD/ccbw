@@ -107,55 +107,68 @@
                     <div class="form-group row" id="recu">
                         <?php echo Form::label(__('Quand avez-vous recu ?'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('', ['12 dernier mois' => __('12 dernier mois'), 'Il ya 2ans' => __(' Il ya 2ans'), 'Au dela de 02 ans' => 'Au dela de 02 ans'], null, ['class' => 'form-control']); ?>
+                            <?php echo Form::select('recuArbreAgroForestier', ['12 dernier mois' => __('12 dernier mois'), 'Il ya 2ans' => __(' Il ya 2ans'), 'Au dela de 02 ans' => 'Au dela de 02 ans'], null, ['class' => 'form-control recuArbreAgroForestier']); ?>
+                        </div>
+                    </div>
+                    {{-- agroforestiersobtenus --}}
+
+                    <div class="row mb-30" id="agroforestiersobtenus">
+                        <div class="col-lg-12">
+                            <div class="card border--primary mt-3">
+                                <h5 class="card-header bg--primary text-white">@lang('Quels sont les arbres agro-forestiers obtenus ?')
+                                    <button type="button" class="btn btn-sm btn-outline-light float-end addUserData"><i
+                                            class="la la-fw la-plus"></i>@lang('Ajouter un arbre agro-forestier')
+                                    </button>
+                                </h5>
+                                <div class="card-body">
+                                    <div class="row" id="addedField">
+                                        <?php $i = 0; ?>
+                                        @if (old('items'))
+                                            @foreach (old('items') as $item)
+                                                <div class="row single-item gy-2">
+                                                    <div class="col-md-3">
+                                                        <select class="form-control selected_type"
+                                                            name="items[{{ $loop->index }}][arbre]"
+                                                            id='producteur-<?php echo $i; ?>'
+                                                            onchange=getParcelle(<?php echo $i; ?>) required>
+                                                            <option disabled selected value="">@lang('Abres d\'ombrages')
+                                                            </option>
+                                                            @foreach ($arbres as $arbre)
+                                                                <option value="{{ $arbre->id }}"
+                                                                    @selected($item['arbre'] == $arbre->id)>
+                                                                    {{ __($arbre->nom) }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="col-md-3">
+                                                        <div class="input-group mb-3">
+                                                            <input type="number" class="form-control nombre"
+                                                                value="{{ $item['nombre'] }}"
+                                                                name="items[{{ $loop->index }}][nombre]" required>
+                                                            <span class="input-group-text unit"><i
+                                                                    class="las la-balance-scale"></i></span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-1">
+                                                        <button class="btn btn--danger w-100 removeBtn w-100 h-45"
+                                                            type="button">
+                                                            <i class="fa fa-times"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        @endif
+                                    </div>
+
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="form-group row" id="agroforestiersobtenus">
-
-                        <?php echo Form::label(__('Donner leur type et le nombre'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <table class="table table-striped table-bordered">
-                                <tbody id="agroforestiers_area">
-
-                                    <tr>
-                                        <td class="row">
-                                            <div class="col-xs-12 col-sm-12 bg-success">
-                                                <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Arbre agro-forestier')
-                                                </badge>
-                                            </div>
-                                            <div class="col-xs-12 col-sm-6">
-                                                <div class="form-group row">
-                                                    {{ Form::label(__('Type'), null, ['class' => '']) }}
-                                                    <input type="text" name="agroforestiers[]" placeholder="..."
-                                                        id="agroforestiers-1" class="form-control">
-                                                </div>
-                                            </div>
-
-                                            <div class="col-xs-12 col-sm-6">
-                                                <div class="form-group row">
-                                                    {{ Form::label(__('Nombre'), null, ['class' => '']) }}
-                                                    <input type="number" name="nombreagroforestiers[]" placeholder="..."
-                                                        id="nombreagroforestiers-1" class="form-control " min="1">
-                                                </div>
-                                            </div>
-
-                                        </td>
-                                    </tr>
-
-                                </tbody>
-                                <tfoot style="background: #e3e3e3;">
-                                    <tr>
-
-                                        <td colspan="3">
-                                            <button id="addRowagroforestiers" type="button"
-                                                class="btn btn-success btn-sm"><i class="fa fa-plus"></i></button>
-                                        </td>
-                                    <tr>
-                                </tfoot>
-                            </table>
-                        </div>
-                    </div>
+                    {{-- agroforestiersobtenus fin --}}
 
                     <div class="form-group row">
                         <?php echo Form::label(__('Activité de Taille dans la Parcelle'), null, ['class' => 'col-sm-4 control-label']); ?>
@@ -195,10 +208,6 @@
                             <?php echo Form::label(__('Nombre de sacs utilisé de NPK'), null, ['class' => 'control-label']); ?>
                             <?php echo Form::hidden('intrantNPK', 'NPK', ['class' => 'form-control intrant']); ?>
                             <?php echo Form::number('nombresacsNPK', 0, ['placeholder' => 'Nombre de sacs utilisé...', 'class' => 'form-control', 'min' => '0']); ?>
-
-                            <?php echo Form::label(__('Unité'), null, ['class' => 'control-label']); ?>
-                            <?php echo Form::hidden('', 'Composte', ['class' => 'form-control']); ?>
-                            <?php echo Form::select('', ['L' => __('L'), 'Kg' => __('Kg')], null, ['class' => 'form-control']); ?>
                         </div>
                     </div>
 
@@ -206,12 +215,8 @@
                         <?php echo Form::label(__("Intrant Dechets animaux Utilisé l'année dernière"), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
                             <?php echo Form::label(__('Nombre de sacs utilisé de dechets animaux'), null, ['class' => 'control-label']); ?>
-                            <?php echo Form::hidden('', 'Dechets animaux', ['class' => 'form-control intrant']); ?>
-                            <?php echo Form::number('', 0, ['placeholder' => 'Nombre de sacs utilisé...', 'class' => 'form-control', 'min' => '0']); ?>
-
-                            <?php echo Form::label(__('Unité'), null, ['class' => 'control-label']); ?>
-                            <?php echo Form::hidden('', 'Composte', ['class' => 'form-control']); ?>
-                            <?php echo Form::select('', ['L' => __('L'), 'Kg' => __('Kg')], null, ['class' => 'form-control']); ?>
+                            <?php echo Form::hidden('intrantDechetsAnimaux', 'Dechets animaux', ['class' => 'form-control intrant']); ?>
+                            <?php echo Form::number('nombreDechetsAnimaux', 0, ['placeholder' => 'Nombre de sacs utilisé...', 'class' => 'form-control', 'min' => '0']); ?>
                         </div>
                     </div>
 
@@ -221,22 +226,15 @@
                             <?php echo Form::label(__('Nombre de sacs utilisé de Fiente'), null, ['class' => 'control-label']); ?>
                             <?php echo Form::hidden('intrantFiente', 'Fiente', ['class' => 'form-control intrant']); ?>
                             <?php echo Form::number('nombresacsFiente', 0, ['placeholder' => 'Nombre de sacs utilisé...', 'class' => 'form-control', 'min' => '0']); ?>
-
-                            <?php echo Form::label(__('Unité'), null, ['class' => 'control-label']); ?>
-                            <?php echo Form::hidden('', 'Composte', ['class' => 'form-control']); ?>
-                            <?php echo Form::select('', ['L' => __('L'), 'Kg' => __('Kg')], null, ['class' => 'form-control']); ?>
                         </div>
                     </div>
+
                     <div class="form-group row">
                         <?php echo Form::label(__("Intrant Composte Utilisé l'année dernière"), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
                             <?php echo Form::label(__('Nombre de sacs utilisé de Composte'), null, ['class' => 'control-label']); ?>
                             <?php echo Form::hidden('intrantComposte', 'Composte', ['class' => 'form-control intrant']); ?>
                             <?php echo Form::number('nombresacsComposte', 0, ['placeholder' => 'Nombre de sacs utilisé...', 'class' => 'form-control', 'min' => '0']); ?>
-
-                            <?php echo Form::label(__('Unité'), null, ['class' => 'control-label']); ?>
-                            <?php echo Form::hidden('', 'Composte', ['class' => 'form-control']); ?>
-                            <?php echo Form::select('', ['L' => __('L'), 'Kg' => __('Kg')], null, ['class' => 'form-control']); ?>
                         </div>
                     </div>
 
@@ -244,33 +242,44 @@
                         <?php echo Form::label(__("Biofertilisant/Bio stimulant Utilisé l'année dernière"), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
                             <?php echo Form::label(__('Quantité utilisée'), null, ['class' => 'control-label']); ?>
-                            <?php echo Form::hidden('', '', ['class' => 'form-control intrant']); ?>
+                            <?php echo Form::number('qteBiofertilisant', null, ['class' => 'form-control']); ?>
 
 
                             <?php echo Form::label(__('Unité'), null, ['class' => 'control-label']); ?>
-                            <?php echo Form::hidden('', 'Composte', ['class' => 'form-control']); ?>
-                            <?php echo Form::select('', ['L' => __('L'), 'Kg' => __('Kg')], null, ['class' => 'form-control']); ?>
+                            <?php echo Form::select('uniteBioFertilisant', ['L' => __('L'), 'Kg' => __('Kg')], null, ['class' => 'form-control']); ?>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <?php echo Form::label(__("Engrais organique préfabriqué Utilisé l'année dernière"), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-12 col-sm-8">
+                            <?php echo Form::label(__('Quantité utilisée'), null, ['class' => 'control-label']); ?>
+                            <?php echo Form::number('qteEngraisOrganique', null, ['class' => 'form-control']); ?>
+
+
+                            <?php echo Form::label(__('Unité'), null, ['class' => 'control-label']); ?>
+                            <?php echo Form::select('uniteEngraisOrganique', ['L' => __('L'), 'Kg' => __('Kg')], null, ['class' => 'form-control']); ?>
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <?php echo Form::label('Frequence d\'utilisation du pesticide (combien de fois avez-vous appliqué sur la campagne)', null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::number('', 0, ['placeholder' => 'fréquence...', 'class' => 'form-control', 'min' => '0']); ?>
+                            <?php echo Form::number('frequencePesticide', 0, ['placeholder' => 'fréquence...', 'class' => 'form-control', 'min' => '0']); ?>
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <?php echo Form::label(__('Pesticide utilisé l\'année derniere ( la campagne précédente)'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('', ['Insecticide' => 'Insecticide', 'Fongicide' => 'Fongicide', 'Nematicide' => 'Nematicide', 'Herbicide' => 'Herbicide', 'Autre' => 'Autre'], null, ['class' => 'form-control']); ?>
+                            <?php echo Form::select('pesticideUtiliseAnne', ['Insecticide' => 'Insecticide', 'Fongicide' => 'Fongicide', 'Nematicide' => 'Nematicide', 'Herbicide' => 'Herbicide', 'Autre' => 'Autre'], null, ['class' => 'form-control pesticideUtiliseAnne']); ?>
                         </div>
                     </div>
 
-                    <div class="form-group row">
+                    <div class="form-group row" id="autrePesticides">
                         <?php echo Form::label(__('Autre Pesticide'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::text('', null, ['placeholder' => 'Autre...', 'class' => 'form-control']); ?>
+                            <?php echo Form::text('autrePesticide', null, ['id'=>'autrePesticide','placeholder' => 'Autre...', 'class' => 'form-control autrePesticide']); ?>
                         </div>
                     </div>
 
@@ -344,7 +353,7 @@
                     <div class="form-group row" id="presenceInsectesParasitesRavageurs">
                         <?php echo Form::label(__('Parasites ou Ravageurs'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('', ['Mirides' => __('Mirides'), 'Punaise' => __('Punaise'), 'Foreurs' => __('Foreurs'), 'Chenilles' => __('Chenilles'), 'Autre' => __('Autre')], null, ['class' => 'form-control']); ?>
+                            <?php echo Form::select('presenceInsectesParasitesRavageur', ['Mirides' => __('Mirides'), 'Punaise' => __('Punaise'), 'Foreurs' => __('Foreurs'), 'Chenilles' => __('Chenilles'), 'Autre' => __('Autre')], null, ['class' => 'form-control presenceInsectesParasitesRavageur']); ?>
                         </div>
                     </div>
 
@@ -482,32 +491,32 @@
                     <div class="form-group row">
                         <?php echo Form::label(__('Présence de Fourmis Rouge'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('', ['Assez' => __('assez'), 'Moins' => __('moins')], null, ['class' => 'form-control']); ?>
+                            <?php echo Form::select('presenceFourmisRouge', ['Assez' => __('assez'), 'Moins' => __('moins')], null, ['class' => 'form-control']); ?>
                         </div>
                     </div>
                     <div class="form-group row">
                         <?php echo Form::label(__('Présence d’Araignée'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('', ['Assez' => __('assez'), 'Moins' => __('moins')], null, ['class' => 'form-control']); ?>
+                            <?php echo Form::select('presenceAraigne', ['Assez' => __('assez'), 'Moins' => __('moins')], null, ['class' => 'form-control']); ?>
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <?php echo Form::label(__('Présence de Ver de Terre'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('', ['Assez' => __('assez'), 'Moins' => __('moins')], null, ['class' => 'form-control']); ?>
+                            <?php echo Form::select('presenceVerDeTerre', ['Assez' => __('assez'), 'Moins' => __('moins')], null, ['class' => 'form-control']); ?>
                         </div>
                     </div>
                     <div class="form-group row">
                         <?php echo Form::label(__('Présence de Mente  Religieuse'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('', ['Assez' => __('assez'), 'Moins' => __('moins')], null, ['class' => 'form-control']); ?>
+                            <?php echo Form::select('presenceMenteReligieuse', ['Assez' => __('assez'), 'Moins' => __('moins')], null, ['class' => 'form-control']); ?>
                         </div>
                     </div>
                     <div class="form-group row">
                         <?php echo Form::label(__('Présence d’autres types d’insecte amis ?'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('', ['non' => __('non'), 'oui' => __('oui')], null, ['class' => 'form-control ']); ?>
+                            <?php echo Form::select('presenceAutreTypeInsecteAmi', ['non' => __('non'), 'oui' => __('oui')], null, ['class' => 'form-control ']); ?>
                         </div>
                     </div>
                     <div class="form-group row" id="autreInsectesAmis">
@@ -754,7 +763,7 @@
                 }
             });
 
-            $('#courseaux,#agroforestiersobtenus,#presenceInsectesParasitesRavageurs,#recu')
+            $('#courseaux,#agroforestiersobtenus,#presenceInsectesParasitesRavageurs,#recu,#autrePesticides,#autreInsectesAmis')
                 .hide();
 
             $('.arbresagroforestiers').change(function() {
@@ -762,9 +771,14 @@
                 if (arbresagroforestiers == 'oui') {
                     $('#agroforestiersobtenus').show('slow');
                     $('#recu').show('slow');
+                    $('.recuArbreAgroForestier').show('slow');
+                    $('.recuArbreAgroForestier').attr('required', true);
                 } else {
                     $('#agroforestiersobtenus').hide('slow');
                     $('#recu').hide('slow');
+                    $('.recuArbreAgroForestier').hide('slow');
+                    $('.recuArbreAgroForestier').attr('required', false);
+                    $('.recuArbreAgroForestier').val('');
                 }
             });
             $('.presenceInsectesParasites').change(function() {
@@ -801,5 +815,62 @@
             $("#producteur").chained("#localite");
             $("#parcelle").chained("#producteur");
         });
+    </script>
+
+    <script>
+        "use strict";
+
+        (function($) {
+
+
+            $('.addUserData').on('click', function() {
+
+                let count = $("#addedField select").length;
+                let length = $("#addedField").find('.single-item').length;
+
+                let html = `
+            <div class="row single-item gy-2">
+                <div class="col-md-3">
+                    <select class="form-control selected_type" name="items[${length}][arbre]" required id='arbre-${length}')>
+                        <option disabled selected value="">@lang('Arbres agro-forestiers')</option>
+                        @foreach ($arbres as $arbre)
+                            <option value="{{ $arbre->id }}"  >{{ __($arbre->nom) }} </option>
+                        @endforeach
+                    </select>
+                </div>
+                
+                <div class="col-md-3">
+                    <div class="input-group mb-3">
+                        <input type="number" class="form-control quantity" placeholder="@lang('Nombre')"  name="items[${length}][nombre]"  required>
+                        <span class="input-group-text unit"><i class="las la-balance-scale"></i></span>
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <button class="btn btn--danger w-100 removeBtn w-100 h-45" type="button">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </div>
+                <br><hr class="panel-wide">
+            </div>`;
+                $('#addedField').append(html)
+            });
+
+            $('#addedField').on('change', '.selected_type', function(e) {
+                let unit = $(this).find('option:selected').data('unit');
+                let parent = $(this).closest('.single-item');
+                $(parent).find('.quantity').attr('disabled', false);
+                $(parent).find('.unit').html(`${unit || '<i class="las la-balance-scale"></i>'}`);
+            });
+
+            $('#addedField').on('click', '.removeBtn', function(e) {
+                let length = $("#addedField").find('.single-item').length;
+                if (length <= 1) {
+                    notify('warning', "@lang('Au moins un élément est requis')");
+                } else {
+                    $(this).closest('.single-item').remove();
+                }
+            });
+
+        })(jQuery);
     </script>
 @endpush
