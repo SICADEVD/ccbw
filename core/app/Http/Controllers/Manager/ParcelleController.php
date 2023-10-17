@@ -3,22 +3,26 @@
 namespace App\Http\Controllers\Manager;
 
 use Excel;
-use App\Constants\Status;
+use App\Models\Campagne;
 use App\Models\Localite;
 use App\Models\Parcelle;
-use App\Models\Cooperative;
+use App\Constants\Status;
 use App\Models\Producteur;
+use App\Models\Cooperative;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\LivraisonPrime;
 use App\Imports\ParcelleImport;
+use App\Models\LivraisonScelle;
 use App\Exports\ExportParcelles;
+use App\Models\Agroespecesarbre;
+use App\Models\LivraisonProduct;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 use App\Models\agroespeceabre_parcelle;
-use App\Models\Agroespecesarbre;
 use App\Models\Parcelle_type_protection;
 use App\Models\Producteur_infos_typeculture;
-use Illuminate\Support\Facades\Hash;
 
 class ParcelleController extends Controller
 {
@@ -63,8 +67,8 @@ class ParcelleController extends Controller
             return $localite->active();
         });
         $producteurs  = Producteur::with('localite')->get();
-        $abres = Agroespecesarbre::all();
-        return view('manager.parcelle.create', compact('pageTitle', 'producteurs', 'localites', 'sections', 'abres'));
+        $arbres = Agroespecesarbre::all();
+        return view('manager.parcelle.create', compact('pageTitle', 'producteurs', 'localites', 'sections', 'arbres'));
     }
 
     public function store(Request $request)
@@ -86,6 +90,8 @@ class ParcelleController extends Controller
             'superficie' => 'required',
             'nbCacaoParHectare' => 'required|numeric',
             'erosion' => 'required',
+            'items.*.arbre'     => 'required|integer',
+            'items.*.nombre'     => 'required|integer',
         ];
         $messages = [
             'section.required' => 'Le champ section est obligatoire',
@@ -185,36 +191,41 @@ class ParcelleController extends Controller
                 return back()->withNotify($notify);
             }
         }
-        
+
         $parcelle->save();
-        if($parcelle !=null ){
+        if ($parcelle != null) {
             $id = $parcelle->id;
             $datas  = $data2 = [];
-            if(($request->protection !=null)) { 
-                Parcelle_type_protection::where('parcelle_id',$id)->delete();
-                $i=0; 
-                foreach($request->protection as $data){
-                    if($data !=null)
-                    {
+            if (($request->protection != null)) {
+                Parcelle_type_protection::where('parcelle_id', $id)->delete();
+                $i = 0;
+                foreach ($request->protection as $data) {
+                    if ($data != null) {
                         $datas[] = [
-                        'parcelle_id' => $id, 
-                        'typeProtection' => $data,  
+                            'parcelle_id' => $id,
+                            'typeProtection' => $data,
+                        ];
+                    }
+                    $i++;
+                }
+            }
+            if (($request->items != null)) {
+                agroespeceabre_parcelle::where('parcelle_id', $id)->delete();
+                foreach ($request->items as $item) {
+                    
+                    $data2[] = [
+                        'parcelle_id' => $id,
+                        'nombre' => $item['nombre'],
+                        'agroespeceabre_id' => $item['arbre'],
                     ];
-                    } 
-                  $i++;
-                } 
-            }
-            if($request->abre !=null && $request->nombre !=null){
-                agroespeceabre_parcelle::where('parcelle_id',$id)->delete();
-                $data2[]= [
-                    'parcelle_id' => $id,
-                    'agroespeceabre_id' => $request->abre,
-                    'nombre' => $request->nombre,
-                ];
-            }
+                }
+            }  
+            
+            Parcelle_type_protection::insert($datas);
+            agroespeceabre_parcelle::insert($data2);
         }
-        Parcelle_type_protection::insert($datas);
-        agroespeceabre_parcelle::insert($data2);
+       
+        
         $notify[] = ['success', isset($message) ? $message : 'Le parcelle a été crée avec succès.'];
         return back()->withNotify($notify);
     }
@@ -283,12 +294,12 @@ class ParcelleController extends Controller
         });
         $producteurs  = Producteur::with('localite')->get();
         $protections = $parcelle->parcelleTypeProtections->pluck('typeProtection')->all();
-        $abres = Agroespecesarbre::all();
-        $abres_parcelle = agroespeceabre_parcelle::where('parcelle_id',$id)->get();
-        return view('manager.parcelle.edit', compact('pageTitle', 'localites', 'parcelle', 'producteurs','sections','protections','abres','abres_parcelle'));
+        $arbres = Agroespecesarbre::all();
+        $abres_parcelle = agroespeceabre_parcelle::where('parcelle_id', $id)->get();
+        return view('manager.parcelle.edit', compact('pageTitle', 'localites', 'parcelle', 'producteurs', 'sections', 'protections', 'arbres', 'abres_parcelle'));
 
-         // $protections = Parcelle_type_protection::where('parcelle_id',$id)->get();
-        
+        // $protections = Parcelle_type_protection::where('parcelle_id',$id)->get();
+
         // $protections = Parcelle_type_protection::where('parcelle_id', $id)->get()->map(function ($protection) {
         //     return $protection->typeProtection;
         // });

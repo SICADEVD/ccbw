@@ -157,19 +157,51 @@
                         </div>
                     </div>
 
-                    <div class="form-group row">
-                        <?php echo Form::label('Quels sont les arbres à Ombrages observés ?', null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-4">
-                            <select class="form-control select2-multi-select" name="abre" id="abre" required>
-                                <option value="">@lang('Selectionner une option')</option>
-                                @foreach ($abres as $abre)
-                                    <option value="{{ $abre->id }}" @selected(old('abre'))>
-                                        {{ $abre->nom }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-xs-12 col-sm-4">
-                            <?php echo Form::number('nombre', null, ['placeholder' => 'Nombre', 'class' => 'form-control']); ?>
+                    <div class="row mb-30">
+                        <div class="col-lg-12">
+                            <div class="card border--primary mt-3">
+                                <h5 class="card-header bg--primary text-white">@lang('Quels sont les arbres à Ombrages observés ?')
+                                    <button type="button" class="btn btn-sm btn-outline-light float-end addUserData"><i
+                                            class="la la-fw la-plus"></i>@lang('Ajouter un arbre d\'ombrage')
+                                    </button>
+                                </h5>
+                                <div class="card-body">
+                                    <div class="row" id="addedField">
+                                    <?php $i=0; ?>
+                                        @if(old('items'))
+                                            @foreach (old('items') as $item)
+                                            <div class="row single-item gy-2">
+                                                <div class="col-md-3">
+                                                    <select class="form-control selected_type" name="items[{{ $loop->index}}][arbre]"
+                                                    id='producteur-<?php echo $i; ?>' onchange=getParcelle(<?php echo $i; ?>) required>
+                                                        <option disabled selected value="">@lang('Abres d\'ombrages')</option>
+                                                        @foreach($arbres as $arbre)
+                                                            <option value="{{$arbre->id}}" @selected($item['arbre']==$arbre->id) >
+                                                                {{__($arbre->nom)}} 
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                               
+                                                <div class="col-md-3">
+                                                    <div class="input-group mb-3">
+                                                        <input type="number" class="form-control nombre" value="{{$item['nombre']}}"  name="items[{{ $loop->index }}][nombre]"  required>
+                                                        <span class="input-group-text unit"><i class="las la-balance-scale"></i></span>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-md-1">
+                                                    <button class="btn btn--danger w-100 removeBtn w-100 h-45" type="button">
+                                                        <i class="fa fa-times"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            @endforeach
+                                        @endif
+                                    </div>
+
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -328,5 +360,64 @@
             });
 
         });
+
     </script>
+    <script>
+    "use strict"; 
+    
+    (function ($) {
+
+        
+        $('.addUserData').on('click', function () {
+            
+            let count = $("#addedField select").length;
+            let length=$("#addedField").find('.single-item').length; 
+               
+            let html = `
+            <div class="row single-item gy-2">
+                <div class="col-md-3">
+                    <select class="form-control selected_type" name="items[${length}][arbre]" required id='arbre-${length}')>
+                        <option disabled selected value="">@lang('Arbres d\'ombrages')</option>
+                        @foreach($arbres as $arbre)
+                            <option value="{{$arbre->id}}"  >{{__($arbre->nom)}} </option>
+                        @endforeach
+                    </select>
+                </div>
+                
+                <div class="col-md-3">
+                    <div class="input-group mb-3">
+                        <input type="number" class="form-control quantity" placeholder="@lang('Nombre')"  name="items[${length}][nombre]"  required>
+                        <span class="input-group-text unit"><i class="las la-balance-scale"></i></span>
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <button class="btn btn--danger w-100 removeBtn w-100 h-45" type="button">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </div>
+                <br><hr class="panel-wide">
+            </div>`;
+            $('#addedField').append(html)
+        });
+
+        $('#addedField').on('change', '.selected_type', function (e) {
+            let unit = $(this).find('option:selected').data('unit');
+            let parent = $(this).closest('.single-item');
+            $(parent).find('.quantity').attr('disabled', false);
+            $(parent).find('.unit').html(`${unit || '<i class="las la-balance-scale"></i>'}`);
+        });
+
+        $('#addedField').on('click', '.removeBtn', function (e) {
+            let length=$("#addedField").find('.single-item').length;
+            if(length <= 1){
+                notify('warning',"@lang('Au moins un élément est requis')");
+            }else{
+                $(this).closest('.single-item').remove();
+            }
+        });
+
+    })(jQuery);
+    
+</script>
 @endpush
+
