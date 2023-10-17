@@ -1,6 +1,7 @@
 @extends('manager.layouts.app')
 @section('panel')
 @section('filter-section')
+<?php use Carbon\Carbon; ?>
 <div id="filter-bloc">
 <x-filters.filter-box>
     <!-- CLIENT START -->
@@ -64,7 +65,7 @@
             <label class="f-14 text-dark-grey mb-12 text-capitalize" for="usr">Département</label>
             <div class="select-filter mb-4">
                 <div class="select-others">
-                    <select class="form-control select-picker" name="department" data-container="body"
+                    <select class="form-control" name="department" data-container="body"
                             id="department">
                         <option value="all">Tous</option>
                         @foreach ($teams as $department)
@@ -81,7 +82,7 @@
             <label class="f-14 text-dark-grey mb-12 text-capitalize" for="usr">Statut</label>
             <div class="select-filter mb-4">
                 <div class="select-others">
-                    <select class="form-control select-picker" name="status" id="status" data-container="body">
+                    <select class="form-control" name="status" id="status" data-container="body">
                         <option value="all">Tous</option>
                         <option selected value="active">Activé</option>
                         <option value="deactive">Désactivé</option> 
@@ -94,7 +95,7 @@
             <label class="f-14 text-dark-grey mb-12 text-capitalize" for="usr">Genre</label>
             <div class="select-filter mb-4">
                 <div class="select-others">
-                    <select class="form-control select-picker" name="gender" id="gender" data-container="body">
+                    <select class="form-control" name="gender" id="gender" data-container="body">
                         <option value="all">Tous</option>
                         <option value="homme">Homme</option>
                         <option value="femme">Femme</option> 
@@ -129,23 +130,7 @@
                        Importer
                     </x-forms.link-secondary>
                
-            </div>
-
-            <x-datatable.actions>
-                <div class="select-status mr-3 pl-3">
-                    <select name="action_type" class="form-control select-picker" id="quick-action-type" disabled>
-                        <option value="">@lang('app.selectAction')</option>
-                        <option value="change-status">@lang('modules.tasks.changeStatus')</option>
-                        <option value="delete">@lang('app.delete')</option>
-                    </select>
-                </div>
-                <div class="select-status mr-3 d-none quick-action-field" id="change-status-action">
-                    <select name="status" class="form-control select-picker">
-                        <option value="deactive">@lang('app.inactive')</option>
-                        <option value="active">@lang('app.active')</option>
-                    </select>
-                </div>
-            </x-datatable.actions>
+            </div> 
 
         </div>
         <!-- Add Task Export Buttons End -->
@@ -176,8 +161,8 @@
                                     <td>{{ $items->employee_matricule }}</td>
 
                                     <td>{{ $items->user->email }}</td>
-                                    <td>{{ $items->user->mobile }}</td>
-                                    <td>{{ $items->joining_date }}</td>
+                                    <td>{{  $items->user->mobile }}</td>
+                                    <td>{{ Carbon::parse($items->joining_date)->format('d-m-Y') }}</td>
                                     <td>{{ $items->user->user_type }}</td>
                                     <td class="text-right">
                                         <div class="dropdown dropdown-action">
@@ -226,13 +211,12 @@
                             </div>
                     <div class="col-lg-6 col-md-6">
                         <x-label for="Nom_Employe"></x-label>
-                        <x-input name="name" required placeholder="e.g Kouame"></x-input>
-                                 
+                        <x-input name="nom" required placeholder="e.g Kouame"></x-input> 
                             </div>
                             <div class="col-lg-6 col-md-6">
-                                <x-forms.text fieldId="prenom" :fieldLabel="__('Prenom Employe')"
-                                    fieldName="prenom" fieldRequired="true" :fieldPlaceholder="__('e.g Gildas')">
-                                </x-forms.text>
+                                <x-label for="Prenom Employe"></x-label>
+                                <x-input name="prenom" placeholder="e.g Gildas" required></x-input>
+                                
                             </div>
                             <div class="col-lg-6 col-md-6">
                                 <x-forms.text fieldId="email" :fieldLabel="__('Email Employe')"
@@ -240,6 +224,7 @@
                                 </x-forms.text>
                             </div>
                             <div class="col-lg-4 col-md-6">
+                          
                                 <x-forms.datepicker fieldId="date_of_birth" :fieldLabel="__('Date de Naissance')"
                                     fieldName="date_of_birth" :fieldPlaceholder="__('Select Date')" />
                             </div>
@@ -248,7 +233,7 @@
                                     :fieldLabel="__('Désignation')" fieldRequired="true">
                                 </x-forms.label>
                                 <x-forms.input-group>
-                                    <select class="form-control select-picker" name="designation"
+                                    <select class="form-control" name="designation"
                                         id="employee_designation" data-live-search="true">
                                         <option value="">--</option>
                                         @foreach ($designations as $designation)
@@ -262,7 +247,7 @@
                                     :fieldLabel="__('Département')" fieldRequired="true">
                                 </x-forms.label>
                                 <x-forms.input-group>
-                                    <select class="form-control select-picker" name="department"
+                                    <select class="form-control" name="department"
                                         id="employee_department" data-live-search="true">
                                         <option value="">--</option>
                                         @foreach ($teams as $team)
@@ -324,13 +309,18 @@
                             fieldName="joining_date" :fieldPlaceholder="__('Select Date')" fieldRequired="true" />
                     </div>
                     <div class="col-lg-6 col-md-6">
-                        <x-forms.select fieldId="reporting_to" :fieldLabel="__('Superieur(e) Hierachique')"
-                            fieldName="reporting_to" :fieldPlaceholder="__('placeholders.date')" search="true">
-                            <option value="">--</option>
-                            @foreach ($users as $item)
-                                <x-user-option :user="$item" />
-                            @endforeach
-                        </x-forms.select>
+                    
+                                <x-label for="Superieur(e) Hierachique"></x-label>
+                                <x-forms.input-group>
+                                    <select class="form-control" name="reporting_to"
+                                        id="reporting_to" data-live-search="true">
+                                        <option value="">--</option>
+                                        @foreach ($users as $item)
+                                            <x-user-option :user="$item" />
+                                        @endforeach 
+                                    </select>
+                                </x-forms.input-group>
+                         
                     </div>     
                     <div class="col-md-12">
                         <div class="form-group my-3">
@@ -400,81 +390,3 @@
     
     
 @endsection 
-@push('script')
-    <script>
-        $("input:checkbox").on('click', function()
-        {
-            var $box = $(this);
-            if ($box.is(":checked"))
-            {
-                var group = "input:checkbox[class='" + $box.attr("class") + "']";
-                $(group).prop("checked", false);
-                $box.prop("checked", true);
-            }
-            else
-            {
-                $box.prop("checked", false);
-            }
-        });
-        $('#country').change(function(){
-            var phonecode = $(this).find(':selected').data('phonecode');
-            console.log(phonecode);
-            $('#country_phonecode').val(phonecode);
-            $('.select-picker').selectpicker('refresh'); 
-        }); 
-        // select auto id and email
-        $('#name').on('change',function()
-        {
-            $('#employee_id').val($(this).find(':selected').data('employee_id'));
-            $('#email').val($(this).find(':selected').data('email'));
-        });
-        $('#marital_status').change(function(){
-            var value = $(this).val();
-            if(value == 'marie') {
-                $('.marriage_date').removeClass('d-none');
-            }
-            else {
-                $('.marriage_date').addClass('d-none');
-            }
-        });
-        $('#employment_type').change(function(){
-            var value = $(this).val();
-            if(value == 'contractuel') {
-                $('.contract-date').removeClass('d-none');
-            }
-            else {
-                $('.contract-date').addClass('d-none');
-            }
-
-            if(value == 'interimaire') {
-                $('.internship-date').removeClass('d-none');
-            }
-            else {
-                $('.internship-date').addClass('d-none');
-            }
-        });
-    //     $('#date_of_birth,#marriage_anniversary_date,#contract_end_date,#internship_end_date').datepicker({    
-    //  format: 'dd-mm-yyyy'});  
-    datepicker('#date_of_birth', {
-            position: 'bl',
-            dateFormat: 'dd-mm-yyyy', 
-            maxDate: new Date(), 
-        });
-        datepicker('#marriage_anniversary_date', {
-            position: 'bl',
-            maxDate: new Date(), 
-        });
-        datepicker('#contract_end_date', {
-            position: 'bl',
-            maxDate: new Date(), 
-        });
-        datepicker('#internship_end_date', {
-            position: 'bl',
-            maxDate: new Date(), 
-        });
-        datepicker('#joining_date', {
-            position: 'bl',
-            maxDate: new Date(), 
-        });
-    </script>
-    @endpush

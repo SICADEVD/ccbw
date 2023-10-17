@@ -15811,11 +15811,7 @@ input[type=button].btn-block,input[type=reset].btn-block,input[type=submit].btn-
     background-color:#e9ecef;color:#16181b;text-decoration:none
     
 }
-.dropdown-item.active,.dropdown-item:active
-    {
-    background-color:#1d82f5;color:#fff;text-decoration:none
-    
-}
+ 
 .dropdown-item.disabled,.dropdown-item:disabled
     {
     background-color:transparent;color:#adb5bd;pointer-events:none

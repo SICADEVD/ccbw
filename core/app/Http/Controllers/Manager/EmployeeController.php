@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers\Manager;
+use Carbon\Carbon;
 use App\Models\User;
 use App\Helper\Files;
 use App\Models\Countrie;
@@ -7,8 +8,8 @@ use App\Models\Employee;
 use App\Models\Department;
 use App\Models\Designation;
 use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 
+use Illuminate\Http\Request;
 use App\Models\EmployeeDetail;
 use App\Models\module_permission;
 use Illuminate\Support\Facades\DB;
@@ -63,22 +64,22 @@ class EmployeeController extends Controller
             $employe = new EmployeeDetail();   
         } 
         $manager        = auth()->user();
- 
-        $employe->date_of_birth    = $request->date_of_birth; 
+         
+        $employe->date_of_birth    = Carbon::parse($request->date_of_birth)->format('Y-m-d'); 
         $employe->designation_id  = $request->designation; 
         $employe->department_id  = $request->department; 
         $employe->country_id    = $request->country;
         $employe->employee_matricule = $request->matricule;
         $employe->country_phonecode = $request->country_phonecode;  
-        $employe->joining_date     = $request->joining_date;
+        $employe->joining_date     =  Carbon::parse($request->joining_date)->format('Y-m-d');
         $employe->reporting_to  = $request->reporting_to;
         $employe->address    = $request->address;
         $employe->about_me = $request->about_me; 
         $employe->employment_type    = $request->employment_type;
-        $employe->internship_end_date     = $request->internship_end_date; 
-        $employe->contract_end_date     = $request->contract_end_date; 
+        $employe->internship_end_date     =  Carbon::parse($request->internship_end_date)->format('Y-m-d'); 
+        $employe->contract_end_date     =  Carbon::parse($request->contract_end_date)->format('Y-m-d'); 
         $employe->marital_status     = $request->marital_status; 
-        $employe->marriage_anniversary_date     = $request->marriage_anniversary_date; 
+        $employe->marriage_anniversary_date     =  Carbon::parse($request->marriage_anniversary_date)->format('Y-m-d'); 
         
         $staff = new User();
         $staff->cooperative_id = $manager->cooperative_id;
