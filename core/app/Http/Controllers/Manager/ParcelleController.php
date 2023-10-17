@@ -191,7 +191,7 @@ class ParcelleController extends Controller
                 return back()->withNotify($notify);
             }
         }
-
+        
         $parcelle->save();
         if ($parcelle != null) {
             $id = $parcelle->id;

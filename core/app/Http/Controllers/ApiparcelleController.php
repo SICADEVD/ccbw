@@ -60,6 +60,9 @@ class ApiparcelleController extends Controller
       'existePente' => 'required',
       'superficie' => 'required',
       'nbCacaoParHectare' => 'required|numeric',
+      'erosion' => 'required',
+      'items.*.arbre'     => 'required|integer',
+      'items.*.nombre'     => 'required|integer',
     ];
     $messages = [
       'section.required' => 'Le champ section est obligatoire',
@@ -183,13 +186,16 @@ class ApiparcelleController extends Controller
           $i++;
         }
       }
-      if ($request->abre != null && $request->nombre != null) {
-        agroespeceabre_parcelle::where('parcelle_id',$id)->delete();
-        $data2[] = [
-          'parcelle_id' => $id,
-          'agroespeceabre_id' => $request->abre,
-          'nombre' => $request->nombre,
-        ];
+      if (($request->items != null)) {
+        agroespeceabre_parcelle::where('parcelle_id', $id)->delete();
+        foreach ($request->items as $item) {
+
+          $data2[] = [
+            'parcelle_id' => $id,
+            'nombre' => $item['nombre'],
+            'agroespeceabre_id' => $item['arbre'],
+          ];
+        }
       }
     }
     Parcelle_type_protection::insert($datas);
