@@ -165,44 +165,44 @@
                                 <div class="card-body">
                                     <div class="row" id="addedField">
                                         <?php $i = 0; ?>
-                                        @if (old('items'))
-                                            @foreach (old('items') as $item)
-                                                <div class="row single-item gy-2">
-                                                    <div class="col-md-3">
-                                                        <select class="form-control selected_type"
-                                                            name="items[{{ $loop->index }}][arbre]"
-                                                            id='producteur-<?php echo $i; ?>'
-                                                            onchange=getParcelle(<?php echo $i; ?>) required>
-                                                            <option disabled selected value="">@lang('Abres d\'ombrages')
+                                        @foreach ($agroespeceabreParcelle as $item)
+                                            <div class="row single-item gy-2">
+                                                <div class="col-md-3">
+                                                    <select class="form-control selected_type"
+                                                        name="items[{{ $loop->index }}][arbre]"
+                                                        id='producteur-<?php echo $i; ?>'
+                                                        onchange=getParcelle(<?php echo $i; ?>) required>
+                                                        <option disabled selected value="">@lang('Abres d\'ombrages')
+                                                        </option>
+                                                        @foreach ($arbres as $arbre)
+                                                            <option value="{{ $arbre->id }}"
+                                                                @selected($item->agroespeceabre_id == $arbre->id)>
+                                                                {{ __($arbre->nom) }}
                                                             </option>
-                                                            @foreach ($arbres as $arbre)
-                                                                <option value="{{ $arbre->id }}"
-                                                                    @selected($item->agroespeceabre->id == $arbre->id)>
-                                                                    {{ __($arbre->nom) }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
 
-                                                    <div class="col-md-3">
-                                                        <div class="input-group mb-3">
-                                                            <input type="number" class="form-control nombre"
-                                                                value="{{ $item['nombre'] }}"
-                                                                name="items[{{ $loop->index }}][nombre]" required>
-                                                            <span class="input-group-text unit"><i
-                                                                    class="las la-balance-scale"></i></span>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-md-1">
-                                                        <button class="btn btn--danger w-100 removeBtn w-100 h-45"
-                                                            type="button">
-                                                            <i class="fa fa-times"></i>
-                                                        </button>
+                                                <div class="col-md-3">
+                                                    <div class="input-group mb-3">
+                                                        <input type="number" class="form-control nombre"
+                                                            value="{{ $item['nombre'] }}"
+                                                            name="items[{{ $loop->index }}][nombre]" required>
+                                                        <span class="input-group-text unit"><i
+                                                                class="las la-balance-scale"></i></span>
                                                     </div>
                                                 </div>
-                                            @endforeach
-                                        @endif
+
+                                                <div class="col-md-1">
+                                                    <button class="btn btn--danger w-100 removeBtn w-100 h-45"
+                                                        type="button">
+                                                        <i class="fa fa-times"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <?php $i++;?>
+                                        @endforeach
+                                        
                                     </div>
 
                                 </div>
