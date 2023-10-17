@@ -8,10 +8,8 @@
         <p class="mb-0 pr-2 f-14 text-dark-grey d-flex align-items-center">Employé(e)</p>
         <div class="select-status">
             <select class="form-control select-picker" name="employee" id="employee" data-live-search="true"
-                    data-size="8">
-                @if ($users->count() > 1)
-                    <option value="all">Tous</option>
-                @endif
+                    data-size="8"> 
+                    <option value="all">Tous</option> 
                 @foreach ($users as $employee)
                     <x-user-option :user="$employee"/>
                 @endforeach
@@ -84,7 +82,7 @@
             <div class="select-filter mb-4">
                 <div class="select-others">
                     <select class="form-control select-picker" name="status" id="status" data-container="body">
-                        <option value="all">@lang('app.all')</option>
+                        <option value="all">Tous</option>
                         <option selected value="active">Activé</option>
                         <option value="deactive">Désactivé</option> 
                     </select>
@@ -217,19 +215,19 @@
                      
                         </form> -->
                         <x-form id="save-data-form" :action="route('manager.hr.all.employee.save')">
-        <div class="add-client bg-white rounded">
+        <div class="add-client">
             <div class="row p-20">
                 <div class="col-lg-9">
                     <div class="row">
                         <div class="col-lg-6 col-md-6">
-                                <x-forms.text fieldId="matricule" :fieldLabel="__('Matricule Employe')"
-                                    fieldName="matricule" fieldRequired="true" :fieldPlaceholder="__('e.g CXV-163')">
-                                </x-forms.text>
+                            <x-label for="Matricule_Employe"></x-label>
+                                <x-input name="matricule" required placeholder="e.g CXV-163">
+                                </x-input>
                             </div>
                     <div class="col-lg-6 col-md-6">
-                                <x-forms.text fieldId="nom" :fieldLabel="__('Nom Employe')"
-                                    fieldName="nom" fieldRequired="true" :fieldPlaceholder="__('e.g Kouame')">
-                                </x-forms.text>
+                        <x-label for="Nom_Employe"></x-label>
+                        <x-input name="name" required placeholder="e.g Kouame"></x-input>
+                                 
                             </div>
                             <div class="col-lg-6 col-md-6">
                                 <x-forms.text fieldId="prenom" :fieldLabel="__('Prenom Employe')"

@@ -1,7 +1,7 @@
 @php
 $content = "<div class='d-flex align-items-center text-left'>
     <div class='taskEmployeeImg border-0 d-inline-block mr-1'>
-        <img class='rounded-circle' src='".$user->image_url."'>
+        <img class='rounded-circle' src='".URL::to("/assets/images/". $user->avatar)."'>
     </div>
     <div>". htmlentities($user->userBadge());
 
@@ -12,7 +12,7 @@ $content = "<div class='d-flex align-items-center text-left'>
         $content.="</div>";
 
     if($agent){
-    $content .= ' ['.$user->email.'] ';
+    $content .= ' ['.$user->user->email.'] ';
     }
 
     if($pill){
@@ -22,5 +22,5 @@ $content = "<div class='d-flex align-items-center text-left'>
     @endphp
 
     <option {{ !$selected ?: 'selected' }} data-content="{!! $content !!}" value="{{ $userID ?? $user->id }}">
-        {{ $user->name }}
+        {{ $user->user->lastname }} {{ $user->user->firstname }}
     </option>
