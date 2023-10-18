@@ -28534,8 +28534,7 @@ button.disabled,button:disabled
     box-shadow:0 1px 0 0 #e8eef3;position:sticky;top:63px;width:100%;z-index:1
 }
 #filter-bloc{ 
-    margin-left: 250px;
-    position: sticky;
+    margin-left: 250px; 
     padding-left: 10px;
     padding-right: 10px;
     background: #FFF;

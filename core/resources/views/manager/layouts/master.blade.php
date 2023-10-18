@@ -141,6 +141,7 @@
     <script>
         $(document).ready(function() {
             // $('#save-data-form select').select2();
+            $('.select-picker').selectpicker('refresh');
             // Basic
             $('.dropify').dropify();
 

@@ -154,7 +154,13 @@
                                 <tr>
                                     <td>
                                         <h2 class="table-avatar">
-                                            <a href="{{ url('employee/profile/'.$items->user_id) }}" class="avatar"><img alt="" src="{{ URL::to('/assets/images/'. $items->avatar) }}"></a>
+                                            <a href="{{ url('employee/profile/'.$items->user_id) }}" class="avatar">
+                                            @if($items->user->image)
+                                                <img alt="" src="{{ url('core/storage/app/public/'. $items->user->image) }}">
+                                            @else
+                                            <img alt="" src="{{ url('assets/images/avatar.png') }}">
+                                            @endif
+                                            </a>
                                             <a href="{{ url('employee/profile/'.$items->user_id) }}">{{ $items->user->lastname }}<span>{{ $items->user->firstname }}</span></a>
                                         </h2>
                                     </td> 
@@ -233,7 +239,7 @@
                                     :fieldLabel="__('Désignation')" fieldRequired="true">
                                 </x-forms.label>
                                 <x-forms.input-group>
-                                    <select class="form-control" name="designation"
+                                    <select class="form-control select-picker" name="designation"
                                         id="employee_designation" data-live-search="true">
                                         <option value="">--</option>
                                         @foreach ($designations as $designation)
@@ -247,7 +253,7 @@
                                     :fieldLabel="__('Département')" fieldRequired="true">
                                 </x-forms.label>
                                 <x-forms.input-group>
-                                    <select class="form-control" name="department"
+                                    <select class="form-control select-picker" name="department"
                                         id="employee_department" data-live-search="true">
                                         <option value="">--</option>
                                         @foreach ($teams as $team)
@@ -312,7 +318,7 @@
                     
                                 <x-label for="Superieur(e) Hierachique"></x-label>
                                 <x-forms.input-group>
-                                    <select class="form-control" name="reporting_to"
+                                    <select class="form-control select-picker" name="reporting_to"
                                         id="reporting_to" data-live-search="true">
                                         <option value="">--</option>
                                         @foreach ($users as $item)
