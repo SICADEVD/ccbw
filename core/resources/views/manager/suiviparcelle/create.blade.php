@@ -242,7 +242,7 @@
                         <?php echo Form::label(__("Biofertilisant/Bio stimulant Utilisé l'année dernière"), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
                             <?php echo Form::label(__('Quantité utilisée'), null, ['class' => 'control-label']); ?>
-                            <?php echo Form::number('qteBiofertilisant', null, ['class' => 'form-control']); ?>
+                            <?php echo Form::number('qteBiofertilisant', null, ['class' => 'form-control','min'=>'0']); ?>
 
 
                             <?php echo Form::label(__('Unité'), null, ['class' => 'control-label']); ?>
@@ -254,7 +254,7 @@
                         <?php echo Form::label(__("Engrais organique préfabriqué Utilisé l'année dernière"), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
                             <?php echo Form::label(__('Quantité utilisée'), null, ['class' => 'control-label']); ?>
-                            <?php echo Form::number('qteEngraisOrganique', null, ['class' => 'form-control']); ?>
+                            <?php echo Form::number('qteEngraisOrganique', null, ['class' => 'form-control','min'=>'0']); ?>
 
 
                             <?php echo Form::label(__('Unité'), null, ['class' => 'control-label']); ?>
@@ -279,7 +279,7 @@
                     <div class="form-group row" id="autrePesticides">
                         <?php echo Form::label(__('Autre Pesticide'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::text('autrePesticide', null, ['id'=>'autrePesticide','placeholder' => 'Autre...', 'class' => 'form-control autrePesticide']); ?>
+                            <?php echo Form::text('autrePesticide', null, ['id' => 'autrePesticide', 'placeholder' => 'Autre...', 'class' => 'form-control autrePesticide']); ?>
                         </div>
                     </div>
 
@@ -299,50 +299,6 @@
 
                     <hr class="panel-wide">
 
-                    <div class="form-group row">
-                        <?php echo Form::label(__('Présence de Bio-Agresseur'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('presenceBioAgresseur', ['Assez' => __('assez'), 'Moins' => __('moins')], null, ['class' => 'form-control presenceBioAgresseur']); ?>
-                        </div>
-                    </div>
-
-
-                    <div class="form-group row">
-                        <?php echo Form::label(__('Présence d’Insectes Ravageurs'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('presenceInsectesRavageurs', ['Assez' => __('assez'), 'Moins' => __('moins')], null, ['class' => 'form-control presenceInsectesRavageurs']); ?>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <?php echo Form::label(__('Présence de Fourmis Rouge'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('presenceFourmisRouge', ['Assez' => __('assez'), 'Moins' => __('moins')], null, ['class' => 'form-control presenceFourmisRouge']); ?>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <?php echo Form::label(__('Présence d’Araignée'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('presenceAraignee', ['Assez' => __('assez'), 'Moins' => __('moins')], null, ['class' => 'form-control presenceAraignee']); ?>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <?php echo Form::label(__('Présence de Ver de Terre'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('presenceVerTerre', ['Assez' => __('assez'), 'Moins' => __('moins')], null, ['class' => 'form-control presenceVerTerre']); ?>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <?php echo Form::label(__('Présence de Mente Religieuse'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('presenceMenteReligieuse', ['Assez' => __('assez'), 'Moins' => __('moins')], null, ['class' => 'form-control presenceMenteReligieuse']); ?>
-                        </div>
-                    </div>
-
-                    <hr class="panel-wide">
                     <div class="form-group row">
                         <?php echo Form::label(__('Présence d’insectes parasites ou ravageurs ?'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
@@ -383,7 +339,7 @@
                                             <div class="col-xs-12 col-sm-6">
                                                 <div class="form-group row">
                                                     {{ Form::label(__('Quantite'), null, ['class' => '']) }}
-                                                    <?php echo Form::select('nombreinsectesParasites[]', ['Assez' => __('assez'), 'Moins' => __('moins')], null, ['class' => 'form-control nombreinsectesParasites', 'id' => 'nombreinsectesParasites-1']); ?>
+                                                    <?php echo Form::select('nombreinsectesParasites[]', ['Assez' => __('Assez'), 'Moins' => __('Moins')], null, ['class' => 'form-control nombreinsectesParasites', 'id' => 'nombreinsectesParasites-1']); ?>
                                                 </div>
                                             </div>
 
@@ -403,8 +359,105 @@
                             </table>
                         </div>
                     </div>
+                    {{-- présence de autre ravageur fin --}}
 
+                    <div class="form-group row">
+                        <?php echo Form::label(__('Présence de Bio-Agresseur'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-12 col-sm-8">
+                            <?php echo Form::select('presenceBioAgresseur', ['Assez' => __('assez'), 'Moins' => __('moins')], null, ['class' => 'form-control presenceBioAgresseur']); ?>
+                        </div>
+                    </div>
 
+                    <div class="form-group row">
+                        <?php echo Form::label(__('Présence d’Insectes Ravageurs'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-12 col-sm-8">
+                            <?php echo Form::select('presenceInsectesRavageurs', ['Assez' => __('assez'), 'Moins' => __('moins')], null, ['class' => 'form-control presenceInsectesRavageurs']); ?>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <?php echo Form::label(__('Présence de Fourmis Rouge'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-12 col-sm-8">
+                            <?php echo Form::select('presenceFourmisRouge', ['Assez' => __('assez'), 'Moins' => __('moins')], null, ['class' => 'form-control presenceFourmisRouge']); ?>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <?php echo Form::label(__('Présence d’Araignée'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-12 col-sm-8">
+                            <?php echo Form::select('presenceAraignee', ['Assez' => __('assez'), 'Moins' => __('moins')], null, ['class' => 'form-control presenceAraignee']); ?>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <?php echo Form::label(__('Présence de Ver de Terre'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-12 col-sm-8">
+                            <?php echo Form::select('presenceVerTerre', ['Assez' => __('assez'), 'Moins' => __('moins')], null, ['class' => 'form-control presenceVerTerre']); ?>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <?php echo Form::label(__('Présence de Mente Religieuse'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-12 col-sm-8">
+                            <?php echo Form::select('presenceMenteReligieuse', ['Assez' => __('assez'), 'Moins' => __('moins')], null, ['class' => 'form-control presenceMenteReligieuse']); ?>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <?php echo Form::label(__('Présence d’autres types d’insecte amis ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-12 col-sm-8">
+                            <?php echo Form::select('presenceAutreTypeInsecteAmi', ['non' => __('non'), 'oui' => __('oui')], null, ['class' => 'form-control presenceAutreTypeInsecteAmi']); ?>
+                        </div>
+                    </div>
+                    {{-- presenceAutreTypeInsecteAmi --}}
+                    <div class="form-group row" id="autreInsectesAmis">
+
+                        <?php echo Form::label(__('Autres insectes amis'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-12 col-sm-8">
+                            <table class="table table-striped table-bordered">
+                                <tbody id="insectesAmis_area">
+
+                                    <tr>
+                                        <td class="row">
+                                            <div class="col-xs-12 col-sm-12 bg-success">
+                                                <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Insectes amis')
+                                                </badge>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6">
+                                                <div class="form-group row">
+                                                    {{ Form::label(__('Nom'), null, ['class' => '']) }}
+                                                    <input type="text" name="insectesAmis[]"
+                                                        placeholder="Autre Insecte ami" id="insectesAmis-1"
+                                                        class="form-control">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xs-12 col-sm-6">
+                                                <div class="form-group row">
+                                                    {{ Form::label(__('Quantite'), null, ['class' => '']) }}
+                                                    <?php echo Form::select('nombreinsectesAmis[]', ['Assez' => __('Assez'), 'Moins' => __('Moins')], null, ['class' => 'form-control nombreinsectesAmis', 'id' => 'nombreinsectesAmis-1']); ?>
+                                                </div>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                                <tfoot style="background: #e3e3e3;">
+                                    <tr>
+
+                                        <td colspan="3">
+                                            <button id="addRowinsectesAmis" type="button"
+                                                class="btn btn-success btn-sm"><i class="fa fa-plus"></i></button>
+                                        </td>
+                                    <tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    {{-- presenceAutreTypeInsecteAmi fin --}}
+
+                    <hr class="panel-wide">
                     <div class="form-group row">
                         <?php echo Form::label('Les insecticides utilisés sur la parcelle', null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
@@ -447,7 +500,7 @@
                                             <div class="col-xs-12 col-sm-6">
                                                 <div class="form-group row">
                                                     {{ Form::label(__('Unité'), null, ['class' => '']) }}
-                                                    <?php echo Form::select('', ['ml' => __('ml'), 'L' => __('L'), 'g' => __('g'), 'Kg' => __('Kg')], null, ['class' => 'form-control']); ?>
+                                                    <?php echo Form::select('uniteFongicide', ['ml' => __('ml'), 'L' => __('L'), 'g' => __('g'), 'Kg' => __('Kg')], null, ['class' => 'form-control']); ?>
                                                 </div>
                                             </div>
 
@@ -468,7 +521,7 @@
                                             <div class="col-xs-12 col-sm-6">
                                                 <div class="form-group row">
                                                     {{ Form::label(__('Unité'), null, ['class' => '']) }}
-                                                    <?php echo Form::select('', ['ml' => __('ml'), 'L' => __('L'), 'g' => __('g'), 'Kg' => __('Kg')], null, ['class' => 'form-control']); ?>
+                                                    <?php echo Form::select('uniteHerbicide', ['ml' => __('ml'), 'L' => __('L'), 'g' => __('g'), 'Kg' => __('Kg')], null, ['class' => 'form-control']); ?>
                                                 </div>
                                             </div>
 
@@ -497,7 +550,7 @@
                     <div class="form-group row">
                         <?php echo Form::label(__('Présence d’Araignée'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('presenceAraigne', ['Assez' => __('assez'), 'Moins' => __('moins')], null, ['class' => 'form-control']); ?>
+                            <?php echo Form::select('presenceAraignee', ['Assez' => __('assez'), 'Moins' => __('moins')], null, ['class' => 'form-control']); ?>
                         </div>
                     </div>
 
@@ -511,56 +564,6 @@
                         <?php echo Form::label(__('Présence de Mente  Religieuse'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
                             <?php echo Form::select('presenceMenteReligieuse', ['Assez' => __('assez'), 'Moins' => __('moins')], null, ['class' => 'form-control']); ?>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <?php echo Form::label(__('Présence d’autres types d’insecte amis ?'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('presenceAutreTypeInsecteAmi', ['non' => __('non'), 'oui' => __('oui')], null, ['class' => 'form-control ']); ?>
-                        </div>
-                    </div>
-                    <div class="form-group row" id="autreInsectesAmis">
-                        <?php echo Form::label(__('Autres insectes amis'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <table class="table table-striped table-bordered">
-                                <tbody id="insectesParasites_area">
-
-                                    <tr>
-                                        <td class="row">
-                                            <div class="col-xs-12 col-sm-12 bg-success">
-                                                <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Insectes amis')
-                                                </badge>
-                                            </div>
-                                            <div class="col-xs-12 col-sm-6">
-                                                <div class="form-group row">
-                                                    {{ Form::label(__('Nom'), null, ['class' => '']) }}
-                                                    <input type="text" name="insectesParasites[]"
-                                                        placeholder="Autre Parasite ou Ravageur" id="insectesParasites-1"
-                                                        class="form-control">
-                                                </div>
-                                            </div>
-
-                                            <div class="col-xs-12 col-sm-6">
-                                                <div class="form-group row">
-                                                    {{ Form::label(__('Quantite'), null, ['class' => '']) }}
-                                                    <?php echo Form::select('nombreinsectesParasites[]', ['Assez' => __('assez'), 'Moins' => __('moins')], null, ['class' => 'form-control nombreinsectesParasites', 'id' => 'nombreinsectesParasites-1']); ?>
-                                                </div>
-                                            </div>
-
-                                        </td>
-                                    </tr>
-
-                                </tbody>
-                                <tfoot style="background: #e3e3e3;">
-                                    <tr>
-
-                                        <td colspan="3">
-                                            <button id="addRowinsectesParasites" type="button"
-                                                class="btn btn-success btn-sm"><i class="fa fa-plus"></i></button>
-                                        </td>
-                                    <tr>
-                                </tfoot>
-                            </table>
                         </div>
                     </div>
                     <hr class="panel-wide">
@@ -637,38 +640,6 @@
     <script type="text/javascript">
         $(document).ready(function() {
 
-            var productCount = $("#product_area tr").length + 1;
-            $(document).on('click', '#addRow', function() {
-
-                //---> Start create table tr
-                var html_table = '<tr>';
-                html_table +=
-                    '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm">Information Arbre à Ombrage ' +
-                    productCount +
-                    '</badge></div><div class="col-xs-12 col-sm-6"><div class="form-group"><label for="varietesOmbrage" class="">Variété</label><input placeholder="Variété arbre..." class="form-control" id="varietesOmbrage-' +
-                    productCount +
-                    '" name="varietesOmbrage[]" type="text"></div></div><div class="col-xs-12 col-sm-6"><div class="form-group"><label for="nombreOmbrage" class="">Nombre</label><input type="number" name="nombreOmbrage[]" placeholder="Nombre d\'arbre" min="1" id="nombreOmbrage-' +
-                    productCount +
-                    '" class="form-control " value=""></div></div><div class="col-xs-12 col-sm-8"><button type="button" id="' +
-                    productCount +
-                    '" class="removeRow btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></div></td>';
-
-                html_table += '</tr>';
-                //---> End create table tr
-
-                productCount = parseInt(productCount) + 1;
-                $('#product_area').append(html_table);
-
-            });
-
-            $(document).on('click', '.removeRow', function() {
-                var row_id = $(this).attr('id');
-                if (row_id == $("#product_area tr").length) {
-                    $(this).parents('tr').remove();
-                    productCount = parseInt(productCount) - 1;
-                }
-            });
-
             var agroforestiersCount = $("#agroforestiers_area tr").length + 1;
             $(document).on('click', '#addRowagroforestiers', function() {
 
@@ -700,6 +671,40 @@
                     agroforestiersCount = parseInt(agroforestiersCount) - 1;
                 }
             });
+            
+            //insectes amis
+            var insectesAmisCount = $("#insectesAmis_area tr").length + 1;
+            $(document).on('click', '#addRowinsectesAmis', function() {
+
+                //---> Start create table tr
+                var html_table = '<tr>';
+                html_table +=
+                    '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm">Insectes amis ' +
+                    insectesAmisCount +
+                    '</badge></div><div class="col-xs-12 col-sm-6"><div class="form-group"><label for="insectesAmis" class="">Nom</label><input placeholder="Insecte amis..." class="form-control" id="insectesAmis-' +
+                    insectesAmisCount +
+                    '" name="insectesAmis[]" type="text"></div></div><div class="col-xs-12 col-sm-6"><div class="form-group"><label for="nombreinsectesAmis" class="">Quantite</label><select name="nombreinsectesAmis[]" class="form-control nombreinsectesParasites" d="nombreinsectesAmis-' +
+                    insectesAmisCount +
+                    '" ><option value="Assez">Assez</option><option value="Moins">Moins</option></select></div></div><div class="col-xs-12 col-sm-8"><button type="button" id="' +
+                    insectesAmisCount +
+                    '" class="removeRowinsectesAmis btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></div></td>';
+
+                html_table += '</tr>';
+                //---> End create table tr
+
+                insectesAmisCount = parseInt(insectesAmisCount) + 1;
+                $('#insectesAmis_area').append(html_table);
+
+            });
+
+             $(document).on('click', '.removeRowinsectesAmis', function() {
+                var row_id = $(this).attr('id');
+                if (row_id == $("#insectesAmis_area tr").length) {
+                    $(this).parents('tr').remove();
+                    insectesAmisCount = parseInt(insectesAmisCount) - 1;
+                }
+            });
+            //fin insectes amis
 
             var insectesParasitesCount = $("#insectesParasites_area tr").length + 1;
             $(document).on('click', '#addRowinsectesParasites', function() {
@@ -709,7 +714,7 @@
                 html_table +=
                     '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm">Insectes parasites ou ravageurs ' +
                     insectesParasitesCount +
-                    '</badge></div><div class="col-xs-12 col-sm-6"><div class="form-group"><label for="insectesParasites" class="">Nom</label><input placeholder="Nom..." class="form-control" id="insectesParasites-' +
+                    '</badge></div><div class="col-xs-12 col-sm-6"><div class="form-group"><label for="insectesParasites" class="">Nom</label><input placeholder="Autre parasite ou ravageur..." class="form-control" id="insectesParasites-' +
                     insectesParasitesCount +
                     '" name="insectesParasites[]" type="text"></div></div><div class="col-xs-12 col-sm-6"><div class="form-group"><label for="nombreinsectesParasites" class="">Quantite</label><select name="nombreinsectesParasites[]" class="form-control nombreinsectesParasites" d="nombreinsectesParasites-' +
                     insectesParasitesCount +
@@ -763,7 +768,7 @@
                 }
             });
 
-            $('#courseaux,#agroforestiersobtenus,#presenceInsectesParasitesRavageurs,#recu,#autrePesticides,#autreInsectesAmis')
+            $('#courseaux,#agroforestiersobtenus,#presenceInsectesParasitesRavageurs,#recu,#autrePesticides,#autreInsectesAmis,#autrePresenceInsectesParasitesRavageurs')
                 .hide();
 
             $('.arbresagroforestiers').change(function() {
@@ -781,36 +786,53 @@
                     $('.recuArbreAgroForestier').val('');
                 }
             });
+            $('.pesticideUtiliseAnne').change(function() {
+                var pesticideUtiliseAnne = $('.pesticideUtiliseAnne').val();
+                if (pesticideUtiliseAnne == 'Autre') {
+                    $('#autrePesticides').show('slow');
+                    $('#autrePesticide').prop('required', true);
+                    $('.autrePesticide').show('slow');
+                } else {
+                    $('#autrePesticides').hide('slow');
+                    $('#autrePesticide').prop('required', false);
+                    $('.autrePesticide').hide('slow');
+                    $('.autrePesticide').val('');
+                }
+            });
             $('.presenceInsectesParasites').change(function() {
                 var presenceInsectesParasites = $('.presenceInsectesParasites').val();
                 if (presenceInsectesParasites == 'oui') {
                     $('#presenceInsectesParasitesRavageurs').show('slow');
+                    $('.presenceInsectesParasitesRavageur').show('slow');
                 } else {
                     $('#presenceInsectesParasitesRavageurs').hide('slow');
+                    $('.presenceInsectesParasitesRavageur').val('');
+                    $('#autrePresenceInsectesParasitesRavageurs').hide('slow');
                 }
             });
-            $('.existeCoursEaux').change(function() {
-                var existeCoursEaux = $('.existeCoursEaux').val();
-                if (existeCoursEaux == 'oui') {
-                    $('#courseaux').show('slow');
+
+            $('.presenceInsectesParasitesRavageur').change(function() {
+                var presenceInsectesParasitesRavageur = $('.presenceInsectesParasitesRavageur').val();
+                if (presenceInsectesParasitesRavageur == 'Autre') {
+                    $('#autrePresenceInsectesParasitesRavageurs').show('slow');
+
                 } else {
-                    $('#courseaux').hide('slow');
-                    $('.courseaux').val('');
+                    $('#autrePresenceInsectesParasitesRavageurs').hide('slow');
+                    $('#autrePresenceInsectesParasitesRavageurs input').val('');
                 }
             });
+            $('.presenceAutreTypeInsecteAmi').change(function() {
+                var presenceAutreTypeInsecteAmi = $('.presenceAutreTypeInsecteAmi').val();
+                if (presenceAutreTypeInsecteAmi == 'oui') {
 
+                    $('#autreInsectesAmis').show('slow');
 
-            $('#autreVariete').hide();
-
-            $('.varietes_cacao').change(function() {
-                var varietes_cacao = $('.varietes_cacao').val();
-                if (varietes_cacao == 'Autre') {
-                    $('#autreVariete').show('slow');
                 } else {
-                    $('#autreVariete').hide('slow');
-                    $('.autreVariete').val('');
+                    $('#autreInsectesAmis').hide('slow');
+                    $('#autreInsectesAmis input').val('');
                 }
             });
+
             $('#localite').chained("#section")
             $("#producteur").chained("#localite");
             $("#parcelle").chained("#producteur");
