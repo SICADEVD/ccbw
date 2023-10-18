@@ -1,17 +1,21 @@
 <?php
 namespace App\Http\Controllers\Manager;
-use DB; 
+use Carbon\Carbon;
 use App\Models\User;
+use App\Helper\Files;
+use App\Models\Countrie;
 use App\Models\Employee;
 use App\Models\Department;
 use App\Models\Designation;
+use Illuminate\Support\Str;
+
 use Illuminate\Http\Request;
 use App\Models\EmployeeDetail;
 use App\Models\module_permission;
-
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\Countrie;
 use Brian2694\Toastr\Facades\Toastr;
+use Illuminate\Support\Facades\Hash;
 
 class EmployeeController extends Controller
 {
@@ -38,60 +42,79 @@ class EmployeeController extends Controller
     // save data employee
     public function saveRecord(Request $request)
     {
-        $request->validate([
-            'name'        => 'required|string|max:255',
-            'email'       => 'required|string|email',
-            'birthDate'   => 'required|string|max:255',
-            'gender'      => 'required|string|max:255',
-            'employee_id' => 'required|string|max:255',
-            'company'     => 'required|string|max:255',
-        ]);
 
-        DB::beginTransaction();
-        try{
+        $validationRule = [ 
+            'nom' => 'required|max:255',
+            'prenom'  => 'required|max:255',
+            'email'  => 'required|max:255',
+            'date_of_birth'  => 'required|max:255', 
+            'designation'  => 'required|max:255',
+            'department'  => 'required|max:255',
+            'joining_date'  => 'required|max:255', 
+        ];
+ 
 
-            $employees = Employee::where('email', '=',$request->email)->first();
-            if ($employees === null)
-            {
+        $request->validate($validationRule); 
 
-                $employee = new Employee;
-                $employee->name         = $request->name;
-                $employee->email        = $request->email;
-                $employee->birth_date   = $request->birthDate;
-                $employee->gender       = $request->gender;
-                $employee->employee_id  = $request->employee_id;
-                $employee->company      = $request->company;
-                $employee->save();
-    
-                for($i=0;$i<count($request->id_count);$i++)
-                {
-                    $module_permissions = [
-                        'employee_id' => $request->employee_id,
-                        'module_permission' => $request->permission[$i],
-                        'id_count'          => $request->id_count[$i],
-                        'read'              => $request->read[$i],
-                        'write'             => $request->write[$i],
-                        'create'            => $request->create[$i],
-                        'delete'            => $request->delete[$i],
-                        'import'            => $request->import[$i],
-                        'export'            => $request->export[$i],
-                    ];
-                    DB::table('module_permissions')->insert($module_permissions);
-                }
-                
-                DB::commit();
-                Toastr::success('Add new employee successfully :)','Success');
-                return redirect()->route('all/employee/card');
-            } else {
-                DB::rollback();
-                Toastr::error('Add new employee exits :)','Error');
-                return redirect()->back();
-            }
-        }catch(\Exception $e){
-            DB::rollback();
-            Toastr::error('Add new employee fail :)','Error');
-            return redirect()->back();
+        if($request->id) {
+            $employe = EmployeeDetail::findOrFail($request->id); 
+            $message = "La employe a été mise à jour avec succès";
+
+        } else {
+            $employe = new EmployeeDetail();   
+        } 
+        $manager        = auth()->user();
+         
+        $employe->date_of_birth    = Carbon::parse($request->date_of_birth)->format('Y-m-d'); 
+        $employe->designation_id  = $request->designation; 
+        $employe->department_id  = $request->department; 
+        $employe->country_id    = $request->country;
+        $employe->employee_matricule = $request->matricule;
+        $employe->country_phonecode = $request->country_phonecode;  
+        $employe->joining_date     =  Carbon::parse($request->joining_date)->format('Y-m-d');
+        $employe->reporting_to  = $request->reporting_to;
+        $employe->address    = $request->address;
+        $employe->about_me = $request->about_me; 
+        $employe->employment_type    = $request->employment_type;
+        $employe->internship_end_date     =  Carbon::parse($request->internship_end_date)->format('Y-m-d'); 
+        $employe->contract_end_date     =  Carbon::parse($request->contract_end_date)->format('Y-m-d'); 
+        $employe->marital_status     = $request->marital_status; 
+        $employe->marriage_anniversary_date     =  Carbon::parse($request->marriage_anniversary_date)->format('Y-m-d'); 
+        
+        $staff = new User();
+        $staff->cooperative_id = $manager->cooperative_id;
+        $staff->firstname = $request->nom;
+        $staff->lastname  = $request->prenom;
+        $staff->username  = Str::limit(Str::slug($request->prenom,""),12,'.').Str::limit(Str::slug($request->nom,""),1,'');
+        $staff->email     = $request->email;
+        $staff->mobile    = $request->mobile;
+        $staff->genre     = $request->gender;
+        $staff->adresse    = "";
+        $staff->user_type = "Employe"; 
+        $staff->type_compte = "web"; 
+        $staff->password  =  Hash::make('azerty'); 
+        if($request->hasFile('image')) {
+            Files::deleteFile($staff->image, 'avatar');
+            $staff->image = Files::uploadLocalOrS3($request->image, 'avatar', 300);
         }
+        $staff->save();
+        if($staff !=null ){
+            $role = DB::table('roles')->where('name','Employe')->first();
+            if($role !=null)
+            {
+                $staff->syncRoles($role->id);
+            }
+            
+
+            $id = $staff->id;
+            $employe->company_id  = $manager->cooperative_id ;
+            $employe->user_id  = $staff->id;
+            $employe->save(); 
+            
+        }
+
+        $notify[] = ['success', isset($message) ? $message : 'Cet employé a été crée avec succès.'];
+        return back()->withNotify($notify);
     }
     // view edit record
     public function viewRecord($employee_id)

@@ -28,8 +28,8 @@
   
 <!-- TimePicker -->
 <link rel="stylesheet" href="{{ asset('assets/vendor/css/bootstrap-timepicker.min.css') }}">
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+<!-- Latest compiled and minified CSS --> 
+<link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap-select.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/vendor/css/datepicker.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/fcadmin/js/toastr/toastr.css') }}">
 	<script src="{{ asset('assets/fcadmin/js/toastr/jquery.min.js') }}"></script> 
@@ -80,8 +80,7 @@
 <script src="{{ asset('assets/vendor/jquery/daterangepicker.min.js')}}" defer=""></script> 
  <script src="{{ asset('assets/vendor/jquery/datepicker.min.js') }}"></script>
 <!-- Latest compiled and minified JavaScript --> 
- 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+<script src="{{ asset('assets/vendor/jquery/bootstrap-select.min.js') }}"></script> 
 <script src="{{ asset('assets/js/main.js') }}"></script>
     <script src="{{ asset('assets/fcadmin/js/app.js') }}"></script>
 
@@ -89,6 +88,40 @@
     {{-- LOAD NIC EDIT --}}
     <script>
         "use strict";
+        const datepickerConfig = {
+        formatter: (input, date, instance) => {
+            input.value = moment(date).format('YYYY-MM-DD')
+        },
+        showAllDates: true,
+        customDays: ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],
+        customMonths: ["January","February","March","April","May","June","July","August","September","October","November","December"],
+        customOverlayMonths: ["January","February","March","April","May","June","July","August","September","October","November","December"],
+        overlayButton: "Submit",
+        overlayPlaceholder: "4-digit year",
+        startDay: parseInt("1")
+    };
+
+    const daterangeConfig = {
+        "Today": [moment(), moment()],
+        "Last 30 Days": [moment().subtract(29, 'days'), moment()],
+        "This Month": [moment().startOf('month'), moment().endOf('month')],
+        "Last Month": [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+        "Last 90 Days": [moment().subtract(89, 'days'), moment()],
+        "Last 6 Months": [moment().subtract(6, 'months'), moment()],
+        "Last 1 Year": [moment().subtract(1, 'years'), moment()]
+    };
+
+    const daterangeLocale = {
+        "format": "DD-MM-YYYY",
+        "customRangeLabel": "Custom Range",
+        "separator": " To ",
+        "applyLabel": "Apply",
+        "cancelLabel": "Cancel",
+        "monthNames": ["January","February","March","April","May","June","July","August","September","October","November","December"],
+        "daysOfWeek": ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],
+        "firstDay": parseInt("1")
+    };
+
         bkLib.onDomLoaded(function() {
             $(".nicEdit").each(function(index) {
                 $(this).attr("id", "nicEditor" + index);
@@ -108,6 +141,7 @@
     <script>
         $(document).ready(function() {
             // $('#save-data-form select').select2();
+            $('.select-picker').selectpicker('refresh');
             // Basic
             $('.dropify').dropify();
 
@@ -153,10 +187,9 @@
         });
         
     </script>
- 
-    @stack('script')
+  
     <script>
-        document.loading = '@lang('app.loading')';
+        document.loading = 'loading';
         const MODAL_DEFAULT = '#myModalDefault';
         const MODAL_LG = '#myModal';
         const MODAL_XL = '#myModalXl';
@@ -164,8 +197,85 @@
         const RIGHT_MODAL = '#task-detail-1';
         const RIGHT_MODAL_CONTENT = '#right-modal-content';
         const RIGHT_MODAL_TITLE = '#right-modal-title';
-    </script>
+        
+    </script> 
+    <script>
+        $("input:checkbox").on('click', function()
+        {
+            var $box = $(this);
+            if ($box.is(":checked"))
+            {
+                var group = "input:checkbox[class='" + $box.attr("class") + "']";
+                $(group).prop("checked", false);
+                $box.prop("checked", true);
+            }
+            else
+            {
+                $box.prop("checked", false);
+            }
+        });
+        $('#country').change(function(){
+            var phonecode = $(this).find(':selected').data('phonecode');
+            console.log(phonecode);
+            $('#country_phonecode').val(phonecode);
+            $('.select-picker').selectpicker('refresh'); 
+        }); 
+        // select auto id and email
+        $('#name').on('change',function()
+        {
+            $('#employee_id').val($(this).find(':selected').data('employee_id'));
+            $('#email').val($(this).find(':selected').data('email'));
+        });
+        $('#marital_status').change(function(){
+            var value = $(this).val();
+            if(value == 'marie') {
+                $('.marriage_date').removeClass('d-none');
+            }
+            else {
+                $('.marriage_date').addClass('d-none');
+            }
+        });
+        $('#employment_type').change(function(){
+            var value = $(this).val();
+            if(value == 'contractuel') {
+                $('.contract-date').removeClass('d-none');
+            }
+            else {
+                $('.contract-date').addClass('d-none');
+            }
+
+            if(value == 'interimaire') {
+                $('.internship-date').removeClass('d-none');
+            }
+            else {
+                $('.internship-date').addClass('d-none');
+            }
+        });
      
+    datepicker('#date_of_birth', {
+            position: 'bl', 
+            maxDate: new Date(),  
+            ...datepickerConfig
+        });
+        datepicker('#marriage_anniversary_date', {
+            position: 'bl',
+            maxDate: new Date(), 
+            ...datepickerConfig
+        });
+        datepicker('#contract_end_date', {
+            position: 'bl',
+            ...datepickerConfig 
+        });
+        datepicker('#internship_end_date', {
+            position: 'bl',
+            ...datepickerConfig 
+        });
+        datepicker('#joining_date', {
+            position: 'bl',
+            ...datepickerConfig 
+        });
+    </script>
+ 
 </body>
 
 </html>
