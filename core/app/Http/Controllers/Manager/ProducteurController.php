@@ -137,6 +137,14 @@ class ProducteurController extends Controller
                 return back()->withNotify($notify);
             }
         }
+        $coop = DB::table('sections as s')->join('cooperatives as c','s.cooperative_id','=','c.id')->join('localites as l','s.id','=','l.section_id')->where('l.id',$request->localite_id)->select('c.codeApp')->first();
+        if($coop !=null)
+        { 
+            $producteur->codeProdapp = $this->generecodeProdApp($request->nom,$request->prenoms, $coop->codeApp);
+
+        }else{
+            $producteur->codeProdapp = null;
+        }
         $producteur->save();
 
         $notify[] = ['success', isset($message) ? $message : 'Le producteur a été crée avec succès.'];
@@ -217,6 +225,14 @@ class ProducteurController extends Controller
             } catch (\Exception $exp) {
                 $notify[] = ['error', 'Impossible de télécharger votre image'];
                 return back()->withNotify($notify);
+            }
+        }
+        if ($producteur->codeProdapp == null) {
+            $coop = DB::table('localites as l')->join('cooperatives as c', 'l.cooperative_id', '=', 'c.id')->where('l.id', $request->localite)->select('c.codeApp')->first();
+            if ($coop != null) {
+                $producteur->codeProdapp = $this->generecodeProdApp($request->nom, $request->prenoms, $coop->codeApp);
+            } else {
+                $producteur->codeProdapp = null;
             }
         }
         $producteur->save();
@@ -343,7 +359,7 @@ class ProducteurController extends Controller
     {
         $action = 'non';
 
-        $data = Producteur::select('codeProdapp')->join('localites as l', 'producteurs.localite_id', '=', 'l.id')->join('cooperatives as c', 'l.cooperative_id', '=', 'c.id')->where([
+        $data = Producteur::select('codeProdapp')->join('localites as l', 'producteurs.localite_id', '=', 'l.id')->join('sections as s', 'l.section_id', '=', 's.id')->join('cooperatives as c', 's.cooperative_id', '=', 'c.id')->where([
             ['codeProdapp', '!=', null], ['codeApp', $codeApp]
         ])->orderby('producteurs.id', 'desc')->first();
 
