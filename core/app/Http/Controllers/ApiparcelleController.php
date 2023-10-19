@@ -116,13 +116,13 @@ class ApiparcelleController extends Controller
       }
     } else {
       $parcelle = new Parcelle();
-      $produc = Producteur::select('codeProdapp')->find($request->producteur);
+      $produc = Producteur::select('codeProdapp')->find($request->producteur_id);
       if ($produc != null) {
         $codeProd = $produc->codeProdapp;
       } else {
         $codeProd = '';
       }
-      $parcelle->codeParc  =  $this->generecodeparc($request->producteur, $codeProd);
+      $parcelle->codeParc  =  $this->generecodeparc($request->producteur_id, $codeProd);
     }
 
     // $parcelle->producteur_id  = $request->producteur;
@@ -176,11 +176,11 @@ class ApiparcelleController extends Controller
       if (($request->protection != null)) {
         Parcelle_type_protection::where('parcelle_id', $id)->delete();
         $i = 0;
-        foreach ($request->protection as $data) {
-          if ($data != null) {
+        foreach ($request->protection as $protection) {
+          if (!empty($protection)) {
             $datas[] = [
               'parcelle_id' => $id,
-              'typeProtection' => $data,
+              'typeProtection' => $protection,
             ];
           }
           $i++;
