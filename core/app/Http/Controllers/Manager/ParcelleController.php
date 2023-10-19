@@ -143,25 +143,24 @@ class ParcelleController extends Controller
             $parcelle = Parcelle::findOrFail($request->id);
             $codeParc = $parcelle->codeParc;
             if ($codeParc == '') {
-                $produc = Producteur::select('codeProdapp')->find($request->producteur);
+                $produc = Producteur::select('codeProdapp')->find($request->producteur_id);
                 if ($produc != null) {
                     $codeProd = $produc->codeProdapp;
                 } else {
                     $codeProd = '';
                 }
-                $parcelle->codeParc  =  $this->generecodeparc($request->producteur, $codeProd);
+                $parcelle->codeParc  =  $this->generecodeparc($request->producteur_id, $codeProd);
             }
             $message = "La parcelle a été mise à jour avec succès";
         } else {
             $parcelle = new Parcelle();
-
-            $produc = Producteur::select('codeProdapp')->find($request->producteur);
+            $produc = Producteur::select('codeProdapp')->find($request->producteur_id);
             if ($produc != null) {
                 $codeProd = $produc->codeProdapp;
             } else {
                 $codeProd = '';
             }
-            $parcelle->codeParc  =  $this->generecodeparc($request->producteur, $codeProd);
+            $parcelle->codeParc  =  $this->generecodeparc($request->producteur_id, $codeProd);
         }
         $parcelle->producteur_id  = $request->producteur_id;
         $parcelle->niveauPente  = $request->niveauPente;
@@ -199,33 +198,34 @@ class ParcelleController extends Controller
             if (($request->protection != null)) {
                 Parcelle_type_protection::where('parcelle_id', $id)->delete();
                 $i = 0;
-                foreach ($request->protection as $data) {
-                    if ($data != null) {
+                foreach ($request->protection as $protection) {
+                    if (!empty($protection)) { 
                         $datas[] = [
                             'parcelle_id' => $id,
-                            'typeProtection' => $data,
+                            'typeProtection' => $protection,
                         ];
                     }
+                    
                     $i++;
                 }
             }
             if (($request->items != null)) {
                 agroespeceabre_parcelle::where('parcelle_id', $id)->delete();
                 foreach ($request->items as $item) {
-                    
+
                     $data2[] = [
                         'parcelle_id' => $id,
                         'nombre' => $item['nombre'],
                         'agroespeceabre_id' => $item['arbre'],
                     ];
                 }
-            }  
-            
+            }
+
             Parcelle_type_protection::insert($datas);
             agroespeceabre_parcelle::insert($data2);
         }
-       
-        
+
+
         $notify[] = ['success', isset($message) ? $message : 'Le parcelle a été crée avec succès.'];
         return back()->withNotify($notify);
     }
@@ -296,7 +296,7 @@ class ParcelleController extends Controller
         $protections = $parcelle->parcelleTypeProtections->pluck('typeProtection')->all();
         $arbres = Agroespecesarbre::all();
         $agroespeceabreParcelle = agroespeceabre_parcelle::where('parcelle_id', $id)->get();
-        
+
         return view('manager.parcelle.edit', compact('pageTitle', 'localites', 'parcelle', 'producteurs', 'sections', 'protections', 'arbres', 'agroespeceabreParcelle'));
 
         // $protections = Parcelle_type_protection::where('parcelle_id',$id)->get();
