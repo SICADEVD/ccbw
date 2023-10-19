@@ -65,7 +65,7 @@
                                 <option value="">@lang('Selectionner une option')</option>
                                 @foreach ($parcelles as $parcelle)
                                     <option value="{{ $parcelle->id }}" data-chained="{{ $parcelle->producteur->id }}"
-                                        @selected(old('parcelle'))>
+                                        {{ old('parcelle') == $parcelle->id ? 'selected' : '' }}>
                                         {{ __('Parcelle') }} {{ $parcelle->codeParc }}</option>
                                 @endforeach
                             </select>
@@ -242,7 +242,7 @@
                         <?php echo Form::label(__("Biofertilisant/Bio stimulant Utilisé l'année dernière"), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
                             <?php echo Form::label(__('Quantité utilisée'), null, ['class' => 'control-label']); ?>
-                            <?php echo Form::number('qteBiofertilisant', null, ['class' => 'form-control','min'=>'0']); ?>
+                            <?php echo Form::number('qteBiofertilisant', null, ['class' => 'form-control', 'min' => '0']); ?>
 
 
                             <?php echo Form::label(__('Unité'), null, ['class' => 'control-label']); ?>
@@ -254,7 +254,7 @@
                         <?php echo Form::label(__("Engrais organique préfabriqué Utilisé l'année dernière"), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
                             <?php echo Form::label(__('Quantité utilisée'), null, ['class' => 'control-label']); ?>
-                            <?php echo Form::number('qteEngraisOrganique', null, ['class' => 'form-control','min'=>'0']); ?>
+                            <?php echo Form::number('qteEngraisOrganique', null, ['class' => 'form-control', 'min' => '0']); ?>
 
 
                             <?php echo Form::label(__('Unité'), null, ['class' => 'control-label']); ?>
@@ -671,7 +671,7 @@
                     agroforestiersCount = parseInt(agroforestiersCount) - 1;
                 }
             });
-            
+
             //insectes amis
             var insectesAmisCount = $("#insectesAmis_area tr").length + 1;
             $(document).on('click', '#addRowinsectesAmis', function() {
@@ -697,7 +697,7 @@
 
             });
 
-             $(document).on('click', '.removeRowinsectesAmis', function() {
+            $(document).on('click', '.removeRowinsectesAmis', function() {
                 var row_id = $(this).attr('id');
                 if (row_id == $("#insectesAmis_area tr").length) {
                     $(this).parents('tr').remove();

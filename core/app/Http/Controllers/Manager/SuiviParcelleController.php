@@ -238,11 +238,15 @@ class SuiviParcelleController extends Controller
         $pageTitle = "Mise à jour du suivi parcelle";
         $manager   = auth()->user();
         $producteurs  = Producteur::with('localite')->get();
-        $localites  = Localite::active()->where('cooperative_id', auth()->user()->cooperative_id)->orderBy('nom')->get();
+        $cooperative = Cooperative::with('sections.localites', 'sections.localites.section')->find($manager->cooperative_id);
+        $sections = $cooperative->sections;
+        $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
+            return $localite->active();
+        });
         $campagnes = Campagne::active()->pluck('nom', 'id');
         $parcelles  = Parcelle::with('producteur')->get();
         $suiviparcelle   = SuiviParcelle::findOrFail($id);
-        return view('manager.suiviparcelle.edit', compact('pageTitle', 'suiviparcelle', 'producteurs', 'localites', 'campagnes', 'parcelles'));
+        return view('manager.suiviparcelle.edit', compact('pageTitle', 'suiviparcelle', 'producteurs', 'localites', 'campagnes', 'parcelles', 'sections'));
     }
 
     public function statusSuiviParc($id)
