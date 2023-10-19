@@ -60,7 +60,10 @@
             "Database\\Seeders\\": "database/seeders/"
         },
         "files": [
-            "app/Http/Helpers/helpers.php"
+            "app/Http/Helpers/helpers.php",
+			"app/Http/Helpers/Files.php",
+			"app/Http/Helpers/start.php",
+			"app/Http/Helpers/Reply.php"
         ]
     },
     "autoload-dev": {

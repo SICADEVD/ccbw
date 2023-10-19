@@ -2,7 +2,7 @@
 namespace App\Http\Controllers\Manager;
 use Carbon\Carbon;
 use App\Models\User;
-use App\Helper\Files;
+use App\Http\Helpers\Files;
 use App\Models\Countrie;
 use App\Models\Employee;
 use App\Models\Department;
@@ -148,24 +148,7 @@ class EmployeeController extends Controller
                 'name'=>$request->name,
                 'email'=>$request->email,
             ];
-
-            // update table module_permissions
-            for($i=0;$i<count($request->id_permission);$i++)
-            {
-                $UpdateModule_permissions = [
-                    'employee_id' => $request->employee_id,
-                    'module_permission' => $request->permission[$i],
-                    'id'                => $request->id_permission[$i],
-                    'read'              => $request->read[$i],
-                    'write'             => $request->write[$i],
-                    'create'            => $request->create[$i],
-                    'delete'            => $request->delete[$i],
-                    'import'            => $request->import[$i],
-                    'export'            => $request->export[$i],
-                ];
-                module_permission::where('id',$request->id_permission[$i])->update($UpdateModule_permissions);
-            }
-
+ 
             User::where('id',$request->id)->update($updateUser);
             Employee::where('id',$request->id)->update($updateEmployee);
         

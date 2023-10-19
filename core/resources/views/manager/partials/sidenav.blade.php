@@ -53,14 +53,14 @@
                     <div class="sidebar-submenu {{ menuActive('manager.hr.*', 2) }} ">
                         <ul>
 
-                            <li class="sidebar-menu-item {{ menuActive('manager.hr.') }}">
+                            <li class="sidebar-menu-item {{ menuActive('manager.hr.all.employee.list') }}">
                                 <a href="{{ route('manager.hr.all.employee.list') }}" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>
                                     <span class="menu-title">@lang('Tous les employés')</span>
                                 </a>
                             </li> 
-                            <li class="sidebar-menu-item {{ menuActive('manager.hr.') }}">
-                                <a href="#" class="nav-link">
+                            <li class="sidebar-menu-item {{ menuActive('manager.hr.attendances.index') }}">
+                                <a href="{{ route('manager.hr.attendances.index') }}" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>
                                     <span class="menu-title">@lang('Présences')</span>
                                 </a>

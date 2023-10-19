@@ -392,7 +392,86 @@
                 </div>
             </div>
         </div>
-        <!-- /Add Employee Modal -->
-    
+        <!-- /Add Employee Modal --> 
     
 @endsection 
+
+@push('script')
+
+<script>
+        $("input:checkbox").on('click', function()
+        {
+            var $box = $(this);
+            if ($box.is(":checked"))
+            {
+                var group = "input:checkbox[class='" + $box.attr("class") + "']";
+                $(group).prop("checked", false);
+                $box.prop("checked", true);
+            }
+            else
+            {
+                $box.prop("checked", false);
+            }
+        });
+        $('#country').change(function(){
+            var phonecode = $(this).find(':selected').data('phonecode');
+            console.log(phonecode);
+            $('#country_phonecode').val(phonecode);
+            $('.select-picker').selectpicker('refresh'); 
+        }); 
+        // select auto id and email
+        $('#name').on('change',function()
+        {
+            $('#employee_id').val($(this).find(':selected').data('employee_id'));
+            $('#email').val($(this).find(':selected').data('email'));
+        });
+        $('#marital_status').change(function(){
+            var value = $(this).val();
+            if(value == 'marie') {
+                $('.marriage_date').removeClass('d-none');
+            }
+            else {
+                $('.marriage_date').addClass('d-none');
+            }
+        });
+        $('#employment_type').change(function(){
+            var value = $(this).val();
+            if(value == 'contractuel') {
+                $('.contract-date').removeClass('d-none');
+            }
+            else {
+                $('.contract-date').addClass('d-none');
+            }
+
+            if(value == 'interimaire') {
+                $('.internship-date').removeClass('d-none');
+            }
+            else {
+                $('.internship-date').addClass('d-none');
+            }
+        });
+     
+    datepicker('#date_of_birth', {
+            position: 'bl', 
+            maxDate: new Date(),  
+            ...datepickerConfig
+        });
+        datepicker('#marriage_anniversary_date', {
+            position: 'bl',
+            maxDate: new Date(), 
+            ...datepickerConfig
+        });
+        datepicker('#contract_end_date', {
+            position: 'bl',
+            ...datepickerConfig 
+        });
+        datepicker('#internship_end_date', {
+            position: 'bl',
+            ...datepickerConfig 
+        });
+        datepicker('#joining_date', {
+            position: 'bl',
+            ...datepickerConfig 
+        });
+    </script>
+@endpush

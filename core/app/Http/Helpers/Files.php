@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Helper;
+namespace App\Http\Helpers;
 
 use App\Models\Company;
 use App\Models\FileStorage;

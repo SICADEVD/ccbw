@@ -2,7 +2,7 @@
     $active = false;
 
     if (isset($user->session)) {
-        $lastSeen = \Carbon\Carbon::createFromTimestamp($user->session->last_activity)->timezone(company()?company()->timezone:$user->company->timezone);
+        $lastSeen = \Carbon\Carbon::createFromTimestamp($user->session->last_activity)->timezone('Africa/Abidjan');
 
         $lastSeenDifference = now()->diffInSeconds($lastSeen);
         if ($lastSeenDifference > 0 && $lastSeenDifference <= 90) {
@@ -14,7 +14,7 @@
 <div class="media align-items-center mw-250">
 
     @if (!is_null($user))
-        <a href="{{ isset($disabledLink) ? 'javascript:;' : route('employees.show', [$user->id]) }}"
+        <a href="{{ isset($disabledLink) ? 'javascript:;' : '' }}"
            class="position-relative {{ isset($disabledLink) ? 'disabled-link' : '' }}">
             @if ($active)
                 <span class="text-light-green position-absolute f-8 user-online"
@@ -26,7 +26,7 @@
         <div class="media-body {{$user->status}}">
 
             <h5 class="mb-0 f-12">
-                <a href="{{  isset($disabledLink) ? 'javascript:;' : route('employees.show', [$user->id]) }}"
+                <a href="{{  isset($disabledLink) ? 'javascript:;' : '' }}"
                    class="text-darkest-grey {{ isset($disabledLink) ? 'disabled-link' : '' }}">{!!   $user->userBadge() !!}</a>
             </h5>
             <p class="mb-0 f-12 text-dark-grey">

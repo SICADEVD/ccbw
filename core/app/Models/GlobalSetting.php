@@ -558,20 +558,6 @@ class GlobalSetting extends BaseModel
         }
 
     }
-
-    public static function validateSuperAdmin($permission = null)
-    {
-        // WORKSUITESAAS
-        if (isWorksuiteSaas() && user()->is_superadmin) {
-            if (!is_null($permission)) {
-                return (user()->permission($permission) !== 'all') ? true : false;
-            }
-
-            return false;
-
-        }
-
-        return !in_array('admin', user_roles()) ? true : false;
-    }
+ 
 
 }

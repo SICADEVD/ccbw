@@ -1905,7 +1905,7 @@ a {
 
 /* color css end */
 /* background-color css start */
-*[class*="bg"] {
+*[class*="bg--"] {
     color: #ffffff;
 }
 

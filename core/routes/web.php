@@ -1,7 +1,8 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SiteController;
+use App\Http\Controllers\Manager\LeaveController;
+use App\Http\Controllers\Manager\AttendanceController;
 
 Route::namespace('Manager\Auth')->group(function () {
 
@@ -125,22 +126,39 @@ Route::middleware('auth')->group(function () {
             });
 
 // ----------------------------- form leaves ------------------------------//
-Route::controller('Manager\LeavesController')->name('hr.leaves.')->prefix('hr')->group(function () {
-    Route::get('form/leaves/new', 'leaves')->name('form.leaves.new');
-    Route::get('form/leavesemployee/new', 'leavesEmployee')->name('form.leavesemployee.new');
-    Route::post('form/leaves/save', 'saveRecord')->name('form.leaves.save');
-    Route::post('form/leaves/edit', 'editRecordLeave')->name('form.leaves.edit');
-    Route::post('form/leaves/edit/delete','deleteLeave')->name('form.leaves.edit.delete');    
+Route::controller('Manager\LeaveController')->name('hr.')->prefix('hr')->group(function () {
+    /* LEAVES */
+    Route::get('leaves/leaves-date', [LeaveController::class, 'getDate'])->name('leaves.date');
+    Route::get('leaves/personal', [LeaveController::class, 'personalLeaves'])->name('leaves.personal');
+    Route::get('leaves/calendar', [LeaveController::class, 'leaveCalendar'])->name('leaves.calendar');
+    Route::post('leaves/data', [LeaveController::class, 'data'])->name('leaves.data');
+    Route::post('leaves/leaveAction', [LeaveController::class, 'leaveAction'])->name('leaves.leave_action');
+    Route::get('leaves/show-reject-modal', [LeaveController::class, 'rejectLeave'])->name('leaves.show_reject_modal');
+    Route::get('leaves/show-approved-modal', [LeaveController::class, 'approveLeave'])->name('leaves.show_approved_modal');
+    Route::post('leaves/pre-approve-leave', [LeaveController::class, 'preApprove'])->name('leaves.pre_approve_leave');
+    Route::post('leaves/apply-quick-action', [LeaveController::class, 'applyQuickAction'])->name('leaves.apply_quick_action');
+    Route::get('leaves/view-related-leave/{id}', [LeaveController::class, 'viewRelatedLeave'])->name('leaves.view_related_leave');
+    
 });
+Route::resource('leaves', LeaveController::class);  
 
-// ----------------------------- form attendance  ------------------------------//
-Route::controller('Manager\LeavesController')->name('hr.attendance.')->prefix('hr')->group(function () {
-    Route::get('form/leavesettings/page', 'leaveSettings')->name('form.leavesettings.page');
-    Route::get('attendance/page', 'attendanceIndex')->name('attendance/page');
-    Route::get('attendance/employee/page', 'AttendanceEmployee')->name('attendance.employee.page');
-    Route::get('form/shiftscheduling/page', 'shiftScheduLing')->name('form.shiftscheduling.page');
-    Route::get('form/shiftlist/page', 'shiftList')->name('form.shiftlist.page');    
+Route::controller('Manager\AttendanceController')->name('hr.')->prefix('hr')->group(function () {
+// Attendance
+Route::get('attendances/export-attendance/{year}/{month}/{id}', [AttendanceController::class, 'exportAttendanceByMember'])->name('attendances.export_attendance');
+Route::get('attendances/export-all-attendance/{year}/{month}/{id}/{department}/{designation}', [AttendanceController::class, 'exportAllAttendance'])->name('attendances.export_all_attendance');
+Route::post('attendances/employee-data', [AttendanceController::class, 'employeeData'])->name('attendances.employee_data');
+Route::get('attendances/mark/{id}/{day}/{month}/{year}', [AttendanceController::class, 'mark'])->name('attendances.mark');
+Route::get('attendances/by-member', [AttendanceController::class, 'byMember'])->name('attendances.by_member');
+Route::get('attendances/by-hour', [AttendanceController::class, 'byHour'])->name('attendances.by_hour');
+Route::post('attendances/bulk-mark', [AttendanceController::class, 'bulkMark'])->name('attendances.bulk_mark');
+Route::get('attendances/import', [AttendanceController::class, 'importAttendance'])->name('attendances.import');
+Route::post('attendances/import', [AttendanceController::class, 'importStore'])->name('attendances.import.store');
+Route::post('attendances/import/process', [AttendanceController::class, 'importProcess'])->name('attendances.import.process');
+Route::get('attendances/by-map-location', [AttendanceController::class, 'byMapLocation'])->name('attendances.by_map_location');
+Route::resource('attendances', AttendanceController::class);
+Route::get('attendance/{id}/{day}/{month}/{year}', [AttendanceController::class, 'addAttendance'])->name('attendances.add-user-attendance');
 });
+ 
             Route::controller('Manager\ProgrammeController')->name('durabilite.')->prefix('durabilite')->group(function () {
                 Route::get('create', 'create')->name('create');
                 Route::get('list', 'index')->name('index');
