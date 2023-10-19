@@ -99,34 +99,34 @@ class ApiproducteurController extends Controller
       $producteur = Producteur::findOrFail($request->id);
       $validationRule = [
         'programme_id' => 'required|exists:programmes,id',
-            'proprietaires' => 'required',
-            'certificats' => 'required',
-            'variete' => 'required',
-            'habitationProducteur' => 'required',
-            'statut' => 'required',
-            'statutMatrimonial' => 'required',
-            'localite_id'    => 'required|exists:localites,id',
-            'nom' => 'required|max:255',
-            'prenoms'  => 'required|max:255',
-            'sexe'  => 'required|max:255',
-            'nationalite'  => 'required|max:255',
-            'dateNaiss'  => 'required|max:255',
-            'phone1'  => 'required|max:255',
-            'niveau_etude'  => 'required|max:255',
-            'type_piece'  => 'required|max:255',
-            'numPiece'  => 'required|max:255',
-            'anneeDemarrage' =>'required_if:proprietaires,==,Garantie',
-            'anneeFin' =>'required_if:proprietaires,==,Garantie',
-            'plantePartage'=>'required_if:proprietaires,==,Planté-partager',
-            'typeCarteSecuriteSociale'=>'required',
-            'autreCertificats'=>'required_if:certificats,==,Autre',
-            'autreVariete'=>'required_if:variete,==,Autre',
-            'codeProd'=>'required_if:statut,==,Certifie',
-            'certificat'=>'required_if:statut,==,Certifie',
-            'phone2'=>'required_if:autreMembre,==,oui',
-            'autrePhone'=>'required_if:autreMembre,==,oui',
-            'numCMU'=>'required_if:carteCMU,==,oui',
-            'num_ccc' => ['max:20', Rule::unique('producteurs', 'num_ccc')->ignore($producteur)],
+        'proprietaires' => 'required',
+        'certificats' => 'required',
+        'variete' => 'required',
+        'habitationProducteur' => 'required',
+        'statut' => 'required',
+        'statutMatrimonial' => 'required',
+        'localite_id'    => 'required|exists:localites,id',
+        'nom' => 'required|max:255',
+        'prenoms'  => 'required|max:255',
+        'sexe'  => 'required|max:255',
+        'nationalite'  => 'required|max:255',
+        'dateNaiss'  => 'required|max:255',
+        'phone1'  => 'required|max:255',
+        'niveau_etude'  => 'required|max:255',
+        'type_piece'  => 'required|max:255',
+        'numPiece'  => 'required|max:255',
+        'anneeDemarrage' => 'required_if:proprietaires,==,Garantie',
+        'anneeFin' => 'required_if:proprietaires,==,Garantie',
+        'plantePartage' => 'required_if:proprietaires,==,Planté-partager',
+        'typeCarteSecuriteSociale' => 'required',
+        'autreCertificats' => 'required_if:certificats,==,Autre',
+        'autreVariete' => 'required_if:variete,==,Autre',
+        'codeProd' => 'required_if:statut,==,Certifie',
+        'certificat' => 'required_if:statut,==,Certifie',
+        'phone2' => 'required_if:autreMembre,==,oui',
+        'autrePhone' => 'required_if:autreMembre,==,oui',
+        'numCMU' => 'required_if:carteCMU,==,oui',
+        'num_ccc' => ['max:20', Rule::unique('producteurs', 'num_ccc')->ignore($producteur)],
       ];
       $messages = [
         'programme_id.required' => 'Le programme est obligatoire',
@@ -215,11 +215,18 @@ class ApiproducteurController extends Controller
       $producteur->userid = $request->userid;
       $producteur->codeProd = $request->codeProd;
       $producteur->plantePartage = $request->plantePartage;
+      if ($producteur->codeProdapp == null) {
+        $coop = DB::table('localites as l')->join('cooperatives as c', 'l.cooperative_id', '=', 'c.id')->where('l.id', $request->localite)->select('c.codeApp')->first();
+        if ($coop != null) {
+          $producteur->codeProdapp = $this->generecodeProdApp($request->nom, $request->prenoms, $coop->codeApp);
+        } else {
+          $producteur->codeProdapp = null;
+        }
+      }
       $producteur->update($request->all());
 
       $message = "Le producteur a été mis à jour avec succès";
-    } 
-    else {
+    } else {
       $validationRule = [
         'programme_id' => 'required|exists:programmes,id',
         'proprietaires' => 'required',
@@ -341,6 +348,12 @@ class ApiproducteurController extends Controller
         $esignature = "public/producteurs/pieces/$imageName";
 
         $producteur->esignature = $esignature;
+      }
+      $coop = DB::table('sections as s')->join('cooperatives as c', 's.cooperative_id', '=', 'c.id')->join('localites as l', 's.id', '=', 'l.section_id')->where('l.id', $request->localite_id)->select('c.codeApp')->first();
+      if ($coop != null) {
+        $producteur->codeProdapp = $this->generecodeProdApp($request->nom, $request->prenoms, $coop->codeApp);
+      } else {
+        $producteur->codeProdapp = null;
       }
       $producteur->save();
       $message = "Le producteur a été créé avec succès";
@@ -522,6 +535,46 @@ class ApiproducteurController extends Controller
 
     return response()->json($producteur, 201);
   }
+
+  private function generecodeProdApp($nom, $prenoms, $codeApp)
+  {
+    $action = 'non';
+
+    $data = Producteur::select('codeProdapp')->join('localites as l', 'producteurs.localite_id', '=', 'l.id')->join('sections as s', 'l.section_id', '=', 's.id')->join('cooperatives as c', 's.cooperative_id', '=', 'c.id')->where([
+      ['codeProdapp', '!=', null], ['codeApp', $codeApp]
+    ])->orderby('producteurs.id', 'desc')->first();
+
+    if ($data != null) {
+
+      $code = $data->codeProdapp;
+      if ($code != null) {
+        $chaine_number = Str::afterLast($code, '-');
+      } else {
+        $chaine_number = 0;
+      }
+    } else {
+      $chaine_number = 0;
+    }
+
+    $lastCode = $chaine_number + 1;
+    $codeP = $codeApp . '-' . gmdate('Y') . '-' . $lastCode;
+
+    do {
+
+      $verif = Producteur::select('codeProdapp')->where('codeProdapp', $codeP)->orderby('id', 'desc')->first();
+      if ($verif == null) {
+        $action = 'non';
+      } else {
+        $action = 'oui';
+        $code = $codeP;
+        $chaine_number = Str::afterLast($code, '-');
+        $lastCode = $chaine_number + 1;
+        $codeP = $codeApp . '-' . gmdate('Y') . '-' . $lastCode;
+      }
+    } while ($action != 'non');
+
+    return $codeP;
+  }
   /**
    * Show the form for editing the specified resource.
    *
@@ -533,6 +586,7 @@ class ApiproducteurController extends Controller
 
     //
   }
+
 
   /**
    * Update the specified resource in storage.
