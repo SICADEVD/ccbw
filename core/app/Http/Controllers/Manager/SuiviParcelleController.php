@@ -39,7 +39,7 @@ class SuiviParcelleController extends Controller
             if (request()->localite != null) {
                 $q->where('localite_id', request()->localite);
             }
-        })->with('parcelle')->paginate(getPaginate());
+        })->with(['parcelle.producteur.localite'])->paginate(getPaginate());
 
         return view('manager.suiviparcelle.index', compact('pageTitle', 'suiviparcelles', 'localites'));
     }
@@ -135,7 +135,7 @@ class SuiviParcelleController extends Controller
         $suivi_parcelle->dateVisite    = $request->dateVisite;
         $suivi_parcelle->presenceAutreTypeInsecteAmi    = $request->presenceAutreTypeInsecteAmi;
         $suivi_parcelle->userid   = auth()->user()->id;
-        dd(json_encode($request->all()));
+        //dd(json_encode($request->all()));
         $suivi_parcelle->save();
         if ($suivi_parcelle != null) {
             $id = $suivi_parcelle->id;
