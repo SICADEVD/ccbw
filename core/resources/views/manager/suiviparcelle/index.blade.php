@@ -75,7 +75,7 @@
                                             <div class="dropdown-menu p-0">
                                                 <a href="{{ route('manager.suivi.parcelles.edit', $suiviparcelle->id) }}"
                                                     class="dropdown-item"><i class="la la-pen"></i>@lang('Edit')</a> 
-                                                    @if ($suiviparcelle->statu == Status::DISABLE)
+                                                    @if ($suiviparcelle->status == Status::DISABLE)
                                                     <button type="button" class="confirmationBtn  dropdown-item"
                                                         data-action="{{ route('manager.suivi.parcelles.status', $suiviparcelle->id) }}"
                                                         data-question="@lang('Are you sure to enable this suivi parcelle?')">
