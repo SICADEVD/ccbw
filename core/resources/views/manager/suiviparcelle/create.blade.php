@@ -242,7 +242,7 @@
                         <?php echo Form::label(__("Biofertilisant/Bio stimulant Utilisé l'année dernière"), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
                             <?php echo Form::label(__('Quantité utilisée'), null, ['class' => 'control-label']); ?>
-                            <?php echo Form::number('qteBiofertilisant', null, ['class' => 'form-control', 'min' => '0']); ?>
+                            <?php echo Form::number('qteBiofertilisant',0, ['class' => 'form-control', 'min' => '0']); ?>
 
 
                             <?php echo Form::label(__('Unité'), null, ['class' => 'control-label']); ?>
@@ -254,7 +254,7 @@
                         <?php echo Form::label(__("Engrais organique préfabriqué Utilisé l'année dernière"), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
                             <?php echo Form::label(__('Quantité utilisée'), null, ['class' => 'control-label']); ?>
-                            <?php echo Form::number('qteEngraisOrganique', null, ['class' => 'form-control', 'min' => '0']); ?>
+                            <?php echo Form::number('qteEngraisOrganique',0, ['class' => 'form-control', 'min' => '0']); ?>
 
 
                             <?php echo Form::label(__('Unité'), null, ['class' => 'control-label']); ?>

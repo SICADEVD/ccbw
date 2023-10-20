@@ -39,6 +39,9 @@ class SuiviParcelle extends Model
     {
         return $this->hasMany(SuiviParcellesAgroforesterie::class, 'suivi_parcelle_id', 'id');
     }
+    public function insectes(){
+        return $this->hasMany(SuiviParcellesInsecte::class, 'suivi_parcelle_id', 'id');
+    }
      
      
 }

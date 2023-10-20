@@ -18,5 +18,9 @@ class agroespeceabre_parcelle extends Model
     {
         return $this->belongsTo(Agroespecesarbre::class, 'agroespeceabre_id');
     }
+    public function parcelle()
+    {
+        return $this->belongsTo(Parcelle::class, 'parcelle_id');
+    }
 
 }

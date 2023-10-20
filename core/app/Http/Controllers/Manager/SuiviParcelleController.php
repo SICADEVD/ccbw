@@ -133,6 +133,8 @@ class SuiviParcelleController extends Controller
         $suivi_parcelle->presenceMenteReligieuse   = $request->presenceMenteReligieuse;
         $suivi_parcelle->arbresagroforestiers  = $request->arbresagroforestiers;
         $suivi_parcelle->dateVisite    = $request->dateVisite;
+        $suivi_parcelle->presenceAutreTypeInsecteAmi    = $request->presenceAutreTypeInsecteAmi;
+        $suivi_parcelle->userid   = auth()->user()->id;
         
         $suivi_parcelle->save();
         if ($suivi_parcelle != null) {
@@ -164,7 +166,7 @@ class SuiviParcelleController extends Controller
                 foreach ($request->items as $item) {
                     
                     $data2[] = [
-                        'parcelle_id' => $id,
+                        'suivi_parcelle_id' => $id,
                         'nombre' => $item['nombre'],
                         'agroespeceabre_id' => $item['arbre'],
                     ];
@@ -221,8 +223,8 @@ class SuiviParcelleController extends Controller
                 }
             }
             SuiviParcellesAnimal::insert($datas4);
+            SuiviParcellesAgroforesterie::insert($data2);
             SuiviParcellesParasite::insert($datas3);
-            SuiviParcellesAgroforesterie::insert($datas2);
             SuiviParcellesInsecte::insert($datas5);
             SuiviParcellesOmbrage::insert($datas);
         }
@@ -246,7 +248,12 @@ class SuiviParcelleController extends Controller
         $campagnes = Campagne::active()->pluck('nom', 'id');
         $parcelles  = Parcelle::with('producteur')->get();
         $suiviparcelle   = SuiviParcelle::findOrFail($id);
-        return view('manager.suiviparcelle.edit', compact('pageTitle', 'suiviparcelle', 'producteurs', 'localites', 'campagnes', 'parcelles', 'sections'));
+        $arbres = Agroespecesarbre::all();
+        $arbreAgroForestiers = SuiviParcellesAgroforesterie::where('suivi_parcelle_id', $id)->get();
+        $arbreOmbrages = SuiviParcellesOmbrage::where('suivi_parcelle_id', $id)->pluck('agroespecesarbre_id')->toArray();
+        $parasites = SuiviParcellesParasite::where('suivi_parcelle_id', $id)->get();
+
+        return view('manager.suiviparcelle.edit', compact('pageTitle', 'suiviparcelle', 'producteurs', 'localites', 'campagnes', 'parcelles', 'sections', 'arbres', 'arbreOmbrages', 'arbreAgroForestiers', 'parasites'));
     }
 
     public function statusSuiviParc($id)
