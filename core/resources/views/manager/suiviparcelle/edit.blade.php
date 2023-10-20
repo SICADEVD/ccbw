@@ -16,7 +16,7 @@
                 <div class="form-group row">
                     <?php echo Form::label(__('Campagne'), null, ['class' => 'col-sm-4 control-label required']); ?>
                     <div class="col-xs-12 col-sm-8">
-                        <?php echo Form::select('campagne', $campagnes, null, ['class' => 'form-control campagnes', 'id' => 'campagnes', 'required' => 'required']); ?>
+                        <?php echo Form::select('campagne_id', $campagnes, null, ['class' => 'form-control campagnes', 'id' => 'campagnes', 'required' => 'required']); ?>
                     </div>
                 </div>
 
@@ -64,7 +64,7 @@
                 <div class="form-group row">
                     <label class="col-sm-4 control-label">@lang('Parcelle')</label>
                     <div class="col-xs-12 col-sm-8">
-                        <select class="form-control" name="parcelle" id="parcelle" onchange="getSuperficie()" required>
+                        <select class="form-control" name="parcelle_id" id="parcelle" onchange="getSuperficie()" required>
                             <option value="">@lang('Selectionner une option')</option>
                             @foreach ($parcelles as $parcelle)
                             <option value="{{ $parcelle->id }}" data-chained="{{ $parcelle->producteur->id }}"
