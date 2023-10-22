@@ -75,7 +75,7 @@
                                     <tr>
                                         <td>
                                             @if ($producteur->picture != null)
-                                                <img src="{{ url('core/storage/app/public/producteur/photos'.$producteur->picture) }}"
+                                                <img src="{{ url('core/storage/app/public/producteur/photos/'.$producteur->picture) }}"
                                                     alt="image" style = " width: 100px;">
                                             @else
                                                 <img src="{{ asset('assets/images/default.png') }}"
