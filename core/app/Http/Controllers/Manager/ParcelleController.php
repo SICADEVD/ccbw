@@ -190,6 +190,7 @@ class ParcelleController extends Controller
                 return back()->withNotify($notify);
             }
         }
+        dd(json_encode($request->all()));
         $parcelle->save();
         if ($parcelle != null) {
             $id = $parcelle->id;
