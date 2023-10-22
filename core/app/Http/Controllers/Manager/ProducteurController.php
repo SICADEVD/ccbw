@@ -131,7 +131,7 @@ class ProducteurController extends Controller
         $producteur->plantePartage = $request->plantePartage;
         if ($request->hasFile('picture')) {
             try {
-                $producteur->picture = $request->file('picture')->store('public/producteurs/photos');
+                $producteur->picture = $request->file('picture')->store('core/public/producteurs/photos');
             } catch (\Exception $exp) {
                 $notify[] = ['error', 'Impossible de télécharger votre image'];
                 return back()->withNotify($notify);
@@ -221,7 +221,7 @@ class ProducteurController extends Controller
         $producteur->plantePartage = $request->plantePartage;
         if ($request->hasFile('picture')) {
             try {
-                $producteur->picture = $request->file('picture')->store('public/producteurs/photos');
+                $producteur->picture = $request->file('picture')->store('core/public/producteurs/photos');
             } catch (\Exception $exp) {
                 $notify[] = ['error', 'Impossible de télécharger votre image'];
                 return back()->withNotify($notify);
@@ -235,7 +235,7 @@ class ProducteurController extends Controller
                 $producteur->codeProdapp = null;
             }
         }
-        $producteur->save();
+        dd(json_encode($request->all()));
 
         $notify[] = ['success', isset($message) ? $message : 'Le producteur a été mise à jour avec succès.'];
         return back()->withNotify($notify);
