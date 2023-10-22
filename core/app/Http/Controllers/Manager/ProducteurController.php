@@ -145,7 +145,7 @@ class ProducteurController extends Controller
         }else{
             $producteur->codeProdapp = null;
         }
-
+        dd(json_encode($request->all()));
         $producteur->save();
 
         $notify[] = ['success', isset($message) ? $message : 'Le producteur a été crée avec succès.'];
