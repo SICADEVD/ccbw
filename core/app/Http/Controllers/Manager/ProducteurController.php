@@ -131,7 +131,7 @@ class ProducteurController extends Controller
         $producteur->plantePartage = $request->plantePartage;
         if ($request->hasFile('picture')) {
             try {
-                $producteur->picture = $request->file('picture')->store('core/public/producteurs/photos');
+                $producteur->picture = $request->file('picture')->store('public/producteurs/photos');
             } catch (\Exception $exp) {
                 $notify[] = ['error', 'Impossible de télécharger votre image'];
                 return back()->withNotify($notify);
@@ -223,7 +223,7 @@ class ProducteurController extends Controller
         // dd(json_encode($request->all()));
         if ($request->hasFile('picture')) {
             try {
-                $producteur->picture = $request->file('picture')->store('core/public/producteurs/photos');
+                $producteur->picture = $request->file('picture')->store('public/producteurs/photos');
             } catch (\Exception $exp) {
                 $notify[] = ['error', 'Impossible de télécharger votre image'];
                 return back()->withNotify($notify);
