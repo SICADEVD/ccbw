@@ -126,7 +126,7 @@ class ApiproducteurController extends Controller
         'phone2' => 'required_if:autreMembre,==,oui',
         'autrePhone' => 'required_if:autreMembre,==,oui',
         'numCMU' => 'required_if:carteCMU,==,oui',
-        'num_ccc' => ['max:20', Rule::unique('producteurs', 'num_ccc')->ignore($producteur)],
+        
       ];
       $messages = [
         'programme_id.required' => 'Le programme est obligatoire',
