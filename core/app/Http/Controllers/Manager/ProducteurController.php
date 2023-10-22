@@ -145,6 +145,7 @@ class ProducteurController extends Controller
         }else{
             $producteur->codeProdapp = null;
         }
+
         $producteur->save();
 
         $notify[] = ['success', isset($message) ? $message : 'Le producteur a été crée avec succès.'];
@@ -219,6 +220,7 @@ class ProducteurController extends Controller
         $producteur->userid = auth()->user()->id;
         $producteur->codeProd = $request->codeProd;
         $producteur->plantePartage = $request->plantePartage;
+        dd(json_encode($request->all()));
         if ($request->hasFile('picture')) {
             try {
                 $producteur->picture = $request->file('picture')->store('core/public/producteurs/photos');
@@ -235,7 +237,7 @@ class ProducteurController extends Controller
                 $producteur->codeProdapp = null;
             }
         }
-        dd(json_encode($request->all()));
+        
 
         $notify[] = ['success', isset($message) ? $message : 'Le producteur a été mise à jour avec succès.'];
         return back()->withNotify($notify);
