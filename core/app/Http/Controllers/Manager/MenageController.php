@@ -112,7 +112,7 @@ class MenageController extends Controller
         $menage->autreMachine    = $request->autreMachine;
         $menage->autreEndroit    = $request->autreEndroit;
         $menage->userid = auth()->user()->id;
-        dd(json_encode($request->all()));
+        // dd(json_encode($request->all()));
         $menage->save();
 
         $notify[] = ['success', isset($message) ? $message : 'Le menage a été crée avec succès.'];
