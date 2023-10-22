@@ -130,7 +130,7 @@ class ApimenageController extends Controller
                 return response()->json("Ce producteur a déjà un menage enregistré", 501);
             }
         }
-        $menage->producteur_id  = $request->producteur_id;  
+        $menage->producteur_id  = $request->producteur;  
         $menage->quartier  = $request->quartier;
         $menage->ageEnfant0A5  = $request->ageEnfant0A5;
         $menage->ageEnfant6A17  = $request->ageEnfant6A17;
