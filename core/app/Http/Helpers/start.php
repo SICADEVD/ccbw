@@ -44,13 +44,13 @@ if (!function_exists('user')) {
             return session('user');
         }
  
-        if (auth()->id()) {
+        if (auth()->user()->id) {
 
             if (session()->has('cooperative')) {
-                $user = User::where('user_auth_id', auth()->id())->where('status', 1)->first();
+                $user = User::where('id', auth()->user()->id)->where('status', 1)->first();
             }
             else {
-                $user = DB::table('users')->where('user_auth_id', auth()->id())->where('status', 1)->first();
+                $user = DB::table('users')->where('id', auth()->user()->id)->where('status', 1)->first();
             }
 
             if ($user) {
@@ -58,7 +58,7 @@ if (!function_exists('user')) {
                 return session('user');
             }
             else {
-                auth()->logout();
+                return auth()->user()->id;
             }
         }
 

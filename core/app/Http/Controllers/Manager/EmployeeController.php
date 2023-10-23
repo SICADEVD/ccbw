@@ -101,7 +101,8 @@ class EmployeeController extends AccountBaseController
         $this->skills = Skill::all()->pluck('name')->toArray();
         $this->countries = countries();
         $this->lastEmployeeID = EmployeeDetail::count();
-        $this->checkifExistEmployeeId = EmployeeDetail::select('id')->where('employee_id', ($this->lastEmployeeID + 1))->first();
+        $this->checkifExistEmployeeId =  EmployeeDetail::select('id')->where('employee_id', ($this->lastEmployeeID + 1))->first();
+        $this->lastEmployeeID = 'EMP-'.$this->lastEmployeeID+1;
         $this->employees = User::allEmployees(null, true); 
  
         $employee = new EmployeeDetail();

@@ -86,11 +86,9 @@
                 <div class="select-filter mb-4">
                     <div class="select-others">
                         <select class="form-control select-picker" name="status" id="status" data-container="body">
-                            <option value="all">@lang('app.all')</option>
-                            <option selected value="active">@lang('app.active')</option>
-                            <option value="deactive">@lang('app.inactive')</option>
-                            <option {{ request('status') == 'ex_employee' ? 'selected' : '' }} value="ex_employee">
-                                @lang('modules.employees.exEmployee')</option>
+                            <option selected value="all">@lang('app.all')</option>
+                            <option value="1">@lang('app.active')</option>
+                            <option value="0">@lang('app.inactive')</option> 
                         </select>
                     </div>
                 </div>

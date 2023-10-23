@@ -36,7 +36,55 @@ class EmployeesDataTable extends BaseDataTable
     public function dataTable($query)
     {
        
-            $datatables = datatables()->eloquent($query);  
+            $datatables = datatables()->eloquent($query)->filter(function ($query) {
+                if (request()->status != 'all' && request()->status != '') {
+                $query->where('users.status', request()->status); 
+                }
+                if (request()->employee != 'all' && request()->employee != '') {
+                $query->where('users.id', request()->employee);
+                }
+                if (request()->employee != 'all' && request()->employee != '') {
+                    $query->where('users.id', request()->employee);
+                }
+        
+                if (request()->designation != 'all' && request()->designation != '') {
+                    $query->where('employee_details.designation_id', request()->designation);
+                }
+        
+                if (request()->department != 'all' && request()->department != '') {
+                    $query->where('employee_details.department_id', request()->department);
+                }
+        
+                 
+                if ((is_array(request()->skill) && request()->skill[0] != 'all') && request()->skill != '' && request()->skill != null && request()->skill != 'null') {
+                    $query->join('employee_skills', 'employee_skills.user_id', '=', 'users.id')
+                        ->whereIn('employee_skills.skill_id', request()->skill);
+                }
+         
+        
+                if (request()->startDate != '' && request()->endDate != '') {
+                    $startDate = Carbon::createFromFormat('Y-m-d', request()->startDate)->toDateString();
+                    $endDate = Carbon::createFromFormat('Y-m-d', request()->endDate)->toDateString();
+        
+                    $query->whereRaw('Date(employee_details.joining_date) >= ?', [$startDate])->whereRaw('Date(employee_details.joining_date) <= ?', [$endDate]);
+                }
+        
+                if (request()->status == 'ex_employee' && isset(request()->lastStartDate) && isset(request()->lastEndDate) && request()->lastStartDate != '' && request()->lastEndDate != '') {
+                    $startDate = Carbon::createFromFormat('Y-m-d', request()->lastStartDate)->toDateString();
+                    $endDate = Carbon::createFromFormat('Y-m-d', request()->lastEndDate)->toDateString();
+                    $query->whereNotNull('last_date')->whereRaw('Date(employee_details.last_date) >= ?', [$startDate])->whereRaw('Date(employee_details.last_date) <= ?', [$endDate]);
+                }
+        
+                if (request()->searchText != '') {
+                    $query->where(function ($query) {
+                        $query->where('users.lastname', 'like', '%' . request()->searchText . '%')
+                            ->orWhere('users.email', 'like', '%' . request()->searchText . '%')
+                            ->orWhere('employee_details.employee_id', 'like', '%' . request()->searchText . '%');
+                    });
+                }
+        
+           }); 
+            
 
         $datatables->addColumn('check', function ($row) {
            
@@ -132,56 +180,7 @@ class EmployeesDataTable extends BaseDataTable
         $users = $model->join('employee_details', 'employee_details.user_id', '=', 'users.id')
             ->leftJoin('designations', 'employee_details.designation_id', '=', 'designations.id')
             ->select('users.id', 'employee_details.added_by', 'users.lastname', 'users.firstname', 'users.email', 'users.created_at', 'users.image', 'users.genre', 'users.status',  'designations.name as designation_name', 'employee_details.employee_id', 'employee_details.joining_date');
-
-
-        // if ($request->status != 'all' && $request->status != '') {
-        //     $users->where('users.status', $request->status); 
-        // }
-
-        // if ($request->gender != 'all' && $request->gender != '') {
-        //     $users = $users->where('users.genre', $request->gender);
-        // }
-
-        // if ($request->employee != 'all' && $request->employee != '') {
-        //     $users = $users->where('users.id', $request->employee);
-        // }
-
-        // if ($request->designation != 'all' && $request->designation != '') {
-        //     $users = $users->where('employee_details.designation_id', $request->designation);
-        // }
-
-        // if ($request->department != 'all' && $request->department != '') {
-        //     $users = $users->where('employee_details.department_id', $request->department);
-        // }
-
-         
-        // if ((is_array($request->skill) && $request->skill[0] != 'all') && $request->skill != '' && $request->skill != null && $request->skill != 'null') {
-        //     $users = $users->join('employee_skills', 'employee_skills.user_id', '=', 'users.id')
-        //         ->whereIn('employee_skills.skill_id', $request->skill);
-        // }
- 
-
-        // if ($request->startDate != '' && $request->endDate != '') {
-        //     $startDate = Carbon::createFromFormat('Y-m-d', $request->startDate)->toDateString();
-        //     $endDate = Carbon::createFromFormat('Y-m-d', $request->endDate)->toDateString();
-
-        //     $users = $users->whereRaw('Date(employee_details.joining_date) >= ?', [$startDate])->whereRaw('Date(employee_details.joining_date) <= ?', [$endDate]);
-        // }
-
-        // if ($request->status == 'ex_employee' && isset($request->lastStartDate) && isset($request->lastEndDate) && $request->lastStartDate != '' && $request->lastEndDate != '') {
-        //     $startDate = Carbon::createFromFormat('Y-m-d', $request->lastStartDate)->toDateString();
-        //     $endDate = Carbon::createFromFormat('Y-m-d', $request->lastEndDate)->toDateString();
-        //     $users = $users->whereNotNull('last_date')->whereRaw('Date(employee_details.last_date) >= ?', [$startDate])->whereRaw('Date(employee_details.last_date) <= ?', [$endDate]);
-        // }
-
-        // if ($request->searchText != '') {
-        //     $users = $users->where(function ($query) {
-        //         $query->where('users.lastname', 'like', '%' . request('searchText') . '%')
-        //             ->orWhere('users.email', 'like', '%' . request('searchText') . '%')
-        //             ->orWhere('employee_details.employee_id', 'like', '%' . request('searchText') . '%');
-        //     });
-        // }
-
+      
         return $users->groupBy('users.id');
     }
 
