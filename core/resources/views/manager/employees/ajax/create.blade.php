@@ -8,12 +8,12 @@
                 <h4 class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-bottom-grey">
                     @lang('modules.employees.accountDetails')</h4>
                 <div class="row p-20">
-                    <div class="col-lg-9">
+                    <div class="col-lg-12">
                         <div class="row">
                             <div class="col-lg-4 col-md-6">
                                 <x-forms.text fieldId="employee_id" :fieldLabel="__('modules.employees.employeeId')"
-                                    fieldName="employee_id" :fieldValue="((!$checkifExistEmployeeId) ? ($lastEmployeeID+1) : '')" fieldRequired="true"
-                                    :fieldPlaceholder="__('modules.employees.employeeIdInfo')" :popover="__('modules.employees.employeeIdHelp')">
+                                    fieldName="employee_id" :fieldValue="((!$checkifExistEmployeeId) ? ($lastEmployeeID) : '')" fieldRequired="true"
+                                    :fieldPlaceholder="__('modules.employees.employeeIdInfo')" :popover="__('modules.employees.employeeIdHelp')" readonly>
                                 </x-forms.text>
                             </div>
                             <div class="col-lg-4 col-md-6">
@@ -26,6 +26,13 @@
                                     fieldName="firstname" fieldRequired="true" :fieldPlaceholder="__('Prenoms')">
                                 </x-forms.text>
                             </div>
+                            <div class="col-lg-4 col-md-6">
+                        <x-forms.select fieldId="gender" :fieldLabel="__('modules.employees.gender')"
+                            fieldName="gender">
+                            <option value="Homme">@lang('app.male')</option>
+                            <option value="Femme">@lang('app.female')</option> 
+                        </x-forms.select>
+                    </div>
                             <div class="col-lg-4 col-md-6">
                                 <x-forms.text fieldId="email" :fieldLabel="__('modules.employees.employeeEmail')"
                                     fieldName="email" fieldRequired="true" :fieldPlaceholder="__('placeholders.email')">
@@ -63,13 +70,14 @@
                                     </select>
                                 </x-forms.input-group>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
+                            <div class="col-lg-4 col-md-6">
                         <x-forms.file allowedFileExtensions="png jpg jpeg svg bmp" class="mr-0 mr-lg-2 mr-md-2 cropper"
                             :fieldLabel="__('modules.profile.profilePicture')" fieldName="image" fieldId="image"
                             fieldHeight="119" :popover="__('messages.fileFormat.ImageFile')" />
                     </div>
+                        </div>
+                    </div>
+                    
                     <div class="col-lg-3 col-md-6">
                         <x-forms.select fieldId="country" :fieldLabel="__('app.country')" fieldName="country"
                             search="true">
@@ -101,13 +109,7 @@
                                 name="mobile" id="mobile">
                         </x-forms.input-group>
                     </div>
-                    <div class="col-lg-3 col-md-6">
-                        <x-forms.select fieldId="gender" :fieldLabel="__('modules.employees.gender')"
-                            fieldName="gender">
-                            <option value="male">@lang('app.male')</option>
-                            <option value="female">@lang('app.female')</option> 
-                        </x-forms.select>
-                    </div>
+                    
                     <div class="col-lg-3 col-md-6">
                         <x-forms.datepicker fieldId="joining_date" :fieldLabel="__('modules.employees.joiningDate')"
                             fieldName="joining_date" :fieldPlaceholder="__('placeholders.date')" fieldRequired="true"
@@ -143,61 +145,7 @@
                 <h4 class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-top-grey">
                     @lang('modules.client.clientOtherDetails')</h4>
                 <div class="row p-20">
-                    <div class="col-lg-3 col-md-6">
-                        <div class="form-group my-3">
-                            <label class="f-14 text-dark-grey mb-12 w-100"
-                                for="usr">@lang('modules.client.clientCanLogin')</label>
-                            <div class="d-flex">
-                                <x-forms.radio fieldId="login-yes" :fieldLabel="__('app.yes')" fieldName="login"
-                                    fieldValue="enable" checked="true">
-                                </x-forms.radio>
-                                <x-forms.radio fieldId="login-no" :fieldLabel="__('app.no')" fieldValue="disable"
-                                    fieldName="login"></x-forms.radio>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6">
-                        <div class="form-group my-3">
-                            <label class="f-14 text-dark-grey mb-12 w-100"
-                                for="usr">@lang('modules.emailSettings.emailNotifications')</label>
-                            <div class="d-flex">
-                                <x-forms.radio fieldId="notification-yes" :fieldLabel="__('app.yes')" fieldValue="yes"
-                                    fieldName="email_notifications" checked="true">
-                                </x-forms.radio>
-                                <x-forms.radio fieldId="notification-no" :fieldLabel="__('app.no')" fieldValue="no"
-                                    fieldName="email_notifications">
-                                </x-forms.radio>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-3 col-md-6">
-                        <x-forms.label class="my-3" fieldId="hourly_rate"
-                            :fieldLabel="__('modules.employees.hourlyRate')"></x-forms.label>
-                        <x-forms.input-group>
-                        <input type="number" step=".01" min="0" class="form-control height-35 f-14"
-                                name="hourly_rate" id="hourly_rate">
-                            <x-slot name="prepend">
-                                <span
-                                    class="input-group-text f-14 bg-white-shade">FCFA</span>
-                            </x-slot>
-
-                            
-                        </x-forms.input-group>
-                    </div>
-
-                    <div class="col-lg-3 col-md-6">
-                        <x-forms.label class="my-3" fieldId="slack_username"
-                            :fieldLabel="__('modules.employees.slackUsername')"></x-forms.label>
-                        <x-forms.input-group>
-                            <x-slot name="prepend">
-                                <span class="input-group-text f-14 bg-white-shade">@</span>
-                            </x-slot>
-
-                            <input type="text" class="form-control height-35 f-14" name="slack_username"
-                                id="slack_username">
-                        </x-forms.input-group>
-                    </div>
+                        
 
                     <div class="col-md-12">
                         <x-forms.text fieldId="tags" :fieldLabel="__('app.skills')" fieldName="tags"
@@ -296,9 +244,7 @@
 </div>
 
 <script src="{{ asset('assets/vendor/jquery/tagify.min.js') }}"></script>
-@if (function_exists('sms_setting') && sms_setting()->telegram_status)
-    <script src="{{ asset('assets/vendor/jquery/clipboard.min.js') }}"></script>
-@endif
+ 
 <script>
     $(document).ready(function() {
 
@@ -488,14 +434,7 @@
         $('#' + id).val(checkedData);
     }
 
-    $('.cropper').on('dropify.fileReady', function(e) {
-        var inputId = $(this).find('input').attr('id');
-        var url = "{{ route('cropper', ':element') }}";
-        url = url.replace(':element', inputId);
-        $(MODAL_LG + ' ' + MODAL_HEADING).html('...');
-        $.ajaxModal(MODAL_LG, url);
-    })
-
+    
     @if (function_exists('sms_setting') && sms_setting()->telegram_status)
         var clipboard = new ClipboardJS('.btn-copy');
 
