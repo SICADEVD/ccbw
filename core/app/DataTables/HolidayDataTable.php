@@ -39,7 +39,7 @@ class HolidayDataTable extends BaseDataTable
                 return '<input type="checkbox" class="select-table-row" id="datatable-row-' . $row->id . '"  name="datatable_ids[]" value="' . $row->id . '" onclick="dataTableRowCheck(' . $row->id . ')">';
             })
             ->editColumn('holiday_date', function ($row) {
-                return Carbon::parse($row->date)->translatedFormat($this->company->date_format);
+                return Carbon::parse($row->date)->translatedFormat($this->cooperative->date_format);
             })
             ->addColumn('occasion', function ($row) {
                 return $row->occassion;

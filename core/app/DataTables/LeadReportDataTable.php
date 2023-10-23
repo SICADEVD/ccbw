@@ -34,10 +34,10 @@ class LeadReportDataTable extends BaseDataTable
                 return $row->count_converted_leads;
             })
             ->addColumn('total_amount', function ($row) {
-                return currency_format($row->total_value, company()->currency->currency_id);
+                return currency_format($row->total_value, cooperative()->currency->currency_id);
             })
             ->addColumn('converted_amount', function ($row) {
-                return $row->total_converted_value ? currency_format($row->total_converted_value, company()->currency->currency_id) : 0;
+                return $row->total_converted_value ? currency_format($row->total_converted_value, cooperative()->currency->currency_id) : 0;
             })
             ->addColumn('total_follow_up', function ($row) {
                 return $row->count_total_follow_up;
@@ -78,7 +78,7 @@ class LeadReportDataTable extends BaseDataTable
             ->leftjoin('lead_follow_up', 'lead_follow_up.lead_id', 'leads.id');
 
         if ($request->startDate !== null && $request->startDate != 'null' && $request->startDate != '') {
-            $startDate = Carbon::createFromFormat($this->company->date_format, $request->startDate)->toDateString();
+            $startDate = Carbon::createFromFormat($this->cooperative->date_format, $request->startDate)->toDateString();
 
             if (!is_null($startDate)) {
                 $model = $model->where(DB::raw('DATE(leads.`created_at`)'), '>=', $startDate);
@@ -86,7 +86,7 @@ class LeadReportDataTable extends BaseDataTable
         }
 
         if ($request->endDate !== null && $request->endDate != 'null' && $request->endDate != '') {
-            $endDate = Carbon::createFromFormat($this->company->date_format, $request->endDate)->toDateString();
+            $endDate = Carbon::createFromFormat($this->cooperative->date_format, $request->endDate)->toDateString();
 
             if (!is_null($endDate)) {
                 $model = $model->where(function ($query) use ($endDate) {

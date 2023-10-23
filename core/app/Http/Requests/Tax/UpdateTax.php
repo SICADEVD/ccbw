@@ -35,7 +35,7 @@ class UpdateTax extends CoreRequest
         else {
             if ($this->type == 'tax_name') {
                 $rules = [
-                    'value' => 'required|unique:taxes,tax_name,null,id,company_id,' . company()->id,
+                    'value' => 'required|unique:taxes,tax_name,null,id,cooperative_id,' . cooperative()->id,
                 ];
             }
             else {

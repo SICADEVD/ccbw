@@ -118,7 +118,7 @@ class CreditNotesDataTable extends BaseDataTable
             ->editColumn(
                 'issue_date',
                 function ($row) {
-                    return $row->issue_date->timezone($this->company->timezone)->translatedFormat($this->company->date_format);
+                    return $row->issue_date->timezone($this->cooperative->timezone)->translatedFormat($this->cooperative->date_format);
                 }
             )
             ->editColumn('status', function ($row) {
@@ -163,12 +163,12 @@ class CreditNotesDataTable extends BaseDataTable
             );
 
         if ($request->startDate !== null && $request->startDate != 'null' && $request->startDate != '') {
-            $startDate = Carbon::createFromFormat($this->company->date_format, $request->startDate)->toDateString();
+            $startDate = Carbon::createFromFormat($this->cooperative->date_format, $request->startDate)->toDateString();
             $model = $model->where(DB::raw('DATE(credit_notes.`issue_date`)'), '>=', $startDate);
         }
 
         if ($request->endDate !== null && $request->endDate != 'null' && $request->endDate != '') {
-            $endDate = Carbon::createFromFormat($this->company->date_format, $request->endDate)->toDateString();
+            $endDate = Carbon::createFromFormat($this->cooperative->date_format, $request->endDate)->toDateString();
             $model = $model->where(DB::raw('DATE(credit_notes.`issue_date`)'), '<=', $endDate);
         }
 

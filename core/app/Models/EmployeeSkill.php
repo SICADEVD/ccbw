@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Traits\HasCompany;
+use App\Traits\HasCooperative;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -24,15 +24,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|EmployeeSkill whereSkillId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EmployeeSkill whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EmployeeSkill whereUserId($value)
- * @property int|null $company_id
- * @property-read \App\Models\Company|null $company
- * @method static \Illuminate\Database\Eloquent\Builder|EmployeeSkill whereCompanyId($value)
+ * @property int|null $cooperative_id
+ * @property-read \App\Models\Cooperative|null $cooperative
+ * @method static \Illuminate\Database\Eloquent\Builder|EmployeeSkill whereCooperativeId($value)
  * @mixin \Eloquent
  */
 class EmployeeSkill extends BaseModel
 {
 
-    use HasCompany;
+    use HasCooperative;
 
     protected $table = 'employee_skills';
 

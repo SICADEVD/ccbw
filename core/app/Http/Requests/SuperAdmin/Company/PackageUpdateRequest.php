@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\SuperAdmin\Company;
+namespace App\Http\Requests\SuperAdmin\Cooperative;
 
 use Illuminate\Foundation\Http\FormRequest;
 

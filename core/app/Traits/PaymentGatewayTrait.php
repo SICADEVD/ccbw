@@ -2,18 +2,18 @@
 
 namespace App\Traits;
 
-use App\Models\Company;
+use App\Models\Cooperative;
 use Froiden\RestAPI\Exceptions\ApiException;
 use Illuminate\Support\Facades\Config;
 
 trait PaymentGatewayTrait
 {
 
-    private function paystackSet($companyHash)
+    private function paystackSet($cooperativeHash)
     {
 
-        // This needs to be set according to company id
-        $paymentGateway = $this->getGateway($companyHash);
+        // This needs to be set according to cooperative id
+        $paymentGateway = $this->getGateway($cooperativeHash);
 
         $payStackMode = $paymentGateway->paystack_mode;
 
@@ -37,16 +37,16 @@ trait PaymentGatewayTrait
 
     }
 
-    private function mollieSet($companyHash)
+    private function mollieSet($cooperativeHash)
     {
-        $paymentGateway = $this->getGateway($companyHash);
+        $paymentGateway = $this->getGateway($cooperativeHash);
         $mollie_api_key = ($paymentGateway->mollie_api_key) ?: config('mollie.key');
         Config::set('mollie.key', $mollie_api_key);
     }
 
-    private function payfastSet($companyHash)
+    private function payfastSet($cooperativeHash)
     {
-        $paymentGateway = $this->getGateway($companyHash);
+        $paymentGateway = $this->getGateway($cooperativeHash);
 
         if ($paymentGateway->payfast_mode == 'sandbox') {
             $payfast_merchant_id = ($paymentGateway->test_payfast_merchant_id) ?: env('PF_MERCHANT_ID');
@@ -68,9 +68,9 @@ trait PaymentGatewayTrait
 
     }
 
-    private function flutterwaveSet($companyHash)
+    private function flutterwaveSet($cooperativeHash)
     {
-        $paymentGateway = $this->getGateway($companyHash);
+        $paymentGateway = $this->getGateway($cooperativeHash);
         // Flutterwave
         $flutterwave_mode = $paymentGateway->flutterwave_mode;
 
@@ -91,9 +91,9 @@ trait PaymentGatewayTrait
         Config::set('secretHash.merchantEmail', $flutterwave_hash);
     }
 
-    private function authorizeSet($companyHash)
+    private function authorizeSet($cooperativeHash)
     {
-        $paymentGateway = $this->getGateway($companyHash);
+        $paymentGateway = $this->getGateway($cooperativeHash);
         $authorize_api_login_id = ($paymentGateway->authorize_api_login_id) ?: env('AUTHORIZE_PAYMENT_API_LOGIN_ID');
         $authorize_transaction_key = ($paymentGateway->authorize_transaction_key) ?: env('AUTHORIZE_PAYMENT_TRANSACTION_KEY');
 
@@ -106,9 +106,9 @@ trait PaymentGatewayTrait
 
     }
 
-    private function squareSet($companyHash)
+    private function squareSet($cooperativeHash)
     {
-        $paymentGateway = $this->getGateway($companyHash);
+        $paymentGateway = $this->getGateway($cooperativeHash);
         // square
         $square_application_id = ($paymentGateway->square_application_id) ?: env('SQUARE_APPLICATION_ID');
         $square_access_token = ($paymentGateway->square_access_token) ?: env('SQUARE_ACCESS_TOKEN');
@@ -122,17 +122,17 @@ trait PaymentGatewayTrait
         Config::set('services.square.environment', $square_environment);
     }
 
-    private function getGateway($companyHash)
+    private function getGateway($cooperativeHash)
     {
 
-        $company = Company::where('hash', $companyHash)->first();
+        $cooperative = Cooperative::where('hash', $cooperativeHash)->first();
 
-        if (!$company) {
+        if (!$cooperative) {
             throw new ApiException('Please enter the correct webhook url. You have entered wrong webhook url', null, 200);
         }
 
-        // This needs to be set according to company id
-        return $company->paymentGatewayCredentials;
+        // This needs to be set according to cooperative id
+        return $cooperative->paymentGatewayCredentials;
     }
 
 }

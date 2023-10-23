@@ -48,7 +48,7 @@ class StorePayment extends CoreRequest
 
         if ($this->transaction_id) {
 
-            // It need to be unique for all the company
+            // It need to be unique for all the cooperative
             $rules['transaction_id'] = 'unique:payments,transaction_id';
         }
 

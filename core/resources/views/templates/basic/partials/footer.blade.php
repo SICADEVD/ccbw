@@ -33,7 +33,7 @@
 
                 <div class="col-lg-3 col-md-6 col-sm-6">
                     <div class="footer__widget">
-                        <h5 class="title text--white">@lang('Company')</h5>
+                        <h5 class="title text--white">@lang('Cooperative')</h5>
                         <ul class="useful-link">
                             <li>
                                 <a href="{{ route('home') }}">@lang('Home')</a>

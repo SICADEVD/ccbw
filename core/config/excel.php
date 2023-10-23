@@ -69,7 +69,7 @@ return [
             'keywords'       => '',
             'category'       => '',
             'manager'        => '',
-            'company'        => '',
+            'cooperative'        => '',
         ],
     ],
 
@@ -147,7 +147,7 @@ return [
             'keywords'       => '',
             'category'       => '',
             'manager'        => '',
-            'company'        => '',
+            'cooperative'        => '',
         ],
 
     ],

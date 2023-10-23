@@ -210,7 +210,7 @@ function showTable(loading = true) {
 
     var year = $('#year').val();
     var month = $('#month').val();
-
+ 
     var userId = $('#user_id').val();
     var department = $('#department').val();
     var designation = $('#designation').val();
@@ -261,9 +261,10 @@ $('#attendance-data').on('click', '.edit-attendance', function (event) {
     url = url.replace(':day', attendanceDate);
     url = url.replace(':month', month);
     url = url.replace(':year', year);
-
+    
     $(MODAL_LG + ' ' + MODAL_HEADING).html('...');
     $.ajaxModal(MODAL_XL, url);
+ $(MODAL_XL).modal('show'); 
 });
 
 function editAttendance(id) {

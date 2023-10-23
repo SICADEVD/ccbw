@@ -30,7 +30,7 @@ class StoreCurrency extends CoreRequest
             'no_of_decimal' => 'required',
             'usd_price' => 'required_if:is_cryptocurrency,yes',
             'exchange_rate' => 'required_if:is_cryptocurrency,no',
-            'currency_code' => 'required|unique:currencies,currency_code,null,id,company_id,' . company()->id,
+            'currency_code' => 'required|unique:currencies,currency_code,null,id,cooperative_id,' . cooperative()->id,
         ];
     }
 

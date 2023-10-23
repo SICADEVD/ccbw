@@ -66,12 +66,12 @@ class LeaveReportDataTable extends BaseDataTable
         $employeeId = $request->employeeId;
 
         if ($request->startDate == '') {
-            $startDate = now($this->company->timezone)->startOfMonth();
-            $endDate = now($this->company->timezone);
+            $startDate = now($this->cooperative->timezone)->startOfMonth();
+            $endDate = now($this->cooperative->timezone);
         }
         else {
-            $startDate = Carbon::createFromFormat($this->company->date_format, $startDate)->toDateString();
-            $endDate = Carbon::createFromFormat($this->company->date_format, $endDate)->toDateString();
+            $startDate = Carbon::createFromFormat($this->cooperative->date_format, $startDate)->toDateString();
+            $endDate = Carbon::createFromFormat($this->cooperative->date_format, $endDate)->toDateString();
         }
 
         $startDt = '';
@@ -91,7 +91,7 @@ class LeaveReportDataTable extends BaseDataTable
                 ( select count("id") from leaves where user_id = users.id and leaves.duration = \'half day\' and leaves.status = \'approved\' ' . $startDt . ' ' . $endDt . ' ) as count_approved_half_leaves,
                 ( select count("id") from leaves where user_id = users.id and leaves.duration != \'half day\' and leaves.status = \'pending\' ' . $startDt . ' ' . $endDt . ') as count_pending_leaves,
                 ( select count("id") from leaves where user_id = users.id and leaves.duration = \'half day\' and leaves.status = \'pending\' ' . $startDt . ' ' . $endDt . ') as count_pending_half_leaves,
-                ( select count("id") from leaves where user_id = users.id and leaves.duration != \'half day\' and leaves.leave_date > "' . Carbon::now($this->company->timezone)->translatedFormat('Y-m-d') . '" and leaves.status != \'rejected\' ' . $startDt . ' ' . $endDt . ') as count_upcoming_leaves,
+                ( select count("id") from leaves where user_id = users.id and leaves.duration != \'half day\' and leaves.leave_date > "' . Carbon::now($this->cooperative->timezone)->translatedFormat('Y-m-d') . '" and leaves.status != \'rejected\' ' . $startDt . ' ' . $endDt . ') as count_upcoming_leaves,
                 ( select count("id") from leaves where user_id = users.id and leaves.duration = \'half day\' and leaves.leave_date   > "' . now()->translatedFormat('Y-m-d') . '" and leaves.status != \'rejected\' ' . $startDt . ' ' . $endDt . ') as count_upcoming_half_leaves'
         )->leftJoin('employee_details', 'employee_details.user_id', '=', 'users.id')
             ->leftJoin('designations', 'employee_details.designation_id', '=', 'designations.id')

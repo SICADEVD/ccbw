@@ -73,16 +73,16 @@ $moveClass = '';
             @if (!is_null($task->due_date))
                 @if ($task->due_date->endOfDay()->isPast())
                     <div class="d-flex text-red">
-                        <span class="f-12 ml-1"><i class="f-11 bi bi-calendar align-self-center"></i> {{ $task->due_date->translatedFormat(company()->date_format) }}</span>
+                        <span class="f-12 ml-1"><i class="f-11 bi bi-calendar align-self-center"></i> {{ $task->due_date->translatedFormat(cooperative()->date_format) }}</span>
                     </div>
-                @elseif($task->due_date->setTimezone(company()->timezone)->isToday())
+                @elseif($task->due_date->setTimezone(cooperative()->timezone)->isToday())
                     <div class="d-flex text-dark-green">
                         <i class="fa fa-calendar-alt f-11 align-self-center"></i><span class="f-12 ml-1">@lang('app.today')</span>
                     </div>
                 @else
                     <div class="d-flex text-lightest">
                         <i class="fa fa-calendar-alt f-11 align-self-center"></i><span
-                            class="f-12 ml-1">{{ $task->due_date->translatedFormat(company()->date_format) }}</span>
+                            class="f-12 ml-1">{{ $task->due_date->translatedFormat(cooperative()->date_format) }}</span>
                     </div>
                 @endif
             @endif

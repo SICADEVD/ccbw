@@ -28,9 +28,9 @@ class UpdateRequest extends CoreRequest
         $lead = Lead::whereRaw('md5(id) = ?', $this->route('lead'))->firstOrFail();
 
         $rules = [
-            'company_name' => 'required',
+            'cooperative_name' => 'required',
             'client_name' => 'required',
-            'client_email' => 'required|email:rfc|unique:leads,client_email,'.$lead->id.',id,company_id,' . company()->id,
+            'client_email' => 'required|email:rfc|unique:leads,client_email,'.$lead->id.',id,cooperative_id,' . cooperative()->id,
         ];
 
         return $rules;

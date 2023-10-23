@@ -28,10 +28,10 @@ class StoreInvoice extends CoreRequest
     {
         $this->has('show_shipping_address') ? $this->request->add(['show_shipping_address' => 'yes']) : $this->request->add(['show_shipping_address' => 'no']);
 
-        $setting = company();
+        $setting = cooperative();
 
         $rules = [
-            'invoice_number' => 'required|unique:invoices,invoice_number,null,id,company_id,' . company()->id,
+            'invoice_number' => 'required|unique:invoices,invoice_number,null,id,cooperative_id,' . cooperative()->id,
             'issue_date' => 'required',
             'sub_total' => 'required',
             'total' => 'required',

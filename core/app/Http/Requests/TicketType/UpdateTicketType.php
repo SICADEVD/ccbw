@@ -25,7 +25,7 @@ class UpdateTicketType extends CoreRequest
     public function rules()
     {
         return [
-            'type' => 'required|unique:ticket_types,type,'.$this->route('ticketType').',id,company_id,' . company()->id,
+            'type' => 'required|unique:ticket_types,type,'.$this->route('ticketType').',id,cooperative_id,' . cooperative()->id,
         ];
     }
 

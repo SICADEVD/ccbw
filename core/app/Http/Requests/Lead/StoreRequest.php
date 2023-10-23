@@ -28,7 +28,7 @@ class StoreRequest extends CoreRequest
     public function rules()
     {
         \Illuminate\Support\Facades\Validator::extend('check_superadmin', function ($attribute, $value, $parameters, $validator) {
-            return !\App\Models\User::withoutGlobalScopes([\App\Scopes\ActiveScope::class, \App\Scopes\CompanyScope::class])
+            return !\App\Models\User::withoutGlobalScopes([\App\Scopes\ActiveScope::class, \App\Scopes\CooperativeScope::class])
                 ->where('email', $value)
                 ->where('is_superadmin', 1)
                 ->exists();

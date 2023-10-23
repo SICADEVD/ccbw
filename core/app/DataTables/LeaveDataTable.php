@@ -62,7 +62,7 @@ class LeaveDataTable extends BaseDataTable
                 return $row->type->paid == 1 ? __('app.yes') : __('app.no');
             })
             ->addColumn('leave_date', function ($row) {
-                return Carbon::parse($row->leave_date)->translatedFormat($this->company->date_format) .' ('.Carbon::parse($row->leave_date)->translatedFormat('l').')';
+                return Carbon::parse($row->leave_date)->translatedFormat($this->cooperative->date_format) .' ('.Carbon::parse($row->leave_date)->translatedFormat('l').')';
             })
             ->addColumn('status', function ($row) {
                 if ($row->status == 'approved') {
@@ -247,7 +247,7 @@ class LeaveDataTable extends BaseDataTable
     {
 
         // Will check count leave from the start of the year or nor
-        $setting = company();
+        $setting = cooperative();
 
         $leavesList = $model->with('user', 'user.employeeDetail', 'user.employeeDetail.designation', 'user.session', 'type')
             ->join('leave_types', 'leave_types.id', 'leaves.leave_type_id')
@@ -258,13 +258,13 @@ class LeaveDataTable extends BaseDataTable
             ->groupByRaw('ifnull(leaves.unique_id, leaves.id)');
 
         if (!is_null(request()->startDate)) {
-            $startDate = Carbon::createFromFormat($this->company->date_format, request()->startDate)->toDateString();
+            $startDate = Carbon::createFromFormat($this->cooperative->date_format, request()->startDate)->toDateString();
 
             $leavesList->whereRaw('Date(leaves.leave_date) >= ?', [$startDate]);
         }
 
         if (!is_null(request()->endDate)) {
-            $endDate = Carbon::createFromFormat($this->company->date_format, request()->endDate)->toDateString();
+            $endDate = Carbon::createFromFormat($this->cooperative->date_format, request()->endDate)->toDateString();
 
             $leavesList->whereRaw('Date(leaves.leave_date) <= ?', [$endDate]);
         }

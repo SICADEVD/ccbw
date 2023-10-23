@@ -11,7 +11,7 @@
                     <h4 class="card-title f-13 f-w-500 text-dark mr-3">{{ $user->name }}</h4>
                 </a>
                 <p class="card-date f-11 text-lightest mb-0">
-                    {{ $message->created_at->timezone(company()->timezone)->translatedFormat(company()->date_format . ' ' . company()->time_format) }}
+                    {{ $message->created_at->timezone(cooperative()->timezone)->translatedFormat(cooperative()->date_format . ' ' . cooperative()->time_format) }}
                 </p>
 
                 @if ($user->id == user()->id || in_array('admin', user_roles()))

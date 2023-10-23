@@ -25,7 +25,7 @@ class StoreTaskBoard extends CoreRequest
     public function rules()
     {
         return [
-            'column_name' => 'required|unique:taskboard_columns,column_name,null,id,company_id,' . company()->id,
+            'column_name' => 'required|unique:taskboard_columns,column_name,null,id,cooperative_id,' . cooperative()->id,
             'label_color' => 'required'
         ];
     }

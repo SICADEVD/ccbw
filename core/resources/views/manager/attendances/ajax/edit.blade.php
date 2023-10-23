@@ -1,7 +1,4 @@
-@php
-$editAttendancePermission = user()->permission('add_attendance');
-$deleteAttendancePermission = user()->permission('delete_attendance');
-@endphp
+ 
 <div class="modal-header">
     <h5 class="modal-title" id="modelHeading">
         @if ($type == 'edit')
@@ -10,8 +7,9 @@ $deleteAttendancePermission = user()->permission('delete_attendance');
         @lang('app.mark')  @lang('app.menu.attendance')
         @endif
     </h5>
-    <button type="button"  class="close" data-dismiss="modal" aria-label="Close"><span
-        aria-hidden="true">×</span></button>
+   
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="las la-times"></i> </button>
     </div>
     <div class="modal-body">
         <div class="row">
@@ -21,7 +19,7 @@ $deleteAttendancePermission = user()->permission('delete_attendance');
         </div>
         <div class="row">
             <div class="col-sm-12">
-                <h5 class="f-w-500 f-15 d-flex justify-content-between">{{ __('app.date').' - '.\Carbon\Carbon::parse($date)->translatedFormat(company()->date_format) }}
+                <h5 class="f-w-500 f-15 d-flex justify-content-between">{{ __('app.date').' - '.\Carbon\Carbon::parse($date)->translatedFormat('Y-m-d') }}
                     @if ($attendanceSettings->shift_name != 'Day Off')
                     <span class="badge badge-info ml-2" style="background-color: {{ $attendanceSettings->color }}">{{ $attendanceSettings->shift_name }}</span>
                     @else
@@ -44,7 +42,7 @@ $deleteAttendancePermission = user()->permission('delete_attendance');
                                 <x-forms.text class="a-timepicker" :fieldLabel="__('modules.attendance.clock_in')"
                                     :fieldPlaceholder="__('placeholders.hours')" fieldName="clock_in_time"
                                     fieldId="clock-in-time" fieldRequired="true"
-                                    :fieldValue="(!is_null($row->clock_in_time)) ? \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $row->clock_in_time)->timezone(company()->timezone)->translatedFormat(company()->time_format) : ''" />
+                                    :fieldValue="(!is_null($row->clock_in_time)) ? \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $row->clock_in_time)->timezone('Africa/Abidjan')->translatedFormat('H:i') : ''" />
                             </div>
                         </div>
 
@@ -74,7 +72,7 @@ $deleteAttendancePermission = user()->permission('delete_attendance');
                                 <x-forms.text :fieldLabel="__('modules.attendance.clock_out')"
                                     :fieldPlaceholder="__('placeholders.hours')" fieldName="clock_out_time"
                                     fieldId="clock-out"
-                                    :fieldValue="(!is_null($row->clock_out_time)) ? \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $row->clock_out_time)->timezone(company()->timezone)->translatedFormat(company()->time_format) : ''" />
+                                    :fieldValue="(!is_null($row->clock_out_time)) ? \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $row->clock_out_time)->timezone('Africa/Abidjan')->translatedFormat('H:i') : ''" />
                             </div>
                         </div>
 
@@ -138,7 +136,7 @@ $deleteAttendancePermission = user()->permission('delete_attendance');
     </div>
 </div>
 <div class="modal-footer">
-    <x-forms.button-cancel data-dismiss="modal" class="border-0 mr-3">@lang('app.close')</x-forms.button-cancel>
+    <x-forms.button-cancel data-bs-dismiss="modal" class="border-0 mr-3">@lang('app.close')</x-forms.button-cancel>
 
     <x-forms.button-primary id="save-attendance" icon="check">@lang('app.save')</x-forms.button-primary>
 </div>
@@ -148,15 +146,13 @@ $deleteAttendancePermission = user()->permission('delete_attendance');
     $(document).ready(function() {
 
         $('#clock-in-time').timepicker({
-            @if(company()->time_format == 'H:i')
-            showMeridian: false,
-            @endif
+           
+            showMeridian: false, 
             minuteStep: 1
         });
         $('#clock-out').timepicker({
-            @if(company()->time_format == 'H:i')
-            showMeridian: false,
-            @endif
+             
+            showMeridian: false, 
             minuteStep: 1,
             defaultTime: false
         });

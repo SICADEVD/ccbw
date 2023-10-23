@@ -46,11 +46,11 @@ class TimeLogReportDataTable extends BaseDataTable
                 ]);
             })
             ->editColumn('start_time', function ($row) {
-                return $row->start_time->timezone($this->company->timezone)->translatedFormat($this->company->date_format . ' ' . $this->company->time_format);
+                return $row->start_time->timezone($this->cooperative->timezone)->translatedFormat($this->cooperative->date_format . ' ' . $this->cooperative->time_format);
             })
             ->editColumn('end_time', function ($row) {
                 if (!is_null($row->end_time)) {
-                    return $row->end_time->timezone($this->company->timezone)->translatedFormat($this->company->date_format . ' ' . $this->company->time_format);
+                    return $row->end_time->timezone($this->cooperative->timezone)->translatedFormat($this->cooperative->date_format . ' ' . $this->cooperative->time_format);
                 }
                 else {
                     return "<span class='badge badge-primary'>" . __('app.active') . '</span>';
@@ -80,7 +80,7 @@ class TimeLogReportDataTable extends BaseDataTable
                     return '--';
                 }
 
-                return currency_format($row->earnings, company()->currency_id);
+                return currency_format($row->earnings, cooperative()->currency_id);
             })
             ->editColumn('project', function ($row) {
                 $project = '';
@@ -161,7 +161,7 @@ class TimeLogReportDataTable extends BaseDataTable
 
 
         if ($request->startDate !== null && $request->startDate != 'null' && $request->startDate != '') {
-            $startDate = Carbon::createFromFormat($this->company->date_format, $request->startDate)->toDateString();
+            $startDate = Carbon::createFromFormat($this->cooperative->date_format, $request->startDate)->toDateString();
 
             if (!is_null($startDate)) {
                 $model = $model->where(DB::raw('DATE(project_time_logs.`start_time`)'), '>=', $startDate);
@@ -169,7 +169,7 @@ class TimeLogReportDataTable extends BaseDataTable
         }
 
         if ($request->endDate !== null && $request->endDate != 'null' && $request->endDate != '') {
-            $endDate = Carbon::createFromFormat($this->company->date_format, $request->endDate)->toDateString();
+            $endDate = Carbon::createFromFormat($this->cooperative->date_format, $request->endDate)->toDateString();
 
             if (!is_null($endDate)) {
                 $model = $model->where(function ($query) use ($endDate) {

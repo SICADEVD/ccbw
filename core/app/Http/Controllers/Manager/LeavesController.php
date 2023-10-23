@@ -152,7 +152,7 @@ class LeavesController extends Controller
 
         // Set Date as index for same date clock-ins
         foreach ($attendances as $attand) {
-            $clockInTime = Carbon::createFromFormat('Y-m-d H:i:s', $attand->clock_in_time->timezone(company()->timezone)->toDateTimeString(), 'UTC');
+            $clockInTime = Carbon::createFromFormat('Y-m-d H:i:s', $attand->clock_in_time->timezone(cooperative()->timezone)->toDateTimeString(), 'UTC');
 
             if (!is_null($attand->employee_shift_id)) {
                 $shiftStartTime = Carbon::parse($clockInTime->copy()->toDateString() . ' ' . $attand->shift->office_start_time);
@@ -240,7 +240,7 @@ class LeavesController extends Controller
         }
 
         // Getting View data
-        $view = view('attendances.ajax.user_attendance', ['dateWiseData' => $dateWiseData, 'global' => $this->company])->render();
+        $view = view('attendances.ajax.user_attendance', ['dateWiseData' => $dateWiseData, 'global' => $this->cooperative])->render();
 
         return Reply::dataOnly(['status' => 'success', 'data' => $view, 'daysPresent' => $daysPresent, 'daysLate' => $daysLate, 'halfDays' => $halfDays, 'totalWorkingDays' => $totalWorkingDays, 'absentDays' => $daysAbsent, 'holidays' => $holidayCount]);
     }

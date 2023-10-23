@@ -134,13 +134,13 @@ class ProposalDataTable extends BaseDataTable
             ->editColumn(
                 'valid_till',
                 function ($row) {
-                    return Carbon::parse($row->valid_till)->translatedFormat($this->company->date_format);
+                    return Carbon::parse($row->valid_till)->translatedFormat($this->cooperative->date_format);
                 }
             )
             ->editColumn(
                 'created_at',
                 function ($row) {
-                    return Carbon::parse($row->created_at)->translatedFormat($this->company->date_format);
+                    return Carbon::parse($row->created_at)->translatedFormat($this->cooperative->date_format);
                 }
             )
             ->rawColumns(['name', 'action', 'status', 'client_name', 'proposal_number'])
@@ -153,18 +153,18 @@ class ProposalDataTable extends BaseDataTable
     public function query()
     {
         $request = $this->request();
-        $model = Proposal::select('proposals.id', 'proposals.hash', 'leads.client_name', 'proposals.send_status', 'leads.client_id', 'leads.id as lead_id', 'total', 'valid_till', 'proposals.status', 'currencies.currency_symbol', 'currencies.id as currencyId', 'leads.company_name', 'proposals.added_by', 'proposals.created_at')
+        $model = Proposal::select('proposals.id', 'proposals.hash', 'leads.client_name', 'proposals.send_status', 'leads.client_id', 'leads.id as lead_id', 'total', 'valid_till', 'proposals.status', 'currencies.currency_symbol', 'currencies.id as currencyId', 'leads.cooperative_name', 'proposals.added_by', 'proposals.created_at')
             ->with('signature')
             ->join('currencies', 'currencies.id', '=', 'proposals.currency_id')
             ->join('leads', 'leads.id', 'proposals.lead_id');
 
         if ($request->startDate !== null && $request->startDate != 'null' && $request->startDate != '') {
-            $startDate = Carbon::createFromFormat($this->company->date_format, $request->startDate)->toDateString();
+            $startDate = Carbon::createFromFormat($this->cooperative->date_format, $request->startDate)->toDateString();
             $model = $model->where(DB::raw('DATE(proposals.`created_at`)'), '>=', $startDate);
         }
 
         if ($request->endDate !== null && $request->endDate != 'null' && $request->endDate != '') {
-            $endDate = Carbon::createFromFormat($this->company->date_format, $request->endDate)->toDateString();
+            $endDate = Carbon::createFromFormat($this->cooperative->date_format, $request->endDate)->toDateString();
             $model = $model->where(DB::raw('DATE(proposals.`created_at`)'), '<=', $endDate);
         }
 

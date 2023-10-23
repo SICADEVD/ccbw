@@ -108,13 +108,13 @@ class ArchiveTasksDataTable extends BaseDataTable
                 }
 
                 if ($row->due_date->endOfDay()->isPast()) {
-                    return '<span class="text-danger">' . $row->due_date->translatedFormat($this->company->date_format) . '</span>';
+                    return '<span class="text-danger">' . $row->due_date->translatedFormat($this->cooperative->date_format) . '</span>';
                 }
                 elseif ($row->due_date->isToday()) {
                     return '<span class="text-success">' . __('app.today') . '</span>';
                 }
 
-                return '<span >' . $row->due_date->translatedFormat($this->company->date_format) . '</span>';
+                return '<span >' . $row->due_date->translatedFormat($this->cooperative->date_format) . '</span>';
             })
             ->editColumn('users', function ($row) {
                 if (count($row->users) == 0) {
@@ -288,11 +288,11 @@ class ArchiveTasksDataTable extends BaseDataTable
         $endDate = null;
 
         if ($request->startDate !== null && $request->startDate != 'null' && $request->startDate != '') {
-            $startDate = Carbon::createFromFormat($this->company->date_format, $request->startDate)->toDateString();
+            $startDate = Carbon::createFromFormat($this->cooperative->date_format, $request->startDate)->toDateString();
         }
 
         if ($request->endDate !== null && $request->endDate != 'null' && $request->endDate != '') {
-            $endDate = Carbon::createFromFormat($this->company->date_format, $request->endDate)->toDateString();
+            $endDate = Carbon::createFromFormat($this->cooperative->date_format, $request->endDate)->toDateString();
         }
 
         $projectId = $request->projectId;
@@ -389,7 +389,7 @@ class ArchiveTasksDataTable extends BaseDataTable
         }
 
         if ($request->overdue == 'yes' && $request->status != 'all') {
-            $model->where(DB::raw('DATE(tasks.`due_date`)'), '<', now(company()->timezone)->toDateString());
+            $model->where(DB::raw('DATE(tasks.`due_date`)'), '<', now(cooperative()->timezone)->toDateString());
         }
 
         if ($projectId != 0 && $projectId != null && $projectId != 'all') {

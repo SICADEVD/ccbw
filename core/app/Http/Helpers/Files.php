@@ -2,7 +2,7 @@
 
 namespace App\Http\Helpers;
 
-use App\Models\Company;
+use App\Models\Cooperative;
 use App\Models\FileStorage;
 use App\Models\StorageSetting;
 use Illuminate\Support\Facades\File;
@@ -91,16 +91,16 @@ class Files
         }
 
         // WORKSUITESAAS
-        if (company() && company()->package->max_storage_size > 0) {
-            // Check if company has exceeded the storage limit
-            $companyFilesSize = FileStorage::where('company_id', company()->id)->sum('size');
-            $companyPackageMaxStorageSize = company()->package->max_storage_size;
-            $companyPackageStorageUnit = company()->package->storage_unit;
-            $maxStorageInBytes = $companyPackageMaxStorageSize * self::storageUnitToBytes($companyPackageStorageUnit);
-            $companyAllowedStorageSize = $maxStorageInBytes - $companyFilesSize;
+        if (cooperative() && cooperative()->package->max_storage_size > 0) {
+            // Check if cooperative has exceeded the storage limit
+            $cooperativeFilesSize = FileStorage::where('cooperative_id', cooperative()->id)->sum('size');
+            $cooperativePackageMaxStorageSize = cooperative()->package->max_storage_size;
+            $cooperativePackageStorageUnit = cooperative()->package->storage_unit;
+            $maxStorageInBytes = $cooperativePackageMaxStorageSize * self::storageUnitToBytes($cooperativePackageStorageUnit);
+            $cooperativeAllowedStorageSize = $maxStorageInBytes - $cooperativeFilesSize;
 
-            if ($uploadedFile->getSize() > $companyAllowedStorageSize) {
-                throw new ApiException('You are not allowed to upload a file with filesize greater than ' . $companyAllowedStorageSize . ' bytes', null, 422, 422);
+            if ($uploadedFile->getSize() > $cooperativeAllowedStorageSize) {
+                throw new ApiException('You are not allowed to upload a file with filesize greater than ' . $cooperativeAllowedStorageSize . ' bytes', null, 422, 422);
             }
         }
 
@@ -272,22 +272,22 @@ class Files
         return $newName;
     }
 
-    public static function uploadLocalFile($fileName, $path, $companyId = null): void
+    public static function uploadLocalFile($fileName, $path, $cooperativeId = null): void
     {
         if (!File::exists(public_path(Files::UPLOAD_FOLDER . '/' . $path . '/' .  $fileName))) {
             return;
         }
 
-        self::saveFileInfo($fileName, $path, $companyId);
+        self::saveFileInfo($fileName, $path, $cooperativeId);
         self::storeLocalFileOnCloud($fileName, $path);
     }
 
-    public static function saveFileInfo($fileName, $path, $companyId = null)
+    public static function saveFileInfo($fileName, $path, $cooperativeId = null)
     {
         $filePath = public_path(Files::UPLOAD_FOLDER . '/' . $path . '/' .  $fileName);
 
         $fileStorage = FileStorage::where('filename', $fileName)->first() ?: new FileStorage();
-        $fileStorage->company_id = $companyId;
+        $fileStorage->cooperative_id = $cooperativeId;
         $fileStorage->filename = $fileName;
         $fileStorage->size = File::size($filePath);
         $fileStorage->type = File::mimeType($filePath);
@@ -318,13 +318,13 @@ class Files
      * fixLocalUploadFiles is used to fix the local upload files
      *
      * Example of $model
-     * $model = Company::class;
+     * $model = Cooperative::class;
      *
      * Example of $columns
      * $columns = [
      *     [
      *        'name' => 'logo',
-     *       'path' => 'company'
+     *       'path' => 'cooperative'
      *    ]
      * ];
      *
@@ -344,7 +344,7 @@ class Files
                 /** @phpstan-ignore-next-line */
                 $fileName = $item->{$name};
                 /** @phpstan-ignore-next-line */
-                $companyId = ($model == Company::class) ? $item->id : $item->company_id;
+                $cooperativeId = ($model == Cooperative::class) ? $item->id : $item->cooperative_id;
 
                 $filePath = public_path(self::UPLOAD_FOLDER . '/' . $path . '/' .  $fileName);
 
@@ -352,7 +352,7 @@ class Files
                     continue;
                 }
 
-                self::saveFileInfo($fileName, $path, $companyId);
+                self::saveFileInfo($fileName, $path, $cooperativeId);
                 self::storeLocalFileOnCloud($fileName, $path);
             }
         }

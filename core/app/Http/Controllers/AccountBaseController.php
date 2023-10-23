@@ -85,7 +85,7 @@ class AccountBaseController extends Controller
 
         App::setLocale(user()->locale);
         Carbon::setLocale(user()->locale);
-        setlocale(LC_TIME, user()->locale . '_' . mb_strtoupper($this->company->locale));
+        setlocale(LC_TIME, user()->locale . '_' . mb_strtoupper($this->cooperative->locale));
 
         if (!isset(user()->roles)) {
             session(['user' => User::find(user()->id)]);

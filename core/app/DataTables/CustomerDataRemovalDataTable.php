@@ -60,7 +60,7 @@ class CustomerDataRemovalDataTable extends BaseDataTable
             ->editColumn(
                 'created_at',
                 function ($row) {
-                    return Carbon::parse($row->created_at)->translatedFormat($this->company->date_format);
+                    return Carbon::parse($row->created_at)->translatedFormat($this->cooperative->date_format);
                 }
             )
             ->rawColumns(['status', 'action', 'status']);

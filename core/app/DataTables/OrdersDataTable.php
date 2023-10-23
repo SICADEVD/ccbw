@@ -4,7 +4,7 @@ namespace App\DataTables;
 
 use Carbon\Carbon;
 use App\Models\Order;
-use App\Models\Company;
+use App\Models\Cooperative;
 use App\DataTables\BaseDataTable;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
@@ -165,7 +165,7 @@ class OrdersDataTable extends BaseDataTable
             ->editColumn(
                 'order_date',
                 function ($row) {
-                    return Carbon::parse($row->order_date)->timezone($this->company->timezone)->translatedFormat($this->company->date_format);
+                    return Carbon::parse($row->order_date)->timezone($this->cooperative->timezone)->translatedFormat($this->cooperative->date_format);
                 }
             )
             ->addColumn('order_status', function ($row) {
@@ -192,12 +192,12 @@ class OrdersDataTable extends BaseDataTable
             ->select('orders.id', 'orders.client_id', 'orders.currency_id', 'orders.total', 'orders.status', 'orders.order_date', 'orders.show_shipping_address', 'orders.added_by', 'orders.order_number', 'orders.custom_order_number');
 
         if ($request->startDate !== null && $request->startDate != 'null' && $request->startDate != '') {
-            $startDate = Carbon::createFromFormat($this->company->date_format, $request->startDate)->toDateString();
+            $startDate = Carbon::createFromFormat($this->cooperative->date_format, $request->startDate)->toDateString();
             $model = $model->where(DB::raw('DATE(orders.`order_date`)'), '>=', $startDate);
         }
 
         if ($request->endDate !== null && $request->endDate != 'null' && $request->endDate != '') {
-            $endDate = Carbon::createFromFormat($this->company->date_format, $request->endDate)->toDateString();
+            $endDate = Carbon::createFromFormat($this->cooperative->date_format, $request->endDate)->toDateString();
             $model = $model->where(DB::raw('DATE(orders.`order_date`)'), '<=', $endDate);
         }
 

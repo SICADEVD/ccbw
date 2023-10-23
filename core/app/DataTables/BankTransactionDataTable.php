@@ -62,7 +62,7 @@ class BankTransactionDataTable extends BaseDataTable
             })
             ->editColumn('transaction_date', function ($row) {
                 if (!is_null($row->transaction_date)) {
-                    return $row->transaction_date->translatedFormat($this->company->date_format);
+                    return $row->transaction_date->translatedFormat($this->cooperative->date_format);
                 }
             })
             ->addColumn('transaction_type', function ($row) {

@@ -96,7 +96,7 @@ class AppreciationsDataTable extends BaseDataTable
             ->editColumn(
                 'award_date',
                 function ($row) {
-                    return $row->award_date->translatedFormat($this->company->date_format);
+                    return $row->award_date->translatedFormat($this->cooperative->date_format);
                 }
             )
             ->editColumn(
@@ -134,12 +134,12 @@ class AppreciationsDataTable extends BaseDataTable
             ->join('users', 'users.id', '=', 'appreciations.award_to');
 
         if ($request->startDate !== null && $request->startDate != 'null' && $request->startDate != '') {
-            $startDate = Carbon::createFromFormat(company()->date_format, $request->startDate)->toDateString();
+            $startDate = Carbon::createFromFormat(cooperative()->date_format, $request->startDate)->toDateString();
             $model = $model->where(DB::raw('DATE(appreciations.`award_date`)'), '>=', $startDate);
         }
 
         if ($request->endDate !== null && $request->endDate != 'null' && $request->endDate != '') {
-            $endDate = Carbon::createFromFormat(company()->date_format, $request->endDate)->toDateString();
+            $endDate = Carbon::createFromFormat(cooperative()->date_format, $request->endDate)->toDateString();
             $model = $model->where(DB::raw('DATE(appreciations.`award_date`)'), '<=', $endDate);
         }
 

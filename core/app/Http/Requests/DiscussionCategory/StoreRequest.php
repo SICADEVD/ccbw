@@ -25,7 +25,7 @@ class StoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'category_name' => 'required|unique:discussion_categories,name,null,id,company_id,' . company()->id,
+            'category_name' => 'required|unique:discussion_categories,name,null,id,cooperative_id,' . cooperative()->id,
             'color' => 'required'
         ];
     }

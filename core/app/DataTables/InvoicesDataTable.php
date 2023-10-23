@@ -345,7 +345,7 @@ class InvoicesDataTable extends BaseDataTable
         $datatables->editColumn(
             'issue_date',
             function ($row) {
-                return $row->issue_date->timezone($this->company->timezone)->translatedFormat($this->company->date_format);
+                return $row->issue_date->timezone($this->cooperative->timezone)->translatedFormat($this->cooperative->date_format);
             }
         );
         $datatables->orderColumn('short_code', 'invoice_number $1');
@@ -385,15 +385,15 @@ class InvoicesDataTable extends BaseDataTable
                 'invoices.show_shipping_address', 'invoices.send_status', 'invoices.invoice_recurring_id',
                 'invoices.added_by', 'invoices.hash', 'invoices.custom_invoice_number'
             ])
-            ->addSelect('invoices.company_id'); // Company_id is fetched so the we have fetch company relation with it)
+            ->addSelect('invoices.cooperative_id'); // Cooperative_id is fetched so the we have fetch cooperative relation with it)
 
         if ($request->startDate !== null && $request->startDate != 'null' && $request->startDate != '') {
-            $startDate = Carbon::createFromFormat($this->company->date_format, $request->startDate)->toDateString();
+            $startDate = Carbon::createFromFormat($this->cooperative->date_format, $request->startDate)->toDateString();
             $model = $model->where(DB::raw('DATE(invoices.`issue_date`)'), '>=', $startDate);
         }
 
         if ($request->endDate !== null && $request->endDate != 'null' && $request->endDate != '') {
-            $endDate = Carbon::createFromFormat($this->company->date_format, $request->endDate)->toDateString();
+            $endDate = Carbon::createFromFormat($this->cooperative->date_format, $request->endDate)->toDateString();
             $model = $model->where(DB::raw('DATE(invoices.`issue_date`)'), '<=', $endDate);
         }
 

@@ -32,8 +32,8 @@ trait HRDashboard
         abort_403($this->viewHRDashboard !== 'all');
 
         $this->pageTitle = 'app.hrDashboard';
-        $this->startDate  = (request('startDate') != '') ? Carbon::createFromFormat($this->company->date_format, request('startDate')) : now($this->company->timezone)->startOfMonth();
-        $this->endDate = (request('endDate') != '') ? Carbon::createFromFormat($this->company->date_format, request('endDate')) : now($this->company->timezone);
+        $this->startDate  = (request('startDate') != '') ? Carbon::createFromFormat($this->cooperative->date_format, request('startDate')) : now($this->cooperative->timezone)->startOfMonth();
+        $this->endDate = (request('endDate') != '') ? Carbon::createFromFormat($this->cooperative->date_format, request('endDate')) : now($this->cooperative->timezone);
         $startDate = $this->startDate->toDateString();
         $endDate = $this->endDate->toDateString();
 
@@ -104,8 +104,8 @@ trait HRDashboard
             ->get();
 
         $this->counts = User::select(
-                DB::raw('(select count(distinct(attendances.user_id)) from `attendances` inner join users as atd_user on atd_user.id=attendances.user_id inner join role_user on role_user.user_id=atd_user.id inner join roles on roles.id=role_user.role_id WHERE roles.name = "employee" and attendances.clock_in_time >= "'.today(company()->timezone)->setTimezone('UTC')->toDateTimeString().'" and atd_user.status = "active" AND attendances.company_id = '. company()->id .') as totalTodayAttendance'),
-                DB::raw('(select count(users.id) from `users` inner join role_user on role_user.user_id=users.id inner join roles on roles.id=role_user.role_id WHERE roles.name = "employee" and users.status = "active" AND users.company_id = '. company()->id .') as totalEmployees')
+                DB::raw('(select count(distinct(attendances.user_id)) from `attendances` inner join users as atd_user on atd_user.id=attendances.user_id inner join role_user on role_user.user_id=atd_user.id inner join roles on roles.id=role_user.role_id WHERE roles.name = "employee" and attendances.clock_in_time >= "'.today(cooperative()->timezone)->setTimezone('UTC')->toDateTimeString().'" and atd_user.status = "active" AND attendances.cooperative_id = '. cooperative()->id .') as totalTodayAttendance'),
+                DB::raw('(select count(users.id) from `users` inner join role_user on role_user.user_id=users.id inner join roles on roles.id=role_user.role_id WHERE roles.name = "employee" and users.status = "active" AND users.cooperative_id = '. cooperative()->id .') as totalEmployees')
             )
             ->first();
 

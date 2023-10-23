@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Lead;
 
-use App\Models\Company;
+use App\Models\Cooperative;
 use App\Http\Requests\CoreRequest;
 use App\Traits\CustomFieldsRequestTrait;
 
@@ -27,10 +27,10 @@ class StorePublicLead extends CoreRequest
      */
     public function rules()
     {
-        $company = Company::findOrFail($this->request->get('company_id'));
+        $cooperative = Cooperative::findOrFail($this->request->get('cooperative_id'));
         $rules = array();
         $rules['name'] = 'required';
-        $rules['email'] = 'nullable|email:rfc|unique:leads,client_email,null,id,company_id,' . $company->id.'|unique:users,email,null,id,company_id,' . $company->id;
+        $rules['email'] = 'nullable|email:rfc|unique:leads,client_email,null,id,cooperative_id,' . $cooperative->id.'|unique:users,email,null,id,cooperative_id,' . $cooperative->id;
 
         $rules = $this->customFieldRules($rules);
 

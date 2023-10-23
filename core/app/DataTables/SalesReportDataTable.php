@@ -29,7 +29,7 @@ class SalesReportDataTable extends BaseDataTable
             ->eloquent($query);
 
         $datatable->addColumn('paid_on', function ($row) {
-            return $row->paid_on ? Carbon::parse($row->paid_on)->format($this->company->date_format) : '--';
+            return $row->paid_on ? Carbon::parse($row->paid_on)->format($this->cooperative->date_format) : '--';
         });
         $datatable->addColumn('invoice_number', function ($row) {
             return $row->custom_invoice_number ? $row->custom_invoice_number : '--';
@@ -38,7 +38,7 @@ class SalesReportDataTable extends BaseDataTable
             return $row->client ? $row->client->name : '--';
         });
         $datatable->addColumn('invoice_value', function($row){
-            return $row->total ? currency_format($row->total, company()->currency->currency_id) : '--';
+            return $row->total ? currency_format($row->total, cooperative()->currency->currency_id) : '--';
         });
         $datatable->addColumn('bank_account', function($row){
             return !is_null($row->bankAccount) ? $row->bankAccount->bank_name : '--';
@@ -56,11 +56,11 @@ class SalesReportDataTable extends BaseDataTable
                     $discountedAmount = ($row->sub_total - $row->discount);
                 }
 
-                return currency_format($discountedAmount, company()->currency->currency_id);
+                return currency_format($discountedAmount, cooperative()->currency->currency_id);
 
             }
 
-            return currency_format($row->sub_total, company()->currency->currency_id);
+            return currency_format($row->sub_total, cooperative()->currency->currency_id);
 
         });
 
@@ -74,7 +74,7 @@ class SalesReportDataTable extends BaseDataTable
                     $discountAmount = $row->discount;
                 }
 
-                return currency_format($discountAmount, company()->currency->currency_id);
+                return currency_format($discountAmount, cooperative()->currency->currency_id);
             }
 
             return 0;
@@ -176,7 +176,7 @@ class SalesReportDataTable extends BaseDataTable
             ->whereNotNull('payments.invoice_id');
 
         if ($request->startDate !== null && $request->startDate != 'null' && $request->startDate != '') {
-            $startDate = Carbon::createFromFormat($this->company->date_format, $request->startDate)->toDateString();
+            $startDate = Carbon::createFromFormat($this->cooperative->date_format, $request->startDate)->toDateString();
 
             if (!is_null($startDate)) {
                 $model = $model->where(DB::raw('DATE(payments.`created_at`)'), '>=', $startDate);
@@ -184,7 +184,7 @@ class SalesReportDataTable extends BaseDataTable
         }
 
         if ($request->endDate !== null && $request->endDate != 'null' && $request->endDate != '') {
-            $endDate = Carbon::createFromFormat($this->company->date_format, $request->endDate)->toDateString();
+            $endDate = Carbon::createFromFormat($this->cooperative->date_format, $request->endDate)->toDateString();
 
             if (!is_null($endDate)) {
                 $model = $model->where(function ($query) use ($endDate) {

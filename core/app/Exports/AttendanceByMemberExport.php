@@ -58,12 +58,12 @@ class AttendanceByMemberExport implements FromCollection, WithHeadings,  WithMap
         $userId = $this->userId;
 
         $attendances = Attendance::
-        leftJoin('company_addresses', 'company_addresses.id', '=', 'attendances.location_id')
+        leftJoin('cooperative_addresses', 'cooperative_addresses.id', '=', 'attendances.location_id')
             ->where('attendances.user_id', '=', $userId)
             ->where(DB::raw('DATE(attendances.clock_in_time)'), '>=', $startDate->format('Y-m-d'))
             ->where(DB::raw('DATE(attendances.clock_in_time)'), '<=', $endDate->format('Y-m-d'))
             ->orderBy('attendances.clock_in_time', 'asc')
-            ->select('attendances.clock_in_time as date', 'attendances.clock_in_time', 'attendances.clock_out_time', 'attendances.late', 'attendances.half_day', 'company_addresses.location')->get();
+            ->select('attendances.clock_in_time as date', 'attendances.clock_in_time', 'attendances.clock_out_time', 'attendances.late', 'attendances.half_day', 'cooperative_addresses.location')->get();
 
         $leavesDates = Leave::where('user_id', $userId)
             ->where('leave_date', '>=', $startDate)
@@ -149,11 +149,11 @@ class AttendanceByMemberExport implements FromCollection, WithHeadings,  WithMap
         $employee_temp = array();
 
         foreach ($attendances->sortBy('date') as $attendance) {
-            $date = Carbon::createFromFormat('Y-m-d H:i:s', $attendance->date)->timezone(company()->timezone)->format(company()->date_format);
-            $to = $attendance->clock_out_time ? \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $attendance->clock_out_time)->timezone(company()->timezone) : null;
-            $from = $attendance->clock_in_time ? \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $attendance->clock_in_time)->timezone(company()->timezone) : null;
-            $clock_in = $attendance->clock_in_time ? Carbon::createFromFormat('Y-m-d H:i:s', $attendance->clock_in_time)->timezone(company()->timezone)->format(company()->time_format) : 0;
-            $clock_out = $attendance->clock_out_time ? Carbon::createFromFormat('Y-m-d H:i:s', $attendance->clock_out_time)->timezone(company()->timezone)->format(company()->time_format) : 0;
+            $date = Carbon::createFromFormat('Y-m-d H:i:s', $attendance->date)->timezone(cooperative()->timezone)->format(cooperative()->date_format);
+            $to = $attendance->clock_out_time ? \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $attendance->clock_out_time)->timezone(cooperative()->timezone) : null;
+            $from = $attendance->clock_in_time ? \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $attendance->clock_in_time)->timezone(cooperative()->timezone) : null;
+            $clock_in = $attendance->clock_in_time ? Carbon::createFromFormat('Y-m-d H:i:s', $attendance->clock_in_time)->timezone(cooperative()->timezone)->format(cooperative()->time_format) : 0;
+            $clock_out = $attendance->clock_out_time ? Carbon::createFromFormat('Y-m-d H:i:s', $attendance->clock_out_time)->timezone(cooperative()->timezone)->format(cooperative()->time_format) : 0;
             $diff_time = ($to && $from) ? $to->diffInMinutes($from) : 0;
             $location = $attendance->location;
 

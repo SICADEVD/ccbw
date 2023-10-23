@@ -17,7 +17,7 @@
             <div class="select-status">
                 <input type="text" class="position-relative text-dark form-control border-0 p-2 text-left f-14 f-w-500 border-additional-grey"
                     id="attendance_date" placeholder="@lang('placeholders.date')"
-                    value="{{ now(company()->timezone)->translatedFormat(company()->date_format) }}">
+                    value="{{ now(cooperative()->timezone)->translatedFormat(cooperative()->date_format) }}">
             </div>
         </div>
 

@@ -25,7 +25,7 @@ class StoreRole extends CoreRequest
     public function rules()
     {
         return [
-            'name' => 'required|unique:roles,name,null,id,company_id,' . company()->id
+            'name' => 'required|unique:roles,name,null,id,cooperative_id,' . cooperative()->id
         ];
     }
 

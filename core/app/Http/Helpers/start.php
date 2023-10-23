@@ -14,14 +14,14 @@
 
 use App\Models\User;
 use App\Http\Helpers\Files;
-use App\Models\Company;
+use App\Http\Controllers\FileController;
+use App\Models\Cooperative;
 use App\Models\Currency;
 use App\Models\Permission;
-use App\Models\Cooperative;
 use App\Scopes\ActiveScope;
 use Illuminate\Support\Str;
 use App\Models\ThemeSetting;
-use App\Scopes\CompanyScope;
+use App\Scopes\CooperativeScope;
 use App\Models\InvoiceSetting;
 use App\Models\StorageSetting;
 use App\Models\UserPermission;
@@ -30,7 +30,6 @@ use Illuminate\Support\Facades\DB;
 use App\Models\CurrencyFormatSetting;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
-use App\Http\Controllers\FileController;
 use App\Models\SuperAdmin\GlobalCurrency;
 use App\Models\SuperAdmin\GlobalInvoiceSetting;
 
@@ -44,14 +43,14 @@ if (!function_exists('user')) {
         if (session()->has('user')) {
             return session('user');
         }
+ 
+        if (auth()->id()) {
 
-        if (auth()->user()->id) {
-
-            if (session()->has('company')) {
-                $user = User::where('id', auth()->id)->where('status', 'active')->first();
+            if (session()->has('cooperative')) {
+                $user = User::where('user_auth_id', auth()->id())->where('status', 1)->first();
             }
             else {
-                $user = DB::table('users')->where('id', auth()->user()->id)->where('status', 'active')->first();
+                $user = DB::table('users')->where('user_auth_id', auth()->id())->where('status', 1)->first();
             }
 
             if ($user) {
@@ -59,7 +58,7 @@ if (!function_exists('user')) {
                 return session('user');
             }
             else {
-                auth()->user();
+                auth()->logout();
             }
         }
 
@@ -123,7 +122,7 @@ if (!function_exists('superadmin_theme')) {
     function superadmin_theme()
     {
         if (!session()->has('superadmin_theme')) {
-            session(['superadmin_theme' => \App\Models\ThemeSetting::withoutGlobalScope(CompanyScope::class)->where('panel', 'superadmin')->first()]);
+            session(['superadmin_theme' => \App\Models\ThemeSetting::withoutGlobalScope(CooperativeScope::class)->where('panel', 'superadmin')->first()]);
         }
 
         return session('superadmin_theme');
@@ -649,7 +648,7 @@ if (!function_exists('currency_format')) {
             $currency_symbol = '';
         }
         else {
-            $settings = $formats->company ?? Company::find($formats->company_id);
+            $settings = $formats->cooperative ?? Cooperative::find($formats->cooperative_id);
             $currency_symbol = $currencyId == null ? $settings->currency->currency_symbol : $formats->currency_symbol;
         }
 
@@ -821,7 +820,7 @@ if (!function_exists('default_address')) {
     function default_address()
     {
         if (!session()->has('default_address')) {
-            session(['default_address' => company()->defaultAddress]);
+            session(['default_address' => cooperative()->defaultAddress]);
         }
 
         return session('default_address');
@@ -873,7 +872,7 @@ if (!function_exists('sidebar_user_perms')) {
                 'view_leave_report',
                 'view_lead_proposals',
                 'view_attendance_report',
-                'manage_company_setting',
+                'manage_cooperative_setting',
                 'add_employees',
                 'view_knowledgebase',
                 'view_shift_roster',
@@ -1024,17 +1023,17 @@ if (!function_exists('can_upload')) {
     // @codingStandardsIgnoreLine
     function can_upload($size = 0)
     {
-        if (!session()->has('client_company')) {
-            session()->forget(['company_setting', 'company']);
+        if (!session()->has('client_cooperative')) {
+            session()->forget(['cooperative_setting', 'cooperative']);
         }
 
         // Return true for unlimited file storage
-        if (company()->package->max_storage_size == -1) {
+        if (cooperative()->package->max_storage_size == -1) {
             return true;
         }
 
         // Total Space in package in MB
-        $totalSpace = (company()->package->storage_unit == 'mb') ? company()->package->max_storage_size : company()->package->max_storage_size * 1024;
+        $totalSpace = (cooperative()->package->storage_unit == 'mb') ? cooperative()->package->max_storage_size : cooperative()->package->max_storage_size * 1024;
 
         // Used space in mb
         $fileStorage = \App\Models\FileStorage::all();
@@ -1080,21 +1079,21 @@ if (!function_exists('showId')) {
 
 if (!function_exists('getDomainSpecificUrl')) {
 
-    function getDomainSpecificUrl($url, $company = null)
+    function getDomainSpecificUrl($url, $cooperative = null)
     {
         // Check if Subdomain module exist
         if (!module_enabled('Subdomain')) {
             return $url;
         }
 
-        // If company specific
-        if ($company) {
+        // If cooperative specific
+        if ($cooperative) {
 
-            if (Str::contains($url, $company->sub_domain)) {
+            if (Str::contains($url, $cooperative->sub_domain)) {
                 return $url;
             }
 
-            $url = str_replace(request()->getHost(), $company->sub_domain, $url);
+            $url = str_replace(request()->getHost(), $cooperative->sub_domain, $url);
             $url = str_replace('www.', '', $url);
 
             // Replace https to http for sub-domain to
@@ -1105,7 +1104,7 @@ if (!function_exists('getDomainSpecificUrl')) {
             return $url;
         }
 
-        // If there is no company and url has login means
+        // If there is no cooperative and url has login means
         // New superadmin is created
         return str_replace('login', 'super-admin-login', $url);
     }
@@ -1159,25 +1158,25 @@ if (!function_exists('getDomain')) {
 
 }
 
-if (!function_exists('company')) {
+if (!function_exists('cooperative')) {
 
-    function company()
+    function cooperative()
     {
 
-        if (session()->has('company')) {
-            return session('company');
+        if (session()->has('cooperative')) {
+            return session('cooperative');
         }
 
 
         if (user()) {
-            if (user()->company_id) {
-                $company = Cooperative::find(user()->cooperative_id);
-                session(['company' => $company]);
+            if (user()->cooperative_id) {
+                $cooperative = Cooperative::find(user()->cooperative_id);
+                session(['cooperative' => $cooperative]);
 
-                return $company;
+                return $cooperative;
             }
 
-            return session('company');
+            return session('cooperative');
         }
 
         return false;
@@ -1185,14 +1184,14 @@ if (!function_exists('company')) {
 
 }
 
-if (!function_exists('companyOrGlobalSetting')) {
+if (!function_exists('cooperativeOrGlobalSetting')) {
 
-    function companyOrGlobalSetting()
+    function cooperativeOrGlobalSetting()
     {
         if (user()) {
 
-            if (user()->company_id) {
-                return company();
+            if (user()->cooperative_id) {
+                return cooperative();
             }
         }
 
@@ -1268,7 +1267,7 @@ if (!function_exists('global_currency_format')) {
     function global_currency_format($amount, $currencyId = null, $showSymbol = true)
     {
         $globalformat = global_currency_format_setting($currencyId);
-        $settings = companyOrGlobalSetting();
+        $settings = cooperativeOrGlobalSetting();
 
         if($showSymbol == false){
             $currency_symbol = '';
@@ -1303,13 +1302,13 @@ if (!function_exists('user_companies')) {
     {
 
         if (!session()->has('user_companies')) {
-            $userCompanies = User::withoutGlobalScope(CompanyScope::class)
+            $userCompanies = User::withoutGlobalScope(CooperativeScope::class)
                 ->where('email', $user->email)
                 ->where('login', 'enable')
-                ->whereHas('approvedCompany')
-                ->with('company')
+                ->whereHas('approvedCooperative')
+                ->with('cooperative')
                 ->withOut('clientDetails', 'role', 'employeeDetail')
-                ->select('id', 'company_id', 'status')
+                ->select('id', 'cooperative_id', 'status')
                 ->get();
 
                 session(['user_companies' => $userCompanies]);
@@ -1323,9 +1322,9 @@ if (!function_exists('user_companies')) {
 }
 
 
-if (!function_exists('flushCompanySpecificSessions')) {
+if (!function_exists('flushCooperativeSpecificSessions')) {
 
-    function flushCompanySpecificSessions()
+    function flushCooperativeSpecificSessions()
     {
         session()->forget([
             'user_roles',
@@ -1357,53 +1356,53 @@ if (!function_exists('flushCompanySpecificSessions')) {
 
 }
 
-if (!function_exists('checkCompanyPackageIsValid')) {
+if (!function_exists('checkCooperativePackageIsValid')) {
 
-    function checkCompanyPackageIsValid($companyId)
+    function checkCooperativePackageIsValid($cooperativeId)
     {
 
-        if (is_null($companyId)) {
+        if (is_null($cooperativeId)) {
             return true;
         }
 
-        return cache()->rememberForever('company_' . $companyId . '_valid_package', function () use ($companyId) {
-            $company = Company::with('package')->withCount('employees')->find($companyId);
-            return $company->employees_count <= $company->package->max_employees;
+        return cache()->rememberForever('cooperative_' . $cooperativeId . '_valid_package', function () use ($cooperativeId) {
+            $cooperative = Cooperative::with('package')->withCount('employees')->find($cooperativeId);
+            return $cooperative->employees_count <= $cooperative->package->max_employees;
         });
 
     }
 
 }
 
-if (!function_exists('checkCompanyCanAddMoreEmployees')) {
+if (!function_exists('checkCooperativeCanAddMoreEmployees')) {
 
-    function checkCompanyCanAddMoreEmployees($companyId)
+    function checkCooperativeCanAddMoreEmployees($cooperativeId)
     {
 
-        if (is_null($companyId)) {
+        if (is_null($cooperativeId)) {
             return true;
         }
 
-        return cache()->rememberForever('company_' . $companyId . '_can_add_more_employees', function () use ($companyId) {
-            $company = Company::with('package')->withCount('employees')->find($companyId);
-            return $company->employees_count < $company->package->max_employees;
+        return cache()->rememberForever('cooperative_' . $cooperativeId . '_can_add_more_employees', function () use ($cooperativeId) {
+            $cooperative = Cooperative::with('package')->withCount('employees')->find($cooperativeId);
+            return $cooperative->employees_count < $cooperative->package->max_employees;
         });
 
     }
 
 }
 
-if (!function_exists('clearCompanyValidPackageCache')) {
+if (!function_exists('clearCooperativeValidPackageCache')) {
 
-    function clearCompanyValidPackageCache($companyId)
+    function clearCooperativeValidPackageCache($cooperativeId)
     {
 
-        if (is_null($companyId)) {
+        if (is_null($cooperativeId)) {
             return true;
         }
 
-        cache()->forget('company_' . $companyId . '_valid_package');
-        cache()->forget('company_' . $companyId . '_can_add_more_employees');
+        cache()->forget('cooperative_' . $cooperativeId . '_valid_package');
+        cache()->forget('cooperative_' . $cooperativeId . '_can_add_more_employees');
     }
 
 }

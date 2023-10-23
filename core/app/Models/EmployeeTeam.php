@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Scopes\ActiveScope;
-use App\Traits\HasCompany;
+use App\Traits\HasCooperative;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -24,15 +24,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|EmployeeTeam whereTeamId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EmployeeTeam whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EmployeeTeam whereUserId($value)
- * @property int|null $company_id
- * @property-read \App\Models\Company|null $company
- * @method static \Illuminate\Database\Eloquent\Builder|EmployeeTeam whereCompanyId($value)
+ * @property int|null $cooperative_id
+ * @property-read \App\Models\Cooperative|null $cooperative
+ * @method static \Illuminate\Database\Eloquent\Builder|EmployeeTeam whereCooperativeId($value)
  * @mixin \Eloquent
  */
 class EmployeeTeam extends BaseModel
 {
 
-    use HasCompany;
+    use HasCooperative;
 
     public function user(): BelongsTo
     {

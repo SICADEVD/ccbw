@@ -24,7 +24,7 @@ class UpdateProfile extends CoreRequest
      */
     public function rules()
     {
-        $setting = companyOrGlobalSetting();
+        $setting = cooperativeOrGlobalSetting();
         $rules = [
             'name' => 'required|max:50',
             'password' => 'nullable|min:8|max:50',

@@ -29,22 +29,22 @@ class UpdateRequest extends CoreRequest
     public function rules()
     {
         \Illuminate\Support\Facades\Validator::extend('check_superadmin', function ($attribute, $value, $parameters, $validator) {
-            return !\App\Models\User::withoutGlobalScopes([\App\Scopes\ActiveScope::class, \App\Scopes\CompanyScope::class])
+            return !\App\Models\User::withoutGlobalScopes([\App\Scopes\ActiveScope::class, \App\Scopes\CooperativeScope::class])
                 ->where('email', $value)
                 ->where('is_superadmin', 1)
                 ->exists();
         });
 
         $detailID = EmployeeDetails::where('user_id', $this->route('employee'))->first();
-        $setting = company();
+        $setting = cooperative();
 
         $exists = !Rule::exists('users')->where(function ($query) {
             return $query->where('is_superadmin', 0);
         });
 
         $rules = [
-            'employee_id' => 'required|max:50|unique:employee_details,employee_id,'.$detailID->id.',id,company_id,' . company()->id,
-            'email' => 'required|max:100|unique:users,email,'.$this->route('employee').',id,company_id,' . company()->id.'|'.$exists.'|check_superadmin',
+            'employee_id' => 'required|max:50|unique:employee_details,employee_id,'.$detailID->id.',id,cooperative_id,' . cooperative()->id,
+            'email' => 'required|max:100|unique:users,email,'.$this->route('employee').',id,cooperative_id,' . cooperative()->id.'|'.$exists.'|check_superadmin',
             'name'  => 'required|max:50',
             'hourly_rate' => 'nullable|numeric',
             'department' => 'required',
@@ -60,10 +60,10 @@ class UpdateRequest extends CoreRequest
         ];
 
         if ($detailID) {
-            $rules['slack_username'] = 'nullable|unique:employee_details,slack_username,'.$detailID->id.',id,company_id,' . company()->id;
+            $rules['slack_username'] = 'nullable|unique:employee_details,slack_username,'.$detailID->id.',id,cooperative_id,' . cooperative()->id;
         }
         else {
-            $rules['slack_username'] = 'nullable|unique:employee_details,slack_username,null,id,company_id,' . company()->id;
+            $rules['slack_username'] = 'nullable|unique:employee_details,slack_username,null,id,cooperative_id,' . cooperative()->id;
         }
 
         if (request()->password != '') {
@@ -71,7 +71,7 @@ class UpdateRequest extends CoreRequest
         }
 
         if (request()->telegram_user_id) {
-            $rules['telegram_user_id'] = 'nullable|unique:users,telegram_user_id,' . $detailID->user_id.',id,company_id,' . company()->id;
+            $rules['telegram_user_id'] = 'nullable|unique:users,telegram_user_id,' . $detailID->user_id.',id,cooperative_id,' . cooperative()->id;
         }
 
         $rules = $this->customFieldRules($rules);

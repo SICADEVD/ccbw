@@ -27,7 +27,7 @@ class AccountSetupRequest extends FormRequest
         $global = global_setting();
 
         $rules = [
-            'company_name' => 'required',
+            'cooperative_name' => 'required',
             'full_name' => 'required',
             'email' => 'required|email:rfc',
             'password' => 'required|min:8',

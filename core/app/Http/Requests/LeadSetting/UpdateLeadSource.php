@@ -25,7 +25,7 @@ class UpdateLeadSource extends CoreRequest
     public function rules()
     {
         return [
-            'type' => 'required|unique:lead_sources,type,'.$this->route('lead_source_setting').',id,company_id,' . company()->id,
+            'type' => 'required|unique:lead_sources,type,'.$this->route('lead_source_setting').',id,cooperative_id,' . cooperative()->id,
         ];
     }
 

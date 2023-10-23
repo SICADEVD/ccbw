@@ -25,7 +25,7 @@ class StoreTicketType extends CoreRequest
     public function rules()
     {
         return [
-            'type' => 'required|unique:ticket_types,type,null,id,company_id,' . company()->id
+            'type' => 'required|unique:ticket_types,type,null,id,cooperative_id,' . cooperative()->id
         ];
     }
 

@@ -81,7 +81,7 @@ class NoticeBoardDataTable extends BaseDataTable
             ->editColumn(
                 'created_at',
                 function ($row) {
-                    return $row->created_at->translatedFormat($this->company->date_format);
+                    return $row->created_at->translatedFormat($this->cooperative->date_format);
                 }
             )
             ->editColumn(
@@ -108,12 +108,12 @@ class NoticeBoardDataTable extends BaseDataTable
         $model = $model->select('id', 'heading', 'to', 'created_at', 'added_by', 'department_id');
 
         if ($request->startDate !== null && $request->startDate != 'null' && $request->startDate != '') {
-            $startDate = Carbon::createFromFormat($this->company->date_format, $request->startDate)->toDateString();
+            $startDate = Carbon::createFromFormat($this->cooperative->date_format, $request->startDate)->toDateString();
             $model = $model->where(DB::raw('DATE(notices.`created_at`)'), '>=', $startDate);
         }
 
         if ($request->endDate !== null && $request->endDate != 'null' && $request->endDate != '') {
-            $endDate = Carbon::createFromFormat($this->company->date_format, $request->endDate)->toDateString();
+            $endDate = Carbon::createFromFormat($this->cooperative->date_format, $request->endDate)->toDateString();
             $model = $model->where(DB::raw('DATE(notices.`created_at`)'), '<=', $endDate);
         }
 

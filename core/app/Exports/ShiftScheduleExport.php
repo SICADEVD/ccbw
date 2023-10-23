@@ -123,7 +123,7 @@ class ShiftScheduleExport implements FromCollection, WithHeadings, WithMapping, 
             $this->daysInMonth = Carbon::parse('01-' . $startDate->month . '-' . $this->year)->daysInMonth;
         }
 
-        $now = now()->timezone(company()->timezone);
+        $now = now()->timezone(cooperative()->timezone);
         $requestedDate = Carbon::parse(Carbon::parse('01-' . $this->month . '-' . $this->year))->endOfMonth();
 
         $employeedata = array();
@@ -150,7 +150,7 @@ class ShiftScheduleExport implements FromCollection, WithHeadings, WithMapping, 
             }
 
             foreach ($employee->shifts as $shift) {
-                $employeedata[$employee_index]['dates'][Carbon::parse($shift->date)->timezone(company()->timezone)->day] = $shift->shift->shift_name;
+                $employeedata[$employee_index]['dates'][Carbon::parse($shift->date)->timezone(cooperative()->timezone)->day] = $shift->shift->shift_name;
             }
 
             $employeeName = $employee->name;
@@ -204,7 +204,7 @@ class ShiftScheduleExport implements FromCollection, WithHeadings, WithMapping, 
         $data = array();
         $data[] = $employeedata['employee_name'];
 
-        $now = Carbon::parse($this->startdate, company()->timezone);
+        $now = Carbon::parse($this->startdate, cooperative()->timezone);
         $this->weekStartDate = $now->copy()->startOfWeek(attendance_setting()->week_start_from);
         $startDate = Carbon::parse($this->weekStartDate)->day;
         $this->weekEndDate = Carbon::parse($this->weekStartDate->copy()->addDays(6))->day;

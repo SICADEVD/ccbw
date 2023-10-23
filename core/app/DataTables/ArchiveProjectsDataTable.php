@@ -100,11 +100,11 @@ class ArchiveProjectsDataTable extends BaseDataTable
                 </div>';
             })
             ->editColumn('start_date', function ($row) {
-                return $row->start_date->translatedFormat($this->company->date_format);
+                return $row->start_date->translatedFormat($this->cooperative->date_format);
             })
             ->editColumn('deadline', function ($row) {
                 if ($row->deadline) {
-                    return $row->deadline->translatedFormat($this->company->date_format);
+                    return $row->deadline->translatedFormat($this->cooperative->date_format);
                 }
 
                 return '-';

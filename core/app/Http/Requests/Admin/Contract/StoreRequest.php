@@ -26,10 +26,10 @@ class StoreRequest extends CoreRequest
      */
     public function rules()
     {
-        $setting = company();
+        $setting = cooperative();
 
         $rules = [
-            'contract_number' => 'required|unique:contracts,contract_number,null,id,company_id,' . company()->id,
+            'contract_number' => 'required|unique:contracts,contract_number,null,id,cooperative_id,' . cooperative()->id,
             'client_id' => 'required',
             'subject' => 'required',
             'amount' => 'required',

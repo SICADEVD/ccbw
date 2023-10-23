@@ -182,13 +182,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class, 
-        Froiden\RestAPI\Providers\ApiServiceProvider::class,
-        Yajra\DataTables\DataTablesServiceProvider::class,
-        Yajra\DataTables\DataTablesServiceProvider::class,
-        Yajra\DataTables\HtmlServiceProvider::class,
-        Yajra\DataTables\DataTablesServiceProvider::class,
-        Yajra\DataTables\ButtonsServiceProvider::class,
-        Yajra\DataTables\ExportServiceProvider::class
+        Froiden\RestAPI\Providers\ApiServiceProvider::class, 
 
     ],
 
@@ -209,6 +203,7 @@ return [
         'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'PDF' => Barryvdh\DomPDF\Facade::class, 
+        'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'ApiRoute' => \Froiden\RestAPI\Facades\ApiRoute::class, 
     ])->toArray(),
 

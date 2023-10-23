@@ -25,7 +25,7 @@ class UpdateUser extends CoreRequest
     public function rules()
     {
         return [
-            'email' => 'required|unique:users,email,'.$this->route('client').',id,company_id,' . company()->id,
+            'email' => 'required|unique:users,email,'.$this->route('client').',id,cooperative_id,' . cooperative()->id,
             'name'  => 'required',
         ];
     }

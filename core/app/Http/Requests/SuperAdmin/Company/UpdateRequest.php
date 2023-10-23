@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\SuperAdmin\Company;
+namespace App\Http\Requests\SuperAdmin\Cooperative;
 
 use App\Models\CustomField;
 use Illuminate\Foundation\Http\FormRequest;
@@ -32,9 +32,9 @@ class UpdateRequest extends FormRequest
         $len = strlen(getDomain()) + 4;
 
         $rules = [
-            'company_name' => 'required',
-            'company_email' => 'required|email|unique:companies,company_email,' . $this->route('company'),
-            'sub_domain' => module_enabled('Subdomain') ? 'required|min:4|max:50|banned_sub_domain|min:' . $len . '|unique:companies,sub_domain,' . $this->route('company') : '',
+            'cooperative_name' => 'required',
+            'cooperative_email' => 'required|email|unique:companies,cooperative_email,' . $this->route('cooperative'),
+            'sub_domain' => module_enabled('Subdomain') ? 'required|min:4|max:50|banned_sub_domain|min:' . $len . '|unique:companies,sub_domain,' . $this->route('cooperative') : '',
             'address' => 'required',
             'status' => 'required'
         ];

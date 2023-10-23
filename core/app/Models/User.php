@@ -18,28 +18,8 @@ class User extends Authenticatable
 {
     //ajout du use HasRole
     use Searchable,HasApiTokens, GlobalStatus, PowerJoins,HasRoles;
-
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-
-
-    public function loginLogs()
-    {
-        return $this->hasMany(UserLogin::class);
-    }
-
+ 
+ 
     public function userLocalites()
     {
         return $this->hasMany(User_localite::class,'user_id','id');
@@ -119,7 +99,7 @@ class User extends Authenticatable
      */
     public function routeNotificationForSlack()
     {
-        $slack = $this->company->slackSetting;
+        $slack = $this->cooperative->slackSetting;
 
         return $slack->slack_webhook;
     }
@@ -334,18 +314,18 @@ class User extends Authenticatable
     }
 
     // WORKSUITESAAS
-    public function approvedCompany()
+    public function approvedCooperative()
     {
-        $company = $this->belongsTo(Company::class, 'company_id');
+        $cooperative = $this->belongsTo(Cooperative::class, 'cooperative_id');
 
-        if (global_setting()->company_need_approval) {
-            $company->where('companies.approved', 1);
+        if (global_setting()->cooperative_need_approval) {
+            $cooperative->where('companies.approved', 1);
         }
 
-        return $company;
+        return $cooperative;
     }
 
-    public static function allClients($exceptId = null, $active = false, $overRidePermission = null, $companyId = null)
+    public static function allClients($exceptId = null, $active = false, $overRidePermission = null, $cooperativeId = null)
     { 
  
 
@@ -353,7 +333,7 @@ class User extends Authenticatable
             ->join('role_user', 'role_user.user_id', '=', 'users.id')
             ->join('roles', 'roles.id', '=', 'role_user.role_id')
             ->join('client_details', 'users.id', '=', 'client_details.user_id')
-            ->select('users.id', 'users.name', 'users.created_at', 'client_details.company_name', 'users.image', 'users.email_notifications', 'users.mobile', 'users.country_id')
+            ->select('users.id', 'users.name', 'users.created_at', 'client_details.cooperative_name', 'users.image', 'users.email_notifications', 'users.mobile', 'users.country_id')
             ->where('roles.name', 'client');
 
         if (!is_null($exceptId)) {
@@ -371,8 +351,8 @@ class User extends Authenticatable
             $clients->withoutGlobalScope(ActiveScope::class);
         }
 
-        if (!is_null($companyId)) {
-            $clients->where('users.company_id', '<>', $companyId);
+        if (!is_null($cooperativeId)) {
+            $clients->where('users.cooperative_id', '<>', $cooperativeId);
         }
  
 
@@ -390,21 +370,20 @@ class User extends Authenticatable
             ->join('role_user', 'role_user.user_id', '=', 'users.id')
             ->join('roles', 'roles.id', '=', 'role_user.role_id')
             ->join('client_details', 'users.id', '=', 'client_details.user_id')
-            ->select('users.id', 'users.name', 'users.email', 'users.created_at', 'client_details.company_name', 'users.image', 'users.email_notifications', 'users.mobile', 'users.country_id')
+            ->select('users.id', 'users.name', 'users.email', 'users.created_at', 'client_details.cooperative_name', 'users.image', 'users.email_notifications', 'users.mobile', 'users.country_id')
             ->where('roles.name', 'client')
             ->where('users.id', user()->id)
             ->orderBy('users.name', 'asc')
             ->get();
     }
 
-    public static function allEmployees($exceptId = null, $active = false, $overRidePermission = null, $companyId = null)
+    public static function allEmployees($exceptId = null, $active = false, $overRidePermission = null, $cooperativeId = null)
     {
         
 
-        $users = User::withRole('employee')
-            ->join('employee_details', 'employee_details.user_id', '=', 'users.id')
+        $users = User::join('employee_details', 'employee_details.user_id', '=', 'users.id')
             ->leftJoin('designations', 'employee_details.designation_id', '=', 'designations.id')
-            ->select('users.id', 'users.company_id', 'users.name', 'users.created_at', 'users.image', 'designations.name as designation_name', 'users.email_notifications', 'users.mobile', 'users.country_id');
+            ->select('users.*', 'designations.*', 'employee_details.*');
 
         if (!is_null($exceptId)) {
             if (is_array($exceptId)) {
@@ -416,48 +395,27 @@ class User extends Authenticatable
             }
         }
 
-        if (!is_null($companyId)) {
-            $users->where('users.company_id', $companyId);
+        if (!is_null($cooperativeId)) {
+            $users->where('users.cooperative_id', $cooperativeId);
         }
 
         if (!$active) {
             $users->withoutGlobalScope(ActiveScope::class);
         }
-
-        if (!isRunningInConsoleOrSeeding() && user()) {
-            
-
-            if (in_array('client', user_roles())) {
-                $clientEmployees = Project::where('client_id', user()->id)
-                    ->join('project_members', 'project_members.project_id', '=', 'projects.id')
-                    ->select('project_members.user_id')
-                    ->get()
-                    ->pluck('user_id');
-
-                $users->whereIn('users.id', $clientEmployees);
-            }
-
-        }
-
-        if(!isRunningInConsoleOrSeeding() && user() && in_array('client', user_roles())) {
-            $clientEmployess = Project::where('client_id', user()->id)->join('project_members', 'project_members.project_id', '=', 'projects.id')
-            ->select('project_members.user_id')->get()->pluck('user_id');
-
-            $users->whereIn('users.id', $clientEmployess);
-        }
-
-        $users->orderBy('users.name');
+ 
+ 
+        $users->orderBy('users.lastname');
         $users->groupBy('users.id');
 
         return $users->get();
     }
 
-    public static function allAdmins($companyId = null)
+    public static function allAdmins($cooperativeId = null)
     {
         $users = User::withOut('clientDetails')->withRole('admin');
 
-        if (!is_null($companyId)) {
-            return $users->where('users.company_id', $companyId)->get();
+        if (!is_null($cooperativeId)) {
+            return $users->where('users.cooperative_id', $cooperativeId)->get();
         }
 
         return $users->get();
@@ -560,17 +518,17 @@ class User extends Authenticatable
 
     public static function firstSuperAdmin()
     {
-        return User::withoutGlobalScopes(['active', CompanyScope::class])
+        return User::withoutGlobalScopes(['active', CooperativeScope::class])
             ->where('is_superadmin', 1)
-            ->whereNull('company_id')
+            ->whereNull('cooperative_id')
             ->orderBy('id')->first();
     }
 
     public static function allSuperAdmin()
     {
-        return User::withoutGlobalScopes(['active', CompanyScope::class])
+        return User::withoutGlobalScopes(['active', CooperativeScope::class])
             ->where('is_superadmin', 1)
-            ->whereNull('company_id')
+            ->whereNull('cooperative_id')
             ->get();
     }
 
@@ -637,11 +595,13 @@ class User extends Authenticatable
         $itsYou = ' <span class="ml-2 badge badge-secondary pr-1">' . __('app.itsYou') . '</span>';
 
         if (user() && user()->id == $this->id) {
-            return $this->name . $itsYou;
+            return $this->lastname.' '.$this->firstname.' ' . $itsYou;
         }
 
-        return $this->name;
+        return $this->lastname.' '.$this->firstname;
     }
+
+    
 
     public function estimates()
     {
@@ -655,9 +615,7 @@ class User extends Authenticatable
 
     public function scopeOnlyEmployee($query)
     {
-        return $query->whereHas('roles', function ($q) {
-            $q->where('name', 'employee');
-        })->whereHas('employeeDetail');
+        return $query;
     }
 
     /**

@@ -65,9 +65,9 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-form-label col-md-2">Company</label>
+                                    <label class="col-form-label col-md-2">Cooperative</label>
                                     <div class="col-md-10">
-                                        <input type="text" class="form-control" id="company" name="company" value="{{ $employees[0]->company }}">
+                                        <input type="text" class="form-control" id="cooperative" name="cooperative" value="{{ $employees[0]->cooperative }}">
                                     </div>
                                 </div>
 

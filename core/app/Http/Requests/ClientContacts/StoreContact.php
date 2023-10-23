@@ -27,7 +27,7 @@ class StoreContact extends CoreRequest
     {
         return [
             'contact_name' => 'required',
-            'email' => 'email:rfc|unique:client_contacts,email,null,id,company_id,' . company()->id
+            'email' => 'email:rfc|unique:client_contacts,email,null,id,cooperative_id,' . cooperative()->id
         ];
     }
 

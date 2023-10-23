@@ -24,10 +24,10 @@ class UpdatePassportRequest extends FormRequest
      */
     public function rules()
     {
-        $setting = company();
+        $setting = cooperative();
 
         return [
-            'passport_number' => 'required|unique:passport_details,passport_number,' . $this->route('passport').',id,company_id,' . $setting->id,
+            'passport_number' => 'required|unique:passport_details,passport_number,' . $this->route('passport').',id,cooperative_id,' . $setting->id,
             'issue_date' => 'required',
             'expiry_date' => 'required|date_format:"' . $setting->date_format . '"|after_or_equal:issue_date',
             'nationality' => 'required'

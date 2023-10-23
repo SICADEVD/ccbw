@@ -123,14 +123,14 @@ class TasksDataTable extends BaseDataTable
                 }
 
                 if ($row->start_date->endOfDay()->isPast()) {
-                    return '<span class="text-black">' . $row->start_date->translatedFormat($this->company->date_format) . '</span>';
+                    return '<span class="text-black">' . $row->start_date->translatedFormat($this->cooperative->date_format) . '</span>';
                 }
                 elseif ($row->start_date->isToday()) {
 
                     return '<span class="text-success">' . __('app.today') . '</span>';
                 }
 
-                return '<span >' . $row->start_date->translatedFormat($this->company->date_format) . '</span>';
+                return '<span >' . $row->start_date->translatedFormat($this->cooperative->date_format) . '</span>';
             }
         );
 
@@ -142,17 +142,17 @@ class TasksDataTable extends BaseDataTable
 
                 if ($row->due_date->endOfDay()->isPast()) {
                     if ($row->boardColumn->column_name == 'Completed') {
-                        return '<span class="text-black">'. $row->due_date->translatedFormat($this->company->date_format) . '</span>';
+                        return '<span class="text-black">'. $row->due_date->translatedFormat($this->cooperative->date_format) . '</span>';
                     }
                     else{
-                        return '<span class="text-danger">'. $row->due_date->translatedFormat($this->company->date_format) . '</span>';
+                        return '<span class="text-danger">'. $row->due_date->translatedFormat($this->cooperative->date_format) . '</span>';
                     }
                 }
                 elseif ($row->due_date->isToday()) {
                     return '<span class="text-success">' . __('app.today') . '</span>';
                 }
 
-                return '<span>' . $row->due_date->translatedFormat($this->company->date_format) . '</span>';
+                return '<span>' . $row->due_date->translatedFormat($this->cooperative->date_format) . '</span>';
             }
         );
         $datatables->editColumn(
@@ -162,13 +162,13 @@ class TasksDataTable extends BaseDataTable
                 }
 
                 if ($row->completed_on->endOfDay()->isPast()) {
-                    return '<span class="text-black">' . $row->completed_on->translatedFormat($this->company->date_format) . '</span>';
+                    return '<span class="text-black">' . $row->completed_on->translatedFormat($this->cooperative->date_format) . '</span>';
                 }
                 elseif ($row->completed_on->isToday()) {
                     return '<span class="text-success">' . __('app.today') . '</span>';
 
                 }
-                return '<span>' . $row->completed_on->translatedFormat($this->company->date_format) . '</span>';
+                return '<span>' . $row->completed_on->translatedFormat($this->cooperative->date_format) . '</span>';
             }
         );
         $datatables->editColumn(
@@ -407,11 +407,11 @@ class TasksDataTable extends BaseDataTable
         $endDate = null;
 
         if ($request->startDate !== null && $request->startDate != 'null' && $request->startDate != '') {
-            $startDate = Carbon::createFromFormat($this->company->date_format, $request->startDate)->toDateString();
+            $startDate = Carbon::createFromFormat($this->cooperative->date_format, $request->startDate)->toDateString();
         }
 
         if ($request->endDate !== null && $request->endDate != 'null' && $request->endDate != '') {
-            $endDate = Carbon::createFromFormat($this->company->date_format, $request->endDate)->toDateString();
+            $endDate = Carbon::createFromFormat($this->cooperative->date_format, $request->endDate)->toDateString();
         }
 
         $projectId = $request->projectId;
@@ -443,7 +443,7 @@ class TasksDataTable extends BaseDataTable
              tasks.due_date, taskboard_columns.column_name as board_column, taskboard_columns.label_color,
               tasks.project_id, tasks.is_private ,( select count("id") from pinned where pinned.task_id = tasks.id and pinned.user_id = ' . user()->id . ') as pinned_task'
             )
-            ->addSelect('tasks.company_id') // Company_id is fetched so the we have fetch company relation with it)
+            ->addSelect('tasks.cooperative_id') // Cooperative_id is fetched so the we have fetch cooperative relation with it)
             ->with('users', 'activeTimerAll', 'boardColumn', 'activeTimer', 'timeLogged', 'timeLogged.breaks', 'userActiveTimer', 'userActiveTimer.activeBreak', 'labels', 'taskUsers')
             ->withCount('activeTimerAll', 'completedSubtasks', 'subtasks')
             ->groupBy('tasks.id');
@@ -512,7 +512,7 @@ class TasksDataTable extends BaseDataTable
         }
 
         if ($request->overdue == 'yes' && $request->status != 'all') {
-            $model->where(DB::raw('DATE(tasks.`due_date`)'), '<', now(company()->timezone)->toDateString());
+            $model->where(DB::raw('DATE(tasks.`due_date`)'), '<', now(cooperative()->timezone)->toDateString());
         }
 
         if ($projectId != 0 && $projectId != null && $projectId != 'all') {

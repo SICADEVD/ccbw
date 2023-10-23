@@ -3,6 +3,14 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\Manager\LeaveController;
 use App\Http\Controllers\Manager\AttendanceController;
+use App\Http\Controllers\Manager\EmployeeController;
+use App\Http\Controllers\Manager\ImportController;
+use App\Http\Controllers\Manager\TimelogController;
+use App\Http\Controllers\Manager\TimelogCalendarController;
+use App\Http\Controllers\Manager\DepartmentController;
+use App\Http\Controllers\Manager\DesignationController;
+use App\Http\Controllers\Manager\ImageController;
+
 
 Route::namespace('Manager\Auth')->group(function () {
 
@@ -92,38 +100,32 @@ Route::middleware('auth')->group(function () {
                 // Route::get('localite/section/edit/{id}', 'localitesectionedit')->name('localitesectionedit');
             });
 
-            //Manage programme durabilite
+        // employee routes
+Route::controller('Manager\EmployeeController')->name('hr.')->prefix('hr')->group(function () {
+    Route::post('employees/apply-quick-action', [EmployeeController::class, 'applyQuickAction'])->name('employees.apply_quick_action');
+    Route::post('employees/assignRole', [EmployeeController::class, 'assignRole'])->name('employees.assign_role');
+    Route::get('employees/byDepartment/{id}', [EmployeeController::class, 'byDepartment'])->name('employees.by_department');
+    Route::get('employees/invite-member', [EmployeeController::class, 'inviteMember'])->name('employees.invite_member');
+    Route::get('employees/import', [EmployeeController::class, 'importMember'])->name('employees.import');
+    Route::post('employees/import', [EmployeeController::class, 'importStore'])->name('employees.import.store');
+    Route::post('employees/import/process', [EmployeeController::class, 'importProcess'])->name('employees.import.process');
+    Route::post('employees/send-invite', [EmployeeController::class, 'sendInvite'])->name('employees.send_invite');
+    Route::post('employees/create-link', [EmployeeController::class, 'createLink'])->name('employees.create_link');
+});
+Route::resource('designations', DesignationController::class);
+Route::resource('departments', DepartmentController::class);
+// Get quill image uploaded
+Route::get('quill-image/{image}', [ImageController::class, 'getImage'])->name('image.getImage');
+// Cropper Model
+Route::get('cropper/{element}', [ImageController::class, 'cropper'])->name('cropper');
 
-            Route::controller('Manager\EmployeeController')->name('hr.')->prefix('hr')->group(function () {
-                Route::get('all/employee/card', 'cardAllEmployee')->name('all.employee.card');
-                Route::get('all/employee/list', 'listAllEmployee')->name('all.employee.list');
-                Route::post('all/employee/save', 'saveRecord')->name('all.employee.save');
-                Route::get('all/employee/view/edit/{employee_id}', 'viewRecord');
-                Route::post('all/employee/update', 'updateRecord')->name('all.employee.update');
-                Route::get('all/employee/delete/{employee_id}', 'deleteRecord');
-                Route::post('all/employee/search', 'employeeSearch')->name('all.employee.search');
-                Route::post('all/employee/list/search', 'employeeListSearch')->name('all.employee.list.search');
-            
-                Route::get('form/departments/page', 'index')->name('form.departments.page');    
-                Route::post('form/departments/save', 'saveRecordDepartment')->name('form.departments.save');    
-                Route::post('form/department/update', 'updateRecordDepartment')->name('form.department.update');    
-                Route::post('form/department/delete', 'deleteRecordDepartment')->name('form.department.delete');  
-                
-                Route::get('form/designations/page', 'designationsIndex')->name('form.designations.page');    
-                Route::post('form/designations/save', 'saveRecordDesignations')->name('form.designations.save');    
-                Route::post('form/designations/update', 'updateRecordDesignations')->name('form.designations.update');    
-                Route::post('form/designations/delete', 'deleteRecordDesignations')->name('form.designations.delete');
-                
-                Route::get('form/timesheet/page', 'timeSheetIndex')->name('form.timesheet.page');    
-                Route::post('form/timesheet/save', 'saveRecordTimeSheets')->name('form.timesheet.save');    
-                Route::post('form/timesheet/update', 'updateRecordTimeSheets')->name('form.timesheet.update');    
-                Route::post('form/timesheet/delete', 'deleteRecordTimeSheets')->name('form.timesheet.delete');
-                
-                Route::get('form/overtime/page', 'overTimeIndex')->name('form.overtime.page');    
-                Route::post('form/overtime/save', 'saveRecordOverTime')->name('form.overtime.save');    
-                Route::post('form/overtime/update', 'updateRecordOverTime')->name('form.overtime.update');    
-                Route::post('form/overtime/delete', 'deleteRecordOverTime')->name('form.overtime.delete');  
-            });
+Route::controller('Manager\ImportController')->name('hr.')->prefix('hr')->group(function () {
+    Route::get('import/process/{name}/{id}', [ImportController::class, 'getImportProgress'])->name('import.process.progress');
+    Route::get('employees/import/exception/{name}', [ImportController::class, 'getQueueException'])->name('import.process.exception');
+  });
+
+Route::resource('employees', EmployeeController::class);
+ 
 
 // ----------------------------- form leaves ------------------------------//
 Route::controller('Manager\LeaveController')->name('hr.')->prefix('hr')->group(function () {
@@ -158,6 +160,28 @@ Route::get('attendances/by-map-location', [AttendanceController::class, 'byMapLo
 Route::resource('attendances', AttendanceController::class);
 Route::get('attendance/{id}/{day}/{month}/{year}', [AttendanceController::class, 'addAttendance'])->name('attendances.add-user-attendance');
 });
+
+    // Timelogs
+ 
+    Route::controller('Manager\TimelogController')->name('hr.')->prefix('hr')->group(function () {
+        
+        Route::get('by-employee', [TimelogController::class, 'byEmployee'])->name('timelogs.by_employee');
+        Route::get('export', [TimelogController::class, 'export'])->name('timelogs.export');
+        Route::get('show-active-timer', [TimelogController::class, 'showActiveTimer'])->name('timelogs.show_active_timer');
+        Route::get('show-timer', [TimelogController::class, 'showTimer'])->name('timelogs.show_timer');
+        Route::post('start-timer', [TimelogController::class, 'startTimer'])->name('timelogs.start_timer');
+        Route::get('timer-data', [TimelogController::class, 'timerData'])->name('timelogs.timer_data');
+        Route::post('stop-timer', [TimelogController::class, 'stopTimer'])->name('timelogs.stop_timer');
+        Route::post('pause-timer', [TimelogController::class, 'pauseTimer'])->name('timelogs.pause_timer');
+        Route::post('resume-timer', [TimelogController::class, 'resumeTimer'])->name('timelogs.resume_timer');
+        Route::post('apply-quick-action', [TimelogController::class, 'applyQuickAction'])->name('timelogs.apply_quick_action');
+
+        Route::post('employee_data', [TimelogController::class, 'employeeData'])->name('timelogs.employee_data');
+        Route::post('user_time_logs', [TimelogController::class, 'userTimelogs'])->name('timelogs.user_time_logs');
+        Route::post('approve_timelog', [TimelogController::class, 'approveTimelog'])->name('timelogs.approve_timelog');
+    });
+    Route::resource('timelog-calendar', TimelogCalendarController::class); 
+    Route::resource('timelogs', TimelogController::class);
  
             Route::controller('Manager\ProgrammeController')->name('durabilite.')->prefix('durabilite')->group(function () {
                 Route::get('create', 'create')->name('create');

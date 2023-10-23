@@ -25,7 +25,7 @@ class UpdateDepartment extends CoreRequest
     public function rules()
     {
         return [
-            'team_name' => 'required|unique:teams,team_name,'.$this->route('department').',id,company_id,' . company()->id
+            'team_name' => 'required|unique:teams,team_name,'.$this->route('department').',id,cooperative_id,' . cooperative()->id
         ];
     }
 

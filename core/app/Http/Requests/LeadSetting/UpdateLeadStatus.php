@@ -25,7 +25,7 @@ class UpdateLeadStatus extends CoreRequest
     public function rules()
     {
         return [
-            'type' => 'required|unique:lead_status,type,'.$this->route('lead_status_setting').',id,company_id,' . company()->id,
+            'type' => 'required|unique:lead_status,type,'.$this->route('lead_status_setting').',id,cooperative_id,' . cooperative()->id,
             'label_color' => 'required'
         ];
     }

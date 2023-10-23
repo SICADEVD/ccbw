@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * App\Models\LeaveFile
  *
  * @property int $id
- * @property int|null $company_id
+ * @property int|null $cooperative_id
  * @property int $user_id
  * @property int $leave_id
  * @property string $filename
@@ -28,7 +28,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|LeaveFile newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|LeaveFile query()
  * @method static \Illuminate\Database\Eloquent\Builder|LeaveFile whereAddedBy($value)
- * @method static \Illuminate\Database\Eloquent\Builder|LeaveFile whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|LeaveFile whereCooperativeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|LeaveFile whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|LeaveFile whereFilename($value)
  * @method static \Illuminate\Database\Eloquent\Builder|LeaveFile whereHashname($value)

@@ -26,7 +26,7 @@ class UpdateRequest extends CoreRequest
      */
     public function rules()
     {
-        $setting = company();
+        $setting = cooperative();
         $rules = [
             'client_id' => 'required',
             'subject' => 'required',

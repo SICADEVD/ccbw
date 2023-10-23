@@ -77,7 +77,7 @@ class RecurringExpensesDataTable extends BaseDataTable
                         return $rotation;
                     }
 
-                    $date = $row->next_expense_date->timezone($this->company->timezone)->translatedFormat($this->company->date_format);
+                    $date = $row->next_expense_date->timezone($this->cooperative->timezone)->translatedFormat($this->cooperative->date_format);
 
                     return $date . $rotation;
 

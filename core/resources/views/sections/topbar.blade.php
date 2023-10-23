@@ -50,15 +50,15 @@
             @endif
 
             {{-- WORKSUITESAAS --}}
-            @if (in_array(company()->package->default, ['yes']) && in_array('admin', user_roles()))
+            @if (in_array(cooperative()->package->default, ['yes']) && in_array('admin', user_roles()))
                 <a href="{{ route('billing.upgrade_plan') }}" class='btn-primary btn btn-sm rounded mr-3 f-12 py-2 px-3' data-toggle="tooltip" data-original-title="{{ __('superadmin.packages.upgradePlan') }}" >
                     <i class="bi bi-stars"></i>
                     @if (is_null($selfActiveTimer)) {{ __('superadmin.packages.upgradePlan') }} @endif
                 </a>
-            @elseif (in_array(company()->package->default, ['trial']) && in_array('admin', user_roles()))
+            @elseif (in_array(cooperative()->package->default, ['trial']) && in_array('admin', user_roles()))
                 <a href="{{ route('billing.upgrade_plan') }}" class='btn-light border btn btn-sm rounded mr-3 f-12 py-2 px-3 font-weight-semibold d-none d-lg-block' data-toggle="tooltip" data-original-title="{{ __('superadmin.packages.upgradePlan') }}" >
                     @php
-                        $daysLeftInTrial = now(company()->timezone)->diffInDays(\Carbon\Carbon::parse(company()->licence_expire_on)->addDays(1), false);
+                        $daysLeftInTrial = now(cooperative()->timezone)->diffInDays(\Carbon\Carbon::parse(cooperative()->licence_expire_on)->addDays(1), false);
                     @endphp
                     <i @class(['bi bi-circle-fill', 'text-success' => ($daysLeftInTrial >= 0), 'text-danger' => ($daysLeftInTrial < 0)])></i>
                     @if (is_null($selfActiveTimer)) {{ ($daysLeftInTrial > 0) ? $daysLeftInTrial . ' ' . __('superadmin.packages.daysLeftTrial') : __('superadmin.packages.trialExpired') }} @endif
@@ -68,7 +68,7 @@
         @endif
 
         <ul>
-        @if (checkCompanyPackageIsValid(user()->company_id))
+        @if (checkCooperativePackageIsValid(user()->cooperative_id))
             <!-- SEARCH START -->
             <li data-toggle="tooltip" data-placement="top" title="{{__('app.search')}}" class="d-none d-sm-block">
                 <div class="d-flex align-items-center">

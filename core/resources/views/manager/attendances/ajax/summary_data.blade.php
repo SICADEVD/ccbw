@@ -12,7 +12,7 @@ $addAttendancePermission = 'all';
                     {{ $weekMap[\Carbon\Carbon::parse(\Carbon\Carbon::parse($i . '-' . $month . '-' . $year))->dayOfWeek] }}
                 </span></th>
             @endfor
-            <th class="text-right px-2">@lang('app.total')</th>
+            <th class="text-right px-2">Total</th>
         </x-slot>
 
         @foreach ($employeeAttendence as $key => $attendance)
@@ -33,16 +33,16 @@ $addAttendancePermission = 'all';
                                 <span data-toggle="tooltip" data-original-title="{{ $leaveReasons[$userId][$key2] }}"><i
                                         class="fa fa-plane-departure text-red"></i></span>
                             @elseif ($day == 'Day Off')
-                                <span data-toggle="tooltip" data-original-title="@lang('modules.attendance.dayOff')"><i
+                                <span data-toggle="tooltip" data-original-title="Jour Off"><i
                                         class="fa fa-calendar-week text-red"></i></span>
                             @elseif ($day == 'Half Day')
                                 @if ($attendanceDate->isFuture())
-                                    <span data-toggle="tooltip" data-original-title="@lang('modules.attendance.halfDay')"><i
+                                    <span data-toggle="tooltip" data-original-title="Demi Journée"><i
                                         class="fa fa-star-half-alt text-red"></i></span>
                                 @else
                                     <a @if ($addAttendancePermission == 'all') href="javascript:;" class="edit-attendance" @endif data-user-id="{{ $userId }}"
                                             data-attendance-date="{{ $key2 }}">
-                                        <span data-toggle="tooltip" data-original-title="@lang('modules.attendance.halfDay')"><i
+                                        <span data-toggle="tooltip" data-original-title="Demi Journée"><i
                                                 class="fa fa-star-half-alt text-red"></i></span>
                                     </a>
                                 @endif

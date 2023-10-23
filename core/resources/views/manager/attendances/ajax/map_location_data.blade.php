@@ -3,7 +3,7 @@
 
     var map = new google.maps.Map(document.getElementById('attendance-data'), {
         zoom: 13,
-        center: new google.maps.LatLng(parseFloat(company.latitude), parseFloat(company.longitude)),
+        center: new google.maps.LatLng(parseFloat(cooperative.latitude), parseFloat(cooperative.longitude)),
         mapTypeId: google.maps.MapTypeId.ROADMAP
     });
 

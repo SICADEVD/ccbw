@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Traits\HasCompany;
+use App\Traits\HasCooperative;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,15 +10,15 @@ use Illuminate\Database\Eloquent\Model;
  * App\Models\LeaveSetting
  *
  * @property int $id
- * @property int|null $company_id
+ * @property int|null $cooperative_id
  * @property string $manager_permission
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Company|null $company
+ * @property-read \App\Models\Cooperative|null $cooperative
  * @method static \Illuminate\Database\Eloquent\Builder|LeaveSetting newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|LeaveSetting newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|LeaveSetting query()
- * @method static \Illuminate\Database\Eloquent\Builder|LeaveSetting whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|LeaveSetting whereCooperativeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|LeaveSetting whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|LeaveSetting whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|LeaveSetting whereManagerPermission($value)
@@ -28,5 +28,5 @@ use Illuminate\Database\Eloquent\Model;
 class LeaveSetting extends Model
 {
 
-    use HasFactory, HasCompany;
+    use HasFactory, HasCooperative;
 }

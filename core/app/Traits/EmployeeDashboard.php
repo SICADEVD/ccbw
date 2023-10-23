@@ -18,7 +18,7 @@ use App\Models\LeadAgent;
 use App\Models\Attendance;
 use App\Models\Appreciation;
 use Illuminate\Http\Request;
-use App\Models\CompanyAddress;
+use App\Models\CooperativeAddress;
 use App\Models\ProjectTimeLog;
 use App\Models\DashboardWidget;
 use App\Models\EmployeeDetails;
@@ -29,7 +29,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\ProjectTimeLogBreak;
 use App\Models\EmployeeShiftSchedule;
 use App\Http\Requests\ClockIn\ClockInRequest;
-use App\Models\Company;
+use App\Models\Cooperative;
 use App\Models\EmployeeShift;
 
 /**
@@ -52,8 +52,8 @@ trait EmployeeDashboard
         $startTimestamp = now()->format('Y-m-d') . ' ' . $this->attendanceSettings->office_start_time;
 
         $endTimestamp = now()->format('Y-m-d') . ' ' . $this->attendanceSettings->office_end_time;
-        $officeStartTime = Carbon::createFromFormat('Y-m-d H:i:s', $startTimestamp, $this->company->timezone);
-        $officeEndTime = Carbon::createFromFormat('Y-m-d H:i:s', $endTimestamp, $this->company->timezone);
+        $officeStartTime = Carbon::createFromFormat('Y-m-d H:i:s', $startTimestamp, $this->cooperative->timezone);
+        $officeEndTime = Carbon::createFromFormat('Y-m-d H:i:s', $endTimestamp, $this->cooperative->timezone);
 
         $officeStartTime = $officeStartTime->setTimezone('UTC');
         $officeEndTime = $officeEndTime->setTimezone('UTC');
@@ -81,7 +81,7 @@ trait EmployeeDashboard
                 $this->cannotLogin = true;
             }
             else{
-                $earlyClockIn = Carbon::now(company()->timezone)->addMinutes($this->attendanceSettings->early_clock_in);
+                $earlyClockIn = Carbon::now(cooperative()->timezone)->addMinutes($this->attendanceSettings->early_clock_in);
                 $earlyClockIn = $earlyClockIn->setTimezone('UTC');
 
                 if($earlyClockIn->gte($officeStartTime) || $showClockIn->show_clock_in_button == 'yes'){
@@ -251,7 +251,7 @@ trait EmployeeDashboard
         $projects = $projects->whereNotNull('due_date');
 
         $this->dueProjects = $projects->filter(function ($value) {
-            return now(company()->timezone)->gt($value->due_date);
+            return now(cooperative()->timezone)->gt($value->due_date);
         })->count();
 
         // Getting Current Clock-in if exist
@@ -261,11 +261,11 @@ trait EmployeeDashboard
             ->whereNull('clock_out_time')
             ->first();
 
-        $currentDate = now(company()->timezone)->format('Y-m-d');
+        $currentDate = now(cooperative()->timezone)->format('Y-m-d');
 
         $this->checkTodayLeave = Leave::where('status', 'approved')
             ->select('id')
-            ->where('leave_date', now(company()->timezone)->toDateString())
+            ->where('leave_date', now(cooperative()->timezone)->toDateString())
             ->where('user_id', user()->id)
             ->where('duration', '<>', 'half day')
             ->first();
@@ -277,7 +277,7 @@ trait EmployeeDashboard
             ->whereNull('end_time')
             ->first();
 
-        $currentDay = now(company()->timezone)->format('m-d');
+        $currentDay = now(cooperative()->timezone)->format('m-d');
 
         $this->upcomingBirthdays = EmployeeDetails::whereHas('user', function ($query) {
             return $query->where('status', 'active');
@@ -294,7 +294,7 @@ trait EmployeeDashboard
             ->get()->values()->all();
 
         $this->leave = Leave::with('user', 'type')->where('status', 'approved')
-            ->where('leave_date', today(company()->timezone)->toDateString())
+            ->where('leave_date', today(cooperative()->timezone)->toDateString())
             ->get();
 
 
@@ -321,7 +321,7 @@ trait EmployeeDashboard
             })->count();
         }
 
-        $now = now(company()->timezone);
+        $now = now(cooperative()->timezone);
         $this->weekStartDate = $now->copy()->startOfWeek($showClockIn->week_start_from);
         $this->weekEndDate = $this->weekStartDate->copy()->addDays(7);
         $this->weekPeriod = CarbonPeriod::create($this->weekStartDate, $this->weekStartDate->copy()->addDays(6)); // Get All Dates from start to end date
@@ -351,7 +351,7 @@ trait EmployeeDashboard
             ->get();
 
         $leaveDates = $weekLeaves->pluck('ldate')->toArray();
-        $generalShift = Company::with(['attendanceSetting', 'attendanceSetting.shift'])->first();
+        $generalShift = Cooperative::with(['attendanceSetting', 'attendanceSetting.shift'])->first();
 
         // phpcs:ignore
         for ($i = $this->weekStartDate->copy(); $i < $this->weekEndDate->copy(); $i->addDay()) {
@@ -440,7 +440,7 @@ trait EmployeeDashboard
             ->get();
 
 
-        $currentDay = now(company()->timezone)->format('Y-m-d');
+        $currentDay = now(cooperative()->timezone)->format('Y-m-d');
         $this->employees = EmployeeDetails::whereHas('user', function ($query) {
             return $query->where('status', 'active');
         })->with(['user' => function($query) {
@@ -508,8 +508,8 @@ trait EmployeeDashboard
 
         $startTimestamp = now()->format('Y-m-d') . ' ' . $this->attendanceSettings->office_start_time;
         $endTimestamp = now()->format('Y-m-d') . ' ' . $this->attendanceSettings->office_end_time;
-        $officeStartTime = Carbon::createFromFormat('Y-m-d H:i:s', $startTimestamp, $this->company->timezone);
-        $officeEndTime = Carbon::createFromFormat('Y-m-d H:i:s', $endTimestamp, $this->company->timezone);
+        $officeStartTime = Carbon::createFromFormat('Y-m-d H:i:s', $startTimestamp, $this->cooperative->timezone);
+        $officeEndTime = Carbon::createFromFormat('Y-m-d H:i:s', $endTimestamp, $this->cooperative->timezone);
         $officeStartTime = $officeStartTime->setTimezone('UTC');
         $officeEndTime = $officeEndTime->setTimezone('UTC');
 
@@ -525,7 +525,7 @@ trait EmployeeDashboard
                 $this->cannotLogin = true;
             }
             else {
-                $earlyClockIn = Carbon::now(company()->timezone)->addMinutes($this->attendanceSettings->early_clock_in);
+                $earlyClockIn = Carbon::now(cooperative()->timezone)->addMinutes($this->attendanceSettings->early_clock_in);
                 $earlyClockIn = $earlyClockIn->setTimezone('UTC');
 
                 if($earlyClockIn->gte($officeStartTime) || $showClockIn->show_clock_in_button == 'yes'){
@@ -548,7 +548,7 @@ trait EmployeeDashboard
         $this->shiftAssigned = $this->attendanceSettings;
 
         $this->attendanceSettings = attendance_setting();
-        $this->location = CompanyAddress::all();
+        $this->location = CooperativeAddress::all();
 
         return view('dashboard.employee.clock_in_modal', $this->data);
     }
@@ -563,8 +563,8 @@ trait EmployeeDashboard
 
         $startTimestamp = now()->format('Y-m-d') . ' ' . $this->attendanceSettings->office_start_time;
         $endTimestamp = now()->format('Y-m-d') . ' ' . $this->attendanceSettings->office_end_time;
-        $officeStartTime = Carbon::createFromFormat('Y-m-d H:i:s', $startTimestamp, $this->company->timezone);
-        $officeEndTime = Carbon::createFromFormat('Y-m-d H:i:s', $endTimestamp, $this->company->timezone);
+        $officeStartTime = Carbon::createFromFormat('Y-m-d H:i:s', $startTimestamp, $this->cooperative->timezone);
+        $officeEndTime = Carbon::createFromFormat('Y-m-d H:i:s', $endTimestamp, $this->cooperative->timezone);
 
         if ($showClockIn->show_clock_in_button == 'yes') {
             $officeEndTime = now();
@@ -585,7 +585,7 @@ trait EmployeeDashboard
                 $this->cannotLogin = true;
             }
             else {
-                $earlyClockIn = Carbon::now(company()->timezone)->addMinutes($this->attendanceSettings->early_clock_in);
+                $earlyClockIn = Carbon::now(cooperative()->timezone)->addMinutes($this->attendanceSettings->early_clock_in);
                 $earlyClockIn = $earlyClockIn->setTimezone('UTC');
 
                 if($earlyClockIn->gte($officeStartTime) || $showClockIn->show_clock_in_button == 'yes'){
@@ -635,14 +635,14 @@ trait EmployeeDashboard
             // Set TimeZone And Convert into timestamp in halfday time
             if ($this->attendanceSettings->halfday_mark_time) {
                 $halfDayTimestamp = $now->format('Y-m-d') . ' ' . $this->attendanceSettings->halfday_mark_time;
-                $halfDayTimestamp = Carbon::createFromFormat('Y-m-d H:i:s', $halfDayTimestamp, $this->company->timezone);
+                $halfDayTimestamp = Carbon::createFromFormat('Y-m-d H:i:s', $halfDayTimestamp, $this->cooperative->timezone);
                 $halfDayTimestamp = $halfDayTimestamp->setTimezone('UTC');
                 $halfDayTimestamp = $halfDayTimestamp->timestamp;
             }
 
 
             $timestamp = $now->format('Y-m-d') . ' ' . $this->attendanceSettings->office_start_time;
-            $officeStartTime = Carbon::createFromFormat('Y-m-d H:i:s', $timestamp, $this->company->timezone);
+            $officeStartTime = Carbon::createFromFormat('Y-m-d H:i:s', $timestamp, $this->cooperative->timezone);
             $officeStartTime = $officeStartTime->setTimezone('UTC');
 
             $lateTime = $officeStartTime->addMinutes($this->attendanceSettings->late_mark_duration);
@@ -741,7 +741,7 @@ trait EmployeeDashboard
         $radius = attendance_setting()->radius;
         $currentLatitude = $request->currentLatitude;
         $currentLongitude = $request->currentLongitude;
-        $location = CompanyAddress::find($request->location);
+        $location = CooperativeAddress::find($request->location);
 
         $latFrom = deg2rad($location->latitude);
         $latTo = deg2rad($currentLatitude);
@@ -762,22 +762,22 @@ trait EmployeeDashboard
     public function attendanceShift($defaultAttendanceSettings)
     {
         $checkPreviousDayShift = EmployeeShiftSchedule::with('shift')->where('user_id', user()->id)
-            ->where('date', now(company()->timezone)->subDay()->toDateString())
+            ->where('date', now(cooperative()->timezone)->subDay()->toDateString())
             ->first();
 
         $checkTodayShift = EmployeeShiftSchedule::with('shift')->where('user_id', user()->id)
-            ->where('date', now(company()->timezone)->toDateString())
+            ->where('date', now(cooperative()->timezone)->toDateString())
             ->first();
 
-        $backDayFromDefault = Carbon::parse(now(company()->timezone)->subDay()->format('Y-m-d') . ' ' . $defaultAttendanceSettings->office_start_time);
+        $backDayFromDefault = Carbon::parse(now(cooperative()->timezone)->subDay()->format('Y-m-d') . ' ' . $defaultAttendanceSettings->office_start_time);
 
-        $backDayToDefault = Carbon::parse(now(company()->timezone)->subDay()->format('Y-m-d') . ' ' . $defaultAttendanceSettings->office_end_time);
+        $backDayToDefault = Carbon::parse(now(cooperative()->timezone)->subDay()->format('Y-m-d') . ' ' . $defaultAttendanceSettings->office_end_time);
 
         if ($backDayFromDefault->gt($backDayToDefault)) {
             $backDayToDefault->addDay();
         }
 
-        $nowTime = Carbon::createFromFormat('Y-m-d H:i:s', now(company()->timezone)->toDateTimeString(), 'UTC');
+        $nowTime = Carbon::createFromFormat('Y-m-d H:i:s', now(cooperative()->timezone)->toDateTimeString(), 'UTC');
 
         if ($checkPreviousDayShift && $nowTime->betweenIncluded($checkPreviousDayShift->shift_start_time, $checkPreviousDayShift->shift_end_time)) {
             $attendanceSettings = $checkPreviousDayShift;

@@ -234,7 +234,7 @@ class RecurringInvoicesDataTable extends BaseDataTable
             ->editColumn(
                 'issue_date',
                 function ($row) {
-                    return $row->issue_date->timezone($this->company->timezone)->translatedFormat($this->company->date_format);
+                    return $row->issue_date->timezone($this->cooperative->timezone)->translatedFormat($this->cooperative->date_format);
                 }
             )
             ->rawColumns(['project_name', 'action', 'status', 'invoice_number', 'total', 'name'])
@@ -259,15 +259,15 @@ class RecurringInvoicesDataTable extends BaseDataTable
             $q->select('id', 'project_name', 'client_id');
         }, 'currency:id,currency_symbol,currency_code', 'project.client'])
             ->with('client', 'client.session', 'client.clientDetails', 'payment')
-            ->select('invoices.id', 'invoices.project_id', 'invoices.client_id', 'invoices.invoice_number', 'invoices.currency_id', 'invoices.total', 'invoices.status', 'invoices.issue_date', 'invoices.credit_note', 'invoices.show_shipping_address', 'invoices.send_status', 'invoices.invoice_recurring_id', 'invoices.hash', 'invoices.company_id');
+            ->select('invoices.id', 'invoices.project_id', 'invoices.client_id', 'invoices.invoice_number', 'invoices.currency_id', 'invoices.total', 'invoices.status', 'invoices.issue_date', 'invoices.credit_note', 'invoices.show_shipping_address', 'invoices.send_status', 'invoices.invoice_recurring_id', 'invoices.hash', 'invoices.cooperative_id');
 
         if ($request->startDate !== null && $request->startDate != 'null' && $request->startDate != '') {
-            $startDate = Carbon::createFromFormat($this->company->date_format, $request->startDate)->toDateString();
+            $startDate = Carbon::createFromFormat($this->cooperative->date_format, $request->startDate)->toDateString();
             $model = $model->where(DB::raw('DATE(invoices.`issue_date`)'), '>=', $startDate);
         }
 
         if ($request->endDate !== null && $request->endDate != 'null' && $request->endDate != '') {
-            $endDate = Carbon::createFromFormat($this->company->date_format, $request->endDate)->toDateString();
+            $endDate = Carbon::createFromFormat($this->cooperative->date_format, $request->endDate)->toDateString();
             $model = $model->where(DB::raw('DATE(invoices.`issue_date`)'), '<=', $endDate);
         }
 

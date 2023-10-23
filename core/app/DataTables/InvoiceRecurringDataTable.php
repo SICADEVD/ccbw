@@ -138,7 +138,7 @@ class InvoiceRecurringDataTable extends BaseDataTable
             ->editColumn(
                 'issue_date',
                 function ($row) {
-                    return $row->issue_date->timezone($this->company->timezone)->translatedFormat($this->company->date_format);
+                    return $row->issue_date->timezone($this->cooperative->timezone)->translatedFormat($this->cooperative->date_format);
                 }
             )->editColumn(
                 'next_invoice_date',
@@ -149,7 +149,7 @@ class InvoiceRecurringDataTable extends BaseDataTable
                         return $rotation;
                     }
 
-                    $date = $row->next_invoice_date->timezone($this->company->timezone)->translatedFormat($this->company->date_format);
+                    $date = $row->next_invoice_date->timezone($this->cooperative->timezone)->translatedFormat($this->cooperative->date_format);
 
                     return $date . $rotation;
 
@@ -176,12 +176,12 @@ class InvoiceRecurringDataTable extends BaseDataTable
             ->select('invoice_recurring.id', 'invoice_recurring.project_id', 'invoice_recurring.client_id', 'invoice_recurring.currency_id', 'invoice_recurring.total', 'invoice_recurring.status', 'invoice_recurring.issue_date', 'invoice_recurring.show_shipping_address', 'invoice_recurring.client_can_stop', 'invoice_recurring.next_invoice_date', 'rotation');
 
         if ($request->startDate !== null && $request->startDate != 'null' && $request->startDate != '') {
-            $startDate = Carbon::createFromFormat($this->company->date_format, $request->startDate)->toDateString();
+            $startDate = Carbon::createFromFormat($this->cooperative->date_format, $request->startDate)->toDateString();
             $model = $model->where(DB::raw('DATE(invoice_recurring.`issue_date`)'), '>=', $startDate);
         }
 
         if ($request->endDate !== null && $request->endDate != 'null' && $request->endDate != '') {
-            $endDate = Carbon::createFromFormat($this->company->date_format, $request->endDate)->toDateString();
+            $endDate = Carbon::createFromFormat($this->cooperative->date_format, $request->endDate)->toDateString();
             $model = $model->where(DB::raw('DATE(invoice_recurring.`issue_date`)'), '<=', $endDate);
         }
 

@@ -29,8 +29,8 @@ trait OverviewDashboard
     {
         abort_403($this->viewOverviewDashboard !== 'all');
 
-        $this->startDate  = (request('startDate') != '') ? Carbon::createFromFormat($this->company->date_format, request('startDate')) : now($this->company->timezone)->startOfMonth();
-        $this->endDate = (request('endDate') != '') ? Carbon::createFromFormat($this->company->date_format, request('endDate')) : now($this->company->timezone);
+        $this->startDate  = (request('startDate') != '') ? Carbon::createFromFormat($this->cooperative->date_format, request('startDate')) : now($this->cooperative->timezone)->startOfMonth();
+        $this->endDate = (request('endDate') != '') ? Carbon::createFromFormat($this->cooperative->date_format, request('endDate')) : now($this->cooperative->timezone);
         $startDate = $this->startDate->toDateString();
         $endDate = $this->endDate->toDateString();
 
@@ -42,17 +42,17 @@ trait OverviewDashboard
 
         $this->counts = DB::table('users')
             ->select(
-                DB::raw('(select count(users.id) from `users` inner join role_user on role_user.user_id=users.id inner join roles on roles.id=role_user.role_id WHERE roles.name = "client" AND users.company_id = '. company()->id .') as totalClients'),
-                DB::raw('(select count(users.id) from `users` inner join role_user on role_user.user_id=users.id inner join roles on roles.id=role_user.role_id WHERE roles.name = "employee" and users.status = "active" AND users.company_id = '. company()->id .') as totalEmployees'),
-                DB::raw('(select count(projects.id) from `projects` WHERE projects.company_id = '. company()->id .') as totalProjects'),
-                DB::raw('(select count(invoices.id) from `invoices` where (status = "unpaid" or status = "partial") AND invoices.company_id = '. company()->id .') as totalUnpaidInvoices'),
-                DB::raw('(select sum(project_time_logs.total_minutes) from `project_time_logs` where approved = "1" AND project_time_logs.company_id = '. company()->id .') as totalHoursLogged'),
-                DB::raw('(select sum(project_time_log_breaks.total_minutes) from `project_time_log_breaks` WHERE project_time_log_breaks.company_id = '. company()->id .') as totalBreakMinutes'),
-                DB::raw('(select count(tasks.id) from `tasks` where tasks.board_column_id=' . $completedTaskColumn->id . ' and is_private = "0" AND tasks.company_id = '. company()->id .') as totalCompletedTasks'),
-                DB::raw('(select count(tasks.id) from `tasks` where tasks.board_column_id != ' . $completedTaskColumn->id . ' and is_private = "0" AND tasks.company_id = '. company()->id .') as totalPendingTasks'),
-                DB::raw('(select count(distinct(attendances.user_id)) from `attendances` inner join users as atd_user on atd_user.id=attendances.user_id inner join role_user on role_user.user_id=atd_user.id inner join roles on roles.id=role_user.role_id WHERE roles.name = "employee" and attendances.clock_in_time >= "'.today(company()->timezone)->setTimezone('UTC')->toDateTimeString().'" and atd_user.status = "active" AND attendances.company_id = '. company()->id .') as totalTodayAttendance'),
-                DB::raw('(select count(tickets.id) from `tickets` where (status="open") and deleted_at IS NULL AND tickets.company_id = '. company()->id .') as totalOpenTickets'),
-                DB::raw('(select count(tickets.id) from `tickets` where (status="resolved" or status="closed") and deleted_at IS NULL AND tickets.company_id = '. company()->id .') as totalResolvedTickets')
+                DB::raw('(select count(users.id) from `users` inner join role_user on role_user.user_id=users.id inner join roles on roles.id=role_user.role_id WHERE roles.name = "client" AND users.cooperative_id = '. cooperative()->id .') as totalClients'),
+                DB::raw('(select count(users.id) from `users` inner join role_user on role_user.user_id=users.id inner join roles on roles.id=role_user.role_id WHERE roles.name = "employee" and users.status = "active" AND users.cooperative_id = '. cooperative()->id .') as totalEmployees'),
+                DB::raw('(select count(projects.id) from `projects` WHERE projects.cooperative_id = '. cooperative()->id .') as totalProjects'),
+                DB::raw('(select count(invoices.id) from `invoices` where (status = "unpaid" or status = "partial") AND invoices.cooperative_id = '. cooperative()->id .') as totalUnpaidInvoices'),
+                DB::raw('(select sum(project_time_logs.total_minutes) from `project_time_logs` where approved = "1" AND project_time_logs.cooperative_id = '. cooperative()->id .') as totalHoursLogged'),
+                DB::raw('(select sum(project_time_log_breaks.total_minutes) from `project_time_log_breaks` WHERE project_time_log_breaks.cooperative_id = '. cooperative()->id .') as totalBreakMinutes'),
+                DB::raw('(select count(tasks.id) from `tasks` where tasks.board_column_id=' . $completedTaskColumn->id . ' and is_private = "0" AND tasks.cooperative_id = '. cooperative()->id .') as totalCompletedTasks'),
+                DB::raw('(select count(tasks.id) from `tasks` where tasks.board_column_id != ' . $completedTaskColumn->id . ' and is_private = "0" AND tasks.cooperative_id = '. cooperative()->id .') as totalPendingTasks'),
+                DB::raw('(select count(distinct(attendances.user_id)) from `attendances` inner join users as atd_user on atd_user.id=attendances.user_id inner join role_user on role_user.user_id=atd_user.id inner join roles on roles.id=role_user.role_id WHERE roles.name = "employee" and attendances.clock_in_time >= "'.today(cooperative()->timezone)->setTimezone('UTC')->toDateTimeString().'" and atd_user.status = "active" AND attendances.cooperative_id = '. cooperative()->id .') as totalTodayAttendance'),
+                DB::raw('(select count(tickets.id) from `tickets` where (status="open") and deleted_at IS NULL AND tickets.cooperative_id = '. cooperative()->id .') as totalOpenTickets'),
+                DB::raw('(select count(tickets.id) from `tickets` where (status="resolved" or status="closed") and deleted_at IS NULL AND tickets.cooperative_id = '. cooperative()->id .') as totalResolvedTickets')
             )
             ->first();
 
@@ -94,10 +94,10 @@ trait OverviewDashboard
             ->get();
 
 
-        $currentDate = now()->timezone($this->company->timezone)->toDateTimeString();
+        $currentDate = now()->timezone($this->cooperative->timezone)->toDateTimeString();
 
         $this->pendingLeadFollowUps = Lead::with('followup', 'leadAgent', 'leadAgent.user', 'leadAgent.user.employeeDetail', 'leadAgent.user.employeeDetail.designation')
-            ->selectRaw('leads.id,leads.company_name, leads.client_name, leads.agent_id, ( select lead_follow_up.next_follow_up_date from lead_follow_up where lead_follow_up.lead_id = leads.id and DATE(lead_follow_up.next_follow_up_date) < "'.$currentDate.'" ORDER BY lead_follow_up.created_at DESC Limit 1) as follow_up_date_past,
+            ->selectRaw('leads.id,leads.cooperative_name, leads.client_name, leads.agent_id, ( select lead_follow_up.next_follow_up_date from lead_follow_up where lead_follow_up.lead_id = leads.id and DATE(lead_follow_up.next_follow_up_date) < "'.$currentDate.'" ORDER BY lead_follow_up.created_at DESC Limit 1) as follow_up_date_past,
             ( select lead_follow.next_follow_up_date from lead_follow_up as lead_follow where lead_follow.lead_id = leads.id and status = "incomplete" ORDER BY lead_follow.created_at DESC Limit 1) as follow_up_date_next'
         )
             ->where('leads.next_follow_up', 'yes')
@@ -110,7 +110,7 @@ trait OverviewDashboard
 
         $this->projectActivities = ProjectActivity::with('project')
             ->join('projects', 'projects.id', '=', 'project_activity.project_id')
-            ->where('projects.company_id', company()->id)
+            ->where('projects.cooperative_id', cooperative()->id)
             ->whereNull('projects.deleted_at')
             ->select('project_activity.*')
             ->limit(15)
@@ -154,7 +154,7 @@ trait OverviewDashboard
                 $incomes[$invoice->date] = 0;
             }
 
-            if ($invoice->currency_id != $this->company->currency_id && $invoice->exchange_rate != 0) {
+            if ($invoice->currency_id != $this->cooperative->currency_id && $invoice->exchange_rate != 0) {
                 $incomes[$invoice->date] += floor((float)$invoice->total / (float)$invoice->exchange_rate);
             }
             else {

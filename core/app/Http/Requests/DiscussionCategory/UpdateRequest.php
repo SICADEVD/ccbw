@@ -26,7 +26,7 @@ class UpdateRequest extends FormRequest
     {
         if (request()->has('name')) {
             return [
-                'name' => 'required|unique:discussion_categories,name,' . $this->route('discussion_category').',id,company_id,' . company()->id,
+                'name' => 'required|unique:discussion_categories,name,' . $this->route('discussion_category').',id,cooperative_id,' . cooperative()->id,
             ];
         }
 

@@ -25,7 +25,7 @@ class StoreDepartment extends CoreRequest
     public function rules()
     {
         return [
-            'team_name' => 'required|unique:teams,team_name,null,id,company_id,' . company()->id
+            'team_name' => 'required|unique:teams,team_name,null,id,cooperative_id,' . cooperative()->id
         ];
     }
 

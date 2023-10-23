@@ -28,11 +28,11 @@ class StoreRequest extends CoreRequest
             'description' => 'required',
         ];
 
-        if (company()) {
-            $rules['name'] = 'required|unique:offline_payment_methods,name,null,id,company_id,' . company()->id;
+        if (cooperative()) {
+            $rules['name'] = 'required|unique:offline_payment_methods,name,null,id,cooperative_id,' . cooperative()->id;
         }
         else{
-            $rules['name'] = 'required|unique:offline_payment_methods,name,null,id,company_id,null';
+            $rules['name'] = 'required|unique:offline_payment_methods,name,null,id,cooperative_id,null';
         }
 
         return $rules;

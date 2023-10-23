@@ -28447,11 +28447,11 @@ button.disabled,button:disabled
 }
 .task-detail-panel
     {
-    background-color:#fff;border:1px solid #e8eef3;height:100vh;position:fixed;right:-320px;top:0;transition:all .5s ease;width:240px;z-index:3
+    background-color:#fff;border:1px solid #e8eef3;height:100vh;position:fixed;right:-320px;top:0;transition:all .5s ease;width:240px;z-index:111111
 }
 .task-detail-panel.in
     {
-    right:0;transition:all .5s ease;width:85%
+    right:0;transition:all .5s ease;width:82%
 }
 @media (max-width:767.98px)
     {
@@ -29567,7 +29567,7 @@ table.dataTable
 }
 .select-box,.task-search
     {
-    width:29%
+    width:26%
 }
 @media (max-width:991.98px)
     {

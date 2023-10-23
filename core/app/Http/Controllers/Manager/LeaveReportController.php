@@ -23,8 +23,8 @@ class LeaveReportController extends AccountBaseController
     {
         if (!request()->ajax()) {
             $this->employees = User::allEmployees(null, true);
-            $this->fromDate = now($this->company->timezone)->startOfMonth();
-            $this->toDate = now($this->company->timezone)->endOfMonth();
+            $this->fromDate = now($this->cooperative->timezone)->startOfMonth();
+            $this->toDate = now($this->cooperative->timezone)->endOfMonth();
         }
 
         return $dataTable->render('reports.leave.index', $this->data);
@@ -38,13 +38,13 @@ class LeaveReportController extends AccountBaseController
         $this->leave_types = LeaveType::with(['leaves' => function ($query) use ($request, $id, $view) {
             if ($request->startDate !== null && $request->startDate != 'null' && $request->startDate != '') {
                 $this->startDate = $request->startDate;
-                $startDate = Carbon::createFromFormat($this->company->date_format, $request->startDate)->toDateString();
+                $startDate = Carbon::createFromFormat($this->cooperative->date_format, $request->startDate)->toDateString();
                 $query->where(DB::raw('DATE(leaves.`leave_date`)'), '>=', $startDate);
             }
 
             if ($request->endDate !== null && $request->endDate != 'null' && $request->endDate != '') {
                 $this->endDate = $request->endDate;
-                $endDate = Carbon::createFromFormat($this->company->date_format, $request->endDate)->toDateString();
+                $endDate = Carbon::createFromFormat($this->cooperative->date_format, $request->endDate)->toDateString();
                 $query->where(DB::raw('DATE(leaves.`leave_date`)'), '<=', $endDate);
             }
 
@@ -53,7 +53,7 @@ class LeaveReportController extends AccountBaseController
                 $query->where('status', 'pending')->where('user_id', $id);
                     break;
             case 'upcoming':
-                $query->where('leave_date', '>', now($this->company->timezone)->format('Y-m-d'));
+                $query->where('leave_date', '>', now($this->cooperative->timezone)->format('Y-m-d'));
                 $query->where('status', '<>', 'rejected')->where('user_id', $id);
                     break;
             default:

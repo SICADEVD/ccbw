@@ -25,7 +25,7 @@ class UpdateEvent extends CoreRequest
      */
     public function rules()
     {
-        $setting = company();
+        $setting = cooperative();
         return [
             'event_name' => 'required',
             'start_date' => 'required',

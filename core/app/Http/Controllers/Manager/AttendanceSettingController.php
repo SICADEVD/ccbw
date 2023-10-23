@@ -6,7 +6,7 @@ use App\Http\Controllers\AccountBaseController;
 use App\Http\Helpers\Reply;
 use App\Http\Requests\AttendanceSetting\UpdateAttendanceSetting;
 use App\Models\AttendanceSetting;
-use App\Models\Company;
+use App\Models\Cooperative;
 use App\Models\EmployeeShift;
 use App\Models\Holiday;
 use App\Models\Role;
@@ -70,7 +70,7 @@ class AttendanceSettingController extends AccountBaseController
     //phpcs:ignore
     public function update(UpdateAttendanceSetting $request, $id)
     {
-        $setting = company()->attendanceSetting;
+        $setting = cooperative()->attendanceSetting;
         $setting->employee_clock_in_out = ($request->employee_clock_in_out == 'yes') ? 'yes' : 'no';
         $setting->radius_check = ($request->radius_check == 'yes') ? 'yes' : 'no';
         $setting->ip_check = ($request->ip_check == 'yes') ? 'yes' : 'no';
@@ -88,7 +88,7 @@ class AttendanceSettingController extends AccountBaseController
         $setting->monthly_report_roles = json_encode($request->monthly_report_roles);
         $setting->save();
 
-        session()->forget(['attendance_setting','company']);
+        session()->forget(['attendance_setting','cooperative']);
 
         return Reply::success(__('messages.updateSuccess'));
     }

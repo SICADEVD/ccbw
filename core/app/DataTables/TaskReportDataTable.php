@@ -34,13 +34,13 @@ class TaskReportDataTable extends BaseDataTable
             ->editColumn('due_date', function ($row) {
                 if (!is_null($row->due_date)) {
                     if ($row->due_date->endOfDay()->isPast()) {
-                        return '<span class="text-danger">' . $row->due_date->translatedFormat($this->company->date_format) . '</span>';
+                        return '<span class="text-danger">' . $row->due_date->translatedFormat($this->cooperative->date_format) . '</span>';
                     }
-                    elseif ($row->due_date->setTimezone($this->company->timezone)->isToday()) {
+                    elseif ($row->due_date->setTimezone($this->cooperative->timezone)->isToday()) {
                         return '<span class="text-success">' . __('app.today') . '</span>';
                     }
 
-                    return '<span>' . $row->due_date->translatedFormat($this->company->date_format) . '</span>';
+                    return '<span>' . $row->due_date->translatedFormat($this->cooperative->date_format) . '</span>';
                 }
             })
             ->editColumn('users', function ($row) {
@@ -137,11 +137,11 @@ class TaskReportDataTable extends BaseDataTable
         $endDate = null;
 
         if ($request->startDate !== null && $request->startDate != 'null' && $request->startDate != '') {
-            $startDate = Carbon::createFromFormat($this->company->date_format, $request->startDate)->toDateString();
+            $startDate = Carbon::createFromFormat($this->cooperative->date_format, $request->startDate)->toDateString();
         }
 
         if ($request->endDate !== null && $request->endDate != 'null' && $request->endDate != '') {
-            $endDate = Carbon::createFromFormat($this->company->date_format, $request->endDate)->toDateString();
+            $endDate = Carbon::createFromFormat($this->cooperative->date_format, $request->endDate)->toDateString();
         }
 
         $projectId = $request->projectId;
@@ -166,7 +166,7 @@ class TaskReportDataTable extends BaseDataTable
             ->selectRaw('tasks.id, tasks.added_by, projects.project_name, projects.client_id, tasks.heading, client.name as clientName, creator_user.name as created_by, creator_user.image as created_image, tasks.board_column_id,tasks.task_short_code,
              tasks.due_date, taskboard_columns.column_name as board_column, taskboard_columns.label_color,
               tasks.project_id, tasks.is_private ,( select count("id") from pinned where pinned.task_id = tasks.id and pinned.user_id = ' . user()->id . ') as pinned_task')
-            ->addSelect('tasks.company_id') // Company_id is fetched so the we have fetch company relation with it)
+            ->addSelect('tasks.cooperative_id') // Cooperative_id is fetched so the we have fetch cooperative relation with it)
             ->whereNull('projects.deleted_at')
             ->with('users', 'activeTimerAll', 'activeTimer')
             ->groupBy('tasks.id');

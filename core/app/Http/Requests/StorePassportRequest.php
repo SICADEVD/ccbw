@@ -25,7 +25,7 @@ class StorePassportRequest extends FormRequest
      */
     public function rules()
     {
-        $setting = company();
+        $setting = cooperative();
 
         return [
             'passport_number' => 'required|unique:passport_details',

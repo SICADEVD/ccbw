@@ -26,9 +26,9 @@ class UpdateOrganisationSettings extends CoreRequest
     public function rules()
     {
         $rules = [
-            'company_name' => 'required|max:60',
-            'company_email' => 'required|email:rfc|max:100',
-            'company_phone' => 'required|max:20',
+            'cooperative_name' => 'required|max:60',
+            'cooperative_email' => 'required|email:rfc|max:100',
+            'cooperative_phone' => 'required|max:20',
             'website' => 'nullable|url|max:50'
         ];
 

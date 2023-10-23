@@ -25,7 +25,7 @@ class RenewRequest extends CoreRequest
      */
     public function rules()
     {
-        $setting = company();
+        $setting = cooperative();
 
         $rules = [
             'amount' => 'required',

@@ -2,7 +2,7 @@
 
 namespace App\Traits\SuperAdmin;
 
-use App\Models\Company;
+use App\Models\Cooperative;
 use App\Models\SuperAdmin\Package;
 use App\Scopes\ActiveScope;
 use Carbon\Carbon;
@@ -23,29 +23,29 @@ trait SuperAdminDashboard
     {
         $this->isCheckScript();
         $this->pageTitle = 'superadmin.superAdminDashboard';
-        $this->recentRegisteredCompanies = Company::with('package')->latest()->limit(5)->get();
-        $this->recentSubscriptions = Company::with('package')->where('status', 'active')->whereNotNull('subscription_updated_at')->latest('subscription_updated_at')->limit(5)->get();
+        $this->recentRegisteredCompanies = Cooperative::with('package')->latest()->limit(5)->get();
+        $this->recentSubscriptions = Cooperative::with('package')->where('status', 'active')->whereNotNull('subscription_updated_at')->latest('subscription_updated_at')->limit(5)->get();
 
-        $this->recentLicenceExpiredCompanies = Company::with('package')->where('status', 'license_expired')->where(function ($query) {
+        $this->recentLicenceExpiredCompanies = Cooperative::with('package')->where('status', 'license_expired')->where(function ($query) {
             $query->where('licence_expire_on', '<', now()->format('Y-m-d'))
                 ->orWhere('licence_expire_on', '=', null);
         })->latest('license_updated_at')
             ->limit(5)
             ->get();
 
-        $this->totalCompanies = Company::withoutGlobalScope(ActiveScope::class)->count();
+        $this->totalCompanies = Cooperative::withoutGlobalScope(ActiveScope::class)->count();
 
-        $this->activeCompanies = Company::where('status', '=', 'active')->count();
-        $this->inactiveCompanies = Company::where('status', '=', 'inactive')->count();
+        $this->activeCompanies = Cooperative::where('status', '=', 'active')->count();
+        $this->inactiveCompanies = Cooperative::where('status', '=', 'inactive')->count();
 
-        $this->expiredCompanies = Company::with('package')->where('status', 'license_expired')->where(function ($query) {
+        $this->expiredCompanies = Cooperative::with('package')->where('status', 'license_expired')->where(function ($query) {
             $query->where('licence_expire_on', '<', now()->format('Y-m-d'))
                 ->orWhere('licence_expire_on', '=', null);
         })->count();
 
-        $this->topCompaniesUserCount = Company::active()->withCount(['users', 'employees', 'clients'])->orderBy('users_count', 'desc')->limit(5)->get();
+        $this->topCompaniesUserCount = Cooperative::active()->withCount(['users', 'employees', 'clients'])->orderBy('users_count', 'desc')->limit(5)->get();
 
-        $this->packageCompanyCount = Package::where('default', '!=', 'trial')->withCount(['companies'])->orderBy('companies_count', 'desc')->limit(10)->get();
+        $this->packageCooperativeCount = Package::where('default', '!=', 'trial')->withCount(['companies'])->orderBy('companies_count', 'desc')->limit(10)->get();
         $this->totalPackages = Package::where('default', '!=', 'trial')->count();
         $year = now(global_setting()->timezone)->year;
 
@@ -60,7 +60,7 @@ trait SuperAdminDashboard
 
     public function registrationsChart($year)
     {
-        $companies = Company::whereYear('created_at', $year)->orderBy('created_at');
+        $companies = Cooperative::whereYear('created_at', $year)->orderBy('created_at');
         $companies = $companies->groupBy('year', 'month')
             ->get([
                 DB::raw('YEAR(created_at) year, MONTHNAME(created_at) month,MONTH(created_at) month_number'),

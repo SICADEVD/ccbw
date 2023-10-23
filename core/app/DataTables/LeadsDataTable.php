@@ -49,7 +49,7 @@ class LeadsDataTable extends BaseDataTable
      */
     public function dataTable($query)
     {
-        $currentDate = Carbon::now(company()->timezone)->translatedFormat('Y-m-d');
+        $currentDate = Carbon::now(cooperative()->timezone)->translatedFormat('Y-m-d');
         $status = $this->status;
 
         $datatables = datatables()->eloquent($query);
@@ -210,7 +210,7 @@ class LeadsDataTable extends BaseDataTable
                     <h5 class="mb-0 f-13 "><a href="' . route('leads.show', [$row->id]) . '">' . $client_name . '</a></h5>
                     <p class="mb-0">' . $label . '</p>
                     <p class="mb-0 f-12 text-dark-grey">
-                    '.$row->company_name.'
+                    '.$row->cooperative_name.'
                 </p>
                     </div>
                   ';
@@ -219,7 +219,7 @@ class LeadsDataTable extends BaseDataTable
             if ($this->viewLeadFollowUpPermission != 'none') {
                 // code...
                 if ($row->next_follow_up_date != null && $row->next_follow_up_date != '') {
-                    $date = Carbon::parse($row->next_follow_up_date)->translatedFormat($this->company->date_format . ' ' . $this->company->time_format);
+                    $date = Carbon::parse($row->next_follow_up_date)->translatedFormat($this->cooperative->date_format . ' ' . $this->cooperative->time_format);
                 }
                 else {
                     $date = '--';
@@ -233,7 +233,7 @@ class LeadsDataTable extends BaseDataTable
             }
         });
         $datatables->editColumn('created_at', function ($row) {
-            return $row->created_at->translatedFormat($this->company->date_format);
+            return $row->created_at->translatedFormat($this->cooperative->date_format);
         });
         $datatables->editColumn('agent_name', function ($row) {
 
@@ -282,7 +282,7 @@ class LeadsDataTable extends BaseDataTable
                 'leads.value',
                 'client_name',
                 'client_email',
-                'company_name',
+                'cooperative_name',
                 'lead_status.type as statusName',
                 'status_id',
                 'leads.created_at',
@@ -328,35 +328,35 @@ class LeadsDataTable extends BaseDataTable
         }
 
         if ($this->request()->startDate !== null && $this->request()->startDate != 'null' && $this->request()->startDate != '' && request()->date_filter_on == 'created_at') {
-            $startDate = Carbon::createFromFormat($this->company->date_format, $this->request()->startDate)->toDateString();
+            $startDate = Carbon::createFromFormat($this->cooperative->date_format, $this->request()->startDate)->toDateString();
 
             $lead = $lead->having(DB::raw('DATE(leads.`created_at`)'), '>=', $startDate);
         }
 
         if ($this->request()->startDate !== null && $this->request()->startDate != 'null' && $this->request()->startDate != '' && request()->date_filter_on == 'next_follow_up_date') {
-            $startDate = Carbon::createFromFormat($this->company->date_format, $this->request()->startDate)->toDateString();
+            $startDate = Carbon::createFromFormat($this->cooperative->date_format, $this->request()->startDate)->toDateString();
 
             $lead = $lead->having(DB::raw('DATE(`next_follow_up_date`)'), '>=', $startDate);
         }
 
         if ($this->request()->endDate !== null && $this->request()->endDate != 'null' && $this->request()->endDate != '' && request()->date_filter_on == 'created_at') {
-            $endDate = Carbon::createFromFormat($this->company->date_format, $this->request()->endDate)->toDateString();
+            $endDate = Carbon::createFromFormat($this->cooperative->date_format, $this->request()->endDate)->toDateString();
             $lead = $lead->having(DB::raw('DATE(leads.`created_at`)'), '<=', $endDate);
         }
 
         if ($this->request()->endDate !== null && $this->request()->endDate != 'null' && $this->request()->endDate != '' && request()->date_filter_on == 'next_follow_up_date') {
-            $endDate = Carbon::createFromFormat($this->company->date_format, $this->request()->endDate)->toDateString();
+            $endDate = Carbon::createFromFormat($this->cooperative->date_format, $this->request()->endDate)->toDateString();
             $lead = $lead->having(DB::raw('DATE(`next_follow_up_date`)'), '<=', $endDate);
         }
 
         if ($this->request()->startDate !== null && $this->request()->startDate != 'null' && $this->request()->startDate != '' && request()->date_filter_on == 'updated_at') {
-            $startDate = Carbon::createFromFormat($this->company->date_format, $this->request()->startDate)->toDateString();
+            $startDate = Carbon::createFromFormat($this->cooperative->date_format, $this->request()->startDate)->toDateString();
 
             $lead = $lead->having(DB::raw('DATE(leads.`updated_at`)'), '>=', $startDate);
         }
 
         if ($this->request()->endDate !== null && $this->request()->endDate != 'null' && $this->request()->endDate != '' && request()->date_filter_on == 'updated_at') {
-            $endDate = Carbon::createFromFormat($this->company->date_format, $this->request()->endDate)->toDateString();
+            $endDate = Carbon::createFromFormat($this->cooperative->date_format, $this->request()->endDate)->toDateString();
             $lead = $lead->having(DB::raw('DATE(leads.`updated_at`)'), '<=', $endDate);
         }
 
@@ -404,7 +404,7 @@ class LeadsDataTable extends BaseDataTable
             $lead = $lead->where(function ($query) {
                 $query->where('leads.client_name', 'like', '%' . request('searchText') . '%')
                     ->orWhere('leads.client_email', 'like', '%' . request('searchText') . '%')
-                    ->orWhere('leads.company_name', 'like', '%' . request('searchText') . '%')
+                    ->orWhere('leads.cooperative_name', 'like', '%' . request('searchText') . '%')
                     ->orwhere('leads.mobile', 'like', '%' . request('searchText') . '%');
             });
         }

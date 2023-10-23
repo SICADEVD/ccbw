@@ -26,7 +26,7 @@ class StoreRequest extends CoreRequest
     public function rules()
     {
         $lead = Lead::findOrFail($this->lead_id);
-        $setting = company();
+        $setting = cooperative();
 
         $rules = [];
 

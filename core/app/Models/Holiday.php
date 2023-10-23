@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Scopes\ActiveScope;
-use App\Traits\HasCompany;
+use App\Traits\HasCooperative;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\DB;
 
@@ -32,9 +32,9 @@ use Illuminate\Support\Facades\DB;
  * @method static \Illuminate\Database\Eloquent\Builder|Holiday whereUpdatedAt($value)
  * @property string|null $event_id
  * @method static \Illuminate\Database\Eloquent\Builder|Holiday whereEventId($value)
- * @property int|null $company_id
- * @property-read \App\Models\Company|null $company
- * @method static \Illuminate\Database\Eloquent\Builder|Holiday whereCompanyId($value)
+ * @property int|null $cooperative_id
+ * @property-read \App\Models\Cooperative|null $cooperative
+ * @method static \Illuminate\Database\Eloquent\Builder|Holiday whereCooperativeId($value)
  * @property-read \App\Models\Holiday|null $hdate
  * @property-read \App\Models\Leave|null $ldate
  * @mixin \Eloquent
@@ -42,7 +42,7 @@ use Illuminate\Support\Facades\DB;
 class Holiday extends BaseModel
 {
 
-    use HasCompany;
+    use HasCooperative;
 
     const SUNDAY = 0;
 

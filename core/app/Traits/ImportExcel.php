@@ -72,7 +72,7 @@ trait ImportExcel
 
         foreach ($excelData as $row) {
 
-            $jobs[] = (new $importJobClass($row, $columns, company()));
+            $jobs[] = (new $importJobClass($row, $columns, cooperative()));
         }
 
         $batch = Bus::batch($jobs)->onConnection('database')->onQueue($importClassName)->name($importClassName)->dispatch();

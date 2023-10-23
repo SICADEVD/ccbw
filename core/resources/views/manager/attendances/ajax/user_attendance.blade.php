@@ -7,7 +7,7 @@
         <tr>
             <td>
                 <div class="media-body">
-                    <h5 class="mb-0 f-13">{{ $currentDate->translatedFormat(company()->date_format) }}
+                    <h5 class="mb-0 f-13">{{ $currentDate->translatedFormat(cooperative()->date_format) }}
                     </h5>
                     <p class="mb-0 f-13 text-dark-grey">
                         <label class="badge badge-secondary">{{ $currentDate->translatedFormat('l') }}</label>
@@ -22,7 +22,7 @@
                     @foreach ($dateData['attendance'] as $attendance)
                         <tr>
                             <td width="50%">
-                                {{ $attendance->clock_in_time->timezone(company()->timezone)->translatedFormat(company()->time_format) }}
+                                {{ $attendance->clock_in_time->timezone(cooperative()->timezone)->translatedFormat(cooperative()->time_format) }}
 
                                 @if ($attendance->late == 'yes')
                                     <span class="text-dark-grey"><i class="fa fa-exclamation-triangle ml-2"></i>
@@ -46,7 +46,7 @@
                             </td>
                             <td width="50%">
                                 @if (!is_null($attendance->clock_out_time))
-                                    {{ $attendance->clock_out_time->timezone(company()->timezone)->translatedFormat(company()->time_format) }}
+                                    {{ $attendance->clock_out_time->timezone(cooperative()->timezone)->translatedFormat(cooperative()->time_format) }}
                                 @else - @endif
                             </td>
                         </tr>
@@ -68,7 +68,7 @@
         <tr>
             <td>
                 <div class="media-body">
-                    <h5 class="mb-0 f-13">{{ $currentDate->translatedFormat(company()->date_format) }}
+                    <h5 class="mb-0 f-13">{{ $currentDate->translatedFormat(cooperative()->date_format) }}
                     </h5>
                     <p class="mb-0 f-13 text-dark-grey">
                         <span class="badge badge-secondary">{{ $currentDate->translatedFormat('l') }}</span>

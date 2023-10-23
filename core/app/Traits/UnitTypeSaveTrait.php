@@ -14,8 +14,8 @@ trait UnitTypeSaveTrait
             return $model;
         }
 
-        /* Find the first unit type for the company */
-        $type = UnitType::where('company_id', $model->company_id)->first();
+        /* Find the first unit type for the cooperative */
+        $type = UnitType::where('cooperative_id', $model->cooperative_id)->first();
 
         /* If a unit type was found, set the unit_id and return the updated model */
         if ($type) {

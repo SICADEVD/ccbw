@@ -60,7 +60,7 @@ class ShiftChangeRequestDataTable extends BaseDataTable
                 return '<span class="badge badge-info" style="background-color: ' . $row->shiftSchedule->shift->color . '">' . $row->shiftSchedule->shift->shift_name . '</span> ' . __('app.to') . ' <span class="badge badge-info" style="background-color: ' . $row->shift->color . '">' . $row->shift->shift_name . '</span>';
             })
             ->editColumn('date', function ($row) {
-                return $row->shiftSchedule->date->translatedFormat(company()->date_format);
+                return $row->shiftSchedule->date->translatedFormat(cooperative()->date_format);
             })
             ->editColumn('status', function ($row) {
                 return $row->status;
@@ -89,7 +89,7 @@ class ShiftChangeRequestDataTable extends BaseDataTable
         $model = $model->join('employee_shifts', 'employee_shifts.id', '=', 'employee_shift_schedules.employee_shift_id');
 
         if ($request->startDate !== null && $request->startDate != 'null' && $request->startDate != '') {
-            $startDate = Carbon::createFromFormat($this->company->date_format, $request->startDate)->toDateString();
+            $startDate = Carbon::createFromFormat($this->cooperative->date_format, $request->startDate)->toDateString();
 
             if (!is_null($startDate)) {
                 $model->where(DB::raw('DATE(employee_shift_change_requests.`created_at`)'), '>=', $startDate);
@@ -97,7 +97,7 @@ class ShiftChangeRequestDataTable extends BaseDataTable
         }
 
         if ($request->endDate !== null && $request->endDate != 'null' && $request->endDate != '') {
-            $endDate = Carbon::createFromFormat($this->company->date_format, $request->endDate)->toDateString();
+            $endDate = Carbon::createFromFormat($this->cooperative->date_format, $request->endDate)->toDateString();
 
             if (!is_null($endDate)) {
                 $model->where(function ($query) use ($endDate) {

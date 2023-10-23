@@ -170,7 +170,7 @@ class   TicketDataTable extends BaseDataTable
 
         });
         $datatables->editColumn('updated_at', function ($row) {
-            return $row->created_at->timezone($this->company->timezone)->translatedFormat($this->company->date_format . ' ' . $this->company->time_format);
+            return $row->created_at->timezone($this->cooperative->timezone)->translatedFormat($this->cooperative->date_format . ' ' . $this->cooperative->time_format);
         });
 
         $datatables->setRowId(function ($row) {
@@ -206,12 +206,12 @@ class   TicketDataTable extends BaseDataTable
             ->join('users', 'users.id', '=', 'tickets.user_id');
 
         if (!is_null($request->startDate) && $request->startDate != '') {
-            $startDate = Carbon::createFromFormat($this->company->date_format, $request->startDate)->toDateString();
+            $startDate = Carbon::createFromFormat($this->cooperative->date_format, $request->startDate)->toDateString();
             $model->where(DB::raw('DATE(tickets.updated_at)'), '>=', $startDate);
         }
 
         if (!is_null($request->endDate) && $request->endDate != '') {
-            $endDate = Carbon::createFromFormat($this->company->date_format, $request->endDate)->toDateString();
+            $endDate = Carbon::createFromFormat($this->cooperative->date_format, $request->endDate)->toDateString();
             $model->where(DB::raw('DATE(tickets.updated_at)'), '<=', $endDate);
         }
 

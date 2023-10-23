@@ -17,7 +17,7 @@ trait CustomFieldsRequestTrait
                 $idarray = explode('_', $key);
                 $id = end($idarray);
 
-                $customField = CustomField::findOrFail($id);
+                $customField = CustomField::find($id);
 
                 if ($customField->required == 'yes') {
                     $rules['custom_fields_data.'.$key] = 'required';

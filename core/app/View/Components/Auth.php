@@ -29,8 +29,8 @@ class Auth extends Component
     {
         // WORKSUITESAAS
         if (module_enabled('Subdomain')) {
-            $company = getCompanyBySubDomain();
-            $globalSetting = $company ?? GlobalSetting::first();
+            $cooperative = getCooperativeBySubDomain();
+            $globalSetting = $cooperative ?? GlobalSetting::first();
         }
         else {
             $globalSetting = global_setting();

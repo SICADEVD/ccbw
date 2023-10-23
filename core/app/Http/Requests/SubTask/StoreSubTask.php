@@ -28,7 +28,7 @@ class StoreSubTask extends FormRequest
     {
 
 
-        $setting = company();
+        $setting = cooperative();
         $task = Task::findOrFail(request()->task_id);
         $startDate = $task->start_date->format($setting->date_format);
         $dueDate = !is_null($task->due_date) ? $task->due_date->format($setting->date_format) : '';

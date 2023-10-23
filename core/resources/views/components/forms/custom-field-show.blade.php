@@ -30,7 +30,7 @@
 
         @elseif($field->type == 'date')
             <x-cards.data-row :label="$field->label"
-                              :value="(!is_null($model->custom_fields_data['field_' . $field->id]) && $model->custom_fields_data['field_' . $field->id] != '' ? \Carbon\Carbon::parse($model->custom_fields_data['field_' . $field->id])->translatedFormat(company()->date_format) : '--')">
+                              :value="(!is_null($model->custom_fields_data['field_' . $field->id]) && $model->custom_fields_data['field_' . $field->id] != '' ? \Carbon\Carbon::parse($model->custom_fields_data['field_' . $field->id])->translatedFormat(cooperative()->date_format) : '--')">
             </x-cards.data-row>
         @elseif($field->type == 'file')
             @php

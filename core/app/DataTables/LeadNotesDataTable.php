@@ -74,7 +74,7 @@ class LeadNotesDataTable extends BaseDataTable
                 return $action;
             })
             ->editColumn('created_at', function ($row) {
-                return $row->created_at->timezone(company()->timezone)->translatedFormat($this->company->date_format . ' ' . $this->company->time_format);
+                return $row->created_at->timezone(cooperative()->timezone)->translatedFormat($this->cooperative->date_format . ' ' . $this->cooperative->time_format);
             })
             ->editColumn('title', function ($row) {
                 if (!in_array('admin', user_roles()) && $row->ask_password == 1) {

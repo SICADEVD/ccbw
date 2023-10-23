@@ -37,11 +37,9 @@
         "textmagic/sdk": "dev-master",
         "twilio/sdk": "^6.23",
         "vonage/client": "^2.4",
-        "yajra/laravel-datatables": "9.0",
         "yajra/laravel-datatables-buttons": "^9.1",
-        "yajra/laravel-datatables-export": "^1.2",
         "yajra/laravel-datatables-html": "^9.4",
-        "yajra/laravel-datatables-oracle": "10.3.1"
+        "yajra/laravel-datatables-oracle": "^10.10"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.8",

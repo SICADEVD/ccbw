@@ -32,8 +32,8 @@ class UpdatePayments extends CoreRequest
         ];
 
         if ($this->transaction_id) {
-            // It need to be unique for all the company
-            $rules['transaction_id'] = 'unique:payments,transaction_id,' . $this->route('payment').',id,company_id,' . company()->id;
+            // It need to be unique for all the cooperative
+            $rules['transaction_id'] = 'unique:payments,transaction_id,' . $this->route('payment').',id,cooperative_id,' . cooperative()->id;
         }
 
         return $rules;

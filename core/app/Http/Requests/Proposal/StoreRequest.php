@@ -25,7 +25,7 @@ class StoreRequest extends CoreRequest
      */
     public function rules()
     {
-        $setting = company();
+        $setting = cooperative();
         $today = now()->format($setting->date_format);
 
         return [

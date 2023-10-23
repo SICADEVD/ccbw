@@ -27,7 +27,7 @@ class UpdateContact extends CoreRequest
     {
         return [
             'contact_name' => 'required',
-            'email' => 'email:rfc|unique:client_contacts,email,' . $this->route('client_contact').',id,company_id,' . company()->id,
+            'email' => 'email:rfc|unique:client_contacts,email,' . $this->route('client_contact').',id,cooperative_id,' . cooperative()->id,
 
         ];
     }

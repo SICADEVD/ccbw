@@ -168,12 +168,12 @@ class EstimatesDataTable extends BaseDataTable
         $datatables->editColumn(
             'valid_till',
             function ($row) {
-                return Carbon::parse($row->valid_till)->translatedFormat($this->company->date_format);
+                return Carbon::parse($row->valid_till)->translatedFormat($this->cooperative->date_format);
             }
         )->editColumn(
             'created_at',
             function ($row) {
-                return Carbon::parse($row->created_at)->translatedFormat($this->company->date_format);
+                return Carbon::parse($row->created_at)->translatedFormat($this->cooperative->date_format);
             }
         );
         $datatables->removeColumn('currency_symbol');
@@ -195,14 +195,14 @@ class EstimatesDataTable extends BaseDataTable
         $request = $this->request();
 
         $this->firstEstimate = Estimate::orderBy('id', 'desc')->first();
-        $model = Estimate::with('client', 'client.session', 'company:id')
+        $model = Estimate::with('client', 'client.session', 'cooperative:id')
             ->join('client_details', 'estimates.client_id', '=', 'client_details.user_id')
             ->join('currencies', 'currencies.id', '=', 'estimates.currency_id')
             ->join('users', 'users.id', '=', 'estimates.client_id')
             ->leftJoin('invoices', 'invoices.estimate_id', '=', 'estimates.id')
             ->select([
                 'estimates.id',
-                'estimates.company_id',
+                'estimates.cooperative_id',
                 'estimates.client_id',
                 'users.name',
                 'users.email',
@@ -220,12 +220,12 @@ class EstimatesDataTable extends BaseDataTable
             ]);
 
         if ($request->startDate !== null && $request->startDate != 'null' && $request->startDate != '') {
-            $startDate = Carbon::createFromFormat($this->company->date_format, $request->startDate)->toDateString();
+            $startDate = Carbon::createFromFormat($this->cooperative->date_format, $request->startDate)->toDateString();
             $model = $model->where(DB::raw('DATE(estimates.`valid_till`)'), '>=', $startDate);
         }
 
         if ($request->endDate !== null && $request->endDate != 'null' && $request->endDate != '') {
-            $endDate = Carbon::createFromFormat($this->company->date_format, $request->endDate)->toDateString();
+            $endDate = Carbon::createFromFormat($this->cooperative->date_format, $request->endDate)->toDateString();
             $model = $model->where(DB::raw('DATE(estimates.`valid_till`)'), '<=', $endDate);
         }
 

@@ -25,7 +25,7 @@ class StoreVisaRequest extends FormRequest
      */
     public function rules()
     {
-        $setting = company();
+        $setting = cooperative();
         return [
             'visa_number' => 'required|unique:visa_details',
             'issue_date' => 'required',

@@ -18,8 +18,8 @@ class AttendanceReportController extends AccountBaseController
     public function index(AttendanceReportDataTable $dataTable)
     {
         if (!request()->ajax()) {
-            $this->fromDate = now($this->company->timezone)->startOfMonth();
-            $this->toDate = now($this->company->timezone);
+            $this->fromDate = now($this->cooperative->timezone)->startOfMonth();
+            $this->toDate = now($this->cooperative->timezone);
             $this->employees = User::allEmployees();
         }
 

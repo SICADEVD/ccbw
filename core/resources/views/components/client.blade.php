@@ -2,7 +2,7 @@
 $active = false;
 
 if (!is_null($user) && $user->session) {
-    $lastSeen = \Carbon\Carbon::createFromTimestamp($user->session->last_activity)->timezone(company()?company()->timezone:$user->company->timezone);
+    $lastSeen = \Carbon\Carbon::createFromTimestamp($user->session->last_activity)->timezone(cooperative()?cooperative()->timezone:$user->cooperative->timezone);
 
     $lastSeenDifference = now()->diffInSeconds($lastSeen);
     if ($lastSeenDifference > 0 && $lastSeenDifference <= 90) {
@@ -32,7 +32,7 @@ if (!is_null($user) && $user->session) {
                 @endif
             </h5>
             <p class="mb-0 f-12 text-dark-grey">
-                {{ !is_null($user->clientDetails) && !is_null($user->clientDetails->company_name) ? $user->clientDetails->company_name : ' ' }}
+                {{ !is_null($user->clientDetails) && !is_null($user->clientDetails->cooperative_name) ? $user->clientDetails->cooperative_name : ' ' }}
             </p>
         </div>
     @else

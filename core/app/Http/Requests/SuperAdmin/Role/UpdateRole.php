@@ -29,7 +29,7 @@ class UpdateRole extends FormRequest
             'name' => [
                 'required', Rule::unique('roles')
                     ->where('id', '<>', $this->route('role_permission'))
-                    ->whereNull('company_id')
+                    ->whereNull('cooperative_id')
             ]
         ];
     }

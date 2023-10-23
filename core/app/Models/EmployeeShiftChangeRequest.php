@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Traits\HasCompany;
+use App\Traits\HasCooperative;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * App\Models\EmployeeShiftChangeRequest
  *
  * @property int $id
- * @property int|null $company_id
+ * @property int|null $cooperative_id
  * @property int $shift_schedule_id
  * @property int $employee_shift_id
  * @property string $status
@@ -29,14 +29,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|EmployeeShiftChangeRequest whereShiftScheduleId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EmployeeShiftChangeRequest whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EmployeeShiftChangeRequest whereUpdatedAt($value)
- * @property-read \App\Models\Company|null $company
- * @method static \Illuminate\Database\Eloquent\Builder|EmployeeShiftChangeRequest whereCompanyId($value)
+ * @property-read \App\Models\Cooperative|null $cooperative
+ * @method static \Illuminate\Database\Eloquent\Builder|EmployeeShiftChangeRequest whereCooperativeId($value)
  * @mixin \Eloquent
  */
 class EmployeeShiftChangeRequest extends BaseModel
 {
 
-    use HasFactory, HasCompany;
+    use HasFactory, HasCooperative;
 
     protected $guarded = ['id'];
 

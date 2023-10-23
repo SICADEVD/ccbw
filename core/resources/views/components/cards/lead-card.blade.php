@@ -25,10 +25,10 @@ $moveClass = '';
             @endif
         </div>
 
-        @if ($lead->company_name)
+        @if ($lead->cooperative_name)
             <div class="d-flex mb-3 align-items-center">
                 <i class="fa fa-building f-11 text-lightest"></i><span
-                    class="ml-2 f-11 text-lightest">{{ $lead->company_name }}</span>
+                    class="ml-2 f-11 text-lightest">{{ $lead->cooperative_name }}</span>
             </div>
         @endif
 
@@ -44,7 +44,7 @@ $moveClass = '';
             @endif
             @if ($lead->next_follow_up_date != null && $lead->next_follow_up_date != '')
                 <div class="d-flex text-lightest">
-                    <span class="f-12 ml-1"><i class="f-11 bi bi-calendar"></i> {{ \Carbon\Carbon::parse($lead->next_follow_up_date)->translatedFormat(company()->date_format) }}</span>
+                    <span class="f-12 ml-1"><i class="f-11 bi bi-calendar"></i> {{ \Carbon\Carbon::parse($lead->next_follow_up_date)->translatedFormat(cooperative()->date_format) }}</span>
                 </div>
             @endif
 

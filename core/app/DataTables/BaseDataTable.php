@@ -8,20 +8,20 @@ use Illuminate\Support\Facades\File;
 class BaseDataTable extends DataTable
 {
 
-    protected $company;
+    protected $cooperative;
     public $user;
     public $domHtml;
 
     public function __construct()
     {
-        $this->company = company();
+        $this->cooperative = cooperative();
         $this->user = user();
         $this->domHtml = "<'row'<'col-sm-12'tr>><'d-flex'<'flex-grow-1'l><i><p>>";
     }
 
     public function setBuilder($table, $orderBy = 1)
     {
-        $intl = File::exists(public_path('i18n/' . user()->locale . '.json')) ? asset('i18n/' . user()->locale . '.json') : __('app.datatable');
+        //$intl = File::exists(public_path('i18n/' . user()->locale . '.json')) ? asset('i18n/' . user()->locale . '.json') : __('app.datatable');
 
         return parent::builder()
             ->setTableId($table)
@@ -32,10 +32,10 @@ class BaseDataTable extends DataTable
             ->responsive()
             ->serverSide()
             ->stateSave(false)
-            ->pageLength(companyOrGlobalSetting()->datatable_row_limit ?? 10)
+            ->pageLength(cooperativeOrGlobalSetting()->datatable_row_limit ?? 10)
             ->processing()
             ->dom($this->domHtml)
-            ->language($intl);
+            ->language('fr');
     }
 
     protected function filename(): string

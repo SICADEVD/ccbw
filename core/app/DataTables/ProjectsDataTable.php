@@ -207,13 +207,13 @@ class ProjectsDataTable extends BaseDataTable
         );
         $datatables->editColumn(
             'start_date', function ($row) {
-                return $row->start_date->translatedFormat($this->company->date_format);
+                return $row->start_date->translatedFormat($this->cooperative->date_format);
             }
         );
         $datatables->editColumn(
             'deadline', function ($row) {
                 if ($row->deadline) {
-                    return $row->deadline->translatedFormat($this->company->date_format);
+                    return $row->deadline->translatedFormat($this->cooperative->date_format);
                 }
 
                 return '--';
@@ -352,11 +352,11 @@ class ProjectsDataTable extends BaseDataTable
         $endFilterDate = null;
 
         if ($request->startFilterDate !== null && $request->startFilterDate != 'null' && $request->startFilterDate != '') {
-            $startFilterDate = Carbon::createFromFormat($this->company->date_format, $request->startFilterDate)->toDateString();
+            $startFilterDate = Carbon::createFromFormat($this->cooperative->date_format, $request->startFilterDate)->toDateString();
         }
 
         if ($request->endFilterDate !== null && $request->endFilterDate != 'null' && $request->endFilterDate != '') {
-            $endFilterDate = Carbon::createFromFormat($this->company->date_format, $request->endFilterDate)->toDateString();
+            $endFilterDate = Carbon::createFromFormat($this->cooperative->date_format, $request->endFilterDate)->toDateString();
         }
 
         $model = $model
@@ -383,7 +383,7 @@ class ProjectsDataTable extends BaseDataTable
                 $model->where('projects.completion_percent', '!=', 100);
 
                 if ($request->deadLineStartDate == '' && $request->deadLineEndDate == '') {
-                    $model->whereDate('projects.deadline', '<', now(company()->timezone)->toDateString());
+                    $model->whereDate('projects.deadline', '<', now(cooperative()->timezone)->toDateString());
                 }
             } else {
                 $model->where('projects.status', $request->status);
@@ -402,8 +402,8 @@ class ProjectsDataTable extends BaseDataTable
         }
 
         if ($request->deadLineStartDate != '' && $request->deadLineEndDate != '') {
-            $startDate = Carbon::createFromFormat($this->company->date_format, $request->deadLineStartDate)->toDateString();
-            $endDate = Carbon::createFromFormat($this->company->date_format, $request->deadLineEndDate)->toDateString();
+            $startDate = Carbon::createFromFormat($this->cooperative->date_format, $request->deadLineStartDate)->toDateString();
+            $endDate = Carbon::createFromFormat($this->cooperative->date_format, $request->deadLineEndDate)->toDateString();
             $model->whereRaw('Date(projects.deadline) >= ?', [$startDate])->whereRaw('Date(projects.deadline) <= ?', [$endDate]);
         }
 
@@ -490,8 +490,8 @@ class ProjectsDataTable extends BaseDataTable
         }
 
         if ($request->startDate && $request->endDate) {
-            $startDate = Carbon::createFromFormat($this->company->date_format, $request->startDate)->toDateString();
-            $endDate = Carbon::createFromFormat($this->company->date_format, $request->endDate)->toDateString();
+            $startDate = Carbon::createFromFormat($this->cooperative->date_format, $request->startDate)->toDateString();
+            $endDate = Carbon::createFromFormat($this->cooperative->date_format, $request->endDate)->toDateString();
             $model->whereBetween(DB::raw('DATE(projects.`created_at`)'), [$startDate, $endDate]);
         }
 

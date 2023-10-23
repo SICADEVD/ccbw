@@ -1,530 +1,1018 @@
 <?php
 namespace App\Http\Controllers\Manager;
 use Carbon\Carbon;
+use App\Models\Task;
+use App\Models\Team;
 use App\Models\User;
-use App\Http\Helpers\Files;
-use App\Models\Countrie;
-use App\Models\Employee;
+use App\Models\Leave;
+use App\Models\Skill;
+use App\Models\Module;
+use App\Models\Ticket;
+use App\Models\Cooperative;
+use App\Models\Passport;
+use App\Models\RoleUser;
+use App\Models\UserAuth;
+use App\Models\LeaveType;
+use App\Models\Attendance;
 use App\Models\Department;
+use App\Models\VisaDetail;
+use App\Http\Helpers\Files;
+use App\Http\Helpers\Reply;
 use App\Models\Designation;
+use App\Scopes\ActiveScope;
+use App\Traits\ImportExcel;
 use Illuminate\Support\Str;
-
-use Illuminate\Http\Request;
+use App\Models\Appreciation;
+use App\Models\Notification;
+use App\Models\UserActivity;
+use App\Scopes\CooperativeScope;
+use Illuminate\Support\Facades\Request;
+use App\Models\EmployeeSkill;
 use App\Models\EmployeeDetail;
-use App\Models\module_permission;
+use App\Models\ProjectTimeLog;
+use App\Models\UserInvitation;
+use App\Imports\EmployeeImport;
+use App\Jobs\ImportEmployeeJob;
+use App\Models\EmployeeDetails;
+use App\Models\LanguageSetting;
+use App\Models\TaskboardColumn;
+use App\Models\UniversalSearch;
+use App\DataTables\LeaveDataTable;
+use App\DataTables\TasksDataTable;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
-use Brian2694\Toastr\Facades\Toastr;
+use Spatie\Permission\Models\Role;
+use App\DataTables\TicketDataTable;
+use App\Models\PackageUpdateNotify;
+use App\Models\ProjectTimeLogBreak;
 use Illuminate\Support\Facades\Hash;
+use App\DataTables\ProjectsDataTable;
+use App\DataTables\TimeLogsDataTable;
+use App\DataTables\EmployeesDataTable;
+use App\Http\Requests\User\InviteEmailRequest;
+use App\Http\Controllers\AccountBaseController;
+use App\Http\Requests\Admin\Employee\StoreRequest;
+use App\Http\Requests\Admin\Employee\ImportRequest;
+use App\Http\Requests\Admin\Employee\UpdateRequest;
+use App\Http\Requests\User\CreateInviteLinkRequest;
+use App\Http\Requests\Admin\Employee\ImportProcessRequest;
+use Symfony\Component\Mailer\Exception\TransportException;
 
-class EmployeeController extends Controller
+class EmployeeController extends AccountBaseController
 {
-    // all employee card view
-    public function cardAllEmployee(Request $request)
+    use ImportExcel;
+
+    public function __construct()
     {
-        $users = EmployeeDetail::with('user')->get(); 
-        $designations = Designation::get();
-        $teams = Department::get();
-        $countries = Countrie::get();
-        return view('manager.form.allemployeecard',compact('users','designations','teams','countries'));
+        $this->pageTitle = 'Gestion des employées'; 
     }
-    // all employee list
-    public function listAllEmployee()
-    {
+
+    /**
+     * @param EmployeesDataTable $dataTable
+     * @return mixed|void
+     */
+    public function index(EmployeesDataTable $dataTable)
+    {  
         
-        $users = EmployeeDetail::with('user')->get(); 
-        $designations = Designation::get();
-        $teams = Department::get();
-        $countries = Countrie::get();
-        return view('manager.form.employeelist',compact('users','designations','teams','countries'));
-    }
-
-    // save data employee
-    public function saveRecord(Request $request)
-    {
-
-        $validationRule = [ 
-            'nom' => 'required|max:255',
-            'prenom'  => 'required|max:255',
-            'email'  => 'required|max:255',
-            'date_of_birth'  => 'required|max:255', 
-            'designation'  => 'required|max:255',
-            'department'  => 'required|max:255',
-            'joining_date'  => 'required|max:255', 
-        ];
- 
-
-        $request->validate($validationRule); 
-
-        if($request->id) {
-            $employe = EmployeeDetail::findOrFail($request->id); 
-            $message = "La employe a été mise à jour avec succès";
-
-        } else {
-            $employe = new EmployeeDetail();   
-        } 
-        $manager        = auth()->user();
+        
+        if (!request()->ajax()) {
+            $this->employees = User::allEmployees();
+            $this->skills = Skill::all();
+            $this->departments = Department::all();
+            $this->designations = Designation::allDesignations();
+            $this->totalEmployees = count($this->employees); 
          
-        $employe->date_of_birth    = Carbon::parse($request->date_of_birth)->format('Y-m-d'); 
-        $employe->designation_id  = $request->designation; 
-        $employe->department_id  = $request->department; 
-        $employe->country_id    = $request->country;
-        $employe->employee_matricule = $request->matricule;
-        $employe->country_phonecode = $request->country_phonecode;  
-        $employe->joining_date     =  Carbon::parse($request->joining_date)->format('Y-m-d');
-        $employe->reporting_to  = $request->reporting_to;
-        $employe->address    = $request->address;
-        $employe->about_me = $request->about_me; 
-        $employe->employment_type    = $request->employment_type;
-        $employe->internship_end_date     =  Carbon::parse($request->internship_end_date)->format('Y-m-d'); 
-        $employe->contract_end_date     =  Carbon::parse($request->contract_end_date)->format('Y-m-d'); 
-        $employe->marital_status     = $request->marital_status; 
-        $employe->marriage_anniversary_date     =  Carbon::parse($request->marriage_anniversary_date)->format('Y-m-d'); 
-        
-        $staff = new User();
-        $staff->cooperative_id = $manager->cooperative_id;
-        $staff->firstname = $request->nom;
-        $staff->lastname  = $request->prenom;
-        $staff->username  = Str::limit(Str::slug($request->prenom,""),12,'.').Str::limit(Str::slug($request->nom,""),1,'');
-        $staff->email     = $request->email;
-        $staff->mobile    = $request->mobile;
-        $staff->genre     = $request->gender;
-        $staff->adresse    = "";
-        $staff->user_type = "Employe"; 
-        $staff->type_compte = "web"; 
-        $staff->password  =  Hash::make('azerty'); 
-        if($request->hasFile('image')) {
-            Files::deleteFile($staff->image, 'avatar');
-            $staff->image = Files::uploadLocalOrS3($request->image, 'avatar', 300);
         }
-        $staff->save();
-        if($staff !=null ){
-            $role = DB::table('roles')->where('name','Employe')->first();
-            if($role !=null)
-            {
-                $staff->syncRoles($role->id);
+        
+        return $dataTable->render('manager.employees.index', $this->data);
+    }
+
+    /**
+     * XXXXXXXXXXX
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        $this->pageTitle = __('app.addEmployee'); 
+
+        $this->teams = Department::all();
+        $this->designations = Designation::allDesignations();
+
+        $this->skills = Skill::all()->pluck('name')->toArray();
+        $this->countries = countries();
+        $this->lastEmployeeID = EmployeeDetail::count();
+        $this->checkifExistEmployeeId = EmployeeDetail::select('id')->where('employee_id', ($this->lastEmployeeID + 1))->first();
+        $this->employees = User::allEmployees(null, true); 
+ 
+        $employee = new EmployeeDetail();
+
+        if ($employee->getCustomFieldGroupsWithFields()) {
+            $this->fields = $employee->getCustomFieldGroupsWithFields()->fields;
+        }
+
+        $this->view = 'manager.employees.ajax.create';
+
+        if (request()->ajax()) {
+            $html = view($this->view, $this->data)->render();
+
+            return Reply::dataOnly(['status' => 'success', 'html' => $html, 'title' => $this->pageTitle]);
+        }
+
+        return view('manager.employees.create', $this->data);
+
+    }
+ 
+
+    /**
+     * @param StoreRequest $request
+     * @return array
+     * @throws \Froiden\RestAPI\Exceptions\RelatedResourceNotFoundException
+     */
+    public function store(Request $request)
+    { 
+         
+        $validationRule = [ 
+            'firstname' => 'required|max:50',
+            'lastname' => 'required|max:250',
+            'email' => 'required|email:rfc|unique:users,email,null,id,cooperative_id,' . cooperative()->id.'|max:100',
+            'hourly_rate' => 'nullable|numeric',
+            'joining_date' => 'required',
+            'last_date' => 'nullable|date_format:"Y-m-d"|after_or_equal:joining_date',
+            'date_of_birth' => 'nullable|date_format:"Y-m-d"|before_or_equal:"H:i"',
+            'department' => 'required',
+            'designation' => 'required',
+            'probation_end_date' => 'nullable|date_format:"Y-m-d"|after_or_equal:joining_date',
+            'notice_period_start_date' => 'nullable|required_with:notice_period_end_date|date_format:"Y-m-d"',
+            'notice_period_end_date' => 'nullable|required_with:notice_period_start_date|date_format:"Y-m-d"|after_or_equal:notice_period_start_date',
+            'internship_end_date' => 'nullable|date_format:"Y-m-d"|after_or_equal:joining_date',
+            'contract_end_date' => 'nullable|date_format:"Y-m-d"|after_or_equal:joining_date',
+        ];
+        $request->validate($validationRule); 
+        
+        DB::beginTransaction();
+        try { 
+
+            $manager        = auth()->user();
+            $user = new User();
+            $user->cooperative_id = $manager->cooperative_id;
+            $user->lastname = $request->lastname;
+            $user->firstname = $request->firstname; 
+            $user->username  = Str::limit(Str::slug($request->prenom,""),12,'.').Str::limit(Str::slug($request->nom,""),1,'');
+            $user->username  = $request->email;
+            $user->mobile = $request->mobile; 
+            $user->country_id = $request->country;
+            $user->country_phonecode = $request->country_phonecode;
+            $user->genre = $request->gender;
+            $user->user_type = "Employe"; 
+            $user->type_compte = "web";  
+            $user->password  =  Hash::make('azerty'); 
+            // $user->user_auth_id = $userAuth->id;
+           
+
+            if ($request->hasFile('image')) {
+                Files::deleteFile($user->image, 'avatar');
+                $user->image = Files::uploadLocalOrS3($request->image, 'avatar', 300);
             }
+  
+            $user->save();
             
 
-            $id = $staff->id;
-            $employe->company_id  = $manager->cooperative_id ;
-            $employe->user_id  = $staff->id;
-            $employe->save(); 
+            if($user->id){
+                $role = DB::table('roles')->where('name','Employe')->first();
+                if($role !=null)
+                {
+                    $user->syncRoles($role->id);
+                }
+            }
+
+            $tags = json_decode($request->tags);
+
+            if (!empty($tags)) {
+                foreach ($tags as $tag) {
+                    // check or store skills
+                    $skillData = Skill::firstOrCreate(['name' => $tag->value]);
+
+                    // Store user skills
+                    $skill = new EmployeeSkill();
+                    $skill->user_id = $user->id;
+                    $skill->skill_id = $skillData->id;
+                    $skill->save();
+                }
+            }
             
-        }
+            if ($user->id) {
+                $employee = new EmployeeDetail();
+                $employee->user_id = $user->id;
+                $employee->cooperative_id = $manager->cooperative_id;
+                $this->employeeData($request, $employee);
+                $employee->save();
+                
+                // To add custom fields data
+                if ($request->custom_fields_data) {
+                    $employee->updateCustomFieldData($request->custom_fields_data);
+                }
+            } 
 
-        $notify[] = ['success', isset($message) ? $message : 'Cet employé a été crée avec succès.'];
-        return back()->withNotify($notify);
-    }
-    // view edit record
-    public function viewRecord($employee_id)
-    {
-        $permission = DB::table('employees')
-            ->join('module_permissions', 'employees.employee_id', '=', 'module_permissions.employee_id')
-            ->select('employees.*', 'module_permissions.*')
-            ->where('employees.employee_id','=',$employee_id)
-            ->get();
-        $employees = DB::table('employees')->where('employee_id',$employee_id)->get();
-        return view('manager.form.edit.editemployee',compact('employees','permission'));
-    }
-    // update record employee
-    public function updateRecord( Request $request)
-    {
-        DB::beginTransaction();
-        try{
-            // update table Employee
-            $updateEmployee = [
-                'id'=>$request->id,
-                'name'=>$request->name,
-                'email'=>$request->email,
-                'birth_date'=>$request->birth_date,
-                'gender'=>$request->gender,
-                'employee_id'=>$request->employee_id,
-                'company'=>$request->company,
-            ];
-            // update table user
-            $updateUser = [
-                'id'=>$request->id,
-                'name'=>$request->name,
-                'email'=>$request->email,
-            ];
- 
-            User::where('id',$request->id)->update($updateUser);
-            Employee::where('id',$request->id)->update($updateEmployee);
-        
+            // $this->logSearchEntry($user->id, $user->lastname.' '.$user->firstname, 'manager.employees.show', 'employee');
+            
+            // Commit Transaction
             DB::commit();
-            Toastr::success('updated record successfully :)','Success');
-            return redirect()->route('all/employee/card');
-        }catch(\Exception $e){
-            DB::rollback();
-            Toastr::error('updated record fail :)','Error');
-            return redirect()->back();
-        }
-    }
-    // delete record
-    public function deleteRecord($employee_id)
-    {
-        DB::beginTransaction();
-        try{
-
-            Employee::where('employee_id',$employee_id)->delete();
-            module_permission::where('employee_id',$employee_id)->delete();
-
-            DB::commit();
-            Toastr::success('Delete record successfully :)','Success');
-            return redirect()->route('all/employee/card');
-
-        }catch(\Exception $e){
-            DB::rollback();
-            Toastr::error('Delete record fail :)','Error');
-            return redirect()->back();
-        }
-    }
-    // employee search
-    public function employeeSearch(Request $request)
-    {
-        $users = DB::table('users')
-                    ->join('employees', 'users.user_id', '=', 'employees.employee_id')
-                    ->select('users.*', 'employees.birth_date', 'employees.gender', 'employees.company')
-                    ->get();
-        $permission_lists = DB::table('permission_lists')->get();
-        $userList = DB::table('users')->get();
-
-        // search by id
-        if($request->employee_id)
-        {
-            $users = DB::table('users')
-                        ->join('employees', 'users.user_id', '=', 'employees.employee_id')
-                        ->select('users.*', 'employees.birth_date', 'employees.gender', 'employees.company')
-                        ->where('employee_id','LIKE','%'.$request->employee_id.'%')
-                        ->get();
-        }
-        // search by name
-        if($request->name)
-        {
-            $users = DB::table('users')
-                        ->join('employees', 'users.user_id', '=', 'employees.employee_id')
-                        ->select('users.*', 'employees.birth_date', 'employees.gender', 'employees.company')
-                        ->where('users.name','LIKE','%'.$request->name.'%')
-                        ->get();
-        }
-        // search by name
-        if($request->position)
-        {
-            $users = DB::table('users')
-                        ->join('employees', 'users.user_id', '=', 'employees.employee_id')
-                        ->select('users.*', 'employees.birth_date', 'employees.gender', 'employees.company')
-                        ->where('users.position','LIKE','%'.$request->position.'%')
-                        ->get();
-        }
-
-        // search by name and id
-        if($request->employee_id && $request->name)
-        {
-            $users = DB::table('users')
-                        ->join('employees', 'users.user_id', '=', 'employees.employee_id')
-                        ->select('users.*', 'employees.birth_date', 'employees.gender', 'employees.company')
-                        ->where('employee_id','LIKE','%'.$request->employee_id.'%')
-                        ->where('users.name','LIKE','%'.$request->name.'%')
-                        ->get();
-        }
-        // search by position and id
-        if($request->employee_id && $request->position)
-        {
-            $users = DB::table('users')
-                        ->join('employees', 'users.user_id', '=', 'employees.employee_id')
-                        ->select('users.*', 'employees.birth_date', 'employees.gender', 'employees.company')
-                        ->where('employee_id','LIKE','%'.$request->employee_id.'%')
-                        ->where('users.position','LIKE','%'.$request->position.'%')
-                        ->get();
-        }
-        // search by name and position
-        if($request->name && $request->position)
-        {
-            $users = DB::table('users')
-                        ->join('employees', 'users.user_id', '=', 'employees.employee_id')
-                        ->select('users.*', 'employees.birth_date', 'employees.gender', 'employees.company')
-                        ->where('users.name','LIKE','%'.$request->name.'%')
-                        ->where('users.position','LIKE','%'.$request->position.'%')
-                        ->get();
-        }
-         // search by name and position and id
-         if($request->employee_id && $request->name && $request->position)
-         {
-             $users = DB::table('users')
-                         ->join('employees', 'users.user_id', '=', 'employees.employee_id')
-                         ->select('users.*', 'employees.birth_date', 'employees.gender', 'employees.company')
-                         ->where('employee_id','LIKE','%'.$request->employee_id.'%')
-                         ->where('users.name','LIKE','%'.$request->name.'%')
-                         ->where('users.position','LIKE','%'.$request->position.'%')
-                         ->get();
-         }
-        return view('manager.form.allemployeecard',compact('users','userList','permission_lists'));
-    }
-    public function employeeListSearch(Request $request)
-    {
-        $users = DB::table('users')
-                    ->join('employees', 'users.user_id', '=', 'employees.employee_id')
-                    ->select('users.*', 'employees.birth_date', 'employees.gender', 'employees.company')
-                    ->get(); 
-        $permission_lists = DB::table('permission_lists')->get();
-        $userList = DB::table('users')->get();
-
-        // search by id
-        if($request->employee_id)
-        {
-            $users = DB::table('users')
-                        ->join('employees', 'users.user_id', '=', 'employees.employee_id')
-                        ->select('users.*', 'employees.birth_date', 'employees.gender', 'employees.company')
-                        ->where('employee_id','LIKE','%'.$request->employee_id.'%')
-                        ->get();
-        }
-        // search by name
-        if($request->name)
-        {
-            $users = DB::table('users')
-                        ->join('employees', 'users.user_id', '=', 'employees.employee_id')
-                        ->select('users.*', 'employees.birth_date', 'employees.gender', 'employees.company')
-                        ->where('users.name','LIKE','%'.$request->name.'%')
-                        ->get();
-        }
-        // search by name
-        if($request->position)
-        {
-            $users = DB::table('users')
-                        ->join('employees', 'users.user_id', '=', 'employees.employee_id')
-                        ->select('users.*', 'employees.birth_date', 'employees.gender', 'employees.company')
-                        ->where('users.position','LIKE','%'.$request->position.'%')
-                        ->get();
-        }
-
-        // search by name and id
-        if($request->employee_id && $request->name)
-        {
-            $users = DB::table('users')
-                        ->join('employees', 'users.user_id', '=', 'employees.employee_id')
-                        ->select('users.*', 'employees.birth_date', 'employees.gender', 'employees.company')
-                        ->where('employee_id','LIKE','%'.$request->employee_id.'%')
-                        ->where('users.name','LIKE','%'.$request->name.'%')
-                        ->get();
-        }
-        // search by position and id
-        if($request->employee_id && $request->position)
-        {
-            $users = DB::table('users')
-                        ->join('employees', 'users.user_id', '=', 'employees.employee_id')
-                        ->select('users.*', 'employees.birth_date', 'employees.gender', 'employees.company')
-                        ->where('employee_id','LIKE','%'.$request->employee_id.'%')
-                        ->where('users.position','LIKE','%'.$request->position.'%')
-                        ->get();
-        }
-        // search by name and position
-        if($request->name && $request->position)
-        {
-            $users = DB::table('users')
-                        ->join('employees', 'users.user_id', '=', 'employees.employee_id')
-                        ->select('users.*', 'employees.birth_date', 'employees.gender', 'employees.company')
-                        ->where('users.name','LIKE','%'.$request->name.'%')
-                        ->where('users.position','LIKE','%'.$request->position.'%')
-                        ->get();
-        }
-        // search by name and position and id
-        if($request->employee_id && $request->name && $request->position)
-        {
-            $users = DB::table('users')
-                        ->join('employees', 'users.user_id', '=', 'employees.employee_id')
-                        ->select('users.*', 'employees.birth_date', 'employees.gender', 'employees.company')
-                        ->where('employee_id','LIKE','%'.$request->employee_id.'%')
-                        ->where('users.name','LIKE','%'.$request->name.'%')
-                        ->where('users.position','LIKE','%'.$request->position.'%')
-                        ->get();
-        }
-        return view('manager.form.employeelist',compact('users','userList','permission_lists'));
-    }
-
-    // employee profile with all controller user
-    public function profileEmployee($user_id)
-    {
-        $users = DB::table('users')
-                ->leftJoin('personal_information','personal_information.user_id','users.user_id')
-                ->leftJoin('profile_information','profile_information.user_id','users.user_id')
-                ->where('users.user_id',$user_id)
-                ->first();
-        $user = DB::table('users')
-                ->leftJoin('personal_information','personal_information.user_id','users.user_id')
-                ->leftJoin('profile_information','profile_information.user_id','users.user_id')
-                ->where('users.user_id',$user_id)
-                ->get(); 
-        return view('manager.form.employeeprofile',compact('user','users'));
-    }
-
-    /** page departments */
-    public function index()
-    {
-        $pageTitle = "Départements";
-        $departments = DB::table('departments')->get();
-        
-        return view('manager.form.departments',compact('departments','pageTitle'));
-    }
-
-    /** save record department */
-    public function saveRecordDepartment(Request $request)
-    {
-        $request->validate([
-            'department'        => 'required|string|max:255',
-        ]);
  
-        try{
 
-            $department = department::where('department',$request->department)->first();
-            if ($department === null)
-            {
-                $department = new department;
-                $department->department = $request->department;
-                $department->save();
-    
-                DB::commit();
-                Toastr::success('Add new department successfully :)','Success');
-                return redirect()->back();
-            } else {
-                DB::rollback();
-                Toastr::error('Add new department exits :)','Error');
-                return redirect()->back();
+        }catch (\Exception $e) {
+            logger($e->getMessage());
+            // Rollback Transaction
+            DB::rollback();
+
+            return Reply::error('Some error occurred when inserting the data. Please try again or contact support '. $e->getMessage());
+        }
+
+
+        if (request()->add_more == 'true') {
+            $html = $this->create();
+
+            return Reply::successWithData(__('messages.recordSaved'), ['html' => $html, 'add_more' => true]);
+        }
+
+        return Reply::successWithData(__('messages.recordSaved'), ['redirectUrl' => route('manager.employees.index')]);
+    }
+
+    /**
+     * @param Request $request
+     * @return array
+     */
+    public function applyQuickAction(Request $request)
+    {
+        switch ($request->action_type) {
+        case 'delete':
+            $this->deleteRecords($request);
+            // WORKSUITESAAS
+            session()->forget('cooperative');
+            return Reply::success(__('messages.deleteSuccess'));
+        case 'change-status':
+            $cooperative = Cooperative::with(['package', 'employees'])->where('id', user()->cooperative_id)->first();
+
+            $updateIds = explode(',', str_replace('on,', '', $request->row_ids));
+
+            if ($request->status == 'active' && !is_null($cooperative->employees) && ($cooperative->employees->count() + count($updateIds)) > $cooperative->package->max_employees) {
+                return Reply::error(__('superadmin.maxEmployeesLimitReached'));
             }
-        }catch(\Exception $e){
-            DB::rollback();
-            Toastr::error('Add new department fail :)','Error');
-            return redirect()->back();
+
+            $this->changeStatus($request);
+
+            return Reply::success(__('messages.updateSuccess'));
+        default:
+            return Reply::error(__('messages.selectAction'));
         }
     }
 
-    /** update record department */
-    public function updateRecordDepartment(Request $request)
+    private function deleteEmployee(User $user)
     {
-        DB::beginTransaction();
-        try{
-            // update table departments
-            $department = [
-                'id'=>$request->id,
-                'department'=>$request->department,
-            ];
-            Department::where('id',$request->id)->update($department);
-        
-            DB::commit();
-            Toastr::success('updated record successfully :)','Success');
-            return redirect()->route('form/departments/page');
-        } catch(\Exception $e) {
-            DB::rollback();
-            Toastr::error('updated record fail :)','Error');
-            return redirect()->back();
-        }
-    }
 
-    /** delete record department */
-    public function deleteRecordDepartment(Request $request) 
-    {
-        try {
+        $universalSearches = UniversalSearch::where('searchable_id', $user->id)->where('module_type', 'employee')->get();
 
-            Department::destroy($request->id);
-            Toastr::success('Department deleted successfully :)','Success');
-            return redirect()->back();
-        
-        } catch(\Exception $e) {
-
-            DB::rollback();
-            Toastr::error('Department delete fail :)','Error');
-            return redirect()->back();
-        }
-    }
-
-    /** page designations */
-    public function designationsIndex()
-    {
-        $pageTitle ="Désignations";
-        $designations = Designation::get();
-     
-        return view('manager.form.designations', compact('pageTitle','designations'));
-    }
-
-    /** save record designation */
-    public function saveRecordDesignations(Request $request)
-    {
-        $request->validate([
-            'designation'        => 'required|string|max:255', 
-        ]);
- 
-        try{
-
-            $designation = Designation::where('name',$request->designation)->first();
-            if ($designation === null)
-            {
-                $designation = new Designation;
-                $designation->name = $request->designation; 
-                $designation->save();
-    
-                DB::commit();
-                Toastr::success('Add new désignation successfully :)','Success');
-                return redirect()->back();
-            } else {
-                DB::rollback();
-                Toastr::error('Add new désignation exits :)','Error');
-                return redirect()->back();
+        if ($universalSearches) {
+            foreach ($universalSearches as $universalSearch) {
+                UniversalSearch::destroy($universalSearch->id);
             }
-        }catch(\Exception $e){
-            DB::rollback();
-            Toastr::error('Add new désignation fail :)','Error');
-            return redirect()->back();
         }
+
+
+        Notification::whereNull('read_at')
+            ->where(function ($q) use ($user) {
+                $q->where('data', 'like', '{"id":' . $user->id . ',%');
+                $q->orWhere('data', 'like', '%,"name":' . $user->name . ',%');
+                $q->orWhere('data', 'like', '%,"user_one":' . $user->id . ',%');
+                $q->orWhere('data', 'like', '%,"user_id":' . $user->id . ',%');
+            })->delete();
+
+        $deleteSession = new AppSettingController();
+        $deleteSession->deleteSessions([$user->id]);
+        $user->delete();
+
     }
 
-    /** update record designation */
-    public function updateRecordDesignations(Request $request)
+    protected function deleteRecords($request)
     {
-        DB::beginTransaction();
-        try{
-            // update table designation
-            $designation = [
-                'id'=>$request->id,
-                'name'=>$request->designation,
-            ];
-            Designation::where('id',$request->id)->update($designation);
-        
-            DB::commit();
-            Toastr::success('updated record successfully :)','Success');
-            return redirect()->route('manager.hr.form.designations.page');
-        } catch(\Exception $e) {
-            DB::rollback();
-            Toastr::error('updated record fail :)','Error');
-            return redirect()->back();
+        abort_403(user()->permission('delete_employees') != 'all');
+
+        $users = User::withoutGlobalScope(ActiveScope::class)->whereIn('id', explode(',', $request->row_ids))->get();
+
+        $users->each(function ($user) {
+            $this->deleteEmployee($user);
+        });
+
+    }
+
+    protected function changeStatus($request)
+    {
+        abort_403(user()->permission('edit_employees') != 'all');
+
+        User::withoutGlobalScope(ActiveScope::class)->whereIn('id', explode(',', $request->row_ids))->update(['status' => $request->status]);
+        clearCooperativeValidPackageCache(user()->cooperative_id);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        $this->employee = User::withoutGlobalScope(ActiveScope::class)->with('employeeDetail', 'reportingTeam')->findOrFail($id);
+        $this->emailCountInCompanies = User::withoutGlobalScopes([ActiveScope::class, CooperativeScope::class])
+            ->where('email', $this->employee->email)
+            ->whereNotNull('email')
+            ->count();
+
+        $this->editPermission = user()->permission('edit_employees');
+
+        $userRoles = $this->employee->roles->pluck('name')->toArray();
+
+        abort_403(!in_array('admin', user_roles()) && in_array('admin', $userRoles));
+
+        abort_403(!($this->editPermission == 'all'
+            || ($this->editPermission == 'added' && $this->employee->employeeDetail->added_by == user()->id)
+            || ($this->editPermission == 'owned' && $this->employee->id == user()->id)
+            || ($this->editPermission == 'both' && ($this->employee->id == user()->id || $this->employee->employeeDetail->added_by == user()->id))
+        ));
+
+        $this->pageTitle = __('app.update') . ' ' . __('app.employee');
+        $this->skills = Skill::all()->pluck('name')->toArray();
+        $this->teams = Team::allDepartments();
+        $this->designations = Designation::allDesignations();
+        $this->countries = countries();
+        $this->languages = LanguageSetting::where('status', 'enabled')->get();
+        $exceptUsers = [$id];
+        $this->roles = Role::where('name', '<>', 'client')->get();
+        $this->userRoles = $this->employee->roles->pluck('name')->toArray();
+
+        /** @phpstan-ignore-next-line */
+        if (count($this->employee->reportingTeam) > 0) {
+            /** @phpstan-ignore-next-line */
+            $exceptUsers = array_merge($this->employee->reportingTeam->pluck('user_id')->toArray(), $exceptUsers);
         }
-    }
 
-    /** delete record designation */
-    public function deleteRecordDesignations(Request $request) 
-    {
-        try {
+        $this->employees = User::allEmployees($exceptUsers, true);
 
-            Designation::destroy($request->id);
-            Toastr::success('Designations deleted successfully :)','Success');
-            return redirect()->back();
-        
-        } catch(\Exception $e) {
+        if (!is_null($this->employee->employeeDetail)) {
+            $this->employeeDetail = $this->employee->employeeDetail->withCustomFields();
 
-            DB::rollback();
-            Toastr::error('Designations delete fail :)','Error');
-            return redirect()->back();
+            if ($this->employeeDetail->getCustomFieldGroupsWithFields()) {
+                $this->fields = $this->employeeDetail->getCustomFieldGroupsWithFields()->fields;
+            }
         }
-    }
-    /** page time sheet */
-    public function timeSheetIndex()
-    {
-        return view('manager.form.timesheet');
+
+        if (request()->ajax()) {
+            $html = view('employees.ajax.edit', $this->data)->render();
+
+            return Reply::dataOnly(['status' => 'success', 'html' => $html, 'title' => $this->pageTitle]);
+        }
+
+        $this->view = 'employees.ajax.edit';
+
+        return view('employees.create', $this->data);
+
     }
 
-    /** page overtime */
-    public function overTimeIndex()
+    /**
+     * @param UpdateRequest $request
+     * @param int $id
+     * @return array
+     * @throws \Froiden\RestAPI\Exceptions\RelatedResourceNotFoundException
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
+    public function update(UpdateRequest $request, $id)
     {
-        return view('manager.form.overtime');
+
+        $user = User::withoutGlobalScope(ActiveScope::class)->findOrFail($id);
+        $emailCountInCompanies = User::withoutGlobalScopes([ActiveScope::class, CooperativeScope::class])
+            ->where('email', $user->email)
+            ->count();
+
+        if ($emailCountInCompanies > 1 && $request->email != $user->email) {
+            return Reply::error(__('messages.emailCannotChange'));
+        }
+
+        $userAuth = UserAuth::createUserAuthCredentials($request->email, null, $user->email);
+
+        if(!$userAuth){
+            // Update email in userauth also
+            $user->userAuth->update(['email' => $request->email]);
+        }
+
+        $user->name = $request->name;
+        $user->email = $request->email;
+
+        $user->mobile = $request->mobile;
+        $user->country_id = $request->country;
+        $user->country_phonecode = $request->country_phonecode;
+        $user->gender = $request->gender;
+        $user->locale = $request->locale;
+
+        if (request()->has('status')) {
+
+            if (request()->status == 'active' && !checkCooperativeCanAddMoreEmployees(user()->cooperative_id) && $user->status != 'active') {
+                return Reply::error(__('superadmin.maxEmployeesLimitReached'));
+            }
+
+            $user->status = $request->status;
+            PackageUpdateNotify::where('cooperative_id', user()->cooperative_id)->where('user_id', $user->id)->delete();
+        }
+
+        if ($id != user()->id) {
+            $user->login = $request->login;
+        }
+
+        if ($request->has('email_notifications')) {
+            $user->email_notifications = $request->email_notifications;
+        }
+
+        if ($request->image_delete == 'yes') {
+            Files::deleteFile($user->image, 'avatar');
+            $user->image = null;
+        }
+
+        if ($request->hasFile('image')) {
+
+            Files::deleteFile($user->image, 'avatar');
+            $user->image = Files::uploadLocalOrS3($request->image, 'avatar', 300);
+        }
+
+        if ($request->has('telegram_user_id')) {
+            $user->telegram_user_id = $request->telegram_user_id;
+        }
+
+        $user->save();
+
+        cache()->forget('user_is_active_' . $user->id);
+
+        $roleId = request()->role;
+
+        $userRole = Role::where('id', request()->role)->first();
+
+        if ($roleId != '' && $userRole->name != $user->user_other_role) {
+
+            $employeeRole = Role::where('name', 'employee')->first();
+
+            $user = User::withoutGlobalScope(ActiveScope::class)->findOrFail($user->id);
+
+            RoleUser::where('user_id', $user->id)->delete();
+            $user->roles()->attach($employeeRole->id);
+
+            if ($employeeRole->id != $roleId) {
+                $user->roles()->attach($roleId);
+            }
+
+            $user->assignUserRolePermission($roleId);
+
+            $userSession = new AppSettingController();
+            $userSession->deleteSessions([$user->id]);
+        }
+
+        $tags = json_decode($request->tags);
+
+        if (!empty($tags)) {
+            EmployeeSkill::where('user_id', $user->id)->delete();
+
+            foreach ($tags as $tag) {
+                // Check or store skills
+                $skillData = Skill::firstOrCreate(['name' => $tag->value]);
+
+                // Store user skills
+                $skill = new EmployeeSkill();
+                $skill->user_id = $user->id;
+                $skill->skill_id = $skillData->id;
+                $skill->save();
+            }
+        }
+
+        $employee = EmployeeDetails::where('user_id', '=', $user->id)->first();
+
+        if (empty($employee)) {
+            $employee = new EmployeeDetails();
+            $employee->user_id = $user->id;
+        }
+
+        $this->employeeData($request, $employee);
+
+        $employee->last_date = null;
+
+        if ($request->last_date != '') {
+            $employee->last_date = Carbon::createFromFormat('Y-m-d', $request->last_date)->format('Y-m-d');
+        }
+
+        $employee->save();
+
+        // To add custom fields data
+        if ($request->custom_fields_data) {
+            $employee->updateCustomFieldData($request->custom_fields_data);
+        }
+
+        if (user()->id == $user->id) {
+            session()->forget('user');
+        }
+
+        return Reply::successWithData(__('messages.updateSuccess'), ['redirectUrl' => route('employees.index')]);
+    }
+
+    /**
+     * @param int $id
+     * @return array
+     */
+    public function destroy($id)
+    {
+        $user = User::withoutGlobalScope(ActiveScope::class)->findOrFail($id);
+        $this->deletePermission = user()->permission('delete_employees');
+
+        abort_403(!($this->deletePermission == 'all' || ($this->deletePermission == 'added' && $user->employeeDetail->added_by == user()->id)));
+
+
+        if ($user->hasRole('admin') && !in_array('admin', user_roles())) {
+            return Reply::error(__('messages.adminCannotDelete'));
+        }
+
+        PackageUpdateNotify::where('cooperative_id', $user->cooperative_id)->where('user_id', $user->id)->delete();
+
+        $this->deleteEmployee($user);
+
+        // WORKSUITESAAS
+
+        session()->forget('cooperative');
+
+        return Reply::success(__('messages.deleteSuccess'));
+
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $this->viewPermission = user()->permission('view_employees');
+
+        $this->employee = User::with(['employeeDetail.designation', 'employeeDetail.department','appreciations', 'appreciations.award', 'appreciations.award.awardIcon', 'employeeDetail.reportingTo', 'country', 'emergencyContacts', 'reportingTeam' => function ($query) {
+            $query->join('users', 'users.id', '=', 'employee_details.user_id');
+            $query->where('users.status', '=', 'active');
+        }, 'reportingTeam.user', 'leaveTypes', 'leaveTypes.leaveType', 'appreciationsGrouped', 'appreciationsGrouped.award', 'appreciationsGrouped.award.awardIcon'])
+        ->withoutGlobalScope(ActiveScope::class)
+        ->withOut('clientDetails', 'role')
+        ->withCount('member', 'agents', 'openTasks')
+        ->findOrFail($id);
+
+        $this->employeeLanguage = LanguageSetting::where('language_code', $this->employee->locale)->first();
+
+        if (!$this->employee->hasRole('employee')) {
+            abort(404);
+        }
+
+        if ($this->employee->status == 'deactive' && !in_array('admin', user_roles())) {
+            abort(403);
+        }
+
+        abort_403(in_array('client', user_roles()));
+
+        $tab = request('tab');
+
+        if (
+            $this->viewPermission == 'all'
+            || ($this->viewPermission == 'added' && $this->employee->employeeDetail->added_by == user()->id)
+            || ($this->viewPermission == 'owned' && $this->employee->employeeDetail->user_id == user()->id)
+            || ($this->viewPermission == 'both' && ($this->employee->employeeDetail->user_id == user()->id || $this->employee->employeeDetail->added_by == user()->id))
+        ) {
+
+            if ($tab == '') {  // Works for profile
+
+                $this->fromDate = now()->timezone($this->cooperative->timezone)->startOfMonth()->toDateString();
+                $this->toDate = now()->timezone($this->cooperative->timezone)->endOfMonth()->toDateString();
+
+                $this->lateAttendance = Attendance::whereBetween(DB::raw('DATE(`clock_in_time`)'), [$this->fromDate, $this->toDate])
+                    ->where('late', 'yes')->where('user_id', $id)->count();
+
+                $this->leavesTaken = Leave::selectRaw('count(*) as count, SUM(if(duration="half day", 1, 0)) AS halfday')
+                    ->where('user_id', $id)
+                    ->where('status', 'approved')
+                    ->whereBetween(DB::raw('DATE(`leave_date`)'), [$this->fromDate, $this->toDate])
+                    ->first();
+
+                $this->leavesTaken = (!is_null($this->leavesTaken)) ? $this->leavesTaken->count - ($this->leavesTaken->halfday * 0.5) : 0;
+
+                $this->taskChart = $this->taskChartData($id);
+                $this->ticketChart = $this->ticketChartData($id);
+
+                if (!is_null($this->employee->employeeDetail)) {
+                    $this->employeeDetail = $this->employee->employeeDetail->withCustomFields();
+
+                    $customFields = $this->employeeDetail->getCustomFieldGroupsWithFields();
+
+                    if (!empty($customFields)) {
+                        $this->fields = $customFields->fields;
+                    }
+                }
+
+                $taskBoardColumn = TaskboardColumn::completeColumn();
+
+                $this->taskCompleted = Task::join('task_users', 'task_users.task_id', '=', 'tasks.id')
+                    ->where('task_users.user_id', $id)
+                    ->where('tasks.board_column_id', $taskBoardColumn->id)
+                    ->count();
+
+                $hoursLogged = ProjectTimeLog::where('user_id', $id)->sum('total_minutes');
+                $breakMinutes = ProjectTimeLogBreak::userBreakMinutes($id);
+
+                $timeLog = intdiv($hoursLogged - $breakMinutes, 60);
+
+                $this->hoursLogged = $timeLog;
+            }
+
+        }
+
+        $this->pageTitle = $this->employee->name;
+        $viewDocumentPermission = user()->permission('view_documents');
+        $viewImmigrationPermission = user()->permission('view_immigration');
+
+        switch ($tab) {
+        case 'tickets':
+            return $this->tickets();
+        case 'projects':
+            return $this->projects();
+
+        case 'tasks':
+            return $this->tasks();
+        case 'leaves':
+            return $this->leaves();
+        case 'timelogs':
+            return $this->timelogs();
+        case 'documents':
+            abort_403(($viewDocumentPermission == 'none'));
+            $this->view = 'employees.ajax.documents';
+            break;
+        case 'emergency-contacts':
+            $this->view = 'employees.ajax.emergency-contacts';
+            break;
+        case 'appreciation':
+            $viewAppreciationPermission = user()->permission('view_appreciation');
+            abort_403(!in_array($viewAppreciationPermission, ['all', 'added', 'owned', 'both']));
+
+            $this->appreciations = $this->appreciation($this->employee->id);
+            $this->view = 'employees.ajax.appreciations';
+            break;
+        case 'leaves-quota':
+            $this->leaveQuota($id);
+            $this->leavesTakenByUser = Leave::byUserCount($this->employee);
+            $this->leaveTypes = LeaveType::byUser($this->employee);
+            $this->employeeLeavesQuotas = $this->employee->leaveTypes;
+            $this->employeeLeavesQuota = clone $this->employeeLeavesQuotas;
+
+            $totalLeaves = 0;
+
+            foreach($this->leaveTypes as $key => $leavesCount)
+            {
+                $leavesCountCheck = $leavesCount->leaveTypeCodition($leavesCount, $this->userRole);
+
+                if($leavesCountCheck && $this->employeeLeavesQuotas[$key]->leave_type_id == $leavesCount->id){
+                    $totalLeaves += $this->employeeLeavesQuotas[$key]->no_of_leaves;
+                }
+            }
+
+            $this->allowedLeaves = $totalLeaves;
+            $this->view = 'employees.ajax.leaves_quota';
+            break;
+        case 'shifts':
+            abort_403(user()->permission('view_shift_roster') != 'all');
+            $this->view = 'employees.ajax.shifts';
+            break;
+        case 'permissions':
+            abort_403(user()->permission('manage_role_permission_setting') != 'all');
+
+            $this->modulesData = Module::with('permissions')->withCount('customPermissions')->get();
+            $this->view = 'employees.ajax.permissions';
+            break;
+
+        case 'activity':
+            $this->activities = UserActivity::where('user_id', $id)->orderBy('id', 'desc')->get();
+            $this->view = 'employees.ajax.activity';
+            break;
+
+        case 'immigration':
+            abort_403($viewImmigrationPermission == 'none');
+            $this->passport = Passport::with('country')->where('user_id', $this->employee->id )->first();
+            $this->visa = VisaDetail::with('country')->where('user_id', $this->employee->id)->get();
+            $this->view = 'employees.ajax.immigration';
+            break;
+
+        default:
+            $this->view = 'employees.ajax.profile';
+            break;
+        }
+
+        if (request()->ajax()) {
+            $html = view($this->view, $this->data)->render();
+
+            return Reply::dataOnly(['views' => $this->view, 'status' => 'success', 'html' => $html, 'title' => $this->pageTitle]);
+        }
+
+        $this->activeTab = $tab ?: 'profile';
+
+        return view('employees.show', $this->data);
+    }
+
+    /**
+     * XXXXXXXXXXX
+     *
+     * @return array
+     */
+    public function taskChartData($id)
+    {
+        $taskStatus = TaskboardColumn::all();
+        $data['labels'] = $taskStatus->pluck('column_name');
+        $data['colors'] = $taskStatus->pluck('label_color');
+        $data['values'] = [];
+
+        foreach ($taskStatus as $label) {
+            $data['values'][] = Task::join('task_users', 'task_users.task_id', '=', 'tasks.id')
+                ->where('task_users.user_id', $id)->where('tasks.board_column_id', $label->id)->count();
+        }
+
+        return $data;
+    }
+
+    /**
+     * XXXXXXXXXXX
+     *
+     * @return array
+     */
+    public function ticketChartData($id)
+    {
+        $labels = ['open', 'pending', 'resolved', 'closed'];
+        $data['labels'] = [__('app.open'), __('app.pending'), __('app.resolved'), __('app.closed')];
+        $data['colors'] = ['#D30000', '#FCBD01', '#2CB100', '#1d82f5'];
+        $data['values'] = [];
+
+        foreach ($labels as $label) {
+            $data['values'][] = Ticket::where('agent_id', $id)->where('status', $label)->count();
+        }
+
+        return $data;
+    }
+
+    public function byDepartment($id)
+    {
+        $users = User::join('employee_details', 'employee_details.user_id', '=', 'users.id');
+
+        if ($id != 0) {
+            $users = $users->where('employee_details.department_id', $id);
+        }
+
+        $users = $users->select('users.*')->get();
+
+        $options = '';
+
+        foreach ($users as $item) {
+            $options .= '<option  data-content="<div class=\'d-inline-block mr-1\'><img class=\'taskEmployeeImg rounded-circle\' src=' . $item->image_url . ' ></div>  ' . $item->name . '" value="' . $item->id . '"> ' . $item->name . ' </option>';
+        }
+
+        return Reply::dataOnly(['status' => 'success', 'data' => $options]);
+    }
+
+    public function appreciation($employeeID)
+    {
+        $viewAppreciationPermission = user()->permission('view_appreciation');
+
+        if($viewAppreciationPermission == 'none'){
+            return [];
+        }
+
+        $appreciations = Appreciation::with(['award','award.awardIcon', 'awardTo'])->select('id', 'award_id', 'award_to', 'award_date', 'image', 'summary', 'created_at');
+        $appreciations->join('awards', 'awards.id', '=', 'appreciations.award_id');
+
+        if ($viewAppreciationPermission == 'added') {
+            $appreciations->where('appreciations.added_by', user()->id);
+        }
+
+        if ($viewAppreciationPermission == 'owned') {
+            $appreciations->where('appreciations.award_to', user()->id);
+        }
+
+        if ($viewAppreciationPermission == 'both') {
+            $appreciations->where(function ($q) {
+                $q->where('appreciations.added_by', '=', user()->id);
+
+                $q->orWhere('appreciations.award_to', '=', user()->id);
+            });
+        }
+
+        $appreciations = $appreciations->select('appreciations.*')->where('appreciations.award_to', $employeeID)->get();
+
+        return $appreciations;
+    }
+
+    public function projects()
+    {
+
+        $viewPermission = user()->permission('view_employee_projects');
+        abort_403(!in_array($viewPermission, ['all']));
+
+        $tab = request('tab');
+        $this->activeTab = $tab ?: 'profile';
+        $this->view = 'employees.ajax.projects';
+
+        $dataTable = new ProjectsDataTable();
+
+        return $dataTable->render('employees.show', $this->data);
+
+    }
+
+    public function tickets()
+    {
+        $viewPermission = user()->permission('view_tickets');
+        abort_403(!in_array($viewPermission, ['all']));
+        $tab = request('tab');
+        $this->activeTab = $tab ?: 'profile';
+        $this->tickets = Ticket::all();
+        $this->view = 'employees.ajax.tickets';
+        $dataTable = new TicketDataTable();
+
+        return $dataTable->render('employees.show', $this->data);
+
+    }
+
+    public function tasks()
+    {
+        $viewPermission = user()->permission('view_employee_tasks');
+        abort_403(!in_array($viewPermission, ['all']));
+
+        $tab = request('tab');
+        $this->activeTab = $tab ?: 'profile';
+        $this->taskBoardStatus = TaskboardColumn::all();
+        $this->view = 'employees.ajax.tasks';
+
+        $dataTable = new TasksDataTable();
+
+        return $dataTable->render('employees.show', $this->data);
+    }
+
+    public function leaves()
+    {
+
+        $viewPermission = user()->permission('view_leaves_taken');
+        abort_403(!in_array($viewPermission, ['all']));
+
+        $tab = request('tab');
+        $this->activeTab = $tab ?: 'profile';
+        $this->leaveTypes = LeaveType::all();
+        $this->view = 'employees.ajax.leaves';
+
+        $dataTable = new LeaveDataTable();
+
+        return $dataTable->render('employees.show', $this->data);
+    }
+
+    public function timelogs()
+    {
+
+        $viewPermission = user()->permission('view_employee_timelogs');
+        abort_403(!in_array($viewPermission, ['all']));
+
+        $tab = request('tab');
+        $this->activeTab = $tab ?: 'profile';
+        $this->view = 'employees.ajax.timelogs';
+
+        $dataTable = new TimeLogsDataTable();
+
+        return $dataTable->render('employees.show', $this->data);
+    }
+
+    /**
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function inviteMember()
+    {
+        abort_403(!in_array(user()->permission('add_employees'), ['all']));
+
+        return view('employees.ajax.invite_member', $this->data);
+
+    }
+
+    /**
+     * XXXXXXXXXXX
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function sendInvite(InviteEmailRequest $request)
+    {
+        $emails = json_decode($request->email);
+
+        if (!empty($emails)) {
+            foreach ($emails as $email) {
+                $invite = new UserInvitation();
+                $invite->user_id = user()->id;
+                $invite->email = $email->value;
+                $invite->message = $request->message;
+                $invite->invitation_type = 'email';
+                $invite->invitation_code = sha1(time() . user()->id);
+                $invite->save();
+            }
+        }
+
+        return Reply::success(__('messages.inviteEmailSuccess'));
+    }
+
+    /**
+     * XXXXXXXXXXX
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function createLink(CreateInviteLinkRequest $request)
+    {
+        $invite = new UserInvitation();
+        $invite->user_id = user()->id;
+        $invite->invitation_type = 'link';
+        $invite->invitation_code = sha1(time() . user()->id);
+        $invite->email_restriction = (($request->allow_email == 'selected') ? $request->email_domain : null);
+        $invite->save();
+
+        return Reply::successWithData(__('messages.inviteLinkSuccess'), ['link' => route('invitation', $invite->invitation_code)]);
+    }
+
+    /**
+     * @param mixed $request
+     * @param mixed $employee
+     */
+    public function employeeData($request, $employee): void
+    {
+        $employee->employee_id = $request->employee_id;
+        $employee->address = $request->address;
+        $employee->hourly_rate = $request->hourly_rate;
+        $employee->slack_username = $request->slack_username;
+        $employee->department_id = $request->department;
+        $employee->designation_id = $request->designation;
+        $employee->reporting_to = $request->reporting_to;
+        $employee->about_me = $request->about_me;
+        $employee->joining_date = Carbon::createFromFormat('Y-m-d', $request->joining_date)->format('Y-m-d');
+        $employee->date_of_birth = $request->date_of_birth ? Carbon::createFromFormat('Y-m-d', $request->date_of_birth)->format('Y-m-d') : null;
+        $employee->calendar_view = 'task,events,holiday,tickets,leaves';
+        $employee->probation_end_date = $request->probation_end_date ? Carbon::createFromFormat('Y-m-d', $request->probation_end_date)->format('Y-m-d') : null;
+        $employee->notice_period_start_date = $request->notice_period_start_date ? Carbon::createFromFormat('Y-m-d', $request->notice_period_start_date)->format('Y-m-d') : null;
+        $employee->notice_period_end_date = $request->notice_period_end_date ? Carbon::createFromFormat('Y-m-d', $request->notice_period_end_date)->format('Y-m-d') : null;
+        $employee->marital_status = $request->marital_status;
+        $employee->marriage_anniversary_date = $request->marriage_anniversary_date ? Carbon::createFromFormat('Y-m-d', $request->marriage_anniversary_date)->format('Y-m-d') : null;
+        $employee->employment_type = $request->employment_type;
+        $employee->internship_end_date = $request->internship_end_date ? Carbon::createFromFormat('Y-m-d', $request->internship_end_date)->format('Y-m-d') : null;
+        $employee->contract_end_date = $request->contract_end_date ? Carbon::createFromFormat('Y-m-d', $request->contract_end_date)->format('Y-m-d') : null;
+    }
+
+    public function importMember()
+    {
+        $this->pageTitle = __('app.importExcel') . ' ' . __('app.employee');
+
+        $addPermission = user()->permission('add_employees');
+        abort_403(!in_array($addPermission, ['all', 'added']));
+
+
+        if (request()->ajax()) {
+            $html = view('employees.ajax.import', $this->data)->render();
+
+            return Reply::dataOnly(['status' => 'success', 'html' => $html, 'title' => $this->pageTitle]);
+        }
+
+        $this->view = 'employees.ajax.import';
+
+        return view('employees.create', $this->data);
+    }
+
+    public function importStore(ImportRequest $request)
+    {
+        $this->importFileProcess($request, EmployeeImport::class);
+
+        $view = view('employees.ajax.import_progress', $this->data)->render();
+
+        return Reply::successWithData(__('messages.importUploadSuccess'), ['view' => $view]);
+    }
+
+    public function importProcess(ImportProcessRequest $request)
+    {
+        $batch = $this->importJobProcess($request, EmployeeImport::class, ImportEmployeeJob::class);
+
+        return Reply::successWithData(__('messages.importProcessStart'), ['batch' => $batch]);
+    }
+
+    public function leaveQuota($id)
+    {
+        $roles = User::with('roles')->findOrFail($id);
+        $userRole = [];
+
+        $userRoles = $roles->roles->count() > 1 ? $roles->roles->where('name', '!=', 'employee') : $roles->roles;
+
+        foreach($userRoles as $role){
+            $userRole[] = $role->id;
+        }
+
+        $this->userRole = $userRole;
     }
 
 }

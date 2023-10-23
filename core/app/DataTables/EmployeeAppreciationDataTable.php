@@ -54,7 +54,7 @@ class EmployeeAppreciationDataTable extends BaseDataTable
                     $title .= __('modules.discussions.posted');
                 }
 
-                $title .= ' ' . $row->last_reply_at->timezone(company()->timezone)->translatedFormat(company()->date_format . ' ' . company()->time_format) . '</span>';
+                $title .= ' ' . $row->last_reply_at->timezone(cooperative()->timezone)->translatedFormat(cooperative()->date_format . ' ' . cooperative()->time_format) . '</span>';
 
                 $title .= '</div>
                     </div>';

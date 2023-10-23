@@ -28,7 +28,7 @@ class UpdateRecurringInvoice extends CoreRequest
     {
         $this->has('show_shipping_address') ? $this->request->add(['show_shipping_address' => 'yes']) : $this->request->add(['show_shipping_address' => 'no']);
 
-        $setting = company();
+        $setting = cooperative();
 
         $rules = [
             'sub_total' => 'required',

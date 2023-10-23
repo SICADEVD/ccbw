@@ -78,7 +78,7 @@
                             :fieldRequired="($field->required === 'yes') ? true : false"
                             :fieldLabel="$field->label"
                             fieldName="custom_fields_data[{{ $field->name . '_' . $field->id }}]"
-                            :fieldValue="($model && $model->custom_fields_data['field_'.$field->id] != '') ? \Carbon\Carbon::parse($model->custom_fields_data['field_'.$field->id])->format(companyOrGlobalSetting()->date_format) : now()->format(companyOrGlobalSetting()->date_format)"
+                            :fieldValue="($model && $model->custom_fields_data['field_'.$field->id] != '') ? \Carbon\Carbon::parse($model->custom_fields_data['field_'.$field->id])->format(cooperativeOrGlobalSetting()->date_format) : now()->format(cooperativeOrGlobalSetting()->date_format)"
                             :fieldPlaceholder="$field->label"/>
 
                     @elseif($field->type == 'checkbox')

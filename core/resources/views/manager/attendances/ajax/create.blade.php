@@ -1,6 +1,4 @@
-<link rel="stylesheet" href="{{ asset('vendor/css/daterangepicker.css') }}">
-
-
+<link rel="stylesheet" href="{{ asset('assets/vendor/css/daterangepicker.css') }}">
 <div class="row">
     <div class="col-sm-12">
         <x-form id="save-attendance-data-form">
@@ -14,7 +12,7 @@
                             fieldName="department_id" search="true">
                             <option value="0">--</option>
                             @foreach ($departments as $team)
-                                <option value="{{ $team->id }}">{{ $team->team_name }}</option>
+                                <option value="{{ $team->id }}">{{ $team->department }}</option>
                             @endforeach
                         </x-forms.select>
                     </div>
@@ -84,7 +82,7 @@
                     <div class="col-lg-4 col-md-6 d-none multi_date_div">
                         <x-forms.text :fieldLabel="__('messages.selectMultipleDates')" fieldName="multi_date"
                             fieldId="multi_date" :fieldPlaceholder="__('messages.selectMultipleDates')"
-                            :fieldValue="Carbon\Carbon::today()->translatedFormat(company()->date_format)" />
+                            :fieldValue="Carbon\Carbon::today()->translatedFormat('Y-m-d')" />
                     </div>
 
                 </div>
@@ -94,7 +92,7 @@
                             <x-forms.text :fieldLabel="__('modules.attendance.clock_in')"
                                 :fieldPlaceholder="__('placeholders.hours')" fieldName="clock_in_time"
                                 fieldId="start_time" fieldRequired="true"
-                                :fieldValue="\Carbon\Carbon::createFromFormat('H:i:s', attendance_setting()->shift->office_start_time)->format(company()->time_format)" />
+                                :fieldValue="\Carbon\Carbon::createFromFormat('H:i:s', \App\Models\AttendanceSetting::first()->shift->office_start_time)->format('H:i')" />
                         </div>
                     </div>
 
@@ -103,7 +101,7 @@
                             <x-forms.text :fieldLabel="__('modules.attendance.clock_out')"
                                 :fieldPlaceholder="__('placeholders.hours')" fieldName="clock_out_time"
                                 fieldId="end_time"
-                                :fieldValue="\Carbon\Carbon::createFromFormat('H:i:s', attendance_setting()->shift->office_end_time)->format(company()->time_format)" />
+                                :fieldValue="\Carbon\Carbon::createFromFormat('H:i:s', \App\Models\AttendanceSetting::first()->shift->office_end_time)->format('H:i')" />
                         </div>
                     </div>
 
@@ -172,7 +170,7 @@
     </div>
 </div>
 
-<script src="{{ asset('vendor/jquery/daterangepicker.min.js') }}" defer=""></script>
+<script src="{{ asset('assets/vendor/jquery/daterangepicker.min.js') }}" defer=""></script>
 <script>
 
     $(document).ready(function() {
@@ -211,12 +209,12 @@
         });
 
         $('#start_time, #end_time').timepicker({
-            showMeridian: (company.time_format == 'H:i' ? false : true)
+            showMeridian: (false)
         });
 
         $('#department_id').change(function() {
             var id = $(this).val();
-            var url = "{{ route('employees.by_department', ':id') }}";
+            var url = "{{ route('manager.hr.employees.by_department', ':id') }}";
             url = url.replace(':id', id);
 
             $.easyAjax({
@@ -236,8 +234,8 @@
 
         $('#save-attendance-form').click(function() {
             var dateRange = $('#multi_date').data('daterangepicker');
-            startDate = dateRange.startDate.format('{{ company()->moment_date_format }}');
-            endDate = dateRange.endDate.format('{{ company()->moment_date_format }}');
+            startDate = dateRange.startDate.format('Y-m-d');
+            endDate = dateRange.endDate.format('Y-m-d');
             var multiDate = [];
             multiDate = [startDate, endDate];
             $('#multi_date').val(multiDate);

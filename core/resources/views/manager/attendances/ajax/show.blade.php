@@ -34,11 +34,11 @@ $deleteAttendancePermission = user()->permission('delete_attendance');
 
     <div class="row">
         <div class="col-md-6">
-            <x-cards.data :title="__('app.date').' - '.$attendanceDate->translatedFormat(company()->date_format) .' ('.$attendanceDate->translatedFormat('l').')'">
+            <x-cards.data :title="__('app.date').' - '.$attendanceDate->translatedFormat(cooperative()->date_format) .' ('.$attendanceDate->translatedFormat('l').')'">
                 <div class="punch-status">
                     <div class="border rounded p-3 mb-3 bg-light">
                         <h6 class="f-13">@lang('modules.attendance.clock_in')</h6>
-                        <p class="mb-0">{{ $startTime->translatedFormat(company()->time_format) }}</p>
+                        <p class="mb-0">{{ $startTime->translatedFormat(cooperative()->time_format) }}</p>
                     </div>
                     <div class="punch-info">
                         <div class="punch-hours f-13">
@@ -47,7 +47,7 @@ $deleteAttendancePermission = user()->permission('delete_attendance');
                     </div>
                     <div class="border rounded p-3 bg-light">
                         <h6 class="f-13">@lang('modules.attendance.clock_out')</h6>
-                        <p class="mb-0">{{ $endTime != '' ? $endTime->translatedFormat(company()->time_format) : '' }}
+                        <p class="mb-0">{{ $endTime != '' ? $endTime->translatedFormat(cooperative()->time_format) : '' }}
                             @if (isset($notClockedOut))
                                 (@lang('modules.attendance.notClockOut'))
                             @endif
@@ -86,7 +86,7 @@ $deleteAttendancePermission = user()->permission('delete_attendance');
                                     </p>
                                     <p class="res-activity-time">
                                         <i class="fa fa-clock"></i>
-                                        {{ $item->clock_in_time->timezone(company()->timezone)->translatedFormat(company()->date_format . ' ' . company()->time_format) }}
+                                        {{ $item->clock_in_time->timezone(cooperative()->timezone)->translatedFormat(cooperative()->date_format . ' ' . cooperative()->time_format) }}
 
                                         @if ($item->work_from_type != '')
                                             @if ($item->work_from_type == 'other')
@@ -120,7 +120,7 @@ $deleteAttendancePermission = user()->permission('delete_attendance');
                                     <p class="res-activity-time">
                                         <i class="fa fa-clock"></i>
                                         @if (!is_null($item->clock_out_time))
-                                            {{ $item->clock_out_time->timezone(company()->timezone)->translatedFormat(company()->date_format . ' ' . company()->time_format) }}
+                                            {{ $item->clock_out_time->timezone(cooperative()->timezone)->translatedFormat(cooperative()->date_format . ' ' . cooperative()->time_format) }}
                                         @else
                                             @lang('modules.attendance.notClockOut')
                                         @endif

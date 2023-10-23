@@ -27,14 +27,14 @@ class UpdateClientRequest extends CoreRequest
     public function rules()
     {
         \Illuminate\Support\Facades\Validator::extend('check_superadmin', function ($attribute, $value, $parameters, $validator) {
-            return !\App\Models\User::withoutGlobalScopes([\App\Scopes\ActiveScope::class, \App\Scopes\CompanyScope::class])
+            return !\App\Models\User::withoutGlobalScopes([\App\Scopes\ActiveScope::class, \App\Scopes\CooperativeScope::class])
                 ->where('email', $value)
                 ->where('is_superadmin', 1)
                 ->exists();
         });
 
         $rules = [
-            'email' => 'nullable|email|required_if:login,enable|unique:users,email,'.$this->route('client').',id,company_id,' . company()->id.'|check_superadmin',
+            'email' => 'nullable|email|required_if:login,enable|unique:users,email,'.$this->route('client').',id,cooperative_id,' . cooperative()->id.'|check_superadmin',
             'slack_username' => 'nullable|unique',
             'name'  => 'required',
             'website' => 'nullable|url',

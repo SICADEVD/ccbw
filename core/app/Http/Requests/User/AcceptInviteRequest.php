@@ -44,7 +44,7 @@ class AcceptInviteRequest extends FormRequest
             $rules['terms_and_conditions'] = 'required';
         }
 
-        $rules['email'] = 'required|email:rfc|unique:users,email,null,id,company_id,' . $invite->company->id;
+        $rules['email'] = 'required|email:rfc|unique:users,email,null,id,cooperative_id,' . $invite->cooperative->id;
 
         return $rules;
     }

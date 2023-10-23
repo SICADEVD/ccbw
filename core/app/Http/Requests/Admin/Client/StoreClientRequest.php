@@ -27,7 +27,7 @@ class StoreClientRequest extends CoreRequest
     public function rules()
     {
         \Illuminate\Support\Facades\Validator::extend('check_superadmin', function ($attribute, $value, $parameters, $validator) {
-            return !\App\Models\User::withoutGlobalScopes([\App\Scopes\ActiveScope::class, \App\Scopes\CompanyScope::class])
+            return !\App\Models\User::withoutGlobalScopes([\App\Scopes\ActiveScope::class, \App\Scopes\CooperativeScope::class])
                 ->where('email', $value)
                 ->where('is_superadmin', 1)
                 ->exists();
@@ -35,7 +35,7 @@ class StoreClientRequest extends CoreRequest
 
         $rules = [
             'name' => 'required',
-            'email' => 'nullable|email|required_if:login,enable|email:rfc|unique:users,email,null,id,company_id,' . company()->id.'|check_superadmin',
+            'email' => 'nullable|email|required_if:login,enable|email:rfc|unique:users,email,null,id,cooperative_id,' . cooperative()->id.'|check_superadmin',
             'slack_username' => 'nullable',
             'website' => 'nullable|url',
             'country' => 'required_with:mobile',

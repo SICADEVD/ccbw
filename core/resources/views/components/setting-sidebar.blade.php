@@ -20,8 +20,8 @@
     <!-- SETTINGS MENU START -->
     <ul class="settings-menu" id="settingsMenu">
 
-        @if (user()->permission('manage_company_setting') == 'all')
-            <x-setting-menu-item :active="$activeMenu" menu="company_settings" :href="route('company-settings.index')"
+        @if (user()->permission('manage_cooperative_setting') == 'all')
+            <x-setting-menu-item :active="$activeMenu" menu="cooperative_settings" :href="route('cooperative-settings.index')"
                                  :text="__('app.menu.accountSettings')"/>
 
             <x-setting-menu-item :active="$activeMenu" menu="business_address" :href="route('business-address.index')"
@@ -178,12 +178,12 @@
                                      :text="__('app.menu.databaseBackupSetting')"/>
             @endif
 
-            @if (user()->permission('manage_company_setting') == 'all')
+            @if (user()->permission('manage_cooperative_setting') == 'all')
                 <x-setting-menu-item :active="$activeMenu" menu="sign_up_setting" :href="route('sign-up-settings.index')"
                                     :text="__('app.menu.signUpSetting')"/>
             @endif
         @endif
-        @if (checkCompanyPackageIsValid(user()->company_id))
+        @if (checkCooperativePackageIsValid(user()->cooperative_id))
             @foreach (worksuite_plugins() as $item)
                 @includeIf(strtolower($item).'::sections.setting-sidebar')
             @endforeach

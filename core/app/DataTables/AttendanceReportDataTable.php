@@ -39,24 +39,24 @@ class AttendanceReportDataTable extends BaseDataTable
     public function dataTable($query)
     {
         $request = $this->request();
-        $startDate = now($this->company->timezone)->startOfMonth();
-        $endDate = $endDate = now($this->company->timezone);
+        $startDate = now($this->cooperative->timezone)->startOfMonth();
+        $endDate = $endDate = now($this->cooperative->timezone);
 
         $diff = 0;
 
         if ($request->startDate != '') {
             // if this month filter's end date is not equal to now
-            $diff = ($endDate->lt(Carbon::createFromFormat($this->company->date_format, $request->endDate))) ? $endDate->diffInDays(Carbon::createFromFormat($this->company->date_format, $request->endDate)) : 0;
-            $startDate = Carbon::createFromFormat($this->company->date_format, $request->startDate)->startOfDay();
-            $endDate = $endDate = Carbon::createFromFormat($this->company->date_format, $request->endDate)->endOfDay();
+            $diff = ($endDate->lt(Carbon::createFromFormat($this->cooperative->date_format, $request->endDate))) ? $endDate->diffInDays(Carbon::createFromFormat($this->cooperative->date_format, $request->endDate)) : 0;
+            $startDate = Carbon::createFromFormat($this->cooperative->date_format, $request->startDate)->startOfDay();
+            $endDate = $endDate = Carbon::createFromFormat($this->cooperative->date_format, $request->endDate)->endOfDay();
         }
 
         $period = CarbonPeriod::create($startDate, $endDate);
         $this->totalWorkingDays = ($diff < 1) ? $startDate->diffInDays($endDate) + 1 : $startDate->diffInDays($endDate) - $diff;
 
         // if this month filter's end date is not equal to now
-        if ($endDate->gt(now($this->company->timezone))) {
-            $holidayDate = Holiday::whereBetween(DB::raw('DATE(holidays.`date`)'), [$startDate->toDateString(), now($this->company->timezone)])->get('date');
+        if ($endDate->gt(now($this->cooperative->timezone))) {
+            $holidayDate = Holiday::whereBetween(DB::raw('DATE(holidays.`date`)'), [$startDate->toDateString(), now($this->cooperative->timezone)])->get('date');
         }
         else {
             $holidayDate = Holiday::whereBetween(DB::raw('DATE(holidays.`date`)'), [$startDate->toDateString(), $endDate->toDateString()])->get('date');
@@ -212,19 +212,19 @@ class AttendanceReportDataTable extends BaseDataTable
                 if (!is_null($value)) {
 
                     $this->startTime = Carbon::parse($value->clock_in_time)
-                        ->timezone($this->company->timezone);
+                        ->timezone($this->cooperative->timezone);
 
                     if (!is_null($value->clock_out_time)) {
                         $this->endTime = Carbon::parse($value->clock_out_time)
-                            ->timezone($this->company->timezone);
+                            ->timezone($this->cooperative->timezone);
                     }
-                    elseif (($value->clock_in_time->timezone($this->company->timezone)->translatedFormat('Y-m-d') != now()->timezone($this->company->timezone)->translatedFormat('Y-m-d')) && is_null($value->clock_out_time)) {
-                        $this->endTime = Carbon::parse($this->startTime->translatedFormat('Y-m-d') . ' ' . $this->attendanceSettings->office_end_time, $this->company->timezone);
+                    elseif (($value->clock_in_time->timezone($this->cooperative->timezone)->translatedFormat('Y-m-d') != now()->timezone($this->cooperative->timezone)->translatedFormat('Y-m-d')) && is_null($value->clock_out_time)) {
+                        $this->endTime = Carbon::parse($this->startTime->translatedFormat('Y-m-d') . ' ' . $this->attendanceSettings->office_end_time, $this->cooperative->timezone);
                         $this->notClockedOut = true;
                     }
                     else {
                         $this->notClockedOut = true;
-                        $this->endTime = now()->timezone($this->company->timezone);
+                        $this->endTime = now()->timezone($this->cooperative->timezone);
                     }
 
                     $timeLogInMinutes = $timeLogInMinutes + $this->endTime->diffInMinutes($this->startTime, true);

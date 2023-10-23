@@ -1,20 +1,20 @@
 <?php
 namespace App\Http\Controllers\Manager;
-use App\Http\Controllers\AccountBaseController;
 use Carbon\Carbon;
 use App\Models\Team;
 use App\Models\User;
-use App\Http\Helpers\Reply;
 use App\Models\Leave;
 use App\Models\Holiday;
 use Carbon\CarbonPeriod;
 use App\Models\Attendance;
 use App\Models\Department;
 use Carbon\CarbonInterval;
+use App\Http\Helpers\Reply;
 use App\Models\Designation;
 use App\Traits\ImportExcel;
 use Illuminate\Http\Request;
-use App\Models\CompanyAddress;
+use App\Models\EmployeeShift;
+use App\Models\CooperativeAddress;
 use App\Models\EmployeeDetail;
 use App\Exports\AttendanceExport;
 use App\Imports\AttendanceImport;
@@ -25,6 +25,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Models\EmployeeShiftSchedule;
 use App\Exports\AttendanceByMemberExport;
 use App\Http\Requests\ClockIn\ClockInRequest; 
+use App\Http\Controllers\AccountBaseController;
 use App\Http\Requests\Attendance\StoreAttendance;
 use App\Http\Requests\Admin\Employee\ImportRequest;
 use App\Http\Requests\Attendance\StoreBulkAttendance;
@@ -318,7 +319,7 @@ class AttendanceController extends AccountBaseController
     {
 
         $attendance = Attendance::findOrFail($id);
-
+      
         $attendanceSettings = EmployeeShiftSchedule::with('shift')->where('user_id', $attendance->user_id)->where('date', $attendance->clock_in_time->format('Y-m-d'))->first();
 
 
@@ -328,7 +329,7 @@ class AttendanceController extends AccountBaseController
         }
         else {
 
-            $this->attendanceSettings = attendance_setting()->shift; // Do not get this from session here
+            $this->attendanceSettings = AttendanceSetting::with('shift')->first(); // Do not get this from session here
         }
 
 
@@ -338,9 +339,9 @@ class AttendanceController extends AccountBaseController
         $this->userid = $attendance->user_id;
         $this->total_clock_in = Attendance::where('user_id', $attendance->user_id)
             ->where(DB::raw('DATE(attendances.clock_in_time)'), '=', $this->date)
-            ->whereNull('manager.attendances.clock_out_time')->count();
+            ->whereNull('attendances.clock_out_time')->count();
         $this->type = 'edit';
-        $this->location = CompanyAddress::all();
+        $this->location = CooperativeAddress::all();
         $this->attendanceUser = User::findOrFail($attendance->user_id);
 
         $this->maxAttendanceInDay = $this->attendanceSettings->clockin_in_day;
@@ -352,11 +353,11 @@ class AttendanceController extends AccountBaseController
     {
         $attendance = Attendance::findOrFail($id);
         $date = Carbon::parse($request->attendance_date)->format('Y-m-d');
-        $clockIn = Carbon::createFromFormat('Y-m-d ' . $this->company->time_format, $date . ' ' . $request->clock_in_time, $this->timezone);
+        $clockIn = Carbon::createFromFormat('Y-m-d H:i', $date . ' ' . $request->clock_in_time, $this->timezone);
         $clockIn->setTimezone('UTC');
 
         if ($request->clock_out_time != '') {
-            $clockOut = Carbon::createFromFormat('Y-m-d ' . $this->company->time_format, $date . ' ' . $request->clock_out_time, $this->timezone);
+            $clockOut = Carbon::createFromFormat('Y-m-d H:i', $date . ' ' . $request->clock_out_time, $this->timezone);
             $clockOut->setTimezone('UTC');
 
             if ($clockIn->gt($clockOut) && !is_null($clockOut)) {
@@ -390,26 +391,27 @@ class AttendanceController extends AccountBaseController
         $this->date = Carbon::createFromFormat('d-m-Y', $day . '-' . $month . '-' . $year)->format('Y-m-d');
 
         $attendanceSettings = EmployeeShiftSchedule::with('shift')->where('user_id', $userid)->where('date', $this->date)->first();
-
+        
         if ($attendanceSettings) {
             $this->attendanceSettings = $attendanceSettings->shift;
 
         }
         else {
-            $this->attendanceSettings = attendance_setting()->shift; // Do not get this from session here
+            $this->attendanceSettings = AttendanceSetting::with('shift')->first(); // Do not get this from session here
         }
-
+         
         $this->row = Attendance::attendanceByUserDate($userid, $this->date);
         $this->clock_in = 0;
         $this->total_clock_in = Attendance::where('user_id', $userid)
             ->where(DB::raw('DATE(attendances.clock_in_time)'), '=', $this->date)
-            ->whereNull('manager.attendances.clock_out_time')->count();
+            ->whereNull('attendances.clock_out_time')->count();
 
         $this->userid = $userid;
         $this->attendanceUser = User::findOrFail($userid);
         $this->type = 'add';
+   
         $this->maxAttendanceInDay = $this->attendanceSettings->clockin_in_day;
-        $this->location = CompanyAddress::all();
+        $this->location = CooperativeAddress::all();
 
         return view('manager.attendances.ajax.edit', $this->data);
     }
@@ -417,7 +419,7 @@ class AttendanceController extends AccountBaseController
     public function store(StoreAttendance $request)
     {
         $date = Carbon::parse($request->attendance_date)->format('Y-m-d');
-        $clockIn = Carbon::createFromFormat('Y-m-d ' . $this->company->time_format, $date . ' ' . $request->clock_in_time, $this->timezone);
+        $clockIn = Carbon::createFromFormat('Y-m-d H:i', $date . ' ' . $request->clock_in_time, $this->timezone);
         $clockIn->setTimezone('UTC');
 
         $attendanceSettings = EmployeeShiftSchedule::with('shift')->where('user_id', $request->user_id)->where('date', $clockIn->toDateString())->first();
@@ -431,7 +433,7 @@ class AttendanceController extends AccountBaseController
         }
 
         if ($request->clock_out_time != '') {
-            $clockOut = Carbon::createFromFormat('Y-m-d ' . $this->company->time_format, $date . ' ' . $request->clock_out_time, $this->timezone);
+            $clockOut = Carbon::createFromFormat('Y-m-d H:i', $date . ' ' . $request->clock_out_time, $this->timezone);
             $clockOut->setTimezone('UTC');
 
             if ($clockIn->gt($clockOut) && !is_null($clockOut)) {
@@ -674,7 +676,7 @@ class AttendanceController extends AccountBaseController
         }
 
         // Getting View data
-        $view = view('manager.attendances.ajax.user_attendance', ['dateWiseData' => $dateWiseData, 'global' => $this->company])->render();
+        $view = view('manager.attendances.ajax.user_attendance', ['dateWiseData' => $dateWiseData, 'global' => $this->cooperative])->render();
 
         return Reply::dataOnly(['status' => 'success', 'data' => $view, 'daysPresent' => $daysPresent, 'daysLate' => $daysLate, 'halfDays' => $halfDays, 'totalWorkingDays' => $totalWorkingDays, 'absentDays' => $daysAbsent, 'holidays' => $holidayCount]);
     }
@@ -687,12 +689,12 @@ class AttendanceController extends AccountBaseController
     public function create()
     {
          
-        $this->employees = EmployeeDetail::with()->get();
-        $this->departments = Department::allDepartments();
+        $this->employees = EmployeeDetail::with('user')->get();
+        $this->departments = Department::get();
         $this->pageTitle = __('modules.attendance.markAttendance');
         $this->year = now()->format('Y');
         $this->month = now()->format('m');
-        $this->location = CompanyAddress::all();
+        $this->location = CooperativeAddress::all();
 
         if (request()->ajax()) {
             $html = view('manager.attendances.ajax.create', $this->data)->render();
@@ -700,7 +702,7 @@ class AttendanceController extends AccountBaseController
             return Reply::dataOnly(['status' => 'success', 'html' => $html, 'title' => $this->pageTitle]);
         }
 
-        $this->view = 'attendances.ajax.create';
+        $this->view = 'manager.attendances.ajax.create';
 
         return view('manager.attendances.create', $this->data);
     }
@@ -712,15 +714,16 @@ class AttendanceController extends AccountBaseController
      */
     public function bulkMark(StoreBulkAttendance $request)
     {
+        dd($request);
         $employees = $request->user_id;
         $employeeData = User::with('employeeDetail')->whereIn('id', $employees)->get();
 
         $date = Carbon::createFromFormat('d-m-Y', '01-' . $request->month . '-' . $request->year)->format('Y-m-d');
-        $clockIn = Carbon::createFromFormat('Y-m-d ' . $this->company->time_format, $date . ' ' . $request->clock_in_time, $this->timezone);
+        $clockIn = Carbon::createFromFormat('Y-m-d H:i', $date . ' ' . $request->clock_in_time, $this->timezone);
         $clockIn->setTimezone('UTC');
 
         if ($request->clock_out_time != '') {
-            $clockOut = Carbon::createFromFormat('Y-m-d ' . $this->company->time_format, $date . ' ' . $request->clock_out_time, $this->timezone);
+            $clockOut = Carbon::createFromFormat('Y-m-d H:i', $date . ' ' . $request->clock_out_time, $this->timezone);
             $clockOut->setTimezone('UTC');
 
             if ($clockIn->gt($clockOut) && !is_null($clockOut)) {
@@ -806,10 +809,10 @@ class AttendanceController extends AccountBaseController
                 && $this->attendanceSettings->shift_name != 'Day Off'
                 ) { // Attendance should not exist for the user for the same date
 
-                    $clockIn = Carbon::createFromFormat('Y-m-d ' . $this->company->time_format, $date->format('Y-m-d') . ' ' . $request->clock_in_time, $this->timezone);
+                    $clockIn = Carbon::createFromFormat('Y-m-d H:i', $date->format('Y-m-d') . ' ' . $request->clock_in_time, $this->timezone);
                     $clockIn->setTimezone('UTC');
 
-                    $clockOut = Carbon::createFromFormat('Y-m-d ' . $this->company->time_format, $date->format('Y-m-d') . ' ' . $request->clock_out_time, $this->timezone);
+                    $clockOut = Carbon::createFromFormat('Y-m-d H:i', $date->format('Y-m-d') . ' ' . $request->clock_out_time, $this->timezone);
                     $clockOut->setTimezone('UTC');
 
                     if ($clockIn->gt($clockOut) && !is_null($clockOut)) {
@@ -819,7 +822,7 @@ class AttendanceController extends AccountBaseController
 
                     $insertData[] = [
                         'user_id' => $userId,
-                        'company_id' => company()->id,
+                        'cooperative_id' => cooperative()->id,
                         'clock_in_time' => $clockIn,
                         'clock_in_ip' => request()->ip(),
                         'clock_out_time' => $clockOut,
@@ -1123,7 +1126,7 @@ class AttendanceController extends AccountBaseController
             ->join('roles', 'roles.id', '=', 'role_user.role_id')
             ->leftJoin('employee_details', 'employee_details.user_id', '=', 'users.id')
             ->select('manager.attendances.*')
-            ->whereDate('clock_in_time', Carbon::createFromFormat($this->company->date_format, $request->attendance_date)->toDateString())
+            ->whereDate('clock_in_time', Carbon::createFromFormat($this->cooperative->date_format, $request->attendance_date)->toDateString())
             ->whereNotNull('latitude')
             ->whereNotNull('longitude');
 
@@ -1200,11 +1203,11 @@ class AttendanceController extends AccountBaseController
 
         }
         else {
-            $this->attendanceSettings = attendance_setting(); // Do not get this from session here
+            $this->attendanceSettings = AttendanceSetting::first()->shift; // Do not get this from session here
 
         }
 
-        $this->location = CompanyAddress::all();
+        $this->location = CooperativeAddress::all();
         $this->attendanceUser = User::findOrFail($userID);
 
         return view('manager.attendances.ajax.add_user_attendance', $this->data);

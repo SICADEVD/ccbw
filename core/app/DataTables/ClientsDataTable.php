@@ -100,7 +100,7 @@ class ClientsDataTable extends BaseDataTable
         $datatables->editColumn(
             'created_at',
             function ($row) {
-                return Carbon::parse($row->created_at)->translatedFormat($this->company->date_format);
+                return Carbon::parse($row->created_at)->translatedFormat($this->cooperative->date_format);
             }
         );
         $datatables->editColumn(
@@ -139,16 +139,16 @@ class ClientsDataTable extends BaseDataTable
             ->join('role_user', 'role_user.user_id', '=', 'users.id')
             ->leftJoin('client_details', 'users.id', '=', 'client_details.user_id')
             ->join('roles', 'roles.id', '=', 'role_user.role_id')
-            ->select('users.id', 'users.name', 'client_details.company_name', 'users.email', 'users.mobile', 'users.image', 'users.created_at', 'users.status', 'client_details.added_by', 'users.admin_approval')
+            ->select('users.id', 'users.name', 'client_details.cooperative_name', 'users.email', 'users.mobile', 'users.image', 'users.created_at', 'users.status', 'client_details.added_by', 'users.admin_approval')
             ->where('roles.name', 'client');
 
         if ($request->startDate !== null && $request->startDate != 'null' && $request->startDate != '') {
-            $startDate = Carbon::createFromFormat($this->company->date_format, $request->startDate)->toDateString();
+            $startDate = Carbon::createFromFormat($this->cooperative->date_format, $request->startDate)->toDateString();
             $users = $users->where(DB::raw('DATE(users.`created_at`)'), '>=', $startDate);
         }
 
         if ($request->endDate !== null && $request->endDate != 'null' && $request->endDate != '') {
-            $endDate = Carbon::createFromFormat($this->company->date_format, $request->endDate)->toDateString();
+            $endDate = Carbon::createFromFormat($this->cooperative->date_format, $request->endDate)->toDateString();
             $users = $users->where(DB::raw('DATE(users.`created_at`)'), '<=', $endDate);
         }
 
@@ -203,7 +203,7 @@ class ClientsDataTable extends BaseDataTable
             $users = $users->where(function ($query) {
                 $query->where('users.name', 'like', '%' . request('searchText') . '%')
                     ->orWhere('users.email', 'like', '%' . request('searchText') . '%')
-                    ->orWhere('client_details.company_name', 'like', '%' . request('searchText') . '%');
+                    ->orWhere('client_details.cooperative_name', 'like', '%' . request('searchText') . '%');
             });
         }
 

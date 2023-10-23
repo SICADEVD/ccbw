@@ -25,8 +25,8 @@ class UpdateEmployee extends CoreRequest
     public function rules()
     {
         return [
-            'email' => 'required|unique:users,email,' . $this->route('employee').',id,company_id,' . company()->id,
-            'slack_username' => 'nullable|unique:employee_details,slack_username,' . $this->route('employee').',id,company_id,' . company()->id,
+            'email' => 'required|unique:users,email,' . $this->route('employee').',id,cooperative_id,' . cooperative()->id,
+            'slack_username' => 'nullable|unique:employee_details,slack_username,' . $this->route('employee').',id,cooperative_id,' . cooperative()->id,
             'name' => 'required',
         ];
     }

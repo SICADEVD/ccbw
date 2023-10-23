@@ -25,7 +25,7 @@ class UpdateTicketChannel extends CoreRequest
     public function rules()
     {
         return [
-            'channel_name' => 'required|unique:ticket_channels,channel_name,'.$this->route('ticketChannel').',id,company_id,' . company()->id
+            'channel_name' => 'required|unique:ticket_channels,channel_name,'.$this->route('ticketChannel').',id,cooperative_id,' . cooperative()->id
         ];
     }
 

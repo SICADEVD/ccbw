@@ -167,7 +167,7 @@ class ExpensesDataTable extends BaseDataTable
             'purchase_date',
             function ($row) {
                 if (!is_null($row->purchase_date)) {
-                    return $row->purchase_date->translatedFormat($this->company->date_format);
+                    return $row->purchase_date->translatedFormat($this->cooperative->date_format);
                 }
             }
         );
@@ -211,12 +211,12 @@ class ExpensesDataTable extends BaseDataTable
             ->join('currencies', 'currencies.id', 'expenses.currency_id');
 
         if ($request->startDate !== null && $request->startDate != 'null' && $request->startDate != '') {
-            $startDate = Carbon::createFromFormat($this->company->date_format, $request->startDate)->toDateString();
+            $startDate = Carbon::createFromFormat($this->cooperative->date_format, $request->startDate)->toDateString();
             $model = $model->where(DB::raw('DATE(expenses.`purchase_date`)'), '>=', $startDate);
         }
 
         if ($request->endDate !== null && $request->endDate != 'null' && $request->endDate != '') {
-            $endDate = Carbon::createFromFormat($this->company->date_format, $request->endDate)->toDateString();
+            $endDate = Carbon::createFromFormat($this->cooperative->date_format, $request->endDate)->toDateString();
             $model = $model->where(DB::raw('DATE(expenses.`purchase_date`)'), '<=', $endDate);
         }
 

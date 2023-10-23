@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Scopes\ActiveScope;
-use App\Traits\HasCompany;
+use App\Traits\HasCooperative;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -14,7 +14,7 @@ class Leave extends BaseModel
 {
 
     use HasFactory;
-    use HasCompany;
+    use HasCooperative;
 
     protected $casts = [
         'leave_date' => 'datetime',
@@ -46,9 +46,9 @@ class Leave extends BaseModel
     public function getLeavesTakenCountAttribute()
     {
         $userId = $this->user_id;
-        $setting = company();
+        $setting = cooperative();
         $user = User::withoutGlobalScope(ActiveScope::class)->withOut('clientDetails', 'role')->findOrFail($userId);
-        $currentYearJoiningDate = Carbon::parse($user->employee[0]->joining_date->format((now(company()->timezone)->year) . '-m-d'));
+        $currentYearJoiningDate = Carbon::parse($user->employee[0]->joining_date->format((now(cooperative()->timezone)->year) . '-m-d'));
 
         if ($currentYearJoiningDate->isFuture()) {
             $currentYearJoiningDate->subYear();
@@ -58,7 +58,7 @@ class Leave extends BaseModel
         $leaveTo = $currentYearJoiningDate->copy()->addYear()->toDateString();
 
         if ($setting->leaves_start_from !== 'joining_date') {
-            $leaveStartYear = Carbon::parse(now()->format((now(company()->timezone)->year) . '-' . company()->year_starts_from . '-01'));
+            $leaveStartYear = Carbon::parse(now()->format((now(cooperative()->timezone)->year) . '-' . cooperative()->year_starts_from . '-01'));
 
             if ($leaveStartYear->isFuture()) {
                 $leaveStartYear = $leaveStartYear->subYear();
@@ -86,17 +86,17 @@ class Leave extends BaseModel
 
     public static function byUserCount($user, $year = null)
     {
-        $setting = company();
+        $setting = cooperative();
 
         if (!$user instanceof User) {
             $user = User::withoutGlobalScope(ActiveScope::class)->withOut('clientDetails', 'role')->findOrFail($user);
         }
 
-        $leaveFrom = (is_null($year)) ? Carbon::createFromFormat('d-m-Y', '01-'.company()->year_starts_from.'-'.now(company()->timezone)->year)->startOfMonth()->toDateString() : Carbon::createFromFormat('d-m-Y', '01-'.company()->year_starts_from.'-'.$year)->startOfMonth()->toDateString();
+        $leaveFrom = (is_null($year)) ? Carbon::createFromFormat('d-m-Y', '01-'.cooperative()->year_starts_from.'-'.now(cooperative()->timezone)->year)->startOfMonth()->toDateString() : Carbon::createFromFormat('d-m-Y', '01-'.cooperative()->year_starts_from.'-'.$year)->startOfMonth()->toDateString();
         $leaveTo = Carbon::parse($leaveFrom)->addYear()->subDay()->toDateString();
 
         if ($setting->leaves_start_from == 'joining_date' && isset($user->employee[0])) {
-            $currentYearJoiningDate = Carbon::parse($user->employee[0]->joining_date->format((now(company()->timezone)->year) . '-m-d'));
+            $currentYearJoiningDate = Carbon::parse($user->employee[0]->joining_date->format((now(cooperative()->timezone)->year) . '-m-d'));
 
             if ($currentYearJoiningDate->isFuture()) {
                 $currentYearJoiningDate->subYear();

@@ -50,7 +50,7 @@ class LeaveSettingController extends AccountBaseController
 
     public function store(Request $request)
     {
-        $setting = company();
+        $setting = cooperative();
         $setting->leaves_start_from = $request->leaveCountFrom;
         $setting->year_starts_from = $request->yearStartFrom;
         $setting->save();

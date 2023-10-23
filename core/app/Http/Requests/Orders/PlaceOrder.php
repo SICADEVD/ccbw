@@ -28,7 +28,7 @@ class PlaceOrder extends FormRequest
 
         $rules['status'] = 'sometimes|in:pending,on-hold,failed,processing,completed,canceled';
 
-        $rules['order_number'] = 'required|unique:orders,order_number,null,id,company_id,' . company()->id;
+        $rules['order_number'] = 'required|unique:orders,order_number,null,id,cooperative_id,' . cooperative()->id;
 
         if (request()->has('client_id')) {
             $rules['client_id'] = 'required';

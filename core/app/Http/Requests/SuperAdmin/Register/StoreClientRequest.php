@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\SuperAdmin\Register;
 
-use App\Models\Company;
+use App\Models\Cooperative;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -26,12 +26,12 @@ class StoreClientRequest extends FormRequest
      */
     public function rules()
     {
-        $company = Company::where('hash', request()->company_hash)->firstOrFail();
+        $cooperative = Cooperative::where('hash', request()->cooperative_hash)->firstOrFail();
         $global = global_setting();
 
         $rules = [
             'name' => 'required|string|max:255',
-            'email' => 'required|email:rfc|unique:users,email,null,id,company_id,' . $company->id,
+            'email' => 'required|email:rfc|unique:users,email,null,id,cooperative_id,' . $cooperative->id,
             'password' => 'required|min:8',
         ];
 

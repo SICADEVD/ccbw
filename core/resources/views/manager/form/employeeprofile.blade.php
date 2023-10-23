@@ -1395,7 +1395,7 @@
                                             <div class="col-md-6">
                                                 <div class="form-group form-focus">
                                                     <input type="text" class="form-control floating" value="Digital Devlopment Inc">
-                                                    <label class="focus-label">Company Name</label>
+                                                    <label class="focus-label">Cooperative Name</label>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
@@ -1437,7 +1437,7 @@
                                             <div class="col-md-6">
                                                 <div class="form-group form-focus">
                                                     <input type="text" class="form-control floating" value="Digital Devlopment Inc">
-                                                    <label class="focus-label">Company Name</label>
+                                                    <label class="focus-label">Cooperative Name</label>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">

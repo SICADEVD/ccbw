@@ -44,7 +44,7 @@ class UpdateTask extends CoreRequest
         }
 
 
-        $setting = company();
+        $setting = cooperative();
         $unassignedPermission = user()->permission('create_unassigned_tasks');
 
         $user = user();

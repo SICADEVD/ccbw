@@ -19,7 +19,7 @@ trait GlobalCurrencyExchange
 
     public function updateExchangeRates()
     {
-        $setting = companyOrGlobalSetting();
+        $setting = cooperativeOrGlobalSetting();
         $currencies = GlobalCurrency::where('id', '<>', $setting->currency_id)->get();
         $currencyApiKeyVersion = $setting->currency_key_version;
         $currencyApiKey = ($setting->currency_converter_key) ? $setting->currency_converter_key : env('CURRENCY_CONVERTER_KEY');

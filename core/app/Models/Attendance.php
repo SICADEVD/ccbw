@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Scopes\ActiveScope;
-use App\Traits\HasCompany;
+use App\Traits\HasCooperative;
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -49,17 +49,17 @@ use Illuminate\Support\Facades\DB;
  * @property string|null $longitude
  * @method static \Illuminate\Database\Eloquent\Builder|Attendance whereLatitude($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Attendance whereLongitude($value)
- * @property int|null $company_id
+ * @property int|null $cooperative_id
  * @property int|null $location_id
  * @property \Illuminate\Support\Carbon|null $shift_start_time
  * @property \Illuminate\Support\Carbon|null $shift_end_time
  * @property int|null $employee_shift_id
  * @property string $work_from_type
  * @property \Illuminate\Support\Carbon $attendance
- * @property-read \App\Models\Company|null $company
- * @property-read \App\Models\CompanyAddress|null $location
+ * @property-read \App\Models\Cooperative|null $cooperative
+ * @property-read \App\Models\CooperativeAddress|null $location
  * @property-read \App\Models\EmployeeShift|null $shift
- * @method static \Illuminate\Database\Eloquent\Builder|Attendance whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Attendance whereCooperativeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Attendance whereEmployeeShiftId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Attendance whereLocationId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Attendance whereShiftEndTime($value)
@@ -76,7 +76,7 @@ use Illuminate\Support\Facades\DB;
 class Attendance extends BaseModel
 {
 
-    use HasCompany;
+    use HasCooperative;
 
     protected $casts = [
         'clock_in_time' => 'datetime',
@@ -86,7 +86,7 @@ class Attendance extends BaseModel
     ];
     protected $appends = ['clock_in_date'];
     protected $guarded = ['id'];
-    protected $with = ['company'];
+    protected $with = ['cooperative'];
 
     public function user(): BelongsTo
     {
@@ -95,7 +95,7 @@ class Attendance extends BaseModel
 
     public function location(): BelongsTo
     {
-        return $this->belongsTo(CompanyAddress::class, 'location_id');
+        return $this->belongsTo(CooperativeAddress::class, 'location_id');
     }
 
     public function shift(): BelongsTo
@@ -105,7 +105,7 @@ class Attendance extends BaseModel
 
     public function getClockInDateAttribute()
     {
-        return $this->clock_in_time->timezone($this->company->timezone)->toDateString();
+        return $this->clock_in_time->timezone($this->cooperative->timezone)->toDateString();
     }
 
     public static function attendanceByDate($date)
@@ -232,14 +232,14 @@ class Attendance extends BaseModel
 
     public static function userAttendanceByDate($startDate, $endDate, $userId)
     {
-        return Attendance::without('company')
+        return Attendance::without('cooperative')
             ->join('users', 'users.id', '=', 'attendances.user_id')
-            ->leftJoin('company_addresses', 'company_addresses.id', '=', 'attendances.location_id')
+            ->leftJoin('cooperative_addresses', 'cooperative_addresses.id', '=', 'attendances.location_id')
             ->where(DB::raw('DATE(attendances.clock_in_time)'), '>=', $startDate)
             ->where(DB::raw('DATE(attendances.clock_in_time)'), '<=', $endDate)
             ->where('attendances.user_id', '=', $userId)
             ->orderBy('attendances.clock_in_time', 'desc')
-            ->select('attendances.*', 'users.*', 'attendances.id as aId', 'company_addresses.location')
+            ->select('attendances.*', 'users.*', 'attendances.id as aId', 'cooperative_addresses.location')
             ->get();
     }
 

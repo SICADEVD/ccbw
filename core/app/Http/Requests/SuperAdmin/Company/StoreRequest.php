@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\SuperAdmin\Company;
+namespace App\Http\Requests\SuperAdmin\Cooperative;
 
 use App\Models\CustomField;
 use Illuminate\Foundation\Http\FormRequest;
@@ -26,7 +26,7 @@ class StoreRequest extends FormRequest
     public function rules()
     {
         \Illuminate\Support\Facades\Validator::extend('check_superadmin', function ($attribute, $value, $parameters, $validator) {
-            return !\App\Models\User::withoutGlobalScopes([\App\Scopes\ActiveScope::class, \App\Scopes\CompanyScope::class])
+            return !\App\Models\User::withoutGlobalScopes([\App\Scopes\ActiveScope::class, \App\Scopes\CooperativeScope::class])
                 ->where('email', $value)
                 ->where('is_superadmin', 1)
                 ->exists();
@@ -49,8 +49,8 @@ class StoreRequest extends FormRequest
         }
 
         $rules = [
-            'company_name' => 'required',
-            'company_email' => 'required|email|unique:companies',
+            'cooperative_name' => 'required',
+            'cooperative_email' => 'required|email|unique:companies',
             'address' => 'required',
             'sub_domain' => module_enabled('Subdomain') ? 'required|banned_sub_domain|min:' . $len . '|unique:companies,sub_domain|max:50' : '',
             'status' => 'required',

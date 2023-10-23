@@ -1511,10 +1511,10 @@
             searchTerms: [ "insect", "report" ]
         }, {
             title: "fas fa-building",
-            searchTerms: [ "apartment", "business", "company", "office", "work" ]
+            searchTerms: [ "apartment", "business", "cooperative", "office", "work" ]
         }, {
             title: "far fa-building",
-            searchTerms: [ "apartment", "business", "company", "office", "work" ]
+            searchTerms: [ "apartment", "business", "cooperative", "office", "work" ]
         }, {
             title: "fas fa-bullhorn",
             searchTerms: [ "announcement", "broadcast", "louder", "megaphone", "share" ]
@@ -5748,10 +5748,10 @@
             searchTerms: [ "insect", "report" ]
         }, {
             title: "las la-building",
-            searchTerms: [ "apartment", "business", "company", "office", "work" ]
+            searchTerms: [ "apartment", "business", "cooperative", "office", "work" ]
         }, {
             title: "lar la-building",
-            searchTerms: [ "apartment", "business", "company", "office", "work" ]
+            searchTerms: [ "apartment", "business", "cooperative", "office", "work" ]
         }, {
             title: "las la-bullhorn",
             searchTerms: [ "announcement", "broadcast", "louder", "megaphone", "share" ]

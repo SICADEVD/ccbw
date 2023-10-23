@@ -12668,7 +12668,7 @@
                     'motobike-trail',
                     'movie-rental',
                     'movie-theater',
-                    'moving-company',
+                    'moving-cooperative',
                     'museum',
                     'natural-feature',
                     'night-club',

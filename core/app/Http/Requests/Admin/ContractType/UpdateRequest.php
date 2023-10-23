@@ -25,7 +25,7 @@ class UpdateRequest extends CoreRequest
     public function rules()
     {
         return [
-            'name' => 'required|max:100|unique:contract_types,name,'.$this->route('type').',id,company_id,' . company()->id
+            'name' => 'required|max:100|unique:contract_types,name,'.$this->route('type').',id,cooperative_id,' . cooperative()->id
         ];
     }
 

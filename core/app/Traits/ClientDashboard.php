@@ -31,8 +31,8 @@ trait ClientDashboard
         abort_403($this->viewClientDashboard !== 'all');
 
         $this->pageTitle = 'app.clientDashboard';
-        $this->startDate = (request('startDate') != '') ? Carbon::createFromFormat($this->company->date_format, request('startDate')) : now($this->company->timezone)->startOfMonth();
-        $this->endDate = (request('endDate') != '') ? Carbon::createFromFormat($this->company->date_format, request('endDate')) : now($this->company->timezone);
+        $this->startDate = (request('startDate') != '') ? Carbon::createFromFormat($this->cooperative->date_format, request('startDate')) : now($this->cooperative->timezone)->startOfMonth();
+        $this->endDate = (request('endDate') != '') ? Carbon::createFromFormat($this->cooperative->date_format, request('endDate')) : now($this->cooperative->timezone);
         $startDate = $this->startDate->toDateString();
         $endDate = $this->endDate->toDateString();
 
@@ -119,7 +119,7 @@ trait ClientDashboard
                 $chartDataClients[$chartName] = 0;
             }
 
-            if ($chart->currency->currency_code != $this->company->currency->currency_code && $chart->currency->exchange_rate != 0) {
+            if ($chart->currency->currency_code != $this->cooperative->currency->currency_code && $chart->currency->exchange_rate != 0) {
                 if ($chart->currency->is_cryptocurrency == 'yes') {
                     $usdTotal = ($chart->amount * $chart->currency->usd_price);
                     $chartDataClients[$chartName] = $chartDataClients[$chartName] + floor($usdTotal / $chart->currency->exchange_rate);

@@ -28,8 +28,8 @@ class UpdateEmployee extends CoreRequest
     {
         $detailID = EmployeeDetails::where('user_id', $this->route('employee'))->first();
         return [
-            'email' => 'required|max:100|unique:users,email,'.$this->route('employee').',id,company_id,' . company()->id,
-            'slack_username' => 'nullable|max:100|unique:employee_details,slack_username,'.$detailID->id.',id,company_id,' . company()->id,
+            'email' => 'required|max:100|unique:users,email,'.$this->route('employee').',id,cooperative_id,' . cooperative()->id,
+            'slack_username' => 'nullable|max:100|unique:employee_details,slack_username,'.$detailID->id.',id,cooperative_id,' . cooperative()->id,
             'name'  => 'required|max:100',
             'hourly_rate' => 'nullable|numeric',
         ];

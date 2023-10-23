@@ -49,6 +49,8 @@
     @yield('content')
 
     <script src="{{ asset('assets/global/js/jquery-3.6.0.min.js') }}"></script> 
+ 
+    <script src="{{ asset('assets/vendor/jquery/modernizr.min.js') }}"></script>
     <script src="{{ asset('assets/global/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/fcadmin/js/vendor/bootstrap-toggle.min.js') }}"></script>
     <script src="{{ asset('assets/global/js/jquery.validate.js') }}"></script>
@@ -67,6 +69,7 @@
 <script src="{{ asset('assets/fcadmin/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('assets/fcadmin/js/dataTables.bootstrap4.min.js') }}"></script> 
 <script src="{{ asset('assets/vendor/jquery/bootstrap-datepicker.min.js') }}"></script>
+<script src="{{ asset('assets/vendor/jquery/bootstrap-timepicker.min.js') }}"></script>
 <script src="{{ asset('assets/vendor/jquery/dropzone.min.js') }}"></script>
 <script src="{{ asset('assets/vendor/jquery/daterangepicker.min.js')}}" defer=""></script> 
  <script src="{{ asset('assets/vendor/jquery/datepicker.min.js') }}"></script> 
@@ -75,7 +78,7 @@
 
     <script src="{{ asset('assets/fcadmin/js/app.js') }}"></script>
 
-
+    @include('sections.modals')
     {{-- LOAD NIC EDIT --}}
 
     <script>
@@ -189,8 +192,142 @@
         const RIGHT_MODAL = '#task-detail-1';
         const RIGHT_MODAL_CONTENT = '#right-modal-content';
         const RIGHT_MODAL_TITLE = '#right-modal-title';
-        
+
+
+        $('body').on('click', '.img-lightbox', function () {
+        const imageUrl = $(this).data('image-url');
+        const url = "";
+        $(MODAL_XL + ' ' + MODAL_HEADING).html('...');
+        $.ajaxModal(MODAL_XL, url);
+    });
+
     </script> 
+    
+<script>
+    $('body').on('click', '#pause-timer-btn, .pause-active-timer', function () {
+        const id = $(this).data('time-id');
+        let url = "{{ route('manager.hr.timelogs.pause_timer', ':id') }}";
+        url = url.replace(':id', id);
+        const token = '{{ csrf_token() }}';
+
+        let currentUrl = $(this).data('url');
+
+        $.easyAjax({
+            url: url,
+            blockUI: true,
+            type: "POST",
+            disableButton: true,
+            buttonSelector: "#pause-timer-btn",
+            data: {
+                timeId: id,
+                currentUrl: currentUrl,
+                _token: token
+            },
+            success: function (response) {
+                if (response.status === 'success') {
+                    if ($('#myActiveTimer').length > 0) {
+                        $(MODAL_XL + ' .modal-content').html(response.html);
+
+                        if ($('#allTasks-table').length) {
+                            window.LaravelDataTables["allTasks-table"].draw(false);
+                        }
+                    }
+
+                    if ($('#allTasks-table').length) {
+                        window.LaravelDataTables["allTasks-table"].draw(false);
+                    }
+
+                    if (response.reload === 'yes') {
+                        window.location.reload();
+                    } else {
+                        $('#timer-clock').html(response.clockHtml);
+                    }
+                }
+            }
+        })
+    });
+
+    $('body').on('click', '#resume-timer-btn, .resume-active-timer', function () {
+        const id = $(this).data('time-id');
+        let url = "{{ route('manager.hr.timelogs.resume_timer', ':id') }}";
+        url = url.replace(':id', id);
+        const token = '{{ csrf_token() }}';
+
+        let currentUrl = $(this).data('url');
+
+        $.easyAjax({
+            url: url,
+            blockUI: true,
+            type: "POST",
+            disableButton: true,
+            buttonSelector: "#resume-timer-btn",
+            data: {
+                timeId: id,
+                currentUrl: currentUrl,
+                _token: token
+            },
+            success: function (response) {
+
+                if (response.status === 'success') {
+                    if ($('#myActiveTimer').length > 0) {
+                        $(MODAL_XL + ' .modal-content').html(response.html);
+                    }
+
+                    $('#timer-clock').html(response.clockHtml);
+                    if ($('#allTasks-table').length) {
+                        window.LaravelDataTables["allTasks-table"].draw(false);
+                    }
+
+                    if (response.reload === 'yes') {
+                        window.location.reload();
+                    }
+                }
+            }
+        })
+    });
+
+    $('body').on('click', '.stop-active-timer', function () {
+        const id = $(this).data('time-id');
+        let url = "{{ route('manager.hr.timelogs.stop_timer', ':id') }}";
+        url = url.replace(':id', id);
+        const token = '{{ csrf_token() }}';
+
+        let currentUrl = $(this).data('url');
+
+        $.easyAjax({
+            url: url,
+            type: "POST",
+            data: {
+                timeId: id,
+                currentUrl: currentUrl,
+                _token: token
+            },
+            success: function (response) {
+                if ($('#myActiveTimer').length > 0) {
+                    $(MODAL_XL + ' .modal-content').html(response.html);
+                }
+
+                if (response.activeTimerCount > 0) {
+                    $('#show-active-timer .active-timer-count').html(response.activeTimerCount);
+                } else {
+                    $('#show-active-timer .active-timer-count').addClass('d-none');
+                }
+
+                $('#timer-clock').html('');
+                if ($('#allTasks-table').length) {
+                    window.LaravelDataTables["allTasks-table"].draw(false);
+                }
+
+                if (response.reload === 'yes') {
+                    window.location.reload();
+                }
+
+            }
+        })
+
+    });
+
+</script>
      @stack('script')
 </body>
 </html>

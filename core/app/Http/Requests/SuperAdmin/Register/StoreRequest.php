@@ -4,9 +4,9 @@ namespace App\Http\Requests\SuperAdmin\Register;
 
 use App\Models\User;
 use GuzzleHttp\Client;
-use App\Models\Company;
+use App\Models\Cooperative;
 use App\Scopes\ActiveScope;
-use App\Scopes\CompanyScope;
+use App\Scopes\CooperativeScope;
 use Illuminate\Validation\Rule;
 use App\Http\Requests\CoreRequest;
 use App\Models\SuperAdmin\SignUpSetting;
@@ -33,7 +33,7 @@ class StoreRequest extends CoreRequest
     public function rules()
     {
         Validator::extend('check_superadmin', function ($attribute, $value, $parameters, $validator) {
-            return !User::withoutGlobalScopes([ActiveScope::class, CompanyScope::class])
+            return !User::withoutGlobalScopes([ActiveScope::class, CooperativeScope::class])
                 ->where('email', $value)
                 ->where('is_superadmin', 1)
                 ->exists();
@@ -56,7 +56,7 @@ class StoreRequest extends CoreRequest
         }
 
         $rules = [
-            'company_name' => 'required',
+            'cooperative_name' => 'required',
             'name' => 'required',
             'email' => 'required|email:rfc|regex:/(.+)@(.+)\.(.+)/i|check_superadmin',
             'sub_domain' => module_enabled('Subdomain') ? 'required|banned_sub_domain|min:4|unique:companies,sub_domain|max:50' : '',
@@ -85,7 +85,7 @@ class StoreRequest extends CoreRequest
             });
         }
 
-        if (Company::where('company_email', '=', request()->email)->exists()) {
+        if (Cooperative::where('cooperative_email', '=', request()->email)->exists()) {
             $rules['email'] = 'required|email:rfc|regex:/(.+)@(.+)\.(.+)/i|unique:users,email';
         }
 

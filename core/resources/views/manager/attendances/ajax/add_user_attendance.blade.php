@@ -1,7 +1,3 @@
-@php
-$editAttendancePermission = user()->permission('add_attendance');
-$deleteAttendancePermission = user()->permission('delete_attendance');
-@endphp
 
 <div class="modal-header">
     <h5 class="modal-title" id="modelHeading">
@@ -19,7 +15,7 @@ $deleteAttendancePermission = user()->permission('delete_attendance');
 
     <div class="row">
         <div class="col-sm-12">
-            <h5 class="f-w-500 f-15 d-flex justify-content-between">{{ __('app.date').' - '.\Carbon\Carbon::parse($date)->translatedFormat(company()->date_format) }} <span class="badge badge-info f-14" style="background-color: {{ $attendanceSettings->color }}">{{ $attendanceSettings->shift_name }}</span></h5>
+            <h5 class="f-w-500 f-15 d-flex justify-content-between">{{ __('app.date').' - '.\Carbon\Carbon::parse($date)->translatedFormat('Y-m-d') }} <span class="badge badge-info f-14" style="background-color: {{ $attendanceSettings->color }}">{{ $attendanceSettings->shift_name }}</span></h5>
 
             <x-form id="attendance-container">
                 <input type="hidden" name="attendance_date" value="{{ $date }}">
@@ -113,13 +109,13 @@ $deleteAttendancePermission = user()->permission('delete_attendance');
     $(document).ready(function() {
 
         $('#clock-in-time').timepicker({
-            @if(company()->time_format == 'H:i')
+            @if(cooperative()->time_format == 'H:i')
             showMeridian: false,
             @endif
             minuteStep: 1
         });
         $('#clock-out').timepicker({
-            @if(company()->time_format == 'H:i')
+            @if(cooperative()->time_format == 'H:i')
             showMeridian: false,
             @endif
             minuteStep: 1,

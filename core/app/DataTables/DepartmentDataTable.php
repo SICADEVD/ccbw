@@ -17,8 +17,8 @@ class DepartmentDataTable extends BaseDataTable
     public function __construct()
     {
         parent::__construct();
-        $this->editDepartmentPermission = user()->permission('edit_department');
-        $this->deleteDepartmentPermission = user()->permission('delete_department');
+        $this->editDepartmentPermission ='all';
+        $this->deleteDepartmentPermission = 'all';
     }
 
     /**
@@ -170,7 +170,7 @@ class DepartmentDataTable extends BaseDataTable
                 'exportable' => false,
                 'orderable' => false,
                 'searchable' => false,
-                'visible' => !in_array('client', user_roles())
+                'visible' => true
             ],
             '#' => ['data' => 'DT_RowIndex', 'orderable' => false, 'searchable' => false, 'visible' => false, 'title' => '#'],
             __('app.name') => ['data' => 'name', 'name' => 'team_name', 'title' => __('app.name')],

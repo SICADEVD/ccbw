@@ -11,7 +11,7 @@
             <div class="dropdown-toggle sidebar-brand d-flex align-items-center justify-content-between  w-100"
                 type="link" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 
-                @if (companyOrGlobalSetting()->sidebar_logo_style !== 'full')
+                @if (cooperativeOrGlobalSetting()->sidebar_logo_style !== 'full')
                     <!-- SIDEBAR BRAND NAME START -->
                     <div class="sidebar-brand-name">
                         <h1 class="mb-0 f-16 f-w-500 text-white-shade mt-0" data-placement="bottom" data-toggle="tooltip"
@@ -27,7 +27,7 @@
                     <!-- SIDEBAR BRAND NAME END -->
                     <!-- SIDEBAR BRAND LOGO START -->
                     <div class="sidebar-brand-logo">
-                        <img src="{{ companyOrGlobalSetting()->logo_url }}">
+                        <img src="{{ cooperativeOrGlobalSetting()->logo_url }}">
                     </div>
                     <!-- SIDEBAR BRAND LOGO END -->
                 @else
@@ -35,7 +35,7 @@
                     <div class="sidebar-brand-name">
                         <h1 class="mb-0 f-16 f-w-500 text-white-shade mt-0" data-placement="bottom"
                             data-toggle="tooltip" data-original-title="{{ $appName }}">
-                            <img src="{{ companyOrGlobalSetting()->logo_url }}">
+                            <img src="{{ cooperativeOrGlobalSetting()->logo_url }}">
                         </h1>
                     </div>
                     <!-- SIDEBAR BRAND NAME END -->
@@ -78,11 +78,11 @@
                         </a>
                     @endif
                 </div>
-                @if (checkCompanyCanAddMoreEmployees(user()->company_id))
+                @if (checkCooperativeCanAddMoreEmployees(user()->cooperative_id))
                     @if (!in_array('client', user_roles()) && ($sidebarUserPermissions['add_employees'] == 4 || $sidebarUserPermissions['add_employees'] == 1))
                         <a class="dropdown-item d-flex justify-content-between align-items-center f-15 text-dark invite-member"
                             href="javascript:;">
-                            <span>@lang('app.inviteMember') {{ ($companyName) }}</span>
+                            <span>@lang('app.inviteMember') {{ ($cooperativeName) }}</span>
                             <i class="side-icon bi bi-person-plus"></i>
                         </a>
                     @endif
@@ -105,7 +105,7 @@
                 </a>
 
                 <!-- WORKSUITESAAS -->
-                @include('super-admin.sections.choose-company')
+                @include('super-admin.sections.choose-cooperative')
 
             </div>
         </div>

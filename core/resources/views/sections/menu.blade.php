@@ -282,7 +282,7 @@
             </x-slot>
         </x-menu-item>
     @endif
-@if (checkCompanyPackageIsValid(user()->company_id))
+@if (checkCooperativePackageIsValid(user()->cooperative_id))
 <!-- NAV ITEM - CUSTOM MODULES  -->
     @foreach ($worksuitePlugins as $item)
         @includeIf(strtolower($item) . '::sections.sidebar')
@@ -366,7 +366,7 @@
 <!-- NAV ITEM - REPORTS COLLAPASE MENU -->
     <!-- NAV ITEM - SETTINGS -->
     <x-menu-item icon="gear" :text="__('app.menu.settings')"
-                 :link="($sidebarUserPermissions['manage_company_setting'] == 4 ? route('company-settings.index') : route('profile-settings.index'))">
+                 :link="($sidebarUserPermissions['manage_cooperative_setting'] == 4 ? route('cooperative-settings.index') : route('profile-settings.index'))">
         <x-slot name="iconPath">
             <path
                 d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z" />

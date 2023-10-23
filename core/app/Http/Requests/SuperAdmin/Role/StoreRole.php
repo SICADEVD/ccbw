@@ -26,7 +26,7 @@ class StoreRole extends CoreRequest
     public function rules()
     {
         return [
-            'name' => ['required', Rule::unique('roles')->whereNull('company_id')]
+            'name' => ['required', Rule::unique('roles')->whereNull('cooperative_id')]
         ];
     }
 

@@ -38,7 +38,7 @@ trait MakeOrderInvoiceTrait
         /* Step2 - make an invoice related to recently paid order_id */
         $invoice = new Invoice();
         $invoice->order_id = $order->id;
-        $invoice->company_id = $order->company_id;
+        $invoice->cooperative_id = $order->cooperative_id;
         $invoice->client_id = $order->client_id;
         $invoice->sub_total = $order->sub_total;
         $invoice->discount = $order->discount;

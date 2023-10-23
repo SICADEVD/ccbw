@@ -27,7 +27,7 @@ class StoreEstimate extends FormRequest
     public function rules()
     {
         $rules = [
-            'estimate_number' => 'required|unique:estimates,estimate_number,' . $this->route('estimate').',id,company_id,' . company()->id,
+            'estimate_number' => 'required|unique:estimates,estimate_number,' . $this->route('estimate').',id,cooperative_id,' . cooperative()->id,
             'client_id' => 'required',
             'valid_till' => 'required',
             'sub_total' => 'required',

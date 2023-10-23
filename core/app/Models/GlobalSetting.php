@@ -7,7 +7,7 @@ use App\Models\SuperAdmin\GlobalCurrency;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * App\Models\Company
+ * App\Models\Cooperative
  *
  * @property int $id
  * @property string $global_app_name
@@ -76,9 +76,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|Setting whereAfterDays($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Setting whereAppDebug($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Setting whereBeforeDays($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Setting whereCompanyEmail($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Setting whereCompanyName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Setting whereCompanyPhone($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Setting whereCooperativeEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Setting whereCooperativeName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Setting whereCooperativePhone($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Setting whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Setting whereCurrencyConverterKey($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Setting whereCurrencyId($value)
@@ -178,15 +178,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|GlobalSetting whereSignUpTerms($value)
  * @method static \Illuminate\Database\Eloquent\Builder|GlobalSetting whereTermsLink($value)
  * @mixin \Eloquent
- * @property string $company_email
- * @property string|null $company_phone
+ * @property string $cooperative_email
+ * @property string|null $cooperative_phone
  * @property int $front_design
  * @property int $email_verification
  * @property string|null $logo_front
  * @property int $login_ui
  * @property string|null $auth_css
  * @property string|null $auth_css_theme_two
- * @property string|null $new_company_locale
+ * @property string|null $new_cooperative_locale
  * @property int $frontend_disable
  * @property string $setup_homepage
  * @property string|null $custom_homepage_url
@@ -203,7 +203,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|GlobalSetting whereFrontendDisable($value)
  * @method static \Illuminate\Database\Eloquent\Builder|GlobalSetting whereLoginUi($value)
  * @method static \Illuminate\Database\Eloquent\Builder|GlobalSetting whereLogoFront($value)
- * @method static \Illuminate\Database\Eloquent\Builder|GlobalSetting whereNewCompanyLocale($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|GlobalSetting whereNewCooperativeLocale($value)
  * @method static \Illuminate\Database\Eloquent\Builder|GlobalSetting whereRegistrationOpen($value)
  * @method static \Illuminate\Database\Eloquent\Builder|GlobalSetting whereSetupHomepage($value)
  */
@@ -225,7 +225,7 @@ class GlobalSetting extends BaseModel
         'client_notes',
         'client_sub_categories',
         'client_user_notes',
-        'company_addresses',
+        'cooperative_addresses',
         'contract_discussions',
         'contract_files',
         'contract_renews',
@@ -413,7 +413,7 @@ class GlobalSetting extends BaseModel
             }
         }
 
-        if (company() && company()->auth_theme == 'dark') {
+        if (cooperative() && cooperative()->auth_theme == 'dark') {
             return $this->defaultLogo();
         }
 

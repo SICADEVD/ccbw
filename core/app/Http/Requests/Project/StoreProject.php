@@ -26,14 +26,14 @@ class StoreProject extends CoreRequest
      */
     public function rules()
     {
-        $setting = company();
+        $setting = cooperative();
 
         $rules = [
             'project_name' => 'required|max:150',
             'start_date' => 'required|date_format:"' . $setting->date_format . '"',
             'hours_allocated' => 'nullable|numeric',
             'client_id' => 'requiredIf:client_view_task,true',
-            'project_code' => 'required|unique:projects,project_short_code,null,id,company_id,' . company()->id,
+            'project_code' => 'required|unique:projects,project_short_code,null,id,cooperative_id,' . cooperative()->id,
             'miroboard_checkbox' => 'nullable',
             'miro_board_id' => 'nullable|required_if:miroboard_checkbox,checked'
         ];

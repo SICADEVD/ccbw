@@ -84,10 +84,10 @@ class LeadFollowupDataTable extends BaseDataTable
                 return $row->status;
             })
             ->addColumn('created_at', function ($row) {
-                return $row->created_at->timezone(company()->timezone)->format(company()->date_format. ' '.company()->time_format);
+                return $row->created_at->timezone(cooperative()->timezone)->format(cooperative()->date_format. ' '.cooperative()->time_format);
             })
             ->addColumn('next_follow_up', function ($row) {
-                return $row->next_follow_up_date->format(company()->date_format. ' '.company()->time_format);
+                return $row->next_follow_up_date->format(cooperative()->date_format. ' '.cooperative()->time_format);
             })
             ->smart(false)
             ->setRowId(function ($row) {

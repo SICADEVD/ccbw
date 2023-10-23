@@ -25,7 +25,7 @@ class StoreTicketChannel extends CoreRequest
     public function rules()
     {
         return [
-            'channel_name' => 'required|unique:ticket_channels,channel_name,null,id,company_id,' . company()->id
+            'channel_name' => 'required|unique:ticket_channels,channel_name,null,id,cooperative_id,' . cooperative()->id
         ];
     }
 

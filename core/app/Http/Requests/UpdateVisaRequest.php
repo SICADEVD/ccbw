@@ -24,10 +24,10 @@ class UpdateVisaRequest extends FormRequest
      */
     public function rules()
     {
-        $setting = company();
+        $setting = cooperative();
 
         return [
-            'visa_number' => 'required|unique:visa_details,visa_number,' . $this->route('employee_visa').',id,company_id,' . $setting->id,
+            'visa_number' => 'required|unique:visa_details,visa_number,' . $this->route('employee_visa').',id,cooperative_id,' . $setting->id,
             'issue_date' => 'required',
             'expiry_date' => 'required|date_format:"' . $setting->date_format . '"|after_or_equal:issue_date',
             'country' => 'required'

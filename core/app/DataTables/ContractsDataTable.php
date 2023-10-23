@@ -58,10 +58,10 @@ class ContractsDataTable extends BaseDataTable
 
                 $action .= ' <a href="' . route('contracts.show', [$row->id]) . '" class="dropdown-item"><i class="fa fa-eye mr-2"></i>' . __('app.view') . '</a>';
 
-                if (!$row->company_sign && user()->company_id == $row->company_id) {
+                if (!$row->cooperative_sign && user()->cooperative_id == $row->cooperative_id) {
                     $action .= '<a class="dropdown-item sign-modal" href="javascript:;" data-contract-id="' . $row->id . '">
                     <i class="fa fa-check mr-2"></i>
-                    ' . trans('modules.estimates.companysignature') . '
+                    ' . trans('modules.estimates.cooperativesignature') . '
                     </a>';
                 }
 
@@ -137,14 +137,14 @@ class ContractsDataTable extends BaseDataTable
                   </div>';
             })
             ->editColumn('start_date', function ($row) {
-                return $row->start_date->translatedFormat($this->company->date_format);
+                return $row->start_date->translatedFormat($this->cooperative->date_format);
             })
             ->editColumn('end_date', function ($row) {
                 if (is_null($row->end_date)) {
                     return '--';
                 }
 
-                return $row->end_date == null ? $row->end_date : $row->end_date->translatedFormat($this->company->date_format);
+                return $row->end_date == null ? $row->end_date : $row->end_date->translatedFormat($this->cooperative->date_format);
             })
             ->editColumn('amount', function ($row) {
                 return currency_format($row->amount, $row->currency->id);
@@ -158,7 +158,7 @@ class ContractsDataTable extends BaseDataTable
                     <img src="' . $row->client->image_url . '" class="mr-3 taskEmployeeImg rounded-circle" alt="' . $row->client->name . '" title="' . $row->client->name . '"></a>
                     <div class="media-body">
                     <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('clients.show', [$row->client_id]) . '">' . $row->client->name . '</a></h5>
-                    <p class="mb-0 f-13 text-dark-grey">' . $row->client->clientDetails->company_name . '</p>
+                    <p class="mb-0 f-13 text-dark-grey">' . $row->client->clientDetails->cooperative_name . '</p>
                     </div>
                   </div>';
             })
@@ -189,11 +189,11 @@ class ContractsDataTable extends BaseDataTable
         $endDate = null;
 
         if ($request->startDate !== null && $request->startDate != 'null' && $request->startDate != '') {
-            $startDate = Carbon::createFromFormat($this->company->date_format, $request->startDate)->toDateString();
+            $startDate = Carbon::createFromFormat($this->cooperative->date_format, $request->startDate)->toDateString();
         }
 
         if ($request->endDate !== null && $request->endDate != 'null' && $request->endDate != '') {
-            $endDate = Carbon::createFromFormat($this->company->date_format, $request->endDate)->toDateString();
+            $endDate = Carbon::createFromFormat($this->cooperative->date_format, $request->endDate)->toDateString();
         }
 
             $model = $model->with(
@@ -233,7 +233,7 @@ class ContractsDataTable extends BaseDataTable
             $model = $model->where(function ($query) {
                 $query->where('contracts.subject', 'like', '%' . request('searchText') . '%')
                     ->orWhere('contracts.amount', 'like', '%' . request('searchText') . '%')
-                    ->orWhere('client_details.company_name', 'like', '%' . request('searchText') . '%');
+                    ->orWhere('client_details.cooperative_name', 'like', '%' . request('searchText') . '%');
             })
             ->orWhere(function ($query) {
                 $query->whereHas('project', function ($q) {

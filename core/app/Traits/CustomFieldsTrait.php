@@ -17,8 +17,8 @@ trait CustomFieldsTrait
     public $custom_fields;
     public $custom_fields_data;
 
-    /** Get company ID for current object
-     * @return int Returns current object's company id
+    /** Get cooperative ID for current object
+     * @return int Returns current object's cooperative id
      */
 
     private function getModelName()
@@ -66,9 +66,9 @@ trait CustomFieldsTrait
     public function getCustomFieldGroups($fields = false)
     {
         $customFieldGroup = CustomFieldGroup::where('model', $this->getModelName());
-
-        $customFieldGroup = $customFieldGroup->when(method_exists($this, 'company'), function ($query) {
-            return $query->where('company_id', $this->company_id ?: company()->id);
+ 
+        $customFieldGroup = $customFieldGroup->when(method_exists($this, 'cooperative'), function ($query) {
+            return $query->where('cooperative_id', $this->cooperative_id ?: cooperative()->id);
         })->first();
 
         if ($fields && $customFieldGroup) {
@@ -118,7 +118,7 @@ trait CustomFieldsTrait
 
             $fieldType = CustomField::findOrFail($id)->type;
 
-            $value = ($fieldType == 'date') ? Carbon::createFromFormat(companyOrGlobalSetting()->date_format, $value)->format('Y-m-d') : $value;
+            $value = ($fieldType == 'date') ? Carbon::createFromFormat(cooperativeOrGlobalSetting()->date_format, $value)->format('Y-m-d') : $value;
             $value = ($fieldType == 'file' && !is_string($value) && !is_null($value)) ? Files::uploadLocalOrS3($value, 'custom_fields') : $value;
 
             // Find is entry exists

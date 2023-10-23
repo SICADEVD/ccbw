@@ -1,1 +1,1 @@
-<link rel="stylesheet" href="{{ asset('vendor/css/daterangepicker.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/vendor/css/daterangepicker.css') }}">

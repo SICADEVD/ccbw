@@ -183,7 +183,7 @@ class PaymentsDataTable extends BaseDataTable
                 'paid_on',
                 function ($row) {
                     if (!is_null($row->paid_on)) {
-                        return $row->paid_on->translatedFormat($this->company->date_format);
+                        return $row->paid_on->translatedFormat($this->cooperative->date_format);
                     }
                 }
             )
@@ -210,15 +210,15 @@ class PaymentsDataTable extends BaseDataTable
             ->leftJoin('invoices', 'invoices.id', '=', 'payments.invoice_id')
             ->leftJoin('projects', 'projects.id', '=', 'payments.project_id')
             ->leftJoin('orders', 'orders.id', '=', 'payments.order_id')
-            ->select('payments.id', 'payments.company_id', 'payments.project_id', 'payments.currency_id', 'payments.invoice_id', 'payments.amount', 'payments.status', 'payments.paid_on', 'payments.remarks', 'payments.bill', 'payments.added_by', 'payments.order_id', 'payments.gateway', 'payments.transaction_id');
+            ->select('payments.id', 'payments.cooperative_id', 'payments.project_id', 'payments.currency_id', 'payments.invoice_id', 'payments.amount', 'payments.status', 'payments.paid_on', 'payments.remarks', 'payments.bill', 'payments.added_by', 'payments.order_id', 'payments.gateway', 'payments.transaction_id');
 
         if ($request->startDate !== null && $request->startDate != 'null' && $request->startDate != '') {
-            $startDate = Carbon::createFromFormat($this->company->date_format, $request->startDate)->toDateString();
+            $startDate = Carbon::createFromFormat($this->cooperative->date_format, $request->startDate)->toDateString();
             $model = $model->where(DB::raw('DATE(payments.`paid_on`)'), '>=', $startDate);
         }
 
         if ($request->endDate !== null && $request->endDate != 'null' && $request->endDate != '') {
-            $endDate = Carbon::createFromFormat($this->company->date_format, $request->endDate)->toDateString();
+            $endDate = Carbon::createFromFormat($this->cooperative->date_format, $request->endDate)->toDateString();
             $model = $model->where(DB::raw('DATE(payments.`paid_on`)'), '<=', $endDate);
         }
 

@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Scopes\ActiveScope;
-use App\Traits\HasCompany;
+use App\Traits\HasCooperative;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -31,12 +31,12 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static \Illuminate\Database\Eloquent\Builder|LeaveType wherePaid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|LeaveType whereTypeName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|LeaveType whereUpdatedAt($value)
- * @property int|null $company_id
+ * @property int|null $cooperative_id
  * @property int $monthly_limit
- * @property-read \App\Models\Company|null $company
+ * @property-read \App\Models\Cooperative|null $cooperative
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Leave[] $leavesCount
  * @property-read int|null $leaves_count_count
- * @method static \Illuminate\Database\Eloquent\Builder|LeaveType whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|LeaveType whereCooperativeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|LeaveType whereMonthlyLimit($value)
  * @property int|null $effective_after
  * @property string|null $effective_type
@@ -65,7 +65,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class LeaveType extends BaseModel
 {
 
-    use HasCompany;
+    use HasCooperative;
 
     public function leaves(): HasMany
     {
@@ -82,22 +82,22 @@ class LeaveType extends BaseModel
     public static function byUser($user, $leaveTypeId = null, $status = array('approved'), $leaveDate = null)
     {
         if (!is_null($leaveDate)) {
-            $leaveDate = Carbon::createFromFormat(company()->date_format, $leaveDate);
+            $leaveDate = Carbon::createFromFormat(cooperative()->date_format, $leaveDate);
 
         }
         else {
-            $leaveDate = Carbon::createFromFormat('d-m-Y', '01-'.company()->year_starts_from.'-'.now(company()->timezone)->year)->startOfMonth();
+            $leaveDate = Carbon::createFromFormat('d-m-Y', '01-'.cooperative()->year_starts_from.'-'.now(cooperative()->timezone)->year)->startOfMonth();
         }
 
         if (!$user instanceof User) {
             $user = User::withoutGlobalScope(ActiveScope::class)->withOut('clientDetails', 'role')->findOrFail($user);
         }
 
-        $setting = company();
+        $setting = cooperative();
 
         if (isset($user->employee[0])) {
             if ($setting->leaves_start_from == 'joining_date') {
-                $currentYearJoiningDate = Carbon::parse($user->employee[0]->joining_date->format((now(company()->timezone)->year) . '-m-d'));
+                $currentYearJoiningDate = Carbon::parse($user->employee[0]->joining_date->format((now(cooperative()->timezone)->year) . '-m-d'));
 
                 if ($currentYearJoiningDate->isFuture()) {
                     $currentYearJoiningDate->subYear();

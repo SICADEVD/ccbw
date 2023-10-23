@@ -24,8 +24,8 @@ trait TicketDashboard
         abort_403($this->viewTicketDashboard !== 'all');
 
         $this->pageTitle = 'app.ticketDashboard';
-        $this->startDate  = (request('startDate') != '') ? Carbon::createFromFormat($this->company->date_format, request('startDate')) : now($this->company->timezone)->startOfMonth();
-        $this->endDate = (request('endDate') != '') ? Carbon::createFromFormat($this->company->date_format, request('endDate')) : now($this->company->timezone);
+        $this->startDate  = (request('startDate') != '') ? Carbon::createFromFormat($this->cooperative->date_format, request('startDate')) : now($this->cooperative->timezone)->startOfMonth();
+        $this->endDate = (request('endDate') != '') ? Carbon::createFromFormat($this->cooperative->date_format, request('endDate')) : now($this->cooperative->timezone);
         $startDate = $this->startDate->startOfDay()->toDateTimeString();
         $endDate = $this->endDate->endOfDay()->toDateTimeString();
 

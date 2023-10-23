@@ -1,4 +1,4 @@
-<script src="{{ asset('vendor/jquery/daterangepicker.min.js') }}"></script>
+<script src="{{ asset('assets/vendor/jquery/daterangepicker.min.js') }}"></script>
 
 <script type="text/javascript">
     $(function() {

@@ -228,13 +228,13 @@ class AttendanceExport implements FromCollection, WithHeadings, WithMapping, Wit
             $status = __('app.present');
 
             foreach ($attendances->sortBy('date') as $attendance) {
-                $date = Carbon::createFromFormat('Y-m-d', $attendance->date)->timezone(company()->timezone)->format(company()->date_format);
+                $date = Carbon::createFromFormat('Y-m-d', $attendance->date)->timezone(cooperative()->timezone)->format(cooperative()->date_format);
 
                 $to = $attendance->clock_out_time ? \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $attendance->clock_out_time) : null;
                 $from = $attendance->clock_in_time ? \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $attendance->clock_in_time) : null;
 
-                $clock_in = $attendance->clock_in_time ? Carbon::createFromFormat('Y-m-d H:i:s', $attendance->clock_in_time)->timezone(company()->timezone)->format(company()->time_format) : 0;
-                $clock_out = $attendance->clock_out_time ? Carbon::createFromFormat('Y-m-d H:i:s', $attendance->clock_out_time)->timezone(company()->timezone)->format(company()->time_format) : 0;
+                $clock_in = $attendance->clock_in_time ? Carbon::createFromFormat('Y-m-d H:i:s', $attendance->clock_in_time)->timezone(cooperative()->timezone)->format(cooperative()->time_format) : 0;
+                $clock_out = $attendance->clock_out_time ? Carbon::createFromFormat('Y-m-d H:i:s', $attendance->clock_out_time)->timezone(cooperative()->timezone)->format(cooperative()->time_format) : 0;
 
                 $diff_in_hours = ($to && $from) ? $to->diffInHours($from) : 0;
 

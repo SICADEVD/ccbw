@@ -27,7 +27,7 @@ class UpdateRequest extends CoreRequest
     public function rules()
     {
         \Illuminate\Support\Facades\Validator::extend('check_superadmin', function ($attribute, $value, $parameters, $validator) {
-            return !\App\Models\User::withoutGlobalScopes([\App\Scopes\ActiveScope::class, \App\Scopes\CompanyScope::class])
+            return !\App\Models\User::withoutGlobalScopes([\App\Scopes\ActiveScope::class, \App\Scopes\CooperativeScope::class])
                 ->where('email', $value)
                 ->where('is_superadmin', 1)
                 ->exists();
@@ -35,7 +35,7 @@ class UpdateRequest extends CoreRequest
 
         $rules = [
             'client_name' => 'required',
-            'client_email' => 'nullable|email:rfc|unique:leads,client_email,'.$this->route('lead').',id,company_id,' . company()->id.'|check_superadmin',
+            'client_email' => 'nullable|email:rfc|unique:leads,client_email,'.$this->route('lead').',id,cooperative_id,' . cooperative()->id.'|check_superadmin',
             'website' => 'nullable|url'
         ];
 
