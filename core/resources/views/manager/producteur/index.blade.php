@@ -75,13 +75,11 @@
                                     <tr>
                                         <td>
                                             @if ($producteur->picture != null)
-                                                <img src="{{ asset('assets/storage/producteurs/photos/' . $producteur->picture) }}" style = " width: 100px;"/>
+                                                <img src="{{asset('core/storage/app/' . $producteur->picture)}}" style = " width: 100px;"/>
                                             @else
                                                 <img src="{{ asset('assets/images/default.png') }}"
                                                     alt="image" style = " width: 100px;">
                                             @endif
-
-
                                         </td>
                                         <td>
                                             <span class="fw-bold">{{ __($producteur->localite->section->libelle) }}</span>

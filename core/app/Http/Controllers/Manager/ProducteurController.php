@@ -224,11 +224,13 @@ class ProducteurController extends Controller
         if ($request->hasFile('picture')) {
             try {
                 $producteur->picture = $request->file('picture')->store('public/producteurs/photos');
+                
             } catch (\Exception $exp) {
                 $notify[] = ['error', 'Impossible de télécharger votre image'];
                 return back()->withNotify($notify);
             }
         }
+        
         if ($producteur->codeProdapp == null) {
             $coop = DB::table('localites as l')->join('cooperatives as c', 'l.cooperative_id', '=', 'c.id')->where('l.id', $request->localite)->select('c.codeApp')->first();
             if ($coop != null) {
@@ -237,8 +239,7 @@ class ProducteurController extends Controller
                 $producteur->codeProdapp = null;
             }
         }
-        
-
+        $producteur->save();
         $notify[] = ['success', isset($message) ? $message : 'Le producteur a été mise à jour avec succès.'];
         return back()->withNotify($notify);
     }
