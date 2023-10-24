@@ -2,7 +2,7 @@
 
 <div class="row">
     <div class="col-sm-12">
-        <x-form id="save-employee-data-form">
+        <x-form id="save-employee-data-form" :action="route('manager.employees.store')">
 
             <div class="add-client bg-white rounded">
                 <h4 class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-bottom-grey">
@@ -10,18 +10,13 @@
                 <div class="row p-20">
                     <div class="col-lg-12">
                         <div class="row">
-                            <div class="col-lg-4 col-md-6">
-                                <x-forms.text fieldId="employee_id" :fieldLabel="__('modules.employees.employeeId')"
-                                    fieldName="employee_id" :fieldValue="((!$checkifExistEmployeeId) ? ($lastEmployeeID) : '')" fieldRequired="true"
-                                    :fieldPlaceholder="__('modules.employees.employeeIdInfo')" :popover="__('modules.employees.employeeIdHelp')" readonly>
-                                </x-forms.text>
-                            </div>
-                            <div class="col-lg-4 col-md-6">
+                          
+                            <div class="col-lg-6 col-md-6">
                                 <x-forms.text fieldId="lastname" :fieldLabel="__('Nom de famille')"
                                     fieldName="lastname" fieldRequired="true" :fieldPlaceholder="__('Nom de famille')">
                                 </x-forms.text>
                             </div>
-                            <div class="col-lg-4 col-md-6">
+                            <div class="col-lg-6 col-md-6">
                                 <x-forms.text fieldId="firstname" :fieldLabel="__('Prenoms')"
                                     fieldName="firstname" fieldRequired="true" :fieldPlaceholder="__('Prenoms')">
                                 </x-forms.text>
@@ -227,12 +222,10 @@
                 
 
                 <x-form-actions>
-                 
-                    <x-forms.button-primary id="save-employee-form" class="mr-3" icon="check">
-                        @lang('app.save')
-                    </x-forms.button-primary>
-                    <x-forms.button-secondary class="mr-3" id="save-more-employee-form" icon="check-double">@lang('app.saveAddMore')
-                    </x-forms.button-secondary>
+                <x-form-button id="save-employee-form" class="mr-3 btn btn-primary" icon="check">
+                        @lang('Enregistrer')
+                    </x-form-button>
+                    
                     <x-forms.button-cancel class="border-0 " data-dismiss="modal">@lang('app.cancel')
                     </x-forms.button-cancel>
 

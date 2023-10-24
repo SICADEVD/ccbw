@@ -124,7 +124,7 @@
             <div id="table-actions" class="d-block d-lg-flex align-items-center">
                  
                  
-                    <x-forms.link-primary :link="route('manager.employees.create')" class="mr-3 openRightModal" icon="plus">
+                    <x-forms.link-primary :link="route('manager.employees.create')" class="mr-3" icon="plus">
                         @lang('app.add')
                         @lang('app.employee')
                     </x-forms.link-primary>

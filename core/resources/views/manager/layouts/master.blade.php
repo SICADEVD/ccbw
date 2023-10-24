@@ -25,7 +25,8 @@
     <link rel="stylesheet" href="{{ asset('assets/dropify/css/dropify.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/templates/basic/css/custom.css') }}"> 
 
-  
+    <script src="{{ asset('assets/global/js/jquery-3.6.0.min.js') }}"></script>  
+ <script src="{{ asset('assets/vendor/jquery/modernizr.min.js') }}"></script>
     @stack('style')
     <style>
         hr {
@@ -48,9 +49,7 @@
     
     @yield('content')
 
-    <script src="{{ asset('assets/global/js/jquery-3.6.0.min.js') }}"></script> 
- 
-    <script src="{{ asset('assets/vendor/jquery/modernizr.min.js') }}"></script>
+    
     <script src="{{ asset('assets/global/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/fcadmin/js/vendor/bootstrap-toggle.min.js') }}"></script>
     <script src="{{ asset('assets/global/js/jquery.validate.js') }}"></script>

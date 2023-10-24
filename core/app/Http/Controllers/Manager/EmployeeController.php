@@ -102,7 +102,7 @@ class EmployeeController extends AccountBaseController
         $this->countries = countries();
         $this->lastEmployeeID = EmployeeDetail::count();
         $this->checkifExistEmployeeId =  EmployeeDetail::select('id')->where('employee_id', ($this->lastEmployeeID + 1))->first();
-        $this->lastEmployeeID = 'EMP-'.$this->lastEmployeeID+1;
+         
         $this->employees = User::allEmployees(null, true); 
  
         $employee = new EmployeeDetail();
@@ -129,27 +129,9 @@ class EmployeeController extends AccountBaseController
      * @return array
      * @throws \Froiden\RestAPI\Exceptions\RelatedResourceNotFoundException
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     { 
          
-        $validationRule = [ 
-            'firstname' => 'required|max:50',
-            'lastname' => 'required|max:250',
-            'email' => 'required|email:rfc|unique:users,email,null,id,cooperative_id,' . cooperative()->id.'|max:100',
-            'hourly_rate' => 'nullable|numeric',
-            'joining_date' => 'required',
-            'last_date' => 'nullable|date_format:"Y-m-d"|after_or_equal:joining_date',
-            'date_of_birth' => 'nullable|date_format:"Y-m-d"|before_or_equal:"H:i"',
-            'department' => 'required',
-            'designation' => 'required',
-            'probation_end_date' => 'nullable|date_format:"Y-m-d"|after_or_equal:joining_date',
-            'notice_period_start_date' => 'nullable|required_with:notice_period_end_date|date_format:"Y-m-d"',
-            'notice_period_end_date' => 'nullable|required_with:notice_period_start_date|date_format:"Y-m-d"|after_or_equal:notice_period_start_date',
-            'internship_end_date' => 'nullable|date_format:"Y-m-d"|after_or_equal:joining_date',
-            'contract_end_date' => 'nullable|date_format:"Y-m-d"|after_or_equal:joining_date',
-        ];
-        $request->validate($validationRule); 
-        
         DB::beginTransaction();
         try { 
 
@@ -172,8 +154,15 @@ class EmployeeController extends AccountBaseController
 
             if ($request->hasFile('image')) {
                 Files::deleteFile($user->image, 'avatar');
-                $user->image = Files::uploadLocalOrS3($request->image, 'avatar', 300);
+                $user->image = Files::uploadLocalOrS3($request->image, 'avatar', 400);
             }
+            $this->lastEmployeeID = EmployeeDetail::count();
+        $this->checkifExistEmployeeId =  EmployeeDetail::select('id')->where('employee_id', ($this->lastEmployeeID + 1))->first();
+        if($this->lastEmployeeID){
+           $employeeid = 'EMP-'.$this->lastEmployeeID+1;
+        }else{
+            $employeeid ="";
+        }
   
             $user->save();
             
@@ -203,7 +192,8 @@ class EmployeeController extends AccountBaseController
             
             if ($user->id) {
                 $employee = new EmployeeDetail();
-                $employee->user_id = $user->id;
+                $employee->user_id = $user->id; 
+                $employee->employee_id =  $employeeid;
                 $employee->cooperative_id = $manager->cooperative_id;
                 $this->employeeData($request, $employee);
                 $employee->save();
@@ -229,13 +219,9 @@ class EmployeeController extends AccountBaseController
         }
 
 
-        if (request()->add_more == 'true') {
-            $html = $this->create();
-
-            return Reply::successWithData(__('messages.recordSaved'), ['html' => $html, 'add_more' => true]);
-        }
-
-        return Reply::successWithData(__('messages.recordSaved'), ['redirectUrl' => route('manager.employees.index')]);
+       return Reply::successWithData(__('messages.recordSaved'), ['redirectUrl' => route('manager.employees.index')]);
+        // $notify[] = ['success', 'Cet employé a été crée avec succès.'];
+        // return redirect()->route('manager.employees.index')->withNotify($notify);
     }
 
     /**
@@ -295,7 +281,7 @@ class EmployeeController extends AccountBaseController
 
     protected function deleteRecords($request)
     {
-        abort_403(user()->permission('delete_employees') != 'all');
+         
 
         $users = User::withoutGlobalScope(ActiveScope::class)->whereIn('id', explode(',', $request->row_ids))->get();
 
@@ -489,10 +475,10 @@ class EmployeeController extends AccountBaseController
             }
         }
 
-        $employee = EmployeeDetails::where('user_id', '=', $user->id)->first();
+        $employee = EmployeeDetail::where('user_id', '=', $user->id)->first();
 
         if (empty($employee)) {
-            $employee = new EmployeeDetails();
+            $employee = new EmployeeDetail();
             $employee->user_id = $user->id;
         }
 
@@ -554,42 +540,26 @@ class EmployeeController extends AccountBaseController
      */
     public function show($id)
     {
-        $this->viewPermission = user()->permission('view_employees');
+   
 
         $this->employee = User::with(['employeeDetail.designation', 'employeeDetail.department','appreciations', 'appreciations.award', 'appreciations.award.awardIcon', 'employeeDetail.reportingTo', 'country', 'emergencyContacts', 'reportingTeam' => function ($query) {
             $query->join('users', 'users.id', '=', 'employee_details.user_id');
             $query->where('users.status', '=', 'active');
         }, 'reportingTeam.user', 'leaveTypes', 'leaveTypes.leaveType', 'appreciationsGrouped', 'appreciationsGrouped.award', 'appreciationsGrouped.award.awardIcon'])
         ->withoutGlobalScope(ActiveScope::class)
-        ->withOut('clientDetails', 'role')
+        ->withOut('clientDetails')
         ->withCount('member', 'agents', 'openTasks')
         ->findOrFail($id);
-
-        $this->employeeLanguage = LanguageSetting::where('language_code', $this->employee->locale)->first();
-
-        if (!$this->employee->hasRole('employee')) {
-            abort(404);
-        }
-
-        if ($this->employee->status == 'deactive' && !in_array('admin', user_roles())) {
-            abort(403);
-        }
-
-        abort_403(in_array('client', user_roles()));
+ 
 
         $tab = request('tab');
 
-        if (
-            $this->viewPermission == 'all'
-            || ($this->viewPermission == 'added' && $this->employee->employeeDetail->added_by == user()->id)
-            || ($this->viewPermission == 'owned' && $this->employee->employeeDetail->user_id == user()->id)
-            || ($this->viewPermission == 'both' && ($this->employee->employeeDetail->user_id == user()->id || $this->employee->employeeDetail->added_by == user()->id))
-        ) {
+     
 
             if ($tab == '') {  // Works for profile
 
-                $this->fromDate = now()->timezone($this->cooperative->timezone)->startOfMonth()->toDateString();
-                $this->toDate = now()->timezone($this->cooperative->timezone)->endOfMonth()->toDateString();
+                $this->fromDate = now()->timezone('H:i')->startOfMonth()->toDateString();
+                $this->toDate = now()->timezone('H:i')->endOfMonth()->toDateString();
 
                 $this->lateAttendance = Attendance::whereBetween(DB::raw('DATE(`clock_in_time`)'), [$this->fromDate, $this->toDate])
                     ->where('late', 'yes')->where('user_id', $id)->count();
@@ -613,28 +583,14 @@ class EmployeeController extends AccountBaseController
                     if (!empty($customFields)) {
                         $this->fields = $customFields->fields;
                     }
-                }
+                } 
 
-                $taskBoardColumn = TaskboardColumn::completeColumn();
 
-                $this->taskCompleted = Task::join('task_users', 'task_users.task_id', '=', 'tasks.id')
-                    ->where('task_users.user_id', $id)
-                    ->where('tasks.board_column_id', $taskBoardColumn->id)
-                    ->count();
-
-                $hoursLogged = ProjectTimeLog::where('user_id', $id)->sum('total_minutes');
-                $breakMinutes = ProjectTimeLogBreak::userBreakMinutes($id);
-
-                $timeLog = intdiv($hoursLogged - $breakMinutes, 60);
-
-                $this->hoursLogged = $timeLog;
             }
 
-        }
+       
 
-        $this->pageTitle = $this->employee->name;
-        $viewDocumentPermission = user()->permission('view_documents');
-        $viewImmigrationPermission = user()->permission('view_immigration');
+        $this->pageTitle = $this->employee->firstname;
 
         switch ($tab) {
         case 'tickets':
@@ -648,9 +604,6 @@ class EmployeeController extends AccountBaseController
             return $this->leaves();
         case 'timelogs':
             return $this->timelogs();
-        case 'documents':
-            abort_403(($viewDocumentPermission == 'none'));
-            $this->view = 'employees.ajax.documents';
             break;
         case 'emergency-contacts':
             $this->view = 'employees.ajax.emergency-contacts';
@@ -881,7 +834,7 @@ class EmployeeController extends AccountBaseController
 
         $tab = request('tab');
         $this->activeTab = $tab ?: 'profile';
-        $this->view = 'employees.ajax.timelogs';
+        $this->view = 'manager.employees.ajax.timelogs';
 
         $dataTable = new TimeLogsDataTable();
 
@@ -946,7 +899,7 @@ class EmployeeController extends AccountBaseController
      */
     public function employeeData($request, $employee): void
     {
-        $employee->employee_id = $request->employee_id;
+        // $employee->employee_id = $request->employee_id;
         $employee->address = $request->address;
         $employee->hourly_rate = $request->hourly_rate;
         $employee->slack_username = $request->slack_username;
@@ -981,16 +934,16 @@ class EmployeeController extends AccountBaseController
             return Reply::dataOnly(['status' => 'success', 'html' => $html, 'title' => $this->pageTitle]);
         }
 
-        $this->view = 'employees.ajax.import';
+        $this->view = 'manager.employees.ajax.import';
 
-        return view('employees.create', $this->data);
+        return view('manager.employees.create', $this->data);
     }
 
     public function importStore(ImportRequest $request)
     {
         $this->importFileProcess($request, EmployeeImport::class);
 
-        $view = view('employees.ajax.import_progress', $this->data)->render();
+        $view = view('manager.employees.ajax.import_progress', $this->data)->render();
 
         return Reply::successWithData(__('messages.importUploadSuccess'), ['view' => $view]);
     }
