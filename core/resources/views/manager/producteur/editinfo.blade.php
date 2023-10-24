@@ -33,7 +33,7 @@
 
 
                         <div class="form-group row">
-                            <?php echo Form::label(__('Culture'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <?php echo Form::label(__('Avez-vous D’autres Cultures En Dehors Du Cacao?'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
                                 <?php echo Form::select('autresCultures', ['non' => 'Non', 'oui' => 'Oui'], null, ['class' => 'form-control autresCultures', 'required']); ?>
 
@@ -148,7 +148,44 @@
                             <div class="col-xs-12 col-sm-8" id="listeactivites">
                                 <table class="table table-striped table-bordered">
                                     <tbody id="activity_area">
+                                        <?php
 
+                                       if($infosproducteur->autresactivites)
+        {  
+        $i=0;
+        $a=1;
+        foreach($infosproducteur->autresactivites as $data) {
+           ?>
+                                        <tr>
+                                            <td class="row">
+                                                <div class="col-xs-12 col-sm-12 bg-success">
+                                                    <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Information Activité')
+                                                        <?php echo $a; ?></badge>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-12">
+                                                    <div class="form-group">
+                                                        {{ Form::label(__('Type D\'activité'), null, ['class' => 'control-label']) }}
+                                                        <input type="text" name="typeactivite[]"
+                                                            placeholder="Riz, Maïs, Igname, Banane, ..."
+                                                            id="typeactivite-<?php echo $a; ?>" class="form-control"
+                                                            value="<?php echo $data->typeactivite; ?>">
+                                                    </div>
+                                                </div>
+
+                                                <?php if($a>=1):?>
+                                                <div class="col-xs-12 col-sm-12"><button type="button"
+                                                        id="<?php echo $a; ?>"
+                                                        class="removeRowActivite btn btn-danger btn-sm"><i
+                                                            class="fa fa-minus"></i></button></div>
+                                                <?php endif; ?>
+                                            </td>
+                                        </tr>
+                                        <?php
+           $a++;
+            $i++;
+        }
+    }else{
+        ?>
                                         <tr>
                                             <td class="row">
                                                 <div class="col-xs-12 col-sm-12 bg-success">
@@ -168,14 +205,17 @@
                                                 </div>
                                             </td>
                                         </tr>
+                                        <?php
+        }
+        ?>
 
                                     </tbody>
                                     <tfoot style="background: #e3e3e3;">
                                         <tr>
 
                                             <td colspan="3">
-                                                <button id="addRowActivite" type="button" class="btn btn-success btn-sm"><i
-                                                        class="fa fa-plus"></i></button>
+                                                <button id="addRowActivite" type="button"
+                                                    class="btn btn-success btn-sm"><i class="fa fa-plus"></i></button>
                                             </td>
                                         <tr>
                                     </tfoot>
@@ -183,6 +223,20 @@
                             </div>
                         </div>
                         <hr class="panel-wide">
+
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Avez-vous recours à une main d\'œuvre familiale  ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::select('mainOeuvreFamilial', ['non' => 'non', 'oui' => 'oui'], null, ['class' => 'form-control mainOeuvreFamilial', 'required']); ?>
+                            </div>
+                        </div>
+
+                        <div class="form-group row" id="travailleurFamilial">
+                            <?php echo Form::label(__('Combien de personnes (de la famille travaillent)'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::number('travailleurFamilial', null, ['placeholder' => 'Nombre', 'class' => 'form-control travailleurFamilial', 'min' => '0']); ?>
+                            </div>
+                        </div>
 
                         <div class="form-group row">
                             <?php echo Form::label(__('Combien de travailleurs (rémunéré) avez-vous ?'), null, ['class' => 'col-sm-4 control-label']); ?>
@@ -220,31 +274,83 @@
                                 <div class="col-xs-12 col-sm-8" id="listeoperateurs">
                                     <table class="table table-striped table-bordered">
                                         <tbody id="compagny_area">
+                                            <?php
+
+                                       if($infosproducteur->mobiles)
+        {  
+        $i=0;
+        $a=1;
+        foreach($infosproducteur->mobiles as $data) {
+           ?>
                                             <tr>
                                                 <td class="row">
                                                     <div class="col-xs-12 col-sm-12 bg-success">
                                                         <badge class="btn  btn-outline--warning h-45 btn-sm">
                                                             @lang('Information mobile monnaie')
+                                                            <?php echo $a; ?></badge>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-6">
+                                                        <div class="form-group">
+                                                            {{ Form::label(__('Opérateur'), null, ['class' => 'control-label']) }}
+                                                            <select class="form-control"
+                                                                id="operateurMM-<?php echo $a; ?>"
+                                                                name="operateurMM[]">
+                                                                <option value="MTN" <?php if($data->operateur=='MTN'){echo 'selected';}?>>MTN</option>
+                                                                <option value="Orange" <?php if($data->operateur=='Orange'){echo 'selected';}?>>Orange</option>
+                                                                <option value="Moov" <?php if($data->operateur=='Moov'){echo 'selected';}?>>Moov</option>
+                                                                <option value="Wave" <?php if($data->operateur=='Wave'){echo 'selected';}?>>Wave</option>
+                                                                <option value="Push" <?php if($data->operateur=='Push'){echo 'selected';}?>>Push</option>
+                                                            </select>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-6">
+                                                        <div class="form-group">
+                                                            {{ Form::label(__('Numéro'), null, ['class' => 'control-label']) }}
+                                                            <input type="text" name="numeros[]"
+                                                                placeholder="Numéro de compte mobile monnaie"
+                                                                id="numeros-<?php echo $a; ?>"
+                                                                class="form-control " value="<?php echo $data->numero; ?>">
+                                                        </div>
+                                                    </div>
+
+                                                    <?php if($a>=1):?>
+                                                    <div class="col-xs-12 col-sm-12"><button type="button"
+                                                            id="<?php echo $a; ?>"
+                                                            class="removeRowOperateur btn btn-danger btn-sm"><i
+                                                                class="fa fa-minus"></i></button></div>
+                                                    <?php endif; ?>
+                                                </td>
+                                            </tr>
+                                            <?php
+           $a++;
+            $i++;
+        }
+    }else{
+        ?>
+                                            <tr>
+                                                <td class="row">
+                                                    <div class="col-xs-12 col-sm-12 bg-success">
+                                                        <badge class="btn  btn-outline--warning h-45 btn-sm">
+                                                            @lang('Information Activité')
                                                         </badge>
                                                     </div>
                                                     <div class="col-xs-12 col-sm-12">
                                                         <div class="form-group row">
-                                                            {{ Form::label(__('Ajouter un opérateur'), null, ['class' => 'control-label']) }}
-
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-xs-12 col-sm-12">
-                                                        <div class="form-group row">
-
-                                                            @foreach (old('numeros', []) as $numero)
-                                                                <input type="text" name="numeros[]"
-                                                                    placeholder="Numéro de téléphone" id="numeros-1"
-                                                                    class="form-control" value="{{ $numero }}">
+                                                            {{ Form::label(__('Ajouter une activité'), null, ['class' => 'control-label']) }}
+                                                            @foreach (old('typeactivite', []) as $typeactivite)
+                                                                <input type="text" name="typeactivite[]"
+                                                                    placeholder="Elevage, Commerce, Prestation de service, ..."
+                                                                    id="typeactivite-0" class="form-control"
+                                                                    value="{{ $typeactivite }}">
                                                             @endforeach
                                                         </div>
                                                     </div>
                                                 </td>
                                             </tr>
+                                            <?php
+        }
+        ?>
 
                                         </tbody>
                                         <tfoot style="background: #e3e3e3;">
@@ -346,10 +452,104 @@
 
                     }
                 });
+
+
             });
+
+
+            $(document).ready(function() {
+
+                var productCount = $("#activity_area tr").length + 1;
+
+                $(document).on('click', '#addRowActivite', function() {
+
+                    //---> Start create table tr
+                    var html_table = '<tr>';
+
+                    html_table +=
+                        '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm">Information Activité ' +
+                        productCount +
+                        '</badge></div><div class="col-xs-12 col-sm-12"><div class="form-group"><label for="" class="control-label">Type D\'activité</label><input placeholder="Elevage, Commerce, Prestation de service, ..." class="form-control" id="typeactivite-' +
+                        productCount +
+                        '" name="typeactivite[]" type="text"></div></div><div class="col-xs-12 col-sm-12 col-md-12"><button type="button" id="' +
+                        productCount +
+                        '" class="removeRowActivite btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></div></td>';
+
+                    html_table += '</tr>';
+                    //---> End create table tr
+
+                    productCount = parseInt(productCount) + 1;
+
+
+                    $('#activity_area').append(html_table);
+
+                });
+
+                $(document).on('click', '.removeRowActivite', function() {
+
+                    var row_id = $(this).attr('id');
+
+                    // delete only last row id
+                    if (row_id == $("#activity_area tr").length) {
+
+                        $(this).parents('tr').remove();
+
+                        productCount = parseInt(productCount) - 1;
+
+                        //    console.log($("#product_area tr").length);
+
+                        //  productCount--;
+
+                    }
+                });
+
+
+            });
+             $(document).ready(function() {
+            var productCount = $("#compagny_area tr").length;
+            $(document).on('click', '#addRowOperateur', function() {
+
+                //---> Start create table tr
+                var html_table = '<tr>';
+                html_table +=
+                    '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm">Numéro mobile monnaie ' +
+                    productCount +
+                    '</badge></div><div class="col-xs-12 col-sm-12"><div class="form-group row"><label for="operateurMM" class="control-label">Opérateur</label><select class="form-control" id="operateurMM-' +
+                    productCount +
+                    '" name="operateurMM[]"><option value="Orange">Orange</option><option value="MTN">MTN</option><option value="Moov">Moov</option><option value="Wave">Wave</option><option value="Push">Push</option></select></div></div><div class="col-xs-12 col-sm-12"><div class="form-group row"><label for="numeros" class="control-label">Numéro</label><input type="text" name="numeros[]" placeholder="Numéro téléphonique" id="numeros-' +
+                    productCount +
+                    '" class="form-control " value=""></div></div><div class="col-xs-12 col-sm-12"><button type="button" id="' +
+                    productCount +
+                    '" class="removeRowOperateur btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></div></td>';
+
+                html_table += '</tr>';
+                //---> End create table tr
+
+                //---> End create table tr
+                productCount = parseInt(productCount) + 1;
+                $('#compagny_area').append(html_table);
+
+            });
+
+            $(document).on('click', '.removeRowOperateur', function() {
+
+                var row_id = $(this).attr('id');
+
+                // delete only last row id
+                if (row_id == $("#compagny_area tr").length) {
+
+                    $(this).parents('tr').remove();
+
+                    productCount = parseInt(productCount) - 1;
+
+                }
+            });
+
+        });
         </script>
         <script type="text/javascript">
-            $('#superficie').hide();
+            $('#listecultures,#gardePapiersChamps,#numeroCompteMM,#listeactivites,#nomBanque,#autreBanque,#travailleurFamilial')
+                .hide();
             $('.foretsjachere').change(function() {
                 var foretsjachere = $('.foretsjachere').val();
                 if (foretsjachere == 'oui') {

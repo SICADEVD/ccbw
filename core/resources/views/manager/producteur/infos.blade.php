@@ -167,6 +167,7 @@
                         </div>
 
                         {{-- autre activité en dehors du cacao --}}
+
                         <div class="form-group row">
                             <?php echo Form::label(__('Avez-vous d’autres activités en dehors des cultures?'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">

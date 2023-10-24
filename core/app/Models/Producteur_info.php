@@ -27,5 +27,12 @@ class Producteur_info extends Model
     {
         return $this->hasMany(Producteur_infos_typeculture::class,'producteur_info_id', 'id');
     }
+    public function autresactivites()
+    {
+        return $this->hasMany(Producteur_infos_autresactivite::class,'producteur_info_id', 'id');
+    }
+    public function mobiles(){
+        return $this->hasMany(Producteur_infos_mobile::class,'producteur_info_id', 'id');
+    }
 
 }

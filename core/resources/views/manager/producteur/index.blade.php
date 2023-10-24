@@ -56,7 +56,7 @@
                         <table class="table table--light style--two">
                             <thead>
                                 <tr>
-                                    <th>@lang('Photo')</th>
+                                    {{-- <th>@lang('Photo')</th> --}}
                                     <th>@lang('Section')</th>
                                     <th>@lang('Localite')</th>
                                     
@@ -73,14 +73,14 @@
                             <tbody>
                                 @forelse($producteurs as $producteur)
                                     <tr>
-                                        <td>
+                                        {{-- <td>
                                             @if ($producteur->picture != null)
                                                 <img src="{{asset('core/storage/app/' . $producteur->picture)}}" style = " width: 100px;"/>
                                             @else
                                                 <img src="{{ asset('assets/images/default.png') }}"
                                                     alt="image" style = " width: 100px;">
                                             @endif
-                                        </td>
+                                        </td> --}}
                                         <td>
                                             <span class="fw-bold">{{ __($producteur->localite->section->libelle) }}</span>
                                         </td>
