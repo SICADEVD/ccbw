@@ -91,18 +91,18 @@ class Files
         }
 
         // WORKSUITESAAS
-        if (cooperative() && cooperative()->package->max_storage_size > 0) {
-            // Check if cooperative has exceeded the storage limit
-            $cooperativeFilesSize = FileStorage::where('cooperative_id', cooperative()->id)->sum('size');
-            $cooperativePackageMaxStorageSize = cooperative()->package->max_storage_size;
-            $cooperativePackageStorageUnit = cooperative()->package->storage_unit;
-            $maxStorageInBytes = $cooperativePackageMaxStorageSize * self::storageUnitToBytes($cooperativePackageStorageUnit);
-            $cooperativeAllowedStorageSize = $maxStorageInBytes - $cooperativeFilesSize;
+        // if (cooperative() && cooperative()->package->max_storage_size > 0) {
+            
+        //     $cooperativeFilesSize = FileStorage::where('cooperative_id', cooperative()->id)->sum('size');
+        //     $cooperativePackageMaxStorageSize = cooperative()->package->max_storage_size;
+        //     $cooperativePackageStorageUnit = cooperative()->package->storage_unit;
+        //     $maxStorageInBytes = $cooperativePackageMaxStorageSize * self::storageUnitToBytes($cooperativePackageStorageUnit);
+        //     $cooperativeAllowedStorageSize = $maxStorageInBytes - $cooperativeFilesSize;
 
-            if ($uploadedFile->getSize() > $cooperativeAllowedStorageSize) {
-                throw new ApiException('You are not allowed to upload a file with filesize greater than ' . $cooperativeAllowedStorageSize . ' bytes', null, 422, 422);
-            }
-        }
+        //     if ($uploadedFile->getSize() > $cooperativeAllowedStorageSize) {
+        //         throw new ApiException('You are not allowed to upload a file with filesize greater than ' . $cooperativeAllowedStorageSize . ' bytes', null, 422, 422);
+        //     }
+        // }
 
     }
 
@@ -132,7 +132,7 @@ class Files
     /**
      * @throws \Exception
      */
-    public static function uploadLocalOrS3($uploadedFile, $dir, $width = null, int $height = 800)
+    public static function uploadLocalOrS3($uploadedFile, $dir, $width = null, int $height = null)
     {
         self::validateUploadedFile($uploadedFile);
 

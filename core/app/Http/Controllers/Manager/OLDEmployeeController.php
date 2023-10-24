@@ -95,7 +95,7 @@ class EmployeeController extends Controller
         $staff->password  =  Hash::make('azerty'); 
         if($request->hasFile('image')) {
             Files::deleteFile($staff->image, 'avatar');
-            $staff->image = Files::uploadLocalOrS3($request->image, 'avatar', 300);
+            $staff->image = Files::uploadLocalOrS3($request->image, 'avatar', 400);
         }
         $staff->save();
         if($staff !=null ){
