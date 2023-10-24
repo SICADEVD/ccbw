@@ -22,7 +22,8 @@ class CooperativeManagerController extends Controller
     public function create()
     {
         $pageTitle = "Ajouter un gestionnaire de coopérative";
-        $cooperatives  = Cooperative::active()->orderBy('name')->get();
+        // $cooperatives  = Cooperative::active()->orderBy('name')->get();
+        $cooperatives = Cooperative::where('status', Status::YES)->orderBy('name')->get();
         return view('admin.manager.create', compact('pageTitle', 'cooperatives'));
     }
 
