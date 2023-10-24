@@ -123,34 +123,29 @@
                                         <tr>
                                             <td class="row">
                                                 <div class="col-xs-12 col-sm-12 bg-success">
-                                                    <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Information Culture')
+                                                    <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Information Culture 1')
                                                     </badge>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-12">
                                                     <div class="form-group row">
-                                                        {{ Form::label(__('Ajouter un Type de culture'), null, ['class' => 'control-label']) }}
-                                                        @foreach (old('typeculture', []) as $typeculture)
-                                                            <input type="text" name="typeculture[]"
-                                                                placeholder="Riz, Maïs, Igname, Banane, ..."
-                                                                id="typeculture-0" class="form-control"
-                                                                value="{{ $typeculture }}">
-                                                        @endforeach
+                                                        {{ Form::label(__('Type de culture'), null, ['class' => 'control-label']) }}
+                                                        <input type="text" name="typeculture[]"
+                                                            placeholder="Riz, Maïs, Igname, Banane, ..." id="typeculture-1"
+                                                            class="form-control" value="{{ old('typeculture') }}">
                                                     </div>
                                                 </div>
 
                                                 <div class="col-xs-12 col-sm-12">
                                                     <div class="form-group row">
-
-                                                        @foreach (old('superficieculture', []) as $superficieculture)
-                                                            <input type="text" name="superficieculture[]"
-                                                                placeholder="Superficie de culture" id="superficieculture-1"
-                                                                class="form-control " value="{{ $superficieculture }}">
-                                                        @endforeach
+                                                        {{ Form::label(__('Superficie de culture'), null, ['class' => 'control-label']) }}
+                                                        <input type="text" name="superficieculture[]"
+                                                            placeholder="Superficie de culture" id="superficieculture-1"
+                                                            class="form-control " value="{{ old('superficieculture') }}">
                                                     </div>
                                                 </div>
+
                                             </td>
                                         </tr>
-
 
                                     </tbody>
                                     <tfoot style="background: #e3e3e3;">
@@ -165,9 +160,7 @@
                                 </table>
                             </div>
                         </div>
-
                         {{-- autre activité en dehors du cacao --}}
-
                         <div class="form-group row">
                             <?php echo Form::label(__('Avez-vous d’autres activités en dehors des cultures?'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
@@ -184,27 +177,23 @@
                                         <tr>
                                             <td class="row">
                                                 <div class="col-xs-12 col-sm-12 bg-success">
-                                                    <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Information Activité')
+                                                    <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Information Activité 1')
                                                     </badge>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-12">
                                                     <div class="form-group row">
-                                                        {{ Form::label(__('Ajouter une activité'), null, ['class' => 'control-label']) }}
-                                                        @foreach (old('typeactivite', []) as $typeactivite)
-                                                            <input type="text" name="typeactivite[]"
-                                                                placeholder="Elevage, Commerce, Prestation de service, ..."
-                                                                id="typeactivite-0" class="form-control"
-                                                                value="{{ $typeactivite }}">
-                                                        @endforeach
+                                                        {{ Form::label(__('Type d\'activité'), null, ['class' => 'control-label']) }}
+                                                        <input type="text" name="typeactivite[]"
+                                                            placeholder="Elevage, Commerce, Prestation de service, ..."
+                                                            id="typeactivite-1" class="form-control"
+                                                            value="{{ old('typeactivite') }}">
                                                     </div>
                                                 </div>
                                             </td>
                                         </tr>
-
                                     </tbody>
                                     <tfoot style="background: #e3e3e3;">
                                         <tr>
-
                                             <td colspan="3">
                                                 <button id="addRowActivite" type="button" class="btn btn-success btn-sm"><i
                                                         class="fa fa-plus"></i></button>
@@ -270,32 +259,37 @@
                                                 <td class="row">
                                                     <div class="col-xs-12 col-sm-12 bg-success">
                                                         <badge class="btn  btn-outline--warning h-45 btn-sm">
-                                                            @lang('Information mobile monnaie')
+                                                            @lang('Information mobile monnaie 1')
                                                         </badge>
                                                     </div>
                                                     <div class="col-xs-12 col-sm-12">
                                                         <div class="form-group row">
-                                                            {{ Form::label(__('Ajouter un opérateur'), null, ['class' => 'control-label']) }}
-
+                                                            {{ Form::label(__('Opérateur'), null, ['class' => 'control-label']) }}
+                                                            <select name="operateurMM[]" id="operateurMM-1"
+                                                                class="form-control">
+                                                                <option value="MTN">MTN</option>
+                                                                <option value="ORANGE">ORANGE</option>
+                                                                <option value="MOOV">MOOV</option>
+                                                                <option value="Wave">Wave</option>
+                                                                <option value="Push">Push</option>
+                                                            </select>
                                                         </div>
                                                     </div>
+
                                                     <div class="col-xs-12 col-sm-12">
                                                         <div class="form-group row">
-
-                                                            @foreach (old('numeros', []) as $numero)
-                                                                <input type="text" name="numeros[]"
-                                                                    placeholder="Numéro de téléphone" id="numeros-1"
-                                                                    class="form-control" value="{{ $numero }}">
-                                                            @endforeach
+                                                            {{ Form::label(__('Numéro'), null, ['class' => 'control-label']) }}
+                                                            <input type="text" name="numeros[]"
+                                                                placeholder="Numéro opérateur" id="numeros-1"
+                                                                class="form-control " value="{{ old('numeros') }}">
                                                         </div>
                                                     </div>
+
                                                 </td>
                                             </tr>
-
                                         </tbody>
                                         <tfoot style="background: #e3e3e3;">
                                             <tr>
-
                                                 <td colspan="3">
                                                     <button id="addRowOperateur" type="button"
                                                         class="btn btn-success btn-sm"><i class="fa fa-plus"></i></button>
@@ -303,6 +297,7 @@
                                             <tr>
                                         </tfoot>
                                     </table>
+
                                 </div>
                             </div>
                         </div>
@@ -372,158 +367,144 @@
     <script type="text/javascript">
         $(document).ready(function() {
 
-            var productCount = $("#product_area tr").length;
-            $(document).on('click', '#addRow', function() {
+            $(document).ready(function() {
 
-                //---> Start create table tr
-                var html_table = '<tr>';
-                html_table +=
-                    '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm">Information Culture ' +
-                    productCount +
-                    '</badge></div><div class="col-xs-12 col-sm-12"><div class="form-group row"><label for="Type de culture" class="control-label">Type de culture</label><input placeholder="Riz, Maïs, Igname, Banane, ..." class="form-control" id="typeculture-' +
-                    productCount +
-                    '" name="typeculture[]" type="text"></div></div><div class="col-xs-12 col-sm-12"><div class="form-group row"><label for="superficieculture" class="control-label">Superficie de culture</label><input type="text" name="superficieculture[]" placeholder="Superficie de culture" id="superficieculture-' +
-                    productCount +
-                    '" class="form-control " value=""></div></div><div class="col-xs-12 col-sm-12"><button type="button" id="' +
-                    productCount +
-                    '" class="removeRow btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></div></td>';
+                var productCount = $("#product_area tr").length + 1;
+                $(document).on('click', '#addRow', function() {
 
-                html_table += '</tr>';
-                //---> End create table tr
+                    //---> Start create table tr
+                    var html_table = '<tr>';
+                    html_table +=
+                        '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm">Information Culture ' +
+                        productCount +
+                        '</badge></div><div class="col-xs-12 col-sm-12"><div class="form-group row"><label for="Type de culture" class="control-label">Type de culture</label><input placeholder="Riz, Maïs, Igname, Banane, ..." class="form-control" id="typeculture-' +
+                        productCount +
+                        '" name="typeculture[]" type="text"></div></div><div class="col-xs-12 col-sm-12"><div class="form-group row"><label for="superficieculture" class="control-label">Superficie de culture</label><input type="text" name="superficieculture[]" placeholder="Superficie de culture" id="superficieculture-' +
+                        productCount +
+                        '" class="form-control " value=""></div></div><div class="col-xs-12 col-sm-12"><button type="button" id="' +
+                        productCount +
+                        '" class="removeRow btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></div></td>';
 
-                productCount = parseInt(productCount) + 1;
-                $('#product_area').append(html_table);
+                    html_table += '</tr>';
+                    //---> End create table tr
+
+                    productCount = parseInt(productCount) + 1;
+                    $('#product_area').append(html_table);
+
+                });
+
+                $(document).on('click', '.removeRow', function() {
+
+                    var row_id = $(this).attr('id');
+
+                    // delete only last row id
+                    if (row_id == $("#product_area tr").length) {
+
+                        $(this).parents('tr').remove();
+
+                        productCount = parseInt(productCount) - 1;
+
+                        //    console.log($("#product_area tr").length);
+
+                        //  productCount--;
+
+                    }
+                });
+
+            });
+            
+            $(document).ready(function() {
+
+                var productCount = $("#activity_area tr").length + 1;
+
+                $(document).on('click', '#addRowActivite', function() {
+
+                    //---> Start create table tr
+                    var html_table = '<tr>';
+
+                    html_table +=
+                        '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm">Information Activité ' +
+                        productCount +
+                        '</badge></div><div class="col-xs-12 col-sm-12"><div class="form-group"><label for="" class="control-label">Type D\'activité</label><input placeholder="Elevage, Commerce, Prestation de service, ..." class="form-control" id="typeactivite-' +
+                        productCount +
+                        '" name="typeactivite[]" type="text"></div></div><div class="col-xs-12 col-sm-12 col-md-12"><button type="button" id="' +
+                        productCount +
+                        '" class="removeRowActivite btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></div></td>';
+
+                    html_table += '</tr>';
+                    //---> End create table tr
+
+                    productCount = parseInt(productCount) + 1;
+
+
+                    $('#activity_area').append(html_table);
+
+                });
+
+                $(document).on('click', '.removeRowActivite', function() {
+
+                    var row_id = $(this).attr('id');
+
+                    // delete only last row id
+                    if (row_id == $("#activity_area tr").length) {
+
+                        $(this).parents('tr').remove();
+
+                        productCount = parseInt(productCount) - 1;
+
+                        //    console.log($("#product_area tr").length);
+
+                        //  productCount--;
+
+                    }
+                });
+
 
             });
 
-            $(document).on('click', '.removeRow', function() {
+             $(document).ready(function() {
 
-                var row_id = $(this).attr('id');
+                var productCount = $("#compagny_area tr").length + 1;
+                $(document).on('click', '#addRowOperateur', function() {
 
-                // delete only last row id
-                if (row_id == $("#product_area tr").length) {
+                    //---> Start create table tr
+                    var html_table = '<tr>';
+                    html_table +=
+                        '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm">Information mobile monnaie ' +
+                        productCount +
+                        '</badge></div><div class="col-xs-12 col-sm-12"><div class="form-group row"><label for="Type de culture" class="control-label">Opérateur</label><select name="operateurMM[]" id="operateurMM-' +
+                        productCount +
+                        '" class="form-control"><option value="MTN">MTN</option><option value="ORANGE">ORANGE</option><option value="MOOV">MOOV</option><option value="Wave">Wave</option><option value="Push">Push</option></select></div></div><div class="col-xs-12 col-sm-12"><div class="form-group row"><label for="" class="control-label">Numéro</label><input type="text" name="numeros[]" placeholder="Numéro opérateur" id="numeros-' +
+                        productCount +
+                        '" class="form-control " value=""></div></div><div class="col-xs-12 col-sm-12"><button type="button" id="' +
+                        productCount +
+                        '" class="removeRowOperateur btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></div></td>';
+                    html_table += '</tr>';
+                    //---> End create table tr
 
-                    $(this).parents('tr').remove();
+                    productCount = parseInt(productCount) + 1;
+                    $('#compagny_area').append(html_table);
 
-                    productCount = parseInt(productCount) - 1;
+                });
 
-                }
-            });
+                $(document).on('click', '.removeRowOperateur', function() {
 
-        });
-        $(document).ready(function() {
-            var productCount = $("#activity_area tr").length;
-            $(document).on('click', '#addRowActivite', function() {
+                    var row_id = $(this).attr('id');
 
-                var html_table = '<tr>';
-                html_table +=
-                    '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm">Information Activité ' +
-                    productCount +
-                    '</badge></div><div class="col-xs-12 col-sm-12"><div class="form-group row"><label for="" class="control-label">Type D\'activité</label><input placeholder="Elevage, Commerce, Prestation de service, ..." class="form-control" id="typeactivite-' +
-                    productCount +
-                    '" name="typeactivite[]" type="text"></div></div><div class="col-xs-12 col-sm-12"><button type="button" id="' +
-                    productCount +
-                    '" class="removeRowActivite btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></div></td>';
+                    // delete only last row id
+                    if (row_id == $("#compagny_area tr").length) {
 
-                html_table += '</tr>';
+                        $(this).parents('tr').remove();
 
-                productCount = parseInt(productCount) + 1;
-                $('#activity_area').append(html_table);
+                        productCount = parseInt(productCount) - 1;
 
-            });
+                        //    console.log($("#product_area tr").length);
 
-            $(document).on('click', '.removeRowActivite', function() {
+                        //  productCount--;
 
-                var row_id = $(this).attr('id');
+                    }
+                });
 
-                // delete only last row id
-                if (row_id == $("#activity_area tr").length) {
-
-                    $(this).parents('tr').remove();
-
-                    productCount = parseInt(productCount) - 1;
-
-                }
-            });
-
-        });
-        $(document).ready(function() {
-            var productCount = $("#compagny_area tr").length;
-            $(document).on('click', '#addRowOperateur', function() {
-
-                //---> Start create table tr
-                var html_table = '<tr>';
-                html_table +=
-                    '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm">Numéro mobile monnaie ' +
-                    productCount +
-                    '</badge></div><div class="col-xs-12 col-sm-12"><div class="form-group row"><label for="operateurMM" class="control-label">Opérateur</label><select class="form-control" id="operateurMM-' +
-                    productCount +
-                    '" name="operateurMM[]"><option value="Orange">Orange</option><option value="MTN">MTN</option><option value="Moov">Moov</option><option value="Wave">Wave</option><option value="Push">Push</option></select></div></div><div class="col-xs-12 col-sm-12"><div class="form-group row"><label for="numeros" class="control-label">Numéro</label><input type="text" name="numeros[]" placeholder="Numéro téléphonique" id="numeros-' +
-                    productCount +
-                    '" class="form-control " value=""></div></div><div class="col-xs-12 col-sm-12"><button type="button" id="' +
-                    productCount +
-                    '" class="removeRowOperateur btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></div></td>';
-
-                html_table += '</tr>';
-                //---> End create table tr
-
-                //---> End create table tr
-                productCount = parseInt(productCount) + 1;
-                $('#compagny_area').append(html_table);
-
-            });
-
-            $(document).on('click', '.removeRowOperateur', function() {
-
-                var row_id = $(this).attr('id');
-
-                // delete only last row id
-                if (row_id == $("#compagny_area tr").length) {
-
-                    $(this).parents('tr').remove();
-
-                    productCount = parseInt(productCount) - 1;
-
-                }
-            });
-
-        });
-        $(document).ready(function() {
-
-            var maladiesCount = $("#maladies tr").length + 1;
-            $(document).on('click', '#addRowMal', function() {
-
-                //---> Start create table tr
-                var html_table = '<tr>';
-                html_table +=
-                    '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm">Maladie ' +
-                    maladiesCount +
-                    '</badge></div><div class="col-xs-12 col-sm-12"><div class="form-group row"><input placeholder="Rhume, Toux, ..." class="form-control" id="maladiesenfants-' +
-                    maladiesCount +
-                    '" name="maladiesenfants[]" type="text"></div></div><div class="col-xs-12 col-sm-12"><button type="button" id="' +
-                    maladiesCount +
-                    '" class="removeRowMal btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></div></td>';
-
-                html_table += '</tr>';
-                //---> End create table tr
-
-                maladiesCount = parseInt(maladiesCount) + 1;
-                $('#maladies').append(html_table);
-
-            });
-
-            $(document).on('click', '.removeRowMal', function() {
-
-                var row_id = $(this).attr('id');
-
-                // delete only last row id
-                if (row_id == $("#maladies tr").length) {
-
-                    $(this).parents('tr').remove();
-
-                    maladiesCount = parseInt(maladiesCount) - 1;
-
-                }
             });
 
         });

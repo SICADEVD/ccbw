@@ -295,11 +295,21 @@
                                                             <select class="form-control"
                                                                 id="operateurMM-<?php echo $a; ?>"
                                                                 name="operateurMM[]">
-                                                                <option value="MTN" <?php if($data->operateur=='MTN'){echo 'selected';}?>>MTN</option>
-                                                                <option value="Orange" <?php if($data->operateur=='Orange'){echo 'selected';}?>>Orange</option>
-                                                                <option value="Moov" <?php if($data->operateur=='Moov'){echo 'selected';}?>>Moov</option>
-                                                                <option value="Wave" <?php if($data->operateur=='Wave'){echo 'selected';}?>>Wave</option>
-                                                                <option value="Push" <?php if($data->operateur=='Push'){echo 'selected';}?>>Push</option>
+                                                                <option value="MTN" <?php if ($data->operateur == 'MTN') {
+                                                                    echo 'selected';
+                                                                } ?>>MTN</option>
+                                                                <option value="Orange" <?php if ($data->operateur == 'Orange') {
+                                                                    echo 'selected';
+                                                                } ?>>Orange</option>
+                                                                <option value="Moov" <?php if ($data->operateur == 'Moov') {
+                                                                    echo 'selected';
+                                                                } ?>>Moov</option>
+                                                                <option value="Wave" <?php if ($data->operateur == 'Wave') {
+                                                                    echo 'selected';
+                                                                } ?>>Wave</option>
+                                                                <option value="Push" <?php if ($data->operateur == 'Push') {
+                                                                    echo 'selected';
+                                                                } ?>>Push</option>
                                                             </select>
 
                                                         </div>
@@ -309,8 +319,8 @@
                                                             {{ Form::label(__('Numéro'), null, ['class' => 'control-label']) }}
                                                             <input type="text" name="numeros[]"
                                                                 placeholder="Numéro de compte mobile monnaie"
-                                                                id="numeros-<?php echo $a; ?>"
-                                                                class="form-control " value="<?php echo $data->numero; ?>">
+                                                                id="numeros-<?php echo $a; ?>" class="form-control "
+                                                                value="<?php echo $data->numero; ?>">
                                                         </div>
                                                     </div>
 
@@ -505,47 +515,50 @@
 
 
             });
-             $(document).ready(function() {
-            var productCount = $("#compagny_area tr").length;
-            $(document).on('click', '#addRowOperateur', function() {
+            $(document).ready(function() {
 
-                //---> Start create table tr
-                var html_table = '<tr>';
-                html_table +=
-                    '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm">Numéro mobile monnaie ' +
-                    productCount +
-                    '</badge></div><div class="col-xs-12 col-sm-12"><div class="form-group row"><label for="operateurMM" class="control-label">Opérateur</label><select class="form-control" id="operateurMM-' +
-                    productCount +
-                    '" name="operateurMM[]"><option value="Orange">Orange</option><option value="MTN">MTN</option><option value="Moov">Moov</option><option value="Wave">Wave</option><option value="Push">Push</option></select></div></div><div class="col-xs-12 col-sm-12"><div class="form-group row"><label for="numeros" class="control-label">Numéro</label><input type="text" name="numeros[]" placeholder="Numéro téléphonique" id="numeros-' +
-                    productCount +
-                    '" class="form-control " value=""></div></div><div class="col-xs-12 col-sm-12"><button type="button" id="' +
-                    productCount +
-                    '" class="removeRowOperateur btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></div></td>';
+                var productCount = $("#compagny_area tr").length + 1;
+                $(document).on('click', '#addRowOperateur', function() {
 
-                html_table += '</tr>';
-                //---> End create table tr
+                    //---> Start create table tr
+                    var html_table = '<tr>';
+                    html_table +=
+                        '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm">Information mobile monnaie ' +
+                        productCount +
+                        '</badge></div><div class="col-xs-12 col-sm-12"><div class="form-group row"><label for="Type de culture" class="control-label">Opérateur</label><select name="operateurMM[]" id="operateurMM-' +
+                        productCount +
+                        '" class="form-control"><option value="MTN">MTN</option><option value="ORANGE">ORANGE</option><option value="MOOV">MOOV</option><option value="Wave">Wave</option><option value="Push">Push</option></select></div></div><div class="col-xs-12 col-sm-12"><div class="form-group row"><label for="" class="control-label">Numéro</label><input type="text" name="numeros[]" placeholder="Numéro opérateur" id="numeros-' +
+                        productCount +
+                        '" class="form-control " value=""></div></div><div class="col-xs-12 col-sm-12"><button type="button" id="' +
+                        productCount +
+                        '" class="removeRowOperateur btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></div></td>';
+                    html_table += '</tr>';
+                    //---> End create table tr
 
-                //---> End create table tr
-                productCount = parseInt(productCount) + 1;
-                $('#compagny_area').append(html_table);
+                    productCount = parseInt(productCount) + 1;
+                    $('#compagny_area').append(html_table);
+
+                });
+
+                $(document).on('click', '.removeRowOperateur', function() {
+
+                    var row_id = $(this).attr('id');
+
+                    // delete only last row id
+                    if (row_id == $("#compagny_area tr").length) {
+
+                        $(this).parents('tr').remove();
+
+                        productCount = parseInt(productCount) - 1;
+
+                        //    console.log($("#product_area tr").length);
+
+                        //  productCount--;
+
+                    }
+                });
 
             });
-
-            $(document).on('click', '.removeRowOperateur', function() {
-
-                var row_id = $(this).attr('id');
-
-                // delete only last row id
-                if (row_id == $("#compagny_area tr").length) {
-
-                    $(this).parents('tr').remove();
-
-                    productCount = parseInt(productCount) - 1;
-
-                }
-            });
-
-        });
         </script>
         <script type="text/javascript">
             $('#listecultures,#gardePapiersChamps,#numeroCompteMM,#listeactivites,#nomBanque,#autreBanque,#travailleurFamilial')
