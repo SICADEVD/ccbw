@@ -35,11 +35,19 @@ class SuiviParcelleController extends Controller
             return $localite->active();
         });
         $sections = $cooperative->sections;
-        $suiviparcelles = SuiviParcelle::dateFilter()->searchable(["varieteAbres", "nombreSauvageons", "arbresagroforestiers", "activiteTaille", "activiteEgourmandage", "activiteDesherbageManuel", "activiteRecolteSanitaire", "intrantNPK", "nombresacsNPK", "intrantFiente", "nombresacsFiente", "intrantComposte", "nombresacsComposte", "presencePourritureBrune", "presenceBioAgresseur", "presenceInsectesRavageurs", "presenceFourmisRouge", "presenceAraignee", "presenceVerTerre", "presenceMenteReligieuse", "presenceSwollenShoot", "presenceInsectesParasites", "nomInsecticide", "nombreInsecticide", "nomFongicide", "uniteFongicide", "nomHerbicide", "uniteHerbicide", "nombreDesherbage"])->latest('id')->joinRelationship('parcelle.producteur.localite')->where(function ($q) {
-            if (request()->localite != null) {
-                $q->where('localite_id', request()->localite);
-            }
-        })->with(['parcelle.producteur.localite'])->paginate(getPaginate());
+        $suiviparcelles = SuiviParcelle::dateFilter()
+            ->searchable(["varieteAbres", "nombreSauvageons", "arbresagroforestiers", "activiteTaille", "activiteEgourmandage", "activiteDesherbageManuel", "activiteRecolteSanitaire", "intrantNPK", "nombresacsNPK", "intrantFiente", "nombresacsFiente", "intrantComposte", "nombresacsComposte", "presencePourritureBrune", "presenceBioAgresseur", "presenceInsectesRavageurs", "presenceFourmisRouge", "presenceAraignee", "presenceVerTerre", "presenceMenteReligieuse", "presenceSwollenShoot", "presenceInsectesParasites", "nomInsecticide", "nombreInsecticide", "nomFongicide", "uniteFongicide", "nomHerbicide", "uniteHerbicide", "nombreDesherbage"])
+            ->latest('id')
+            ->joinRelationship('parcelle.producteur.localite')
+            ->where(function ($q) {
+                if (request()->localite != null) {
+                    $q->where('localite.localite_id', request()->localite);
+                }
+            })
+            ->with(['parcelle.producteur.localite'])
+            ->where('suivi_parcelles.userid', $manager->id)
+            ->paginate(getPaginate());
+
 
         return view('manager.suiviparcelle.index', compact('pageTitle', 'suiviparcelles', 'localites'));
     }
@@ -164,14 +172,14 @@ class SuiviParcelleController extends Controller
             if (($request->items != null)) {
                 SuiviParcellesAgroforesterie::where('suivi_parcelle_id', $id)->delete();
                 foreach ($request->items as $item) {
-                    
+
                     $data2[] = [
                         'suivi_parcelle_id' => $id,
                         'nombre' => $item['nombre'],
                         'agroespeceabre_id' => $item['arbre'],
                     ];
                 }
-            }  
+            }
             //fin les arbres agro-forestiers obtenus
 
             //autres insectes parasites ou ravageurs
