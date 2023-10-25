@@ -65,7 +65,6 @@ class CooperativeLocaliteController extends Controller
             'electricite'  => 'required|max:255',
             'marche'  => 'required|max:255',
             'deversementDechets'  => 'required|max:255',
-            'nomEcoleproche'  => 'required|max:255',
         ];
 
         $manager   = auth()->user();

@@ -102,7 +102,7 @@
                     <div class="form-group row" id="nomEcoleproche">
                         <?php echo Form::label(__('Nom Ecole primaire'), null, ['class' => 'control-label col-xs-12 col-sm-4']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::text('nomEcoleproche', null, ['placeholder' => '...', 'class' => 'form-control nomEcoleproche','required']); ?>
+                            <?php echo Form::text('nomEcoleproche', null, ['placeholder' => '...', 'class' => 'form-control nomEcoleproche', 'required']); ?>
                         </div>
                     </div>
 
@@ -121,10 +121,13 @@
                                             </div>
                                             <div class="col-xs-12 col-sm-12">
                                                 <div class="form-group col-lg-12">
-                                                    <input type="text" name="nomecolesprimaires[]" placeholder="..."
-                                                        id="nomecolesprimaires-1" class="form-control"
-                                                        value="{{ old('nomecolesprimaires') }}">
+                                                    @foreach (old('nomecolesprimaires', []) as $nomecolesprimaires)
+                                                        <input type="text" name="nomecolesprimaires[]" placeholder="..."
+                                                            id="nomecolesprimaires-1" class="form-control"
+                                                            value="{{ $nomecolesprimaires }}">
+                                                    @endforeach
                                                 </div>
+                                            </div>
 
 
                                         </td>
@@ -207,7 +210,7 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <?php echo Form::label(__("Nombre d’association de jeunes qu’il y a dans la localité"), null, ['class' => 'control-label col-xs-12 col-sm-4']); ?>
+                        <?php echo Form::label(__('Nombre d’association de jeunes qu’il y a dans la localité'), null, ['class' => 'control-label col-xs-12 col-sm-4']); ?>
                         <div class="col-xs-12 col-sm-8">
                             <?php echo Form::number('associationJeunes', null, ['placeholder' => __('nombre'), 'class' => 'form-control', 'min' => '0']); ?>
                         </div>
