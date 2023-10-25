@@ -115,21 +115,19 @@
                             <table class="table table-striped table-bordered">
                                 <tbody id="maladies">
                                     <tr>
-                                        <td class="col-xs-12 col-sm-8">
+                                        <td class="row">
                                             <div class="col-xs-12 col-sm-12 bg-success">
-                                                <badge class="btn btn-warning btn-sm">@lang('Nom Ecole primaire')</badge>
+                                                <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Informations sur l\'école primaire 1')</badge>
+                                                </badge>
                                             </div>
                                             <div class="col-xs-12 col-sm-12">
-                                                <div class="form-group col-lg-12">
-                                                    @foreach (old('nomecolesprimaires', []) as $nomecolesprimaires)
-                                                        <input type="text" name="nomecolesprimaires[]" placeholder="..."
-                                                            id="nomecolesprimaires-1" class="form-control"
-                                                            value="{{ $nomecolesprimaires }}">
-                                                    @endforeach
+                                                <div class="form-group row">
+                                                    <input type="text" name="nomecolesprimaires[]"
+                                                        placeholder="Nom de l'école primaire"
+                                                        id="nomecolesprimaires-1" class="form-control"
+                                                        value="{{ old('nomecolesprimaires') }}">
                                                 </div>
                                             </div>
-
-
                                         </td>
                                     </tr>
 

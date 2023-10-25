@@ -106,7 +106,7 @@
                     <div class="form-group row" id="nomEcoleproche">
                         <?php echo Form::label(__('Nom Ecole primaire'), null, ['class' => 'control-label col-xs-12 col-sm-4']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::text('nomEcoleproche', null, ['placeholder' => '...', 'class' => 'form-control nomEcoleproche','required']); ?>
+                            <?php echo Form::text('nomEcoleproche', null, ['placeholder' => '...', 'class' => 'form-control nomEcoleproche', 'required']); ?>
                         </div>
                     </div>
 
@@ -118,22 +118,60 @@
                         <div class="form-group row col-lg-12">
                             <table class="table table-striped table-bordered">
                                 <tbody id="maladies">
+                                    <?php
+                                 if($localite->ecoleprimaires)
+        {  
+        $i=0;
+        $a=1;
+        foreach($localite->ecoleprimaires as $data) {
+           ?>
                                     <tr>
-                                        <td class="col-xs-12 col-sm-8">
+                                        <td class="row">
                                             <div class="col-xs-12 col-sm-12 bg-success">
-                                                <badge class="btn btn-warning btn-sm">@lang('Nom Ecole primaire')</badge>
+                                                <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Informations sur l\'école primaire 1')
+                                                    <?php echo $a; ?></badge>
                                             </div>
                                             <div class="col-xs-12 col-sm-12">
-                                                <div class="form-group col-lg-12">
-                                                    <input type="text" name="nomecolesprimaires[]" placeholder="..."
-                                                        id="nomecolesprimaires-1" class="form-control"
-                                                        value="{{ old('nomecolesprimaires') }}">
+                                                <div class="form-group">
+                                                    <input type="text" name="nomecolesprimaires[]"
+                                                        placeholder="Nom de l'école primaire"
+                                                        id="nomecolesprimaires-<?php echo $a; ?>" class="form-control"
+                                                        value="<?php echo $data->nomecole; ?>">
                                                 </div>
+                                            </div>
 
-
+                                            <?php if($a>=1):?>
+                                            <div class="col-xs-12 col-sm-12"><button type="button"
+                                                    id="<?php echo $a; ?>" class="removeRowMal btn btn-danger btn-sm"><i
+                                                        class="fa fa-minus"></i></button></div>
+                                            <?php endif; ?>
                                         </td>
                                     </tr>
-
+                                    <?php
+           $a++;
+            $i++;
+        }
+    }else{
+        ?>
+                                    <tr>
+                                        <td class="row">
+                                            <div class="col-xs-12 col-sm-12 bg-success">
+                                                <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Informations sur l\'école primaire 1')
+                                                </badge>
+                                                </badge>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-12">
+                                                <div class="form-group row">
+                                                    <input type="text" name="nomecolesprimaires[]"
+                                                        placeholder="Nom de l'école primaire" id="nomecolesprimaires-1"
+                                                        class="form-control" value="{{ old('nomecolesprimaires') }}">
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <?php
+        }
+        ?>
                                 </tbody>
                                 <tfoot style="background: #e3e3e3;">
                                     <tr>
@@ -266,9 +304,9 @@
                 html_table +=
                     '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn btn-warning btn-sm">Nom Ecole Primaire ' +
                     maladiesCount +
-                    '</badge></div><div class="col-xs-12 col-sm-11"><div class="form-group"><input placeholder=" ..." class="form-control" id="nomecolesprimaires-' +
+                    '</badge></div><div class="col-xs-12 col-sm-12"><div class="form-group"><input placeholder="..." class="form-control" id="nomecolesprimaires-' +
                     maladiesCount +
-                    '" name="nomecolesprimaires[]" type="text"></div></div><div class="col-xs-12 col-sm-1"><button type="button" id="' +
+                    '" name="nomecolesprimaires[]" type="text"></div></div><div class="col-xs-12 col-sm-8"><button type="button" id="' +
                     maladiesCount +
                     '" class="removeRowMal btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></div></td>';
 
@@ -281,11 +319,16 @@
             });
 
             $(document).on('click', '.removeRowMal', function() {
+
                 var row_id = $(this).attr('id');
+
                 // delete only last row id
                 if (row_id == $("#maladies tr").length) {
+
                     $(this).parents('tr').remove();
+
                     maladiesCount = parseInt(maladiesCount) - 1;
+
                 }
             });
             if ($('.marche').val() == 'oui') {

@@ -8,7 +8,6 @@
                         <table class="table table--light style--two">
                             <thead>
                                 <tr>
-                                    <th>@lang('Cooperative')</th>
                                     <th>@lang('Section')</th>
                                     <th>@lang('Localite')</th>
                                     <th>@lang('Code Localite')</th>
@@ -21,9 +20,7 @@
                             <tbody>
                                 @forelse($cooperativeLocalites as $localite)
                                     <tr>
-                                        <td>
-                                            <span class="fw-bold">{{ __($localite->section->cooperative->name) }}</span>
-                                        </td>
+                                        
                                         <td>
                                             <span class="fw-bold">{{ __($localite->section->libelle) }}</span>
                                         </td>

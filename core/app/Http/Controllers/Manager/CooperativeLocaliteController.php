@@ -65,6 +65,7 @@ class CooperativeLocaliteController extends Controller
             'electricite'  => 'required|max:255',
             'marche'  => 'required|max:255',
             'deversementDechets'  => 'required|max:255',
+
         ];
 
         $manager   = auth()->user();
@@ -119,9 +120,7 @@ class CooperativeLocaliteController extends Controller
         if ($localite != null) {
 
             $id = $localite->id;
-
-            if (($request->nomecolesprimaires != null) && $request->nombrecole != null) {
-
+            if($request->nomecolesprimaires != null){
                 $verification   = Localite_ecoleprimaire::where('localite_id', $id)->get();
                 if ($verification->count()) {
                     DB::table('localite_ecoleprimaires')->where('localite_id', $id)->delete();
@@ -134,6 +133,7 @@ class CooperativeLocaliteController extends Controller
                     }
                     $i++;
                 }
+
             }
         }
 
