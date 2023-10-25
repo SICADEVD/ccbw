@@ -39,17 +39,26 @@ class ProducteurController extends Controller
             return $localite->active();
         });
         $programmes = Programme::all();
-        $producteurs = Producteur::dateFilter()->searchable(["nationalite", "type_piece", "codeProd", "codeProdapp", "producteurs.nom", "prenoms", "sexe", "dateNaiss", "phone1", "niveau_etude", "numPiece", "consentement", "statut", "certificat"])->latest('id')->joinRelationship('localite')->where(function ($q) {
-            if (request()->localite != null) {
-                $q->where('localite_id', request()->localite);
-            }
-            if (request()->status != null) {
-                $q->where('statut', request()->status);
-            }
-            if (request()->programme != null) {
-                $q->where('programme_id', request()->programme);
-            }
-        })->with('localite.section')->paginate(getPaginate());
+        
+        $producteurs = Producteur::dateFilter()
+            ->searchable(["nationalite", "type_piece", "codeProd", "codeProdapp", "producteurs.nom", "prenoms", "sexe", "dateNaiss", "phone1", "niveau_etude", "numPiece", "consentement", "statut", "certificat"])
+            ->latest('id')
+            ->joinRelationship('localite')
+            ->where(function ($q) {
+                if (request()->localite != null) {
+                    $q->where('producteurs.localite_id', request()->localite);
+                }
+                if (request()->status != null) {
+                    $q->where('producteurs.statut', request()->status);
+                }
+                if (request()->programme != null) {
+                    $q->where('producteurs.programme_id', request()->programme);
+                }
+            })
+            ->with('localite.section')
+            ->where('producteurs.userid', $manager->id)
+            ->paginate(getPaginate());
+
         return view('manager.producteur.index', compact('pageTitle', 'producteurs', 'localites', 'programmes'));
     }
 
@@ -83,7 +92,7 @@ class ProducteurController extends Controller
 
     public function store(StoreProducteurRequest $request)
     {
-       
+
         $request->validated();
 
         $localite = Localite::where('id', $request->localite_id)->first();
@@ -137,12 +146,10 @@ class ProducteurController extends Controller
                 return back()->withNotify($notify);
             }
         }
-        $coop = DB::table('sections as s')->join('cooperatives as c','s.cooperative_id','=','c.id')->join('localites as l','s.id','=','l.section_id')->where('l.id',$request->localite_id)->select('c.codeApp')->first();
-        if($coop !=null)
-        { 
-            $producteur->codeProdapp = $this->generecodeProdApp($request->nom,$request->prenoms, $coop->codeApp);
-
-        }else{
+        $coop = DB::table('sections as s')->join('cooperatives as c', 's.cooperative_id', '=', 'c.id')->join('localites as l', 's.id', '=', 'l.section_id')->where('l.id', $request->localite_id)->select('c.codeApp')->first();
+        if ($coop != null) {
+            $producteur->codeProdapp = $this->generecodeProdApp($request->nom, $request->prenoms, $coop->codeApp);
+        } else {
             $producteur->codeProdapp = null;
         }
         // dd(json_encode($request->all()));
@@ -151,7 +158,8 @@ class ProducteurController extends Controller
         $notify[] = ['success', isset($message) ? $message : 'Le producteur a été crée avec succès.'];
         return back()->withNotify($notify);
     }
-    public function update(Request $request, $id){
+    public function update(Request $request, $id)
+    {
         $producteur = Producteur::findOrFail($id);
         $validationRule = [
             'programme_id' => 'required|exists:programmes,id',
@@ -171,17 +179,17 @@ class ProducteurController extends Controller
             'niveau_etude'  => 'required|max:255',
             'type_piece'  => 'required|max:255',
             'numPiece'  => 'required|max:255',
-            'anneeDemarrage' =>'required_if:proprietaires,==,Garantie',
-            'anneeFin' =>'required_if:proprietaires,==,Garantie',
-            'plantePartage'=>'required_if:proprietaires,==,Planté-partager',
-            'typeCarteSecuriteSociale'=>'required',
-            'autreCertificats'=>'required_if:certificats,==,Autre',
-            'autreVariete'=>'required_if:variete,==,Autre',
-            'codeProd'=>'required_if:statut,==,Certifie',
-            'certificat'=>'required_if:statut,==,Certifie',
-            'phone2'=>'required_if:autreMembre,==,oui',
-            'autrePhone'=>'required_if:autreMembre,==,oui',
-            'numCMU'=>'required_if:carteCMU,==,oui',
+            'anneeDemarrage' => 'required_if:proprietaires,==,Garantie',
+            'anneeFin' => 'required_if:proprietaires,==,Garantie',
+            'plantePartage' => 'required_if:proprietaires,==,Planté-partager',
+            'typeCarteSecuriteSociale' => 'required',
+            'autreCertificats' => 'required_if:certificats,==,Autre',
+            'autreVariete' => 'required_if:variete,==,Autre',
+            'codeProd' => 'required_if:statut,==,Certifie',
+            'certificat' => 'required_if:statut,==,Certifie',
+            'phone2' => 'required_if:autreMembre,==,oui',
+            'autrePhone' => 'required_if:autreMembre,==,oui',
+            'numCMU' => 'required_if:carteCMU,==,oui',
         ];
         $request->validate($validationRule);
         $producteur->proprietaires = $request->proprietaires;
@@ -224,13 +232,12 @@ class ProducteurController extends Controller
         if ($request->hasFile('picture')) {
             try {
                 $producteur->picture = $request->file('picture')->store('public/producteurs/photos');
-                
             } catch (\Exception $exp) {
                 $notify[] = ['error', 'Impossible de télécharger votre image'];
                 return back()->withNotify($notify);
             }
         }
-        
+
         if ($producteur->codeProdapp == null) {
             $coop = DB::table('localites as l')->join('cooperatives as c', 'l.cooperative_id', '=', 'c.id')->where('l.id', $request->localite)->select('c.codeApp')->first();
             if ($coop != null) {
@@ -243,7 +250,7 @@ class ProducteurController extends Controller
         $notify[] = ['success', isset($message) ? $message : 'Le producteur a été mise à jour avec succès.'];
         return back()->withNotify($notify);
     }
-    
+
 
 
     public function storeinfo(StoreInfoRequest $request)
@@ -254,7 +261,7 @@ class ProducteurController extends Controller
         try {
 
             $request->validated();
-            
+
 
             $producteur = Producteur::where('id', $request->producteur_id)->first();
 
