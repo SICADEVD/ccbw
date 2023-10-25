@@ -10,6 +10,7 @@
                                 <tr>
                                     <th>@lang('Cooperative')</th>
                                     <th>@lang('Section')</th>
+                                    <th>@lang('Sous-préfecture')</th>
                                     <th>@lang('Ajoutée le')</th>
                                     <th>@lang('Action')</th>
                                 </tr>
@@ -18,7 +19,7 @@
                                 @forelse($sections as $section)
                                     <tr>
                                         <td>
-                                            <span class="fw-bold">{{ __($section->cooperative->name) }}</span>
+                                            <span class="fw-bold">{{ __($section->cooperative->codeCoop) }}</span>
                                         </td>
                                         <td> 
                                             <span class="small">
@@ -26,6 +27,9 @@
                                                     <span>@</span>{{$section->libelle }}
                                                 </a>
                                             </span>
+                                        </td>
+                                        <td> 
+                                        <span class="fw-bold">{{ __($section->sousPrefecture) }}</span>
                                         </td>
                                         <td>
                                             <span class="d-block">{{ showDateTime($section->created_at) }}</span>
