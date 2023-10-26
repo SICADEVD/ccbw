@@ -41,7 +41,7 @@ class DepartmentDataTable extends BaseDataTable
                     <div class="dropdown">
                         <a class="task_view_more d-flex align-items-center justify-content-center dropdown-toggle" type="link"
                             id="dropdownMenuLink-' . $row->id . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="icon-options-vertical icons"></i>
+                            <i class="fa fa-ellipsis-v"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink-' . $row->id . '" tabindex="0">';
 
@@ -70,7 +70,7 @@ class DepartmentDataTable extends BaseDataTable
             ->editColumn(
                 'name',
                 function ($row) {
-                    return '<h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('departments.show', [$row->id]) . '" class="openRightModal">' . $row->team_name . '</a></h5>';
+                    return '<h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('departments.show', [$row->id]) . '" class="openRightModal">' . $row->department . '</a></h5>';
                 }
             )
             ->editColumn('parent_id', function ($row) {
@@ -78,7 +78,7 @@ class DepartmentDataTable extends BaseDataTable
                 $parent = Team::where('id', $row->parent_id)->first();
 
                 if ($parent) {
-                    return $parent->team_name;
+                    return $parent->department;
                 }
                 else {
                     return '-';
@@ -105,7 +105,7 @@ class DepartmentDataTable extends BaseDataTable
         $model = $model->select('*');
 
         if (request()->searchText != '') {
-            $model->where('team_name', 'like', '%' . request()->searchText . '%');
+            $model->where('department', 'like', '%' . request()->searchText . '%');
         }
 
         if ($request->parentId != 'all' && $request->parentId != null) {
@@ -173,7 +173,7 @@ class DepartmentDataTable extends BaseDataTable
                 'visible' => true
             ],
             '#' => ['data' => 'DT_RowIndex', 'orderable' => false, 'searchable' => false, 'visible' => false, 'title' => '#'],
-            __('app.name') => ['data' => 'name', 'name' => 'team_name', 'title' => __('app.name')],
+            __('app.name') => ['data' => 'name', 'name' => 'department', 'title' => __('app.name')],
             __('modules.department.parentDepartment') => ['data' => 'parent_id', 'name' => 'parent_id', 'exportable' => true, 'title' => __('modules.department.parentDepartment')],
             Column::computed('action', __('app.action'))
                 ->exportable(false)

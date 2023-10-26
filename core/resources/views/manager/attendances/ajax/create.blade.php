@@ -82,7 +82,7 @@
                     <div class="col-lg-4 col-md-6 d-none multi_date_div">
                         <x-forms.text :fieldLabel="__('messages.selectMultipleDates')" fieldName="multi_date"
                             fieldId="multi_date" :fieldPlaceholder="__('messages.selectMultipleDates')"
-                            :fieldValue="Carbon\Carbon::today()->translatedFormat('Y-m-d')" />
+                            :fieldValue="Carbon\Carbon::today()->translatedFormat('d-m-Y')" />
                     </div>
 
                 </div>

@@ -45,8 +45,8 @@ $editImmigrationPermission = user()->permission('edit_immigration');
 
                     </p>
                 </div>
-                <x-cards.data-row :label="__('modules.employees.issueDate')" :value=" $visa ? $visa->issue_date->format(cooperative()->date_format) : '--'" />
-                <x-cards.data-row :label="__('modules.employees.expiryDate')" :value=" $visa  ? $visa->expiry_date->format(cooperative()->date_format) : '--'" />
+                <x-cards.data-row :label="__('modules.employees.issueDate')" :value=" $visa ? $visa->issue_date->format('Y-m-d') : '--'" />
+                <x-cards.data-row :label="__('modules.employees.expiryDate')" :value=" $visa  ? $visa->expiry_date->format('Y-m-d') : '--'" />
                 <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
                     <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">
                         @lang('modules.employees.scanCopy')</p>

@@ -13,16 +13,12 @@ use Yajra\DataTables\EloquentDataTable;
 
 class DesignationDataTable extends BaseDataTable
 {
-
-    private $editDesignationPermission;
-    private $deleteDesignationPermission;
+ 
     public $arr = [];
 
     public function __construct()
     {
-        parent::__construct();
-        $this->editDesignationPermission = user()->permission('edit_designation');
-        $this->deleteDesignationPermission = user()->permission('delete_designation');
+        parent::__construct(); 
     }
 
     /**
@@ -32,7 +28,7 @@ class DesignationDataTable extends BaseDataTable
      * @return \Yajra\DataTables\DataTableAbstract
      */
     public function dataTable($query)
-    {
+    { 
         return datatables()
             ->eloquent($query)
             ->addIndexColumn()
@@ -63,26 +59,26 @@ class DesignationDataTable extends BaseDataTable
                     <div class="dropdown">
                         <a class="task_view_more d-flex align-items-center justify-content-center dropdown-toggle" type="link"
                             id="dropdownMenuLink-' . $row->id . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="icon-options-vertical icons"></i>
+                            <i class="fa fa-ellipsis-v"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink-' . $row->id . '" tabindex="0">';
 
                 $action .= '<a href="' . route('designations.show', [$row->id]) . '" class="dropdown-item openRightModal"><i class="fa fa-eye mr-2"></i>' . __('app.view') . '</a>';
 
-                if ($this->editDesignationPermission == 'all') {
+                 
                     $action .= '<a class="dropdown-item openRightModal" href="' . route('designations.edit', [$row->id]) . '">
                                 <i class="fa fa-edit mr-2"></i>
                                 ' . trans('app.edit') . '
                             </a>';
-                }
+               
 
 
-                if ($this->deleteDesignationPermission == 'all') {
+             
                     $action .= '<a class="dropdown-item delete-table-row" href="javascript:;" data-designation-id="' . $row->id . '">
                                 <i class="fa fa-trash mr-2"></i>
                                 ' . trans('app.delete') . '
                             </a>';
-                }
+                
 
                 $action .= '</div>
                     </div>
@@ -110,13 +106,13 @@ class DesignationDataTable extends BaseDataTable
             $model->where('name', 'like', '%' . request()->searchText . '%');
         }
 
-        if ($request->parentId != 'all' && $request->parentId != null) {
-            $departments = Designation::with('childs')->where('id', $request->parentId)->get();
+        if (request()->parentId != 'all' && request()->parentId != null) {
+            $designations = Designation::with('childs')->where('id', request()->parentId)->get();
 
-            foreach ($departments as $department) {
-                if ($department->childs) {
-                    $this->child($department->childs);
-                    array_push($this->arr, $department->id);
+            foreach ($designations as $designation) {
+                if ($designation->childs) {
+                    $this->child($designation->childs);
+                    array_push($this->arr, $designation->id);
                 }
             }
 
@@ -144,10 +140,10 @@ class DesignationDataTable extends BaseDataTable
      */
     public function html()
     {
-        return $this->setBuilder('Designation-table')
+        return $this->setBuilder('designations-table')
             ->parameters([
                 'initComplete' => 'function () {
-                   window.LaravelDataTables["Designation-table"].buttons().container()
+                   window.LaravelDataTables["designations-table"].buttons().container()
                     .appendTo("#table-actions")
                 }',
                 'fnDrawCallback' => 'function( oSettings ) {

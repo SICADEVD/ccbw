@@ -372,6 +372,7 @@ class AttendanceController extends AccountBaseController
         }
 
         $attendance->user_id = $request->user_id;
+        $attendance->cooperative_id = auth()->user()->cooperative_id;
         $attendance->clock_in_time = $clockIn;
         $attendance->clock_in_ip = $request->clock_in_ip;
         $attendance->clock_out_time = $clockOut;
@@ -493,6 +494,7 @@ class AttendanceController extends AccountBaseController
         if (!is_null($attendance) && !$request->user_id) {
             $attendance->update([
                 'user_id' => $request->user_id,
+                'cooperative_id' => auth()->user()->cooperative_id,
                 'clock_in_time' => $clockIn,
                 'clock_in_ip' => $request->clock_in_ip,
                 'clock_out_time' => $clockOut,
@@ -513,6 +515,7 @@ class AttendanceController extends AccountBaseController
             if ($clockInCount < $this->attendanceSettings->clockin_in_day || $request->user_id) {
                 Attendance::create([
                     'user_id' => $request->user_id,
+                    'cooperative_id' => auth()->user()->cooperative_id,
                     'clock_in_time' => $clockIn,
                     'clock_in_ip' => $request->clock_in_ip,
                     'clock_out_time' => $clockOut,
@@ -689,7 +692,7 @@ class AttendanceController extends AccountBaseController
     public function create()
     {
          
-        $this->employees = EmployeeDetail::with('user')->get();
+        $this->employees = User::allEmployees();
         $this->departments = Department::get();
         $this->pageTitle = __('modules.attendance.markAttendance');
         $this->year = now()->format('Y');
@@ -714,7 +717,7 @@ class AttendanceController extends AccountBaseController
      */
     public function bulkMark(StoreBulkAttendance $request)
     {
-        dd($request);
+         
         $employees = $request->user_id;
         $employeeData = User::with('employeeDetail')->whereIn('id', $employees)->get();
 
@@ -822,7 +825,7 @@ class AttendanceController extends AccountBaseController
 
                     $insertData[] = [
                         'user_id' => $userId,
-                        'cooperative_id' => cooperative()->id,
+                        'cooperative_id' => auth()->user()->cooperative_id,
                         'clock_in_time' => $clockIn,
                         'clock_in_ip' => request()->ip(),
                         'clock_out_time' => $clockOut,

@@ -85,7 +85,7 @@ $viewAppreciationPermission = user()->permission('view_appreciation');
                                 <p class="card-text f-11 text-lightest">@lang('app.lastLogin')
 
                                     @if (!is_null($employee->last_login))
-                                        {{ $employee->last_login->timezone(cooperative()->timezone)->translatedFormat(cooperative()->date_format . ' ' . cooperative()->time_format) }}
+                                        {{ $employee->last_login->timezone(cooperative()->timezone)->translatedFormat('Y-m-d' . ' ' . cooperative()->time_format) }}
                                     @else
                                         --
                                     @endif
@@ -189,13 +189,13 @@ $viewAppreciationPermission = user()->permission('view_appreciation');
                                     :value="$employeeLanguage->language_name ?? '--'" />
 
                                 <x-cards.data-row :label="__('modules.employees.probationEndDate')"
-                                :value="$employee->employeeDetail->probation_end_date ? Carbon\Carbon::parse($employee->employeeDetail->probation_end_date)->translatedFormat(cooperative()->date_format) : '--'" />
+                                :value="$employee->employeeDetail->probation_end_date ? Carbon\Carbon::parse($employee->employeeDetail->probation_end_date)->translatedFormat('Y-m-d') : '--'" />
 
                                 <x-cards.data-row :label="__('modules.employees.noticePeriodStartDate')"
-                                :value="$employee->employeeDetail->notice_period_start_date ? Carbon\Carbon::parse($employee->employeeDetail->notice_period_start_date)->translatedFormat(cooperative()->date_format) : '--'" />
+                                :value="$employee->employeeDetail->notice_period_start_date ? Carbon\Carbon::parse($employee->employeeDetail->notice_period_start_date)->translatedFormat('Y-m-d') : '--'" />
 
                                 <x-cards.data-row :label="__('modules.employees.noticePeriodEndDate')"
-                                :value="$employee->employeeDetail->notice_period_end_date ? Carbon\Carbon::parse($employee->employeeDetail->notice_period_end_date)->translatedFormat(cooperative()->date_format) : '--'" />
+                                :value="$employee->employeeDetail->notice_period_end_date ? Carbon\Carbon::parse($employee->employeeDetail->notice_period_end_date)->translatedFormat('Y-m-d') : '--'" />
 
                                 <x-cards.data-row :label="__('modules.employees.maritalStatus')"
                                 :value="$employee?->employeeDetail?->marital_status ? __('modules.leaves.' . $employee->employeeDetail->marital_status) : '--'" />
@@ -208,16 +208,16 @@ $viewAppreciationPermission = user()->permission('view_appreciation');
 
                                 @if($employee->employeeDetail->employment_type == 'internship')
                                     <x-cards.data-row :label="__('modules.employees.internshipEndDate')"
-                                    :value="$employee->employeeDetail->internship_end_date ? Carbon\Carbon::parse($employee->employeeDetail->internship_end_date)->translatedFormat(cooperative()->date_format) : '--'" />
+                                    :value="$employee->employeeDetail->internship_end_date ? Carbon\Carbon::parse($employee->employeeDetail->internship_end_date)->translatedFormat('Y-m-d') : '--'" />
                                 @endif
 
                                 @if($employee->employeeDetail->employment_type == 'on_contract')
                                     <x-cards.data-row :label="__('modules.employees.contractEndDate')"
-                                    :value="$employee->employeeDetail->contract_end_date ? Carbon\Carbon::parse($employee->employeeDetail->contract_end_date)->translatedFormat(cooperative()->date_format) : '--'" />
+                                    :value="$employee->employeeDetail->contract_end_date ? Carbon\Carbon::parse($employee->employeeDetail->contract_end_date)->translatedFormat('Y-m-d') : '--'" />
                                 @endif
 
                                 <x-cards.data-row :label="__('modules.employees.joiningDate')"
-                                :value="(!is_null($employee->employeeDetail) && !is_null($employee->employeeDetail->joining_date)) ? $employee->employeeDetail->joining_date->translatedFormat(cooperative()->date_format) : '--'" />
+                                :value="(!is_null($employee->employeeDetail) && !is_null($employee->employeeDetail->joining_date)) ? $employee->employeeDetail->joining_date->translatedFormat('Y-m-d') : '--'" />
 
 
                                 {{-- Custom fields data --}}

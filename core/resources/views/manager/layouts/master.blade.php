@@ -8,16 +8,20 @@
     <title>{{ $general->siteName($pageTitle ?? '') }}</title>
     <link rel="shortcut icon" type="image/png" href="{{ getImage(getFilePath('logoIcon') . '/favicon.png') }}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('assets/global/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/global/css/bootstrap.min.css') }}"> 
     <link rel="stylesheet" href="{{ asset('assets/fcadmin/css/vendor/bootstrap-toggle.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendor/css/all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/global/css/all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/global/css/line-awesome.min.css') }}"> 
-    <link rel="stylesheet" href="{{ asset('assets/fcadmin/css/dataTables.bootstrap4.min.css') }}"> 
-
-<link type="text/css" rel="stylesheet" media="all"  href="{{ asset('assets/css/main.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendor/css/simple-line-icons.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendor/css/datepicker.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/vendor/css/bootstrap-timepicker.min.css') }}"> 
+    <link rel="stylesheet" href="{{ asset('assets/fcadmin/css/dataTables.bootstrap4.min.css') }}"> 
+    <link rel="stylesheet" href="{{ asset('assets/vendor/css/bootstrap-icons.css') }}"> 
+<link type="text/css" rel="stylesheet" media="all"  href="{{ asset('assets/css/main.css') }}">
+
 <link rel="stylesheet" href="{{ asset('assets/vendor/jquery/bootstrap-select.min.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/vendor/css/datepicker.min.css') }}">
+
 <link rel="stylesheet" href="{{ asset('assets/fcadmin/css/style.css') }}">
     @stack('style-lib') 
     <link rel="stylesheet" href="{{ asset('assets/fcadmin/css/vendor/select2.min.css') }}">
@@ -26,7 +30,8 @@
     <link rel="stylesheet" href="{{ asset('assets/templates/basic/css/custom.css') }}"> 
 
     <script src="{{ asset('assets/global/js/jquery-3.6.0.min.js') }}"></script>  
- <script src="{{ asset('assets/vendor/jquery/modernizr.min.js') }}"></script>
+ <script src="{{ asset('assets/vendor/jquery/modernizr.min.js') }}"></script> 
+  
     @stack('style')
     <style>
         hr {
@@ -42,6 +47,22 @@
         #cooperativeModel .close {
             display: none;
         }
+        .swal2-container {
+    display: flex;
+    position: fixed;
+    z-index: 1111111 !important;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 0.625em;
+    overflow-x: hidden;
+    transition: background-color .1s;
+    -webkit-overflow-scrolling: touch;
+}
     </style>
 </head>
 
@@ -49,7 +70,7 @@
     
     @yield('content')
 
-    
+    <script src="{{ asset('assets/vglobal/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('assets/global/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/fcadmin/js/vendor/bootstrap-toggle.min.js') }}"></script>
     <script src="{{ asset('assets/global/js/jquery.validate.js') }}"></script>
@@ -64,7 +85,7 @@
     <script src="{{ asset('assets/dropify/js/dropify.min.js') }}"></script>
     <script src="{{ asset('assets/fcadmin/js/jquery.chained.js') }}"></script>
 <script src="{{ asset('assets/fcadmin/js/popper.min.js') }}"></script>
-<script src="{{ asset('assets/global/js/bootstrap.min.js') }}"></script>
+
 <script src="{{ asset('assets/fcadmin/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('assets/fcadmin/js/dataTables.bootstrap4.min.js') }}"></script> 
 <script src="{{ asset('assets/vendor/jquery/bootstrap-datepicker.min.js') }}"></script>
@@ -74,7 +95,7 @@
  <script src="{{ asset('assets/vendor/jquery/datepicker.min.js') }}"></script> 
 <script src="{{ asset('assets/vendor/jquery/bootstrap-select.min.js') }}"></script> 
 <script src="{{ asset('assets/js/main.js') }}"></script>
-
+ 
     <script src="{{ asset('assets/fcadmin/js/app.js') }}"></script>
 
     @include('sections.modals')
@@ -83,7 +104,11 @@
     <script>
         $(document).ready(function() {
             // $('#save-data-form select').select2();
-           
+            $(".close-task-detail").click(function(){
+            $( ".task-detail-panel" ).removeClass( "in")
+            $( ".task-overlay" ).removeClass( "in")
+            $( ".close-task-detail" ).removeClass( "in") 
+        });
             // Basic
             $('.dropify').dropify();
 

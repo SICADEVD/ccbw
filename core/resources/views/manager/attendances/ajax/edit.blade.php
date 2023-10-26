@@ -179,7 +179,9 @@
                 success: function (response) {
                     if(response.status == 'success'){
                         showTable();
-                        $("[data-dismiss=modal]").trigger({ type: "click" });
+                         
+                        $("[data-bs-dismiss=modal]").trigger({ type: "click" });
+
 
                     }
                 }

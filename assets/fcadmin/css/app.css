@@ -2466,10 +2466,10 @@ a {
 
 /* background-color css end */
 /* overlay css start */
-[class*="overlay"] {
+/* [class*="overlay"] {
     position: relative;
     z-index: 1;
-}
+} */
 
 [class*="overlay"]:not(.overlay-icon)::before {
     position: absolute;

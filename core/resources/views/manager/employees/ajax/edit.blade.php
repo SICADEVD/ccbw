@@ -1,9 +1,4 @@
-@php
-$addDesignationPermission = user()->permission('add_designation');
-$changeEmployeeRolePermission = user()->permission('change_employee_role');
-@endphp
-
-<link rel="stylesheet" href="{{ asset('vendor/css/tagify.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/vendor/css/tagify.css') }}">
 <style>
     .tagify_tags .height-35 {
         height: auto !important;
@@ -20,22 +15,20 @@ $changeEmployeeRolePermission = user()->permission('change_employee_role');
                 <div class="row p-20">
                     <div class="col-lg-9">
                         <div class="row">
-                            <div class="col-md-4">
-                                <x-forms.text fieldId="employee_id" :fieldLabel="__('modules.employees.employeeId')"
-                                    fieldName="employee_id" :fieldValue="$employee->employeeDetail->employee_id"
-                                    fieldRequired="true" :fieldPlaceholder="__('modules.employees.employeeIdInfo')" :popover="__('modules.employees.employeeIdHelp')">
+                        <div class="col-lg-6 col-md-6">
+                                <x-forms.text fieldId="lastname" :fieldLabel="__('modules.employees.employeeName')"
+                                    fieldName="lastname"  :fieldValue="$employee->lastname" fieldRequired="true" :fieldPlaceholder="__('placeholders.name')">
                                 </x-forms.text>
                             </div>
-                            <div class="col-md-4">
-                                <x-forms.text fieldId="name" :fieldLabel="__('modules.employees.employeeName')"
-                                    fieldName="name" :fieldValue="$employee->name" fieldRequired="true"
-                                    :fieldPlaceholder="__('placeholders.name')">
+                            <div class="col-lg-6 col-md-6">
+                                <x-forms.text fieldId="firstname" :fieldLabel="__('Prenoms')"
+                                    fieldName="firstname" :fieldValue="$employee->firstname" fieldRequired="true" :fieldPlaceholder="__('Prenoms')">
                                 </x-forms.text>
-                            </div>
+                            </div> 
                             <div class="col-md-4">
                                 <x-forms.text fieldId="email" :fieldLabel="__('modules.employees.employeeEmail')"
                                     fieldName="email" fieldRequired="true" :fieldValue="$employee->email"
-                                    :fieldPlaceholder="__('placeholders.email')" :fieldReadOnly="($emailCountInCompanies > 1)" :popover="($emailCountInCompanies > 1) ? __('messages.emailCannotChange') : null">
+                                    :fieldPlaceholder="__('placeholders.email')" :fieldReadOnly="($emailCountInCompanies > 0)" :popover="($emailCountInCompanies > 0) ? __('messages.emailCannotChange') : null">
                                 </x-forms.text>
                             </div>
                             <div class="col-md-4">
@@ -52,12 +45,12 @@ $changeEmployeeRolePermission = user()->permission('change_employee_role');
                                         @endforeach
                                     </select>
 
-                                    {{-- @if ($addDesignationPermission == 'all' || $addDesignationPermission == 'added')
+                                    
                                         <x-slot name="append">
                                             <button id="designation-setting-edit" type="button"
                                                 class="btn btn-outline-secondary border-grey">@lang('app.add')</button>
                                         </x-slot>
-                                    @endif --}}
+                                    
                                 </x-forms.input-group>
                             </div>
                             <div class="col-md-4">
@@ -70,7 +63,7 @@ $changeEmployeeRolePermission = user()->permission('change_employee_role');
                                         <option value="">--</option>
                                         @foreach ($teams as $team)
                                             <option @if ($employee->employeeDetail->department_id == $team->id) selected @endif value="{{ $team->id }}">
-                                                {{ $team->team_name }}</option>
+                                                {{ $team->department }}</option>
                                         @endforeach
                                     </select>
                                 </x-forms.input-group>
@@ -120,20 +113,19 @@ $changeEmployeeRolePermission = user()->permission('change_employee_role');
                     <div class="col-md-4 col-lg-3">
                         <x-forms.select fieldId="gender" :fieldLabel="__('modules.employees.gender')"
                             fieldName="gender">
-                            <option @if ($employee->gender == 'male') selected @endif value="male">@lang('app.male')</option>
-                            <option @if ($employee->gender == 'female') selected @endif value="female">@lang('app.female')</option>
-                            <option @if ($employee->gender == 'others') selected @endif value="others">@lang('app.others')</option>
+                            <option @if ($employee->gender == 'Homme') selected @endif value="Homme">@lang('app.male')</option>
+                            <option @if ($employee->gender == 'Femme') selected @endif value="Femme">@lang('app.female')</option> 
                         </x-forms.select>
                     </div>
                     <div class="col-md-4 col-lg-3">
                         <x-forms.datepicker fieldId="joining_date" :fieldLabel="__('modules.employees.joiningDate')"
                             fieldName="joining_date" :fieldPlaceholder="__('placeholders.date')" fieldRequired="true"
-                            :fieldValue="$employee->employeeDetail->joining_date->format(cooperative()->date_format)" />
+                            :fieldValue="$employee->employeeDetail->joining_date->format('Y-m-d')" />
                     </div>
                     <div class="col-md-4 col-lg-3">
                         <x-forms.datepicker fieldId="date_of_birth" :fieldLabel="__('modules.employees.dateOfBirth')"
                             fieldName="date_of_birth" :fieldPlaceholder="__('placeholders.date')"
-                            :fieldValue="($employee->employeeDetail->date_of_birth ? $employee->employeeDetail->date_of_birth->format(cooperative()->date_format) : '')" />
+                            :fieldValue="($employee->employeeDetail->date_of_birth ? $employee->employeeDetail->date_of_birth->format('Y-m-d') : '')" />
                     </div>
 
                     <div class="col-md-4 col-lg-3">
@@ -144,46 +136,14 @@ $changeEmployeeRolePermission = user()->permission('change_employee_role');
                                 <x-user-option :user="$item" :selected="$employee->employeeDetail->reporting_to == $item->id"/>
                             @endforeach
                         </x-forms.select>
-                    </div>
-                    <div class="col-md-4 col-lg-3">
-                        <x-forms.select fieldId="locale" :fieldLabel="__('app.language')"
-                            fieldName="locale" search="true">
-                            @foreach ($languages as $language)
-                                <option @if ($employee->locale == $language->language_code) selected @endif
-                                data-content="<span class='flag-icon flag-icon-{{ ($language->flag_code == 'en') ? 'gb' : $language->flag_code }} flag-icon-squared'></span> {{ $language->language_name }}"
-                                value="{{ $language->language_code }}">{{ $language->language_name }}</option>
-                            @endforeach
-                        </x-forms.select>
-                    </div>
-
-                    @if (
-                    ((in_array('admin', $userRoles) && in_array('admin', user_roles()))
-                    || (!in_array('admin', $userRoles)))
-                    && $employee->id != user()->id
-                    && $changeEmployeeRolePermission == 'all'
-                    )
-                        <div class="col-md-4 col-lg-3">
-                            <x-forms.select fieldId="role" :fieldLabel="__('app.role')" fieldName="role">
-                                @foreach ($roles as $role)
-                                    <option
-                                    @if (
-                                        (in_array($role->name, $userRoles) && $role->name == 'admin')
-                                        || (in_array($role->name, $userRoles) && !in_array('admin', $userRoles))
-                                    )
-                                     selected
-                                    @endif
-                                    value="{{ $role->id }}">{{ $role->display_name }}</option>
-                                @endforeach
-                            </x-forms.select>
-                        </div>
-                    @endif
-
-
+                    </div> 
+ 
+ 
                     @if ($employee->id != user()->id)
                         <div class="col-md-4 col-lg-3">
                             <x-forms.datepicker fieldId="last_date" :fieldLabel="__('modules.employees.lastDate')"
                                 fieldName="last_date" :fieldPlaceholder="__('placeholders.date')"
-                                :fieldValue="($employee->employeeDetail->last_date ? $employee->employeeDetail->last_date->format(cooperative()->date_format) : '')" />
+                                :fieldValue="($employee->employeeDetail->last_date ? $employee->employeeDetail->last_date->format('Y-m-d') : '')" />
                         </div>
                     @endif
                     <div class="col-md-12">
@@ -207,90 +167,7 @@ $changeEmployeeRolePermission = user()->permission('change_employee_role');
                 <h4 class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-top-grey">
                     @lang('modules.client.clientOtherDetails')</h4>
                 <div class="row p-20">
-
-                    @if ($employee->id != user()->id)
-                        <div class="col-md-4">
-                            <div class="form-group my-3">
-                                <label class="f-14 text-dark-grey mb-12 w-100"
-                                    for="usr">@lang('modules.client.clientCanLogin')</label>
-                                <div class="d-flex">
-                                    <x-forms.radio fieldId="login-yes" :fieldLabel="__('app.yes')" fieldName="login"
-                                        fieldValue="enable" :checked="($employee->login == 'enable') ? 'checked' : ''">
-                                    </x-forms.radio>
-                                    <x-forms.radio fieldId="login-no" :fieldLabel="__('app.no')" fieldValue="disable"
-                                        fieldName="login" :checked="($employee->login == 'disable') ? 'checked' : ''">
-                                    </x-forms.radio>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
-
-                    <div class="col-md-4">
-                        <div class="form-group my-3">
-                            <label class="f-14 text-dark-grey mb-12 w-100"
-                                for="usr">@lang('modules.emailSettings.emailNotifications')</label>
-                            <div class="d-flex">
-                                <x-forms.radio fieldId="notification-yes" :fieldLabel="__('app.yes')" fieldValue="1"
-                                    fieldName="email_notifications"
-                                    :checked="($employee->email_notifications) ? 'checked' : ''">
-                                </x-forms.radio>
-                                <x-forms.radio fieldId="notification-no" :fieldLabel="__('app.no')" fieldValue="0"
-                                    fieldName="email_notifications"
-                                    :checked="(!$employee->email_notifications) ? 'checked' : ''">
-                                </x-forms.radio>
-                            </div>
-                        </div>
-                    </div>
-
-                    {{-- Users cannot change their own status --}}
-                    @if ($employee->id != user()->id && $employee->id != 1)
-                        <div class="col-md-4">
-                            <div class="form-group my-3">
-                                <label class="f-14 text-dark-grey mb-12 w-100" for="usr">@lang('app.status')</label>
-                                <div class="d-flex">
-                                    <x-forms.radio fieldId="status-active" :fieldLabel="__('app.active')"
-                                        fieldValue="active" fieldName="status"
-                                        checked="($employee->status == 'active') ? 'checked' : ''">
-                                    </x-forms.radio>
-                                    <x-forms.radio fieldId="status-inactive" :fieldLabel="__('app.inactive')"
-                                        fieldValue="deactive" fieldName="status"
-                                        :checked="($employee->status == 'deactive') ? 'checked' : ''">
-                                    </x-forms.radio>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
-
-
-                    <div class="col-md-4">
-                        <x-forms.label class="my-3" fieldId="hourly_rate"
-                            :fieldLabel="__('modules.employees.hourlyRate')"></x-forms.label>
-                        <x-forms.input-group>
-                            <x-slot name="prepend">
-                                <span
-                                    class="input-group-text f-14 bg-white-shade">{{ cooperative()->currency->currency_symbol }}</span>
-                            </x-slot>
-
-                            <input type="number" step=".01" min="0" class="form-control height-35 f-14"
-                                value="{{ $employee->employeeDetail->hourly_rate ?? '' }}" name="hourly_rate"
-                                id="hourly_rate">
-                        </x-forms.input-group>
-                    </div>
-
-                    <div class="col-md-4">
-                        <x-forms.label class="my-3" fieldId="slack_username"
-                            :fieldLabel="__('modules.employees.slackUsername')"></x-forms.label>
-                        <x-forms.input-group>
-                            <x-slot name="prepend">
-                                <span class="input-group-text f-14 bg-white-shade">@</span>
-                            </x-slot>
-
-                            <input type="text" class="form-control height-35 f-14" autocomplete="off"
-                                value="{{ $employee->employeeDetail->slack_username ?? '' }}" name="slack_username"
-                                id="slack_username">
-                        </x-forms.input-group>
-                    </div>
-
+   
                     <div class="col-md-12">
                         <x-forms.text class="tagify_tags" fieldId="tags" :fieldLabel="__('app.skills')"
                             fieldName="tags" :fieldPlaceholder="__('placeholders.skills')"
@@ -317,21 +194,21 @@ $changeEmployeeRolePermission = user()->permission('change_employee_role');
                     <div class="col-lg-3 col-md-6">
                         <x-forms.datepicker fieldId="probation_end_date" :fieldLabel="__('modules.employees.probationEndDate')"
                             fieldName="probation_end_date" :fieldPlaceholder="__('placeholders.date')"
-                            :fieldValue="$employee->employeeDetail->probation_end_date ? Carbon\Carbon::parse($employee->employeeDetail->probation_end_date)->format(cooperative()->date_format) : '' "
+                            :fieldValue="$employee->employeeDetail->probation_end_date ? Carbon\Carbon::parse($employee->employeeDetail->probation_end_date)->format('Y-m-d') : '' "
                             :popover="__('messages.probationEndDate')"/>
                     </div>
 
                     <div class="col-lg-3 col-md-6">
                         <x-forms.datepicker fieldId="notice_period_start_date" :fieldLabel="__('modules.employees.noticePeriodStartDate')"
                             fieldName="notice_period_start_date" :fieldPlaceholder="__('placeholders.date')"
-                            :fieldValue="$employee->employeeDetail->notice_period_start_date ? Carbon\Carbon::parse($employee->employeeDetail->notice_period_start_date)->format(cooperative()->date_format) : '' "
+                            :fieldValue="$employee->employeeDetail->notice_period_start_date ? Carbon\Carbon::parse($employee->employeeDetail->notice_period_start_date)->format('Y-m-d') : '' "
                             :popover="__('messages.noticePeriodStartDate')"/>
                     </div>
 
                     <div class="col-lg-3 col-md-6">
                         <x-forms.datepicker fieldId="notice_period_end_date" :fieldLabel="__('modules.employees.noticePeriodEndDate')"
                             fieldName="notice_period_end_date" :fieldPlaceholder="__('placeholders.date')"
-                            :fieldValue="$employee->employeeDetail->notice_period_end_date ? Carbon\Carbon::parse($employee->employeeDetail->notice_period_end_date)->format(cooperative()->date_format) : '' "
+                            :fieldValue="$employee->employeeDetail->notice_period_end_date ? Carbon\Carbon::parse($employee->employeeDetail->notice_period_end_date)->format('Y-m-d') : '' "
                             :popover="__('messages.noticePeriodEndDate')"/>
                     </div>
                     <div class="col-lg-3 col-md-6">
@@ -349,13 +226,13 @@ $changeEmployeeRolePermission = user()->permission('change_employee_role');
                     <div class="col-lg-3 col-md-6 d-none internship-date">
                         <x-forms.datepicker fieldId="internship_end_date" :fieldLabel="__('modules.employees.internshipEndDate')"
                             fieldName="internship_end_date" :fieldPlaceholder="__('placeholders.date')"
-                            :fieldValue="$employee->employeeDetail->internship_end_date ? Carbon\Carbon::parse($employee->employeeDetail->internship_end_date)->format(cooperative()->date_format) : '' "/>
+                            :fieldValue="$employee->employeeDetail->internship_end_date ? Carbon\Carbon::parse($employee->employeeDetail->internship_end_date)->format('Y-m-d') : '' "/>
                     </div>
 
                     <div class="col-lg-3 col-md-6 d-none contract-date">
                         <x-forms.datepicker fieldId="contract_end_date" :fieldLabel="__('modules.employees.contractEndDate')"
                             fieldName="contract_end_date" :fieldPlaceholder="__('placeholders.date')"
-                            :fieldValue="$employee->employeeDetail->contract_end_date ? Carbon\Carbon::parse($employee->employeeDetail->contract_end_date)->format(cooperative()->date_format) : '' "/>
+                            :fieldValue="$employee->employeeDetail->contract_end_date ? Carbon\Carbon::parse($employee->employeeDetail->contract_end_date)->format('Y-m-d') : '' "/>
                     </div>
 
                     <div class="col-lg-3 col-md-6">
@@ -369,33 +246,31 @@ $changeEmployeeRolePermission = user()->permission('change_employee_role');
                     <div class="col-lg-3 col-md-6 d-none marriage_date">
                         <x-forms.datepicker fieldId="marriage_anniversary_date" :fieldLabel="__('modules.employees.marriageAnniversaryDate')"
                             fieldName="marriage_anniversary_date" :fieldPlaceholder="__('placeholders.date')"
-                            :fieldValue="$employee->employeeDetail->marriage_anniversary_date ? Carbon\Carbon::parse($employee->employeeDetail->marriage_anniversary_date)->format(cooperative()->date_format) : '' " />
+                            :fieldValue="$employee->employeeDetail->marriage_anniversary_date ? Carbon\Carbon::parse($employee->employeeDetail->marriage_anniversary_date)->format('Y-m-d') : '' " />
                     </div>
 
 
                 </div>
-
-                <x-forms.custom-field :fields="$fields" :model="$employeeDetail"></x-forms.custom-field>
-
+ 
                 <x-form-actions>
                     <x-forms.button-primary id="save-form" class="mr-3" icon="check">@lang('app.save')
                     </x-forms.button-primary>
-                    <x-forms.button-cancel :link="route('manager.hr.employees.index')" class="border-0">@lang('app.cancel')
+                    <x-forms.button-cancel :link="route('manager.employees.index')" class="border-0">@lang('app.cancel')
                     </x-forms.button-cancel>
                 </x-form-actions>
             </div>
         </x-form>
 
     </div>
-</div>
-
-<script src="{{ asset('vendor/jquery/tagify.min.js') }}"></script>
+</div> 
+<script src="{{ asset('assets/vendor/jquery/tagify.min.js') }}"></script>
 @if (function_exists('sms_setting') && sms_setting()->telegram_status)
-    <script src="{{ asset('vendor/jquery/clipboard.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jquery/clipboard.min.js') }}"></script>
 @endif
 <script>
     $(document).ready(function() {
-
+        $('.dropify').dropify();
+        
         $('.custom-date-picker').each(function(ind, el) {
             datepicker(el, {
                 position: 'bl',
@@ -500,7 +375,7 @@ $changeEmployeeRolePermission = user()->permission('change_employee_role');
         })
 
         $('#save-form').click(function() {
-            const url = "{{ route('manager.hr.employees.update', $employee->id) }}";
+            const url = "{{ route('manager.employees.update', $employee->id) }}";
 
             $.easyAjax({
                 url: url,
@@ -512,6 +387,7 @@ $changeEmployeeRolePermission = user()->permission('change_employee_role');
                 file: true,
                 data: $('#save-data-form').serialize(),
                 success: function(response) {
+                    
                     if (response.status == 'success') {
                         window.location.href = response.redirectUrl;
                     }

@@ -141,7 +141,7 @@ class EmployeeController extends AccountBaseController
             $user->lastname = $request->lastname;
             $user->firstname = $request->firstname; 
             $user->username  = Str::limit(Str::slug($request->prenom,""),12,'.').Str::limit(Str::slug($request->nom,""),1,'');
-            $user->username  = $request->email;
+            $user->email  = $request->email;
             $user->mobile = $request->mobile; 
             $user->country_id = $request->country;
             $user->country_phonecode = $request->country_phonecode;
@@ -237,7 +237,7 @@ class EmployeeController extends AccountBaseController
             session()->forget('cooperative');
             return Reply::success(__('messages.deleteSuccess'));
         case 'change-status':
-            $cooperative = Cooperative::with(['package', 'employees'])->where('id', user()->cooperative_id)->first();
+            $cooperative = Cooperative::with(['employees'])->where('id', user()->cooperative_id)->first();
 
             $updateIds = explode(',', str_replace('on,', '', $request->row_ids));
 
@@ -255,26 +255,7 @@ class EmployeeController extends AccountBaseController
 
     private function deleteEmployee(User $user)
     {
-
-        $universalSearches = UniversalSearch::where('searchable_id', $user->id)->where('module_type', 'employee')->get();
-
-        if ($universalSearches) {
-            foreach ($universalSearches as $universalSearch) {
-                UniversalSearch::destroy($universalSearch->id);
-            }
-        }
-
-
-        Notification::whereNull('read_at')
-            ->where(function ($q) use ($user) {
-                $q->where('data', 'like', '{"id":' . $user->id . ',%');
-                $q->orWhere('data', 'like', '%,"name":' . $user->name . ',%');
-                $q->orWhere('data', 'like', '%,"user_one":' . $user->id . ',%');
-                $q->orWhere('data', 'like', '%,"user_id":' . $user->id . ',%');
-            })->delete();
-
-        $deleteSession = new AppSettingController();
-        $deleteSession->deleteSessions([$user->id]);
+ 
         $user->delete();
 
     }
@@ -285,16 +266,14 @@ class EmployeeController extends AccountBaseController
 
         $users = User::withoutGlobalScope(ActiveScope::class)->whereIn('id', explode(',', $request->row_ids))->get();
 
-        $users->each(function ($user) {
-            $this->deleteEmployee($user);
-        });
+        // $users->each(function ($user) {
+        //     $this->deleteEmployee($user);
+        // });
 
     }
 
     protected function changeStatus($request)
-    {
-        abort_403(user()->permission('edit_employees') != 'all');
-
+    { 
         User::withoutGlobalScope(ActiveScope::class)->whereIn('id', explode(',', $request->row_ids))->update(['status' => $request->status]);
         clearCooperativeValidPackageCache(user()->cooperative_id);
     }
@@ -312,28 +291,14 @@ class EmployeeController extends AccountBaseController
             ->where('email', $this->employee->email)
             ->whereNotNull('email')
             ->count();
-
-        $this->editPermission = user()->permission('edit_employees');
-
-        $userRoles = $this->employee->roles->pluck('name')->toArray();
-
-        abort_403(!in_array('admin', user_roles()) && in_array('admin', $userRoles));
-
-        abort_403(!($this->editPermission == 'all'
-            || ($this->editPermission == 'added' && $this->employee->employeeDetail->added_by == user()->id)
-            || ($this->editPermission == 'owned' && $this->employee->id == user()->id)
-            || ($this->editPermission == 'both' && ($this->employee->id == user()->id || $this->employee->employeeDetail->added_by == user()->id))
-        ));
+         
 
         $this->pageTitle = __('app.update') . ' ' . __('app.employee');
         $this->skills = Skill::all()->pluck('name')->toArray();
         $this->teams = Team::allDepartments();
         $this->designations = Designation::allDesignations();
-        $this->countries = countries();
-        $this->languages = LanguageSetting::where('status', 'enabled')->get();
-        $exceptUsers = [$id];
-        $this->roles = Role::where('name', '<>', 'client')->get();
-        $this->userRoles = $this->employee->roles->pluck('name')->toArray();
+        $this->countries = countries(); 
+        $exceptUsers = [$id]; 
 
         /** @phpstan-ignore-next-line */
         if (count($this->employee->reportingTeam) > 0) {
@@ -352,14 +317,14 @@ class EmployeeController extends AccountBaseController
         }
 
         if (request()->ajax()) {
-            $html = view('employees.ajax.edit', $this->data)->render();
+            $html = view('manager.employees.ajax.edit', $this->data)->render();
 
             return Reply::dataOnly(['status' => 'success', 'html' => $html, 'title' => $this->pageTitle]);
         }
 
-        $this->view = 'employees.ajax.edit';
+        $this->view = 'manager.employees.ajax.edit';
 
-        return view('employees.create', $this->data);
+        return view('manager.employees.create', $this->data);
 
     }
 
@@ -372,50 +337,41 @@ class EmployeeController extends AccountBaseController
      */
     public function update(UpdateRequest $request, $id)
     {
-
+        
         $user = User::withoutGlobalScope(ActiveScope::class)->findOrFail($id);
         $emailCountInCompanies = User::withoutGlobalScopes([ActiveScope::class, CooperativeScope::class])
             ->where('email', $user->email)
             ->count();
-
+        
         if ($emailCountInCompanies > 1 && $request->email != $user->email) {
             return Reply::error(__('messages.emailCannotChange'));
         }
-
-        $userAuth = UserAuth::createUserAuthCredentials($request->email, null, $user->email);
-
-        if(!$userAuth){
-            // Update email in userauth also
+        
+        $userAuth = UserAuth::createUserAuthCredentials($user->username, $request->email, null, $user->email);
+        
+        if(!$userAuth){ 
             $user->userAuth->update(['email' => $request->email]);
         }
-
-        $user->name = $request->name;
+        
+        $user->firstname = $request->firstname;
+        $user->lastname = $request->lastname;
         $user->email = $request->email;
 
         $user->mobile = $request->mobile;
         $user->country_id = $request->country;
         $user->country_phonecode = $request->country_phonecode;
-        $user->gender = $request->gender;
-        $user->locale = $request->locale;
+        $user->genre = $request->gender; 
 
         if (request()->has('status')) {
 
-            if (request()->status == 'active' && !checkCooperativeCanAddMoreEmployees(user()->cooperative_id) && $user->status != 'active') {
+            if (request()->status == 'active' && !checkCooperativeCanAddMoreEmployees(auth()->user()->cooperative_id) && $user->status != 'active') {
                 return Reply::error(__('superadmin.maxEmployeesLimitReached'));
             }
 
             $user->status = $request->status;
-            PackageUpdateNotify::where('cooperative_id', user()->cooperative_id)->where('user_id', $user->id)->delete();
+            // PackageUpdateNotify::where('cooperative_id', user()->cooperative_id)->where('user_id', $user->id)->delete();
         }
-
-        if ($id != user()->id) {
-            $user->login = $request->login;
-        }
-
-        if ($request->has('email_notifications')) {
-            $user->email_notifications = $request->email_notifications;
-        }
-
+ 
         if ($request->image_delete == 'yes') {
             Files::deleteFile($user->image, 'avatar');
             $user->image = null;
@@ -426,37 +382,12 @@ class EmployeeController extends AccountBaseController
             Files::deleteFile($user->image, 'avatar');
             $user->image = Files::uploadLocalOrS3($request->image, 'avatar', 300);
         }
-
-        if ($request->has('telegram_user_id')) {
-            $user->telegram_user_id = $request->telegram_user_id;
-        }
-
+ 
         $user->save();
 
         cache()->forget('user_is_active_' . $user->id);
 
-        $roleId = request()->role;
-
-        $userRole = Role::where('id', request()->role)->first();
-
-        if ($roleId != '' && $userRole->name != $user->user_other_role) {
-
-            $employeeRole = Role::where('name', 'employee')->first();
-
-            $user = User::withoutGlobalScope(ActiveScope::class)->findOrFail($user->id);
-
-            RoleUser::where('user_id', $user->id)->delete();
-            $user->roles()->attach($employeeRole->id);
-
-            if ($employeeRole->id != $roleId) {
-                $user->roles()->attach($roleId);
-            }
-
-            $user->assignUserRolePermission($roleId);
-
-            $userSession = new AppSettingController();
-            $userSession->deleteSessions([$user->id]);
-        }
+        
 
         $tags = json_decode($request->tags);
 
@@ -493,9 +424,9 @@ class EmployeeController extends AccountBaseController
         $employee->save();
 
         // To add custom fields data
-        if ($request->custom_fields_data) {
-            $employee->updateCustomFieldData($request->custom_fields_data);
-        }
+        // if ($request->custom_fields_data) {
+        //     $employee->updateCustomFieldData($request->custom_fields_data);
+        // }
 
         if (user()->id == $user->id) {
             session()->forget('user');
@@ -510,23 +441,10 @@ class EmployeeController extends AccountBaseController
      */
     public function destroy($id)
     {
-        $user = User::withoutGlobalScope(ActiveScope::class)->findOrFail($id);
-        $this->deletePermission = user()->permission('delete_employees');
-
-        abort_403(!($this->deletePermission == 'all' || ($this->deletePermission == 'added' && $user->employeeDetail->added_by == user()->id)));
-
-
-        if ($user->hasRole('admin') && !in_array('admin', user_roles())) {
-            return Reply::error(__('messages.adminCannotDelete'));
-        }
-
-        PackageUpdateNotify::where('cooperative_id', $user->cooperative_id)->where('user_id', $user->id)->delete();
-
+        $user = User::withoutGlobalScope(ActiveScope::class)->findOrFail($id); 
+  
         $this->deleteEmployee($user);
 
-        // WORKSUITESAAS
-
-        session()->forget('cooperative');
 
         return Reply::success(__('messages.deleteSuccess'));
 
@@ -606,14 +524,11 @@ class EmployeeController extends AccountBaseController
             return $this->timelogs();
             break;
         case 'emergency-contacts':
-            $this->view = 'employees.ajax.emergency-contacts';
+            $this->view = 'manager.employees.ajax.emergency-contacts';
             break;
-        case 'appreciation':
-            $viewAppreciationPermission = user()->permission('view_appreciation');
-            abort_403(!in_array($viewAppreciationPermission, ['all', 'added', 'owned', 'both']));
-
+        case 'appreciation': 
             $this->appreciations = $this->appreciation($this->employee->id);
-            $this->view = 'employees.ajax.appreciations';
+            $this->view = 'manager.employees.ajax.appreciations';
             break;
         case 'leaves-quota':
             $this->leaveQuota($id);
@@ -634,33 +549,24 @@ class EmployeeController extends AccountBaseController
             }
 
             $this->allowedLeaves = $totalLeaves;
-            $this->view = 'employees.ajax.leaves_quota';
+            $this->view = 'manager.employees.ajax.leaves_quota';
             break;
-        case 'shifts':
-            abort_403(user()->permission('view_shift_roster') != 'all');
-            $this->view = 'employees.ajax.shifts';
+        case 'shifts': 
+            $this->view = 'manager.employees.ajax.shifts';
             break;
-        case 'permissions':
-            abort_403(user()->permission('manage_role_permission_setting') != 'all');
-
-            $this->modulesData = Module::with('permissions')->withCount('customPermissions')->get();
-            $this->view = 'employees.ajax.permissions';
-            break;
-
         case 'activity':
             $this->activities = UserActivity::where('user_id', $id)->orderBy('id', 'desc')->get();
-            $this->view = 'employees.ajax.activity';
+            $this->view = 'manager.employees.ajax.activity';
             break;
 
-        case 'immigration':
-            abort_403($viewImmigrationPermission == 'none');
+        case 'immigration': 
             $this->passport = Passport::with('country')->where('user_id', $this->employee->id )->first();
             $this->visa = VisaDetail::with('country')->where('user_id', $this->employee->id)->get();
-            $this->view = 'employees.ajax.immigration';
+            $this->view = 'manager.employees.ajax.immigration';
             break;
 
         default:
-            $this->view = 'employees.ajax.profile';
+            $this->view = 'manager.employees.ajax.profile';
             break;
         }
 
@@ -672,7 +578,7 @@ class EmployeeController extends AccountBaseController
 
         $this->activeTab = $tab ?: 'profile';
 
-        return view('employees.show', $this->data);
+        return view('manager.employees.show', $this->data);
     }
 
     /**
@@ -735,45 +641,20 @@ class EmployeeController extends AccountBaseController
 
     public function appreciation($employeeID)
     {
-        $viewAppreciationPermission = user()->permission('view_appreciation');
-
-        if($viewAppreciationPermission == 'none'){
-            return [];
-        }
-
+        
         $appreciations = Appreciation::with(['award','award.awardIcon', 'awardTo'])->select('id', 'award_id', 'award_to', 'award_date', 'image', 'summary', 'created_at');
-        $appreciations->join('awards', 'awards.id', '=', 'appreciations.award_id');
-
-        if ($viewAppreciationPermission == 'added') {
-            $appreciations->where('appreciations.added_by', user()->id);
-        }
-
-        if ($viewAppreciationPermission == 'owned') {
-            $appreciations->where('appreciations.award_to', user()->id);
-        }
-
-        if ($viewAppreciationPermission == 'both') {
-            $appreciations->where(function ($q) {
-                $q->where('appreciations.added_by', '=', user()->id);
-
-                $q->orWhere('appreciations.award_to', '=', user()->id);
-            });
-        }
-
+        $appreciations->join('awards', 'awards.id', '=', 'appreciations.award_id'); 
         $appreciations = $appreciations->select('appreciations.*')->where('appreciations.award_to', $employeeID)->get();
 
         return $appreciations;
     }
 
     public function projects()
-    {
-
-        $viewPermission = user()->permission('view_employee_projects');
-        abort_403(!in_array($viewPermission, ['all']));
+    { 
 
         $tab = request('tab');
         $this->activeTab = $tab ?: 'profile';
-        $this->view = 'employees.ajax.projects';
+        $this->view = 'manager.employees.ajax.projects';
 
         $dataTable = new ProjectsDataTable();
 
@@ -782,13 +663,11 @@ class EmployeeController extends AccountBaseController
     }
 
     public function tickets()
-    {
-        $viewPermission = user()->permission('view_tickets');
-        abort_403(!in_array($viewPermission, ['all']));
+    { 
         $tab = request('tab');
         $this->activeTab = $tab ?: 'profile';
         $this->tickets = Ticket::all();
-        $this->view = 'employees.ajax.tickets';
+        $this->view = 'manager.employees.ajax.tickets';
         $dataTable = new TicketDataTable();
 
         return $dataTable->render('employees.show', $this->data);
@@ -796,14 +675,12 @@ class EmployeeController extends AccountBaseController
     }
 
     public function tasks()
-    {
-        $viewPermission = user()->permission('view_employee_tasks');
-        abort_403(!in_array($viewPermission, ['all']));
+    { 
 
         $tab = request('tab');
         $this->activeTab = $tab ?: 'profile';
         $this->taskBoardStatus = TaskboardColumn::all();
-        $this->view = 'employees.ajax.tasks';
+        $this->view = 'manager.employees.ajax.tasks';
 
         $dataTable = new TasksDataTable();
 
@@ -811,15 +688,12 @@ class EmployeeController extends AccountBaseController
     }
 
     public function leaves()
-    {
-
-        $viewPermission = user()->permission('view_leaves_taken');
-        abort_403(!in_array($viewPermission, ['all']));
+    { 
 
         $tab = request('tab');
         $this->activeTab = $tab ?: 'profile';
         $this->leaveTypes = LeaveType::all();
-        $this->view = 'employees.ajax.leaves';
+        $this->view = 'manager.employees.ajax.leaves';
 
         $dataTable = new LeaveDataTable();
 
@@ -827,10 +701,7 @@ class EmployeeController extends AccountBaseController
     }
 
     public function timelogs()
-    {
-
-        $viewPermission = user()->permission('view_employee_timelogs');
-        abort_403(!in_array($viewPermission, ['all']));
+    { 
 
         $tab = request('tab');
         $this->activeTab = $tab ?: 'profile';
@@ -845,10 +716,9 @@ class EmployeeController extends AccountBaseController
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function inviteMember()
-    {
-        abort_403(!in_array(user()->permission('add_employees'), ['all']));
+    { 
 
-        return view('employees.ajax.invite_member', $this->data);
+        return view('manager.employees.ajax.invite_member', $this->data);
 
     }
 
@@ -922,14 +792,10 @@ class EmployeeController extends AccountBaseController
 
     public function importMember()
     {
-        $this->pageTitle = __('app.importExcel') . ' ' . __('app.employee');
-
-        $addPermission = user()->permission('add_employees');
-        abort_403(!in_array($addPermission, ['all', 'added']));
-
+        $this->pageTitle = __('app.importExcel') . ' ' . __('app.employee'); 
 
         if (request()->ajax()) {
-            $html = view('employees.ajax.import', $this->data)->render();
+            $html = view('manager.employees.ajax.import', $this->data)->render();
 
             return Reply::dataOnly(['status' => 'success', 'html' => $html, 'title' => $this->pageTitle]);
         }

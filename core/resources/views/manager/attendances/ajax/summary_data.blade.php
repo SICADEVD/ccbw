@@ -4,7 +4,7 @@ $addAttendancePermission = 'all';
 <div class="table-responsive">
     <x-table class="table-bordered mt-3 table-hover" headType="thead-light">
         <x-slot name="thead">
-            <th class="px-2" style="vertical-align: middle;">Employé</th>
+            <th class="px-2" style="vertical-align: middle;">@lang('app.employee')</th>
             @for ($i = 1; $i <= $daysInMonth; $i++)
             <th class="pr-2 pl-1 f-11">{{ $i }}
                 <br>
@@ -12,7 +12,7 @@ $addAttendancePermission = 'all';
                     {{ $weekMap[\Carbon\Carbon::parse(\Carbon\Carbon::parse($i . '-' . $month . '-' . $year))->dayOfWeek] }}
                 </span></th>
             @endfor
-            <th class="text-right px-2">Total</th>
+            <th class="text-right px-2">@lang('app.total')</th>
         </x-slot>
 
         @foreach ($employeeAttendence as $key => $attendance)
@@ -33,16 +33,16 @@ $addAttendancePermission = 'all';
                                 <span data-toggle="tooltip" data-original-title="{{ $leaveReasons[$userId][$key2] }}"><i
                                         class="fa fa-plane-departure text-red"></i></span>
                             @elseif ($day == 'Day Off')
-                                <span data-toggle="tooltip" data-original-title="Jour Off"><i
+                                <span data-toggle="tooltip" data-original-title="@lang('modules.attendance.dayOff')"><i
                                         class="fa fa-calendar-week text-red"></i></span>
                             @elseif ($day == 'Half Day')
                                 @if ($attendanceDate->isFuture())
-                                    <span data-toggle="tooltip" data-original-title="Demi Journée"><i
+                                    <span data-toggle="tooltip" data-original-title="@lang('modules.attendance.halfDay')"><i
                                         class="fa fa-star-half-alt text-red"></i></span>
                                 @else
                                     <a @if ($addAttendancePermission == 'all') href="javascript:;" class="edit-attendance" @endif data-user-id="{{ $userId }}"
                                             data-attendance-date="{{ $key2 }}">
-                                        <span data-toggle="tooltip" data-original-title="Demi Journée"><i
+                                        <span data-toggle="tooltip" data-original-title="@lang('modules.attendance.halfDay')"><i
                                                 class="fa fa-star-half-alt text-red"></i></span>
                                     </a>
                                 @endif

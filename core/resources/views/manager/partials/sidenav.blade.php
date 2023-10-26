@@ -71,14 +71,14 @@
                                     <span class="menu-title">@lang('Congés')</span>
                                 </a>
                             </li> 
-                            <li class="sidebar-menu-item {{ menuActive('manager.hr.') }}">
-                                <a href="#" class="nav-link">
+                            <li class="sidebar-menu-item {{ menuActive('manager.departments.index') }}">
+                                <a href="{{ route('manager.departments.index') }}" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>
                                     <span class="menu-title">@lang('Départements')</span>
                                 </a>
                             </li> 
-                            <li class="sidebar-menu-item {{ menuActive('manager.hr.') }}">
-                                <a href="#" class="nav-link">
+                            <li class="sidebar-menu-item {{ menuActive('manager.designations.index') }}">
+                                <a href="{{ route('manager.designations.index') }}" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>
                                     <span class="menu-title">@lang('Désignations')</span>
                                 </a>

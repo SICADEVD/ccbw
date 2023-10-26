@@ -60,8 +60,8 @@ $editImmigrationPermission = user()->permission('edit_immigration');
 
                     </p>
                 </div>
-                <x-cards.data-row :label="__('modules.employees.issueDate')" :value=" $passport->issue_date ? $passport->issue_date->format(cooperative()->date_format) : '--'" />
-                <x-cards.data-row :label="__('modules.employees.expiryDate')" :value=" $passport->expiry_date  ? $passport->expiry_date->format(cooperative()->date_format) : '--'" />
+                <x-cards.data-row :label="__('modules.employees.issueDate')" :value=" $passport->issue_date ? $passport->issue_date->format('Y-m-d') : '--'" />
+                <x-cards.data-row :label="__('modules.employees.expiryDate')" :value=" $passport->expiry_date  ? $passport->expiry_date->format('Y-m-d') : '--'" />
                 <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
                     <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">
                         @lang('modules.employees.scanCopy')</p>
@@ -121,10 +121,10 @@ $editImmigrationPermission = user()->permission('edit_immigration');
                                 {{$visaValue->country->name}}
                             </td>
                             <td>
-                                {{ $visaValue->issue_date->format(cooperative()->date_format)}}
+                                {{ $visaValue->issue_date->format('Y-m-d')}}
                             </td>
                             <td>
-                                {{ $visaValue->expiry_date->format(cooperative()->date_format)}}
+                                {{ $visaValue->expiry_date->format('Y-m-d')}}
                             </td>
                             <td class="text-right pr-20">
                                 <div class="task_view">

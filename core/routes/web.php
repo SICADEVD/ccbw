@@ -112,7 +112,18 @@ Route::controller('Manager\EmployeeController')->name('hr.')->prefix('hr')->grou
     Route::post('employees/send-invite', [EmployeeController::class, 'sendInvite'])->name('employees.send_invite');
     Route::post('employees/create-link', [EmployeeController::class, 'createLink'])->name('employees.create_link');
 });
+
+Route::get('designations/designation-hierarchy', [DesignationController::class, 'hierarchyData'])->name('designation.hierarchy');
+Route::post('designations/changeParent', [DesignationController::class, 'changeParent'])->name('designation.changeParent');
+Route::post('designations/search-filter', [DesignationController::class, 'searchFilter'])->name('designation.srchFilter');
+Route::post('designations/apply-quick-action', [DesignationController::class, 'applyQuickAction'])->name('designations.apply_quick_action');  
 Route::resource('designations', DesignationController::class);
+
+Route::post('departments/apply-quick-action', [DepartmentController::class, 'applyQuickAction'])->name('departments.apply_quick_action');
+Route::get('departments/department-hierarchy', [DepartmentController::class, 'hierarchyData'])->name('department.hierarchy');
+Route::post('department/changeParent', [DepartmentController::class, 'changeParent'])->name('department.changeParent');
+Route::get('department/search', [DepartmentController::class, 'searchDepartment'])->name('departments.search');
+Route::get('department/{id}', [DepartmentController::class, 'getMembers'])->name('departments.members');
 Route::resource('departments', DepartmentController::class);
 // Get quill image uploaded
 Route::get('quill-image/{image}', [ImageController::class, 'getImage'])->name('image.getImage');

@@ -12,8 +12,8 @@
                         <div class="row">
                           
                             <div class="col-lg-6 col-md-6">
-                                <x-forms.text fieldId="lastname" :fieldLabel="__('Nom de famille')"
-                                    fieldName="lastname" fieldRequired="true" :fieldPlaceholder="__('Nom de famille')">
+                                <x-forms.text fieldId="lastname" :fieldLabel="__('modules.employees.employeeName')"
+                                    fieldName="lastname" fieldRequired="true" :fieldPlaceholder="__('placeholders.name')">
                                 </x-forms.text>
                             </div>
                             <div class="col-lg-6 col-md-6">
@@ -108,7 +108,7 @@
                     <div class="col-lg-3 col-md-6">
                         <x-forms.datepicker fieldId="joining_date" :fieldLabel="__('modules.employees.joiningDate')"
                             fieldName="joining_date" :fieldPlaceholder="__('placeholders.date')" fieldRequired="true"
-                            :fieldValue="now(cooperative()->timezone)->format(cooperative()->date_format)" />
+                            :fieldValue="now(cooperative()->timezone)->format('Y-m-d')" />
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <x-forms.select fieldId="reporting_to" :fieldLabel="__('modules.employees.reportingTo')"
@@ -240,7 +240,7 @@
  
 <script>
     $(document).ready(function() {
-
+        $('.dropify').dropify();
         $('.custom-date-picker').each(function(ind, el) {
             datepicker(el, {
                 position: 'bl',

@@ -221,7 +221,7 @@
 
 @endsection
 
-@push('scripts')
+@push('script')
     @include('sections.datatable_js')
 
     <script>

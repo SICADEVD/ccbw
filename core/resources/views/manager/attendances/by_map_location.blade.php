@@ -113,7 +113,7 @@
 
 @endsection
 
-@push('scripts')
+@push('script')
 
     <script src="https://maps.googleapis.com/maps/api/js?key={{ global_setting()->google_map_key }}&callback=showTable"
         async>

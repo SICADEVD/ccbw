@@ -163,7 +163,7 @@ $addAttendancePermission = user()->permission('add_attendance');
 
 @endsection
 
-@push('scripts')
+@push('script')
     <script>
         $('#user_id, #department, #month, #year, #designation').on('change', function() {
             if ($('#user_id').val() != "all") {

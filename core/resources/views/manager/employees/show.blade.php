@@ -141,7 +141,7 @@ if ($viewPermission == 'all'
     </div>
 @endsection
 
-@push('scripts')
+@push('script')
     <script>
         $("body").on("click", ".project-menu .ajax-tab", function(event) {
             event.preventDefault();

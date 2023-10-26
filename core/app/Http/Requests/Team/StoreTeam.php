@@ -25,14 +25,14 @@ class StoreTeam extends CoreRequest
     public function rules()
     {
         return [
-            'team_name' => 'required'
+            'department' => 'required'
         ];
     }
 
     public function messages()
     {
         return [
-            'team_name.required' => __('app.team').' '.__('app.required')
+            'department.required' => __('app.team').' '.__('app.required')
         ];
     }
 

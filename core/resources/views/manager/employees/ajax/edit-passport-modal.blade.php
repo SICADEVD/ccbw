@@ -33,14 +33,14 @@
                 <div class="col-lg-3">
                     <x-forms.datepicker fieldId="issue_date" fieldRequired="true"
                                         :fieldLabel="__('modules.employees.issueDate')" fieldName="issue_date"
-                                        :fieldValue="$passport ? $passport->issue_date->format(cooperative()->date_format) :  \Carbon\Carbon::now(cooperative()->timezone)->format(cooperative()->date_format)"
+                                        :fieldValue="$passport ? $passport->issue_date->format('Y-m-d') :  \Carbon\Carbon::now(cooperative()->timezone)->format('Y-m-d')"
                                         :fieldPlaceholder="__('placeholders.date')"/>
                 </div>
 
                 <div class="col-lg-3">
                     <x-forms.datepicker fieldId="expiry_date" fieldRequired="true"
                                         :fieldLabel="__('modules.employees.expiryDate')" fieldName="expiry_date"
-                                        :fieldValue="$passport ? $passport->expiry_date->format(cooperative()->date_format) : \Carbon\Carbon::now(cooperative()->timezone)->format(cooperative()->date_format)"
+                                        :fieldValue="$passport ? $passport->expiry_date->format('Y-m-d') : \Carbon\Carbon::now(cooperative()->timezone)->format('Y-m-d')"
                                         :fieldPlaceholder="__('placeholders.date')"/>
                 </div>
 

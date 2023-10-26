@@ -27,54 +27,29 @@ use Laravel\Fortify\TwoFactorAuthenticationProvider;
 use Trebol\Entrust\Traits\EntrustUserTrait;
 use App\Notifications\ResetPassword;
 
-/**
- * App\Models\UserAuth
- *
- * @property string $name
- * @property string $email
- * @property string $password
- * @property string|null $two_factor_secret
- * @property string|null $two_factor_recovery_codes
- * @property string|null $remember_token
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @mixin \Eloquent
- * @property int $two_factor_confirmed
- * @property int $two_factor_email_confirmed
- * @property string|null $salutation
- * @property string|null $two_fa_verify_via
- * @property string|null $two_factor_code when authenticator is email
- * @property \Illuminate\Support\Carbon|null $two_factor_expires_at
- * @property-read \App\Models\User|null $user
- * @property-read \App\Models\User|null $userWithoutCooperative
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
- * @property-read int|null $users_count
- * @method static \Illuminate\Database\Eloquent\Builder|UserAuth newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|UserAuth newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|UserAuth query()
- */
+ 
 class UserAuth extends BaseModel implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract, MustVerifyEmail
 {
 
-    use Authenticatable, Authorizable, CanResetPassword, HasFactory, TwoFactorAuthenticatable, AuthMustVerifyEmail, Notifiable;
+    use Authenticatable, Authorizable, CanResetPassword, HasFactory, AuthMustVerifyEmail, Notifiable;
 
     protected $fillable = ['username', 'email', 'password', 'remember_token', 'email_verification_code', 'email_verified_at', 'email_code_expires_at'];
     protected $hidden = ['password'];
-    public $dates = ['two_factor_expires_at', 'email_code_expires_at'];
+    public $dates = ['email_code_expires_at'];
 
     public function users(): HasMany
     {
-        return $this->hasMany(User::class, 'user_auth_id')->withoutGlobalScope(ActiveScope::class);
+        return $this->hasMany(User::class, 'user_id')->withoutGlobalScope(ActiveScope::class);
     }
 
     public function user(): HasOne
     {
-        return $this->hasOne(User::class, 'user_auth_id')->withoutGlobalScope(ActiveScope::class);
+        return $this->hasOne(User::class, 'user_id')->withoutGlobalScope(ActiveScope::class);
     }
 
     public function userWithoutCooperative(): HasOne
     {
-        return $this->hasOne(User::class, 'user_auth_id')->withoutGlobalScope(CooperativeScope::class);
+        return $this->hasOne(User::class, 'user_id')->withoutGlobalScope(CooperativeScope::class);
     }
 
     public function generateTwoFactorCode()
@@ -110,8 +85,8 @@ class UserAuth extends BaseModel implements AuthenticatableContract, Authorizabl
 
     public static function createUserAuthCredentials($username, $email = null, $password = null, $oldEmail = null)
     {
-        $checkAuth = UserAuth::where('username', $username)->first();
-
+        $checkAuth = User::where('username', $username)->first();
+         
         if (is_null($checkAuth)) {
             if (is_null($password)) {
                 $string = '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcefghijklmnopqrstuvwxyz';
@@ -125,7 +100,7 @@ class UserAuth extends BaseModel implements AuthenticatableContract, Authorizabl
 
             $verifiedAt = user() ? now() : null;
             $checkAuth = UserAuth::create(['username' => $username, 'email' => $email, 'password' => bcrypt($password), 'email_verified_at' => $verifiedAt]);
-            session(['auth_pass' => $password]);
+            
 
         }
 
@@ -181,7 +156,7 @@ class UserAuth extends BaseModel implements AuthenticatableContract, Authorizabl
 
     public function sendEmailVerificationNotification()
     {
-        $id = (user() ? user()->user_auth_id : $this->id);
+        $id = (user() ? user()->id : $this->id);
 
         UserAuth::where('id', $id)
             ->update([

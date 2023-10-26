@@ -25,15 +25,15 @@ class StoreDepartment extends CoreRequest
     public function rules()
     {
         return [
-            'team_name' => 'required|unique:teams,team_name,null,id,cooperative_id,' . cooperative()->id
+            'department' => 'required|unique:departments,department,null,id,cooperative_id,' . auth()->user()->cooperative_id
         ];
     }
 
     public function messages()
     {
         return [
-            'team_name.required' => __('messages.departmentName'),
-            'team_name.unique' => __('messages.departmentUniq'),
+            'department.required' => __('messages.departmentName'),
+            'department.unique' => __('messages.departmentUniq'),
         ];
     }
 

@@ -167,7 +167,7 @@ $addAttendancePermission = user()->permission('add_attendance');
 
 @endsection
 
-@push('scripts')
+@push('script')
 
     <script>
         $('#user_id, #department, #month, #year, #late')
