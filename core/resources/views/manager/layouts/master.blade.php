@@ -70,7 +70,7 @@
     
     @yield('content')
 
-    <script src="{{ asset('assets/vglobal/js/bootstrap.min.js') }}"></script>
+    
     <script src="{{ asset('assets/global/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/fcadmin/js/vendor/bootstrap-toggle.min.js') }}"></script>
     <script src="{{ asset('assets/global/js/jquery.validate.js') }}"></script>
@@ -85,7 +85,7 @@
     <script src="{{ asset('assets/dropify/js/dropify.min.js') }}"></script>
     <script src="{{ asset('assets/fcadmin/js/jquery.chained.js') }}"></script>
 <script src="{{ asset('assets/fcadmin/js/popper.min.js') }}"></script>
-
+<script src="{{ asset('assets/global/js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('assets/fcadmin/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('assets/fcadmin/js/dataTables.bootstrap4.min.js') }}"></script> 
 <script src="{{ asset('assets/vendor/jquery/bootstrap-datepicker.min.js') }}"></script>
@@ -93,10 +93,10 @@
 <script src="{{ asset('assets/vendor/jquery/dropzone.min.js') }}"></script>
 <script src="{{ asset('assets/vendor/jquery/daterangepicker.min.js')}}" defer=""></script> 
  <script src="{{ asset('assets/vendor/jquery/datepicker.min.js') }}"></script> 
-<script src="{{ asset('assets/vendor/jquery/bootstrap-select.min.js') }}"></script> 
+<script src="{{ asset('assets/vendor/jquery/bootstrap-select.min.js') }}"></script>  
 <script src="{{ asset('assets/js/main.js') }}"></script>
- 
     <script src="{{ asset('assets/fcadmin/js/app.js') }}"></script>
+    
 
     @include('sections.modals')
     {{-- LOAD NIC EDIT --}}

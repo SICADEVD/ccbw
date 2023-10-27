@@ -12,17 +12,11 @@ use Yajra\DataTables\Html\Column;
 
 class HolidayDataTable extends BaseDataTable
 {
-
-    private $editPermission;
-    private $deletePermission;
-    private $viewPermission;
+ 
 
     public function __construct()
     {
-        parent::__construct();
-        $this->viewPermission = user()->permission('view_holiday');
-        $this->editPermission = user()->permission('edit_holiday');
-        $this->deletePermission = user()->permission('delete_holiday');
+        parent::__construct(); ;
     }
 
     /**
@@ -39,7 +33,7 @@ class HolidayDataTable extends BaseDataTable
                 return '<input type="checkbox" class="select-table-row" id="datatable-row-' . $row->id . '"  name="datatable_ids[]" value="' . $row->id . '" onclick="dataTableRowCheck(' . $row->id . ')">';
             })
             ->editColumn('holiday_date', function ($row) {
-                return Carbon::parse($row->date)->translatedFormat($this->cooperative->date_format);
+                return Carbon::parse($row->date)->translatedFormat('Y-m-d');
             })
             ->addColumn('occasion', function ($row) {
                 return $row->occassion;
@@ -57,22 +51,21 @@ class HolidayDataTable extends BaseDataTable
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink-41" tabindex="0" x-placement="bottom-end" style="position: absolute; transform: translate3d(-137px, 26px, 0px); top: 0px; left: 0px; will-change: transform;">';
 
-                $actions .= '<a href="' . route('holidays.show', [$row->id]) . '" class="dropdown-item openRightModal"><i class="fa fa-eye mr-2"></i>' . __('app.view') . '</a>';
+                $actions .= '<a href="' . route('manager.holidays.show', [$row->id]) . '" class="dropdown-item openRightModal"><i class="fa fa-eye mr-2"></i>' . __('app.view') . '</a>';
 
-                if ($this->editPermission == 'all' || ($this->editPermission == 'added' && user()->id == $row->added_by)) {
-                    $actions .= '<a class="dropdown-item openRightModal" href="' . route('holidays.edit', [$row->id]) . '">
+             
+                    $actions .= '<a class="dropdown-item openRightModal" href="' . route('manager.holidays.edit', [$row->id]) . '">
                                     <i class="fa fa-edit mr-2"></i>
                                     ' . __('app.edit') . '
                             </a>';
-                }
-
-                if ($this->deletePermission == 'all' || ($this->deletePermission == 'added' && user()->id == $row->added_by)) {
+               
+ 
                     $actions .= '<a data-holiday-id=' . $row->id . '
                             class="dropdown-item delete-table-row" href="javascript:;">
                                <i class="fa fa-trash mr-2"></i>
                                 ' . __('app.delete') . '
                         </a>';
-                }
+                
 
                 $actions .= '</div> </div> </div>';
 
@@ -105,11 +98,7 @@ class HolidayDataTable extends BaseDataTable
 
         if (request()->searchText != '') {
             $holidays->where('holidays.occassion', 'like', '%' . request()->searchText . '%');
-        }
-
-        if ($this->viewPermission == 'added') {
-            $holidays->where('holidays.added_by', user()->id);
-        }
+        } 
 
         return $holidays;
     }

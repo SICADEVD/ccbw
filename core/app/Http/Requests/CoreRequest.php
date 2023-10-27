@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Helper\Reply;
+use App\Http\Helpers\Reply;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 

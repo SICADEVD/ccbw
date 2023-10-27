@@ -10,6 +10,7 @@ use App\Http\Controllers\Manager\TimelogCalendarController;
 use App\Http\Controllers\Manager\DepartmentController;
 use App\Http\Controllers\Manager\DesignationController;
 use App\Http\Controllers\Manager\ImageController;
+use App\Http\Controllers\Manager\HolidayController;
 
 
 Route::namespace('Manager\Auth')->group(function () {
@@ -112,6 +113,13 @@ Route::controller('Manager\EmployeeController')->name('hr.')->prefix('hr')->grou
     Route::post('employees/send-invite', [EmployeeController::class, 'sendInvite'])->name('employees.send_invite');
     Route::post('employees/create-link', [EmployeeController::class, 'createLink'])->name('employees.create_link');
 });
+
+    // Holidays
+Route::get('holidays/mark-holiday', [HolidayController::class, 'markHoliday'])->name('holidays.mark_holiday');
+Route::post('holidays/mark-holiday-store', [HolidayController::class, 'markDayHoliday'])->name('holidays.mark_holiday_store');
+Route::get('holidays/table-view', [HolidayController::class, 'tableView'])->name('holidays.table_view');
+Route::post('holidays/apply-quick-action', [HolidayController::class, 'applyQuickAction'])->name('holidays.apply_quick_action');
+Route::resource('holidays', HolidayController::class);
 
 Route::get('designations/designation-hierarchy', [DesignationController::class, 'hierarchyData'])->name('designation.hierarchy');
 Route::post('designations/changeParent', [DesignationController::class, 'changeParent'])->name('designation.changeParent');

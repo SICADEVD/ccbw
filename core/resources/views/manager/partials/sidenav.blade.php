@@ -46,11 +46,11 @@
                     </a>
                 </li>
                 <li class="sidebar-menu-item sidebar-dropdown">
-                    <a href="javascript:void(0)" class="{{ menuActive('manager.hr.*', 3) }}">
+                    <a href="javascript:void(0)" class="{{ menuActive(['manager.hr.*', 'manager.employees.index','manager.holidays.index','manager.departments.index','manager.designations.index','manager.holidays.table_view'], 3) }}">
                         <i class="menu-icon las la-users"></i>
                         <span class="menu-title">@lang('Ressources Humaines') </span>
                     </a>
-                    <div class="sidebar-submenu {{ menuActive('manager.hr.*', 2) }} ">
+                    <div class="sidebar-submenu {{ menuActive(['manager.hr.*', 'manager.employees.index','manager.holidays.index','manager.departments.index','manager.designations.index','manager.holidays.table_view'], 2) }} ">
                         <ul>
 
                             <li class="sidebar-menu-item {{ menuActive('manager.employees.index') }}">
@@ -69,6 +69,12 @@
                                 <a href="#" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>
                                     <span class="menu-title">@lang('Congés')</span>
+                                </a>
+                            </li> 
+                            <li class="sidebar-menu-item {{ menuActive('manager.holidays.index') }}">
+                                <a href="{{route('manager.holidays.index')}}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('Jours Fériés')</span>
                                 </a>
                             </li> 
                             <li class="sidebar-menu-item {{ menuActive('manager.departments.index') }}">

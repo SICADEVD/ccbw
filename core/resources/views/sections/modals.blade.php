@@ -4,8 +4,8 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modelHeading">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">×</span></button>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="las la-times"></i> </button>
             </div>
             <div class="modal-body">
                 {{__('app.loading')}}
@@ -24,8 +24,8 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modelHeading">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">×</span></button>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="las la-times"></i> </button>
             </div>
             <div class="modal-body">
                 {{__('app.loading')}}
@@ -44,8 +44,8 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modelHeading">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">×</span></button>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="las la-times"></i> </button>
             </div>
             <div class="modal-body bg-grey">
                 {{__('app.loading')}}

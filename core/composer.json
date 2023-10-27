@@ -13,6 +13,7 @@
         "coingate/coingate-php": "^3.0",
         "ezyang/htmlpurifier": "^4.13",
         "froiden/laravel-rest-api": "^10.0",
+        "google/apiclient": "^2.15",
         "guzzlehttp/guzzle": "^7.2",
         "intervention/image": "^2.5",
         "kirschbaum-development/eloquent-power-joins": "^3.0",
