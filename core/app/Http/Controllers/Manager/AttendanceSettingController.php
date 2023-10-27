@@ -31,7 +31,7 @@ class AttendanceSettingController extends AccountBaseController
         $this->ipAddresses = [];
         $this->attendanceSetting = AttendanceSetting::first();
         $this->monthlyReportRoles = json_decode($this->attendanceSetting->monthly_report_roles);
-        $this->roles = Role::where('name', '<>', 'client')->get();
+         
 
         if (json_decode($this->attendanceSetting->ip_address)) {
             $this->ipAddresses = json_decode($this->attendanceSetting->ip_address, true);
@@ -43,10 +43,10 @@ class AttendanceSettingController extends AccountBaseController
         case 'shift':
             $this->weekMap = Holiday::weekMap();
             $this->employeeShifts = EmployeeShift::where('shift_name', '<>', 'Day Off')->get();
-            $this->view = 'attendance-settings.ajax.shift';
+            $this->view = 'manager.attendance-settings.ajax.shift';
             break;
         default:
-            $this->view = 'attendance-settings.ajax.attendance';
+            $this->view = 'manager.attendance-settings.ajax.attendance';
             break;
         }
 
@@ -58,7 +58,7 @@ class AttendanceSettingController extends AccountBaseController
             return Reply::dataOnly(['status' => 'success', 'html' => $html, 'title' => $this->pageTitle, 'activeTab' => $this->activeTab]);
         }
 
-        return view('attendance-settings.index', $this->data);
+        return view('manager.attendance-settings.index', $this->data);
     }
 
     /**
