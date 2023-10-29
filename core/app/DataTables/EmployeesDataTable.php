@@ -179,7 +179,8 @@ class EmployeesDataTable extends BaseDataTable
 
         $users = $model->join('employee_details', 'employee_details.user_id', '=', 'users.id')
             ->leftJoin('designations', 'employee_details.designation_id', '=', 'designations.id')
-            ->select('users.id', 'employee_details.added_by', 'users.lastname', 'users.firstname', 'users.email', 'users.created_at', 'users.image', 'users.genre', 'users.status',  'designations.name as designation_name', 'employee_details.employee_id', 'employee_details.joining_date');
+            ->select('users.id', 'employee_details.added_by', 'users.lastname', 'users.firstname', 'users.email', 'users.created_at', 'users.image', 'users.genre', 'users.status',  'designations.name as designation_name', 'employee_details.employee_id', 'employee_details.joining_date')
+            ->where('users.cooperative_id', auth()->user()->cooperative_id);
       
         return $users->groupBy('users.id');
     }

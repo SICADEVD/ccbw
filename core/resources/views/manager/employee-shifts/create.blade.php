@@ -1,8 +1,8 @@
-<link rel="stylesheet" href="{{ asset('vendor/css/bootstrap-colorpicker.css') }}" />
+<link rel="stylesheet" href="{{ asset('assets/vendor/css/bootstrap-colorpicker.css') }}" />
 
 <div class="modal-header">
     <h5 class="modal-title">@lang('app.addNew') @lang('modules.attendance.shift')</h5>
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><i class="las la-times"></i> </button>
 </div>
 
 <div class="modal-body">
@@ -96,22 +96,20 @@
     <x-forms.button-primary id="save-employee-shift" icon="check">@lang('app.save')</x-forms.button-primary>
 </div>
 
-<script src="{{ asset('vendor/jquery/bootstrap-colorpicker.js') }}"></script>
+<script src="{{ asset('assets/vendor/jquery/bootstrap-colorpicker.js') }}"></script>
 <script>
     $('#colorpicker').colorpicker({
         "color": "#16813D"
     });
 
-    $('#office_end_time, #office_start_time, #halfday_mark_time').timepicker({
-        @if (cooperative()->time_format == 'H:i')
-            showMeridian: false,
-        @endif
+    $('#office_end_time, #office_start_time, #halfday_mark_time').timepicker({ 
+     showMeridian: false, 
     });
 
     // save type
     $('#save-employee-shift').click(function() {
         $.easyAjax({
-            url: "{{ route('employee-shifts.store') }}",
+            url: "{{ route('manager.employee-shifts.store') }}",
             container: '#createTicket',
             type: "POST",
             blockUI: '#save-employee-shift',

@@ -2,7 +2,7 @@
 namespace App\Http\Controllers\Manager;
 use App\Http\Controllers\AccountBaseController;
 
-use App\Helper\Reply;
+use App\Http\Helpers\Reply;
 use App\Http\Requests\TimeLogSetting\UpdateTimeLog;
 use App\Models\LogTimeFor;
 use App\Models\Role;

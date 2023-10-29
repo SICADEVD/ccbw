@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Models\Cooperative;
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Models\EmployeeShift;
+use App\Models\AttendanceSetting;
+use App\Http\Controllers\Controller;
 
 class CooperativeController extends Controller
 {
@@ -46,6 +48,9 @@ class CooperativeController extends Controller
         $cooperative->codeApp   = isset($request->codeApp) ? $request->codeApp : $this->generecodeapp($request->name); 
         $cooperative->save();
 
+        $this->employeeShift($cooperative);
+        $this->attendanceSetting($cooperative);
+
         $notify[] = ['success',$message];
         return back()->withNotify($notify);
     }
@@ -81,4 +86,43 @@ class CooperativeController extends Controller
     {
         return Cooperative::changeStatus($id);
     }
+
+    public function employeeShift($cooperative)
+    {
+
+        $employeeShift = new EmployeeShift();
+        $employeeShift->shift_name = 'Day Off';
+        $employeeShift->cooperative_id = $cooperative->id;
+        $employeeShift->shift_short_code = 'DO';
+        $employeeShift->color = '#E8EEF3';
+        $employeeShift->late_mark_duration = 0;
+        $employeeShift->clockin_in_day = 0;
+        $employeeShift->office_open_days = '';
+        $employeeShift->saveQuietly();
+
+        $employeeShift = new EmployeeShift();
+        $employeeShift->shift_name = 'General Shift';
+        $employeeShift->cooperative_id = $cooperative->id;
+        $employeeShift->shift_short_code = 'GS';
+        $employeeShift->color = '#99C7F1';
+        $employeeShift->office_start_time = '09:00:00';
+        $employeeShift->office_end_time = '18:00:00';
+        $employeeShift->late_mark_duration = 20;
+        $employeeShift->clockin_in_day = 2;
+        $employeeShift->office_open_days = '["1","2","3","4","5"]';
+        $employeeShift->saveQuietly();
+    }
+
+    public function attendanceSetting($cooperative)
+    {
+        $setting = new AttendanceSetting();
+        $setting->cooperative_id = $cooperative->id;
+        $setting->office_start_time = '09:00:00';
+        $setting->office_end_time = '18:00:00';
+        $setting->late_mark_duration = 20;
+        $setting->default_employee_shift = EmployeeShift::where('cooperative_id', $cooperative->id)->where('shift_name', '<>', 'Day Off')->first()->id;
+        $setting->alert_after_status = 0;
+        $setting->saveQuietly();
+    }
+
 }

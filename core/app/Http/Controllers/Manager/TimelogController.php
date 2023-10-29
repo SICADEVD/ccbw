@@ -4,7 +4,7 @@ use App\Http\Controllers\AccountBaseController;
 
 use App\DataTables\TimeLogsDataTable;
 use App\Exports\EmployeeTimelogs;
-use App\Helper\Reply;
+use App\Http\Helpers\Reply;
 use App\Http\Requests\TimeLogs\StartTimer;
 use App\Http\Requests\TimeLogs\StoreTimeLog;
 use App\Http\Requests\TimeLogs\UpdateTimeLog;

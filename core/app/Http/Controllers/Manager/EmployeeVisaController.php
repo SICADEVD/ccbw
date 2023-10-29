@@ -1,9 +1,8 @@
 <?php
-
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Manager; 
 
 use App\Helper\Files;
-use App\Helper\Reply;
+use App\Http\Helpers\Reply;
 use App\Models\VisaDetail;
 use Doctrine\DBAL\Schema\View;
 use App\Http\Requests\StoreVisaRequest;

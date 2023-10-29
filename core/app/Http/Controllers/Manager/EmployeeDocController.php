@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helper\Files;
-use App\Helper\Reply;
+use App\Http\Helpers\Reply;
 use App\Http\Requests\EmployeeDocs\CreateRequest;
 use App\Http\Requests\EmployeeDocs\UpdateRequest;
 use App\Models\EmployeeDocument;

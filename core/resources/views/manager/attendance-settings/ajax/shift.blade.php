@@ -86,15 +86,17 @@
         var url = "{{ route('manager.employee-shifts.create') }}";
         $(MODAL_LG + ' ' + MODAL_HEADING).html('...');
         $.ajaxModal(MODAL_LG, url);
+        $(MODAL_LG).modal('show');
     });
 
     $('body').on('click', '.edit-shift', function() {
         var shiftID = $(this).data('shift-id');
         var url = "{{ route('manager.employee-shifts.edit', ':id') }}";
         url = url.replace(':id', shiftID);
-
+         
         $(MODAL_XL + ' ' + MODAL_HEADING).html('...');
         $.ajaxModal(MODAL_XL, url);
+        $(MODAL_XL).modal('show');
     });
 
     /* delete shift */

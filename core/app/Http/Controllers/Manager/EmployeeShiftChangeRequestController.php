@@ -1,10 +1,10 @@
 <?php
-
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Manager;
+use App\Http\Controllers\AccountBaseController;
 
 use Carbon\Carbon;
 use App\Models\User;
-use App\Helper\Reply;
+use App\Http\Helpers\Reply;
 use Illuminate\Http\Request;
 use App\Models\EmployeeShift;
 use App\Models\EmployeeShiftSchedule;

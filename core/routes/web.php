@@ -147,13 +147,13 @@ Route::controller('Manager\ImportController')->name('hr.')->prefix('hr')->group(
     Route::get('employees/import/exception/{name}', [ImportController::class, 'getQueueException'])->name('import.process.exception');
   });
 
-Route::name('settings.')->prefix('settings')->group(function () {
-    Route::resource('attendance-settings', AttendanceSettingController::class);
-    Route::resource('leaves-settings', LeaveSettingController::class);
-  });
-  Route::post('employee-shifts/set-default', [EmployeeShiftController::class, 'setDefaultShift'])->name('employee-shifts.set_default');
-    Route::resource('employee-shifts', EmployeeShiftController::class);
-Route::resource('settings', SettingsController::class)->only(['edit', 'update', 'index']);
+// Route::name('settings.')->prefix('settings')->group(function () {
+//     Route::resource('attendance-settings', AttendanceSettingController::class);
+//     Route::resource('leaves-settings', LeaveSettingController::class);
+//   });
+// Route::post('employee-shifts/set-default', [EmployeeShiftController::class, 'setDefaultShift'])->name('employee-shifts.set_default');
+// Route::resource('employee-shifts', EmployeeShiftController::class);
+// Route::resource('settings', SettingsController::class)->only(['edit', 'update', 'index']);
 
 Route::resource('employees', EmployeeController::class);
  

@@ -132,7 +132,7 @@
                 <a href="{{ route('manager.hr.attendances.by_hour') }}" class="btn btn-secondary f-14" data-toggle="tooltip"
                    data-original-title="@lang('modules.attendance.attendanceByHour')"><i class="fa fa-clock"></i></a>
 
-                @if(attendance_setting()->save_current_location)
+                @if(attendance_setting() !=null)
                     <a href="{{ route('manager.hr.attendances.by_map_location') }}" class="btn btn-secondary f-14"
                        data-toggle="tooltip" data-original-title="@lang('modules.attendance.attendanceByLocation')"><i
                             class="fa fa-map-marked-alt"></i></a>

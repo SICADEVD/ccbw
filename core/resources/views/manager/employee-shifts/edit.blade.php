@@ -1,8 +1,8 @@
-<link rel="stylesheet" href="{{ asset('vendor/css/bootstrap-colorpicker.css') }}" />
+<link rel="stylesheet" href="{{ asset('assets/vendor/css/bootstrap-colorpicker.css') }}" />
 
 <div class="modal-header">
     <h5 class="modal-title">@lang('app.update') @lang('modules.attendance.shift')</h5>
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><i class="las la-times"></i> </button>
 </div>
 
 <div class="modal-body">
@@ -44,7 +44,7 @@
                                 fieldId="office_start_time" fieldRequired="true" :fieldValue="\Carbon\Carbon::createFromFormat(
                                     'H:i:s',
                                     $employeeShift->office_start_time,
-                                )->translatedFormat(cooperative()->time_format)" />
+                                )->translatedFormat('H:i')" />
                         </div>
                     </div>
 
@@ -52,7 +52,7 @@
                         <div class="bootstrap-timepicker">
                             <x-forms.text :fieldLabel="__('modules.attendance.officeEndTime')" :fieldPlaceholder="__('placeholders.hours')" fieldName="office_end_time"
                                 fieldId="office_end_time" fieldRequired="true" :fieldValue="\Carbon\Carbon::createFromFormat('H:i:s', $employeeShift->office_end_time)->format(
-                                    cooperative()->time_format,
+                                    'H:i',
                                 )" />
                         </div>
                     </div>
@@ -63,7 +63,7 @@
                                 fieldId="halfday_mark_time" :fieldValue="!is_null($employeeShift->halfday_mark_time) ? \Carbon\Carbon::createFromFormat(
                                     'H:i:s',
                                     $employeeShift->halfday_mark_time,
-                                )->translatedFormat(cooperative()->time_format) : ''" />
+                                )->translatedFormat('H:i') : ''" />
                         </div>
                     </div>
 
@@ -102,22 +102,33 @@
     <x-forms.button-primary id="save-employee-shift" icon="check">@lang('app.save')</x-forms.button-primary>
 </div>
 
-<script src="{{ asset('vendor/jquery/bootstrap-colorpicker.js') }}"></script>
+<script src="{{ asset('assets/vendor/jquery/bootstrap-colorpicker.js') }}"></script>
 <script>
     $('#colorpicker').colorpicker({
         "color": "{{ $employeeShift->color }}"
     });
 
-    $('#office_end_time, #office_start_time, #halfday_mark_time').timepicker({
-        @if (cooperative()->time_format == 'H:i')
-            showMeridian: false,
-        @endif
+    $('#office_end_time, #office_start_time, #halfday_mark_time').timepicker({ 
+            showMeridian: false, 
     });
 
+    $('#early_clock_in').timepicker({ 
+           showMeridian: false, 
+           minuteStep: 1
+       });
+       $('#clockin_in_day').timepicker({ 
+           showMeridian: false, 
+           minuteStep: 1
+       });
+       $('#late_mark_duration').timepicker({ 
+           showMeridian: false, 
+           minuteStep: 1
+       });
     // save type
     $('#save-employee-shift').click(function() {
+        
         $.easyAjax({
-            url: "{{ route('employee-shifts.update', $employeeShift->id) }}",
+            url: "{{ route('manager.employee-shifts.update', $employeeShift->id) }}",
             container: '#createTicket',
             type: "POST",
             blockUI: true,

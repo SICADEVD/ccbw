@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers\Manager;
+use App\Http\Controllers\AccountBaseController;
 use Carbon\Carbon;
 use App\Models\Task;
 use App\Models\Team;
@@ -49,7 +50,7 @@ use App\DataTables\ProjectsDataTable;
 use App\DataTables\TimeLogsDataTable;
 use App\DataTables\EmployeesDataTable;
 use App\Http\Requests\User\InviteEmailRequest;
-use App\Http\Controllers\AccountBaseController;
+
 use App\Http\Requests\Admin\Employee\StoreRequest;
 use App\Http\Requests\Admin\Employee\ImportRequest;
 use App\Http\Requests\Admin\Employee\UpdateRequest;

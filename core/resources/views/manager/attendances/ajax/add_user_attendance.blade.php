@@ -3,8 +3,8 @@
     <h5 class="modal-title" id="modelHeading">
         @lang('app.mark')  @lang('app.menu.attendance')
     </h5>
-    <button type="button"  class="close" data-dismiss="modal" aria-label="Close"><span
-            aria-hidden="true">×</span></button>
+    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="las la-times"></i> </button>
 </div>
 <div class="modal-body">
     <div class="row">
@@ -108,16 +108,12 @@
 
     $(document).ready(function() {
 
-        $('#clock-in-time').timepicker({
-            @if(cooperative()->time_format == 'H:i')
-            showMeridian: false,
-            @endif
+        $('#clock-in-time').timepicker({ 
+            showMeridian: false, 
             minuteStep: 1
         });
-        $('#clock-out').timepicker({
-            @if(cooperative()->time_format == 'H:i')
-            showMeridian: false,
-            @endif
+        $('#clock-out').timepicker({ 
+            showMeridian: false, 
             minuteStep: 1,
             defaultTime: false
         });

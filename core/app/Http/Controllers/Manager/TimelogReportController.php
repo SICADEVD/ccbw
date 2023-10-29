@@ -3,7 +3,7 @@ namespace App\Http\Controllers\Manager;
 use App\Http\Controllers\AccountBaseController;
 
 use App\DataTables\TimeLogReportDataTable;
-use App\Helper\Reply;
+use App\Http\Helpers\Reply;
 use App\Models\Project;
 use App\Models\ProjectTimeLog;
 use App\Models\Task;

@@ -1,10 +1,10 @@
 <?php
-
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Manager;
+use App\Http\Controllers\AccountBaseController;
 
 use App\Exports\ShiftScheduleExport;
 use App\Helper\Files;
-use App\Helper\Reply;
+use App\Http\Helpers\Reply;
 use App\Http\Requests\EmployeeShift\StoreBulkShift;
 use App\Mail\BulkShiftEmail;
 use App\Models\AttendanceSetting;

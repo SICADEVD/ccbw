@@ -95,12 +95,7 @@
                                     <span class="menu-title">@lang('Timesheet')</span>
                                 </a>
                             </li> 
-                            <li class="sidebar-menu-item {{ menuActive('manager.settings.attendance-settings.index') }}">
-                                <a href="{{ route('manager.settings.attendance-settings.index') }}" class="nav-link">
-                                    <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('Settings')</span>
-                                </a>
-                            </li> 
+                            
 
                         </ul>
                     </div>

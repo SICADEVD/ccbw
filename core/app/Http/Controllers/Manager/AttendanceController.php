@@ -45,12 +45,13 @@ class AttendanceController extends AccountBaseController
     public function index(Request $request)
     {
         $attendance = Attendance::find($request->employee_id);
-       
+  
         if (request()->ajax()) {
             return $this->summaryData($request);
         }
 
-        $this->employees = EmployeeDetail::with('user')->get();
+        //$this->employees = EmployeeDetail::with('user')->get();
+        $this->employees = User::allEmployees(null, true, 'all', auth()->user()->cooperative_id);
         $now = now();
         $this->year = $now->format('Y');
         $this->month = $now->format('m');
@@ -81,6 +82,7 @@ class AttendanceController extends AccountBaseController
                 },
                 'leaves.type', 'shifts.shift', 'attendance.shift']
         )->leftJoin('employee_details', 'employee_details.user_id', '=', 'users.id')
+        ->where('users.cooperative_id', auth()->user()->cooperative_id)
             ->select('users.id', 'users.firstname','users.lastname', 'users.email', 'users.created_at', 'employee_details.department_id', 'users.image') 
             ->groupBy('users.id');
 
