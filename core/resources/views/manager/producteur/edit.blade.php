@@ -54,7 +54,13 @@
                         <?php echo Form::label(__('Certificat'), null, ['class' => 'col-sm-4 control-label']); ?>
 
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('certificats', ['Rainforest' => 'Rainforest', 'Fairtrade' => 'Fairtrade', 'BIO' => 'BIO', 'Autre' => 'Autre'], null, ['class' => 'form-control certificats', 'id' => 'certificats', 'required']); ?>
+                            <select class="form-control select2-multi-select certificats" name="certificats[]" multiple
+                                required>
+                                <option value="">@lang('Selectionner les protections')</option>
+                                <option value="Rainforest"{{ in_array('Rainforest', $certifications) ? 'selected' : '' }}>Rainforest</option>
+                                <option value="Fairtrade"{{ in_array('Fairtrade', $certifications) ? 'selected' : '' }}>Fairtrade</option>
+                                <option value="Autre"{{ in_array('Autre', $certifications) ? 'selected' : '' }}>Autre</option>
+                            </select>
                         </div>
                     </div>
                     <div id="autreCertificat">
@@ -113,7 +119,7 @@
                     <div class="form-group row">
                         <label class="col-sm-4 control-label">@lang('Selectionner un programme')</label>
                         <div class="col-xs-12 col-sm-8">
-                            <select class="form-control" name="programme_id" id="programme_id" required>
+                            <select class="form-control programme_id" name="programme_id" id="programme_id" required>
                                 <option value="">@lang('Selectionner une option')</option>
                                 @foreach ($programmes as $programme)
                                     <option value="{{ $programme->id }}" @selected($producteur->programme_id == $programme->id)>
@@ -123,9 +129,21 @@
                         </div>
                     </div>
 
+                    {{-- Autre programme  --}}
+                    <div id="autreProgrammes">
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Autre Programme'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::text('autreProgramme', null, ['id' => 'autreProgramme', 'placeholder' => __('Autre Programme'), 'class' => 'form-control autreProgramme']); ?>
+                            </div>
+                        </div>
+                    </div>
+                    {{-- fin autre programme  --}}
+
+
                     {{-- saisie où le producteur habite --}}
                     <div class="form-group row">
-                        <?php echo Form::label(__('Où Habitez vous ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <?php echo Form::label(__('Habitez-vous dans un campement ou village ?'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
                             <?php echo Form::select('habitationProducteur', ['Village' => 'Village', 'Campement' => 'Campement'], null, ['class' => 'form-control habitationProducteur', 'id' => 'habitationProducteur', 'required']); ?>
                         </div>
@@ -176,7 +194,7 @@
                     <div class="form-group row">
                         <?php echo Form::label(__('Statut matrimonial'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('statutMatrimonial', ['Célibataire' => 'Célibataire', 'Fiancé' => 'Fiancé', 'Marié(mariage civil)' => 'Marié(mariage civil)', 'Mariage réligieux' => 'Mariage réligieux', 'Mariage réligieux' => 'Mariage réligieux', 'Divorcé' => 'Divorcé', 'Veuf(ve)' => 'Veuf(ve)'], null, ['class' => 'form-control', 'required']); ?>
+                            <?php echo Form::select('statutMatrimonial', ['Célibataire' => 'Célibataire', 'Concubinage' => 'Concubinage', 'Marié(mariage civil)' => 'Marié(mariage civil)', 'Mariage réligieux' => 'Mariage réligieux', 'Mariage réligieux' => 'Mariage réligieux', 'Divorcé' => 'Divorcé', 'Veuf(ve)' => 'Veuf(ve)'], null, ['class' => 'form-control', 'required']); ?>
                         </div>
                     </div>
 
@@ -513,7 +531,7 @@
 
 @push('script')
     <script type="text/javascript">
-        $('#listecultures,#gardePapiersChamps,#numeroCompteMM,#typeCarteSecuriteSociales,#garantie,#autrePhones,#autreCertificat,#autreVarietes,#plantePartager,#statutCertifie')
+        $('#listecultures,#gardePapiersChamps,#numeroCompteMM,#typeCarteSecuriteSociales,#garantie,#autrePhones,#autreCertificat,#autreVarietes,#plantePartager,#statutCertifie,#autreProgrammes')
             .hide();
         //afficher le champ de saisie du numero de la piece de sécurité sociale
         $('.typeCarteSecuriteSociale').change(function() {
@@ -537,6 +555,30 @@
             $('#typeCarteSecuriteSociales').show('slow');
             $('.numSecuriteSociale').show('slow');
             $("#numSecuriteSociale").prop("required", true);
+        }
+
+        //afficher le champs autre programme
+        $('.programme_id').change(function() {
+            var programme = $('.programme_id').find(":selected").text().trim();
+            console.log(programme);
+            if (programme == 'Autre Programme') {
+                $('#autreProgrammes').show('slow');
+                $('.autreProgramme').show('slow');
+                $("#autreProgramme").prop("required", true);
+            } else {
+                $('#autreProgrammes').hide('slow');
+                $('.autreProgramme').val('');
+                $("#autreProgramme").prop("required", false);
+            }
+        });
+        if ($('.programme_id').val() == 'Autre') {
+            $('#autreProgrammes').show('slow');
+            $('.autreProgramme').show('slow');
+            $("#autreProgramme").prop("required", true);
+        } else {
+            $('#autreProgrammes').hide('slow');
+            $('.autreProgramme').val('');
+            $("#autreProgramme").prop("required", false);
         }
 
         $('.statut').change(function() {

@@ -20,6 +20,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreInfoRequest;
 use App\Http\Requests\StoreProducteurRequest;
 use App\Http\Requests\UpdateProducteurRequest;
+use App\Models\Producteur_certification;
 use App\Models\Producteur_infos_autresactivite;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Producteur_infos_typeculture;
@@ -39,7 +40,7 @@ class ProducteurController extends Controller
             return $localite->active();
         });
         $programmes = Programme::all();
-        
+
         $producteurs = Producteur::dateFilter()
             ->searchable(["nationalite", "type_piece", "codeProd", "codeProdapp", "producteurs.nom", "prenoms", "sexe", "dateNaiss", "phone1", "niveau_etude", "numPiece", "consentement", "statut", "certificat"])
             ->latest('id')
@@ -92,7 +93,6 @@ class ProducteurController extends Controller
 
     public function store(StoreProducteurRequest $request)
     {
-
         $request->validated();
 
         $localite = Localite::where('id', $request->localite_id)->first();
@@ -134,10 +134,11 @@ class ProducteurController extends Controller
         $producteur->niveau_etude    = $request->niveau_etude;
         $producteur->type_piece    = $request->type_piece;
         $producteur->numPiece    = $request->numPiece;
-        $producteur->certificats    = $request->certificats;
+        // $producteur->certificats    = $request->certificats;
         $producteur->userid = auth()->user()->id;
         $producteur->codeProd = $request->codeProd;
         $producteur->plantePartage = $request->plantePartage;
+        $producteur->autreProgramme = $request->autreProgramme;
         if ($request->hasFile('picture')) {
             try {
                 $producteur->picture = $request->file('picture')->store('public/producteurs/photos');
@@ -154,6 +155,28 @@ class ProducteurController extends Controller
         }
         // dd(json_encode($request->all()));
         $producteur->save();
+
+        if ($producteur != null) {
+            $id = $producteur->id;
+            $datas  = $data2 = [];
+            if (($request->certificats != null)) {
+                Producteur_certification::where('producteur_id', $id)->delete();
+                $i = 0;
+                foreach ($request->certificats as $certificat) {
+                    if (!empty($certificat)) {
+                        $datas[] = [
+                            'producteur_id' => $id,
+                            'certification' => $certificat,
+                        ];
+                    }
+
+                    $i++;
+                }
+            }
+           
+            Producteur_certification::insert($datas);
+            
+        }
 
         $notify[] = ['success', isset($message) ? $message : 'Le producteur a été crée avec succès.'];
         return back()->withNotify($notify);
@@ -209,7 +232,6 @@ class ProducteurController extends Controller
         $producteur->numCMU = $request->numCMU;
         $producteur->anneeDemarrage = $request->anneeDemarrage;
         $producteur->anneeFin = $request->anneeFin;
-        $producteur->certificats = $request->certificats;
         $producteur->autreCertificats = $request->autreCertificats;
         $producteur->autreVariete = $request->autreVariete;
         $producteur->consentement  = $request->consentement;
@@ -228,6 +250,7 @@ class ProducteurController extends Controller
         $producteur->userid = auth()->user()->id;
         $producteur->codeProd = $request->codeProd;
         $producteur->plantePartage = $request->plantePartage;
+        $producteur->autreProgramme = $request->autreProgramme;
         // dd(json_encode($request->all()));
         if ($request->hasFile('picture')) {
             try {
@@ -247,6 +270,27 @@ class ProducteurController extends Controller
             }
         }
         $producteur->save();
+        if ($producteur != null) {
+            $id = $producteur->id;
+            $datas  = $data2 = [];
+            if (($request->certificats != null)) {
+                Producteur_certification::where('producteur_id', $id)->delete();
+                $i = 0;
+                foreach ($request->certificats as $certificat) {
+                    if (!empty($certificat)) {
+                        $datas[] = [
+                            'producteur_id' => $id,
+                            'certification' => $certificat,
+                        ];
+                    }
+
+                    $i++;
+                }
+            }
+           
+            Producteur_certification::insert($datas);
+            
+        }
         $notify[] = ['success', isset($message) ? $message : 'Le producteur a été mise à jour avec succès.'];
         return back()->withNotify($notify);
     }
@@ -362,7 +406,8 @@ class ProducteurController extends Controller
         $localites = Localite::active()->with('section')->get();
         $programmes = Programme::all();
         $producteur   = Producteur::findOrFail($id);
-        return view('manager.producteur.edit', compact('pageTitle', 'localites', 'producteur', 'programmes', 'sections'));
+        $certifications = $producteur->certifications->pluck('certification')->all();
+        return view('manager.producteur.edit', compact('pageTitle', 'localites', 'producteur', 'programmes', 'sections', 'certifications'));
     }
 
     private function generecodeProdApp($nom, $prenoms, $codeApp)

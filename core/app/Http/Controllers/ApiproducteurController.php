@@ -20,6 +20,7 @@ use App\Http\Requests\UpdateProducteurRequest;
 use App\Models\Producteur_infos_maladieenfant;
 use Illuminate\Validation\ValidationException;
 use App\Models\Producteur_infos_autresactivite;
+use App\Models\Producteur_certification;
 
 class ApiproducteurController extends Controller
 {
@@ -98,7 +99,8 @@ class ApiproducteurController extends Controller
     if ($request->id) {
       $producteur = Producteur::findOrFail($request->id);
       $validationRule = [
-        'programme_id' => 'required|exists:programmes,id',
+        'programme_id' => ['required', 'exists:programmes,id'],
+        'autreProgramme' => 'nullable', // Champ "autreProgramme" peut être vide
         'proprietaires' => 'required',
         'certificats' => 'required',
         'variete' => 'required',
@@ -111,10 +113,11 @@ class ApiproducteurController extends Controller
         'sexe'  => 'required|max:255',
         'nationalite'  => 'required|max:255',
         'dateNaiss'  => 'required|max:255',
-        'phone1'  => 'required|max:255',
+        'phone1'  => ['required', 'regex:/^\d{10}$/', 'unique:producteurs,phone1'],
         'niveau_etude'  => 'required|max:255',
         'type_piece'  => 'required|max:255',
         'numPiece'  => 'required|max:255',
+        'num_ccc' => 'regex:/^[0-9]{10}$/', // Champ "num_ccc" peut être vide
         'anneeDemarrage' => 'required_if:proprietaires,==,Garantie',
         'anneeFin' => 'required_if:proprietaires,==,Garantie',
         'plantePartage' => 'required_if:proprietaires,==,Planté-partager',
@@ -124,9 +127,10 @@ class ApiproducteurController extends Controller
         'codeProd' => 'required_if:statut,==,Certifie',
         'certificat' => 'required_if:statut,==,Certifie',
         'phone2' => 'required_if:autreMembre,==,oui',
+        'phone2'  => ['required', 'regex:/^\d{10}$/', 'unique:producteurs,phone2'],
         'autrePhone' => 'required_if:autreMembre,==,oui',
         'numCMU' => 'required_if:carteCMU,==,oui',
-        
+
       ];
       $messages = [
         'programme_id.required' => 'Le programme est obligatoire',
@@ -143,10 +147,11 @@ class ApiproducteurController extends Controller
         'nationalite.required' => 'La nationalité est obligatoire',
         'dateNaiss.required' => 'La date de naissance est obligatoire',
         'phone1.required' => 'Le numéro de téléphone est obligatoire',
+        'phone1.regex' => 'Le numéro de téléphone doit contenir exactement 10 chiffres.',
+        'phone1.unique' => 'Ce numéro de téléphone est déjà utilisé.',
         'niveau_etude.required' => 'Le niveau d\'étude est obligatoire',
         'type_piece.required' => 'Le type de pièce est obligatoire',
         'numPiece.required' => 'Le numéro de pièce est obligatoire',
-        'num_ccc.unique' => 'Le numéro de CCC existe déjà',
         'anneeDemarrage.required_if' => 'L\'année de démarrage est obligatoire',
         'anneeFin.required_if' => 'L\'année de fin est obligatoire',
         'plantePartage.required_if' => 'Le type de plante est obligatoire',
@@ -156,7 +161,10 @@ class ApiproducteurController extends Controller
         'codeProdapp.required_if' => 'Le code Prodapp est obligatoire',
         'certificat.required_if' => 'Le certificat est obligatoire',
         'phone2.required_if' => 'Le numéro de téléphone est obligatoire',
+        'phone2.regex' => 'Le numéro de téléphone doit contenir exactement 10 chiffres.',
+        'phone2.unique' => 'Ce numéro de téléphone est déjà utilisé.',
         'autrePhone.required_if' => 'Le champ membre de famille est obligatoire',
+        'num_ccc.regex' => 'numéro du conseil café cacao doit contenir 10 chiffres',
       ];
       $request->validate($validationRule, $messages);
       if ($request->picture) {
@@ -211,10 +219,10 @@ class ApiproducteurController extends Controller
       $producteur->niveau_etude    = $request->niveau_etude;
       $producteur->type_piece    = $request->type_piece;
       $producteur->numPiece    = $request->numPiece;
-      $producteur->certificats   = $request->certificats;
       $producteur->userid = $request->userid;
       $producteur->codeProd = $request->codeProd;
       $producteur->plantePartage = $request->plantePartage;
+      $producteur->autreProgramme = $request->autreProgramme;
       if ($producteur->codeProdapp == null) {
         $coop = DB::table('localites as l')->join('cooperatives as c', 'l.cooperative_id', '=', 'c.id')->where('l.id', $request->localite)->select('c.codeApp')->first();
         if ($coop != null) {
@@ -223,12 +231,33 @@ class ApiproducteurController extends Controller
           $producteur->codeProdapp = null;
         }
       }
+      if ($producteur != null) {
+        $id = $producteur->id;
+        $datas  = $data2 = [];
+        if (($request->certificats != null)) {
+          Producteur_certification::where('producteur_id', $id)->delete();
+          $i = 0;
+          foreach ($request->certificats as $certificat) {
+            if (!empty($certificat)) {
+              $datas[] = [
+                'producteur_id' => $id,
+                'certification' => $certificat,
+              ];
+            }
+
+            $i++;
+          }
+        }
+
+        Producteur_certification::insert($datas);
+      }
       $producteur->update($request->all());
 
       $message = "Le producteur a été mis à jour avec succès";
     } else {
       $validationRule = [
-        'programme_id' => 'required|exists:programmes,id',
+        'programme_id' => ['required', 'exists:programmes,id'],
+        'autreProgramme' => 'nullable', // Champ "autreProgramme" peut être vide
         'proprietaires' => 'required',
         'certificats' => 'required',
         'variete' => 'required',
@@ -241,10 +270,11 @@ class ApiproducteurController extends Controller
         'sexe'  => 'required|max:255',
         'nationalite'  => 'required|max:255',
         'dateNaiss'  => 'required|max:255',
-        'phone1'  => 'required|max:255',
+        'phone1'  => ['required', 'regex:/^\d{10}$/', 'unique:producteurs,phone1'],
         'niveau_etude'  => 'required|max:255',
         'type_piece'  => 'required|max:255',
         'numPiece'  => 'required|max:255',
+        'num_ccc' => 'regex:/^[0-9]{10}$/', // Champ "num_ccc" peut être vide
         'anneeDemarrage' => 'required_if:proprietaires,==,Garantie',
         'anneeFin' => 'required_if:proprietaires,==,Garantie',
         'plantePartage' => 'required_if:proprietaires,==,Planté-partager',
@@ -254,6 +284,7 @@ class ApiproducteurController extends Controller
         'codeProd' => 'required_if:statut,==,Certifie',
         'certificat' => 'required_if:statut,==,Certifie',
         'phone2' => 'required_if:autreMembre,==,oui',
+        'phone2'  => ['required', 'regex:/^\d{10}$/', 'unique:producteurs,phone2'],
         'autrePhone' => 'required_if:autreMembre,==,oui',
         'numCMU' => 'required_if:carteCMU,==,oui',
       ];
@@ -272,10 +303,11 @@ class ApiproducteurController extends Controller
         'nationalite.required' => 'La nationalité est obligatoire',
         'dateNaiss.required' => 'La date de naissance est obligatoire',
         'phone1.required' => 'Le numéro de téléphone est obligatoire',
+        'phone1.regex' => 'Le numéro de téléphone doit contenir exactement 10 chiffres.',
+        'phone1.unique' => 'Ce numéro de téléphone est déjà utilisé.',
         'niveau_etude.required' => 'Le niveau d\'étude est obligatoire',
         'type_piece.required' => 'Le type de pièce est obligatoire',
         'numPiece.required' => 'Le numéro de pièce est obligatoire',
-        'num_ccc.unique' => 'Le numéro de CCC existe déjà',
         'anneeDemarrage.required_if' => 'L\'année de démarrage est obligatoire',
         'anneeFin.required_if' => 'L\'année de fin est obligatoire',
         'plantePartage.required_if' => 'Le type de plante est obligatoire',
@@ -285,7 +317,10 @@ class ApiproducteurController extends Controller
         'codeProdapp.required_if' => 'Le code Prodapp est obligatoire',
         'certificat.required_if' => 'Le certificat est obligatoire',
         'phone2.required_if' => 'Le numéro de téléphone est obligatoire',
+        'phone2.regex' => 'Le numéro de téléphone doit contenir exactement 10 chiffres.',
+        'phone2.unique' => 'Ce numéro de téléphone est déjà utilisé.',
         'autrePhone.required_if' => 'Le champ membre de famille est obligatoire',
+        'num_ccc.regex' => 'numéro du conseil café cacao doit contenir 10 chiffres',
       ];
       $request->validate($validationRule, $message);
       $producteur = new Producteur();
