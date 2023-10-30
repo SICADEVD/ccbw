@@ -8,64 +8,11 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-/**
- * App\Models\LeaveType
- *
- * @property int $id
- * @property string $type_name
- * @property string $color
- * @property int $no_of_leaves
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property int $paid
- * @property-read mixed $icon
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Leave[] $leaves
- * @property-read int|null $leaves_count
- * @method static \Illuminate\Database\Eloquent\Builder|LeaveType newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|LeaveType newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|LeaveType query()
- * @method static \Illuminate\Database\Eloquent\Builder|LeaveType whereColor($value)
- * @method static \Illuminate\Database\Eloquent\Builder|LeaveType whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|LeaveType whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|LeaveType whereNoOfLeaves($value)
- * @method static \Illuminate\Database\Eloquent\Builder|LeaveType wherePaid($value)
- * @method static \Illuminate\Database\Eloquent\Builder|LeaveType whereTypeName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|LeaveType whereUpdatedAt($value)
- * @property int|null $cooperative_id
- * @property int $monthly_limit
- * @property-read \App\Models\Cooperative|null $cooperative
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Leave[] $leavesCount
- * @property-read int|null $leaves_count_count
- * @method static \Illuminate\Database\Eloquent\Builder|LeaveType whereCooperativeId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|LeaveType whereMonthlyLimit($value)
- * @property int|null $effective_after
- * @property string|null $effective_type
- * @property string|null $unused_leave
- * @property int $encashed
- * @property int $allowed_probation
- * @property int $allowed_notice
- * @property string|null $gender
- * @property string|null $marital_status
- * @property string|null $department
- * @property string|null $designation
- * @property string|null $role
- * @method static \Illuminate\Database\Eloquent\Builder|LeaveType whereAllowedNotice($value)
- * @method static \Illuminate\Database\Eloquent\Builder|LeaveType whereAllowedProbation($value)
- * @method static \Illuminate\Database\Eloquent\Builder|LeaveType whereDepartment($value)
- * @method static \Illuminate\Database\Eloquent\Builder|LeaveType whereDesignation($value)
- * @method static \Illuminate\Database\Eloquent\Builder|LeaveType whereEffectiveAfter($value)
- * @method static \Illuminate\Database\Eloquent\Builder|LeaveType whereEffectiveType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|LeaveType whereEncashed($value)
- * @method static \Illuminate\Database\Eloquent\Builder|LeaveType whereGender($value)
- * @method static \Illuminate\Database\Eloquent\Builder|LeaveType whereMaritalStatus($value)
- * @method static \Illuminate\Database\Eloquent\Builder|LeaveType whereRole($value)
- * @method static \Illuminate\Database\Eloquent\Builder|LeaveType whereUnusedLeave($value)
- * @mixin \Eloquent
- */
 class LeaveType extends BaseModel
 {
 
     use HasCooperative;
+    protected $table='leave_types';
 
     public function leaves(): HasMany
     {
@@ -82,11 +29,11 @@ class LeaveType extends BaseModel
     public static function byUser($user, $leaveTypeId = null, $status = array('approved'), $leaveDate = null)
     {
         if (!is_null($leaveDate)) {
-            $leaveDate = Carbon::createFromFormat(cooperative()->date_format, $leaveDate);
+            $leaveDate = Carbon::createFromFormat('Y-m-d', $leaveDate);
 
         }
         else {
-            $leaveDate = Carbon::createFromFormat('d-m-Y', '01-'.cooperative()->year_starts_from.'-'.now(cooperative()->timezone)->year)->startOfMonth();
+            $leaveDate = Carbon::createFromFormat('d-m-Y', '01-'.cooperative()->year_starts_from.'-'.now('Africa/Abidjan')->year)->startOfMonth();
         }
 
         if (!$user instanceof User) {
@@ -96,32 +43,8 @@ class LeaveType extends BaseModel
         $setting = cooperative();
 
         if (isset($user->employee[0])) {
-            if ($setting->leaves_start_from == 'joining_date') {
-                $currentYearJoiningDate = Carbon::parse($user->employee[0]->joining_date->format((now(cooperative()->timezone)->year) . '-m-d'));
-
-                if ($currentYearJoiningDate->isFuture()) {
-                    $currentYearJoiningDate->subYear();
-                }
-
-                $leaveTypes = LeaveType::with(['leavesCount' => function ($q) use ($user, $currentYearJoiningDate, $status) {
-                    $q->where('leaves.user_id', $user->id);
-                    $q->whereBetween('leaves.leave_date', [$currentYearJoiningDate->copy()->toDateString(), $currentYearJoiningDate->copy()->addYear()->toDateString()]);
-                    $q->whereIn('leaves.status', $status);
-                }])->select('leave_types.*', 'employee_details.notice_period_start_date', 'employee_details.probation_end_date',
-                'employee_details.department_id as employee_department', 'employee_details.designation_id as employee_designation',
-                'employee_details.marital_status as maritalStatus', 'users.gender as usergender', 'employee_details.joining_date')
-                ->join('employee_leave_quotas', 'employee_leave_quotas.leave_type_id', 'leave_types.id')
-                ->join('users', 'users.id', 'employee_leave_quotas.user_id')
-                ->join('employee_details', 'employee_details.user_id', 'users.id')->where('users.id', $user->id);
-
-                if (!is_null($leaveTypeId)) {
-                    $leaveTypes = $leaveTypes->where('leave_types.id', $leaveTypeId);
-                }
-
-                return $leaveTypes = $leaveTypes->get();
-
-            }
-            else {
+        
+           
                 $leaveTypes = LeaveType::with(['leavesCount' => function ($q) use ($user, $status, $leaveDate) {
                     $q->where('leaves.user_id', $user->id);
                     $q->whereBetween('leaves.leave_date', [$leaveDate->copy()->toDateString(), $leaveDate->copy()->addYear()->toDateString()]);
@@ -132,8 +55,7 @@ class LeaveType extends BaseModel
                 ->join('employee_leave_quotas', 'employee_leave_quotas.leave_type_id', 'leave_types.id')
                 ->join('users', 'users.id', 'employee_leave_quotas.user_id')
                 ->join('employee_details', 'employee_details.user_id', 'users.id')->where('users.id', $user->id);
-            }
-
+            
             if (!is_null($leaveTypeId)) {
                 $leaveTypes = $leaveTypes->where('leave_types.id', $leaveTypeId);
             }

@@ -46,11 +46,11 @@
                     </a>
                 </li>
                 <li class="sidebar-menu-item sidebar-dropdown">
-                    <a href="javascript:void(0)" class="{{ menuActive(['manager.hr.*', 'manager.employees.index','manager.holidays.index','manager.departments.index','manager.designations.index','manager.holidays.table_view','manager.settings.*'], 3) }}">
+                    <a href="javascript:void(0)" class="{{ menuActive(['manager.hr.*', 'manager.employees.index','manager.holidays.index','manager.departments.index','manager.designations.index','manager.holidays.table_view','manager.settings.*','manager.leaves.*'], 3) }}">
                         <i class="menu-icon las la-users"></i>
                         <span class="menu-title">@lang('Ressources Humaines') </span>
                     </a>
-                    <div class="sidebar-submenu {{ menuActive(['manager.hr.*', 'manager.employees.index','manager.holidays.index','manager.departments.index','manager.designations.index','manager.holidays.table_view','manager.settings.*'], 2) }} ">
+                    <div class="sidebar-submenu {{ menuActive(['manager.hr.*', 'manager.employees.index','manager.holidays.index','manager.departments.index','manager.designations.index','manager.holidays.table_view','manager.settings.*','manager.leaves.*'], 2) }} ">
                         <ul>
 
                             <li class="sidebar-menu-item {{ menuActive('manager.employees.index') }}">
@@ -65,8 +65,8 @@
                                     <span class="menu-title">@lang('Présences')</span>
                                 </a>
                             </li> 
-                            <li class="sidebar-menu-item {{ menuActive('manager.hr.') }}">
-                                <a href="#" class="nav-link">
+                            <li class="sidebar-menu-item {{ menuActive('manager.leaves.index') }}">
+                                <a href="{{ route('manager.leaves.index')}}" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>
                                     <span class="menu-title">@lang('Congés')</span>
                                 </a>
@@ -95,7 +95,12 @@
                                     <span class="menu-title">@lang('Timesheet')</span>
                                 </a>
                             </li> 
-                            
+                            <li class="sidebar-menu-item {{ menuActive('manager.settings.attendance-settings.index') }}">
+                                <a href="{{ route('manager.settings.attendance-settings.index') }}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('Settings')</span>
+                                </a>
+                            </li> 
 
                         </ul>
                     </div>

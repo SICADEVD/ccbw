@@ -1,7 +1,6 @@
 <?php
-
-namespace App\Http\Controllers;
-
+namespace App\Http\Controllers\Manager;
+use App\Http\Controllers\AccountBaseController;
 use App\Helper\Files;
 use App\Http\Helpers\Reply;
 use App\Http\Requests\EmployeeDocs\CreateRequest;

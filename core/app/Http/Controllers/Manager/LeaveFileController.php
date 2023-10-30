@@ -48,7 +48,7 @@ class LeaveFileController extends AccountBaseController
         LeaveFile::destroy($id);
 
         $this->files = LeaveFile::where('leave_id', $file->leave_id)->orderBy('id', 'desc')->get();
-        $view = view('leaves.files.show', $this->data)->render();
+        $view = view('manager.leaves.files.show', $this->data)->render();
 
         return Reply::successWithData(__('messages.deleteSuccess'), ['view' => $view]);
 

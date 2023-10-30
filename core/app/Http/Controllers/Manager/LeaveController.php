@@ -47,7 +47,7 @@ class LeaveController extends AccountBaseController
 
         $this->leaveTypes = LeaveType::all();
 
-        return $dataTable->render('leaves.index', $this->data);
+        return $dataTable->render('manager.leaves.index', $this->data);
     }
 
     /**
@@ -57,8 +57,8 @@ class LeaveController extends AccountBaseController
      */
     public function create()
     {
-          
-        $this->employees = EmployeeDetail::with('user')->get();
+           
+        $this->employees = User::allEmployees();
         $this->currentDate = Carbon::now()->format('Y-m-d');
 
         $leaveQuotas = LeaveType::select('leave_types.*', 'employee_details.notice_period_start_date', 'employee_details.probation_end_date',
@@ -79,14 +79,14 @@ class LeaveController extends AccountBaseController
 
         if (request()->ajax()) {
             $this->pageTitle = __('modules.leaves.addLeave');
-            $html = view('leaves.ajax.create', $this->data)->render();
+            $html = view('manager.leaves.ajax.create', $this->data)->render();
 
             return Reply::dataOnly(['status' => 'success', 'html' => $html, 'title' => $this->pageTitle]);
         }
 
-        $this->view = 'leaves.ajax.create';
+        $this->view = 'manager.leaves.ajax.create';
 
-        return view('leaves.create', $this->data);
+        return view('manager.leaves.create', $this->data);
     }
 
     /**
@@ -430,7 +430,7 @@ class LeaveController extends AccountBaseController
         $this->pageTitle = $this->leave->user->name; 
 
         if (request()->ajax()) {
-            $html = view('leaves.ajax.show', $this->data)->render();
+            $html = view('manager.leaves.ajax.show', $this->data)->render();
 
             return Reply::dataOnly(['status' => 'success', 'html' => $html, 'title' => $this->pageTitle]);
         }
@@ -440,13 +440,13 @@ class LeaveController extends AccountBaseController
             $this->viewType = 'multiple';
             $this->pendingCountLeave = $this->multipleLeaves->where('status', 'pending')->count();
 
-            $this->view = 'leaves.ajax.multiple-leaves';
+            $this->view = 'manager.leaves.ajax.multiple-leaves';
         }
         else {
-            $this->view = 'leaves.ajax.show';
+            $this->view = 'manager.leaves.ajax.show';
         }
 
-        return view('leaves.create', $this->data);
+        return view('manager.leaves.create', $this->data);
     }
 
     /**
@@ -481,14 +481,14 @@ class LeaveController extends AccountBaseController
         }
 
         if (request()->ajax()) {
-            $html = view('leaves.ajax.edit', $this->data)->render();
+            $html = view('manager.leaves.ajax.edit', $this->data)->render();
 
             return Reply::dataOnly(['status' => 'success', 'html' => $html, 'title' => $this->pageTitle]);
         }
 
-        $this->view = 'leaves.ajax.edit';
+        $this->view = 'manager.leaves.ajax.edit';
 
-        return view('leaves.create', $this->data);
+        return view('manager.leaves.create', $this->data);
     }
 
     /**
@@ -664,7 +664,7 @@ class LeaveController extends AccountBaseController
             return $leaveArray;
         }
 
-        return view('leaves.calendar.index', $this->data);
+        return view('manager.leaves.calendar.index', $this->data);
     }
 
     public function applyQuickAction(Request $request)
@@ -776,7 +776,7 @@ class LeaveController extends AccountBaseController
         $this->leaveID = $request->leave_id;
         $this->type = $request->type;
 
-        return view('leaves.approve.index', $this->data);
+        return view('manager.leaves.approve.index', $this->data);
     }
 
     public function rejectLeave(Request $request)
@@ -787,7 +787,7 @@ class LeaveController extends AccountBaseController
         $this->leaveID = $request->leave_id;
         $this->type = $request->type;
 
-        return view('leaves.reject.index', $this->data);
+        return view('manager.leaves.reject.index', $this->data);
     }
 
     public function personalLeaves()
@@ -818,9 +818,9 @@ class LeaveController extends AccountBaseController
 
         $this->allowedLeaves = $totalLeaves;
 
-        $this->view = 'leaves.ajax.personal';
+        $this->view = 'manager.leaves.ajax.personal';
 
-        return view('leaves.create', $this->data);
+        return view('manager.leaves.create', $this->data);
     }
 
     public function getDate(Request $request)
@@ -843,7 +843,7 @@ class LeaveController extends AccountBaseController
         $this->pendingCountLeave = $this->multipleLeaves->where('status', 'pending')->count();
 
         $this->viewType = 'model';
-        return view('leaves.view-multiple-related-leave', $this->data);
+        return view('manager.leaves.view-multiple-related-leave', $this->data);
     }
 
     public function leaveTypeRole($id)

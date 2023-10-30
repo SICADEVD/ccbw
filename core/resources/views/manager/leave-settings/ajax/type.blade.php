@@ -35,7 +35,7 @@
                         <ol class="pl-3">
                             @foreach ($departments as $department)
                                 @if(!is_null($leaveType->department) && in_array($department->id, json_decode($leaveType->department)))
-                                    <li>{{$department->team_name}}</li>
+                                    <li>{{$department->department}}</li>
                                 @endif
                             @endforeach
                         </ol>
@@ -102,7 +102,7 @@
     }).then((result) => {
         if (result.isConfirmed) {
 
-            var url = "{{ route('leaveType.destroy', ':id') }}";
+            var url = "{{ route('manager.leaveType.destroy', ':id') }}";
             url = url.replace(':id', id);
 
             var token = "{{ csrf_token() }}";
@@ -127,9 +127,10 @@
 
     // add new leave type
     $('#addNewLeaveType').click(function() {
-    var url = "{{ route('leaveType.create') }}";
+    var url = "{{ route('manager.leaveType.create') }}";
     $(MODAL_XL + ' ' + MODAL_HEADING).html('...');
     $.ajaxModal(MODAL_XL, url);
+    $(MODAL_XL).modal('show');
     });
 
 
@@ -137,11 +138,12 @@
 
         var id = $(this).data('leave-id');
 
-        var url = "{{ route('leaveType.edit', ':id ') }}";
+        var url = "{{ route('manager.leaveType.edit', ':id ') }}";
         url = url.replace(':id', id);
 
         $(MODAL_XL + ' ' + MODAL_HEADING).html('...');
         $.ajaxModal(MODAL_XL, url);
+        $(MODAL_XL).modal('show');
     });
 
 </script>

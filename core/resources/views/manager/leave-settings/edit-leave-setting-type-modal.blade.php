@@ -1,8 +1,9 @@
-<link rel="stylesheet" href="{{ asset('vendor/css/bootstrap-colorpicker.css') }}" />
+<link rel="stylesheet" href="{{ asset('assets/vendor/css/bootstrap-colorpicker.css') }}" />
 
 <div class="modal-header">
     <h5 class="modal-title">@lang('modules.leaves.editLeaveType')</h5>
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="las la-times"></i> </button>
 </div>
 <div class="modal-body">
     <div class="portlet-body">
@@ -182,7 +183,7 @@
                                             @if (is_array($department) && in_array($allTeam->id, $department))
                                                 selected
                                             @endif
-                                        >{{ $allTeam->team_name }}</option>
+                                        >{{ $allTeam->department }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -205,24 +206,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-lg-4">
-                            <div class="form-group my-3">
-                                <x-forms.label fieldId="role" :fieldLabel="__('app.role')" fieldRequired="true">
-                                </x-forms.label>
-                                &nbsp;<i class="fa fa-question-circle text-dark-grey" data-toggle="popover" data-placement="top" data-html="true"
-                                        data-content="{{__('messages.leave.role')}}" data-trigger="hover"></i>
-                                <select class="form-control multiple-option" multiple name="role[]"
-                                        id="role" data-live-search="true" data-size="8">
-                                    @foreach ($allRoles as $allRole)
-                                        <option value="{{ $allRole->id }}"
-                                            @if (is_array($role) && in_array($allRole->id, $role))
-                                                selected
-                                            @endif
-                                        >{{ $allRole->display_name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
+                         
                     </div>
                 </div>
 
@@ -235,7 +219,7 @@
     <x-forms.button-primary id="save-leave-setting" icon="check">@lang('app.save')</x-forms.button-primary>
 </div>
 
-<script src="{{ asset('vendor/jquery/bootstrap-colorpicker.js') }}"></script>
+<script src="{{ asset('assets/vendor/jquery/bootstrap-colorpicker.js') }}"></script>
 <script>
     $(document).ready(function () {
         setTimeout(function () {
@@ -268,7 +252,7 @@
             blockUI: true,
             buttonSelector: "#save-leave-setting",
             errorPosition: 'inline',
-            url: "{{ route('leaveType.update', $leaveType->id) }}",
+            url: "{{ route('manager.leaveType.update', $leaveType->id) }}",
             data: $('#editLeave').serialize(),
             success: function(response) {
                 if (response.status == 'success') {

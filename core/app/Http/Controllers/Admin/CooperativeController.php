@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\LeaveType;
 use App\Models\Cooperative;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -50,6 +51,8 @@ class CooperativeController extends Controller
 
         $this->employeeShift($cooperative);
         $this->attendanceSetting($cooperative);
+        $this->leaveType($cooperative);
+        $cooperative->leaveSetting()->create();
 
         $notify[] = ['success',$message];
         return back()->withNotify($notify);
@@ -123,6 +126,26 @@ class CooperativeController extends Controller
         $setting->default_employee_shift = EmployeeShift::where('cooperative_id', $cooperative->id)->where('shift_name', '<>', 'Day Off')->first()->id;
         $setting->alert_after_status = 0;
         $setting->saveQuietly();
+    }
+
+    public function leaveType($cooperative)
+    {
+        $gender = ['Homme','Femme'];
+        $maritalstatus = ['marie','celibataire'];
+
+        $status = [
+            ['type_name' => 'Payes', 'color' => '#16813D', 'cooperative_id' => $cooperative->id, 'gender' => json_encode($gender), 'marital_status' => json_encode($maritalstatus), 'role' => ''],
+            ['type_name' => 'Maladie', 'color' => '#DB1313', 'cooperative_id' => $cooperative->id, 'gender' => json_encode($gender), 'marital_status' => json_encode($maritalstatus), 'role' => ''],
+            ['type_name' => 'Deuil', 'color' => '#B078C6', 'cooperative_id' => $cooperative->id, 'gender' => json_encode($gender), 'marital_status' => json_encode($maritalstatus), 'role' => ''],
+            ['type_name' => 'Maternite', 'color' => '#B078C6', 'cooperative_id' => $cooperative->id, 'gender' => json_encode($gender), 'marital_status' => json_encode($maritalstatus), 'role' => ''],
+            ['type_name' => 'R & R / Home leave', 'color' => '#B078C6', 'cooperative_id' => $cooperative->id, 'gender' => json_encode($gender), 'marital_status' => json_encode($maritalstatus), 'role' => ''],
+            ['type_name' => 'Sans solde', 'color' => '#B078C6', 'cooperative_id' => $cooperative->id, 'gender' => json_encode($gender), 'marital_status' => json_encode($maritalstatus), 'role' => ''],
+            ['type_name' => 'Compensation', 'color' => '#B078C6', 'cooperative_id' => $cooperative->id, 'gender' => json_encode($gender), 'marital_status' => json_encode($maritalstatus), 'role' => ''],
+            ['type_name' => 'Fin de contrat', 'color' => '#B078C6', 'cooperative_id' => $cooperative->id, 'gender' => json_encode($gender), 'marital_status' => json_encode($maritalstatus), 'role' => '']
+        ];
+
+        LeaveType::insert($status);
+
     }
 
 }

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('manager.layouts.app')
 
 @push('styles')
     <style>
@@ -17,7 +17,7 @@
 @endpush
 
 
-@section('content')
+@section('panel')
 
     <!-- SETTINGS START -->
     <div class="w-100 d-flex ">
@@ -31,11 +31,11 @@
                         <div class="nav" id="nav-tab" role="tablist">
 
                             <a class="nav-item nav-link f-15 active type" data-toggle="tab"
-                                href="{{ route('leaves-settings.index') }}?tab=type" role="tab" aria-controls="nav-type"
+                                href="{{ route('manager.settings.leaves-settings.index') }}?tab=type" role="tab" aria-controls="nav-type"
                                 aria-selected="true">@lang($pageTitle)</a>
 
                             <a class="nav-item nav-link f-15 general" data-toggle="tab"
-                                href="{{ route('leaves-settings.index') }}?tab=general" role="tab"
+                                href="{{ route('manager.settings.leaves-settings.index') }}?tab=general" role="tab"
                                 aria-controls="nav-general"
                                 aria-selected="false">@lang('app.menu.leaveGeneralSettings')</a>
 
@@ -63,7 +63,7 @@
     <!-- SETTINGS END -->
 @endsection
 
-@push('scripts')
+@push('script')
 
     <script>
 
@@ -82,9 +82,9 @@
 
             $('.nav-item').removeClass('active');
             $(this).addClass('active');
-
+             
             const requestUrl = this.href;
-
+              
             $.easyAjax({
                 url: requestUrl,
                 blockUI: true,

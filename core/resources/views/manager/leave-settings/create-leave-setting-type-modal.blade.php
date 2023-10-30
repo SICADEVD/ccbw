@@ -1,8 +1,9 @@
-<link rel="stylesheet" href="{{ asset('vendor/css/bootstrap-colorpicker.css') }}" />
+<link rel="stylesheet" href="{{ asset('assets/vendor/css/bootstrap-colorpicker.css') }}" />
 
 <div class="modal-header">
     <h5 class="modal-title">@lang('app.addNew') @lang('modules.leaves.leaveType')</h5>
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="las la-times"></i> </button>
 </div>
 <div class="modal-body">
     <div class="portlet-body">
@@ -143,9 +144,8 @@
                                             data-content="{{__('messages.leave.gender')}}" data-trigger="hover"></i>
                                     <select class="form-control multiple-option" multiple name="gender[]"
                                         id="gender" data-live-search="true" data-size="8">
-                                        <option value="male" selected>@lang('app.male')</option>
-                                        <option value="female" selected>@lang('app.female')</option>
-                                        <option value="others" selected>@lang('app.others')</option>
+                                        <option value="Homme" selected>@lang('app.male')</option>
+                                        <option value="Femme" selected>@lang('app.female')</option> 
                                 </select>
                                 </div>
                             </div>
@@ -171,7 +171,7 @@
                                     <select class="form-control multiple-option" multiple name="department[]"
                                             id="department" data-live-search="true" data-size="8">
                                         @foreach ($teams as $team)
-                                            <option value="{{ $team->id }}" selected>{{ $team->team_name }}</option>
+                                            <option value="{{ $team->id }}" selected>{{ $team->department }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -190,20 +190,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-lg-4">
-                                <div class="form-group my-3">
-                                    <x-forms.label fieldId="role" :fieldLabel="__('app.role')" fieldRequired="true">
-                                    </x-forms.label>
-                                    &nbsp;<i class="fa fa-question-circle text-dark-grey" data-toggle="popover" data-placement="top" data-html="true"
-                                            data-content="{{__('messages.leave.role')}}" data-trigger="hover"></i>
-                                    <select class="form-control multiple-option" multiple name="role[]"
-                                            id="role" data-live-search="true" data-size="8">
-                                        @foreach ($roles as $roles)
-                                            <option value="{{ $roles->id }}" selected>{{ $roles->display_name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
+                            
                         </div>
                     </div>
 
@@ -213,19 +200,21 @@
     </div>
 </div>
 <div class="modal-footer">
+ 
     <x-forms.button-cancel data-dismiss="modal" class="border-0 mr-3">@lang('app.cancel')</x-forms.button-cancel>
     <x-forms.button-primary id="save-leave-setting" icon="check">@lang('app.save')</x-forms.button-primary>
 </div>
 
-<script src="{{ asset('vendor/jquery/bootstrap-colorpicker.js') }}"></script>
+<script src="{{ asset('assets/vendor/jquery/bootstrap-colorpicker.js') }}"></script>
 
 <script>
+
     $(document).ready(function () {
         setTimeout(function () {
             $('[data-toggle="popover"]').popover();
         }, 500);
     });
-
+ $("select").select2();
     $(".select-picker").selectpicker();
 
     $('#colorpicker').colorpicker({
@@ -244,6 +233,7 @@
     });
 
     $('#save-leave-setting').click(function() {
+        console.log($('#createLeave').serialize())
         $.easyAjax({
             container: '#createLeave',
             type: "POST",
@@ -251,9 +241,10 @@
             blockUI: true,
             buttonSelector: "#save-leave-setting",
             errorPosition: 'inline',
-            url: "{{ route('leaveType.store') }}",
+            url: "{{ route('manager.leaveType.store') }}",
             data: $('#createLeave').serialize(),
             success: function(response) {
+                
                 if (response.status == 'success') {
                     if (response.page_reload == 'true') {
                         window.location.reload();

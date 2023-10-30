@@ -31,10 +31,9 @@ class LeaveTypeController extends AccountBaseController
     public function create()
     {
         $this->teams = Team::all();
-        $this->designations = Designation::allDesignations();
-        $this->roles = Role::where('name', '<>', 'client')->get();
+        $this->designations = Designation::allDesignations(); 
 
-        return view('leave-settings.create-leave-setting-type-modal', $this->data);
+        return view('manager.leave-settings.create-leave-setting-type-modal', $this->data);
     }
 
     /**
@@ -80,17 +79,16 @@ class LeaveTypeController extends AccountBaseController
     {
         $this->leaveType = LeaveType::findOrFail($id);
         $this->allTeams = Team::all();
-        $this->allDesignations = Designation::allDesignations();
-        $this->allRoles = Role::where('name', '<>', 'client')->get();
-        $this->allGenders = ['male', 'female', 'others'];
-        $this->allMaritalStatus = ['married', 'unmarried'];
+        $this->allDesignations = Designation::allDesignations(); 
+        $this->allGenders = ['Homme', 'Femme'];
+        $this->allMaritalStatus = ['marie', 'celibataire'];
         $this->gender = json_decode($this->leaveType->gender);
         $this->maritalStatus = json_decode($this->leaveType->marital_status);
         $this->department = json_decode($this->leaveType->department);
         $this->designation = json_decode($this->leaveType->designation);
         $this->role = json_decode($this->leaveType->role);
 
-        return view('leave-settings.edit-leave-setting-type-modal', $this->data);
+        return view('manager.leave-settings.edit-leave-setting-type-modal', $this->data);
     }
 
     public function update(StoreLeaveType $request, $id)

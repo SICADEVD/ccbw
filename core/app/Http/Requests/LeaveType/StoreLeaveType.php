@@ -33,7 +33,6 @@ class StoreLeaveType extends CoreRequest
             'marital_status' => 'required',
             'department' => 'required',
             'designation' => 'required',
-            'role' => 'required',
         ];
 
         if(!is_null(request('effective_after'))){

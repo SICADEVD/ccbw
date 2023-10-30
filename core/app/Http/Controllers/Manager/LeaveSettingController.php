@@ -1,15 +1,16 @@
 <?php
 namespace App\Http\Controllers\Manager;
-use App\Http\Controllers\Controller;
-use App\Http\Controllers\AccountBaseController;
+use App\Models\Team;
+use App\Models\LeaveType;
 
-use App\Http\Helpers\Reply;
 use App\Models\Department;
+use App\Http\Helpers\Reply;
 use App\Models\Designation;
 use App\Models\LeaveSetting;
-use App\Models\LeaveType;
-use App\Models\Team;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\AccountBaseController;
 
 class LeaveSettingController extends AccountBaseController
 {
@@ -23,18 +24,19 @@ class LeaveSettingController extends AccountBaseController
 
     public function index()
     {
-        $this->leaveTypes = LeaveType::all();
-
+        $this->leaveTypes = DB::table('leave_types')->where('cooperative_id',auth()->user()->cooperative_id)->get();
+         
         $tab = request('tab');
 
         switch ($tab) {
         case 'general': 
-            $this->view = 'leave-settings.ajax.general';
+            $this->leavePermission = LeaveSetting::first();
+            $this->view = 'manager.leave-settings.ajax.general';
                 break;
         default:
-            $this->departments = Department::all();
+            $this->departments = Team::all();
             $this->designations = Designation::all();
-            $this->view = 'leave-settings.ajax.type';
+            $this->view = 'manager.leave-settings.ajax.type';
                 break;
         }
 
@@ -45,7 +47,9 @@ class LeaveSettingController extends AccountBaseController
             return Reply::dataOnly(['status' => 'success', 'html' => $html, 'title' => $this->pageTitle, 'activeTab' => $this->activeTab]);
         }
 
-        return view('leave-settings.index', $this->data);
+       
+   
+        return view('manager.leave-settings.index', $this->data);
     }
 
     public function store(Request $request)
@@ -58,5 +62,14 @@ class LeaveSettingController extends AccountBaseController
         return Reply::success(__('messages.updateSuccess'));
     }
  
+    
+    public function changePermission(Request $request)
+    {
+        $permission = LeaveSetting::findOrFail($request->id);
+        $permission->manager_permission = $request->value;
+        $permission->update();
+
+        return Reply::success(__('messages.updateSuccess'));
+    }
 
 }

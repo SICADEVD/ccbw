@@ -15,6 +15,10 @@ use App\Http\Controllers\Manager\SettingsController;
 use App\Http\Controllers\Manager\AttendanceSettingController;
 use App\Http\Controllers\Manager\LeaveSettingController;
 use App\Http\Controllers\Manager\EmployeeShiftController;
+use App\Http\Controllers\Manager\LeaveTypeController;
+use App\Http\Controllers\Manager\LeaveFileController;
+use App\Http\Controllers\Manager\LeavesQuotaController;
+use App\Http\Controllers\Manager\EmployeeDocController;
 
 
 Route::namespace('Manager\Auth')->group(function () {
@@ -147,33 +151,41 @@ Route::controller('Manager\ImportController')->name('hr.')->prefix('hr')->group(
     Route::get('employees/import/exception/{name}', [ImportController::class, 'getQueueException'])->name('import.process.exception');
   });
 
-// Route::name('settings.')->prefix('settings')->group(function () {
-//     Route::resource('attendance-settings', AttendanceSettingController::class);
-//     Route::resource('leaves-settings', LeaveSettingController::class);
-//   });
-// Route::post('employee-shifts/set-default', [EmployeeShiftController::class, 'setDefaultShift'])->name('employee-shifts.set_default');
-// Route::resource('employee-shifts', EmployeeShiftController::class);
-// Route::resource('settings', SettingsController::class)->only(['edit', 'update', 'index']);
+Route::name('settings.')->prefix('settings')->group(function () {
+    Route::resource('attendance-settings', AttendanceSettingController::class);
+    Route::resource('leaves-settings', LeaveSettingController::class);
+    Route::post('leaves-settings/change-permission', [LeaveSettingController::class, 'changePermission'])->name('leaves-settings.changePermission');
+  });
+
+Route::resource('leaveType', LeaveTypeController::class);
+Route::post('employee-shifts/set-default', [EmployeeShiftController::class, 'setDefaultShift'])->name('employee-shifts.set_default');
+Route::resource('employee-shifts', EmployeeShiftController::class);
+Route::resource('settings', SettingsController::class)->only(['edit', 'update', 'index']);
 
 Route::resource('employees', EmployeeController::class);
  
+Route::get('employee-docs/download/{id}', [EmployeeDocController::class, 'download'])->name('employee-docs.download');
+    Route::resource('employee-docs', EmployeeDocController::class);
 
+    Route::get('employee-leaves/employeeLeaveTypes/{id}', [LeavesQuotaController::class, 'employeeLeaveTypes'])->name('employee-leaves.employee_leave_types');
+    Route::resource('employee-leaves', LeavesQuotaController::class);
 // ----------------------------- form leaves ------------------------------//
-Route::controller('Manager\LeaveController')->name('hr.')->prefix('hr')->group(function () {
-    /* LEAVES */
-    Route::get('leaves/leaves-date', [LeaveController::class, 'getDate'])->name('leaves.date');
-    Route::get('leaves/personal', [LeaveController::class, 'personalLeaves'])->name('leaves.personal');
-    Route::get('leaves/calendar', [LeaveController::class, 'leaveCalendar'])->name('leaves.calendar');
-    Route::post('leaves/data', [LeaveController::class, 'data'])->name('leaves.data');
-    Route::post('leaves/leaveAction', [LeaveController::class, 'leaveAction'])->name('leaves.leave_action');
-    Route::get('leaves/show-reject-modal', [LeaveController::class, 'rejectLeave'])->name('leaves.show_reject_modal');
-    Route::get('leaves/show-approved-modal', [LeaveController::class, 'approveLeave'])->name('leaves.show_approved_modal');
-    Route::post('leaves/pre-approve-leave', [LeaveController::class, 'preApprove'])->name('leaves.pre_approve_leave');
-    Route::post('leaves/apply-quick-action', [LeaveController::class, 'applyQuickAction'])->name('leaves.apply_quick_action');
-    Route::get('leaves/view-related-leave/{id}', [LeaveController::class, 'viewRelatedLeave'])->name('leaves.view_related_leave');
-    
-});
+ 
+Route::get('leaves/leaves-date', [LeaveController::class, 'getDate'])->name('leaves.date');
+Route::get('leaves/personal', [LeaveController::class, 'personalLeaves'])->name('leaves.personal');
+Route::get('leaves/calendar', [LeaveController::class, 'leaveCalendar'])->name('leaves.calendar');
+Route::post('leaves/data', [LeaveController::class, 'data'])->name('leaves.data');
+Route::post('leaves/leaveAction', [LeaveController::class, 'leaveAction'])->name('leaves.leave_action');
+Route::get('leaves/show-reject-modal', [LeaveController::class, 'rejectLeave'])->name('leaves.show_reject_modal');
+Route::get('leaves/show-approved-modal', [LeaveController::class, 'approveLeave'])->name('leaves.show_approved_modal');
+Route::post('leaves/pre-approve-leave', [LeaveController::class, 'preApprove'])->name('leaves.pre_approve_leave');
+Route::post('leaves/apply-quick-action', [LeaveController::class, 'applyQuickAction'])->name('leaves.apply_quick_action');
+Route::get('leaves/view-related-leave/{id}', [LeaveController::class, 'viewRelatedLeave'])->name('leaves.view_related_leave');
 Route::resource('leaves', LeaveController::class);  
+
+// leaves files routes
+Route::get('leave-files/download/{id}', [LeaveFileController::class, 'download'])->name('leave-files.download');
+Route::resource('leave-files', LeaveFileController::class);
 
 Route::controller('Manager\AttendanceController')->name('hr.')->prefix('hr')->group(function () {
 // Attendance
