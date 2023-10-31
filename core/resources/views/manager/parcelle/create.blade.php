@@ -102,11 +102,18 @@
                         </div>
                     </div>
                     <div id="courDeaus">
-                        <div class="form-group row" id="">
+                        <div class="form-group row">
                             {{ Form::label(__('Quel est le cour ou plan d\'eau'), null, ['class' => 'col-sm-4 control-label']) }}
                             <div class="col-xs-12 col-sm-8">
                                 <?php echo Form::select('courDeau', ['Bas-fond' => 'Bas-fond', 'Marigot' => 'Marigot', 'Rivière' => 'Rivière', 'Source d’eau' => 'Source d’eau', 'Autre' => 'Autre'], null, ['id' => 'courDeau', 'class' => 'form-control courDeau']); ?>
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row" id="autreCourDeaus">
+                        <?php echo Form::label(__('Autre cour ou plan d\'eau '), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-12 col-sm-8">
+                            <?php echo Form::text('autreCourDeau', null, ['class' => 'form-control autreCourDeau','placeholder'=>'Autre Cour ou Plan d\'eau']); ?>
                         </div>
                     </div>
 
@@ -121,22 +128,19 @@
                     <div class="form-group row" id="protection">
                         <label class="col-sm-4 control-label">@lang('Sélectionner les protections')</label>
                         <div class="col-xs-12 col-sm-8">
-                            <select class="form-control select2-multi-select" name="protection[]" multiple>
+                            <select class="form-control select2-multi-select protections" name="protection[]" multiple>
                                 <option value="">@lang('Selectionner les protections')</option>
                                 <option value="barriere de végétation">Barrière de végétation</option>
                                 <option value="zone tampon">Zone tampon</option>
                                 <option value="autre">Autre</option>
                             </select>
                         </div>
-                        {{-- <div class="form-group row">
-                            {!! Form::label('protection', __('Sélectionner les protections'), ['class' => 'col-sm-4 control-label']) !!}
-                            <div class="col-xs-12 col-sm-8">
-                                {!! Form::select(
-                                    'protection[]',['barriere de végétation' =>'Barrière de végétation','zone tampon' => 'Zone tampon','autre' => 'Autre',],null,['class' => 'form-control select2-multi-select', 'multiple' => true],
-                                ) !!}
-                            </div>
-                        </div> --}}
-
+                    </div>
+                    <div class="form-group row" id="autreProtections">
+                        <?php echo Form::label(__('Autre cour ou plan d\'eau '), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-12 col-sm-8">
+                            <?php echo Form::text('autreProtection', null, ['class' => 'form-control autreProtection','placeholder'=>'Autre Protection','id'=>'autreProtection']); ?>
+                        </div>
                     </div>
                     <div class="form-group row">
                         {{ Form::label(__('Ya-t-il une pente dans la Parcelle ?'), null, ['class' => 'col-sm-4 control-label']) }}
@@ -300,7 +304,7 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
-            $('#anneeRegenerers,#courDeaus,#protection,#niveauPentes').hide();
+            $('#anneeRegenerers,#courDeaus,#protection,#niveauPentes,#autreCourDeaus,#autreProtections').hide();
 
             $('.parcelleRegenerer').change(function() {
                 var parcelleRegenerer = $('.parcelleRegenerer').val();
@@ -333,6 +337,20 @@
                     $('#courDeau').prop('required', false);
                 }
             });
+            $('.courDeau').change(function() {
+                var courDeau = $('.courDeau').val();
+                if (courDeau == 'Autre') {
+                    $('#autreCourDeaus').show('slow');
+                    $('.autreCourDeau').show('slow');
+                    $('#autreCourDeau').prop('required', true);
+
+                } else {
+                    $('#autreCourDeaus').hide('slow');
+                    $('.autreCourDeau').hide('slow');
+                    $('.autreCourDeau').val('');
+                    $('#autreCourDeau').prop('required', false);
+                }
+            });
             $('.existePente').change(function() {
                 var existPente = $('.existePente').val();
                 if (existPente == 'oui') {
@@ -359,6 +377,22 @@
                 }
             });
 
+        });
+        $('.protections').change(function() {
+            var protections = $('.protections').find(":selected").map((key, item) => {
+                return item.textContent.trim();
+            }).get();
+            if (protections.includes("Autre")) {
+                $('#autreProtections').show('slow');
+                $('.autreProtection').show('slow');
+                $('#autreProtection').prop('required', true);
+
+            } else {
+                $('#autreProtections').hide('slow');
+                $('.autreProtection').hide('slow');
+                $('.autreProtection').val('');
+                $('#autreProtection').prop('required', false);
+            }
         });
 
     </script>

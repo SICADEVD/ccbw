@@ -85,6 +85,7 @@ class ParcelleController extends Controller
             'typeDoc' => 'required',
             'presenceCourDeau' => 'required',
             'courDeau' => 'required_if:presenceCourDeau,==,oui',
+            'autreCourDeau' => 'required_if:courDeau,==,Autre',
             'existeMesureProtection' => 'required',
             'existePente' => 'required',
             'superficie' => 'required',
@@ -180,6 +181,8 @@ class ParcelleController extends Controller
         $parcelle->userid = auth()->user()->id;
         $parcelle->nbCacaoParHectare  = $request->nbCacaoParHectare;
         $parcelle->erosion  = $request->erosion;
+        $parcelle->autreCourDeau = $request->autreCourDeau;
+        $parcelle->autreProtection = $request->autreProtection;
 
 
         if ($request->hasFile('fichier_kml_gpx')) {
