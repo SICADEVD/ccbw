@@ -56,10 +56,8 @@
                 <div class="select-filter mb-4">
                     <div class="select-others">
                         <select class="form-control select-picker" name="employee_id" id="employee_id"
-                            data-live-search="true" data-container="body" data-size="8">
-                            @if ($employees->count() > 1 || in_array('admin', user_roles()))
-                                <option value="all">@lang('app.all')</option>
-                            @endif
+                            data-live-search="true" data-container="body" data-size="8"> 
+                                <option value="all">@lang('app.all')</option> 
                             @foreach ($employees as $employee)
                                     <x-user-option :user="$employee" />
                             @endforeach
@@ -168,7 +166,7 @@
 
 @endsection
 
-@push('scripts')
+@push('script')
 
     @include('sections.datatable_js')
 
@@ -190,8 +188,8 @@
                 startDate = null;
                 endDate = null;
             } else {
-                startDate = dateRangePicker.startDate.format('DD-MM-YYYY');
-                endDate = dateRangePicker.endDate.format('DD-MM-YYYY');
+                startDate = dateRangePicker.startDate.format('YYYY-MM-DD');
+                endDate = dateRangePicker.endDate.format('YYYY-MM-DD');
             }
 
             var employeeId = $('#employee_id').val();

@@ -1,5 +1,3 @@
-<link rel="stylesheet" href="{{ asset('assets/vendor/css/bootstrap-colorpicker.css') }}" />
-
 <div class="modal-header">
     <h5 class="modal-title">@lang('app.addNew') @lang('modules.leaves.leaveType')</h5>
     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
@@ -204,57 +202,4 @@
     <x-forms.button-cancel data-dismiss="modal" class="border-0 mr-3">@lang('app.cancel')</x-forms.button-cancel>
     <x-forms.button-primary id="save-leave-setting" icon="check">@lang('app.save')</x-forms.button-primary>
 </div>
-
-<script src="{{ asset('assets/vendor/jquery/bootstrap-colorpicker.js') }}"></script>
-
-<script>
-
-    $(document).ready(function () {
-        setTimeout(function () {
-            $('[data-toggle="popover"]').popover();
-        }, 500);
-    });
- $("select").select2();
-    $(".select-picker").selectpicker();
-
-    $('#colorpicker').colorpicker({
-        "color": "#16813D"
-    });
-
-    $(".multiple-option").selectpicker({
-        actionsBox: true,
-        selectAllText: "{{ __('modules.permission.selectAll') }}",
-        deselectAllText: "{{ __('modules.permission.deselectAll') }}",
-        multipleSeparator: ", ",
-        selectedTextFormat: "count > 8",
-        countSelectedText: function(selected, total) {
-            return selected + " {{ __('app.membersSelected') }} ";
-        }
-    });
-
-    $('#save-leave-setting').click(function() {
-        console.log($('#createLeave').serialize())
-        $.easyAjax({
-            container: '#createLeave',
-            type: "POST",
-            disableButton: true,
-            blockUI: true,
-            buttonSelector: "#save-leave-setting",
-            errorPosition: 'inline',
-            url: "{{ route('manager.leaveType.store') }}",
-            data: $('#createLeave').serialize(),
-            success: function(response) {
-                
-                if (response.status == 'success') {
-                    if (response.page_reload == 'true') {
-                        window.location.reload();
-                    } else {
-                        $('#leave_type_id').html(response.data);
-                        $('#leave_type_id').selectpicker('refresh');
-                        $(MODAL_XL).modal('hide');
-                    }
-                }
-            }
-        })
-    });
-</script>
+ 

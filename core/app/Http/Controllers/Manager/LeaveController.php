@@ -37,12 +37,11 @@ class LeaveController extends AccountBaseController
      */
     public function index(LeaveDataTable $dataTable)
     {
-   
 
         $reportingTo = User::with('employeeDetail')->whereHas('employeeDetail', function ($q) {
             $q->where('reporting_to', user()->id);
         })->get(); 
-        $employee = EmployeeDetail::with('user')->get();
+        $employee = User::with('employeeDetail')->get();
         $this->employees = $reportingTo->merge($employee);
 
         $this->leaveTypes = LeaveType::all();
@@ -59,11 +58,12 @@ class LeaveController extends AccountBaseController
     {
            
         $this->employees = User::allEmployees();
+         
         $this->currentDate = Carbon::now()->format('Y-m-d');
 
         $leaveQuotas = LeaveType::select('leave_types.*', 'employee_details.notice_period_start_date', 'employee_details.probation_end_date',
         'employee_details.department_id as employee_department', 'employee_details.designation_id as employee_designation',
-        'employee_details.marital_status as maritalStatus', 'users.gender as usergender', 'employee_details.joining_date', 'employee_leave_quotas.no_of_leaves as employeeLeave')
+        'employee_details.marital_status as maritalStatus', 'users.genre as usergender', 'employee_details.joining_date', 'employee_leave_quotas.no_of_leaves as employeeLeave')
             ->join('employee_leave_quotas', 'employee_leave_quotas.leave_type_id', 'leave_types.id')
             ->join('users', 'users.id', 'employee_leave_quotas.user_id')
             ->join('employee_details', 'employee_details.user_id', 'users.id');
@@ -100,17 +100,19 @@ class LeaveController extends AccountBaseController
         $redirectUrl = urldecode($request->redirect_url);
 
         if ($redirectUrl == '') {
-            $redirectUrl = route('leaves.index');
+            $redirectUrl = route('manager.leaves.index');
         }
-
+ 
         $leaveType = LeaveType::findOrFail($request->leave_type_id);
         $employeeLeaveQuota = EmployeeLeaveQuota::whereUserId($request->user_id)->whereLeaveTypeId($request->leave_type_id)->first();
 
         $totalAllowedLeaves = ($employeeLeaveQuota) ? $employeeLeaveQuota->no_of_leaves : $leaveType->no_of_leaves;
+        
         $sDate = Carbon::createFromFormat(cooperative()->date_format, $request->multiStartDate);
+        
         $eDate = Carbon::createFromFormat(cooperative()->date_format, $request->multiEndDate);
         $diffInDays = $sDate->diffInDays($eDate) + 1;
-
+        
         if($totalAllowedLeaves < $diffInDays) {
             return Reply::error(__('messages.leaveLimitError'));
         }
@@ -132,7 +134,7 @@ class LeaveController extends AccountBaseController
                 $leaveTaken = LeaveType::byUser($request->user_id, $request->leave_type_id, array('approved', 'pending'), $request->leave_date);
                 $leaveTaken = $leaveTaken->first();
 
-                $dateApplied = Carbon::createFromFormat($this->cooperative->date_format, $request->leave_date);
+                $dateApplied = Carbon::createFromFormat(cooperative()->date_format, $request->leave_date);
 
                 /** @phpstan-ignore-next-line */
                 $currentMonthFullDay = Leave::whereBetween('leave_date', [$dateApplied->startOfMonth()->toDateString(), $dateApplied->endOfMonth()->toDateString()])
@@ -266,8 +268,13 @@ class LeaveController extends AccountBaseController
                     }
 
                     $userTotalLeaves = Leave::byUserCount($request->user_id, $leaveYear->year);
-                    $remainingLeave = $employeeLeaveQuota->no_of_leaves - $userTotalLeaves;
-
+                    if($employeeLeaveQuota){
+                        $remainingLeave = $employeeLeaveQuota->no_of_leaves - $userTotalLeaves;
+                    }else{
+                        $remainingLeave = 0;
+                    }
+                    
+                    if($leaveTaken){
                     if(!is_null($leaveTaken->leavesCount) && ($leaveTaken->leavesCount->count + .5) == $employeeLeaveQuota->no_of_leaves) {
                         return Reply::error(__('messages.multipleRemainingLeaveError', ['leaves' => $remainingLeave]));
                     }
@@ -279,6 +286,7 @@ class LeaveController extends AccountBaseController
                     elseif (($userTotalLeaves + count($multiDates)) > $totalEmployeeLeave) { /** @phpstan-ignore-line */
                         return Reply::error(__('messages.leaveLimitError'));
                     }
+                }
 
                 }
             }
@@ -297,6 +305,7 @@ class LeaveController extends AccountBaseController
                     $leave = new Leave();
                     $leave->user_id = $request->user_id;
                     $leave->unique_id = $uniqueId;
+                    $leave->cooperative_id = auth()->user()->cooperative_id;
                     $leave->leave_type_id = $request->leave_type_id;
                     $leave->duration = $request->duration;
                     $leave->leave_date = $dateInsert;
@@ -312,7 +321,7 @@ class LeaveController extends AccountBaseController
             return Reply::successWithData(__('messages.leaveApplySuccess'), ['leaveID' => $leaveId, 'redirectUrl' => $redirectUrl]);
         }
 
-        $dateInsert = Carbon::createFromFormat($this->cooperative->date_format, $request->leave_date)->format('Y-m-d');
+        $dateInsert = Carbon::createFromFormat(cooperative()->date_format, $request->leave_date)->format('Y-m-d');
         $leaveApplied = Leave::where('user_id', $request->user_id)
         ->where('status', '!=', 'rejected')
         ->whereDate('leave_date', $dateInsert)
@@ -370,7 +379,7 @@ class LeaveController extends AccountBaseController
 
         if ($duration == 'half day') {
             /* check leave limit for the selected leave type start */
-            $dateInsert = Carbon::createFromFormat($this->cooperative->date_format, $request->leave_date)->format('Y-m-d');
+            $dateInsert = Carbon::createFromFormat(cooperative()->date_format, $request->leave_date)->format('Y-m-d');
 
             $leaveApplied = Leave::where('user_id', $request->user_id)
             ->where('status', '!=', 'rejected')
@@ -403,7 +412,7 @@ class LeaveController extends AccountBaseController
             $leave->half_day_type = $request->duration;
         }
 
-        $leave->leave_date = Carbon::createFromFormat($this->cooperative->date_format, $request->leave_date)->format('Y-m-d');
+        $leave->leave_date = Carbon::createFromFormat(cooperative()->date_format, $request->leave_date)->format('Y-m-d');
         $leave->reason = $request->reason;
         $leave->status = ($request->has('status') ? $request->status : 'pending');
         $leave->save();
@@ -466,7 +475,7 @@ class LeaveController extends AccountBaseController
 
         $leaveQuotas = LeaveType::select('leave_types.*', 'employee_details.notice_period_start_date', 'employee_details.probation_end_date',
         'employee_details.department_id as employee_department', 'employee_details.designation_id as employee_designation',
-        'employee_details.marital_status as maritalStatus', 'users.gender as usergender', 'employee_details.joining_date')
+        'employee_details.marital_status as maritalStatus', 'users.genre as usergender', 'employee_details.joining_date')
             ->join('employee_leave_quotas', 'employee_leave_quotas.leave_type_id', 'leave_types.id')
             ->join('users', 'users.id', 'employee_leave_quotas.user_id')
             ->join('employee_details', 'employee_details.user_id', 'users.id');
@@ -543,7 +552,7 @@ class LeaveController extends AccountBaseController
 
         $leave->user_id = $request->user_id;
         $leave->leave_type_id = $request->leave_type_id;
-        $leave->leave_date = Carbon::createFromFormat($this->cooperative->date_format, $request->leave_date)->format('Y-m-d');
+        $leave->leave_date = Carbon::createFromFormat(cooperative()->date_format, $request->leave_date)->format('Y-m-d');
         $leave->reason = $request->reason;
 
         if ($request->has('reject_reason')) {
@@ -622,12 +631,12 @@ class LeaveController extends AccountBaseController
                 ->select('leaves.id', 'users.name', 'leaves.leave_date', 'leaves.status', 'leave_types.type_name', 'leave_types.color', 'leaves.leave_date', 'leaves.duration', 'leaves.status');
 
             if (!is_null($request->startDate)) {
-                $startDate = Carbon::createFromFormat($this->cooperative->date_format, $request->startDate)->toDateString();
+                $startDate = Carbon::createFromFormat(cooperative()->date_format, $request->startDate)->toDateString();
                 $leavesList->whereRaw('Date(leaves.leave_date) >= ?', [$startDate]);
             }
 
             if (!is_null($request->endDate)) {
-                $endDate = Carbon::createFromFormat($this->cooperative->date_format, $request->endDate)->toDateString();
+                $endDate = Carbon::createFromFormat(cooperative()->date_format, $request->endDate)->toDateString();
 
                 $leavesList->whereRaw('Date(leaves.leave_date) <= ?', [$endDate]);
             }
@@ -825,14 +834,15 @@ class LeaveController extends AccountBaseController
 
     public function getDate(Request $request)
     {
+        
         if ($request->date != null) {
-            $date = Carbon::createFromFormat($this->cooperative->date_format, $request->date)->toDateString();
+            $date = Carbon::createFromFormat(cooperative()->date_format, $request->date)->toDateString();
             $users = Leave::where('leave_date', $date)->where('status', 'approved')->count();
         }
         else{
             $users = '';
         }
-
+        
         return Reply::dataOnly(['status' => 'success', 'users' => $users]);
     }
 

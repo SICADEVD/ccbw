@@ -1,8 +1,7 @@
-@push('style')
+ 
 <link rel="stylesheet" href="{{ asset('assets/vendor/css/bootstrap-datepicker3.min.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/vendor/css/dropzone.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/vendor/css/daterangepicker.css') }}">
-@endpush
+ 
 <div class="row">
     <div class="col-sm-12">
         <x-form id="save-lead-data-form">
@@ -23,8 +22,7 @@
                                 fieldRequired="true">
                                 <option value="">--</option>
                                 @foreach ($employees as $employee)
-                                    <x-user-option :user="$employee" :selected="request()->has('default_assign') &&
-                                        request('default_assign') == $employee->id" />
+                                    <x-user-option :user="$employee" />
                                 @endforeach
                             </x-forms.select>
                         @endif
@@ -60,11 +58,7 @@
                             </select>
 
                        
-                                <x-slot name="append">
-                                    <button type="button"
-                                        class="btn btn-outline-secondary border-grey add-lead-type2"
-                                        data-toggle="tooltip" data-original-title="{{ __('modules.leaves.addLeaveType') }}">@lang('app.add')</button>
-                                </x-slot>
+                                
                        
                         </x-forms.input-group>
                     </div>
@@ -78,7 +72,7 @@
                         </div>
                    
 
-                    <div class="col-md-6 col-lg-4">
+                    <div class="col-md-6 col-lg-8">
                         <div class="form-group my-3">
                             <label class="f-14 text-dark-grey mb-12 w-100" for="usr">@lang('modules.leaves.selectDuration')</label>
                             <div class="d-block d-lg-flex d-md-flex">
@@ -119,12 +113,13 @@
                     </div>
 
                     <div class="col-lg-12">
-                        <x-forms.file-multiple class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('app.menu.addFile')" fieldName="file" :popover="__('messages.leaveFileMessage')" fieldId="leave-file-upload-dropzone" />
+                        <x-forms.file-multiple class="mr-0 mr-lg-2 mr-md-2 dropify" :fieldLabel="__('app.menu.addFile')" fieldName="file" :popover="__('messages.leaveFileMessage')" fieldId="leaveID" />
                         <input type="hidden" name="leaveID" id="leaveID">
                     </div>
-
-                </div>
-
+                    
+                    <input type="hidden" name="multiStartDate" id="multiStartDate">
+                    <input type="hidden" name="multiEndDate" id="multiEndDate">
+                </div> 
                 <x-form-actions>
                     <x-forms.button-primary id="save-leave-form" class="mr-3" icon="check">@lang('app.save')
                     </x-forms.button-primary>
@@ -137,74 +132,24 @@
 
     </div>
 </div>
-
-@push('script')
+ 
 <script src="{{ asset('assets/vendor/jquery/bootstrap-datepicker.min.js') }}"></script>
-<script src="{{ asset('assets/vendor/jquery/dropzone.min.js') }}"></script>
 <script src="{{ asset('assets/vendor/jquery/daterangepicker.min.js')}}" defer=""></script>
 
 
 <script>
     $(document).ready(function() {
+        $('.dropify').dropify();
 
-        Dropzone.autoDiscover = false;
-        //Dropzone class
-        myDropzone = new Dropzone("div#leave-file-upload-dropzone", {
-            dictDefaultMessage: "{{ __('app.dragDrop') }}",
-            url: "{{ route('manager.leave-files.store') }}",
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            paramName: "file",
-            maxFilesize: DROPZONE_MAX_FILESIZE,
-            maxFiles: DROPZONE_MAX_FILES,
-            autoProcessQueue: false,
-            uploadMultiple: true,
-            addRemoveLinks: true,
-            parallelUploads: DROPZONE_MAX_FILES,
-            acceptedFiles: DROPZONE_FILE_ALLOW,
-            init: function() {
-                myDropzone = this;
-            }
-        });
-        myDropzone.on('sending', function(file, xhr, formData) {
-            var ids = $('#leaveID').val();
-            formData.append('leave_id', ids);
-        });
-        myDropzone.on('uploadprogress', function() {
-            $.easyBlockUI();
-        });
-        myDropzone.on('queuecomplete', function() {
-            var redirect_url = $('#redirect_url').val();
-            if (redirect_url != '') {
-                window.location.href = decodeURIComponent(redirect_url);
-            }
-            window.location.href = "{{ route('manager.leaves.index') }}"
-        });
-        myDropzone.on('removedfile', function () {
-            var grp = $('div#file-upload-dropzone').closest(".form-group");
-            var label = $('div#file-upload-box').siblings("label");
-            $(grp).removeClass("has-error");
-            $(label).removeClass("is-invalid");
-        });
-        myDropzone.on('error', function (file, message) {
-            myDropzone.removeFile(file);
-            var grp = $('div#file-upload-dropzone').closest(".form-group");
-            var label = $('div#file-upload-box').siblings("label");
-            $(grp).find(".help-block").remove();
-            var helpBlockContainer = $(grp);
-
-            if (helpBlockContainer.length == 0) {
-                helpBlockContainer = $(grp);
-            }
-
-            helpBlockContainer.append('<div class="help-block invalid-feedback">' + message + '</div>');
-            $(grp).addClass("has-error");
-            $(label).addClass("is-invalid");
-
-        });
-
-
+// Translated
+$('.dropify-fr').dropify({
+    messages: {
+        default: 'Glissez-déposez un fichier ici ou cliquez',
+        replace: 'Glissez-déposez un fichier ou cliquez pour remplacer',
+        remove: 'Supprimer',
+        error: 'Désolé, le fichier trop volumineux'
+    }
+});
         getDate();
         const dp1 = datepicker('#single_date', {
             onSelect: function () {
@@ -229,6 +174,16 @@
             var endDate = moment(new Date(dates.split(' - ')[1]));
             var totalDays = endDate.diff(startDate, 'days')+1;
 
+            startDate = startDate.format('YYYY-MM-DD');
+             
+            endDate = endDate.format('YYYY-MM-DD');
+
+            var multiDate = [];
+            multiDate = [startDate, endDate];
+            $('#multi_date').val(multiDate);
+
+            $('#multiStartDate').val(startDate);
+            $('#multiEndDate').val(endDate);
             $('.date-range-days').html(totalDays +' Days Selected');
         })
 
@@ -245,11 +200,11 @@
             }
         });
 
-        setMinDate($('#user_id').val());
+        // setMinDate($('#user_id').val());
 
-        $('#user_id').on('change', function(e) {
-            setMinDate(e.target.value);
-        });
+        // $('#user_id').on('change', function(e) {
+        //     setMinDate(e.target.value);
+        // });
 
         function setMinDate(employeeID) {
             var employees = @json($employees);
@@ -267,8 +222,8 @@
 
         $('#save-leave-form').click(function() {
             var dateRange = $('#multi_date').data('daterangepicker');
-            startDate = dateRange.startDate.format('DD-MM-YYYY');
-            endDate = dateRange.endDate.format('DD-MM-YYYY');
+            startDate = dateRange.startDate.format('YYYY-MM-DD');
+            endDate = dateRange.endDate.format('YYYY-MM-DD');
 
             var multiDate = [];
             multiDate = [startDate, endDate];
@@ -295,9 +250,10 @@
         });
 
         $('body').on('click', '.add-lead-type2', function() {
-            var url = "{{ route('leaveType.create') }}";
+            var url = "{{ route('manager.leaveType.create') }}";
             $(MODAL_XL + ' ' + MODAL_HEADING).html('...');
             $.ajaxModal(MODAL_XL, url);
+            $(MODAL_XL).modal('show');
         });
 
         $("input[name=duration]").click(function() {
@@ -360,4 +316,3 @@
         init(RIGHT_MODAL);
     });
 </script>
-@endpush

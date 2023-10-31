@@ -25,10 +25,8 @@ class StoreLeaveType extends CoreRequest
     public function rules()
     {
         $rules = [
-            'type_name' => 'required',
-            'color' => 'required',
-            'leave_number' => 'required',
-            'monthly_limit' => 'required',
+            'type_name' => 'required', 
+            'leave_number' => 'required', 
             'gender' => 'required',
             'marital_status' => 'required',
             'department' => 'required',

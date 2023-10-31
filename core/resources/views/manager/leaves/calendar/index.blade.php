@@ -160,12 +160,11 @@
             $('#reset-filters').addClass('d-none');
             loadData();
         });
-
-        var initialLocaleCode = '{{ user()->locale }}';
+ 
         var calendarEl = document.getElementById('calendar');
 
         var calendar = new FullCalendar.Calendar(calendarEl, {
-            locale: initialLocaleCode,
+            locale: 'en',
             headerToolbar: {
                 left: 'prev,next today',
                 center: 'title',

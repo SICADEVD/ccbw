@@ -9,70 +9,6 @@ use Carbon\CarbonInterval;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\DB;
 
-/**
- * App\Models\Attendance
- *
- * @property int $id
- * @property int $user_id
- * @property int $lateCount
- * @property \Illuminate\Support\Carbon $clock_in_time
- * @property \Illuminate\Support\Carbon|null $clock_out_time
- * @property string $clock_in_ip
- * @property string $clock_out_ip
- * @property string $working_from
- * @property string $late
- * @property string $half_day
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property int|null $added_by
- * @property int|null $last_updated_by
- * @property-read mixed $clock_in_date
- * @property-read mixed $icon
- * @property-read \App\Models\User $user
- * @method static \Illuminate\Database\Eloquent\Builder|Attendance newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Attendance newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Attendance query()
- * @method static \Illuminate\Database\Eloquent\Builder|Attendance whereAddedBy($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Attendance whereClockInIp($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Attendance whereClockInTime($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Attendance whereClockOutIp($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Attendance whereClockOutTime($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Attendance whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Attendance whereHalfDay($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Attendance whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Attendance whereLastUpdatedBy($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Attendance whereLate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Attendance whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Attendance whereUserId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Attendance whereWorkingFrom($value)
- * @property string|null $latitude
- * @property string|null $longitude
- * @method static \Illuminate\Database\Eloquent\Builder|Attendance whereLatitude($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Attendance whereLongitude($value)
- * @property int|null $cooperative_id
- * @property int|null $location_id
- * @property \Illuminate\Support\Carbon|null $shift_start_time
- * @property \Illuminate\Support\Carbon|null $shift_end_time
- * @property int|null $employee_shift_id
- * @property string $work_from_type
- * @property \Illuminate\Support\Carbon $attendance
- * @property-read \App\Models\Cooperative|null $cooperative
- * @property-read \App\Models\CooperativeAddress|null $location
- * @property-read \App\Models\EmployeeShift|null $shift
- * @method static \Illuminate\Database\Eloquent\Builder|Attendance whereCooperativeId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Attendance whereEmployeeShiftId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Attendance whereLocationId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Attendance whereShiftEndTime($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Attendance whereShiftStartTime($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Attendance whereWorkFromType($value)
- * @property string $overwrite_attendance
- * @property string $status
- * @property string $occassion
- * @property string $date
- * @property string $status
- * @method static \Illuminate\Database\Eloquent\Builder|Attendance whereOverwriteAttendance($value)
- * @mixin \Eloquent
- */
 class Attendance extends BaseModel
 {
 
@@ -232,6 +168,7 @@ class Attendance extends BaseModel
 
     public static function userAttendanceByDate($startDate, $endDate, $userId)
     {
+         
         return Attendance::without('cooperative')
             ->join('users', 'users.id', '=', 'attendances.user_id')
             ->leftJoin('cooperative_addresses', 'cooperative_addresses.id', '=', 'attendances.location_id')

@@ -77,25 +77,27 @@ class LeaveTypeController extends AccountBaseController
      */
     public function edit($id)
     {
-        $this->leaveType = LeaveType::findOrFail($id);
+       
+        $this->leaveType = LeaveType::find($id);
         $this->allTeams = Team::all();
         $this->allDesignations = Designation::allDesignations(); 
         $this->allGenders = ['Homme', 'Femme'];
-        $this->allMaritalStatus = ['marie', 'celibataire'];
+        $this->allMaritalStatus = ['marie', 'celibataire']; 
         $this->gender = json_decode($this->leaveType->gender);
+       
         $this->maritalStatus = json_decode($this->leaveType->marital_status);
         $this->department = json_decode($this->leaveType->department);
         $this->designation = json_decode($this->leaveType->designation);
-        $this->role = json_decode($this->leaveType->role);
-
+       
         return view('manager.leave-settings.edit-leave-setting-type-modal', $this->data);
     }
 
     public function update(StoreLeaveType $request, $id)
     {
-        if ($request->leaves < 0) {
-            return Reply::error('messages.leaveTypeValueError');
-        }
+
+        // if ($request->leaves < 0) {
+        //     return Reply::error('messages.leaveTypeValueError');
+        // }
 
         $leaveType = LeaveType::findOrFail($id);
         $leaveType->type_name = $request->type_name;
@@ -115,8 +117,10 @@ class LeaveTypeController extends AccountBaseController
         $leaveType->designation = $request->designation ? json_encode($request->designation) : null;
         $leaveType->role = $request->role ? json_encode($request->role) : null;
         $leaveType->save();
-
-        return Reply::success(__('messages.leaveTypeAdded'));
+        $notify[] = ['success', 'Le type de congés a été crée avec succès.'];
+         
+        //return Reply::success(__('messages.leaveTypeAdded'));
+            return redirect('/manager/settings/leaves-settings')->withNotify($notify);
     }
 
     /**

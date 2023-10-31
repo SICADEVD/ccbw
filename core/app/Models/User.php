@@ -383,7 +383,7 @@ class User extends Authenticatable
 
         $users = User::join('employee_details', 'employee_details.user_id', '=', 'users.id')
             ->leftJoin('designations', 'employee_details.designation_id', '=', 'designations.id')
-            ->select('users.*', 'designations.*', 'employee_details.*');
+            ->select('users.id', 'users.cooperative_id', 'users.firstname', 'users.lastname','users.created_at', 'users.image', 'designations.name as designation_name','designations.name', 'users.mobile', 'users.country_id');
 
         if (!is_null($exceptId)) {
             if (is_array($exceptId)) {

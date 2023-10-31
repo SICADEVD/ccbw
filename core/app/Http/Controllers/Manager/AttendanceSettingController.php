@@ -30,12 +30,12 @@ class AttendanceSettingController extends AccountBaseController
     {
         $this->ipAddresses = [];
         $this->attendanceSetting = AttendanceSetting::first();
-        $this->monthlyReportRoles = json_decode($this->attendanceSetting->monthly_report_roles);
+        // $this->monthlyReportRoles = json_decode($this->attendanceSetting->monthly_report_roles);
          
-
-        if (json_decode($this->attendanceSetting->ip_address)) {
-            $this->ipAddresses = json_decode($this->attendanceSetting->ip_address, true);
-        }
+        $this->monthlyReportRoles = 'admin';
+        // if (json_decode($this->attendanceSetting->ip_address)) {
+        //     $this->ipAddresses = json_decode($this->attendanceSetting->ip_address, true);
+        // }
 
         $tab = request('tab');
 
@@ -85,7 +85,6 @@ class AttendanceSettingController extends AccountBaseController
         $setting->show_clock_in_button = ($request->show_clock_in_button == 'yes') ? 'yes' : 'no';
         $setting->auto_clock_in_location = $request->auto_clock_in_location;
         $setting->monthly_report = ($request->monthly_report) ? 1 : 0;
-        $setting->monthly_report_roles = json_encode($request->monthly_report_roles);
         $setting->save();
 
         session()->forget(['attendance_setting','cooperative']);
