@@ -74,22 +74,6 @@
                             </div>
                         </div>
                     </div>
-                    {{-- Selectionner la Varieté --}}
-
-                    <div class="form-group row">
-                        <?php echo Form::label(__('Varieté'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('variete', ['CNRA' => 'CNRA', 'Tout venant' => 'Tout venant', 'Autre' => 'Autre'], null, ['class' => 'form-control variete', 'id' => 'variete', 'required']); ?>
-                        </div>
-                    </div>
-                    <div id="autreVarietes">
-                        <div class="form-group row">
-                            <?php echo Form::label(__('Autre Varieté'), null, ['class' => 'col-sm-4 control-label']); ?>
-                            <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::text('autreVariete', null, ['id' => 'autreVariete', 'placeholder' => __('Autre varieté'), 'class' => 'form-control autreVariete']); ?>
-                            </div>
-                        </div>
-                    </div>
                     {{-- selection sections --}}
                     <div class="form-group row">
                         <label class="col-sm-4 control-label">@lang('Selectionner une section')</label>
@@ -534,7 +518,7 @@
 
 @push('script')
     <script type="text/javascript">
-        $('#listecultures,#gardePapiersChamps,#numeroCompteMM,#typeCarteSecuriteSociales,#garantie,#autrePhones,#autreCertificat,#autreVarietes,#plantePartager,#statutCertifie,#autreProgrammes')
+        $('#listecultures,#gardePapiersChamps,#numeroCompteMM,#typeCarteSecuriteSociales,#garantie,#autrePhones,#autreCertificat,#plantePartager,#statutCertifie,#autreProgrammes')
             .hide();
         //afficher le champ de saisie du numero de la piece de sécurité sociale
         $('.typeCarteSecuriteSociale').change(function() {

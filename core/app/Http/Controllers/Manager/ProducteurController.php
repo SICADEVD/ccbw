@@ -104,8 +104,6 @@ class ProducteurController extends Controller
         $producteur = new Producteur();
         $producteur->proprietaires = $request->proprietaires;
         $producteur->statutMatrimonial = $request->statutMatrimonial;
-        $producteur->variete = $request->variete;
-        $producteur->autreVariete = $request->autreVariete;
         $producteur->programme_id = $request->programme_id;
         $producteur->localite_id = $request->localite_id;
         $producteur->habitationProducteur = $request->habitationProducteur;
@@ -120,7 +118,6 @@ class ProducteurController extends Controller
         $producteur->anneeDemarrage = $request->anneeDemarrage;
         $producteur->anneeFin = $request->anneeFin;
         $producteur->autreCertificats = $request->autreCertificats;
-        $producteur->autreVariete = $request->autreVariete;
         $producteur->consentement  = $request->consentement;
         $producteur->statut  = $request->statut;
         $producteur->certificat     = $request->certificat;
@@ -134,7 +131,6 @@ class ProducteurController extends Controller
         $producteur->niveau_etude    = $request->niveau_etude;
         $producteur->type_piece    = $request->type_piece;
         $producteur->numPiece    = $request->numPiece;
-        // $producteur->certificats    = $request->certificats;
         $producteur->userid = auth()->user()->id;
         $producteur->codeProd = $request->codeProd;
         $producteur->plantePartage = $request->plantePartage;
@@ -187,7 +183,6 @@ class ProducteurController extends Controller
         $validationRule = [
             'programme_id' => 'required|exists:programmes,id',
             'proprietaires' => 'required',
-            'certificats' => 'required',
             'habitationProducteur' => 'required',
             'statut' => 'required',
             'statutMatrimonial' => 'required',
@@ -205,7 +200,6 @@ class ProducteurController extends Controller
             'anneeFin' => 'required_if:proprietaires,==,Garantie',
             'plantePartage' => 'required_if:proprietaires,==,Planté-partager',
             'typeCarteSecuriteSociale' => 'required',
-            'autreCertificats' => 'required_if:certificats,==,Autre',
             'codeProd' => 'required_if:statut,==,Certifie',
             'certificat' => 'required_if:statut,==,Certifie',
             'phone2' => 'required_if:autreMembre,==,oui',

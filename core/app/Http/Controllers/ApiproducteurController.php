@@ -103,7 +103,6 @@ class ApiproducteurController extends Controller
         'autreProgramme' => 'nullable', // Champ "autreProgramme" peut être vide
         'proprietaires' => 'required',
         'certificats' => 'required',
-        'variete' => 'required',
         'habitationProducteur' => 'required',
         'statut' => 'required',
         'statutMatrimonial' => 'required',
@@ -123,7 +122,6 @@ class ApiproducteurController extends Controller
         'plantePartage' => 'required_if:proprietaires,==,Planté-partager',
         'typeCarteSecuriteSociale' => 'required',
         'autreCertificats' => 'required_if:certificats,==,Autre',
-        'autreVariete' => 'required_if:variete,==,Autre',
         'codeProd' => 'required_if:statut,==,Certifie',
         'certificat' => 'required_if:statut,==,Certifie',
         'autrePhone' => 'required_if:autreMembre,==,oui',
@@ -135,7 +133,6 @@ class ApiproducteurController extends Controller
         'programme_id.required' => 'Le programme est obligatoire',
         'proprietaires.required' => 'Le type de propriétaire est obligatoire',
         'certificats.required' => 'Le type de certificat est obligatoire',
-        'variete.required' => 'Le type de variété est obligatoire',
         'habitationProducteur.required' => 'Le type d\'habitation est obligatoire',
         'statut.required' => 'Le statut est obligatoire',
         'statutMatrimonial.required' => 'Le statut matrimonial est obligatoire',
@@ -156,7 +153,6 @@ class ApiproducteurController extends Controller
         'plantePartage.required_if' => 'Le type de plante est obligatoire',
         'typeCarteSecuriteSociale.required' => 'Le type de carte de sécurité sociale est obligatoire',
         'autreCertificats.required_if' => 'Le type de certificat est obligatoire',
-        'autreVariete.required_if' => 'Le type de variété est obligatoire',
         'codeProdapp.required_if' => 'Le code Prodapp est obligatoire',
         'certificat.required_if' => 'Le certificat est obligatoire',
         'phone2.required_if' => 'Le numéro de téléphone est obligatoire',
@@ -188,8 +184,6 @@ class ApiproducteurController extends Controller
       }
       $producteur->proprietaires = $request->proprietaires;
       $producteur->statutMatrimonial = $request->statutMatrimonial;
-      $producteur->variete = $request->variete;
-      $producteur->autreVariete = $request->autreVariete;
       $producteur->programme_id = $request->programme_id;
       $producteur->localite_id = $request->localite_id;
       $producteur->habitationProducteur = $request->habitationProducteur;
@@ -204,7 +198,6 @@ class ApiproducteurController extends Controller
       $producteur->anneeDemarrage = $request->anneeDemarrage;
       $producteur->anneeFin = $request->anneeFin;
       $producteur->autreCertificats = $request->autreCertificats;
-      $producteur->autreVariete = $request->autreVariete;
       $producteur->consentement  = $request->consentement;
       $producteur->statut  = $request->statut;
       $producteur->certificat     = $request->certificat;
@@ -259,7 +252,6 @@ class ApiproducteurController extends Controller
         'autreProgramme' => 'nullable', // Champ "autreProgramme" peut être vide
         'proprietaires' => 'required',
         'certificats' => 'required',
-        'variete' => 'required',
         'habitationProducteur' => 'required',
         'statut' => 'required',
         'statutMatrimonial' => 'required',
@@ -279,7 +271,6 @@ class ApiproducteurController extends Controller
         'plantePartage' => 'required_if:proprietaires,==,Planté-partager',
         'typeCarteSecuriteSociale' => 'required',
         'autreCertificats' => 'required_if:certificats,==,Autre',
-        'autreVariete' => 'required_if:variete,==,Autre',
         'codeProd' => 'required_if:statut,==,Certifie',
         'certificat' => 'required_if:statut,==,Certifie',
         'autrePhone' => 'required_if:autreMembre,==,oui',
@@ -290,7 +281,6 @@ class ApiproducteurController extends Controller
         'programme_id.required' => 'Le programme est obligatoire',
         'proprietaires.required' => 'Le type de propriétaire est obligatoire',
         'certificats.required' => 'Le type de certificat est obligatoire',
-        'variete.required' => 'Le type de variété est obligatoire',
         'habitationProducteur.required' => 'Le type d\'habitation est obligatoire',
         'statut.required' => 'Le statut est obligatoire',
         'statutMatrimonial.required' => 'Le statut matrimonial est obligatoire',
@@ -311,7 +301,6 @@ class ApiproducteurController extends Controller
         'plantePartage.required_if' => 'Le type de plante est obligatoire',
         'typeCarteSecuriteSociale.required' => 'Le type de carte de sécurité sociale est obligatoire',
         'autreCertificats.required_if' => 'Le type de certificat est obligatoire',
-        'autreVariete.required_if' => 'Le type de variété est obligatoire',
         'codeProdapp.required_if' => 'Le code Prodapp est obligatoire',
         'certificat.required_if' => 'Le certificat est obligatoire',
         'phone2.required_if' => 'Le numéro de téléphone est obligatoire',
@@ -324,8 +313,6 @@ class ApiproducteurController extends Controller
       $producteur = new Producteur();
       $producteur->proprietaires = $request->proprietaires;
       $producteur->statutMatrimonial = $request->statutMatrimonial;
-      $producteur->variete = $request->variete;
-      $producteur->autreVariete = $request->autreVariete;
       $producteur->programme_id = $request->programme_id;
       $producteur->localite_id = $request->localite_id;
       $producteur->habitationProducteur = $request->habitationProducteur;
@@ -339,8 +326,6 @@ class ApiproducteurController extends Controller
       $producteur->numCMU = $request->numCMU;
       $producteur->anneeDemarrage = $request->anneeDemarrage;
       $producteur->anneeFin = $request->anneeFin;
-      $producteur->autreCertificats = $request->autreCertificats;
-      $producteur->autreVariete = $request->autreVariete;
       $producteur->consentement  = $request->consentement;
       $producteur->statut  = $request->statut;
       $producteur->certificat     = $request->certificat;

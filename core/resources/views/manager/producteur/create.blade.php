@@ -521,7 +521,7 @@
 
 @push('script')
     <script type="text/javascript">
-        $('#listecultures,#gardePapiersChamps,#numeroCompteMM,#typeCarteSecuriteSociales,#garantie,#autrePhones,#autreCertificat,#autreVarietes,#plantePartager,#statutCertifie,#pieceCMU,#autreProgrammes')
+        $('#listecultures,#gardePapiersChamps,#numeroCompteMM,#typeCarteSecuriteSociales,#garantie,#autrePhones,#autreCertificat,#plantePartager,#statutCertifie,#pieceCMU,#autreProgrammes')
             .hide();
         //afficher le champ de saisie du numero de la piece de sécurité sociale
         $('.typeCarteSecuriteSociale').change(function() {
