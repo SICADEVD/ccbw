@@ -117,7 +117,7 @@ class ApiproducteurController extends Controller
         'niveau_etude'  => 'required|max:255',
         'type_piece'  => 'required|max:255',
         'numPiece'  => 'required|max:255',
-        'num_ccc' => 'regex:/^[0-9]{10}$/', // Champ "num_ccc" peut être vide
+        'num_ccc' => 'nullable|regex:/^[0-9]{10}$/', // Champ "num_ccc" peut être vide
         'anneeDemarrage' => 'required_if:proprietaires,==,Garantie',
         'anneeFin' => 'required_if:proprietaires,==,Garantie',
         'plantePartage' => 'required_if:proprietaires,==,Planté-partager',
@@ -126,10 +126,9 @@ class ApiproducteurController extends Controller
         'autreVariete' => 'required_if:variete,==,Autre',
         'codeProd' => 'required_if:statut,==,Certifie',
         'certificat' => 'required_if:statut,==,Certifie',
-        'phone2' => 'required_if:autreMembre,==,oui',
-        'phone2'  => ['required', 'regex:/^\d{10}$/', 'unique:producteurs,phone2'],
         'autrePhone' => 'required_if:autreMembre,==,oui',
         'numCMU' => 'required_if:carteCMU,==,oui',
+        'phone2' => 'required_if:autreMembre,oui|regex:/^\d{10}$/'
 
       ];
       $messages = [
@@ -274,7 +273,7 @@ class ApiproducteurController extends Controller
         'niveau_etude'  => 'required|max:255',
         'type_piece'  => 'required|max:255',
         'numPiece'  => 'required|max:255',
-        'num_ccc' => 'regex:/^[0-9]{10}$/', // Champ "num_ccc" peut être vide
+        'num_ccc' => 'nullable|regex:/^[0-9]{10}$/', // Champ "num_ccc" peut être vide
         'anneeDemarrage' => 'required_if:proprietaires,==,Garantie',
         'anneeFin' => 'required_if:proprietaires,==,Garantie',
         'plantePartage' => 'required_if:proprietaires,==,Planté-partager',
@@ -283,10 +282,9 @@ class ApiproducteurController extends Controller
         'autreVariete' => 'required_if:variete,==,Autre',
         'codeProd' => 'required_if:statut,==,Certifie',
         'certificat' => 'required_if:statut,==,Certifie',
-        'phone2' => 'required_if:autreMembre,==,oui',
-        'phone2'  => ['required', 'regex:/^\d{10}$/', 'unique:producteurs,phone2'],
         'autrePhone' => 'required_if:autreMembre,==,oui',
         'numCMU' => 'required_if:carteCMU,==,oui',
+        'phone2' => 'required_if:autreMembre,oui|regex:/^\d{10}$/'
       ];
       $message = [
         'programme_id.required' => 'Le programme est obligatoire',
@@ -361,6 +359,7 @@ class ApiproducteurController extends Controller
       $producteur->userid = $request->userid;
       $producteur->codeProd = $request->codeProd;
       $producteur->plantePartage = $request->plantePartage;
+      $producteur->autreProgramme = $request->autreProgramme;
       if (!file_exists(storage_path() . "/app/public/producteurs/pieces")) {
         File::makeDirectory(storage_path() . "/app/public/producteurs/pieces", 0777, true);
       }
@@ -391,6 +390,27 @@ class ApiproducteurController extends Controller
         $producteur->codeProdapp = null;
       }
       $producteur->save();
+
+      if ($producteur != null) {
+        $id = $producteur->id;
+        $datas  = $data2 = [];
+        if (($request->certificats != null)) {
+          Producteur_certification::where('producteur_id', $id)->delete();
+          $i = 0;
+          foreach ($request->certificats as $certificat) {
+            if (!empty($certificat)) {
+              $datas[] = [
+                'producteur_id' => $id,
+                'certification' => $certificat,
+              ];
+            }
+
+            $i++;
+          }
+        }
+
+        Producteur_certification::insert($datas);
+      }
       $message = "Le producteur a été créé avec succès";
     }
     return response()->json($producteur, 201);

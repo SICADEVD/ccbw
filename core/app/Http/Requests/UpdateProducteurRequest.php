@@ -43,7 +43,7 @@ class UpdateProducteurRequest extends FormRequest
             'niveau_etude'  => 'required|max:255',
             'type_piece'  => 'required|max:255',
             'numPiece'  => 'required|max:255',
-            'num_ccc' => 'regex:/^[0-9]{10}$/', // Champ "num_ccc" peut être vide
+            'num_ccc' => 'nullable|regex:/^[0-9]{10}$/', // Champ "num_ccc" peut être vide
             'anneeDemarrage' =>'required_if:proprietaires,==,Garantie',
             'anneeFin' =>'required_if:proprietaires,==,Garantie',
             'plantePartage'=>'required_if:proprietaires,==,Planté-partager',
@@ -52,10 +52,9 @@ class UpdateProducteurRequest extends FormRequest
             'autreVariete'=>'required_if:variete,==,Autre',
             'codeProd'=>'required_if:statut,==,Certifie',
             'certificat'=>'required_if:statut,==,Certifie',
-            'phone2'=>'required_if:autreMembre,==,oui',
-            'phone2'  => ['required', 'regex:/^\d{10}$/', 'unique:producteurs,phone2'],
             'autrePhone'=>'required_if:autreMembre,==,oui',
             'numCMU'=>'required_if:carteCMU,==,oui',
+            'phone2' => 'required_if:autreMembre,oui|regex:/^\d{10}$/'
         ];
     }
     public function messages()
