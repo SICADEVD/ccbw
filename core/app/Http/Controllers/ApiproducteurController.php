@@ -100,7 +100,6 @@ class ApiproducteurController extends Controller
       $producteur = Producteur::findOrFail($request->id);
       $validationRule = [
         'programme_id' => ['required', 'exists:programmes,id'],
-        'autreProgramme' => 'nullable', // Champ "autreProgramme" peut être vide
         'proprietaires' => 'required',
         'certificats' => 'required',
         'habitationProducteur' => 'required',
@@ -214,7 +213,6 @@ class ApiproducteurController extends Controller
       $producteur->userid = $request->userid;
       $producteur->codeProd = $request->codeProd;
       $producteur->plantePartage = $request->plantePartage;
-      $producteur->autreProgramme = $request->autreProgramme;
       if ($producteur->codeProdapp == null) {
         $coop = DB::table('localites as l')->join('cooperatives as c', 'l.cooperative_id', '=', 'c.id')->where('l.id', $request->localite)->select('c.codeApp')->first();
         if ($coop != null) {
@@ -249,7 +247,6 @@ class ApiproducteurController extends Controller
     } else {
       $validationRule = [
         'programme_id' => ['required', 'exists:programmes,id'],
-        'autreProgramme' => 'nullable', // Champ "autreProgramme" peut être vide
         'proprietaires' => 'required',
         'certificats' => 'required',
         'habitationProducteur' => 'required',
@@ -342,7 +339,7 @@ class ApiproducteurController extends Controller
       $producteur->userid = $request->userid;
       $producteur->codeProd = $request->codeProd;
       $producteur->plantePartage = $request->plantePartage;
-      $producteur->autreProgramme = $request->autreProgramme;
+
       if (!file_exists(storage_path() . "/app/public/producteurs/pieces")) {
         File::makeDirectory(storage_path() . "/app/public/producteurs/pieces", 0777, true);
       }
