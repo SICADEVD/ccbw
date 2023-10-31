@@ -57,9 +57,12 @@
                             <select class="form-control select2-multi-select certificats" name="certificats[]" multiple
                                 required>
                                 <option value="">@lang('Selectionner les protections')</option>
-                                <option value="Rainforest"{{ in_array('Rainforest', $certifications) ? 'selected' : '' }}>Rainforest</option>
-                                <option value="Fairtrade"{{ in_array('Fairtrade', $certifications) ? 'selected' : '' }}>Fairtrade</option>
-                                <option value="Autre"{{ in_array('Autre', $certifications) ? 'selected' : '' }}>Autre</option>
+                                <option value="Rainforest"{{ in_array('Rainforest', $certifications) ? 'selected' : '' }}>
+                                    Rainforest</option>
+                                <option value="Fairtrade"{{ in_array('Fairtrade', $certifications) ? 'selected' : '' }}>
+                                    Fairtrade</option>
+                                <option value="Autre"{{ in_array('Autre', $certifications) ? 'selected' : '' }}>Autre
+                                </option>
                             </select>
                         </div>
                     </div>
@@ -403,7 +406,7 @@
                                     'Zimbabweenne' => 'Zimbabweenne',
                                 ],
                                 null,
-                                ['class' => 'form-control', 'placeholder' => __('Selectionner une option'), 'required'],
+                                ['class' => 'select2-basic', 'placeholder' => __('Selectionner une option'), 'required'],
                             ); ?>
                         </div>
                     </div>
@@ -788,5 +791,9 @@
     </script>
     <script type="text/javascript">
         $("#localite_id").chained("#section");
+
+        $(document).ready(function() {
+            $(".select2-basic").select2();
+        });
     </script>
 @endpush
