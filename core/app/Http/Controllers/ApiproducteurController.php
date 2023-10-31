@@ -339,7 +339,6 @@ class ApiproducteurController extends Controller
       $producteur->numCMU = $request->numCMU;
       $producteur->anneeDemarrage = $request->anneeDemarrage;
       $producteur->anneeFin = $request->anneeFin;
-      $producteur->certificats   = $request->certificats;
       $producteur->autreCertificats = $request->autreCertificats;
       $producteur->autreVariete = $request->autreVariete;
       $producteur->consentement  = $request->consentement;
