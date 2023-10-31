@@ -54,7 +54,16 @@
                         <?php echo Form::label(__('Certificat'), null, ['class' => 'col-sm-4 control-label']); ?>
 
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('certificats', ['Rainforest' => 'Rainforest', 'Fairtrade' => 'Fairtrade', 'BIO' => 'BIO', 'Autre' => 'Autre'], null, ['class' => 'form-control certificats', 'id' => 'certificats', 'required']); ?>
+                            <select class="form-control select2-multi-select certificats" name="certificats[]" multiple
+                                required>
+                                <option value="">@lang('Selectionner les protections')</option>
+                                <option value="Rainforest"{{ in_array('Rainforest', $certifications) ? 'selected' : '' }}>
+                                    Rainforest</option>
+                                <option value="Fairtrade"{{ in_array('Fairtrade', $certifications) ? 'selected' : '' }}>
+                                    Fairtrade</option>
+                                <option value="Autre"{{ in_array('Autre', $certifications) ? 'selected' : '' }}>Autre
+                                </option>
+                            </select>
                         </div>
                     </div>
                     <div id="autreCertificat">
@@ -62,22 +71,6 @@
                             <?php echo Form::label(__('Autre Certificat'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
                                 <?php echo Form::text('autreCertificats', null, ['id' => 'autreCertificats', 'placeholder' => __('Autre certificat'), 'class' => 'form-control autreCertificats']); ?>
-                            </div>
-                        </div>
-                    </div>
-                    {{-- Selectionner la Varieté --}}
-
-                    <div class="form-group row">
-                        <?php echo Form::label(__('Varieté'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('variete', ['CNRA' => 'CNRA', 'Tout venant' => 'Tout venant', 'Autre' => 'Autre'], null, ['class' => 'form-control variete', 'id' => 'variete', 'required']); ?>
-                        </div>
-                    </div>
-                    <div id="autreVarietes">
-                        <div class="form-group row">
-                            <?php echo Form::label(__('Autre Varieté'), null, ['class' => 'col-sm-4 control-label']); ?>
-                            <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::text('autreVariete', null, ['id' => 'autreVariete', 'placeholder' => __('Autre varieté'), 'class' => 'form-control autreVariete']); ?>
                             </div>
                         </div>
                     </div>
@@ -113,7 +106,7 @@
                     <div class="form-group row">
                         <label class="col-sm-4 control-label">@lang('Selectionner un programme')</label>
                         <div class="col-xs-12 col-sm-8">
-                            <select class="form-control" name="programme_id" id="programme_id" required>
+                            <select class="form-control programme_id" name="programme_id" id="programme_id" required>
                                 <option value="">@lang('Selectionner une option')</option>
                                 @foreach ($programmes as $programme)
                                     <option value="{{ $programme->id }}" @selected($producteur->programme_id == $programme->id)>
@@ -125,7 +118,7 @@
 
                     {{-- saisie où le producteur habite --}}
                     <div class="form-group row">
-                        <?php echo Form::label(__('Où Habitez vous ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <?php echo Form::label(__('Habitez-vous dans un campement ou village ?'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
                             <?php echo Form::select('habitationProducteur', ['Village' => 'Village', 'Campement' => 'Campement'], null, ['class' => 'form-control habitationProducteur', 'id' => 'habitationProducteur', 'required']); ?>
                         </div>
@@ -176,7 +169,7 @@
                     <div class="form-group row">
                         <?php echo Form::label(__('Statut matrimonial'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('statutMatrimonial', ['Célibataire' => 'Célibataire', 'Fiancé' => 'Fiancé', 'Marié(mariage civil)' => 'Marié(mariage civil)', 'Mariage réligieux' => 'Mariage réligieux', 'Mariage réligieux' => 'Mariage réligieux', 'Divorcé' => 'Divorcé', 'Veuf(ve)' => 'Veuf(ve)'], null, ['class' => 'form-control', 'required']); ?>
+                            <?php echo Form::select('statutMatrimonial', ['Célibataire' => 'Célibataire', 'Concubinage' => 'Concubinage', 'Marié(mariage civil)' => 'Marié(mariage civil)', 'Mariage réligieux' => 'Mariage réligieux', 'Mariage réligieux' => 'Mariage réligieux', 'Divorcé' => 'Divorcé', 'Veuf(ve)' => 'Veuf(ve)'], null, ['class' => 'form-control', 'required']); ?>
                         </div>
                     </div>
 
@@ -385,7 +378,7 @@
                                     'Zimbabweenne' => 'Zimbabweenne',
                                 ],
                                 null,
-                                ['class' => 'form-control', 'placeholder' => __('Selectionner une option'), 'required'],
+                                ['class' => 'select2-basic', 'placeholder' => __('Selectionner une option'), 'required'],
                             ); ?>
                         </div>
                     </div>
@@ -513,7 +506,7 @@
 
 @push('script')
     <script type="text/javascript">
-        $('#listecultures,#gardePapiersChamps,#numeroCompteMM,#typeCarteSecuriteSociales,#garantie,#autrePhones,#autreCertificat,#autreVarietes,#plantePartager,#statutCertifie')
+        $('#listecultures,#gardePapiersChamps,#numeroCompteMM,#typeCarteSecuriteSociales,#garantie,#autrePhones,#autreCertificat,#plantePartager,#statutCertifie')
             .hide();
         //afficher le champ de saisie du numero de la piece de sécurité sociale
         $('.typeCarteSecuriteSociale').change(function() {
@@ -572,35 +565,15 @@
             $('#codeProd').prop('required', false);
 
         }
-        //afficher le champ autre variete
-
-        $('.variete').change(function() {
-            var variete = $('.variete').val();
-            if (variete == 'Autre') {
-                $('#autreVarietes').show('slow');
-                $('.autreVariete').show('slow');
-                $("#autreVariete").prop("required", true);
-            } else {
-                $('#autreVarietes').hide('slow');
-                $('.autreVariete').val('');
-                $("#autreVariete").prop("required", false);
-            }
-        });
-        if ($('.variete').val() == 'Autre') {
-            $('#autreVarietes').show('slow');
-            $('.autreVariete').show('slow');
-            $("#autreVariete").prop("required", true);
-        } else {
-            $('#autreVarietes').hide('slow');
-            $('.autreVariete').val('');
-            $("#autreVariete").prop("required", false);
-        }
 
         //afficher le champ autre certificat
 
         $('.certificats').change(function() {
-            var certificats = $('.certificats').val();
-            if (certificats == 'Autre') {
+            var certificats = $('.certificats').find(":selected").map((key, item) => {
+                return item.textContent.trim();
+            }).get();
+            console.log(certificats);
+            if (certificats.includes("Autre")) {
                 $('#autreCertificat').show('slow');
                 $("#autreCertificats").prop("required", true);
             } else {
@@ -609,7 +582,9 @@
                 $("#autreCertificats").prop("required", false);
             }
         });
-        if ($('.certificats').val() == 'Autre') {
+        if ($('.certificats').find(":selected").map((key, item) => {
+                return item.textContent.trim();
+            }).get().includes("Autre")) {
             $('#autreCertificat').show('slow');
             $("#autreCertificats").prop("required", true);
         } else {
@@ -746,5 +721,9 @@
     </script>
     <script type="text/javascript">
         $("#localite_id").chained("#section");
+
+        $(document).ready(function() {
+            $(".select2-basic").select2();
+        });
     </script>
 @endpush

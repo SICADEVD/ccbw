@@ -25,5 +25,9 @@ class Producteur extends Model
     {
         return $this->hasMany(Menage::class, 'producteur_id', 'id');
     }
+    public function certifications()
+    {
+        return $this->hasMany(Producteur_certification::class, 'producteur_id', 'id');
+    }
     
 }
