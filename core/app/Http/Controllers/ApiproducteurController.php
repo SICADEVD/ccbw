@@ -339,6 +339,7 @@ class ApiproducteurController extends Controller
       $producteur->userid = $request->userid;
       $producteur->codeProd = $request->codeProd;
       $producteur->plantePartage = $request->plantePartage;
+      $producteur->userid = $request->userid;
 
       if (!file_exists(storage_path() . "/app/public/producteurs/pieces")) {
         File::makeDirectory(storage_path() . "/app/public/producteurs/pieces", 0777, true);
