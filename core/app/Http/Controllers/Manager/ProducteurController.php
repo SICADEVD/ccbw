@@ -153,7 +153,7 @@ class ProducteurController extends Controller
         } else {
             $producteur->codeProdapp = null;
         }
-        // dd(json_encode($request->all()));
+        dd(json_encode($request->all()));
         $producteur->save();
 
         if ($producteur != null) {
@@ -251,7 +251,7 @@ class ProducteurController extends Controller
         $producteur->codeProd = $request->codeProd;
         $producteur->plantePartage = $request->plantePartage;
         $producteur->autreProgramme = $request->autreProgramme;
-        // dd(json_encode($request->all()));
+        dd(json_encode($request->all()));
         if ($request->hasFile('picture')) {
             try {
                 $producteur->picture = $request->file('picture')->store('public/producteurs/photos');
