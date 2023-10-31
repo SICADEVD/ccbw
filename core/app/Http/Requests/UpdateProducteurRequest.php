@@ -29,7 +29,7 @@ class UpdateProducteurRequest extends FormRequest
             'autreProgramme' => 'nullable', // Champ "autreProgramme" peut être vide
             'proprietaires' => 'required',
             'certificats' => 'required',
-            'variete' => 'required',
+
             'habitationProducteur' => 'required',
             'statut' => 'required',
             'statutMatrimonial' => 'required',
@@ -49,7 +49,7 @@ class UpdateProducteurRequest extends FormRequest
             'plantePartage'=>'required_if:proprietaires,==,Planté-partager',
             'typeCarteSecuriteSociale'=>'required',
             'autreCertificats'=>'required_if:certificats,==,Autre',
-            'autreVariete'=>'required_if:variete,==,Autre',
+
             'codeProd'=>'required_if:statut,==,Certifie',
             'certificat'=>'required_if:statut,==,Certifie',
             'autrePhone'=>'required_if:autreMembre,==,oui',
@@ -63,7 +63,7 @@ class UpdateProducteurRequest extends FormRequest
             'programme_id.required' => 'Le programme est obligatoire',
             'proprietaires.required' => 'Le type de propriétaire est obligatoire',
             'certificats.required' => 'Le type de certificat est obligatoire',
-            'variete.required' => 'Le type de variété est obligatoire',
+
             'habitationProducteur.required' => 'Le type d\'habitation est obligatoire',
             'statut.required' => 'Le statut est obligatoire',
             'statutMatrimonial.required' => 'Le statut matrimonial est obligatoire',
@@ -84,7 +84,7 @@ class UpdateProducteurRequest extends FormRequest
             'plantePartage.required_if' => 'Le type de plante est obligatoire',
             'typeCarteSecuriteSociale.required' => 'Le type de carte de sécurité sociale est obligatoire',
             'autreCertificats.required_if' => 'Le type de certificat est obligatoire',
-            'autreVariete.required_if' => 'Le type de variété est obligatoire',
+
             'codeProdapp.required_if' => 'Le code Prodapp est obligatoire',
             'certificat.required_if' => 'Le certificat est obligatoire',
             'phone2.required_if' => 'Le numéro de téléphone est obligatoire',
@@ -100,7 +100,7 @@ class UpdateProducteurRequest extends FormRequest
             'programme_id' => 'programme',
             'proprietaires' => 'propriétaire',
             'certificats' => 'certificat',
-            'variete' => 'variété',
+
             'habitationProducteur' => 'habitation',
             'statut' => 'statut',
             'statutMatrimonial' => 'statut matrimonial',
@@ -119,7 +119,7 @@ class UpdateProducteurRequest extends FormRequest
             'plantePartage'=>'Planté-partager',
             'typeCarteSecuriteSociale'=>'type de carte de sécurité sociale',
             'autreCertificats'=>'type de certificat',
-            'autreVariete'=>'Autre variété',
+
             'codeProdapp'=>'code Prodapp',
             'certificat'=>'certificat',
             'phone2'=>'numéro de téléphone',
