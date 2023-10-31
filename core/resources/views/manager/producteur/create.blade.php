@@ -76,23 +76,6 @@
                             </div>
                         </div>
                     </div>
-                    {{-- Selectionner la Varieté --}}
-
-                    <div class="form-group row">
-                        <?php echo Form::label(__('Varieté'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('variete', ['CNRA' => 'CNRA', 'Tout venant' => 'Tout venant', 'Autre' => 'Autre'], null, ['class' => 'form-control variete', 'id' => 'variete', 'required']); ?>
-                        </div>
-                    </div>
-                    <div id="autreVarietes">
-                        <div class="form-group row">
-                            <?php echo Form::label(__('Autre Varieté'), null, ['class' => 'col-sm-4 control-label']); ?>
-                            <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::text('autreVariete', null, ['id' => 'autreVariete', 'placeholder' => __('Autre varieté'), 'class' => 'form-control autreVariete']); ?>
-                            </div>
-                        </div>
-                    </div>
-
                     {{-- selection sections --}}
                     <div class="form-group row">
                         <label class="col-sm-4 control-label">@lang('Selectionner une section')</label>
@@ -587,20 +570,7 @@
 
             }
         });
-        //afficher le champ autre variete
-
-        $('.variete').change(function() {
-            var variete = $('.variete').val();
-            if (variete == 'Autre') {
-                $('#autreVarietes').show('slow');
-                $('.autreVariete').show('slow');
-                $("#autreVariete").prop("required", true);
-            } else {
-                $('#autreVarietes').hide('slow');
-                $('.autreVariete').val('');
-                $("#autreVariete").prop("required", false);
-            }
-        });
+       
 
         //afficher le champ autre certificat
 

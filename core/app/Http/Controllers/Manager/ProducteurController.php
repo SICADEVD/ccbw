@@ -188,7 +188,6 @@ class ProducteurController extends Controller
             'programme_id' => 'required|exists:programmes,id',
             'proprietaires' => 'required',
             'certificats' => 'required',
-            'variete' => 'required',
             'habitationProducteur' => 'required',
             'statut' => 'required',
             'statutMatrimonial' => 'required',
@@ -207,7 +206,6 @@ class ProducteurController extends Controller
             'plantePartage' => 'required_if:proprietaires,==,Planté-partager',
             'typeCarteSecuriteSociale' => 'required',
             'autreCertificats' => 'required_if:certificats,==,Autre',
-            'autreVariete' => 'required_if:variete,==,Autre',
             'codeProd' => 'required_if:statut,==,Certifie',
             'certificat' => 'required_if:statut,==,Certifie',
             'phone2' => 'required_if:autreMembre,==,oui',
@@ -217,8 +215,6 @@ class ProducteurController extends Controller
         $request->validate($validationRule);
         $producteur->proprietaires = $request->proprietaires;
         $producteur->statutMatrimonial = $request->statutMatrimonial;
-        $producteur->variete = $request->variete;
-        $producteur->autreVariete = $request->autreVariete;
         $producteur->programme_id = $request->programme_id;
         $producteur->localite_id = $request->localite_id;
         $producteur->habitationProducteur = $request->habitationProducteur;
@@ -233,7 +229,6 @@ class ProducteurController extends Controller
         $producteur->anneeDemarrage = $request->anneeDemarrage;
         $producteur->anneeFin = $request->anneeFin;
         $producteur->autreCertificats = $request->autreCertificats;
-        $producteur->autreVariete = $request->autreVariete;
         $producteur->consentement  = $request->consentement;
         $producteur->statut  = $request->statut;
         $producteur->certificat     = $request->certificat;

@@ -617,29 +617,6 @@
             $('#codeProd').prop('required', false);
 
         }
-        //afficher le champ autre variete
-
-        $('.variete').change(function() {
-            var variete = $('.variete').val();
-            if (variete == 'Autre') {
-                $('#autreVarietes').show('slow');
-                $('.autreVariete').show('slow');
-                $("#autreVariete").prop("required", true);
-            } else {
-                $('#autreVarietes').hide('slow');
-                $('.autreVariete').val('');
-                $("#autreVariete").prop("required", false);
-            }
-        });
-        if ($('.variete').val() == 'Autre') {
-            $('#autreVarietes').show('slow');
-            $('.autreVariete').show('slow');
-            $("#autreVariete").prop("required", true);
-        } else {
-            $('#autreVarietes').hide('slow');
-            $('.autreVariete').val('');
-            $("#autreVariete").prop("required", false);
-        }
 
         //afficher le champ autre certificat
 
