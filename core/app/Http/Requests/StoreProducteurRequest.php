@@ -54,7 +54,7 @@ class StoreProducteurRequest extends FormRequest
             'certificat'=>'required_if:statut,==,Certifie',
             'autrePhone'=>'required_if:autreMembre,==,oui',
             'numCMU'=>'required_if:carteCMU,==,oui',
-            // 'phone2' => 'required_if:autreMembre,oui|regex:/^\d{10}$/'
+            'phone2' => 'required_if:autreMembre,oui|regex:/^\d{10}$/'
 
         ];
     }

@@ -644,8 +644,11 @@
         //afficher le champ autre certificat
 
         $('.certificats').change(function() {
-            var certificats = $('.certificats').val();
-            if (certificats == 'Autre') {
+            var certificats = $('.certificats').find(":selected").map((key, item) => {
+                return item.textContent.trim();
+            }).get();
+            console.log(certificats);
+            if (certificats.includes("Autre")) {
                 $('#autreCertificat').show('slow');
                 $("#autreCertificats").prop("required", true);
             } else {
@@ -654,7 +657,9 @@
                 $("#autreCertificats").prop("required", false);
             }
         });
-        if ($('.certificats').val() == 'Autre') {
+        if ($('.certificats').find(":selected").map((key, item) => {
+                return item.textContent.trim();
+            }).get().includes("Autre")) {
             $('#autreCertificat').show('slow');
             $("#autreCertificats").prop("required", true);
         } else {
