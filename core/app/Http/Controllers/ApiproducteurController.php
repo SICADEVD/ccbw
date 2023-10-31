@@ -355,7 +355,6 @@ class ApiproducteurController extends Controller
       $producteur->niveau_etude    = $request->niveau_etude;
       $producteur->type_piece    = $request->type_piece;
       $producteur->numPiece    = $request->numPiece;
-      $producteur->certificats   = $request->certificats;
       $producteur->userid = $request->userid;
       $producteur->codeProd = $request->codeProd;
       $producteur->plantePartage = $request->plantePartage;
