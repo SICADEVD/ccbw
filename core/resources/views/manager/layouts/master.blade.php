@@ -124,7 +124,6 @@
     <script src="{{ asset('assets/fcadmin/js/vendor/select2.min.js') }}"></script>
     <script src="{{ asset('assets/dropify/js/dropify.min.js') }}"></script>
     <script src="{{ asset('assets/fcadmin/js/jquery.chained.js') }}"></script>
-<<<<<<< HEAD
 <script src="{{ asset('assets/fcadmin/js/popper.min.js') }}"></script>
 <script src="{{ asset('assets/global/js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('assets/fcadmin/js/jquery.dataTables.min.js') }}"></script>
@@ -136,19 +135,6 @@
  <script src="{{ asset('assets/vendor/jquery/datepicker.min.js') }}"></script> 
 <script src="{{ asset('assets/vendor/jquery/bootstrap-select.js') }}"></script>  
 <script src="{{ asset('assets/js/main.js') }}"></script>
-=======
-    <script src="{{ asset('assets/fcadmin/js/popper.min.js') }}"></script>
-    <script src="{{ asset('assets/global/js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('assets/fcadmin/js/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('assets/fcadmin/js/dataTables.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('assets/vendor/jquery/bootstrap-datepicker.min.js') }}"></script>
-    <script src="{{ asset('assets/vendor/jquery/bootstrap-timepicker.min.js') }}"></script>
-    <script src="{{ asset('assets/vendor/jquery/dropzone.min.js') }}"></script>
-    <script src="{{ asset('assets/vendor/jquery/daterangepicker.min.js') }}" defer=""></script>
-    <script src="{{ asset('assets/vendor/jquery/datepicker.min.js') }}"></script>
-    <script src="{{ asset('assets/vendor/jquery/bootstrap-select.min.js') }}"></script>
-    <script src="{{ asset('assets/js/main.js') }}"></script>
->>>>>>> 0796a0134f083cc4d948b6db3f76d7d40ac006d3
     <script src="{{ asset('assets/fcadmin/js/app.js') }}"></script>
 
 
@@ -209,12 +195,8 @@
     </script>
     <script>
         "use strict";
-<<<<<<< HEAD
         
 		 $('.select-picker').selectpicker('refresh');
-=======
-        $('.select-picker').selectpicker('refresh');
->>>>>>> 0796a0134f083cc4d948b6db3f76d7d40ac006d3
         const datepickerConfig = {
             formatter: (input, date, instance) => {
                 input.value = moment(date).format('YYYY-MM-DD')
