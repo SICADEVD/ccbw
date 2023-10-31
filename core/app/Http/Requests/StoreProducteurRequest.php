@@ -52,9 +52,10 @@ class StoreProducteurRequest extends FormRequest
             'autreVariete'=>'required_if:variete,==,Autre',
             'codeProd'=>'required_if:statut,==,Certifie',
             'certificat'=>'required_if:statut,==,Certifie',
-            'phone2'=>'required_if:autreMembre,==,oui|regex:/^\d{10}$/|unique:producteurs,phone2',
             'autrePhone'=>'required_if:autreMembre,==,oui',
             'numCMU'=>'required_if:carteCMU,==,oui',
+            // 'phone2' => 'required_if:autreMembre,oui|regex:/^\d{10}$/'
+
         ];
     }
     public function messages()
