@@ -120,16 +120,7 @@
                         </div>
                     </div>
 
-                    {{-- Autre programme  --}}
-                    <div id="autreProgrammes">
-                        <div class="form-group row">
-                            <?php echo Form::label(__('Autre Programme'), null, ['class' => 'col-sm-4 control-label']); ?>
-                            <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::text('autreProgramme', null, ['id' => 'autreProgramme', 'placeholder' => __('Autre Programme'), 'class' => 'form-control autreProgramme']); ?>
-                            </div>
-                        </div>
-                    </div>
-                    {{-- fin autre programme  --}}
+                  
 
                     {{-- saisie où le producteur habite --}}
                     <div class="form-group row">
@@ -521,7 +512,7 @@
 
 @push('script')
     <script type="text/javascript">
-        $('#listecultures,#gardePapiersChamps,#numeroCompteMM,#typeCarteSecuriteSociales,#garantie,#autrePhones,#autreCertificat,#plantePartager,#statutCertifie,#pieceCMU,#autreProgrammes')
+        $('#listecultures,#gardePapiersChamps,#numeroCompteMM,#typeCarteSecuriteSociales,#garantie,#autrePhones,#autreCertificat,#plantePartager,#statutCertifie,#pieceCMU')
             .hide();
         //afficher le champ de saisie du numero de la piece de sécurité sociale
         $('.typeCarteSecuriteSociale').change(function() {
@@ -538,19 +529,7 @@
             }
         });
 
-        //afficher le champs autre programme
-        $('.programme_id').change(function() {
-            var programme = $('.programme_id').find(":selected").text().trim();
-            if (programme == 'Autre Programme') {
-                $('#autreProgrammes').show('slow');
-                $('.autreProgramme').show('slow');
-                $("#autreProgramme").prop("required", true);
-            } else {
-                $('#autreProgrammes').hide('slow');
-                $('.autreProgramme').val('');
-                $("#autreProgramme").prop("required", false);
-            }
-        });
+    
 
         $('.statut').change(function() {
             var statut = $('.statut').val();
