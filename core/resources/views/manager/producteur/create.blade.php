@@ -56,14 +56,17 @@
                             <select class="form-control select2-multi-select certificats" name="certificats[]" multiple
                                 required>
                                 <option value="">@lang('Selectionner les protections')</option>
-                                <option value="Rainforest">Rainforest
+                                <option value="Rainforest"
+                                    {{ in_array('Rainforest', old('certificats', [])) ? 'selected' : '' }}>Rainforest
                                 </option>
-                                <option value="Fairtrade">Fairtrade</option>
-                                <option value="Autre">
+                                <option value="Fairtrade"
+                                    {{ in_array('Fairtrade', old('certificats', [])) ? 'selected' : '' }}>Fairtrade</option>
+                                <option value="Autre" {{ in_array('Autre', old('certificats', [])) ? 'selected' : '' }}>
                                     Autre</option>
                             </select>
                         </div>
                     </div>
+
 
                     <div id="autreCertificat">
                         <div class="form-group row">
