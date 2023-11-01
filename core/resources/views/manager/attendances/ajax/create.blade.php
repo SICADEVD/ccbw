@@ -216,7 +216,7 @@
             var id = $(this).val();
             var url = "{{ route('manager.hr.employees.by_department', ':id') }}";
             url = url.replace(':id', id);
-
+             
             $.easyAjax({
                 url: url,
                 container: '#save-attendance-data-form',

@@ -76,11 +76,12 @@ class EmployeeController extends AccountBaseController
         
         
         if (!request()->ajax()) {
-            $this->employees = User::allEmployees();
+            $this->employees = User::with('employeeDetail')->get();
             $this->skills = Skill::all();
             $this->departments = Department::all();
             $this->designations = Designation::allDesignations();
-            $this->totalEmployees = count($this->employees); 
+            
+            $this->totalEmployees = 0; 
          
         }
         
@@ -477,8 +478,8 @@ class EmployeeController extends AccountBaseController
 
             if ($tab == '') {  // Works for profile
 
-                $this->fromDate = now()->timezone('H:i')->startOfMonth()->toDateString();
-                $this->toDate = now()->timezone('H:i')->endOfMonth()->toDateString();
+                $this->fromDate = now()->timezone(cooperative()->timezone)->startOfMonth()->toDateString();
+                $this->toDate = now()->timezone(cooperative()->timezone)->endOfMonth()->toDateString();
 
                 $this->lateAttendance = Attendance::whereBetween(DB::raw('DATE(`clock_in_time`)'), [$this->fromDate, $this->toDate])
                     ->where('late', 'yes')->where('user_id', $id)->count();
@@ -634,7 +635,7 @@ class EmployeeController extends AccountBaseController
         $options = '';
 
         foreach ($users as $item) {
-            $options .= '<option  data-content="<div class=\'d-inline-block mr-1\'><img class=\'taskEmployeeImg rounded-circle\' src=' . $item->image_url . ' ></div>  ' . $item->name . '" value="' . $item->id . '"> ' . $item->name . ' </option>';
+            $options .= '<option  data-content="<div class=\'d-inline-block mr-1\'><img class=\'taskEmployeeImg rounded-circle\' src=' . $item->image_url . ' ></div>  ' . $item->lastname .' '.$item->firstname. '" value="' . $item->id . '"> ' . $item->lastname .' '.$item->firstname. ' </option>';
         }
 
         return Reply::dataOnly(['status' => 'success', 'data' => $options]);

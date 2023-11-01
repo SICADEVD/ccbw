@@ -7,8 +7,10 @@ use App\Models\Cooperative;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\EmployeeShift;
+use App\Models\CustomFieldGroup;
 use App\Models\AttendanceSetting;
 use App\Http\Controllers\Controller;
+use App\Models\GoogleCalendarModule;
 
 class CooperativeController extends Controller
 {
@@ -49,10 +51,13 @@ class CooperativeController extends Controller
         $cooperative->codeApp   = isset($request->codeApp) ? $request->codeApp : $this->generecodeapp($request->name); 
         $cooperative->save();
 
+        $this->cooperativeAddress($cooperative);
         $this->employeeShift($cooperative);
         $this->attendanceSetting($cooperative);
+        $this->customFieldGroup($cooperative);
         $this->leaveType($cooperative);
         $cooperative->leaveSetting()->create();
+        $this->googleCalendar($cooperative);
 
         $notify[] = ['success',$message];
         return back()->withNotify($notify);
@@ -89,7 +94,40 @@ class CooperativeController extends Controller
     {
         return Cooperative::changeStatus($id);
     }
+    public function customFieldGroup($cooperative)
+    {
 
+        $fields = CustomFieldGroup::ALL_FIELDS;
+
+        array_walk($fields, function (&$a) use ($cooperative) {
+            $a['cooperative_id'] = $cooperative->id;
+        });
+
+        CustomFieldGroup::insert($fields);
+
+    }
+    public function cooperativeAddress($cooperative)
+    {
+        $cooperative->cooperativeAddress()->create([
+            'address' => $cooperative->address ?? $cooperative->name,
+            'location' => $cooperative->name ?? 'CCB',
+            'is_default' => 1,
+            'cooperative_id' => $cooperative->id,
+        ]);
+    }
+    public function googleCalendar($cooperative): void
+    {
+        $module = new GoogleCalendarModule();
+        $module->cooperative_id = $cooperative->id;
+        $module->lead_status = 0;
+        $module->leave_status = 0;
+        $module->invoice_status = 0;
+        $module->contract_status = 0;
+        $module->task_status = 0;
+        $module->event_status = 0;
+        $module->holiday_status = 0;
+        $module->saveQuietly();
+    }
     public function employeeShift($cooperative)
     {
 
@@ -108,7 +146,7 @@ class CooperativeController extends Controller
         $employeeShift->cooperative_id = $cooperative->id;
         $employeeShift->shift_short_code = 'GS';
         $employeeShift->color = '#99C7F1';
-        $employeeShift->office_start_time = '09:00:00';
+        $employeeShift->office_start_time = '08:00:00';
         $employeeShift->office_end_time = '18:00:00';
         $employeeShift->late_mark_duration = 20;
         $employeeShift->clockin_in_day = 2;

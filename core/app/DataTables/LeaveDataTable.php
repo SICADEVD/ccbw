@@ -30,7 +30,8 @@ class LeaveDataTable extends BaseDataTable
      */
 
     public function dataTable($query)
-    {
+    { 
+
         return datatables()
             ->eloquent($query)
             ->addIndexColumn()
@@ -50,7 +51,7 @@ class LeaveDataTable extends BaseDataTable
                 return $row->type->paid == 1 ? __('app.yes') : __('app.no');
             })
             ->addColumn('leave_date', function ($row) {
-                return Carbon::parse($row->leave_date)->translatedFormat($this->cooperative->date_format) .' ('.Carbon::parse($row->leave_date)->translatedFormat('l').')';
+                return Carbon::parse($row->leave_date)->translatedFormat(cooperative()->date_format) .' ('.Carbon::parse($row->leave_date)->translatedFormat('l').')';
             })
             ->addColumn('status', function ($row) {
                 if ($row->status == 'approved') {
@@ -125,10 +126,10 @@ class LeaveDataTable extends BaseDataTable
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink-41" tabindex="0" x-placement="bottom-end" style="position: absolute; transform: translate3d(-137px, 26px, 0px); top: 0px; left: 0px; will-change: transform;">';
 
                 if ($row->duration == 'multiple' && !is_null($row->unique_id)) {
-                    $actions .= '<a href="' . route('leaves.show', [$row->unique_id]) .'" class="dropdown-item"><i class="fa fa-eye mr-2"></i>' . __('app.view') . '</a>';
+                    $actions .= '<a href="' . route('manager.leaves.show', [$row->unique_id]) .'" class="dropdown-item"><i class="fa fa-eye mr-2"></i>' . __('app.view') . '</a>';
                 }
                 else {
-                    $actions .= '<a href="' . route('leaves.show', [$row->id]).'?type=single" class="dropdown-item"><i class="fa fa-eye mr-2"></i>' . __('app.view') . '</a>';
+                    $actions .= '<a href="' . route('manager.leaves.show', [$row->id]).'?type=single" class="dropdown-item"><i class="fa fa-eye mr-2"></i>' . __('app.view') . '</a>';
                 }
 
                 if ($row->status == 'pending' && ($row->duration != 'multiple' || is_null($row->unique_id))) {
@@ -176,7 +177,7 @@ class LeaveDataTable extends BaseDataTable
 
                 if ($row->status == 'pending' && ($row->duration != 'multiple' || is_null($row->unique_id))) {
                      
-                        $actions .= '<a class="dropdown-item openRightModal" href="' . route('leaves.edit', [$row->id]) . '">
+                        $actions .= '<a class="dropdown-item openRightModal" href="' . route('manager.leaves.edit', [$row->id]) . '">
                                 <i class="fa fa-edit mr-2"></i>
                                 ' . __('app.edit') . '
                         </a>';
@@ -221,8 +222,7 @@ class LeaveDataTable extends BaseDataTable
         // Will check count leave from the start of the year or nor
         $setting = cooperative();
 
-        $leavesList = $model->with('user', 'user.employeeDetail', 'user.employeeDetail.designation', 'user.session', 'type')
-            ->join('leave_types', 'leave_types.id', 'leaves.leave_type_id')
+        $leavesList = $model->join('leave_types', 'leave_types.id', 'leaves.leave_type_id')
             ->join('users', 'leaves.user_id', 'users.id')
             ->join('employee_details', 'employee_details.user_id', 'users.id')
             ->selectRaw('leaves.*, leave_types.color, leave_types.type_name, ( select count("lvs.id") from leaves as lvs where lvs.unique_id = leaves.unique_id and lvs.duration = \'multiple\') as count_multiple_leaves',
@@ -230,14 +230,12 @@ class LeaveDataTable extends BaseDataTable
             ->groupByRaw('ifnull(leaves.unique_id, leaves.id)');
 
         if (!is_null(request()->startDate)) {
-            $startDate = Carbon::createFromFormat($this->cooperative->date_format, request()->startDate)->toDateString();
-
+            $startDate = Carbon::createFromFormat(cooperative()->date_format, request()->startDate)->toDateString();
             $leavesList->whereRaw('Date(leaves.leave_date) >= ?', [$startDate]);
         }
 
         if (!is_null(request()->endDate)) {
-            $endDate = Carbon::createFromFormat($this->cooperative->date_format, request()->endDate)->toDateString();
-
+            $endDate = Carbon::createFromFormat(cooperative()->date_format, request()->endDate)->toDateString();
             $leavesList->whereRaw('Date(leaves.leave_date) <= ?', [$endDate]);
         }
 
@@ -246,7 +244,6 @@ class LeaveDataTable extends BaseDataTable
         }
 
         if (request()->leave_year != '') {
-
             $leavesList->whereYear('leaves.leave_date', request()->leave_year);
         }
 

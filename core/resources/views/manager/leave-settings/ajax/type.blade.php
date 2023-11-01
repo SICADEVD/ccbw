@@ -1,5 +1,4 @@
-
-
+<link rel="stylesheet" href="{{ asset('assets/vendor/css/bootstrap-colorpicker.css') }}" />
 <!-- LEAVE SETTING START -->
 <div class="col-lg-12 col-md-12 ntfcn-tab-content-left w-100 p-4">
 
@@ -76,6 +75,57 @@
 
 </div>
 <!-- LEAVE SETTING END -->
+<script src="{{ asset('assets/vendor/jquery/bootstrap-colorpicker.js') }}"></script>
+<script src="{{ asset('assets/vendor/jquery/bootstrap-select.js') }}"></script>   
+<script>
+
+    $(document).ready(function () {
+        setTimeout(function () {
+            $('[data-toggle="popover"]').popover();
+        }, 500);
+    });
+  
+    $('#colorpicker').colorpicker({
+        "color": "#16813D"
+    });
+
+    $(".multiple-option").selectpicker({
+        actionsBox: true,
+        selectAllText: "{{ __('modules.permission.selectAll') }}",
+        deselectAllText: "{{ __('modules.permission.deselectAll') }}",
+        multipleSeparator: ", ",
+        selectedTextFormat: "count > 8",
+        countSelectedText: function(selected, total) {
+            return selected + " {{ __('app.membersSelected') }} ";
+        }
+    });
+
+    $('#save-leave-setting').click(function() {
+        console.log($('#createLeave').serialize())
+        $.easyAjax({
+            container: '#createLeave',
+            type: "POST",
+            disableButton: true,
+            blockUI: true,
+            buttonSelector: "#save-leave-setting",
+            errorPosition: 'inline',
+            url: "{{ route('manager.leaveType.store') }}",
+            data: $('#createLeave').serialize(),
+            success: function(response) {
+                
+                if (response.status == 'success') {
+                    if (response.page_reload == 'true') {
+                        window.location.reload();
+                    } else {
+                        $('#leave_type_id').html(response.data);
+                        $('#leave_type_id').selectpicker('refresh');
+                        $(MODAL_XL).modal('hide');
+                    }
+                }
+            }
+        })
+    });
+</script>
 
 <script>
     $('body').on('click', '.delete-category', function() {
@@ -128,19 +178,20 @@
     // add new leave type
     $('#addNewLeaveType').click(function() {
     var url = "{{ route('manager.leaveType.create') }}";
+   
     $(MODAL_XL + ' ' + MODAL_HEADING).html('...');
     $.ajaxModal(MODAL_XL, url);
-    $(MODAL_XL).modal('show');
+  $(MODAL_XL).modal('show');
     });
 
 
     $('.editNewLeaveType').click(function() {
 
         var id = $(this).data('leave-id');
-
-        var url = "{{ route('manager.leaveType.edit', ':id ') }}";
-        url = url.replace(':id', id);
-
+        
+        var url = "{{ route('manager.leaveType.edit',':id') }}";
+        url = url.replace(':id',id);
+        
         $(MODAL_XL + ' ' + MODAL_HEADING).html('...');
         $.ajaxModal(MODAL_XL, url);
         $(MODAL_XL).modal('show');

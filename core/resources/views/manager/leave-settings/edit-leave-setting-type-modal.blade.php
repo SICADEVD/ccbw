@@ -1,5 +1,3 @@
-<link rel="stylesheet" href="{{ asset('assets/vendor/css/bootstrap-colorpicker.css') }}" />
-
 <div class="modal-header">
     <h5 class="modal-title">@lang('modules.leaves.editLeaveType')</h5>
     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
@@ -7,7 +5,7 @@
 </div>
 <div class="modal-body">
     <div class="portlet-body">
-        <x-form id="editLeave" method="PUT" class="ajax-form">
+        <x-form id="editLeave" method="PUT" class="ajax-form" action="{{route('manager.leaveType.update', $leaveType->id)}}">
             <div class="tabs border-bottom-grey">
                 <div class="nav" id="nav-tab">
                     <a class="nav-item nav-link f-15 type active" data-toggle="tab" href="#personal" role="tab" aria-controls="nav-type" aria-selected="true">@lang('app.general')</a>
@@ -78,7 +76,7 @@
                                         <x-forms.input-group>
                                             <input type="number" class="form-control height-35 f-14" name="effective_after" id="effective_after" value="{{$leaveType->effective_after}}">
                                             <x-slot name="append">
-                                                <select name="effective_type" class="select-picker form-control">
+                                                <select name="effective_type" class="selectpicker form-control">
                                                     <option value="days" @if($leaveType->effective_type == 'days') selected @endif>@lang('app.day')</option>
                                                     <option value="months" @if($leaveType->effective_type == 'months') selected @endif>@lang('app.month')</option>
                                                 </select>
@@ -106,7 +104,7 @@
                                             data-content="{{__('messages.leave.unusedLeave')}}" data-trigger="hover"></i>
                                     <div class="col-md-4">
                                         <x-forms.input-group>
-                                            <select name="unused_leave" class="select-picker form-control">
+                                            <select name="unused_leave" class="selectpicker form-control">
                                                 <option value="carry forward" @if($leaveType->unused_leave == 'carry forward') selected @endif>@lang('modules.leaves.carryForward')</option>
                                                 <option value="lapse" @if($leaveType->unused_leave == 'lapse') selected @endif>@lang('modules.leaves.lapse')</option>
                                                 <option value="paid" @if($leaveType->unused_leave == 'paid') selected @endif>@lang('app.paid')</option>
@@ -211,23 +209,25 @@
                 </div>
 
             </div>
-        </x-form>
+            <button type="submit" class="btn btn-primary">Valider</button>
+            
+    <!-- <x-forms.button-cancel data-dismiss="modal" class="border-0 mr-3">@lang('app.cancel')</x-forms.button-cancel>
+    <x-forms.button-primary id="save-leave-setting" icon="check">@lang('app.save')</x-forms.button-primary>
+        </x-form> -->
     </div>
 </div>
 <div class="modal-footer">
-    <x-forms.button-cancel data-dismiss="modal" class="border-0 mr-3">@lang('app.cancel')</x-forms.button-cancel>
-    <x-forms.button-primary id="save-leave-setting" icon="check">@lang('app.save')</x-forms.button-primary>
-</div>
+    
+</div>  
 
-<script src="{{ asset('assets/vendor/jquery/bootstrap-colorpicker.js') }}"></script>
 <script>
     $(document).ready(function () {
         setTimeout(function () {
             $('[data-toggle="popover"]').popover();
         }, 500);
     });
-
-    $(".select-picker").selectpicker();
+    // $('select').select2()
+    $(".selectpicker").selectpicker();
 
     $('#colorpicker').colorpicker({
         "color": "{{ $leaveType->color }}"
@@ -245,6 +245,7 @@
     });
 
     $('#save-leave-setting').click(function() {
+         console.log("Oui")
         $.easyAjax({
             container: '#editLeave',
             type: "POST",

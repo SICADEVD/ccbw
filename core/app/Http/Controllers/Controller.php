@@ -35,7 +35,7 @@ class Controller extends BaseController
      */
     public function __get($name)
     {
-        return $this->data[$name];
+        return isset($this->data[$name]);
     }
 
     /**

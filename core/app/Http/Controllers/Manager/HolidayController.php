@@ -66,7 +66,7 @@ class HolidayController extends AccountBaseController
         
 
         $this->redirectUrl = request()->date ? route('manager.holidays.index') : route('manager.holidays.table_view');
-        $this->date = request()->date ? Carbon::parse(request()->date)->timezone('Africa/Abidjan')->translatedFormat('Y-m-d') : '';
+        $this->date = request()->date ? Carbon::parse(request()->date)->timezone(cooperative()->timezone)->translatedFormat('Y-m-d') : '';
 
         if (request()->ajax()) {
             $this->pageTitle = __('app.menu.holiday');

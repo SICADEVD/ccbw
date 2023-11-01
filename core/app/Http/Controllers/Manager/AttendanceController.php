@@ -49,7 +49,7 @@ class AttendanceController extends AccountBaseController
         if (request()->ajax()) {
             return $this->summaryData($request);
         }
-
+        
         //$this->employees = EmployeeDetail::with('user')->get();
         $this->employees = User::allEmployees(null, true, 'all', auth()->user()->cooperative_id);
         $now = now();
@@ -100,7 +100,7 @@ class AttendanceController extends AccountBaseController
  
         $employees = $employees->get();
 
-        $this->holidays = Holiday::whereRaw('MONTH(holidays.date) = ?', [$request->month])->whereRaw('YEAR(holidays.date) = ?', [$request->year])->get();
+        $holidaysEmp = Holiday::whereRaw('MONTH(holidays.date) = ?', [$request->month])->whereRaw('YEAR(holidays.date) = ?', [$request->year])->get();
 
         $final = [];
         $holidayOccasions = [];
@@ -126,10 +126,10 @@ class AttendanceController extends AccountBaseController
             }
 
             if (!$requestedDate->isPast()) {
-                $final[$employee->id . '#' . $employee->name] = array_replace($dataTillToday, $dataFromTomorrow);
+                $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname] = array_replace($dataTillToday, $dataFromTomorrow);
 
             } else {
-                $final[$employee->id . '#' . $employee->name] = array_replace($dataTillRequestedDate, $dataFromTomorrow);
+                $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname] = array_replace($dataTillRequestedDate, $dataFromTomorrow);
             }
 
             $shiftScheduleCollection = $employee->shifts->keyBy('date');
@@ -137,7 +137,7 @@ class AttendanceController extends AccountBaseController
 
             foreach ($employee->shifts as $shifts) {
                 if ($shifts->shift->shift_name == 'Day Off') {
-                    $final[$employee->id . '#' . $employee->name][$shifts->date->day] = 'Day Off';
+                    $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][$shifts->date->day] = 'Day Off';
                 }
 
             }
@@ -150,24 +150,24 @@ class AttendanceController extends AccountBaseController
                     $shiftEndTime = Carbon::parse($clockInTime->copy()->toDateString() . ' ' . $shiftScheduleCollection[$clockInTime->copy()->startOfDay()->toDateTimeString()]->shift->office_end_time);
 
                     if ($clockInTime->between($shiftStartTime, $shiftEndTime)) {
-                        $final[$employee->id . '#' . $employee->name][$clockInTime->day] = '<a href="javascript:;" data-toggle="tooltip" data-original-title="'.($attendance->employee_shift_id ? $attendance->shift->shift_name : __('app.present')).'" class="view-attendance" data-attendance-id="' . $attendance->id . '"><i class="fa fa-'.($attendance->half_day == 'yes' ? 'star-half-alt' : ($attendance->late == 'yes' ? 'exclamation-circle' : 'check')).' text-primary"></i></a>';
+                        $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][$clockInTime->day] = '<a href="javascript:;" data-toggle="tooltip" data-original-title="'.($attendance->employee_shift_id ? $attendance->shift->shift_name : __('app.present')).'" class="view-attendance" data-attendance-id="' . $attendance->id . '"><i class="fa fa-'.($attendance->half_day == 'yes' ? 'star-half-alt' : ($attendance->late == 'yes' ? 'exclamation-circle' : 'check')).' text-primary"></i></a>';
 
                     }
                     else if ($attendance->employee_shift_id == $shiftScheduleCollection[$clockInTime->copy()->startOfDay()->toDateTimeString()]->shift->id) {
-                        $final[$employee->id . '#' . $employee->name][$clockInTime->day] = '<a href="javascript:;" data-toggle="tooltip" data-original-title="'.($attendance->employee_shift_id ? $attendance->shift->shift_name : __('app.present')).'" class="view-attendance" data-attendance-id="' . $attendance->id . '"><i class="fa fa-'.($attendance->half_day == 'yes' ? 'star-half-alt' : ($attendance->late == 'yes' ? 'exclamation-circle' : 'check')).' text-primary"></i></a>';
+                        $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][$clockInTime->day] = '<a href="javascript:;" data-toggle="tooltip" data-original-title="'.($attendance->employee_shift_id ? $attendance->shift->shift_name : __('app.present')).'" class="view-attendance" data-attendance-id="' . $attendance->id . '"><i class="fa fa-'.($attendance->half_day == 'yes' ? 'star-half-alt' : ($attendance->late == 'yes' ? 'exclamation-circle' : 'check')).' text-primary"></i></a>';
 
                     }
                     elseif ($clockInTime->betweenIncluded($shiftStartTime->copy()->subDay(), $shiftEndTime->copy()->subDay())) {
-                        $final[$employee->id . '#' . $employee->name][$clockInTime->copy()->subDay()->day] = '<a href="javascript:;" data-toggle="tooltip" data-original-title="'.($attendance->employee_shift_id ? $attendance->shift->shift_name : __('app.present')).'" class="view-attendance" data-attendance-id="' . $attendance->id . '"><i class="fa fa-'.($attendance->half_day == 'yes' ? 'star-half-alt' : ($attendance->late == 'yes' ? 'exclamation-circle' : 'check')).' text-primary"></i></a>';
+                        $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][$clockInTime->copy()->subDay()->day] = '<a href="javascript:;" data-toggle="tooltip" data-original-title="'.($attendance->employee_shift_id ? $attendance->shift->shift_name : __('app.present')).'" class="view-attendance" data-attendance-id="' . $attendance->id . '"><i class="fa fa-'.($attendance->half_day == 'yes' ? 'star-half-alt' : ($attendance->late == 'yes' ? 'exclamation-circle' : 'check')).' text-primary"></i></a>';
 
                     }
                     else {
-                        $final[$employee->id . '#' . $employee->name][$clockInTime->day] = '<a href="javascript:;" data-toggle="tooltip" data-original-title="'.($attendance->employee_shift_id ? $attendance->shift->shift_name : __('app.present')).'" class="view-attendance" data-attendance-id="' . $attendance->id . '"><i class="fa fa-'.($attendance->half_day == 'yes' ? 'star-half-alt' : ($attendance->late == 'yes' ? 'exclamation-circle' : 'check')).' text-primary"></i></a>';
+                        $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][$clockInTime->day] = '<a href="javascript:;" data-toggle="tooltip" data-original-title="'.($attendance->employee_shift_id ? $attendance->shift->shift_name : __('app.present')).'" class="view-attendance" data-attendance-id="' . $attendance->id . '"><i class="fa fa-'.($attendance->half_day == 'yes' ? 'star-half-alt' : ($attendance->late == 'yes' ? 'exclamation-circle' : 'check')).' text-primary"></i></a>';
                     }
 
                 }
                 else {
-                    $final[$employee->id . '#' . $employee->name][$clockInTime->day] = '<a href="javascript:;" class="view-attendance" data-attendance-id="' . $attendance->id . '"><i class="fa fa-'.($attendance->half_day == 'yes' ? 'star-half-alt' : ($attendance->late == 'yes' ? 'exclamation-circle' : 'check')).' text-primary"></i></a>';
+                    $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][$clockInTime->day] = '<a href="javascript:;" class="view-attendance" data-attendance-id="' . $attendance->id . '"><i class="fa fa-'.($attendance->half_day == 'yes' ? 'star-half-alt' : ($attendance->late == 'yes' ? 'exclamation-circle' : 'check')).' text-primary"></i></a>';
                 }
             }
 
@@ -175,7 +175,7 @@ class AttendanceController extends AccountBaseController
                 'user' => $employee
             ]);
 
-            $final[$employee->id . '#' . $employee->name][] = $emplolyeeName;
+            $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][] = $emplolyeeName;
 
             // if ($employee->employeeDetail->joining_date->greaterThan(Carbon::parse(Carbon::parse('01-' . $request->month . '-' . $request->year)))) {
             //     if ($request->month == $employee->employeeDetail->joining_date->format('m') && $request->year == $employee->employeeDetail->joining_date->format('Y')) {
@@ -197,25 +197,25 @@ class AttendanceController extends AccountBaseController
             }
 
             if (!is_null($dataBeforeJoin)) {
-                $final[$employee->id . '#' . $employee->name] = array_replace($final[$employee->id . '#' . $employee->name], $dataBeforeJoin);
+                $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname] = array_replace($final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname], $dataBeforeJoin);
             }
 
             foreach ($employee->leaves as $leave) {
                 if ($leave->duration == 'half day') {
-                    if ($final[$employee->id . '#' . $employee->name][$leave->leave_date->day] == '-' || $final[$employee->id . '#' . $employee->name][$leave->leave_date->day] == 'Absent') {
-                        $final[$employee->id . '#' . $employee->name][$leave->leave_date->day] = 'Half Day';
+                    if ($final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][$leave->leave_date->day] == '-' || $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][$leave->leave_date->day] == 'Absent') {
+                        $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][$leave->leave_date->day] = 'Half Day';
                     }
                 }
                 else {
-                    $final[$employee->id . '#' . $employee->name][$leave->leave_date->day] = 'Leave';
+                    $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][$leave->leave_date->day] = 'Leave';
                     $leaveReasons[$employee->id][$leave->leave_date->day] = $leave->type->type_name.': '.$leave->reason;
                 }
 
             }
-
-            foreach ($this->holidays as $holiday) {
-                if ($final[$employee->id . '#' . $employee->name][$holiday->date->day] == 'Absent' || $final[$employee->id . '#' . $employee->name][$holiday->date->day] == '-') {
-                    $final[$employee->id . '#' . $employee->name][$holiday->date->day] = 'Holiday';
+            
+            foreach ($holidaysEmp as $holiday) {
+                if ($final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][$holiday->date->day] == 'Absent' || $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][$holiday->date->day] == '-') {
+                    $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][$holiday->date->day] = 'Holiday';
                     $holidayOccasions[$holiday->date->day] = $holiday->occassion;
                 }
             }
@@ -391,31 +391,34 @@ class AttendanceController extends AccountBaseController
 
     public function mark(Request $request, $userid, $day, $month, $year)
     {
-        $this->date = Carbon::createFromFormat('d-m-Y', $day . '-' . $month . '-' . $year)->format('Y-m-d');
+        $date = Carbon::createFromFormat('d-m-Y', $day . '-' . $month . '-' . $year)->format('Y-m-d');
 
-        $attendanceSettings = EmployeeShiftSchedule::with('shift')->where('user_id', $userid)->where('date', $this->date)->first();
+        $attendanceSettings = EmployeeShiftSchedule::with('shift')->where('user_id', $userid)->where('date', $date)->first();
         
         if ($attendanceSettings) {
-            $this->attendanceSettings = $attendanceSettings->shift;
+            $attendanceSettings = $attendanceSettings->shift;
 
         }
         else {
-            $this->attendanceSettings = AttendanceSetting::with('shift')->first(); // Do not get this from session here
+            $attendanceSettings = AttendanceSetting::with('shift')->first(); // Do not get this from session here
         }
+        
          
-        $this->row = Attendance::attendanceByUserDate($userid, $this->date);
+        $this->row = Attendance::attendanceByUserDate($userid, $date);
         $this->clock_in = 0;
         $this->total_clock_in = Attendance::where('user_id', $userid)
-            ->where(DB::raw('DATE(attendances.clock_in_time)'), '=', $this->date)
+            ->where(DB::raw('DATE(attendances.clock_in_time)'), '=', $date)
             ->whereNull('attendances.clock_out_time')->count();
 
         $this->userid = $userid;
         $this->attendanceUser = User::findOrFail($userid);
         $this->type = 'add';
-   
-        $this->maxAttendanceInDay = $this->attendanceSettings->clockin_in_day;
+        $this->date = $date;
+         
+        $this->maxAttendanceInDay = $attendanceSettings->clockin_in_day;
+        $this->attendanceSettings = $attendanceSettings;
         $this->location = CooperativeAddress::all();
-
+ 
         return view('manager.attendances.ajax.edit', $this->data);
     }
 
@@ -428,11 +431,11 @@ class AttendanceController extends AccountBaseController
         $attendanceSettings = EmployeeShiftSchedule::with('shift')->where('user_id', $request->user_id)->where('date', $clockIn->toDateString())->first();
 
         if ($attendanceSettings) {
-            $this->attendanceSettings = $attendanceSettings->shift;
+            $attendanceSettings = $attendanceSettings->shift;
 
         }
         else {
-            $this->attendanceSettings = AttendanceSetting::first()->shift; // Do not get this from session here
+            $attendanceSettings = AttendanceSetting::first()->shift; // Do not get this from session here
         }
 
         if ($request->clock_out_time != '') {
@@ -455,24 +458,24 @@ class AttendanceController extends AccountBaseController
             ->whereNull('clock_out_time')
             ->first();
 
-        $startTimestamp = $date . ' ' . $this->attendanceSettings->office_start_time;
-        $endTimestamp = $date . ' ' . $this->attendanceSettings->office_end_time;
+        $startTimestamp = $date . ' ' . $attendanceSettings->office_start_time;
+        $endTimestamp = $date . ' ' . $attendanceSettings->office_end_time;
         $officeStartTime = Carbon::createFromFormat('Y-m-d H:i:s', $startTimestamp, $this->timezone);
         $officeEndTime = Carbon::createFromFormat('Y-m-d H:i:s', $endTimestamp, $this->timezone);
         $officeStartTime = $officeStartTime->setTimezone('UTC');
         $officeEndTime = $officeEndTime->setTimezone('UTC');
         $clockInCount = Attendance::getTotalUserClockInWithTime($officeStartTime, $officeEndTime, $request->user_id);
 
-        $employeeShiftId = $this->attendanceSettings->id;
+        $employeeShiftId = $attendanceSettings->id;
 
-        $shiftStartTime = Carbon::parse($clockIn)->toDateString() . ' ' . $this->attendanceSettings->office_start_time;
+        $shiftStartTime = Carbon::parse($clockIn)->toDateString() . ' ' . $attendanceSettings->office_start_time;
 
-        if (Carbon::parse($this->attendanceSettings->office_start_time)->gt(Carbon::parse($this->attendanceSettings->office_end_time))) {
-            $shiftEndTime = Carbon::parse($clockIn)->addDay()->toDateString() . ' ' . $this->attendanceSettings->office_end_time;
+        if (Carbon::parse($attendanceSettings->office_start_time)->gt(Carbon::parse($attendanceSettings->office_end_time))) {
+            $shiftEndTime = Carbon::parse($clockIn)->addDay()->toDateString() . ' ' . $attendanceSettings->office_end_time;
 
         }
         else {
-            $shiftEndTime = Carbon::parse($clockIn)->toDateString() . ' ' . $this->attendanceSettings->office_end_time;
+            $shiftEndTime = Carbon::parse($clockIn)->toDateString() . ' ' . $attendanceSettings->office_end_time;
         }
 
         if ($attendance && $request->user_id) {
@@ -514,7 +517,7 @@ class AttendanceController extends AccountBaseController
         else {
 
             // Check maximum attendance in a day
-            if ($clockInCount < $this->attendanceSettings->clockin_in_day || $request->user_id) {
+            if ($clockInCount < $attendanceSettings->clockin_in_day || $request->user_id) {
                 Attendance::create([
                     'user_id' => $request->user_id,
                     'cooperative_id' => auth()->user()->cooperative_id,
@@ -694,7 +697,8 @@ class AttendanceController extends AccountBaseController
     public function create()
     {
          
-        $this->employees = User::allEmployees();
+        $this->employees = User::with('employeeDetail')->get();
+        
         $this->departments = Department::get();
         $this->pageTitle = __('modules.attendance.markAttendance');
         $this->year = now()->format('Y');
@@ -997,10 +1001,10 @@ class AttendanceController extends AccountBaseController
             }
 
             if (!$requestedDate->isPast()) {
-                $final[$employee->id . '#' . $employee->name] = array_replace($dataTillToday, $dataFromTomorrow);
+                $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname] = array_replace($dataTillToday, $dataFromTomorrow);
 
             } else {
-                $final[$employee->id . '#' . $employee->name] = array_replace($dataTillRequestedDate, $dataFromTomorrow);
+                $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname] = array_replace($dataTillRequestedDate, $dataFromTomorrow);
             }
 
             $totalMinutes = 0;
@@ -1009,7 +1013,7 @@ class AttendanceController extends AccountBaseController
 
             foreach ($employee->shifts as $shifts) {
                 if ($shifts->shift->shift_name == 'Day Off') {
-                    $final[$employee->id . '#' . $employee->name][$shifts->date->day] = 'Day Off';
+                    $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][$shifts->date->day] = 'Day Off';
                 }
 
             }
@@ -1036,7 +1040,7 @@ class AttendanceController extends AccountBaseController
                     $previousdate = $from->format('Y-m-d');
                 }
 
-                $final[$employee->id . '#' . $employee->name][Carbon::parse($attendance->clock_in_time)->timezone($this->timezone)->day] = '<a href="javascript:;" class="view-attendance" data-attendance-id="' . $attendance->id . '">' . intdiv($diffInMins, 60) . ':' . ($diffInMins % 60) . '</a>';
+                $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][Carbon::parse($attendance->clock_in_time)->timezone($this->timezone)->day] = '<a href="javascript:;" class="view-attendance" data-attendance-id="' . $attendance->id . '">' . intdiv($diffInMins, 60) . ':' . ($diffInMins % 60) . '</a>';
             }
 
             // Convert minutes to hours
@@ -1049,7 +1053,7 @@ class AttendanceController extends AccountBaseController
                 'user' => $employee
             ]);
 
-            $final[$employee->id . '#' . $employee->name][] = $emplolyeeName;
+            $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][] = $emplolyeeName;
 
             if ($employee->employeeDetail->joining_date->greaterThan(Carbon::parse(Carbon::parse('01-' . $request->month . '-' . $request->year)))) {
                 if ($request->month == $employee->employeeDetail->joining_date->format('m') && $request->year == $employee->employeeDetail->joining_date->format('Y')) {
@@ -1071,17 +1075,17 @@ class AttendanceController extends AccountBaseController
             }
 
             if (!is_null($dataBeforeJoin)) {
-                $final[$employee->id . '#' . $employee->name] = array_replace($final[$employee->id . '#' . $employee->name], $dataBeforeJoin);
+                $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname] = array_replace($final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname], $dataBeforeJoin);
             }
 
             foreach ($employee->leaves as $leave) {
                 if ($leave->duration == 'half day') {
-                    if ($final[$employee->id . '#' . $employee->name][$leave->leave_date->day] == '-' || $final[$employee->id . '#' . $employee->name][$leave->leave_date->day] == 'Absent') {
-                        $final[$employee->id . '#' . $employee->name][$leave->leave_date->day] = 'Half Day';
+                    if ($final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][$leave->leave_date->day] == '-' || $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][$leave->leave_date->day] == 'Absent') {
+                        $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][$leave->leave_date->day] = 'Half Day';
                     }
                 }
                 else {
-                    $final[$employee->id . '#' . $employee->name][$leave->leave_date->day] = 'Leave';
+                    $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][$leave->leave_date->day] = 'Leave';
                     $leaveReasons[$employee->id][$leave->leave_date->day] = $leave->type->type_name.': '.$leave->reason;
                 }
 
@@ -1089,14 +1093,14 @@ class AttendanceController extends AccountBaseController
 
             foreach ($employee->shifts as $shifts) {
                 if ($shifts->shift->shift_name == 'Day Off') {
-                    $final[$employee->id . '#' . $employee->name][$shifts->date->day] = 'Day Off';
+                    $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][$shifts->date->day] = 'Day Off';
                 }
 
             }
 
             foreach ($this->holidays as $holiday) {
-                if ($final[$employee->id . '#' . $employee->name][$holiday->date->day] == 'Absent' || $final[$employee->id . '#' . $employee->name][$holiday->date->day] == '-') {
-                    $final[$employee->id . '#' . $employee->name][$holiday->date->day] = 'Holiday';
+                if ($final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][$holiday->date->day] == 'Absent' || $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][$holiday->date->day] == '-') {
+                    $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][$holiday->date->day] = 'Holiday';
                     $holidayOccasions[$holiday->date->day] = $holiday->occassion;
                 }
             }

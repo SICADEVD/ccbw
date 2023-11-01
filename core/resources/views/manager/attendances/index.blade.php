@@ -247,6 +247,7 @@ $('#attendance-data').on('click', '.view-attendance', function () {
 
     $(MODAL_XL + ' ' + MODAL_HEADING).html('...');
     $.ajaxModal(MODAL_XL, url);
+    $(MODAL_XL).modal('show'); 
 });
 
 $('#attendance-data').on('click', '.edit-attendance', function (event) {
@@ -256,12 +257,12 @@ $('#attendance-data').on('click', '.edit-attendance', function (event) {
     var year = $('#year').val();
     var month = $('#month').val();
 
-    var url = "{{ route('manager.hr.attendances.mark', [':userid', ':day', ':month', ':year']) }}";
+    var url = "{{ route('manager.hr.attendances.mark', [':userid',':day',':month',':year']) }}";
     url = url.replace(':userid', userID);
     url = url.replace(':day', attendanceDate);
     url = url.replace(':month', month);
     url = url.replace(':year', year);
-    
+     
     $(MODAL_LG + ' ' + MODAL_HEADING).html('...');
     $.ajaxModal(MODAL_XL, url);
  $(MODAL_XL).modal('show'); 
@@ -273,6 +274,7 @@ function editAttendance(id) {
 
     $(MODAL_LG + ' ' + MODAL_HEADING).html('...');
     $.ajaxModal(MODAL_LG, url);
+    $(MODAL_LG).modal('show'); 
 }
 
 function addAttendance(userID) {
@@ -292,6 +294,7 @@ function addAttendance(userID) {
 
     $(MODAL_LG + ' ' + MODAL_HEADING).html('...');
     $.ajaxModal(MODAL_LG, url);
+    $(MODAL_LG).modal('show'); 
 }
 
 showTable(true);
