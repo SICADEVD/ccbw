@@ -56,6 +56,7 @@ class ApiparcelleController extends Controller
       'typeDoc' => 'required',
       'presenceCourDeau' => 'required',
       'courDeau' => 'required_if:presenceCourDeau,==,oui',
+      'autreCourDeau' => 'required_if:courDeau,==,Autre',
       'existeMesureProtection' => 'required',
       'existePente' => 'required',
       'superficie' => 'required',
@@ -63,6 +64,8 @@ class ApiparcelleController extends Controller
       'erosion' => 'required',
       'items.*.arbre'     => 'required|integer',
       'items.*.nombre'     => 'required|integer',
+      'longitude' => 'numeric|nullable',
+      'latitude' => 'numeric|nullable',
     ];
     $messages = [
       'section.required' => 'Le champ section est obligatoire',
@@ -124,15 +127,6 @@ class ApiparcelleController extends Controller
       }
       $parcelle->codeParc  =  $this->generecodeparc($request->producteur_id, $codeProd);
     }
-
-    // $parcelle->producteur_id  = $request->producteur;
-    // $parcelle->typedeclaration  = $request->typedeclaration;
-    // $parcelle->anneeCreation  = $request->anneeCreation;
-    // $parcelle->culture     = $request->culture;
-    // $parcelle->superficie    = $request->superficie;
-    // $parcelle->latitude = $request->latitude;
-    // $parcelle->longitude    = $request->longitude;
-
     $parcelle->producteur_id  = $request->producteur_id;
     $parcelle->niveauPente  = $request->niveauPente;
     $parcelle->anneeCreation  = $request->anneeCreation;
@@ -145,11 +139,14 @@ class ApiparcelleController extends Controller
     $parcelle->courDeau  = $request->courDeau;
     $parcelle->existeMesureProtection  = $request->existeMesureProtection;
     $parcelle->existePente  = $request->existePente;
+    $parcelle->superficie  = $request->superficie;
     $parcelle->latitude  = $request->latitude;
-    $parcelle->Longitude  = $request->Longitude;
+    $parcelle->longitude  = $request->longitude;
     $parcelle->userid = $request->userid;
     $parcelle->nbCacaoParHectare  = $request->nbCacaoParHectare;
-    $parcelle->erosion = $request->erosion;
+    $parcelle->erosion  = $request->erosion;
+    $parcelle->autreCourDeau = $request->autreCourDeau;
+    $parcelle->autreProtection = $request->autreProtection;
 
     if (isset($request->waypoints) && count($request->waypoints) > 0) {
       $parcelle->waypoints = implode(',', $request->waypoints);

@@ -111,18 +111,23 @@
                         </div>
                     </div>
 
+                    <div class="form-group row" id="autreCourDeaus">
+                        <?php echo Form::label(__('Autre cour ou plan d\'eau '), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-12 col-sm-8">
+                            <?php echo Form::text('autreCourDeau', null, ['class' => 'form-control autreCourDeau', 'placeholder' => 'Autre Cour ou Plan d\'eau']); ?>
+                        </div>
+                    </div>
+
                     <div class="form-group row">
                         {{ Form::label(__('Est ce qu\'il existe des mésures de protection ?'), null, ['class' => 'col-sm-4 control-label']) }}
                         <div class="col-xs-12 col-sm-8">
                             <?php echo Form::select('existeMesureProtection', ['non' => __('non'), 'oui' => __('oui')], null, ['class' => 'form-control existeMesureProtection', 'required']); ?>
                         </div>
                     </div>
-
-
                     <div class="form-group row" id="protection">
                         <label class="col-sm-4 control-label">@lang('Sélectionner les protections')</label>
                         <div class="col-xs-12 col-sm-8">
-                            <select class="form-control select2-multi-select" name="protection[]" multiple>
+                            <select class="form-control select2-multi-select protections" name="protection[]" multiple>
                                 <option value="">@lang('Selectionner les protections')</option>
                                 <option value="barriere de végétation"
                                     {{ in_array('barriere de végétation', $protections) ? 'selected' : '' }}>
@@ -134,7 +139,12 @@
                                     Autre</option>
                             </select>
                         </div>
-
+                    </div>
+                    <div class="form-group row" id="autreProtections">
+                        <?php echo Form::label(__('Autre Protection'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-12 col-sm-8">
+                            <?php echo Form::text('autreProtection', null, ['class' => 'form-control autreProtection', 'placeholder' => 'Autre Protection', 'id' => 'autreProtection']); ?>
+                        </div>
                     </div>
                     <div class="form-group row">
                         {{ Form::label(__('Ya-t-il une pente dans la Parcelle ?'), null, ['class' => 'col-sm-4 control-label']) }}
@@ -200,9 +210,9 @@
                                                     </button>
                                                 </div>
                                             </div>
-                                            <?php $i++;?>
+                                            <?php $i++; ?>
                                         @endforeach
-                                        
+
                                     </div>
 
                                 </div>
@@ -237,7 +247,7 @@
                                                 <div class="form-group row">
                                                     {{ Form::label(__('Latitude'), null, ['class' => 'col-sm-4 control-label']) }}
                                                     {!! Form::text('latitude', null, [
-                                                        'placeholder' => __('Latitude'),
+                                                        'placeholder' => __('Latitude Ex : 0.5'),
                                                         'class' => 'form-control',
                                                         'id' => 'latitude-1',
                                                     ]) !!}
@@ -248,7 +258,7 @@
                                                 <div class="form-group row">
                                                     {{ Form::label(__('Longitude'), null, ['class' => 'col-sm-4 control-label']) }}
                                                     {!! Form::text('longitude', null, [
-                                                        'placeholder' => __('Longitude'),
+                                                        'placeholder' => __('Longitude Ex : -0.5'),
                                                         'class' => 'form-control',
                                                         'id' => 'longitude-1',
                                                     ]) !!}
@@ -256,9 +266,9 @@
                                             </div>
                                             <div class="col-xs-12 col-sm-12">
                                                 <div class="form-group row">
-                                                    {{ Form::label(__('Nombre de Cacao / Hectare'), null, ['class' => 'col-sm-4 control-label']) }}
+                                                    {{ Form::label(__('Nombre de Cacao moyen / parcelle'), null, ['class' => 'col-sm-4 control-label']) }}
                                                     {!! Form::number('nbCacaoParHectare', null, [
-                                                        'placeholder' => __('Nombre de Cacao / Hectare'),
+                                                        'placeholder' => __('Nombre de Cacao moyen par parcelle / Hectare'),
                                                         'class' => 'form-control',
                                                         'id' => 'nbCacaoParHectare-1',
                                                     ]) !!}
@@ -305,7 +315,7 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
-            $('#anneeRegenerers,#courDeaus,#protection,#niveauPentes').hide();
+            $('#anneeRegenerers,#courDeaus,#protection,#niveauPentes,#autreCourDeaus,#autreProtections').hide();
 
             $('.parcelleRegenerer').change(function() {
                 var parcelleRegenerer = $('.parcelleRegenerer').val();
@@ -362,6 +372,31 @@
                 $('.courDeau').val('');
                 $('#courDeau').prop('required', false);
             }
+            $('.courDeau').change(function() {
+                var courDeau = $('.courDeau').val();
+                if (courDeau == 'Autre') {
+                    $('#autreCourDeaus').show('slow');
+                    $('.autreCourDeau').show('slow');
+                    $('#autreCourDeau').prop('required', true);
+
+                } else {
+                    $('#autreCourDeaus').hide('slow');
+                    $('.autreCourDeau').hide('slow');
+                    $('.autreCourDeau').val('');
+                    $('#autreCourDeau').prop('required', false);
+                }
+            });
+            if ($('.courDeau').val() == 'Autre') {
+                $('#autreCourDeaus').show('slow');
+                $('.autreCourDeau').show('slow');
+                $('#autreCourDeau').prop('required', true);
+
+            } else {
+                $('#autreCourDeaus').hide('slow');
+                $('.autreCourDeau').hide('slow');
+                $('.autreCourDeau').val('');
+                $('#autreCourDeau').prop('required', false);
+            }
             $('.existePente').change(function() {
                 var existPente = $('.existePente').val();
                 if (existPente == 'oui') {
@@ -394,6 +429,36 @@
             } else {
                 $('#protection').hide('slow');
                 $('select[name="protection[]"]').prop('required', false);
+            }
+
+            $('.protections').change(function() {
+                var protections = $('.protections').find(":selected").map((key, item) => {
+                    return item.textContent.trim();
+                }).get();
+                if (protections.includes("Autre")) {
+                    $('#autreProtections').show('slow');
+                    $('.autreProtection').show('slow');
+                    $('#autreProtection').prop('required', true);
+
+                } else {
+                    $('#autreProtections').hide('slow');
+                    $('.autreProtection').hide('slow');
+                    $('.autreProtection').val('');
+                    $('#autreProtection').prop('required', false);
+                }
+            });
+            if ($('.protections').find(":selected").map((key, item) => {
+                    return item.textContent.trim();
+                }).get().includes("Autre")) {
+                $('#autreProtections').show('slow');
+                $('.autreProtection').show('slow');
+                $('#autreProtection').prop('required', true);
+
+            } else {
+                $('#autreProtections').hide('slow');
+                $('.autreProtection').hide('slow');
+                $('.autreProtection').val('');
+                $('#autreProtection').prop('required', false);
             }
 
         });

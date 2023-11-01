@@ -93,6 +93,8 @@ class ParcelleController extends Controller
             'erosion' => 'required',
             'items.*.arbre'     => 'required|integer',
             'items.*.nombre'     => 'required|integer',
+            'longitude' => 'numeric|nullable',
+            'latitude' => 'numeric|nullable',
         ];
         $messages = [
             'section.required' => 'Le champ section est obligatoire',
@@ -112,6 +114,8 @@ class ParcelleController extends Controller
             'nbCacaoParHectare.required' => 'Le champ nombre de cacao par hectare est obligatoire',
             'superficieConcerne.required_if' => 'Le champ superficie concerné est obligatoire',
             'erosion.required' => 'Le champ érosion est obligatoire',
+            'longitude.numeric' => 'Le champ longitude doit être un nombre décimal',
+            'latitude.numeric' => 'Le champ latitude doit être un nombre décimal',
         ];
         $attributes = [
             'section' => 'section',
@@ -177,7 +181,7 @@ class ParcelleController extends Controller
         $parcelle->existePente  = $request->existePente;
         $parcelle->superficie  = $request->superficie;
         $parcelle->latitude  = $request->latitude;
-        $parcelle->Longitude  = $request->Longitude;
+        $parcelle->longitude  = $request->longitude;
         $parcelle->userid = auth()->user()->id;
         $parcelle->nbCacaoParHectare  = $request->nbCacaoParHectare;
         $parcelle->erosion  = $request->erosion;
@@ -193,7 +197,7 @@ class ParcelleController extends Controller
                 return back()->withNotify($notify);
             }
         }
-        // dd(json_encode($request->all()));
+        //  dd(json_encode($request->all()));
         $parcelle->save();
         if ($parcelle != null) {
             $id = $parcelle->id;

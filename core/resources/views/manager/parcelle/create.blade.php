@@ -137,7 +137,7 @@
                         </div>
                     </div>
                     <div class="form-group row" id="autreProtections">
-                        <?php echo Form::label(__('Autre cour ou plan d\'eau '), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <?php echo Form::label(__('Autre Protection'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
                             <?php echo Form::text('autreProtection', null, ['class' => 'form-control autreProtection','placeholder'=>'Autre Protection','id'=>'autreProtection']); ?>
                         </div>
@@ -236,7 +236,7 @@
                                                 <div class="form-group row">
                                                     {{ Form::label(__('Latitude'), null, ['class' => 'col-sm-4 control-label']) }}
                                                     {!! Form::text('latitude', null, [
-                                                        'placeholder' => __('Latitude'),
+                                                        'placeholder' => __('Latitude Ex : 1.4'),
                                                         'class' => 'form-control',
                                                         'id' => 'latitude-1',
                                                     ]) !!}
@@ -247,7 +247,7 @@
                                                 <div class="form-group row">
                                                     {{ Form::label(__('Longitude'), null, ['class' => 'col-sm-4 control-label']) }}
                                                     {!! Form::text('longitude', null, [
-                                                        'placeholder' => __('Longitude'),
+                                                        'placeholder' => __('Longitude Ex : -1.4'),
                                                         'class' => 'form-control',
                                                         'id' => 'longitude-1',
                                                     ]) !!}
@@ -255,9 +255,9 @@
                                             </div>
                                             <div class="col-xs-12 col-sm-12">
                                                 <div class="form-group row">
-                                                    {{ Form::label(__('Nombre de Cacao / Hectare'), null, ['class' => 'col-sm-4 control-label']) }}
+                                                    {{ Form::label(__('Nombre de Cacao moyen / parcelle'), null, ['class' => 'col-sm-4 control-label']) }}
                                                     {!! Form::number('nbCacaoParHectare', null, [
-                                                        'placeholder' => __('Nombre de Cacao / Hectare'),
+                                                        'placeholder' => __('Nombre de Cacao moyen / parcelle'),
                                                         'class' => 'form-control',
                                                         'id' => 'nbCacaoParHectare-1',
                                                     ]) !!}
