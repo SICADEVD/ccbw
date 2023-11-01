@@ -134,7 +134,6 @@ class ProducteurController extends Controller
         $producteur->userid = auth()->user()->id;
         $producteur->codeProd = $request->codeProd;
         $producteur->plantePartage = $request->plantePartage;
-        $producteur->autreProgramme = $request->autreProgramme;
         if ($request->hasFile('picture')) {
             try {
                 $producteur->picture = $request->file('picture')->store('public/producteurs/photos');
@@ -149,7 +148,7 @@ class ProducteurController extends Controller
         } else {
             $producteur->codeProdapp = null;
         }
-        // dd(json_encode($request->all()));
+        dd(json_encode($request->all()));
         $producteur->save();
 
         if ($producteur != null) {
@@ -177,36 +176,10 @@ class ProducteurController extends Controller
         $notify[] = ['success', isset($message) ? $message : 'Le producteur a été crée avec succès.'];
         return back()->withNotify($notify);
     }
-    public function update(Request $request, $id)
+    public function update(UpdateProducteurRequest $request, $id)
     {
         $producteur = Producteur::findOrFail($id);
-        $validationRule = [
-            'programme_id' => 'required|exists:programmes,id',
-            'proprietaires' => 'required',
-            'habitationProducteur' => 'required',
-            'statut' => 'required',
-            'statutMatrimonial' => 'required',
-            'localite_id'    => 'required|exists:localites,id',
-            'nom' => 'required|max:255',
-            'prenoms'  => 'required|max:255',
-            'sexe'  => 'required|max:255',
-            'nationalite'  => 'required|max:255',
-            'dateNaiss'  => 'required|max:255',
-            'phone1'  => 'required|max:255',
-            'niveau_etude'  => 'required|max:255',
-            'type_piece'  => 'required|max:255',
-            'numPiece'  => 'required|max:255',
-            'anneeDemarrage' => 'required_if:proprietaires,==,Garantie',
-            'anneeFin' => 'required_if:proprietaires,==,Garantie',
-            'plantePartage' => 'required_if:proprietaires,==,Planté-partager',
-            'typeCarteSecuriteSociale' => 'required',
-            'codeProd' => 'required_if:statut,==,Certifie',
-            'certificat' => 'required_if:statut,==,Certifie',
-            'phone2' => 'required_if:autreMembre,==,oui',
-            'autrePhone' => 'required_if:autreMembre,==,oui',
-            'numCMU' => 'required_if:carteCMU,==,oui',
-        ];
-        $request->validate($validationRule);
+        $request->validated();
         $producteur->proprietaires = $request->proprietaires;
         $producteur->statutMatrimonial = $request->statutMatrimonial;
         $producteur->programme_id = $request->programme_id;
@@ -239,8 +212,7 @@ class ProducteurController extends Controller
         $producteur->userid = auth()->user()->id;
         $producteur->codeProd = $request->codeProd;
         $producteur->plantePartage = $request->plantePartage;
-        $producteur->autreProgramme = $request->autreProgramme;
-        // dd(json_encode($request->all()));
+         dd(json_encode($request->all()));
         if ($request->hasFile('picture')) {
             try {
                 $producteur->picture = $request->file('picture')->store('public/producteurs/photos');

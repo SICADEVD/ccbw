@@ -111,7 +111,7 @@ class ApiproducteurController extends Controller
         'sexe'  => 'required|max:255',
         'nationalite'  => 'required|max:255',
         'dateNaiss'  => 'required|max:255',
-        'phone1'  => ['required', 'regex:/^\d{10}$/', 'unique:producteurs,phone1'],
+        'phone1'  => ['required', 'regex:/^\d{10}$/','unique:producteurs,phone1,'.$request->id],
         'niveau_etude'  => 'required|max:255',
         'type_piece'  => 'required|max:255',
         'numPiece'  => 'required|max:255',
@@ -125,8 +125,7 @@ class ApiproducteurController extends Controller
         'certificat' => 'required_if:statut,==,Certifie',
         'autrePhone' => 'required_if:autreMembre,==,oui',
         'numCMU' => 'required_if:carteCMU,==,oui',
-        'phone2' => 'required_if:autreMembre,oui|regex:/^\d{10}$/'
-
+        'phone2' => 'required_if:autreMembre,oui|regex:/^\d{10}$/|unique:producteurs,phone2,'.$request->id,
       ];
       $messages = [
         'programme_id.required' => 'Le programme est obligatoire',
@@ -221,6 +220,9 @@ class ApiproducteurController extends Controller
           $producteur->codeProdapp = null;
         }
       }
+      $data = $request->all();
+      unset($data['certificats']);
+      $producteur->update($data);
       if ($producteur != null) {
         $id = $producteur->id;
         $datas  = $data2 = [];
@@ -241,14 +243,12 @@ class ApiproducteurController extends Controller
 
         Producteur_certification::insert($datas);
       }
-      $producteur->update($request->all());
 
       $message = "Le producteur a été mis à jour avec succès";
     } else {
       $validationRule = [
         'programme_id' => ['required', 'exists:programmes,id'],
         'proprietaires' => 'required',
-        'certificats' => 'required',
         'habitationProducteur' => 'required',
         'statut' => 'required',
         'statutMatrimonial' => 'required',
@@ -272,7 +272,7 @@ class ApiproducteurController extends Controller
         'certificat' => 'required_if:statut,==,Certifie',
         'autrePhone' => 'required_if:autreMembre,==,oui',
         'numCMU' => 'required_if:carteCMU,==,oui',
-        'phone2' => 'required_if:autreMembre,oui|regex:/^\d{10}$/'
+        'phone2' => 'required_if:autreMembre,oui|regex:/^\d{10}$/|unique:producteurs,phone2'
       ];
       $message = [
         'programme_id.required' => 'Le programme est obligatoire',
@@ -323,6 +323,7 @@ class ApiproducteurController extends Controller
       $producteur->numCMU = $request->numCMU;
       $producteur->anneeDemarrage = $request->anneeDemarrage;
       $producteur->anneeFin = $request->anneeFin;
+      $producteur->autreCertificats = $request->autreCertificats;
       $producteur->consentement  = $request->consentement;
       $producteur->statut  = $request->statut;
       $producteur->certificat     = $request->certificat;
@@ -339,8 +340,6 @@ class ApiproducteurController extends Controller
       $producteur->userid = $request->userid;
       $producteur->codeProd = $request->codeProd;
       $producteur->plantePartage = $request->plantePartage;
-      $producteur->userid = $request->userid;
-
       if (!file_exists(storage_path() . "/app/public/producteurs/pieces")) {
         File::makeDirectory(storage_path() . "/app/public/producteurs/pieces", 0777, true);
       }

@@ -26,7 +26,6 @@ class StoreProducteurRequest extends FormRequest
     {
         return [
             'programme_id'=>['required','exists:programmes,id'],
-            'autreProgramme' => 'nullable', // Champ "autreProgramme" peut être vide
             'proprietaires' => 'required',
             'certificats' => 'required',
             'habitationProducteur' => 'required',
@@ -52,7 +51,7 @@ class StoreProducteurRequest extends FormRequest
             'certificat'=>'required_if:statut,==,Certifie',
             'autrePhone'=>'required_if:autreMembre,==,oui',
             'numCMU'=>'required_if:carteCMU,==,oui',
-            'phone2' => 'required_if:autreMembre,oui|regex:/^\d{10}$/'
+            'phone2' => 'required_if:autreMembre,oui|regex:/^\d{10}$/|unique:producteurs,phone2'
 
         ];
     }
@@ -82,7 +81,6 @@ class StoreProducteurRequest extends FormRequest
             'plantePartage.required_if' => 'Le type de plante est obligatoire',
             'typeCarteSecuriteSociale.required' => 'Le type de carte de sécurité sociale est obligatoire',
             'autreCertificats.required_if' => 'Le type de certificat est obligatoire',
-           
             'codeProdapp.required_if' => 'Le code Prodapp est obligatoire',
             'certificat.required_if' => 'Le certificat est obligatoire',
             'phone2.required_if' => 'Le numéro de téléphone est obligatoire',
@@ -98,7 +96,6 @@ class StoreProducteurRequest extends FormRequest
             'programme_id' => 'programme',
             'proprietaires' => 'propriétaire',
             'certificats' => 'certificat',
- 
             'habitationProducteur' => 'habitation',
             'statut' => 'statut',
             'statutMatrimonial' => 'statut matrimonial',
