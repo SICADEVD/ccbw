@@ -61,13 +61,17 @@
                     <div class="form-group row">
                         <label class="col-sm-4 control-label">@lang('Parcelle')</label>
                         <div class="col-xs-12 col-sm-8">
-                            <select class="form-control" name="parcelle_id" id="parcelle" onchange="getSuperficie()" required>
+                            <select class="form-control" name="parcelle_id" id="parcelle" onchange="getSuperficie()"
+                                required>
                                 <option value="">@lang('Selectionner une option')</option>
                                 @foreach ($parcelles as $parcelle)
-                                    <option value="{{ $parcelle->id }}" data-chained="{{ $parcelle->producteur->id }}"
-                                        {{ old('parcelle') == $parcelle->id ? 'selected' : '' }}>
-                                        {{ __('Parcelle') }} {{ $parcelle->codeParc }}</option>
+                                    @if ($parcelle->producteur)
+                                        <option value="{{ $parcelle->id }}" data-chained="{{ $parcelle->producteur->id }}">
+                                            {{ __('Parcelle') }} {{ $parcelle->codeParc }}
+                                        </option>
+                                    @endif
                                 @endforeach
+
                             </select>
                         </div>
                     </div>
@@ -242,7 +246,7 @@
                         <?php echo Form::label(__("Biofertilisant/Bio stimulant Utilisé l'année dernière"), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
                             <?php echo Form::label(__('Quantité utilisée'), null, ['class' => 'control-label']); ?>
-                            <?php echo Form::number('qteBiofertilisant',0, ['class' => 'form-control', 'min' => '0']); ?>
+                            <?php echo Form::number('qteBiofertilisant', 0, ['class' => 'form-control', 'min' => '0']); ?>
 
 
                             <?php echo Form::label(__('Unité'), null, ['class' => 'control-label']); ?>
@@ -254,7 +258,7 @@
                         <?php echo Form::label(__("Engrais organique préfabriqué Utilisé l'année dernière"), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
                             <?php echo Form::label(__('Quantité utilisée'), null, ['class' => 'control-label']); ?>
-                            <?php echo Form::number('qteEngraisOrganique',0, ['class' => 'form-control', 'min' => '0']); ?>
+                            <?php echo Form::number('qteEngraisOrganique', 0, ['class' => 'form-control', 'min' => '0']); ?>
 
 
                             <?php echo Form::label(__('Unité'), null, ['class' => 'control-label']); ?>
