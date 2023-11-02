@@ -31,6 +31,7 @@ class StoreMenageRequest extends FormRequest
             'ageEnfant6A17' => ['required','integer', new VlidateEnfantTotal],
             'enfantscolarises' => ['required','integer', new VlidateEnfantTotal],
             'enfantsPasExtrait' => ['required','integer', new VlidateEnfantTotal],
+            'enfantsPasExtrait6A17' => ['required','integer'],
             'sources_energies'  => 'required|max:255',
             'ordures_menageres'  => 'required|max:255',
             'separationMenage'  => 'required|max:255',
@@ -41,6 +42,9 @@ class StoreMenageRequest extends FormRequest
             'equipements'  => 'required|max:255',
             'traitementChamps'  => 'required|max:255',
             'activiteFemme'  => 'required|max:255',
+            'nomApplicateur'=>'required_if:traitementChamps,==,Oui',
+            'numeroApplicateur'=>'required_if:traitementChamps,==,Oui',
+           
             // 'nomApplicateur'  => 'required|max:255',
             // 'numeroApplicateur'  => 'required|max:255',
         ];

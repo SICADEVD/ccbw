@@ -43,7 +43,7 @@
                     <div class="form-group row">
                         <label class="col-sm-4 control-label">@lang('Selectionner un producteur')</label>
                         <div class="col-xs-12 col-sm-8">
-                            <select class="form-control" name="producteur" id="producteur" required>
+                            <select class="form-control" name="producteur_id" id="producteur" required>
                                 <option value="">@lang('Selectionner une option')</option>
                                 @foreach ($producteurs as $producteur)
                                     <option value="{{ $producteur->id }}" data-chained="{{ $producteur->localite->id }}"
@@ -82,6 +82,12 @@
                         <?php echo Form::label(__('Parmi les enfants de 0 à 5ans, combien n’ont pas d’extrait de naissance ?'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
                             <?php echo Form::number('enfantsPasExtrait', null, ['placeholder' => 'Nombre', 'class' => 'form-control', 'min' => '0', 'required']); ?>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <?php echo Form::label(__('Parmi les enfants de 6 à 17ans, combien n’ont pas d’extrait de naissance ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-12 col-sm-8">
+                            <?php echo Form::number('enfantsPasExtrait6A17', null, ['placeholder' => 'Nombre', 'class' => 'form-control', 'min' => '0', 'required']); ?>
                         </div>
                     </div>
                     <hr class="panel-wide">
@@ -143,29 +149,35 @@
                     <div class="form-group row">
                         {{ Form::label(__("Où procurez-Vous l'eau potable ?"), null, ['class' => 'col-sm-4 control-label']) }}
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('sources_eaux', ['Pompe Hydraulique' => 'Pompe Hydraulique', 'Marigot' => 'Marigot', 'Puits' => 'Puits', 'Eaux Courante nationale' => 'Courante nationale'], null, ['placeholder' => __('Selectionner une reponse'), 'class' => 'form-control', 'id' => 'sources_eaux', 'required']); ?>
+                            <?php echo Form::select('sources_eaux', ['Pompe Hydraulique' => 'Pompe Hydraulique', 'Marigot' => 'Marigot', 'Puits' => 'Puits', 'Eaux Courante nationale' => 'Eaux Courante nationale', 'Autre' => 'Autre'], null, ['placeholder' => __('Selectionner une reponse'), 'class' => 'form-control sources_eaux', 'id' => 'sources_eaux', 'required']); ?>
+                        </div>
+                    </div>
+                    <div class="form-group row" id="autreSourceEaux">
+                        {{ Form::label(__(''), null, ['class' => 'col-sm-4 control-label']) }}
+                        <div class="col-xs-12 col-sm-8">
+                            <?php echo Form::text('autreSourceEau', null, ['id' => 'autreSourceEau', 'placeholder' => __('Autre'), 'class' => 'form-control autreSourceEau']); ?>
                         </div>
                     </div>
 
                     <hr class="panel-wide">
 
                     <div class="form-group row">
-                        <?php echo Form::label(__('Traitez toujours vous-même vos champs '), null, ['class' => 'col-sm-4 control-label', 'required']); ?>
+                        <?php echo Form::label(__('Effectuez vous vous-même les traitement phyto sanitaire dans vos champs ?'), null, ['class' => 'col-sm-4 control-label', 'required']); ?>
                         <div class="col-xs-12 col-sm-8">
                             <?php echo Form::select('traitementChamps', ['non' => __('non'), 'oui' => __('oui')], null, ['class' => 'form-control traitementChamps', 'required']); ?>
                         </div>
                     </div>
                     <div class="form-group row" id="infosPersonneTraitant">
                         <div class="form-group row">
-                            <?php echo Form::label(__('Donnez le nom de la personne qui traite vos champs'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <?php echo Form::label(__('Donnez le nom de la personne qui éffectue les traitement phyto sanitaire dans vos champs'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::text('nomApplicateur', null, ['id' => 'nomApplicateur', 'placeholder' => __('-----------'), 'class' => 'form-control nomApplicateur']); ?>
+                                <?php echo Form::text('nomApplicateur', null, ['id' => 'nomApplicateur', 'class' => 'form-control nomApplicateur']); ?>
                             </div>
                         </div>
                         <div class="form-group row">
                             <?php echo Form::label(__('Donnez son numéro de téléphone'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::text('numeroApplicateur', null, ['id' => 'numeroApplicateur', 'placeholder' => __('-----------'), 'class' => 'form-control numeroApplicateur']); ?>
+                                <?php echo Form::text('numeroApplicateur', null, ['id' => 'numeroApplicateur', 'class' => 'form-control numeroApplicateur']); ?>
                             </div>
                         </div>
                     </div>
@@ -184,14 +196,21 @@
                                 <?php echo Form::select('etatatomiseur', ['oui' => __('oui'), 'non' => __('non')], null, ['id' => 'etatatomiseur', 'class' => 'form-control etatatomiseur']); ?>
                             </div>
                         </div>
+                        <div class="form-group row" id="autreMachines">
 
-                        <div class="form-group row" id="autreMachine">
-                            <?php echo Form::label(__('Quel est son nom ?'), null, ['class' => 'col-sm-4 control-label']); ?>
-                            <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::text('autreMachine', null, ['class' => 'form-control autreMachine', 'placeholder' => __('Autre machine')]); ?>
+                            <div class="form-group row">
+                                <?php echo Form::label(__('Quel est son nom ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                                <div class="col-xs-12 col-sm-8">
+                                    <?php echo Form::text('autreMachine', null, ['class' => 'form-control autreMachine', 'placeholder' => __('Autre machine')]); ?>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <?php echo Form::label(__('La machine est-elle en bon état?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                                <div class="col-xs-12 col-sm-8">
+                                    <?php echo Form::select('etatAutreMachine', ['oui' => __('oui'), 'non' => __('non')], null, ['id' => 'etatAutreMachine', 'class' => 'form-control etatAutreMachine']); ?>
+                                </div>
                             </div>
                         </div>
-
                         <div class="form-group row">
                             {{ Form::label(__('Où gardez-vous cette machine ?'), null, ['class' => 'col-sm-4 control-label']) }}
                             <div class="col-xs-12 col-sm-8">
@@ -269,6 +288,7 @@
                 if (traitementChamps == 'oui') {
                     $('#avoirMachine').show('slow');
                     $('#infosPersonneTraitant').hide('slow');
+                    $('#autreMachines').hide('slow');
                     $('.nomApplicateur').hide('slow');
                     $('#nomApplicateur').prop('required', false);
                     $('.nomApplicateur').val('');
@@ -286,10 +306,12 @@
                     $('#nomApplicateur').prop('required', true);
                     $('.numeroApplicateur').show('slow');
                     $('#numeroApplicateur').prop('required', true);
+                    $('#autreMachines').hide('slow');
                 }
             });
             if ($('.traitementChamps').val() == 'oui') {
                 $('#infosPersonneTraitant').hide('slow');
+                $('#autreMachines').hide('slow');
                 $('.nomApplicateur').hide('slow');
                 $('#nomApplicateur').prop('required', false);
                 $('.nomApplicateur').val('');
@@ -339,16 +361,19 @@
                     $('.etatatomiseur').show('slow');
                     $('#etatatomiseur').prop('required', true);
                 } else {
+                    $('#etatatomiseurs').hide('slow');
                     $('#etatatomiseur').hide('slow');
                     $('.etatatomiseur').val('');
                     $('#etatatomiseur').prop('required', false);
                 }
                 if (type_machines == 'Autre') {
+                    $('#autreMachines').show('slow');
                     $('#autreMachine').show('slow');
                     $('.autreMachine').show('slow');
                 } else {
                     $('#autreMachine').hide('slow');
                     $('.autreMachine').val('');
+                    $('#autreMachines').hide('slow');
                 }
             });
             if ($('.type_machines').val() == 'Atomiseur' || $('.type_machines').val() == 'Pulverisateur') {
@@ -364,9 +389,11 @@
             if ($('.type_machines').val() == 'Autre') {
                 $('#autreMachine').show('slow');
                 $('.autreMachine').show('slow');
+                $('#autreMachines').show('slow');
             } else {
                 $('#autreMachine').hide('slow');
                 $('.autreMachine').val('');
+                $('#autreMachines').hide('slow');
             }
 
 
@@ -453,18 +480,38 @@
                     $('#nombreHectareFemme').prop('required', false);
                 }
             });
-            if($('.champFemme').val() == 'oui'){
+            if ($('.champFemme').val() == 'oui') {
                 $('#nombreHectareFemmes').show('slow');
                 $('.nombreHectareFemme').css('display', 'block');
                 $('.nombreHectareFemme').show('slow');
                 $('#nombreHectareFemme').prop('required', true);
-            }else{
+            } else {
                 $('#nombreHectareFemmes').hide('slow');
                 $('.nombreHectareFemme').val('');
                 $('.nombreHectareFemme').hide('slow');
                 $('#nombreHectareFemme').prop('required', false);
             }
-
+            $('.sources_eaux').change(function() {
+                var sources_eaux = $('.sources_eaux').val();
+                if (sources_eaux == 'Autre') {
+                    $('#autreSourceEaux').show('slow');
+                    $('.autreSourceEau').show('slow');
+                    $('#autreSourceEau').prop('required', true);
+                } else {
+                    $('#autreSourceEaux').hide('slow');
+                    $('.autreSourceEau').val('');
+                    $('#autreSourceEau').prop('required', false);
+                }
+            });
+            if ($('.sources_eaux').val() == 'Autre') {
+                $('#autreSourceEaux').show('slow');
+                $('.autreSourceEau').show('slow');
+                $('#autreSourceEau').prop('required', true);
+            } else {
+                $('#autreSourceEaux').hide('slow');
+                $('.autreSourceEau').val('');
+                $('#autreSourceEau').prop('required', false);
+            }
         });
     </script>
 @endpush

@@ -47,13 +47,14 @@ class ApimenageController extends Controller
 
         if($request->id !=null) {
             $menage = Menage::find($request->id);
-            $validationRule = [
-                'producteur'    => 'required|exists:producteurs,id',
+            $rules = [
+                'producteur_id'    => 'required|exists:producteurs,id',
                 'quartier' => 'required|max:255',
                 'ageEnfant0A5' => ['required','integer', new VlidateEnfantTotal],
                 'ageEnfant6A17' => ['required','integer', new VlidateEnfantTotal],
                 'enfantscolarises' => ['required','integer', new VlidateEnfantTotal],
                 'enfantsPasExtrait' => ['required','integer', new VlidateEnfantTotal],
+                'enfantsPasExtrait6A17' => ['required','integer'],
                 'sources_energies'  => 'required|max:255',
                 'ordures_menageres'  => 'required|max:255',
                 'separationMenage'  => 'required|max:255',
@@ -64,8 +65,14 @@ class ApimenageController extends Controller
                 'equipements'  => 'required|max:255',
                 'traitementChamps'  => 'required|max:255',
                 'activiteFemme'  => 'required|max:255',
+                'nomApplicateur'=>'required_if:traitementChamps,==,non',
+                'numeroApplicateur' => 'required_if:traitementChamps,non|regex:/^\d{10}$/|nullable|unique:menages,numeroApplicateur,'.$request->id,
             ];
-            $validationMessage = [
+            $attributes = [
+                'producteur' => 'Producteur',
+
+            ];
+            $messages = [
                 'producteur.required' => 'Le champ producteur est obligatoire',
                 'quartier.required' => 'Le champ quartier est obligatoire',
                 'ageEnfant0A5.required' => 'Le champ ageEnfant0A5 est obligatoire',
@@ -79,20 +86,23 @@ class ApimenageController extends Controller
                 'eauxVaisselle.required' => 'Le champ eauxVaisselle est obligatoire',
                 'wc.required' => 'Le champ wc est obligatoire',
                 'sources_eaux.required' => 'Le champ sources_eaux est obligatoire',
+                'garde_machines.required' => 'Le champ garde_machines est obligatoire',
                 'equipements.required' => 'Le champ equipements est obligatoire',
                 'traitementChamps.required' => 'Le champ traitementChamps est obligatoire',
-                'activiteFemme.required' => 'Le champ activiteFemme est obligatoire',
+                'activiteFemme.required' => 'Le champ activitFemme est obligatoire',
             ];
+            $this->validate($request, $rules, $messages, $attributes);
 
         } else {
             $menage = new Menage(); 
-            $validationRule = [
-                'producteur'    => 'required|exists:producteurs,id',
+            $rules = [
+                'producteur_id'    => 'required|exists:producteurs,id',
                 'quartier' => 'required|max:255',
                 'ageEnfant0A5' => ['required','integer', new VlidateEnfantTotal],
                 'ageEnfant6A17' => ['required','integer', new VlidateEnfantTotal],
                 'enfantscolarises' => ['required','integer', new VlidateEnfantTotal],
                 'enfantsPasExtrait' => ['required','integer', new VlidateEnfantTotal],
+                'enfantsPasExtrait6A17' => ['required','integer'],
                 'sources_energies'  => 'required|max:255',
                 'ordures_menageres'  => 'required|max:255',
                 'separationMenage'  => 'required|max:255',
@@ -103,8 +113,14 @@ class ApimenageController extends Controller
                 'equipements'  => 'required|max:255',
                 'traitementChamps'  => 'required|max:255',
                 'activiteFemme'  => 'required|max:255',
+                'nomApplicateur'=>'required_if:traitementChamps,==,non',
+                'numeroApplicateur'=>'required_if:traitementChamps,==,non|regex:/^\d{10}$/|nullable|unique:menages,numeroApplicateur',
             ];
-            $validationMessage = [
+            $attributes = [
+                'producteur' => 'Producteur',
+
+            ];
+            $messages = [
                 'producteur.required' => 'Le champ producteur est obligatoire',
                 'quartier.required' => 'Le champ quartier est obligatoire',
                 'ageEnfant0A5.required' => 'Le champ ageEnfant0A5 est obligatoire',
@@ -118,44 +134,50 @@ class ApimenageController extends Controller
                 'eauxVaisselle.required' => 'Le champ eauxVaisselle est obligatoire',
                 'wc.required' => 'Le champ wc est obligatoire',
                 'sources_eaux.required' => 'Le champ sources_eaux est obligatoire',
+                'garde_machines.required' => 'Le champ garde_machines est obligatoire',
                 'equipements.required' => 'Le champ equipements est obligatoire',
                 'traitementChamps.required' => 'Le champ traitementChamps est obligatoire',
-                'activiteFemme.required' => 'Le champ activiteFemme est obligatoire',
+                'activiteFemme.required' => 'Le champ activitFemme est obligatoire',
             ];
-            $request->validate($validationRule, $validationMessage); 
+            $this->validate($request, $rules, $messages, $attributes);
+            
         } 
-        if($menage->producteur_id != $request->producteur) {
+        if($menage->producteur_id != $request->producteur_id) {
             $hasMenage = Menage::where('producteur_id', $request->producteur)->exists();
             if ($hasMenage) { 
                 return response()->json("Ce producteur a déjà un menage enregistré", 501);
             }
         }
-        $menage->producteur_id  = $request->producteur;  
+        $menage->producteur_id  = $request->producteur_id;
         $menage->quartier  = $request->quartier;
         $menage->ageEnfant0A5  = $request->ageEnfant0A5;
         $menage->ageEnfant6A17  = $request->ageEnfant6A17;
         $menage->enfantscolarises  = $request->enfantscolarises;
         $menage->enfantsPasExtrait = $request->enfantsPasExtrait;
+        $menage->enfantsPasExtrait6A17 = $request->enfantsPasExtrait6A17;
         $menage->sources_energies  = $request->sources_energies;
         $menage->boisChauffe     = $request->boisChauffe;
         $menage->ordures_menageres    = $request->ordures_menageres;
-        $menage->separationMenage = $request->separationMenage; 
+        $menage->separationMenage = $request->separationMenage;
         $menage->eauxToillette    = $request->eauxToillette;
-        $menage->eauxVaisselle    = $request->eauxVaisselle; 
-        $menage->wc    = $request->wc; 
-        $menage->sources_eaux    = $request->sources_eaux;  
-        $menage->type_machines    = $request->type_machines; 
-        $menage->garde_machines    = $request->garde_machines; 
-        $menage->equipements    = $request->equipements; 
-        $menage->traitementChamps    = $request->traitementChamps; 
+        $menage->eauxVaisselle    = $request->eauxVaisselle;
+        $menage->wc    = $request->wc;
+        $menage->sources_eaux    = $request->sources_eaux;
+        $menage->type_machines    = $request->type_machines;
+        $menage->garde_machines    = $request->garde_machines;
+        $menage->equipements    = $request->equipements;
+        $menage->traitementChamps    = $request->traitementChamps;
         $menage->nomApplicateur   = $request->nomApplicateur;
         $menage->numeroApplicateur   = $request->numeroApplicateur;
-        $menage->activiteFemme    = $request->activiteFemme; 
-        $menage->nomActiviteFemme    = $request->nomActiviteFemme; 
-        $menage->champFemme    = $request->champFemme; 
+        $menage->activiteFemme    = $request->activiteFemme;
+        $menage->nomActiviteFemme    = $request->nomActiviteFemme;
+        $menage->champFemme    = $request->champFemme;
         $menage->nombreHectareFemme    = $request->nombreHectareFemme;
         $menage->autreMachine    = $request->autreMachine;
         $menage->autreEndroit    = $request->autreEndroit;
+        $menage->autreSourceEau   = $request->autreSourceEau;
+        $menage->etatAutreMachine   = $request->etatAutreMachine;
+        $menage->etatatomiseur   = $request->etatatomiseur;
         $menage->userid = $request->userid;
         $menage->save();  
 

@@ -302,6 +302,7 @@ class ProducteurController extends Controller
             $infoproducteur->mainOeuvreFamilial    = $request->mainOeuvreFamilial;
             $infoproducteur->travailleurFamilial    = $request->travailleurFamilial;
             $infoproducteur->userid = auth()->user()->id;
+            // dd(json_encode($request->all()));
             $infoproducteur->save();
 
             if ($infoproducteur != null) {
