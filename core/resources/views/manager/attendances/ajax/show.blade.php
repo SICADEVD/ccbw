@@ -1,8 +1,3 @@
-@php
-$addAttendancePermission = user()->permission('add_attendance');
-$editAttendancePermission = user()->permission('edit_attendance');
-$deleteAttendancePermission = user()->permission('delete_attendance');
-@endphp
 
 <div class="modal-header">
     <h5 class="modal-title" id="modelHeading">@lang('app.menu.attendance') @lang('app.details')</h5>
@@ -62,11 +57,11 @@ $deleteAttendancePermission = user()->permission('delete_attendance');
 
             <x-cards.data :title="__('modules.employees.activity')">
 
-                @if ($addAttendancePermission == 'all' && $maxClockIn)
+               
                     <x-slot name="action">
                         <a class="btn-primary rounded f-12 py-1 px-2" href="javascript:;" onclick="addAttendance({{ $attendance->user->id }})" data-attendance-id="{{ $attendance->user->id }}">@lang('app.add')</a>
                     </x-slot>
-                @endif
+              
 
                 <div class="recent-activity">
 
@@ -130,16 +125,7 @@ $deleteAttendancePermission = user()->permission('delete_attendance');
 
                             <div class="col-md-3 text-right">
                                 <div class="dropdown ml-auto comment-action">
-                                    @if ($editAttendancePermission == 'all'
-                                        || ($addAttendancePermission == 'all')
-                                        || ($editAttendancePermission == 'added' && $item->added_by == user()->id)
-                                        || ($editAttendancePermission == 'owned' && $attendance->user->id == user()->id)
-                                        || ($editAttendancePermission == 'both' && ($item->added_by == user()->id || $attendance->user->id == user()->id))
-                                        || $deleteAttendancePermission == 'all'
-                                        || ($deleteAttendancePermission == 'added' && $item->added_by == user()->id)
-                                        || ($deleteAttendancePermission == 'owned' && $attendance->user->id == user()->id)
-                                        || ($deleteAttendancePermission == 'both' && ($item->added_by == user()->id || $attendance->user->id == user()->id))
-                                    )
+                                  
                                     <button
                                         class="btn btn-lg f-14 py-0 text-lightest text-capitalize rounded  dropdown-toggle"
                                         type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -148,28 +134,18 @@ $deleteAttendancePermission = user()->permission('delete_attendance');
                                     <div class="dropdown-menu dropdown-menu-right border-grey rounded b-shadow-4 p-0 mr-2"
                                         aria-labelledby="dropdownMenuLink" tabindex="0">
 
-                                        @if ($editAttendancePermission == 'all'
-                                            || ($editAttendancePermission == 'added' && $item->added_by == user()->id)
-                                            || ($editAttendancePermission == 'owned' && $attendance->user->id == user()->id)
-                                            || ($editAttendancePermission == 'both' && ($item->added_by == user()->id || $attendance->user->id == user()->id))
-                                            )
                                             <a class="dropdown-item d-block text-dark-grey f-13 py-1 px-3"
                                                 href="javascript:;" onclick="editAttendance({{ $item->aId }})"
                                                 data-attendance-id="{{ $item->aId }}">@lang('app.edit')</a>
-                                        @endif
-
-                                        @if ($deleteAttendancePermission == 'all'
-                                            || ($deleteAttendancePermission == 'added' && $item->added_by == user()->id)
-                                            || ($deleteAttendancePermission == 'owned' && $attendance->user->id == user()->id)
-                                            || ($deleteAttendancePermission == 'both' && ($item->added_by == user()->id || $attendance->user->id == user()->id))
-                                            )
+                                         
+ 
                                             <a class="cursor-pointer dropdown-item d-block text-dark-grey f-13 pb-1 px-3"
                                                 onclick="deleteAttendance({{ $item->aId }})"
                                                 data-attendance-id="{{ $item->aId }}"
                                                 href="javascript:;">@lang('app.delete')</a>
-                                        @endif
+                                     
                                     </div>
-                                    @endif
+                                   
                                 </div>
 
                             </div>

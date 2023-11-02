@@ -105,20 +105,12 @@ class EmployeeController extends AccountBaseController
         $this->lastEmployeeID = EmployeeDetail::count();
         $this->checkifExistEmployeeId =  EmployeeDetail::select('id')->where('employee_id', ($this->lastEmployeeID + 1))->first();
          
-        $this->employees = User::allEmployees(null, true); 
- 
-        $employee = new EmployeeDetail();
-
-        if ($employee->getCustomFieldGroupsWithFields()) {
-            $this->fields = $employee->getCustomFieldGroupsWithFields()->fields;
-        }
-
-        $this->view = 'manager.employees.ajax.create';
-
+        $this->employees = User::allEmployees(null, true,null, cooperative()->id); 
+   
         if (request()->ajax()) {
-            $html = view($this->view, $this->data)->render();
+            $html = view('manager.employees.ajax.create', $this->data)->render();
 
-            return Reply::dataOnly(['status' => 'success', 'html' => $html, 'title' => $this->pageTitle]);
+            return Reply::dataOnly(['status' => 'success', 'html' => $html, 'title' => $this->pageTitle]); 
         }
 
         return view('manager.employees.create', $this->data);

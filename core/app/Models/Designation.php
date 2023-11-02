@@ -6,17 +6,18 @@ use App\Traits\GlobalStatus;
 use Illuminate\Database\Eloquent\Model;
 use Kirschbaum\PowerJoins\PowerJoins;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Traits\HasCooperative;
 
 class Designation extends Model
 {
-    use GlobalStatus;
+    use GlobalStatus, hasCooperative;
  
-    public function members(): HasMany
+    public function members()
     {
         return $this->hasMany(EmployeeTeam::class, 'designation_id');
     }
 
-    public function teamMembers(): HasMany
+    public function teamMembers()
     {
         return $this->hasMany(EmployeeDetail::class, 'designation_id');
     }
@@ -31,7 +32,7 @@ class Designation extends Model
         return Designation::all();
     }
 
-    public function childs(): HasMany
+    public function childs()
     {
         return $this->hasMany(Designation::class, 'parent_id');
     }

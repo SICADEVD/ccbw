@@ -127,13 +127,7 @@
                     <x-forms.link-primary :link="route('manager.employees.create')" class="mr-3 openRightModal" icon="plus">
                         @lang('app.add')
                         @lang('app.employee')
-                    </x-forms.link-primary>
-
-                    <x-forms.button-secondary class="mr-3 invite-member mb-2 mb-lg-0" icon="plus">
-                        @lang('app.invite') @lang('app.employee')
-                    </x-forms.button-secondary>
-                 
-
+                    </x-forms.link-primary> 
                
                     <x-forms.link-secondary :link="route('manager.hr.employees.import')" class="mr-3 openRightModal mb-2 mb-lg-0 d-none d-lg-block"
                                             icon="file-upload">
@@ -378,12 +372,14 @@
             const url = "{{ route('manager.designations.create') }}";
             $(MODAL_LG + ' ' + MODAL_HEADING).html('...');
             $.ajaxModal(MODAL_LG, url);
+            $(MODAL_LG).modal('show');
         })
 
         $('.department-setting').click(function () {
             const url = "{{ route('manager.departments.create') }}";
             $(MODAL_LG + ' ' + MODAL_HEADING).html('...');
             $.ajaxModal(MODAL_LG, url);
+            $(MODAL_LG).modal('show');
         });
     </script>
 @endpush

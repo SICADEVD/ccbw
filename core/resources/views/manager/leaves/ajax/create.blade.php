@@ -1,7 +1,7 @@
  
-<link rel="stylesheet" href="{{ asset('assets/vendor/css/bootstrap-datepicker3.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/vendor/css/bootstrap-datepicker3.min.css') }}"> 
 <link rel="stylesheet" href="{{ asset('assets/vendor/css/daterangepicker.css') }}">
- 
+
 <div class="row">
     <div class="col-sm-12">
         <x-form id="save-lead-data-form">
@@ -112,8 +112,12 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-12">
-                        <x-forms.file-multiple class="mr-0 mr-lg-2 mr-md-2 dropify" :fieldLabel="__('app.menu.addFile')" fieldName="file" :popover="__('messages.leaveFileMessage')" fieldId="leaveID" />
+                    <div class="col-lg-12"> 
+                        
+                        <x-forms.file class="mr-0 mr-lg-2 mr-md-2 cropper"
+                            :fieldLabel="__('app.menu.addFile')" fieldName="file" fieldId="leave-file-upload"
+                            fieldHeight="119" :popover="__('messages.leaveFileMessage')" />
+
                         <input type="hidden" name="leaveID" id="leaveID">
                     </div>
                     
@@ -131,11 +135,9 @@
         </x-form>
 
     </div>
-</div>
- 
-<script src="{{ asset('assets/vendor/jquery/bootstrap-datepicker.min.js') }}"></script>
+</div> 
+<script src="{{ asset('assets/vendor/jquery/bootstrap-datepicker.min.js') }}"></script> 
 <script src="{{ asset('assets/vendor/jquery/daterangepicker.min.js')}}" defer=""></script>
-
 
 <script>
     $(document).ready(function() {
@@ -150,6 +152,7 @@ $('.dropify-fr').dropify({
         error: 'Désolé, le fichier trop volumineux'
     }
 });
+ 
         getDate();
         const dp1 = datepicker('#single_date', {
             onSelect: function () {
@@ -189,7 +192,7 @@ $('.dropify-fr').dropify({
 
         $('input[type=radio][name=duration]').change(function() {
             if (this.value == 'multiple') {
-
+                
                 const dp2 = $('#multi_date').daterangepicker('clearDates').daterangepicker({
                     linkedCalendars: false,
                     multidate: true,

@@ -248,29 +248,29 @@ class AttendanceController extends AccountBaseController
         $attendanceSettings = EmployeeShiftSchedule::with('shift')->where('user_id', $attendance->user_id)->where('date', $attendance->clock_in_time->format('Y-m-d'))->first();
 
         if ($attendanceSettings) {
-            $this->attendanceSettings = $attendanceSettings->shift;
+            $attendanceSettingss = $attendanceSettings->shift;
 
         }
         else {
-            $this->attendanceSettings = AttendanceSetting::first()->shift; // Do not get this from session here
+            $attendanceSettingss = AttendanceSetting::first()->shift; // Do not get this from session here
         }
 
         
 
-        $this->attendanceActivity = Attendance::userAttendanceByDate($attendance->clock_in_time->format('Y-m-d'), $attendance->clock_in_time->format('Y-m-d'), $attendance->user_id);
+        $attendanceActivity = Attendance::userAttendanceByDate($attendance->clock_in_time->format('Y-m-d'), $attendance->clock_in_time->format('Y-m-d'), $attendance->user_id);
 
-        $attendanceActivity = clone $this->attendanceActivity;
+        // $attendanceActivity = $attendanceActivity;
         $attendanceActivity = $attendanceActivity->reverse()->values();
 
-        $settingStartTime = Carbon::createFromFormat('H:i:s', $this->attendanceSettings->office_start_time, $this->timezone);
-        $defaultEndTime = $settingEndTime = Carbon::createFromFormat('H:i:s', $this->attendanceSettings->office_end_time, $this->timezone);
+        $settingStartTime = Carbon::createFromFormat('H:i:s', $attendanceSettingss->office_start_time, cooperative()->timezone);
+        $defaultEndTime = $settingEndTime = Carbon::createFromFormat('H:i:s', $attendanceSettingss->office_end_time, cooperative()->timezone);
 
         if ($settingStartTime->gt($settingEndTime)) {
             $settingEndTime->addDay();
         }
 
-        if ($settingEndTime->greaterThan(now()->timezone($this->timezone))) {
-            $defaultEndTime = now()->timezone($this->timezone);
+        if ($settingEndTime->greaterThan(now()->timezone(cooperative()->timezone))) {
+            $defaultEndTime = now()->timezone(cooperative()->timezone);
         }
 
         $this->totalTime = 0;
@@ -278,18 +278,18 @@ class AttendanceController extends AccountBaseController
         foreach ($attendanceActivity as $key => $activity) {
             if ($key == 0) {
                 $this->firstClockIn = $activity;
-                $this->attendanceDate = ($activity->shift_start_time) ? Carbon::parse($activity->shift_start_time) : Carbon::parse($this->firstClockIn->clock_in_time)->timezone($this->timezone);
-                $this->startTime = Carbon::parse($this->firstClockIn->clock_in_time)->timezone($this->timezone);
+                $this->attendanceDate = ($activity->shift_start_time) ? Carbon::parse($activity->shift_start_time) : Carbon::parse($this->firstClockIn->clock_in_time)->timezone(cooperative()->timezone);
+                $this->startTime = Carbon::parse($this->firstClockIn->clock_in_time)->timezone(cooperative()->timezone);
             }
 
             $this->lastClockOut = $activity;
 
             if (!is_null($this->lastClockOut->clock_out_time)) {
-                $this->endTime = Carbon::parse($this->lastClockOut->clock_out_time)->timezone($this->timezone);
+                $this->endTime = Carbon::parse($this->lastClockOut->clock_out_time)->timezone(cooperative()->timezone);
 
             }
-            elseif (($this->lastClockOut->clock_in_time->timezone($this->timezone)->format('Y-m-d') != now()->timezone($this->timezone)->format('Y-m-d')) && is_null($this->lastClockOut->clock_out_time)) {
-                $this->endTime = Carbon::parse($this->startTime->format('Y-m-d') . ' ' . $this->attendanceSettings->office_end_time, $this->timezone);
+            elseif (($this->lastClockOut->clock_in_time->timezone(cooperative()->timezone)->format('Y-m-d') != now()->timezone(cooperative()->timezone)->format('Y-m-d')) && is_null($this->lastClockOut->clock_out_time)) {
+                $this->endTime = Carbon::parse($this->startTime->format('Y-m-d') . ' ' . $attendanceSettingss->office_end_time, cooperative()->timezone);
 
                 if ($this->startTime->gt($this->endTime)) {
                     $this->endTime->addDay();
@@ -303,14 +303,14 @@ class AttendanceController extends AccountBaseController
                 $this->notClockedOut = true;
             }
 
-            $this->totalTime = $this->totalTime + $this->endTime->timezone($this->timezone)->diffInSeconds($activity->clock_in_time->timezone($this->timezone));
+            $this->totalTime = $this->totalTime + $this->endTime->timezone(cooperative()->timezone)->diffInSeconds($activity->clock_in_time->timezone(cooperative()->timezone));
         }
 
-        $this->maxClockIn = $attendanceActivity->count() < $this->attendanceSettings->clockin_in_day;
+        $this->maxClockIn = $attendanceActivity->count() < $attendanceSettingss->clockin_in_day;
 
         /** @phpstan-ignore-next-line */
         $this->totalTime = CarbonInterval::formatHuman($this->totalTime, true);
-
+        $this->attendanceActivity = $attendanceSettingss;
         $this->attendance = $attendance;
 
         return view('manager.attendances.ajax.show', $this->data);

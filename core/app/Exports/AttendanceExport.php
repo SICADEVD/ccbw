@@ -119,14 +119,14 @@ class AttendanceExport implements FromCollection, WithHeadings, WithMapping, Wit
             $employees->where('employee_details.designation_id', $this->designation);
         }
 
-        $employees = $employees->select('users.name', 'users.id')->get();
+        $employees = $employees->select('users.lastname','users.firstname', 'users.id')->get();
         $employeedata = array();
         $emp_attendance = 1;
         $employee_index = 0;
 
         foreach ($employees as $employee) {
             $userId = $employee->id;
-            $employeedata[$employee_index]['employee_name'] = $employee->name;
+            $employeedata[$employee_index]['employee_name'] = $employee->lastname.' '.$employee->firstname;
 
             $attendances = Attendance::where('attendances.user_id', '=', $userId);
 

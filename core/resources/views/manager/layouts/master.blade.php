@@ -28,7 +28,7 @@
     <link rel="stylesheet" href="{{ asset('assets/fcadmin/css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/dropify/css/dropify.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/templates/basic/css/custom.css') }}">
-
+    <link rel="stylesheet" href="{{ asset('assets/vendor/css/daterangepicker.css') }}">
     <script src="{{ asset('assets/global/js/jquery-3.6.0.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/jquery/modernizr.min.js') }}"></script>
 

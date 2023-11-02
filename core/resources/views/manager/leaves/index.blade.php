@@ -14,7 +14,7 @@
 <div id="filter-bloc">
     <x-filters.filter-box>
         <!-- DATE START -->
-        <div class="select-box d-flex pr-2 border-right-grey border-right-grey-sm-0">
+        <div class="select-box d-flex pr-2 border-right-grey border-right-grey-sm-0" style="width: 30%;">
             <p class="mb-0 pr-2 f-14 text-dark-grey d-flex align-items-center">@lang('app.duration')</p>
             <div class="select-status d-flex">
                 <input type="text" class="position-relative text-dark form-control border-0 p-2 text-left f-14 f-w-500 border-additional-grey"
@@ -25,7 +25,7 @@
         <!-- DATE END -->
 
         <!-- SEARCH BY TASK START -->
-        <div class="task-search d-flex  py-1 px-lg-2 px-0 border-right-grey align-items-center">
+        <div class="task-search d-flex  py-1 px-lg-2 px-0 border-right-grey align-items-center" style="width: 30%;">
             <form class="w-100 mr-1 mr-lg-0 mr-md-1 ml-md-1 ml-0 ml-lg-0">
                 <div class="input-group bg-grey rounded">
                     <div class="input-group-prepend">
@@ -41,7 +41,7 @@
         <!-- SEARCH BY TASK END -->
 
         <!-- RESET START -->
-        <div class="select-box d-flex py-1 px-lg-2 px-md-2 px-0">
+        <div class="select-box d-flex py-1 px-lg-2 px-md-2 px-0" style="width: 16%;">
             <x-forms.button-secondary class="btn-xs d-none" id="reset-filters" icon="times-circle">
                 @lang('app.clearFilters')
             </x-forms.button-secondary>

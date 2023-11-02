@@ -67,6 +67,7 @@ class EmployeeDetail extends Model
     {
         return $this->belongsTo(Department::class, 'department_id');
     }
+    
     public function userBadge()
     {
         $itsYou = ' <span class="ml-2 badge badge-secondary pr-1">' . __('app.itsYou') . '</span>';

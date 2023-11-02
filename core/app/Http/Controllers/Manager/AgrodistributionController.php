@@ -43,7 +43,7 @@ class AgrodistributionController extends Controller
         $pageTitle = "Ajouter une distribution";
         $manager   = auth()->user();
         $producteurs  = Producteur::with('localite')->get();
-        $localites  = Localite::active()->where('cooperative_id',auth()->user()->cooperative_id)->orderBy('nom')->get();
+        $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->orderBy('nom')->get();
         return view('manager.distribution.create', compact('pageTitle', 'producteurs','localites'));
     }
 

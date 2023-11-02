@@ -43,7 +43,7 @@ class AgroevaluationController extends Controller
         $pageTitle = "Ajouter une estimation";
         $manager   = auth()->user();
         $producteurs  = Producteur::with('localite')->get();
-        $localites  = Localite::active()->where('cooperative_id',auth()->user()->cooperative_id)->orderBy('nom')->get();
+        $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->orderBy('nom')->get();
         $campagnes = Campagne::active()->pluck('nom','id');
         $parcelles  = Parcelle::with('producteur')->get();
         return view('manager.agroevaluation.create', compact('pageTitle', 'producteurs','localites','campagnes','parcelles'));
@@ -159,7 +159,8 @@ class AgroevaluationController extends Controller
     public function edit($id)
     {
         $pageTitle = "Mise à jour de la estimation";
-        $localites  = Localite::active()->where('cooperative_id',auth()->user()->cooperative_id)->orderBy('nom')->get();
+        $manager = auth()->user();
+        $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->orderBy('nom')->get();
         $producteurs  = Producteur::with('localite')->get();
         $estimation   = Agroevaluation::findOrFail($id);
         return view('manager.agroevaluation.edit', compact('pageTitle', 'localites', 'estimation','producteurs'));
