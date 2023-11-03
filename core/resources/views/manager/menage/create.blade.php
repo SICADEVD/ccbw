@@ -18,8 +18,10 @@
                             <select class="form-control" name="section" id="section" required>
                                 <option value="">@lang('Selectionner une option')</option>
                                 @foreach ($sections as $section)
-                                    <option value="{{ $section->id }}" @selected(old('section'))>
-                                        {{ $section->libelle }}</option>
+                                    <option value="{{ $section->id }}"
+                                        {{ old('section') == $section->id ? 'selected' : '' }}>
+                                        {{ $section->libelle }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
@@ -32,12 +34,14 @@
                                 <option value="">@lang('Selectionner une option')</option>
                                 @foreach ($localites as $localite)
                                     <option value="{{ $localite->id }}" data-chained="{{ $localite->section->id }}"
-                                        @selected(old('localite'))>
-                                        {{ $localite->nom }}</option>
+                                        {{ old('localite') == $localite->id ? 'selected' : '' }}>
+                                        {{ $localite->nom }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
+
 
                     <div class="form-group row">
                         <label class="col-sm-4 control-label">@lang('Selectionner un producteur')</label>
@@ -46,12 +50,14 @@
                                 <option value="">@lang('Selectionner une option')</option>
                                 @foreach ($producteurs as $producteur)
                                     <option value="{{ $producteur->id }}" data-chained="{{ $producteur->localite->id }}"
-                                        @selected(old('producteur'))>
-                                        {{ $producteur->nom }} {{ $producteur->prenoms }}</option>
+                                        {{ old('producteur_id') == $producteur->id ? 'selected' : '' }}>
+                                        {{ $producteur->nom }} {{ $producteur->prenoms }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
+
                     <div class="form-group row">
                         {{ Form::label(__('Quartier'), null, ['class' => 'col-sm-4 control-label']) }}
                         <div class="col-xs-12 col-sm-8">
@@ -95,15 +101,27 @@
                         {{ Form::label(__('Source Energie du ménage'), null, ['class' => 'col-sm-4 control-label']) }}
                         <div class="col-xs-12 col-sm-8">
                             <select class="form-control select2-multi-select sources_energies" name="sourcesEnergie[]"
-                                multiple id="sources_energies">
+                                multiple id="sources_energies" required>
                                 <option value="">@lang('Selectionner les options')</option>
-                                <option value="Bois de chauffe">Bois de chauffe</option>
-                                <option value="Charbon">Charbon</option>
-                                <option value="Gaz">Gaz</option>
-                                <option value="Four à pétrole">Four à pétrole</option>
+                                <option value="Bois de chauffe"
+                                    {{ in_array('Bois de chauffe', old('sourcesEnergie', [])) ? 'selected' : '' }}>
+                                    Bois de chauffe
+                                </option>
+                                <option value="Charbon"
+                                    {{ in_array('Charbon', old('sourcesEnergie', [])) ? 'selected' : '' }}>
+                                    Charbon
+                                </option>
+                                <option value="Gaz" {{ in_array('Gaz', old('sourcesEnergie', [])) ? 'selected' : '' }}>
+                                    Gaz
+                                </option>
+                                <option value="Four à pétrole"
+                                    {{ in_array('Four à pétrole', old('sourcesEnergie', [])) ? 'selected' : '' }}>
+                                    Four à pétrole
+                                </option>
                             </select>
                         </div>
                     </div>
+
 
                     <div class="form-group row" id="boisChauffes">
                         {{ Form::label(__('Combien de bois par semaine?'), null, ['class' => 'col-sm-4 control-label']) }}
@@ -115,17 +133,28 @@
                     <div class="form-group row">
                         {{ Form::label(__('Comment gérez-vous les ordures ménagères ?'), null, ['class' => 'col-sm-4 control-label']) }}
                         <div class="col-xs-12 col-sm-8">
-                            <select class="form-control select2-multi-select ordureMenagere" name="ordureMenagere[]"
-                                multiple>
+                            <select class="form-control select2-multi-select ordureMenagere" name="ordureMenageres[]"
+                                multiple required>
                                 <option value="">@lang('Selectionner les options')</option>
-                                <option value="Dépotoirs Publique">Dépotoirs Publique</option>
-                                <option value="Poubelle de Maison">Poubelle de Maison</option>
-                                <option value="Ramassage ordures organisé">Ramassage ordures organisé</option>
-                                <option value="Aucun">Aucun</option>
+                                <option value="Dépotoirs Publique"
+                                    {{ in_array('Dépotoirs Publique', old('ordureMenageres', [])) ? 'selected' : '' }}>
+                                    Dépotoirs Publique
+                                </option>
+                                <option value="Poubelle de Maison"
+                                    {{ in_array('Poubelle de Maison', old('ordureMenageres', [])) ? 'selected' : '' }}>
+                                    Poubelle de Maison
+                                </option>
+                                <option value="Ramassage ordures organisé"
+                                    {{ in_array('Ramassage ordures organisé', old('ordureMenageres', [])) ? 'selected' : '' }}>
+                                    Ramassage ordures organisé
+                                </option>
+                                <option value="Aucun"
+                                    {{ in_array('Aucun', old('ordureMenageres', [])) ? 'selected' : '' }}>
+                                    Aucun
+                                </option>
                             </select>
                         </div>
                     </div>
-
                     <div class="form-group row">
                         <?php echo Form::label(__('Pratiquez-vous la séparation des déchets ?'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
@@ -363,7 +392,7 @@
                     $('#autreMachines').hide('slow');
                 }
             });
-           
+
             $('.sources_energies').change(function() {
                 var sources_energies = $('.sources_energies').find(":selected").map((key, item) => {
                     return item.textContent.trim();

@@ -15,6 +15,15 @@ class Menage extends Model
     {
         return $this->belongsTo(Producteur::class,);
     }
+
+    public function menage_sourceEnergie()
+    {
+        return $this->hasMany(Menage_sourceEnergie::class, 'menage_id');
+    }
+
+    public function menage_ordure(){
+        return $this->hasMany(Menage_ordure::class, 'menage_id');
+    }
      
      
 }

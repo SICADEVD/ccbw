@@ -96,15 +96,15 @@
                         {{ Form::label(__('Source Energie du ménage'), null, ['class' => 'col-sm-4 control-label']) }}
                         <div class="col-xs-12 col-sm-8">
                             <select class="form-control select2-multi-select sources_energies" name="sourcesEnergie[]"
-                                multiple id="sources_energies">
+                                multiple id="sources_energies" required>
                                 <option value="">@lang('Selectionner les options')</option>
                                 <option value="Bois de chauffe"
-                                    {{ in_array('Bois de chauffe', $ordures) ? 'selected' : '' }}>Bois de chauffe</option>
-                                <option value="Charbon" {{ in_array('Charbon', $ordures) ? 'selected' : '' }}>Charbon
+                                    {{ in_array('Bois de chauffe', $energies) ? 'selected' : '' }}>Bois de chauffe</option>
+                                <option value="Charbon" {{ in_array('Charbon', $energies) ? 'selected' : '' }}>Charbon
                                 </option>
-                                <option value="Gaz" {{ in_array('Gaz', $ordures) ? 'selected' : '' }}>Gaz</option>
+                                <option value="Gaz" {{ in_array('Gaz', $energies) ? 'selected' : '' }}>Gaz</option>
                                 <option value="Four à pétrole"
-                                    {{ in_array('Four à pétrole', $ordures) ? 'selected' : '' }}>Four à pétrole</option>
+                                    {{ in_array('Four à pétrole', $energies) ? 'selected' : '' }}>Four à pétrole</option>
                             </select>
                         </div>
                     </div>
@@ -120,7 +120,7 @@
                         {{ Form::label(__('Comment gérez-vous les ordures ménagères ?'), null, ['class' => 'col-sm-4 control-label']) }}
                         <div class="col-xs-12 col-sm-8">
                             <select class="form-control select2-multi-select ordureMenagere" name="ordureMenagere[]"
-                                multiple>
+                                multiple required>
                                 <option value="">@lang('Selectionner les options')</option>
                                 <option value="Dépotoirs Publique"
                                     {{ in_array('Dépotoirs Publique', $ordures) ? 'selected' : '' }}>Dépotoirs Publique
