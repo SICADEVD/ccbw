@@ -34,11 +34,11 @@
                     </a>
                 </li>
                 <li class="sidebar-menu-item sidebar-dropdown">
-                    <a href="javascript:void(0)" class="{{ menuActive(['manager.hr.*', 'manager.employees.index','manager.holidays.*','manager.departments.*','manager.designations.*','manager.holidays.*','manager.settings.*','manager.leaves.*'], 3) }}">
+                    <a href="javascript:void(0)" class="{{ menuActive(['manager.hr.*', 'manager.employees.index','manager.holidays.*','manager.departments.*','manager.designations.*','manager.holidays.*','manager.leaves.*'], 3) }}">
                         <i class="menu-icon las la-users"></i>
                         <span class="menu-title">@lang('Ressources Humaines') </span>
                     </a>
-                    <div class="sidebar-submenu {{ menuActive(['manager.hr.*', 'manager.employees.*','manager.holidays.*','manager.departments.*','manager.designations.*','manager.holidays.*','manager.settings.*','manager.leaves.*'], 2) }} ">
+                    <div class="sidebar-submenu {{ menuActive(['manager.hr.*', 'manager.employees.*','manager.holidays.*','manager.departments.*','manager.designations.*','manager.holidays.*','manager.leaves.*'], 2) }} ">
                         <ul>
 
                             <li class="sidebar-menu-item {{ menuActive('manager.employees.index') }}">
