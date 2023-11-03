@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Manager;
-
+use App\Http\Helpers\Reply;
 use App\Constants\Status;
 use App\Http\Controllers\Controller;
 use App\Imports\LocaliteImport;
@@ -15,19 +15,11 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Excel;
 
-class CooperativeLocaliteController extends Controller
+class LocaliteSettingController extends Controller
 {
 
     public function index()
     {
-        // $pageTitle      = "Gestion des localités";
-        // $manager   = auth()->user();
-        // $cooperativeLocalites = Localite::searchable(['localites.nom', 'localites.codeLocal', 'localites.type_localites', 'localites.sousprefecture', 'sections.libelle'])->latest('id')->joinRelationship('section')->where('cooperative_id', $manager->cooperative_id)->paginate(getPaginate());
-        // $cooperatives = Cooperative::active()->where('id', $manager->cooperative_id)->get();
-        // $sections = Section::all();
-        // return view('manager.localite.index', compact('pageTitle', 'cooperativeLocalites', 'cooperatives', 'sections'));
-
-
         $pageTitle = "Gestion des localités";
         $manager = auth()->user();
 
@@ -38,18 +30,20 @@ class CooperativeLocaliteController extends Controller
             ->where('cooperative_id', $manager->cooperative_id)
             ->paginate(getPaginate());
 
+        $activeSettingMenu = 'localite_settings';
         $cooperatives = Cooperative::active()->where('id', $manager->cooperative_id)->get();
         $sections = Section::all();
 
-        return view('manager.localite.index', compact('pageTitle', 'cooperativeLocalites', 'cooperatives', 'sections'));
+        return view('manager.localite-settings.index', compact('pageTitle', 'cooperativeLocalites', 'cooperatives', 'sections','activeSettingMenu'));
     }
 
     public function create()
     {
         $pageTitle = "Ajouter une localité";
         $manager   = auth()->user();
+        $activeSettingMenu = 'localite_settings';
         $sections = Section::where('cooperative_id', $manager->cooperative_id)->get();
-        return view('manager.localite.create', compact('pageTitle', 'sections', 'manager'));
+        return view('manager.localite-settings.create', compact('pageTitle', 'sections', 'manager','activeSettingMenu'));
     }
 
     public function store(Request $request)
@@ -137,8 +131,7 @@ class CooperativeLocaliteController extends Controller
             }
         }
 
-        $notify[] = ['success', isset($message) ? $message : 'La localité a été crée avec succès.'];
-        return back()->withNotify($notify);
+        return Reply::successWithData(__('messages.recordSaved'), ['redirectUrl' => route('manager.settings.localite-settings.index')]);
     }
 
     private function verifylocalite($nom)
@@ -227,8 +220,9 @@ class CooperativeLocaliteController extends Controller
         $pageTitle = "Mise à jour de la localité";
         $manager   = auth()->user();
         $localite   = Localite::findOrFail($id);
+        $activeSettingMenu = 'localite_settings';
         $sections = Section::where('cooperative_id', $manager->cooperative_id)->get();
-        return view('manager.localite.edit', compact('pageTitle', 'sections', 'localite', 'manager'));
+        return view('manager.localite-settings.edit', compact('pageTitle', 'sections', 'localite', 'manager','activeSettingMenu'));
     }
 
     public function status($id)
@@ -241,11 +235,18 @@ class CooperativeLocaliteController extends Controller
         $cooperative         = Cooperative::findOrFail($id);
         $pageTitle      = $cooperative->name . " Manager List";
         $cooperativeLocalites = Localite::localite()->where('cooperative_id', $id)->orderBy('id', 'DESC')->with('cooperative')->paginate(getPaginate());
-        return view('manager.localite.index', compact('pageTitle', 'cooperativeLocalites'));
+        return view('manager.localite-settings.index', compact('pageTitle', 'cooperativeLocalites'));
     }
     public function  uploadContent(Request $request)
     {
         Excel::import(new LocaliteImport, $request->file('uploaded_file'));
         return back();
     }
+
+    public function destroy($id)
+    {
+        Localite::destroy($id);
+        return Reply::success(__('messages.deleteSuccess'));
+    }
+
 }

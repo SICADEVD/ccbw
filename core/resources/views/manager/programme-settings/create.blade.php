@@ -22,7 +22,7 @@
             </div>
             
             <div class="form-group">
-              <button type="submit" id="save-form" class="btn btn--primary w-100 h-45"> @lang('Envoyer')</button>
+              <button type="submit" id="save-form" class="btn btn--primary w-100 h-45"> @lang('app.save')</button>
             </div>
           
       </div>

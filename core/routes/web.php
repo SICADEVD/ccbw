@@ -21,7 +21,8 @@ use App\Http\Controllers\Manager\LeavesQuotaController;
 use App\Http\Controllers\Manager\EmployeeDocController;
 use App\Http\Controllers\Manager\CooperativeSettingController;
 use App\Http\Controllers\Manager\ProgrammeSettingController;
-
+use App\Http\Controllers\Manager\SectionSettingController;
+use App\Http\Controllers\Manager\LocaliteSettingController;
 
 Route::namespace('Manager\Auth')->group(function () {
 
@@ -70,14 +71,7 @@ Route::middleware('auth')->group(function () {
                 });
             });
             
-            Route::controller('Manager\CooperativeLocaliteController')->name('cooperative.localite.')->prefix('cooperative-localite')->group(function () {
-                Route::get('list', 'index')->name('index');
-                Route::get('create', 'create')->name('create');
-                Route::post('store', 'store')->name('store');
-                Route::get('edit/{id}', 'edit')->name('edit'); 
-                Route::post('status/{id}', 'status')->name('status');
-                Route::post('/uploadcontent', 'uploadContent')->name('uploadcontent');
-            });
+           
             //Manage Staff
             Route::controller('Manager\StaffController')->name('staff.')->prefix('staff')->group(function () {
                 Route::get('create', 'create')->name('create');
@@ -91,25 +85,7 @@ Route::middleware('auth')->group(function () {
                 Route::post('magasin/status/{id}', 'magasinStatus')->name('magasin.status');
                 Route::get('/exportStaffsExcel', 'exportExcel')->name('exportExcel.staffAll');
                 Route::get('staff/dashboard/{id}', 'staffLogin')->name('stafflogin');
-            });
-
-            //Manage section
-            Route::controller('Manager\SectionController')->name('section.')->prefix('section')->group(function () {
-                Route::get('create', 'create')->name('create');
-                Route::get('list', 'index')->name('index');
-                Route::post('store', 'store')->name('store');
-                Route::get('edit/{id}', 'edit')->name('edit');
-                Route::post('update/{id}', 'update')->name('update');
-
-                // //route pour créer une localité en fonction de la section
-                // Route::post('localites/section/store', 'storelocalitesection')->name('storelocalitesection');
-                // //route pour modifier une localité en fonction de la section
-                // Route::post('localites/section/update/{id}', 'updatelocalitesection')->name('updatelocalitesection');
-                // //route pour lister les localités en fonction de la section
-                // Route::get('localites/section/{id}', 'localitesection')->name('localitesection');
-                // //route pour modifier une localité appartenant à une section
-                // Route::get('localite/section/edit/{id}', 'localitesectionedit')->name('localitesectionedit');
-            });
+            }); 
 
         // employee routes
 Route::controller('Manager\EmployeeController')->name('hr.')->prefix('hr')->group(function () {
@@ -158,6 +134,10 @@ Route::name('settings.')->prefix('settings')->group(function () {
     Route::resource('leaves-settings', LeaveSettingController::class);
     Route::resource('cooperative-settings', CooperativeSettingController::class);
     Route::resource('durabilite-settings', ProgrammeSettingController::class);
+    Route::resource('section-settings', SectionSettingController::class);
+    Route::resource('localite-settings', LocaliteSettingController::class);
+    Route::post('localite-settings/status/{id}', [LocaliteSettingController::class, 'status'])->name('localite-settings.status');
+    Route::post('localite-settings/uploadcontent', [LocaliteSettingController::class, 'uploadContent'])->name('localite-settings.uploadcontent');
     Route::post('leaves-settings/change-permission', [LeaveSettingController::class, 'changePermission'])->name('leaves-settings.changePermission');
   });
 

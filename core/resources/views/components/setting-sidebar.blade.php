@@ -11,7 +11,7 @@
                     <i class="fa fa-search f-12 text-lightest"></i>
                 </span>
             </div>
-            <input type="text" id="search-setting-menu" class="form-control border-0 f-14 pl-0"
+            <input type="text" id="search-setting-menu" class="form-control border-0 f-12 pl-0"
                    placeholder="@lang('app.search')">
         </div>
     </form>
@@ -23,6 +23,10 @@
                                  :href="route('manager.settings.cooperative-settings.index')" :text="__('Paramètres de Coopérative')"/>
     <x-setting-menu-item :active="$activeMenu" menu="durabilite_settings"
                                  :href="route('manager.settings.durabilite-settings.index')" :text="__('Programme de Durabilité')"/>
+    <x-setting-menu-item :active="$activeMenu" menu="section_settings"
+                                 :href="route('manager.settings.section-settings.index')" :text="__('Paramètre de Section')"/>
+    <x-setting-menu-item :active="$activeMenu" menu="localite_settings"
+                                 :href="route('manager.settings.localite-settings.index')" :text="__('Paramètre de localite')"/>
             <x-setting-menu-item :active="$activeMenu" menu="attendance_settings"
                                  :href="route('manager.settings.attendance-settings.index')" :text="__('app.menu.attendanceSettings')"/>
       

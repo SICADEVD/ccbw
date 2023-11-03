@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Manager;
-
+use App\Http\Helpers\Reply;
 use App\Models\Section;
 use App\Models\Localite;
 use App\Constants\Status;
@@ -12,7 +12,7 @@ use App\Http\Requests\StoreSectionRequest;
 use App\Http\Requests\UpdateSectionRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-class SectionController extends Controller
+class SectionSettingController extends Controller
 {
     public function index()
     {
@@ -20,18 +20,19 @@ class SectionController extends Controller
         $manager   = auth()->user();
         $cooperatives = Cooperative::where('status', Status::YES)->where('id',$manager->cooperative_id)->orderBy('name')->get();
         // $sections = Section::orderBy('created_at','desc')->with('cooperative')->paginate(getPaginate());
-
+        $activeSettingMenu = 'section_settings';
         $sections = Section::latest('id')->joinRelationship('cooperative')->where('cooperative_id',$manager->cooperative_id)->with('cooperative')->paginate(getPaginate());
         
-        return view('manager.section.index',compact('pageTitle','cooperatives','sections'));
+        return view('manager.section-settings.index',compact('pageTitle','cooperatives','sections','activeSettingMenu'));
     }
 
     public function create()
     {
         $pageTitle = "Ajouter une section";
         $manager   = auth()->user();
+        $activeSettingMenu = 'section_settings';
         $cooperatives = Cooperative::where('status', Status::YES)->where('id',$manager->cooperative_id)->orderBy('name')->get();
-        return view('manager.section.create', compact('pageTitle','cooperatives'));
+        return view('manager.section-settings.create', compact('pageTitle','cooperatives','activeSettingMenu'));
     }
 
     public function store(StoreSectionRequest $request){
@@ -39,22 +40,21 @@ class SectionController extends Controller
 
         Section::create($valitedData);
 
-        $notify[] = ['success', isset($message) ? $message : 'La section a été crée avec succès.'];
-        return back()->withNotify($notify);
-
+        return Reply::successWithData(__('messages.recordSaved'), ['redirectUrl' => route('manager.settings.section-settings.index')]);
     }
     public function edit($id)
     {
         $pageTitle = "Modifier une section";
-
+        $activeSettingMenu = 'section_settings';
         try {
             $section = Section::findOrFail($id);
             $manager   = auth()->user();
-            $cooperatives  = Cooperative::active()->where('id',$manager->cooperative_id)->orderBy('name')->get();
-            return view('manager.section.edit', compact('pageTitle','section','cooperatives'));
+            $cooperatives  = Cooperative::where('id',$manager->cooperative_id)->orderBy('name')->get();
+            
+            return view('manager.section-settings.edit', compact('pageTitle','section','cooperatives','activeSettingMenu'));
         } catch (ModelNotFoundException $e) {
             // L'enregistrement n'a pas été trouvé, vous pouvez rediriger ou afficher un message d'erreur
-            return redirect()->route('manager.section.index')->with('error', 'La section demandée n\'existe pas.');
+            return redirect()->route('manager.settings.section-settings.index')->with('error', 'La section demandée n\'existe pas.','activeSettingMenu');
         }
       
     }
@@ -64,8 +64,8 @@ class SectionController extends Controller
         $valitedData = $request->validated();
         $section = Section::findOrFail($id);
         $section->update($valitedData);
-        $notify[] = ['success', isset($message) ? $message : 'La section a été mise à jour avec succès.'];
-        return back()->withNotify($notify);
+        
+        return Reply::successWithData(__('messages.updateSuccess'), ['redirectUrl' => route('manager.settings.section-settings.index')]);
     }
     //lister les localités d'une section
     public function localiteSection($id)
@@ -87,4 +87,10 @@ class SectionController extends Controller
     public function localitesectionedit($id){
 
     }
+    public function destroy($id)
+    {
+        Section::destroy($id);
+        return Reply::success(__('messages.deleteSuccess'));
+    }
+
 }
