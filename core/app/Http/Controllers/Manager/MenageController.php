@@ -95,7 +95,8 @@ class MenageController extends Controller
                 'traitementChamps'  => 'required|max:255',
                 'activiteFemme'  => 'required|max:255',
                 'nomApplicateur' => 'required_if:traitementChamps,==,non',
-                'numeroApplicateur' => 'required_if:traitementChamps,==,non|regex:/^\d{10}$/|nullable|unique:menages,numeroApplicateur',
+                'numeroApplicateur' => 'required_if:traitementChamps,non|regex:/^\d{10}$/|unique:menages,numeroApplicateur,'.$request->id,
+
              ];
             $attributes = [
                 'producteur' => 'Producteur',
@@ -263,8 +264,8 @@ class MenageController extends Controller
         $sections = $cooperative->sections;
         $menage   = Menage::findOrFail($id);
         $ordures = $menage->menage_ordure->pluck('ordure_menagere')->toArray();
-        $sources = $menage->menage_sourceEnergie->pluck('source_energie')->toArray();
-        return view('manager.menage.edit', compact('pageTitle', 'localites', 'menage', 'producteurs', 'sections'));
+        $energies = $menage->menage_sourceEnergie->pluck('source_energie')->toArray();
+        return view('manager.menage.edit', compact('pageTitle', 'localites', 'menage', 'producteurs', 'sections', 'ordures', 'energies'));
     }
 
     public function status($id)
