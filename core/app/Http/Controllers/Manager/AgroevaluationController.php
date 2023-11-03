@@ -46,6 +46,7 @@ class AgroevaluationController extends Controller
         $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->orderBy('nom')->get();
         $campagnes = Campagne::active()->pluck('nom','id');
         $parcelles  = Parcelle::with('producteur')->get();
+       
         return view('manager.agroevaluation.create', compact('pageTitle', 'producteurs','localites','campagnes','parcelles'));
     }
 
