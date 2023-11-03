@@ -26,7 +26,7 @@
     <x-setting-menu-item :active="$activeMenu" menu="section_settings"
                                  :href="route('manager.settings.section-settings.index')" :text="__('Paramètre de Section')"/>
     <x-setting-menu-item :active="$activeMenu" menu="localite_settings"
-                                 :href="route('manager.settings.localite-settings.index')" :text="__('Paramètre de localite')"/>
+                                 :href="route('manager.settings.localite-settings.index')" :text="__('Paramètre de Localite')"/>
             <x-setting-menu-item :active="$activeMenu" menu="attendance_settings"
                                  :href="route('manager.settings.attendance-settings.index')" :text="__('app.menu.attendanceSettings')"/>
       
