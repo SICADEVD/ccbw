@@ -73,7 +73,7 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <?php echo Form::label(__('Parmi ces enfants, combien sont scolarisés ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <?php echo Form::label(__('Parmi les enfants de 6 à 17, combien sont scolarisés ? ?'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
                             <?php echo Form::number('enfantscolarises', null, ['placeholder' => 'Nombre', 'class' => 'form-control', 'required', 'min' => '0']); ?>
                         </div>
@@ -95,7 +95,17 @@
                     <div class="form-group row">
                         {{ Form::label(__('Source Energie du ménage'), null, ['class' => 'col-sm-4 control-label']) }}
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('sources_energies', ['Bois de chauffe' => 'Bois de chauffe', 'Charbon' => 'Charbon', 'Gaz' => 'Gaz', 'Four à pétrole' => 'Four à pétrole'], null, ['placeholder' => __('Selectionner une reponse'), 'class' => 'form-control sources_energies', 'id' => 'sources_energies', 'required']); ?>
+                            <select class="form-control select2-multi-select sources_energies" name="sourcesEnergie[]"
+                                multiple id="sources_energies">
+                                <option value="">@lang('Selectionner les options')</option>
+                                <option value="Bois de chauffe"
+                                    {{ in_array('Bois de chauffe', $ordures) ? 'selected' : '' }}>Bois de chauffe</option>
+                                <option value="Charbon" {{ in_array('Charbon', $ordures) ? 'selected' : '' }}>Charbon
+                                </option>
+                                <option value="Gaz" {{ in_array('Gaz', $ordures) ? 'selected' : '' }}>Gaz</option>
+                                <option value="Four à pétrole"
+                                    {{ in_array('Four à pétrole', $ordures) ? 'selected' : '' }}>Four à pétrole</option>
+                            </select>
                         </div>
                     </div>
 
@@ -106,11 +116,23 @@
                         </div>
                     </div>
 
-
                     <div class="form-group row">
                         {{ Form::label(__('Comment gérez-vous les ordures ménagères ?'), null, ['class' => 'col-sm-4 control-label']) }}
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('ordures_menageres', ['Dépotoirs Publique' => 'Dépotoirs Publique', 'Poubelle de Maison' => 'Poubelle de Maison', 'Ramassage ordures organisé' => 'Ramassage ordures organisé', 'Aucun' => 'Aucun'], null, ['placeholder' => __('Selectionner une reponse'), 'class' => 'form-control', 'id' => 'ordures_menageres', 'required']); ?>
+                            <select class="form-control select2-multi-select ordureMenagere" name="ordureMenagere[]"
+                                multiple>
+                                <option value="">@lang('Selectionner les options')</option>
+                                <option value="Dépotoirs Publique"
+                                    {{ in_array('Dépotoirs Publique', $ordures) ? 'selected' : '' }}>Dépotoirs Publique
+                                </option>
+                                <option value="Poubelle de Maison"
+                                    {{ in_array('Poubelle de Maison', $ordures) ? 'selected' : '' }}>Poubelle de Maison
+                                </option>
+                                <option value="Ramassage ordures organisé"
+                                    {{ in_array('Ramassage ordures organisé', $ordures) ? 'selected' : '' }}>Ramassage
+                                    ordures organisé</option>
+                                <option value="Aucun" {{ in_array('Aucun', $ordures) ? 'selected' : '' }}>Aucun</option>
+                            </select>
                         </div>
                     </div>
 
@@ -396,10 +418,11 @@
                 $('#autreMachines').hide('slow');
             }
 
-
             $('.sources_energies').change(function() {
-                var sources_energies = $('.sources_energies').val();
-                if (sources_energies == 'Bois de chauffe') {
+                var sources_energies = $('.sources_energies').find(":selected").map((key, item) => {
+                    return item.textContent.trim();
+                }).get();
+                if (sources_energies.includes("Bois de chauffe")) {
                     $('#boisChauffes').show('slow');
                     $('.boisChauffe').show('slow');
                     $('#boisChauffe').prop('required', true);
@@ -410,7 +433,9 @@
                     $('#boisChauffe').prop('required', false);
                 }
             });
-            if ($('.sources_energies').val() == 'Bois de chauffe') {
+            if ($('.sources_energies').find(":selected").map((key, item) => {
+                    return item.textContent.trim();
+                }).get().includes("Bois de chauffe")) {
                 $('#boisChauffes').show('slow');
                 $('.boisChauffe').show('slow');
                 $('#boisChauffe').prop('required', true);
@@ -420,6 +445,7 @@
                 $('.boisChauffe').val('');
                 $('#boisChauffe').prop('required', false);
             }
+
 
             $('.activiteFemme').change(function() {
                 var activiteFemme = $('.activiteFemme').val();

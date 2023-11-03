@@ -72,7 +72,7 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <?php echo Form::label(__('Parmi ces enfants, combien sont scolarisés ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <?php echo Form::label(__('Parmi les enfants de 6 à 17, combien sont scolarisés ?'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
                             <?php echo Form::number('enfantscolarises', null, ['placeholder' => 'Nombre', 'class' => 'form-control', 'required', 'min' => '0']); ?>
                         </div>
@@ -94,7 +94,14 @@
                     <div class="form-group row">
                         {{ Form::label(__('Source Energie du ménage'), null, ['class' => 'col-sm-4 control-label']) }}
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('sources_energies', ['Bois de chauffe' => 'Bois de chauffe', 'Charbon' => 'Charbon', 'Gaz' => 'Gaz', 'Four à pétrole' => 'Four à pétrole'], null, ['placeholder' => __('Selectionner une reponse'), 'class' => 'form-control sources_energies', 'id' => 'sources_energies', 'required']); ?>
+                            <select class="form-control select2-multi-select sources_energies" name="sourcesEnergie[]"
+                                multiple id="sources_energies">
+                                <option value="">@lang('Selectionner les options')</option>
+                                <option value="Bois de chauffe">Bois de chauffe</option>
+                                <option value="Charbon">Charbon</option>
+                                <option value="Gaz">Gaz</option>
+                                <option value="Four à pétrole">Four à pétrole</option>
+                            </select>
                         </div>
                     </div>
 
@@ -105,14 +112,19 @@
                         </div>
                     </div>
 
-
                     <div class="form-group row">
                         {{ Form::label(__('Comment gérez-vous les ordures ménagères ?'), null, ['class' => 'col-sm-4 control-label']) }}
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('ordures_menageres', ['Dépotoirs Publique' => 'Dépotoirs Publique', 'Poubelle de Maison' => 'Poubelle de Maison', 'Ramassage ordures organisé' => 'Ramassage ordures organisé', 'Aucun' => 'Aucun'], null, ['placeholder' => __('Selectionner une reponse'), 'class' => 'form-control', 'id' => 'ordures_menageres', 'required']); ?>
+                            <select class="form-control select2-multi-select ordureMenagere" name="ordureMenagere[]"
+                                multiple>
+                                <option value="">@lang('Selectionner les options')</option>
+                                <option value="Dépotoirs Publique">Dépotoirs Publique</option>
+                                <option value="Poubelle de Maison">Poubelle de Maison</option>
+                                <option value="Ramassage ordures organisé">Ramassage ordures organisé</option>
+                                <option value="Aucun">Aucun</option>
+                            </select>
                         </div>
                     </div>
-
 
                     <div class="form-group row">
                         <?php echo Form::label(__('Pratiquez-vous la séparation des déchets ?'), null, ['class' => 'col-sm-4 control-label']); ?>
@@ -171,7 +183,7 @@
                         <div class="form-group row">
                             <?php echo Form::label(__('Donnez le nom de la personne qui éffectue les traitement phyto sanitaire dans vos champs'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::text('nomApplicateur', null, ['id' => 'nomApplicateur','class' => 'form-control nomApplicateur']); ?>
+                                <?php echo Form::text('nomApplicateur', null, ['id' => 'nomApplicateur', 'class' => 'form-control nomApplicateur']); ?>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -193,7 +205,7 @@
                         <div class="form-group row" id="etatatomiseurs">
                             <?php echo Form::label(__('La machine est-elle en bon état?'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::select('etatatomiseur', [''=>Null,'oui' => __('oui'), 'non' => __('non')], null, ['id' => 'etatatomiseur', 'class' => 'form-control etatatomiseur']); ?>
+                                <?php echo Form::select('etatatomiseur', ['' => null, 'oui' => __('oui'), 'non' => __('non')], null, ['id' => 'etatatomiseur', 'class' => 'form-control etatatomiseur']); ?>
                             </div>
                         </div>
                         <div class="form-group row" id="autreMachines">
@@ -206,7 +218,7 @@
                             <div class="form-group row">
                                 <?php echo Form::label(__('La machine est-elle en bon état?'), null, ['class' => 'col-sm-4 control-label']); ?>
                                 <div class="col-xs-12 col-sm-8">
-                                    <?php echo Form::select('etatAutreMachine', [''=>Null,'oui' => __('oui'), 'non' => __('non')], null, ['id' => 'etatAutreMachine', 'class' => 'form-control etatAutreMachine']); ?>
+                                    <?php echo Form::select('etatAutreMachine', ['' => null, 'oui' => __('oui'), 'non' => __('non')], null, ['id' => 'etatAutreMachine', 'class' => 'form-control etatAutreMachine']); ?>
                                 </div>
                             </div>
                         </div>
@@ -351,11 +363,12 @@
                     $('#autreMachines').hide('slow');
                 }
             });
-
-
+           
             $('.sources_energies').change(function() {
-                var sources_energies = $('.sources_energies').val();
-                if (sources_energies == 'Bois de chauffe') {
+                var sources_energies = $('.sources_energies').find(":selected").map((key, item) => {
+                    return item.textContent.trim();
+                }).get();
+                if (sources_energies.includes("Bois de chauffe")) {
                     $('#boisChauffes').show('slow');
                     $('.boisChauffe').show('slow');
                     $('#boisChauffe').prop('required', true);
