@@ -13,14 +13,7 @@
                         <span class="menu-title">@lang("Tableau de bord")</span>
                     </a>
                 </li>
-               
                 
-                <li class="sidebar-menu-item {{ menuActive('manager.cooperative.index') }}">
-                    <a href="{{ route('manager.cooperative.index') }}" class="nav-link ">
-                        <i class="menu-icon las la-university"></i>
-                        <span class="menu-title">@lang('Liste coopérative')</span>
-                    </a>
-                </li>
                 <li class="sidebar-menu-item {{ menuActive('manager.cooperative.localite*') }}">
                     <a href="{{ route('manager.cooperative.localite.index') }}" class="nav-link">
                         <i class="menu-icon las la-code-branch"></i>
@@ -30,15 +23,10 @@
                 <li class="sidebar-menu-item {{ menuActive('manager.section.index') }}">
                     <a href="{{ route('manager.section.index') }}" class="nav-link">
                         <i class="menu-icon las la-code-branch"></i>
-                        <span class="menu-title">@lang('Gestion des sections')</span>
+                        <span class="menu-title">@lang('Gestion des Sections')</span>
                     </a>
                 </li>
-                <li class="sidebar-menu-item {{ menuActive('manager.durabilite.index') }}">
-                    <a href="{{ route('manager.durabilite.index') }}" class="nav-link">
-                        <i class="menu-icon las la-code-branch"></i>
-                        <span class="menu-title">@lang('Programmes de durabilités')</span>
-                    </a>
-                </li>
+                 
                 <li class="sidebar-menu-item {{ menuActive('manager.staff.index') }}">
                     <a href="{{ route('manager.staff.index') }}" class="nav-link ">
                         <i class="menu-icon las la-user-friends"></i>
@@ -92,15 +80,10 @@
                             <li class="sidebar-menu-item {{ menuActive('manager.hr.') }}">
                                 <a href="#" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('Timesheet')</span>
+                                    <span class="menu-title">@lang('Formations Staff')</span>
                                 </a>
                             </li> 
-                            <li class="sidebar-menu-item {{ menuActive('manager.settings.attendance-settings.index') }}">
-                                <a href="{{ route('manager.settings.attendance-settings.index') }}" class="nav-link">
-                                    <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('Settings')</span>
-                                </a>
-                            </li> 
+                            
 
                         </ul>
                     </div>
@@ -253,12 +236,7 @@
                         </ul>
                     </div>
                 </li>
-                <li class="sidebar-menu-item  {{ menuActive('manager.cooperative.income') }}">
-                    <a href="{{ route('manager.cooperative.income') }}" class="nav-link">
-                        <i class="menu-icon las la-wallet"></i>
-                        <span class="menu-title">@lang('Cooperative Revenus')</span>
-                    </a>
-                </li>
+                
                 <li class="sidebar-menu-item sidebar-dropdown">
                     <a href="javascript:void(0)" class="{{ menuActive('manager.agro*', 3) }}">
                         <i class="menu-icon las la-tree"></i>
@@ -304,20 +282,18 @@
                         <span class="menu-title">@lang('Support Ticket')</span>
                     </a>
                 </li>
+                <li class="sidebar-menu-item {{ menuActive('manager.settings.*') }}">
+                                <a href="{{ route('manager.settings.cooperative-settings.index') }}" class="nav-link">
+                                    <i class="menu-icon las la-cogs"></i>
+                                    <span class="menu-title">@lang('Settings')</span>
+                                </a>
+                            </li> 
             </ul>
-            <div class="text-center mb-3 text-uppercase">
-                <span class="text--primary">{{ __(systemDetails()['name']) }}</span>
-                <span class="text--success">@lang('V'){{ systemDetails()['version'] }} </span>
-            </div>
+             
         </div>
 
 
-        <div class="sidebar__menu-wrapper" id="sidebar__menuWrapper">
-            <div class="text-center mb-3 text-uppercase">
-                <span class="text--primary">{{ __(systemDetails()['name']) }}</span>
-                <span class="text--success">@lang('V'){{ systemDetails()['version'] }} </span>
-            </div>
-        </div>
+         
     </div>
 </div>
 <!-- sidebar end -->

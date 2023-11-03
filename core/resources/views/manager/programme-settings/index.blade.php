@@ -1,7 +1,14 @@
 @extends('manager.layouts.app')
 @section('panel')
-    <div class="row">
-        <div class="col-lg-12">
+<x-setting-sidebar :activeMenu="$activeSettingMenu" />
+    <x-setting-card> 
+    <x-slot name="header">
+                <div class="s-b-n-header" id="tabs">
+                    <h2 class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-bottom-grey">
+                        @lang($pageTitle)</h2>
+                </div>
+            </x-slot>
+            <div class="col-lg-12 col-md-12 ntfcn-tab-content-left w-100 p-4 ">
             <div class="card b-radius--10 ">
                 <div class="card-body  p-0">
                     <div class="table-responsive--sm table-responsive">
@@ -18,7 +25,7 @@
                                     <tr>
                                         <td> 
                                             <span class="small">
-                                                <a href="{{ route('manager.durabilite.edit', $programmeDurabilite->id) }}">
+                                                <a href="{{ route('manager.settings.durabilite-settings.edit', $programmeDurabilite->id) }}">
                                                     <span>@</span>{{$programmeDurabilite->libelle }}
                                                 </a>
                                             </span>
@@ -28,14 +35,19 @@
                                             <span>{{ diffForHumans($programmeDurabilite->created_at) }}</span>
                                         </td>
                                         <td>
-                                            <button type="button" class="btn btn-sm btn-outline--primary" data-bs-toggle="dropdown" aria-expanded="false"><i
-                                                    class="las la-ellipsis-v"></i>@lang('Action')
-                                             </button>
-                                            <div class="dropdown-menu p-0">
-                                                <a href="{{ route('manager.durabilite.edit', $programmeDurabilite->id) }}"
-                                                    class="dropdown-item"><i class="la la-pen"></i>@lang('Edit')
-                                                </a>
-                                            </div>
+                                        <div class="task_view">
+                            <a href="{{ route('manager.settings.durabilite-settings.edit', $programmeDurabilite->id) }}"
+                                class="task_view_more d-flex align-items-center justify-content-center">
+                                <i class="fa fa-edit icons mr-2"></i> @lang('app.edit')
+                            </a>
+                        </div>
+                        <div class="task_view mt-1 mt-lg-0 mt-md-0">
+                            <a href="javascript:;" data-durab-id="{{ $programmeDurabilite->id }}"
+                                class="delete-category task_view_more d-flex align-items-center justify-content-center">
+                                <i class="fa fa-trash icons mr-2"></i> @lang('app.delete')
+                            </a>
+                        </div>
+                                            
                                         </td>
                                     </tr>
                                 @empty
@@ -54,8 +66,11 @@
                     </div>
                 @endif
             </div>
-        </div>
-    </div>
+            </div>
+            </x-setting-card>
+
+
+
     {{-- modal qui permet d'importer des progragrammes de durabilités (besoins d'explication)--}}
     <div id="typeModel" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
@@ -101,7 +116,7 @@
 
 @push('breadcrumb-plugins')
     <x-search-form placeholder="Search here..." />
-    <a href="{{ route('manager.durabilite.create') }}" class="btn  btn-outline--primary h-45 addNewCooperative">
+    <a href="{{ route('manager.settings.durabilite-settings.create') }}" class="btn  btn-primary h-45 addNewCooperative">
         <i class="las la-plus"></i>@lang("Ajouter nouveau")
     </a>
     <a class="btn  btn-outline--info h-45 addType"><i class="las la-cloud-upload-alt"></i> Importer des programmes de durabilité</a>
@@ -124,6 +139,53 @@
               
 
         })(jQuery)
+        $('body').on('click', '.delete-category', function() {
+
+var id = $(this).data('durab-id');
+
+Swal.fire({
+    title: "@lang('messages.sweetAlertTitle')",
+    text: "@lang('messages.delete')",
+    icon: 'warning',
+    showCancelButton: true,
+    focusConfirm: false,
+    confirmButtonText: "@lang('messages.confirmDelete')",
+    cancelButtonText: "@lang('app.cancel')",
+    customClass: {
+        confirmButton: 'btn btn-primary mr-3',
+        cancelButton: 'btn btn-secondary'
+    },
+    showClass: {
+        popup: 'swal2-noanimation',
+        backdrop: 'swal2-noanimation'
+    },
+    buttonsStyling: false
+}).then((result) => {
+    if (result.isConfirmed) {
+
+        var url = "{{ route('manager.settings.durabilite-settings.destroy', ':id') }}";
+        url = url.replace(':id', id);
+
+        var token = "{{ csrf_token() }}";
+
+        $.easyAjax({
+            type: 'POST',
+            url: url,
+            blockUI: true,
+            data: {
+                '_token': token,
+                '_method': 'DELETE'
+            },
+            success: function(response) {
+                if (response.status == "success") {
+                    $('#type-' + id).fadeOut();
+                    window.location.reload();
+                }
+            }
+        });
+    }
+});
+});
     </script>
 @endpush
 

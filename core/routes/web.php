@@ -19,6 +19,8 @@ use App\Http\Controllers\Manager\LeaveTypeController;
 use App\Http\Controllers\Manager\LeaveFileController;
 use App\Http\Controllers\Manager\LeavesQuotaController;
 use App\Http\Controllers\Manager\EmployeeDocController;
+use App\Http\Controllers\Manager\CooperativeSettingController;
+use App\Http\Controllers\Manager\ProgrammeSettingController;
 
 
 Route::namespace('Manager\Auth')->group(function () {
@@ -154,6 +156,8 @@ Route::controller('Manager\ImportController')->name('hr.')->prefix('hr')->group(
 Route::name('settings.')->prefix('settings')->group(function () {
     Route::resource('attendance-settings', AttendanceSettingController::class);
     Route::resource('leaves-settings', LeaveSettingController::class);
+    Route::resource('cooperative-settings', CooperativeSettingController::class);
+    Route::resource('durabilite-settings', ProgrammeSettingController::class);
     Route::post('leaves-settings/change-permission', [LeaveSettingController::class, 'changePermission'])->name('leaves-settings.changePermission');
   });
 
@@ -224,17 +228,7 @@ Route::get('attendance/{id}/{day}/{month}/{year}', [AttendanceController::class,
         Route::post('approve_timelog', [TimelogController::class, 'approveTimelog'])->name('timelogs.approve_timelog');
     });
     Route::resource('timelog-calendar', TimelogCalendarController::class); 
-    Route::resource('timelogs', TimelogController::class);
- 
-            Route::controller('Manager\ProgrammeController')->name('durabilite.')->prefix('durabilite')->group(function () {
-                Route::get('create', 'create')->name('create');
-                Route::get('list', 'index')->name('index');
-                Route::post('store', 'store')->name('store');
-                Route::get('edit/{id}', 'edit')->name('edit');
-                Route::post('update/{id}', 'update')->name('update');
-            });
-
-
+    Route::resource('timelogs', TimelogController::class); 
             //Manage Producteur
             Route::controller('Manager\ProducteurController')->name('traca.producteur.')->prefix('producteur')->group(function () {
                 Route::get('list', 'index')->name('index');

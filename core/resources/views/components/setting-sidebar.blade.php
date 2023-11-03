@@ -19,8 +19,10 @@
 
     <!-- SETTINGS MENU START -->
     <ul class="settings-menu" id="settingsMenu">
-
-         
+    <x-setting-menu-item :active="$activeMenu" menu="cooperative_settings"
+                                 :href="route('manager.settings.cooperative-settings.index')" :text="__('Paramètres de Coopérative')"/>
+    <x-setting-menu-item :active="$activeMenu" menu="durabilite_settings"
+                                 :href="route('manager.settings.durabilite-settings.index')" :text="__('Programme de Durabilité')"/>
             <x-setting-menu-item :active="$activeMenu" menu="attendance_settings"
                                  :href="route('manager.settings.attendance-settings.index')" :text="__('app.menu.attendanceSettings')"/>
       
@@ -43,7 +45,7 @@
         $(this).addClass('active');
 
         const requestUrl = this.href;
-
+       
         $.easyAjax({
             url: requestUrl,
             blockUI: true,
