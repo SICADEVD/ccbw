@@ -27,4 +27,12 @@ class Localite extends Model
     {
         return $this->hasMany(Localite_centre_sante::class, 'localite_id', 'id');
     }
+    public function marches()
+    {
+        return $this->hasMany(Localite_jour_marche::class, 'localite_id', 'id');
+    }
+    public function eaux()
+    {
+        return $this->hasMany(Localite_source_eau::class, 'localite_id', 'id');
+    }
 }

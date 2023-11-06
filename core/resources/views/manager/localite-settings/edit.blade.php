@@ -1,14 +1,14 @@
 @extends('manager.layouts.app')
 @section('panel')
-<x-setting-sidebar :activeMenu="$activeSettingMenu" />
-    <x-setting-card> 
-    <x-slot name="header">
-                <div class="s-b-n-header" id="tabs">
-                    <h2 class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-bottom-grey">
-                        @lang($pageTitle)</h2>
-                </div>
-            </x-slot>
-            <div class="col-lg-12 col-md-12 ntfcn-tab-content-left w-100 p-4 ">
+    <x-setting-sidebar :activeMenu="$activeSettingMenu" />
+    <x-setting-card>
+        <x-slot name="header">
+            <div class="s-b-n-header" id="tabs">
+                <h2 class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-bottom-grey">
+                    @lang($pageTitle)</h2>
+            </div>
+        </x-slot>
+        <div class="col-lg-12 col-md-12 ntfcn-tab-content-left w-100 p-4 ">
             <div class="card">
                 <div class="card-body">
                     {!! Form::model($localite, [
@@ -78,21 +78,122 @@
                             <?php echo Form::select('centresante', ['oui' => 'oui', 'non' => 'non'], null, ['class' => 'form-control centresante', 'required']); ?>
                         </div>
                     </div>
+
+                    <div class="form-group row col-lg-12" id="centreSante">
+                        <table class="table table-striped table-bordered">
+                            <tbody id="centreSantes">
+
+                                <?php
+                                 if($localite->centresantes)
+        {  
+        $i=0;
+        $a=1;
+        foreach($localite->centresantes as $data) {
+           ?>
+                                <tr>
+                                    <td class="row">
+                                        <div class="col-xs-12 col-sm-12 bg-success">
+                                            <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Informations sur le centre de centé')
+                                                <?php echo $a; ?></badge>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-12">
+                                            <div class="form-group">
+                                                <input type="text" name="nomcentresantes[]"
+                                                    placeholder="Nom de l'école primaire"
+                                                    id="nomcentresantes-<?php echo $a; ?>" class="form-control"
+                                                    value="<?php echo $data->centre_sante; ?>">
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-12">
+                                            <div class="form-group row">
+                                                <input type="text" name="latitude[]" placeholder="Latitude Ex : 14"
+                                                    id="latitude<?php echo $a; ?>" class="form-control"
+                                                    value="<?php echo $data->latitude; ?>">
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-12">
+                                            <div class="form-group row">
+                                                <input type="text" name="longitude[]" placeholder="longitude Ex : -14"
+                                                    id="longitude<?php echo $a; ?>" class="form-control"
+                                                    value="<?php echo $data->longitude; ?>">
+                                            </div>
+                                        </div>
+
+                                        <?php if($a>=1):?>
+                                        <div class="col-xs-12 col-sm-12"><button type="button" id="<?php echo $a; ?>"
+                                                class="removeRowSante btn btn-danger btn-sm"><i
+                                                    class="fa fa-minus"></i></button></div>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+                                <?php
+           $a++;
+            $i++;
+        }
+    }else{
+        ?>
+                                <tr>
+                                    <td class="row">
+                                        <div class="col-xs-12 col-sm-12 bg-success">
+                                            <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Informations sur le centre de centé 1')
+                                            </badge>
+                                            </badge>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-12">
+                                            <div class="form-group row">
+                                                <input type="text" name="nomcentresantes[]"
+                                                    placeholder="Nom du centre de Santé" id="nomcentresantes-1"
+                                                    class="form-control" value="{{ old('nomcentresantes') }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-12">
+                                            <div class="form-group row">
+                                                <input type="text" name="latitude[]" placeholder="Latitude"
+                                                    id="latitude" class="form-control" value="{{ old('latitude') }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-12">
+                                            <div class="form-group row">
+                                                <input type="text" name="longitude[]" placeholder="longitude"
+                                                    id="longitude" class="form-control" value="{{ old('longitude') }}">
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <?php
+        }
+        ?>
+
+
+                            </tbody>
+                            <tfoot style="background: #e3e3e3;">
+                                <tr>
+                                    <td colspan="3">
+                                        <button id="addRowMalSante" type="button" class="btn btn-success btn-sm"><i
+                                                class="fa fa-plus"></i></button>
+                                    </td>
+                                <tr>
+                            </tfoot>
+                        </table>
+                    </div>
                     {{-- Si non on affiche le champs si dessous --}}
 
-                    <div class="form-group row" id="kmCentresante">
-                        <?php echo Form::label(__('A combien de km du village se situe le centre de santé le plus proche ?'), null, ['class' => 'control-label col-xs-12 col-sm-4']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::number('kmCentresante', null, ['placeholder' => __('nombre'), 'class' => 'form-control kmCentresante', 'min' => '0']); ?>
+                    <div id="nonCentreSante">
+                        <div class="form-group row">
+                            <?php echo Form::label(__('A combien de km du village se situe le centre de santé le plus proche ?'), null, ['class' => 'control-label col-xs-12 col-sm-4']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::number('kmCentresante', null, ['placeholder' => __('nombre'), 'class' => 'form-control kmCentresante', 'min' => '0']); ?>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Nom de ce centre de santé'), null, ['class' => 'control-label col-xs-12 col-sm-4']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::text('nomCentresante', null, ['placeholder' => __('Nom du centre de Santé'), 'class' => 'form-control nomCentresante']); ?>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="form-group row">
-                        <?php echo Form::label(__('Nom de ce centre de santé'), null, ['class' => 'control-label col-xs-12 col-sm-4']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::text('nomCentresante', null, ['placeholder' => __('Nom du centre de Santé'), 'class' => 'form-control']); ?>
-                        </div>
-                    </div>
                     <hr class="panel-wide">
 
                     <div class="form-group row">
@@ -102,19 +203,19 @@
                         </div>
                     </div>
 
-                    {{-- Si non afficher le champs si dessous --}}
-                    <div class="form-group row" id="kmEcoleproche">
-                        <?php echo Form::label(__("A combien de km se trouve l'école la plus proche ?"), null, ['class' => 'control-label col-xs-12 col-sm-4']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::number('kmEcoleproche', null, ['placeholder' => __('nombre'), 'class' => 'form-control kmEcoleproche', 'min' => '0']); ?>
+                    <div id="nonEcolePrimaire">
+                        <div class="form-group row">
+                            <?php echo Form::label(__("A combien de km se trouve l'école la plus proche ?"), null, ['class' => 'control-label col-xs-12 col-sm-4']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::number('kmEcoleproche', null, ['placeholder' => __('nombre'), 'class' => 'form-control kmEcoleproche', 'min' => '0']); ?>
+                            </div>
                         </div>
-                    </div>
-                    {{-- fin de champs si dessous --}}
 
-                    <div class="form-group row" id="nomEcoleproche">
-                        <?php echo Form::label(__('Nom Ecole primaire'), null, ['class' => 'control-label col-xs-12 col-sm-4']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::text('nomEcoleproche', null, ['placeholder' => '...', 'class' => 'form-control nomEcoleproche', 'required']); ?>
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Nom Ecole primaire'), null, ['class' => 'control-label col-xs-12 col-sm-4']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::text('nomEcoleproche', null, ['placeholder' => 'Nom de l\'école primaire', 'class' => 'form-control nomEcoleproche', 'id' => 'nomEcoleproche']); ?>
+                            </div>
                         </div>
                     </div>
 
@@ -136,7 +237,7 @@
                                     <tr>
                                         <td class="row">
                                             <div class="col-xs-12 col-sm-12 bg-success">
-                                                <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Informations sur l\'école primaire 1')
+                                                <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Informations sur l\'école primaire')
                                                     <?php echo $a; ?></badge>
                                             </div>
                                             <div class="col-xs-12 col-sm-12">
@@ -147,10 +248,26 @@
                                                         value="<?php echo $data->nomecole; ?>">
                                                 </div>
                                             </div>
+                                            <div class="col-xs-12 col-sm-12">
+                                                <div class="form-group row">
+                                                    <input type="text" name="latitude[]"
+                                                        placeholder="Latitude Ex : 14" id="latitude<?php echo $a; ?>"
+                                                        class="form-control" value="<?php echo $data->latitude; ?>">
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-12">
+                                                <div class="form-group row">
+                                                    <input type="text" name="longitude[]"
+                                                        placeholder="longitude Ex : -14"
+                                                        id="longitude<?php echo $a; ?>" class="form-control"
+                                                        value="<?php echo $data->longitude; ?>">
+                                                </div>
+                                            </div>
 
                                             <?php if($a>=1):?>
                                             <div class="col-xs-12 col-sm-12"><button type="button"
-                                                    id="<?php echo $a; ?>" class="removeRowMal btn btn-danger btn-sm"><i
+                                                    id="<?php echo $a; ?>"
+                                                    class="removeRowMal btn btn-danger btn-sm"><i
                                                         class="fa fa-minus"></i></button></div>
                                             <?php endif; ?>
                                         </td>
@@ -173,6 +290,20 @@
                                                     <input type="text" name="nomecolesprimaires[]"
                                                         placeholder="Nom de l'école primaire" id="nomecolesprimaires-1"
                                                         class="form-control" value="{{ old('nomecolesprimaires') }}">
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-12">
+                                                <div class="form-group row">
+                                                    <input type="text" name="latitude[]" placeholder="Latitude"
+                                                        id="latitude-1" class="form-control"
+                                                        value="{{ old('latitude') }}">
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-12">
+                                                <div class="form-group row">
+                                                    <input type="text" name="longitude[]" placeholder="longitude"
+                                                        id="longitude-1" class="form-control"
+                                                        value="{{ old('longitude') }}">
                                                 </div>
                                             </div>
                                         </td>
@@ -199,14 +330,31 @@
                     <div class="form-group row">
                         <?php echo Form::label(__("Quelle est la source d'eau potable dans la localité ?"), null, ['class' => 'control-label col-xs-12 col-sm-4']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('sources_eaux', ['Pompe Hydraulique Villageoise' => 'Pompe Hydraulique Villageoise', 'SODECI' => 'SODECI', 'Marigot' => 'Marigot', 'Puits Individuel' => 'Puits Individuel'], null, ['placeholder' => __('selectionner une option'), 'class' => 'form-control sourceeau', 'required']); ?>
+                            <select class="form-control select2-multi-select eauxPotables" name="eauPotables[]" multiple
+                                id="eauxPotables" required>
+                                <option value="">@lang('Selectionner les options')</option>
+                                <option value="Pompe Hydraulique Villageoise"
+                                    {{ in_array('Pompe Hydraulique Villageoise', $eaux) ? 'selected' : '' }}>
+                                    Pompe Hydraulique Villageoise
+                                </option>
+                                <option value="SODECI" {{ in_array('SODECI', $eaux) ? 'selected' : '' }}>
+                                    SODECI
+                                </option>
+                                <option value="Marigot" {{ in_array('Marigot', $eaux) ? 'selected' : '' }}>
+                                    Marigot
+                                </option>
+                                <option value="Puits Individuel"
+                                    {{ in_array('Puits Individuel', $eaux) ? 'selected' : '' }}>
+                                    Puits Individuel
+                                </option>
+                            </select>
                         </div>
                     </div>
 
                     <div class="form-group row" id="etatpompehydrau">
                         <?php echo Form::label(__('Est-il en bon état ?'), null, ['class' => 'control-label col-xs-12 col-sm-4']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('etatpompehydrau', ['oui' => 'oui', 'non' => 'non'], null, ['class' => 'form-control etatpompehydrau']); ?>
+                            <?php echo Form::select('etatpompehydrau', [null => '', 'oui' => 'oui', 'non' => 'non'], null, ['class' => 'form-control etatpompehydrau']); ?>
                         </div>
                     </div>
 
@@ -224,18 +372,34 @@
                         </div>
                     </div>
 
-                    <div class="form-group row" id="jourmarche">
+                    <div class="form-group row" id="jourmarches">
                         <?php echo Form::label(__('Quel est le jour du marché ?'), null, ['class' => 'control-label col-xs-12 col-sm-4']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('jourmarche', ['Lundi' => __('lundi'), 'Mardi' => __('mardi'), 'Mercredi' => __('mercredi'), 'Jeudi' => __('jeudi'), 'Vendredi' => __('vendredi'), 'Samedi' => __('samedi'), 'Dimanche' => __('dimanche')], null, ['class' => 'form-control jourmarche']); ?>
+
+                            <select class="form-control select2-multi-select sources_energies" name="jourmarche[]"
+                                multiple id="jourmarche" required>
+                                <option value="">@lang('Selectionner les options')</option>
+                                <option value="Lundi" {{ in_array('Lundi', $jours) ? 'selected' : '' }}>Lundi</option>
+                                <option value="Mardi" {{ in_array('Mardi', $jours) ? 'selected' : '' }}>Mardi</option>
+                                <option value="Mercredi" {{ in_array('Mercredi', $jours) ? 'selected' : '' }}>Mercredi
+                                </option>
+                                <option value="Jeudi" {{ in_array('Jeudi', $jours) ? 'selected' : '' }}>Jeudi</option>
+                                <option value="Vendredi" {{ in_array('Vendredi', $jours) ? 'selected' : '' }}>Vendredi
+                                </option>
+                                <option value="Samedi" {{ in_array('Samedi', $jours) ? 'selected' : '' }}>Samedi</option>
+                                <option value="Dimanche" {{ in_array('Dimanche', $jours) ? 'selected' : '' }}>Dimanche
+                                </option>
+                            </select>
                         </div>
                     </div>
-                    <div class="form-group row" id="kmmarcheproche">
+
+                    <div class="form-group row" id="kmmarcheproches">
                         <?php echo Form::label(__('A combien de km se trouve le marché le plus proche ?'), null, ['class' => 'control-label col-xs-12 col-sm-4']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::number('kmmarcheproche', null, ['placeholder' => __('Kilomètre du marché le plus proche'), 'class' => 'form-control kmmarcheproche', 'min' => '1']); ?>
+                            <?php echo Form::number('kmmarcheproche', null, ['placeholder' => __('Kilomètre du marché le plus proche'), 'class' => 'form-control kmmarcheproche', 'min' => '0']); ?>
                         </div>
                     </div>
+
                     <div class="form-group row">
                         <?php echo Form::label(__('Existe-t-il un endroit public pour le déversement des déchets dans la localité ?'), null, ['class' => 'control-label col-xs-12 col-sm-4']); ?>
                         <div class="col-xs-12 col-sm-8">
@@ -289,21 +453,130 @@
 
 
                     <div class="form-group">
-                        <button type="submit" id="save-form" class="btn btn--primary w-100 h-45"> @lang('app.save')</button>
+                        <button type="submit" id="save-form" class="btn btn--primary w-100 h-45">
+                            @lang('app.save')</button>
                     </div>
                     {!! Form::close() !!}
                 </div>
             </div>
         </div>
-        </x-setting-card>
+    </x-setting-card>
 @endsection
 @push('breadcrumb-plugins')
     <x-back route="{{ route('manager.settings.localite-settings.index') }}" />
 @endpush
 @push('script')
     <script type="text/javascript">
-        $(document).ready(function() {
+        $('#nombrecole, #etatpompehydrau,#centreSante,#jourmarches').hide();
+        $('.marche').change(function() {
+            var marche = $('.marche').val();
+            if (marche == 'non') {
+                $('#kmmarcheproches').show('slow');
+                $('#jourmarches').hide('slow');
 
+            } else {
+                $('#kmmarcheproches').hide('slow');
+                $('.kmmarcheproche').val('');
+                $('#jourmarches').show('slow');
+
+            }
+        });
+        if ($('.marche').val() == 'non') {
+            $('#kmmarcheproches').show('slow');
+            $('#jourmarches').hide('slow');
+
+        } else {
+            $('#kmmarcheproches').hide('slow');
+            $('.kmmarcheproche').val('');
+            $('#jourmarches').show('slow');
+
+        }
+        $('.centresante').change(function() {
+            var centresante = $('.centresante').val();
+            if (centresante == 'non') {
+                $('#nonCentreSante').show('slow');
+                $('#centreSante').hide('slow');
+            } else {
+                $('#nonCentreSante').hide('slow');
+                $('.kmCentresante').val('');
+                $('.nomCentresante').val('');
+                $('#centreSante').show('slow');
+            }
+
+        });
+        if ($('.centresante').val() == 'non') {
+            $('#nonCentreSante').show('slow');
+            $('#centreSante').hide('slow');
+        } else {
+            $('#nonCentreSante').hide('slow');
+            $('.kmCentresante').val('');
+            $('.nomCentresante').val('');
+            $('#centreSante').show('slow');
+        }
+
+        $('.ecole').change(function() {
+            var ecole = $('.ecole').val();
+            if (ecole == 'oui') {
+                $('#nombrecole').show('slow');
+                $('#nonEcolePrimaire').hide('slow');
+                $('.kmEcoleproche').val('');
+                $('.nomEcoleproche').val('');
+                $('#kmEcoleproche').prop('required', false);
+                $('#nomEcoleproche').prop('required', false);
+
+            } else {
+                $('#nombrecole').hide('slow');
+                $('#nonEcolePrimaire').show('slow');
+                $('.kmEcoleproche').val('');
+                $('.nomEcoleproche').val('');
+                $('#kmEcoleproche').prop('required', true);
+                $('#nomEcoleproche').prop('required', true);
+            }
+        });
+        if ($('.ecole').val() == 'oui') {
+            $('#nombrecole').show('slow');
+            $('#nonEcolePrimaire').hide('slow');
+            $('.kmEcoleproche').val('');
+            $('.nomEcoleproche').val('');
+            $('#kmEcoleproche').prop('required', false);
+            $('#nomEcoleproche').prop('required', false);
+
+        } else {
+            $('#nombrecole').hide('slow');
+            $('#nonEcolePrimaire').show('slow');
+            $('.kmEcoleproche').val('');
+            $('.nomEcoleproche').val('');
+            $('#kmEcoleproche').prop('required', true);
+            $('#nomEcoleproche').prop('required', true);
+        }
+
+        $('.eauxPotables').change(function() {
+            var eauxPotables = $('.eauxPotables').find(":selected").map((key, item) => {
+                return item.textContent.trim();
+            }).get();
+            if (eauxPotables.includes("Pompe Hydraulique Villageoise")) {
+
+                $('#etatpompehydrau').show('slow');
+                $('.etatpompehydrau').show('slow');
+
+            } else {
+
+                $('#etatpompehydrau').hide('slow');
+                $('.etatpompehydrau').show('slow');
+
+            }
+        });
+        if($('.eauxPotables').find(":selected").map((key, item) => {
+                return item.textContent.trim();
+            }).get().includes("Pompe Hydraulique Villageoise")){
+                $('#etatpompehydrau').show('slow');
+                $('.etatpompehydrau').show('slow');
+        }else{
+            $('#etatpompehydrau').hide('slow');
+            $('.etatpompehydrau').show('slow');
+        }
+
+        $(document).ready(function() {
             var maladiesCount = $("#maladies tr").length + 1;
             $(document).on('click', '#addRowMal', function() {
 
@@ -312,14 +585,21 @@
                 html_table +=
                     '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn btn-warning btn-sm">Nom Ecole Primaire ' +
                     maladiesCount +
-                    '</badge></div><div class="col-xs-12 col-sm-12"><div class="form-group"><input placeholder="..." class="form-control" id="nomecolesprimaires-' +
+                    '</badge></div><div class="col-xs-12 col-sm-12"><div class="form-group"><input placeholder="Nom école primaire" class="form-control" id="nomecolesprimaires-' +
                     maladiesCount +
-                    '" name="nomecolesprimaires[]" type="text"></div></div><div class="col-xs-12 col-sm-8"><button type="button" id="' +
+                    '" name="nomecolesprimaires[]" type="text"></div></div>' +
+                    '<div class="col-xs-12 col-sm-12"><div class="form-group row"><input type="text" name="latitude[]" placeholder="Latitude Ex : 14 " id="latitude-' +
+                    maladiesCount +
+                    '" class="form-control" value="{{ old('latitude') }}"></div></div>' +
+                    '<div class="col-xs-12 col-sm-12"><div class="form-group row"><input type="text" name="longitude[]" placeholder="Longitude Ex : -14" id="longitude-' +
+                    maladiesCount +
+                    '" class="form-control" value="{{ old('longitude') }}"></div></div>' +
+                    '<div class="col-xs-12 col-sm-8"><button type="button" id="' +
                     maladiesCount +
                     '" class="removeRowMal btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></div></td>';
 
                 html_table += '</tr>';
-                //---> End create table tr
+
 
                 maladiesCount = parseInt(maladiesCount) + 1;
                 $('#maladies').append(html_table);
@@ -339,106 +619,60 @@
 
                 }
             });
-            if ($('.marche').val() == 'oui') {
-                $('#kmmarcheproche').hide('slow');
-                $('.kmmarcheproche').css('display', 'block');
-            } else {
-                $('#kmmarcheproche').show('slow');
-            }
-            $('.marche').change(function() {
-                var marche = $('.marche').val();
-                if (marche == 'non') {
-                    $('#kmmarcheproche').show('slow');
-                    $('.kmmarcheproche').css('display', 'block');
-                } else {
-                    $('#kmmarcheproche').hide('slow');
-                }
+
+        });
+
+
+        $(document).ready(function() {
+
+            var maladiesCount = $("#centreSantes tr").length + 1;
+            $(document).on('click', '#addRowMalSante', function() {
+
+                //---> Start create table tr
+                var html_table = '<tr>';
+                html_table +=
+                    '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn btn-warning btn-sm">Nom Centre de Santé ' +
+                    maladiesCount +
+                    '</badge></div><div class="col-xs-12 col-sm-12"><div class="form-group"><input placeholder="Nom du centre de santé" class="form-control" id="nomcentresantes-' +
+                    maladiesCount +
+                    '" name="nomcentresantes[]" type="text"></div></div>' +
+                    '<div class="col-xs-12 col-sm-12"><div class="form-group row"><input type="text" name="latitude[]" placeholder="Latitude Ex : 14 " id="latitude-' +
+                    maladiesCount +
+                    '" class="form-control" value="{{ old('latitude') }}"></div></div>' +
+                    '<div class="col-xs-12 col-sm-12"><div class="form-group row"><input type="text" name="longitude[]" placeholder="Longitude Ex : -14" id="longitude-' +
+                    maladiesCount +
+                    '" class="form-control" value="{{ old('longitude') }}"></div></div>' +
+                    '<div class="col-xs-12 col-sm-8"><button type="button" id="' +
+                    maladiesCount +
+                    '" class="removeRowSante btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></div></td>';
+
+                html_table += '</tr>';
+
+
+                maladiesCount = parseInt(maladiesCount) + 1;
+                $('#centreSantes').append(html_table);
+
             });
-            // CENTRE DE SANTE
 
-            if ($('.centresante').val() == 'oui') {
-                $('#kmCentresante').hide('slow');
-                $('.kmCentresante').css('display', 'block');
-            } else {
-                $('#kmCentresante').show('slow');
+            $(document).on('click', '.removeRowSante', function() {
 
-            }
-            $('.centresante').change(function() {
-                var centresante = $('.centresante').val();
-                if (centresante == 'non') {
-                    $('#kmCentresante').show('slow');
-                    $('.kmCentresante').css('display', 'block');
-                } else {
-                    $('#kmCentresante').hide('slow');
-                    $('.kmCentresante').val('');
-                }
-            });
+                var row_id = $(this).attr('id');
 
-            // ECOLE
-            if ($('.ecole').val() == 'oui') {
-                $('#kmEcoleproche').hide('slow');
-                $('.kmEcoleproche').val('');
+                // delete only last row id
+                if (row_id == $("#centreSantes tr").length) {
 
-                $('#nombrecole').show('slow');
-                $('.nombrecole').show('slow');
+                    $(this).parents('tr').remove();
 
-                $('#nomEcoleproche').hide('slow');
-                $('.nomEcoleproche').val('');
-                $('.nombrecole').css('display', 'block');
-            } else {
-                $('#kmEcoleproche').show('slow');
-                $('.kmEcoleproche').show('slow');
-                $('#nombrecole').hide('slow');
-                $('nomEcoleproche').show('slow');
-                $('.kmEcoleproche').css('display', 'block');
-            }
+                    maladiesCount = parseInt(maladiesCount) - 1;
 
-            $('.ecole').change(function() {
-                var ecole = $('.ecole').val();
-                if (ecole == 'oui') {
-                    $('#kmEcoleproche').hide('slow');
-                    $('.kmEcoleproche').val('');
-
-                    $('#nomEcoleproche').hide('slow');
-                    $('.nomEcoleproche').val('');
-
-                    $('#nombrecole').show('slow');
-                    $('.nombrecole').show('slow');
-                    $('.nombrecole').css('display', 'block');
-                } else {
-                    $('#kmEcoleproche').show('slow');
-                    $('.kmEcoleproche').show('slow');
-
-                    $('#nomEcoleproche').show('slow');
-                    $('.nomEcoleproche').show('slow');
-
-                    $('#nombrecole').hide('slow');
-                    $('.nombrecole').val('');
-                }
-            });
-            // EAU HYDRAULIQUE
-            if ($('.sourceeau').val() == 'Pompe Hydraulique Villageoise') {
-                $('#etatpompehydrau').show('slow');
-                $('.etatpompehydrau').css('display', 'block');
-            } else {
-                $('#etatpompehydrau').hide('slow');
-            }
-
-            $('.sourceeau').change(function() {
-                var sourceeau = $('.sourceeau').val();
-                if (sourceeau == 'Pompe Hydraulique Villageoise') {
-                    $('#etatpompehydrau').show('slow');
-                    $('.etatpompehydrau').css('display', 'block');
-                } else {
-                    $('#etatpompehydrau').hide('slow');
                 }
             });
 
         });
 
-        $('#save-form').click(function () {
+        $('#save-form').click(function() {
             var url = "{{ route('manager.settings.localite-settings.store') }}";
-            
+
             $.easyAjax({
                 url: url,
                 container: '#editSettings',
@@ -448,7 +682,7 @@
                 redirect: true,
                 buttonSelector: "#save-form",
                 data: $('#editSettings').serialize(),
-                success: function (response) {
+                success: function(response) {
                     if (response.status == 'success') {
                         window.location.href = response.redirectUrl;
                     }

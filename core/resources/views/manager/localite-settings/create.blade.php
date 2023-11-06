@@ -181,14 +181,14 @@
                                     </div>
                                     <div class="col-xs-12 col-sm-12">
                                         <div class="form-group row">
-                                            <input type="text" name="latitude[]" placeholder="Latitude" id="latitude"
+                                            <input type="text" name="latitude[]" placeholder="Latitude" id="latitude-1"
                                                 class="form-control" value="{{ old('latitude') }}">
                                         </div>
                                     </div>
                                     <div class="col-xs-12 col-sm-12">
                                         <div class="form-group row">
                                             <input type="text" name="longitude[]" placeholder="longitude"
-                                                id="longitude" class="form-control" value="{{ old('longitude') }}">
+                                                id="longitude-1" class="form-control" value="{{ old('longitude') }}">
                                         </div>
                                     </div>
                                 </td>
@@ -212,14 +212,32 @@
             <div class="form-group row">
                 <?php echo Form::label(__("Quelle est la source d'eau potable dans la localité ?"), null, ['class' => 'control-label col-xs-12 col-sm-4']); ?>
                 <div class="col-xs-12 col-sm-8">
-                    <?php echo Form::select('sources_eaux', ['Pompe Hydraulique Villageoise' => 'Pompe Hydraulique Villageoise', 'SODECI' => 'SODECI', 'Marigot' => 'Marigot', 'Puits Individuel' => 'Puits Individuel'], null, ['placeholder' => __('selectionner une option'), 'class' => 'form-control sourceeau', 'required']); ?>
+
+                    <select class="form-control select2-multi-select eauxPotables" name="eauPotables[]" multiple
+                        id="eauxPotables" required>
+                        <option value="">@lang('Selectionner les options')</option>
+                        <option value="Pompe Hydraulique Villageoise"
+                            {{ in_array('Pompe Hydraulique Villageoise', old('eauPotables', [])) ? 'selected' : '' }}>
+                            Pompe Hydraulique Villageoise
+                        </option>
+                        <option value="SODECI" {{ in_array('SODECI', old('eauPotables', [])) ? 'selected' : '' }}>
+                            SODECI
+                        </option>
+                        <option value="Marigot" {{ in_array('Marigot', old('eauPotables', [])) ? 'selected' : '' }}>
+                            Marigot
+                        </option>
+                        <option value="Puits Individuel"
+                            {{ in_array('Puits Individuel', old('eauPotables', [])) ? 'selected' : '' }}>
+                            Puits Individuel
+                        </option>
+                    </select>
                 </div>
             </div>
 
             <div class="form-group row" id="etatpompehydrau">
                 <?php echo Form::label(__('Est-il en bon état ?'), null, ['class' => 'control-label col-xs-12 col-sm-4']); ?>
                 <div class="col-xs-12 col-sm-8">
-                    <?php echo Form::select('etatpompehydrau', ['oui' => 'oui', 'non' => 'non'], null, ['class' => 'form-control etatpompehydrau']); ?>
+                    <?php echo Form::select('etatpompehydrau', [null => '', 'oui' => 'oui', 'non' => 'non'], null, ['class' => 'form-control etatpompehydrau']); ?>
                 </div>
             </div>
 
@@ -233,20 +251,44 @@
             <div class="form-group row">
                 <?php echo Form::label(__('Existe-t-il un marché dans la localité ?'), null, ['class' => 'control-label col-xs-12 col-sm-4']); ?>
                 <div class="col-xs-12 col-sm-8">
-                    <?php echo Form::select('marche', ['oui' => 'oui', 'non' => 'non'], null, ['class' => 'form-control marche', 'required']); ?>
+                    <?php echo Form::select('marche', ['non' => 'non', 'oui' => 'oui'], null, ['class' => 'form-control marche', 'required']); ?>
                 </div>
             </div>
 
-            <div class="form-group row" id="jourmarche">
+            <div class="form-group row" id="jourmarches">
                 <?php echo Form::label(__('Quel est le jour du marché ?'), null, ['class' => 'control-label col-xs-12 col-sm-4']); ?>
                 <div class="col-xs-12 col-sm-8">
-                    <?php echo Form::select('jourmarche', ['Lundi' => __('lundi'), 'Mardi' => __('mardi'), 'Mercredi' => __('mercredi'), 'Jeudi' => __('jeudi'), 'Vendredi' => __('vendredi'), 'Samedi' => __('samedi'), 'Dimanche' => __('dimanche')], null, ['class' => 'form-control jourmarche']); ?>
+
+                    <select class="form-control select2-multi-select sources_energies" name="jourmarche[]" multiple
+                        id="jourmarche" required>
+                        <option value="">@lang('Selectionner les options')</option>
+                        <option value="Lundi" {{ in_array('Lundi', old('jourmarche', [])) ? 'selected' : '' }}>
+                            Lundi
+                        </option>
+                        <option value="Mardi" {{ in_array('Mardi', old('jourmarche', [])) ? 'selected' : '' }}>
+                            Mardi
+                        </option>
+                        <option value="Mercredi" {{ in_array('Mercredi', old('jourmarche', [])) ? 'selected' : '' }}>
+                            Mercredi
+                        </option>
+                        <option value="Jeudi" {{ in_array('Jeudi', old('jourmarche', [])) ? 'selected' : '' }}>
+                            Jeudi
+                        </option>
+                        <option value="vendredi" {{ in_array('vendredi', old('jourmarche', [])) ? 'selected' : '' }}>
+                            vendredi
+                        </option>
+                        <option value="Samedi" {{ in_array('Samedi', old('jourmarche', [])) ? 'selected' : '' }}>
+                            Samedi
+                        </option>
+                        <option value="Dimanche" {{ in_array('Dimanche', old('jourmarche', [])) ? 'selected' : '' }}>
+                            Dimanche
+                    </select>
                 </div>
             </div>
-            <div class="form-group row" id="kmmarcheproche">
+            <div class="form-group row" id="kmmarcheproches">
                 <?php echo Form::label(__('A combien de km se trouve le marché le plus proche ?'), null, ['class' => 'control-label col-xs-12 col-sm-4']); ?>
                 <div class="col-xs-12 col-sm-8">
-                    <?php echo Form::number('kmmarcheproche', null, ['placeholder' => __('Kilomètre du marché le plus proche'), 'class' => 'form-control kmmarcheproche', 'min' => '1']); ?>
+                    <?php echo Form::number('kmmarcheproche', null, ['placeholder' => __('Kilomètre du marché le plus proche'), 'class' => 'form-control kmmarcheproche', 'min' => '0']); ?>
                 </div>
             </div>
             <div class="form-group row">
@@ -369,7 +411,7 @@
 
 
 
-         $(document).ready(function() {
+        $(document).ready(function() {
 
             var maladiesCount = $("#centreSantes tr").length + 1;
             $(document).on('click', '#addRowMalSante', function() {
@@ -417,22 +459,19 @@
         });
 
 
-        $('#nombrecole, #etatpompehydrau,#kmmarcheproche,#jourmarche,#centreSante').hide();
+        $('#nombrecole, #etatpompehydrau,#centreSante,#jourmarches').hide();
 
         $('.marche').change(function() {
             var marche = $('.marche').val();
             if (marche == 'non') {
-                $('#kmmarcheproche').show('slow');
-                $('.kmmarcheproche').show('slow');
+                $('#kmmarcheproches').show('slow');
+                $('#jourmarches').hide('slow');
 
-                $('#jourmarche').hide('slow');
-                $('.jourmarche').val('');
             } else {
-                $('#kmmarcheproche').hide('slow');
+                $('#kmmarcheproches').hide('slow');
                 $('.kmmarcheproche').val('');
+                $('#jourmarches').show('slow');
 
-                $('#jourmarche').show('slow');
-                $('.jourmarche').show('slow');
             }
         });
         $('.centresante').change(function() {
@@ -470,14 +509,20 @@
             }
         });
 
-        $('.sourceeau').change(function() {
-            var sourceeau = $('.sourceeau').val();
-            if (sourceeau == 'Pompe Hydraulique Villageoise') {
+        $('.eauxPotables').change(function() {
+            var eauxPotables = $('.eauxPotables').find(":selected").map((key, item) => {
+                return item.textContent.trim();
+            }).get();
+            if (eauxPotables.includes("Pompe Hydraulique Villageoise")) {
+
                 $('#etatpompehydrau').show('slow');
                 $('.etatpompehydrau').show('slow');
+
             } else {
+
                 $('#etatpompehydrau').hide('slow');
                 $('.etatpompehydrau').show('slow');
+
             }
         });
         $('#save-form').click(function() {

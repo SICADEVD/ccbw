@@ -10,6 +10,8 @@ use App\Models\Cooperative;
 use App\Models\Localite;
 use App\Models\Localite_centre_sante;
 use App\Models\Localite_ecoleprimaire;
+use App\Models\Localite_jour_marche;
+use App\Models\Localite_source_eau;
 use App\Models\Section;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -68,7 +70,6 @@ class LocaliteSettingController extends Controller
             'sousprefecture'  => 'required|max:255',
             'centresante'  => 'required|max:255',
             'ecole'  => 'required|max:255',
-            'sources_eaux'  => 'required|max:255',
             'electricite'  => 'required|max:255',
             'marche'  => 'required|max:255',
             'deversementDechets'  => 'required|max:255',
@@ -127,11 +128,8 @@ class LocaliteSettingController extends Controller
         $localite->kmEcoleproche    = $request->kmEcoleproche;
         $localite->nomEcoleproche    = $request->nomEcoleproche;
         $localite->nombrecole    = $request->nombrecole;
-        $localite->sources_eaux    = $request->sources_eaux;
         $localite->etatpompehydrau    = $request->etatpompehydrau;
-        $localite->electricite    = $request->electricite;
         $localite->marche    = $request->marche;
-        $localite->jourmarche    = $request->jourmarche;
         $localite->kmmarcheproche    = $request->kmmarcheproche;
         $localite->deversementDechets    = $request->deversementDechets;
         $localite->comiteMainOeuvre    = $request->comiteMainOeuvre;
@@ -169,6 +167,29 @@ class LocaliteSettingController extends Controller
                     $i++;
                 }
             }
+            if($request->jourmarche != null){
+                $verification   = Localite_jour_marche::where('localite_id', $id)->get();
+                if ($verification->count()) {
+                    DB::table('localite_jour_marches')->where('localite_id', $id)->delete();
+                }
+                $i = 0;
+                foreach ($request->jourmarche as $data) {
+                    DB::table('localite_jour_marches')->insert(['localite_id' => $id, 'jour_marche' =>$data]); 
+                    $i++;
+                }
+            }
+            if($request->eauPotables != null){
+                $verification   = Localite_source_eau::where('localite_id', $id)->get();
+                if ($verification->count()) {
+                    DB::table('localite_source_eaux')->where('localite_id', $id)->delete();
+                }
+                $i = 0;
+                foreach ($request->eauPotables as $data) {
+                    DB::table('localite_source_eaux')->insert(['localite_id' => $id, 'souces_deaux' =>$data]); 
+                    $i++;
+                }
+            }
+            
         }
         return Reply::successWithData(__('messages.recordSaved'), ['redirectUrl' => route('manager.settings.localite-settings.index')]);
     }
@@ -261,7 +282,10 @@ class LocaliteSettingController extends Controller
         $localite   = Localite::findOrFail($id);
         $activeSettingMenu = 'localite_settings';
         $sections = Section::where('cooperative_id', $manager->cooperative_id)->get();
-        return view('manager.localite-settings.edit', compact('pageTitle', 'sections', 'localite', 'manager', 'activeSettingMenu'));
+        $jours = $localite->marches->pluck('jour_marche')->toArray();
+        $eaux = $localite->eaux->pluck('souces_deaux')->toArray();
+        // $energies = $menage->menage_sourceEnergie->pluck('source_energie')->toArray();
+        return view('manager.localite-settings.edit', compact('pageTitle', 'sections', 'localite', 'manager', 'activeSettingMenu', 'jours', 'eaux'));
     }
 
     public function status($id)
