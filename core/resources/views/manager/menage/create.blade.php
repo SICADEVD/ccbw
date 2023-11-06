@@ -274,6 +274,13 @@
                         </div>
                     </div>
 
+                    <div class="form-group row" id="etatEpis">
+                        <?php echo Form::label(__('L\'équipement est-il en bon état?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-12 col-sm-8">
+                            <?php echo Form::select('etatEpi', ['' => null, 'oui' => __('oui'), 'non' => __('non')], null, ['id' => 'etatEpi', 'class' => 'form-control etatEpi']); ?>
+                        </div>
+                    </div>
+
                     <hr class="panel-wide">
 
 
@@ -329,7 +336,7 @@
         $("#localite").chained("#section");
         $("#producteur").chained("#localite");
         $(document).ready(function() {
-            $('#avoirMachine,#boisChauffes,#etatatomiseurs, #nomActiviteFemmes,#nombreHectareFemmes,#autreMachine,#autreEndroits,#autreSourceEaux')
+            $('#avoirMachine,#boisChauffes,#etatatomiseurs, #nomActiviteFemmes,#nombreHectareFemmes,#autreMachine,#autreEndroits,#autreSourceEaux,#etatEpis')
                 .hide();
 
             $('.traitementChamps').change(function() {
@@ -459,7 +466,18 @@
                     $('#autreSourceEau').prop('required', false);
                 }
             });
-
+            $('.equipements').change(function() {
+                var equipements = $('.equipements').val();
+                if (equipements == 'oui') {
+                    $('#etatEpis').show('slow');
+                    $('.etatEpi').show('slow');
+                    $('#etatEpi').prop('required', true);
+                } else {
+                    $('#etatEpis').hide('slow');
+                    $('.etatEpi').val('');
+                    $('#etatEpi').prop('required', false);
+                }
+            });
         });
     </script>
 @endpush

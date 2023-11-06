@@ -91,20 +91,22 @@
                     </div>
 
                     {{-- Si non afficher le champs si dessous --}}
-                    <div class="form-group row" id="kmEcoleproche">
-                        <?php echo Form::label(__("A combien de km se trouve l'école la plus proche ?"), null, ['class' => 'control-label col-xs-12 col-sm-4']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::number('kmEcoleproche', null, ['placeholder' => __('nombre'), 'class' => 'form-control kmEcoleproche', 'min' => '0']); ?>
+                    <div id="nonEcolePrimaire">
+                        <div class="form-group row">
+                            <?php echo Form::label(__("A combien de km se trouve l'école la plus proche ?"), null, ['class' => 'control-label col-xs-12 col-sm-4']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::number('kmEcoleproche', null, ['placeholder' => __('nombre'), 'class' => 'form-control kmEcoleproche', 'min' => '0','id'=>'kmEcoleproche']); ?>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Nom Ecole primaire'), null, ['class' => 'control-label col-xs-12 col-sm-4']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::text('nomEcoleproche', null, ['placeholder' => 'Nom de l\'école primaire', 'class' => 'form-control nomEcoleproche','id'=>'nomEcoleproche']); ?>
+                            </div>
                         </div>
                     </div>
                     {{-- fin de champs si dessous --}}
-
-                    <div class="form-group row" id="nomEcoleproche">
-                        <?php echo Form::label(__('Nom Ecole primaire'), null, ['class' => 'control-label col-xs-12 col-sm-4']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::text('nomEcoleproche', null, ['placeholder' => '...', 'class' => 'form-control nomEcoleproche', 'required']); ?>
-                        </div>
-                    </div>
 
                     <div id="nombrecole">
                         <div class="form-group row">
@@ -329,19 +331,20 @@
         $('.ecole').change(function() {
             var ecole = $('.ecole').val();
             if (ecole == 'oui') {
-                $('#kmEcoleproche').hide('slow');
-                $('.kmEcoleproche').val('');
-
                 $('#nombrecole').show('slow');
-                $('.nombrecole').show('slow');
-
-                $('#nomEcoleproche').hide('slow');
+                $('#nonEcolePrimaire').hide('slow');
+                $('.kmEcoleproche').val('');
                 $('.nomEcoleproche').val('');
+                $('#kmEcoleproche').prop('required', false);
+                $('#nomEcoleproche').prop('required', false);
+                
             } else {
-                $('#kmEcoleproche').show('slow');
-                $('.kmEcoleproche').show('slow');
                 $('#nombrecole').hide('slow');
-                $('.nomEcoleproche').show('slow');
+                $('#nonEcolePrimaire').show('slow');
+                $('.kmEcoleproche').val('');
+                $('.nomEcoleproche').val('');
+                $('#kmEcoleproche').prop('required', true);
+                $('#nomEcoleproche').prop('required', true);
             }
         });
 

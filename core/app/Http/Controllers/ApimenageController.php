@@ -8,9 +8,19 @@ use App\Constants\Status;
 use App\Models\Producteur;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Rules\VlidateEnfantTotal;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StoreMenageRequest;
+
+
+use App\Models\Menage_ordure;
+use App\Exports\ExportMenages;
+use App\Rules\Enfants0A5PasExtrait;
+use App\Http\Controllers\Controller;
+use App\Models\Menage_sourceEnergie;
+use App\Rules\Enfants6A17PasExtrait;
+use App\Rules\NbreEnft6A17Scolarise;
+use Illuminate\Support\Facades\Hash;
+use App\Rules\Enfants6A17Scolarise;
 
 class ApimenageController extends Controller
 {
@@ -21,7 +31,7 @@ class ApimenageController extends Controller
      */
     public function index()
     {
-	
+
         //
     }
 
@@ -32,7 +42,7 @@ class ApimenageController extends Controller
      */
     public function create()
     {
-	
+
         //
     }
 
@@ -45,18 +55,16 @@ class ApimenageController extends Controller
     public function store(Request $request)
     {
 
-        if($request->id !=null) {
+        if ($request->id != null) {
             $menage = Menage::find($request->id);
             $rules = [
                 'producteur_id'    => 'required|exists:producteurs,id',
                 'quartier' => 'required|max:255',
-                'ageEnfant0A5' => ['required','integer', new VlidateEnfantTotal],
-                'ageEnfant6A17' => ['required','integer', new VlidateEnfantTotal],
-                'enfantscolarises' => ['required','integer', new VlidateEnfantTotal],
-                'enfantsPasExtrait' => ['required','integer', new VlidateEnfantTotal],
-                'enfantsPasExtrait6A17' => ['required','integer'],
-                'sources_energies'  => 'required|max:255',
-                'ordures_menageres'  => 'required|max:255',
+                'ageEnfant0A5' => ['required', 'integer'],
+                'ageEnfant6A17' => ['required', 'integer'],
+                'enfantscolarises' => ['required', 'integer',new Enfants6A17Scolarise],
+                'enfantsPasExtrait' => ['required', 'integer', new Enfants0A5PasExtrait],
+                'enfantsPasExtrait6A17' => ['required', 'integer', new Enfants6A17PasExtrait],
                 'separationMenage'  => 'required|max:255',
                 'eauxToillette'  => 'required|max:255',
                 'eauxVaisselle'  => 'required|max:255',
@@ -65,7 +73,7 @@ class ApimenageController extends Controller
                 'equipements'  => 'required|max:255',
                 'traitementChamps'  => 'required|max:255',
                 'activiteFemme'  => 'required|max:255',
-                'nomApplicateur'=>'required_if:traitementChamps,==,non',
+                'nomApplicateur' => 'required_if:traitementChamps,==,non',
                 'numeroApplicateur' => 'required_if:traitementChamps,non|regex:/^\d{10}$/|nullable|unique:menages,numeroApplicateur,'.$request->id,
             ];
             $attributes = [
@@ -90,21 +98,23 @@ class ApimenageController extends Controller
                 'equipements.required' => 'Le champ equipements est obligatoire',
                 'traitementChamps.required' => 'Le champ traitementChamps est obligatoire',
                 'activiteFemme.required' => 'Le champ activitFemme est obligatoire',
+                'enfantscolarises.max' => 'Le nombre d\'enfants de 6 à 17 ans scolarisés ne peut pas être supérieur au nombre d\'enfants de 6 à 17 ans du ménage',
+
+                'enfantsPasExtrait6A17.max' => 'Le nombre d\'enfants de 6 à 17 n\'ayant pas d\'extrait ne peut pas être supérieur au nombre d\'enfants de 6 à 17 ans du ménage',
+
+                'enfantsPasExtrait.max'=>'Le nombre d\'enfants de 0 à 5 n\'ayant pas d\'extrait ne peut pas être supérieur au nombre d\'enfants de 0 à 5 ans du ménage',
             ];
             $this->validate($request, $rules, $messages, $attributes);
-
         } else {
-            $menage = new Menage(); 
+            $menage = new Menage();
             $rules = [
                 'producteur_id'    => 'required|exists:producteurs,id',
                 'quartier' => 'required|max:255',
-                'ageEnfant0A5' => ['required','integer', new VlidateEnfantTotal],
-                'ageEnfant6A17' => ['required','integer', new VlidateEnfantTotal],
-                'enfantscolarises' => ['required','integer', new VlidateEnfantTotal],
-                'enfantsPasExtrait' => ['required','integer', new VlidateEnfantTotal],
-                'enfantsPasExtrait6A17' => ['required','integer'],
-                'sources_energies'  => 'required|max:255',
-                'ordures_menageres'  => 'required|max:255',
+                'ageEnfant0A5' => ['required', 'integer'],
+                'ageEnfant6A17' => ['required', 'integer'],
+                'enfantscolarises' => ['required', 'integer',new Enfants6A17Scolarise],
+                'enfantsPasExtrait' => ['required', 'integer', new Enfants0A5PasExtrait],
+                'enfantsPasExtrait6A17' => ['required', 'integer', new Enfants6A17PasExtrait],
                 'separationMenage'  => 'required|max:255',
                 'eauxToillette'  => 'required|max:255',
                 'eauxVaisselle'  => 'required|max:255',
@@ -113,8 +123,8 @@ class ApimenageController extends Controller
                 'equipements'  => 'required|max:255',
                 'traitementChamps'  => 'required|max:255',
                 'activiteFemme'  => 'required|max:255',
-                'nomApplicateur'=>'required_if:traitementChamps,==,non',
-                'numeroApplicateur'=>'required_if:traitementChamps,==,non|regex:/^\d{10}$/|nullable|unique:menages,numeroApplicateur',
+                'nomApplicateur' => 'required_if:traitementChamps,==,non',
+                'numeroApplicateur' => 'required_if:traitementChamps,==,non|regex:/^\d{10}$/|nullable|unique:menages,numeroApplicateur',
             ];
             $attributes = [
                 'producteur' => 'Producteur',
@@ -140,11 +150,10 @@ class ApimenageController extends Controller
                 'activiteFemme.required' => 'Le champ activitFemme est obligatoire',
             ];
             $this->validate($request, $rules, $messages, $attributes);
-            
-        } 
-        if($menage->producteur_id != $request->producteur_id) {
-            $hasMenage = Menage::where('producteur_id', $request->producteur)->exists();
-            if ($hasMenage) { 
+        }
+        if ($menage->producteur_id != $request->producteur_id) {
+            $hasMenage = Menage::where('producteur_id', $request->producteur_id)->exists();
+            if ($hasMenage) {
                 return response()->json("Ce producteur a déjà un menage enregistré", 501);
             }
         }
@@ -155,9 +164,7 @@ class ApimenageController extends Controller
         $menage->enfantscolarises  = $request->enfantscolarises;
         $menage->enfantsPasExtrait = $request->enfantsPasExtrait;
         $menage->enfantsPasExtrait6A17 = $request->enfantsPasExtrait6A17;
-        $menage->sources_energies  = $request->sources_energies;
         $menage->boisChauffe     = $request->boisChauffe;
-        $menage->ordures_menageres    = $request->ordures_menageres;
         $menage->separationMenage = $request->separationMenage;
         $menage->eauxToillette    = $request->eauxToillette;
         $menage->eauxVaisselle    = $request->eauxVaisselle;
@@ -175,16 +182,50 @@ class ApimenageController extends Controller
         $menage->nombreHectareFemme    = $request->nombreHectareFemme;
         $menage->autreMachine    = $request->autreMachine;
         $menage->autreEndroit    = $request->autreEndroit;
+        $menage->userid =  $request->userid;
         $menage->autreSourceEau   = $request->autreSourceEau;
         $menage->etatAutreMachine   = $request->etatAutreMachine;
         $menage->etatatomiseur   = $request->etatatomiseur;
-        $menage->userid = $request->userid;
-        $menage->save();  
+        $menage->etatEpi  = $request->etatEpi;
+        //dd(json_encode($request->all()));
 
-        if($menage ==null ){
+        $menage->save();
+        if ($menage != null) {
+            $id = $menage->id;
+            $datas  = $data2 = [];
+            if (($request->sourcesEnergie != null)) {
+                Menage_sourceEnergie::where('menage_id', $id)->delete();
+                $i = 0;
+                foreach ($request->sourcesEnergie as $sourceEnergie) {
+                    if (!empty($sourceEnergie)) {
+                        $datas[] = [
+                            'menage_id' => $id,
+                            'source_energie' => $sourceEnergie,
+                        ];
+                    }
+
+                    $i++;
+                }
+            }
+            if (($request->ordureMenageres != null)) {
+                Menage_ordure::where('menage_id', $id)->delete();
+                foreach ($request->ordureMenageres as $ordureMenagere) {
+
+                    $data2[] = [
+                        'menage_id' => $id,
+                        'ordure_menagere' => $ordureMenagere,
+                    ];
+                }
+            }
+
+            Menage_sourceEnergie::insert($datas);
+            Menage_ordure::insert($data2);
+        }
+
+        if ($menage == null) {
             return response()->json("Le ménage n'a pas été enregistré", 501);
         }
-        
+
         return response()->json($menage, 201);
     }
 
@@ -197,7 +238,7 @@ class ApimenageController extends Controller
      */
     public function show($id)
     {
-	
+
         //
     }
 
@@ -209,7 +250,7 @@ class ApimenageController extends Controller
      */
     public function edit($id)
     {
-	
+
         //
     }
 
@@ -222,7 +263,7 @@ class ApimenageController extends Controller
      */
     public function update(Request $request, $id)
     {
-	
+
         //
     }
 
@@ -234,7 +275,7 @@ class ApimenageController extends Controller
      */
     public function destroy($id)
     {
-	
+
         //
     }
 }

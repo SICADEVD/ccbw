@@ -78,12 +78,12 @@ class MenageController extends Controller
 
         if ($request->id) {
             $menage = Menage::findOrFail($request->id);
-             $rules = [
+            $rules = [
                 'producteur_id'    => 'required|exists:producteurs,id',
                 'quartier' => 'required|max:255',
                 'ageEnfant0A5' => ['required', 'integer'],
                 'ageEnfant6A17' => ['required', 'integer'],
-                'enfantscolarises' => ['required', 'integer',new Enfants6A17Scolarise],
+                'enfantscolarises' => ['required', 'integer', new Enfants6A17Scolarise],
                 'enfantsPasExtrait' => ['required', 'integer', new Enfants0A5PasExtrait],
                 'enfantsPasExtrait6A17' => ['required', 'integer', new Enfants6A17PasExtrait],
                 'separationMenage'  => 'required|max:255',
@@ -95,9 +95,9 @@ class MenageController extends Controller
                 'traitementChamps'  => 'required|max:255',
                 'activiteFemme'  => 'required|max:255',
                 'nomApplicateur' => 'required_if:traitementChamps,==,non',
-                'numeroApplicateur' => 'required_if:traitementChamps,non|regex:/^\d{10}$/|unique:menages,numeroApplicateur,'.$request->id,
+                'numeroApplicateur' => 'required_if:traitementChamps,non|regex:/^\d{10}$/|nullable|unique:menages,numeroApplicateur,' . $request->id,
 
-             ];
+            ];
             $attributes = [
                 'producteur' => 'Producteur',
 
@@ -124,7 +124,7 @@ class MenageController extends Controller
 
                 'enfantsPasExtrait6A17.max' => 'Le nombre d\'enfants de 6 à 17 n\'ayant pas d\'extrait ne peut pas être supérieur au nombre d\'enfants de 6 à 17 ans du ménage',
 
-                'enfantsPasExtrait.max'=>'Le nombre d\'enfants de 0 à 5 n\'ayant pas d\'extrait ne peut pas être supérieur au nombre d\'enfants de 0 à 5 ans du ménage',
+                'enfantsPasExtrait.max' => 'Le nombre d\'enfants de 0 à 5 n\'ayant pas d\'extrait ne peut pas être supérieur au nombre d\'enfants de 0 à 5 ans du ménage',
 
             ];
             $this->validate($request, $rules, $messages, $attributes);
@@ -136,7 +136,7 @@ class MenageController extends Controller
                 'quartier' => 'required|max:255',
                 'ageEnfant0A5' => ['required', 'integer'],
                 'ageEnfant6A17' => ['required', 'integer'],
-                'enfantscolarises' => ['required', 'integer',new Enfants6A17Scolarise],
+                'enfantscolarises' => ['required', 'integer', new Enfants6A17Scolarise],
                 'enfantsPasExtrait' => ['required', 'integer', new Enfants0A5PasExtrait],
                 'enfantsPasExtrait6A17' => ['required', 'integer', new Enfants6A17PasExtrait],
                 'separationMenage'  => 'required|max:255',
@@ -174,11 +174,12 @@ class MenageController extends Controller
                 'activiteFemme.required' => 'Le champ activitFemme est obligatoire',
             ];
             $this->validate($request, $rules, $messages, $attributes);
-            
+
             $message = "Le menage a été crée avec succès";
         }
+       
         if ($menage->producteur_id != $request->producteur_id) {
-            $hasMenage = Menage::where('producteur_id', $request->producteur)->exists();
+            $hasMenage = Menage::where('producteur_id', $request->producteur_id)->exists();
             if ($hasMenage) {
                 $notify[] = ['error', 'Ce producteur a déjà un menage enregistré'];
                 return back()->withNotify($notify)->withInput();
@@ -213,8 +214,8 @@ class MenageController extends Controller
         $menage->autreSourceEau   = $request->autreSourceEau;
         $menage->etatAutreMachine   = $request->etatAutreMachine;
         $menage->etatatomiseur   = $request->etatatomiseur;
-        //dd(json_encode($request->all()));
-        
+        $menage->etatEpi  = $request->etatEpi;
+        dd(json_encode($request->all()));
         $menage->save();
         if ($menage != null) {
             $id = $menage->id;
