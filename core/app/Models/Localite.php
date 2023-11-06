@@ -23,4 +23,8 @@ class Localite extends Model
     {
         return $this->hasMany(Producteur::class, 'localite_id', 'id');
     }
+    public function centresantes()
+    {
+        return $this->hasMany(Localite_centre_sante::class, 'localite_id', 'id');
+    }
 }

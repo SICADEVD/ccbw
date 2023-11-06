@@ -1,12 +1,14 @@
 <?php
 
 namespace App\Http\Controllers\Manager;
+
 use App\Http\Helpers\Reply;
 use App\Constants\Status;
 use App\Http\Controllers\Controller;
 use App\Imports\LocaliteImport;
 use App\Models\Cooperative;
 use App\Models\Localite;
+use App\Models\Localite_centre_sante;
 use App\Models\Localite_ecoleprimaire;
 use App\Models\Section;
 use Illuminate\Http\Request;
@@ -14,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Excel;
+use Illuminate\Validation\ValidationException;
 
 class LocaliteSettingController extends Controller
 {
@@ -34,7 +37,7 @@ class LocaliteSettingController extends Controller
         $cooperatives = Cooperative::active()->where('id', $manager->cooperative_id)->get();
         $sections = Section::all();
 
-        return view('manager.localite-settings.index', compact('pageTitle', 'cooperativeLocalites', 'cooperatives', 'sections','activeSettingMenu'));
+        return view('manager.localite-settings.index', compact('pageTitle', 'cooperativeLocalites', 'cooperatives', 'sections', 'activeSettingMenu'));
     }
 
     public function create()
@@ -43,11 +46,21 @@ class LocaliteSettingController extends Controller
         $manager   = auth()->user();
         $activeSettingMenu = 'localite_settings';
         $sections = Section::where('cooperative_id', $manager->cooperative_id)->get();
-        return view('manager.localite-settings.create', compact('pageTitle', 'sections', 'manager','activeSettingMenu'));
+        return view('manager.localite-settings.create', compact('pageTitle', 'sections', 'manager', 'activeSettingMenu'));
     }
 
     public function store(Request $request)
     {
+        // DB::beginTransaction();
+        // try {
+
+            
+        //     }
+        // } catch (ValidationException $e) {
+        //     DB::rollBack();
+        // }
+        
+        // DB::commit();
         $validationRule = [
             'section_id'    => 'required|exists:sections,id',
             'nom' => 'required|max:255',
@@ -59,13 +72,32 @@ class LocaliteSettingController extends Controller
             'electricite'  => 'required|max:255',
             'marche'  => 'required|max:255',
             'deversementDechets'  => 'required|max:255',
-
+            'kmEcoleproche' => 'required_if:ecole,==,non',
+            'nomEcoleproche' => 'required_if:ecole,==,non',
+            'kmCentresante' => 'required_if:centresante,==,non',
+            'nomCentresante' => 'required_if:centresante,==,non',
+        ];
+        $messages = [
+            'section_id.required' => 'Le champ section est obligatoire',
+            'section_id.exists' => 'Le champ section est invalide',
+            'nom.required' => 'Le champ nom est obligatoire',
+            'nom.max' => 'Le champ nom ne doit pas dépasser 255 caractères',
+            'type_localites.required' => 'Le champ type de localité est obligatoire',
+            'type_localites.max' => 'Le champ type de localité ne doit pas dépasser 255 caractères',
+            'sousprefecture.required' => 'Le champ sous préfecture est obligatoire',
+            'sousprefecture.max' => 'Le champ sous préfecture ne doit pas dépasser 255 caractères',
+            'centresante.required' => 'Le champ centre de santé est obligatoire',
+            'centresante.max' => 'Le champ centre de santé ne doit pas dépasser 255 caractères',
+            'ecole.required' => 'Le champ école est obligatoire',
+            'ecole.max' => 'Le champ école ne doit pas dépasser 255 caractères',
+            'kmEcoleproche.' => 'Le champ km école proche est obligatoire',
+            'nomEcoleproche' => 'Le champ nom école proche est obligatoire',
         ];
 
         $manager   = auth()->user();
 
 
-        $request->validate($validationRule);
+        $request->validate($validationRule, $messages);
 
         $cooperative = $manager->cooperative;
 
@@ -112,25 +144,32 @@ class LocaliteSettingController extends Controller
         $localite->save();
 
         if ($localite != null) {
-
             $id = $localite->id;
-            if($request->nomecolesprimaires != null){
+            $datas = [];
+            if ($request->nomecolesprimaires != null && $request->latitude != null && $request->longitude != null) {
                 $verification   = Localite_ecoleprimaire::where('localite_id', $id)->get();
                 if ($verification->count()) {
                     DB::table('localite_ecoleprimaires')->where('localite_id', $id)->delete();
                 }
                 $i = 0;
-
-                foreach ($request->nomecolesprimaires as $data) {
-                    if ($data != null) {
-                        DB::table('localite_ecoleprimaires')->insert(['localite_id' => $id, 'nomecole' => $data]);
-                    }
+                foreach ($request->nomecolesprimaires as $datas) {
+                    DB::table('localite_ecoleprimaires')->insert(['localite_id' => $id, 'nomecole' =>$datas, 'latitude' => $request->latitude[$i], 'longitude' => $request->longitude[$i]]); 
                     $i++;
                 }
+            }
 
+            if ($request->nomcentresantes != null && $request->latitude != null && $request->longitude != null) {
+                $verification   = Localite_centre_sante::where('localite_id', $id)->get();
+                if ($verification->count()) {
+                    DB::table('localite_centre_santes')->where('localite_id', $id)->delete();
+                }
+                $i = 0;
+                foreach ($request->nomcentresantes as $datas) {
+                    DB::table('localite_centre_santes')->insert(['localite_id' => $id, 'centre_sante' =>$datas, 'latitude' => $request->latitude[$i], 'longitude' => $request->longitude[$i]]); 
+                    $i++;
+                }
             }
         }
-
         return Reply::successWithData(__('messages.recordSaved'), ['redirectUrl' => route('manager.settings.localite-settings.index')]);
     }
 
@@ -222,7 +261,7 @@ class LocaliteSettingController extends Controller
         $localite   = Localite::findOrFail($id);
         $activeSettingMenu = 'localite_settings';
         $sections = Section::where('cooperative_id', $manager->cooperative_id)->get();
-        return view('manager.localite-settings.edit', compact('pageTitle', 'sections', 'localite', 'manager','activeSettingMenu'));
+        return view('manager.localite-settings.edit', compact('pageTitle', 'sections', 'localite', 'manager', 'activeSettingMenu'));
     }
 
     public function status($id)
@@ -248,5 +287,4 @@ class LocaliteSettingController extends Controller
         Localite::destroy($id);
         return Reply::success(__('messages.deleteSuccess'));
     }
-
 }

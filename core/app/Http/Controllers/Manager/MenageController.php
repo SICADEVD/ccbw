@@ -215,7 +215,7 @@ class MenageController extends Controller
         $menage->etatAutreMachine   = $request->etatAutreMachine;
         $menage->etatatomiseur   = $request->etatatomiseur;
         $menage->etatEpi  = $request->etatEpi;
-        dd(json_encode($request->all()));
+        // dd(json_encode($request->all()));
         $menage->save();
         if ($menage != null) {
             $id = $menage->id;
