@@ -487,7 +487,7 @@
                                             <div class="col-xs-12 col-sm-6">
                                                 <div class="form-group row">
                                                     {{ Form::label(__('Quantite'), null, ['class' => '']) }}
-                                                    <?php echo Form::select('nombreinsectesAmis[]', ['Faible' => __('faible'), 'Moins' => __('Moins'), 'E'], null, ['class' => 'form-control nombreinsectesAmis', 'id' => 'nombreinsectesAmis-1']); ?>
+                                                    <?php echo Form::select('nombreinsectesAmis[]', ['Faible' => __('faible'), 'Moins' => __('Moins'), 'Elevé'=>_('elevé')], null, ['class' => 'form-control nombreinsectesAmis', 'id' => 'nombreinsectesAmis-1']); ?>
                                                 </div>
                                             </div>
 
@@ -751,7 +751,7 @@
                     insectesAmisCount +
                     '" name="insectesAmis[]" type="text"></div></div><div class="col-xs-12 col-sm-6"><div class="form-group"><label for="nombreinsectesAmis" class="">Quantite</label><select name="nombreinsectesAmis[]" class="form-control nombreinsectesParasites" d="nombreinsectesAmis-' +
                     insectesAmisCount +
-                    '" ><option value="Assez">Assez</option><option value="Moins">Moins</option></select></div></div><div class="col-xs-12 col-sm-8"><button type="button" id="' +
+                    '" ><option value="Faible">faible</option><option value="Moins">moins</option><option value="Elevé">elevé</option></select></div></div><div class="col-xs-12 col-sm-8"><button type="button" id="' +
                     insectesAmisCount +
                     '" class="removeRowinsectesAmis btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></div></td>';
 
