@@ -115,7 +115,7 @@ class ApiproducteurController extends Controller
         'niveau_etude'  => 'required|max:255',
         'type_piece'  => 'required|max:255',
         'numPiece'  => 'required|max:255',
-        'num_ccc' => 'nullable|regex:/^[0-9]{10}$/', // Champ "num_ccc" peut être vide
+        'num_ccc' => 'nullable|regex:/^[0-9]{11}$/', // Champ "num_ccc" peut être vide
         'anneeDemarrage' => 'required_if:proprietaires,==,Garantie',
         'anneeFin' => 'required_if:proprietaires,==,Garantie',
         'plantePartage' => 'required_if:proprietaires,==,Planté-partager',
@@ -262,7 +262,7 @@ class ApiproducteurController extends Controller
         'niveau_etude'  => 'required|max:255',
         'type_piece'  => 'required|max:255',
         'numPiece'  => 'required|max:255',
-        'num_ccc' => 'nullable|regex:/^[0-9]{10}$/', // Champ "num_ccc" peut être vide
+        'num_ccc' => 'nullable|regex:/^[0-9]{11}$/', // Champ "num_ccc" peut être vide
         'anneeDemarrage' => 'required_if:proprietaires,==,Garantie',
         'anneeFin' => 'required_if:proprietaires,==,Garantie',
         'plantePartage' => 'required_if:proprietaires,==,Planté-partager',

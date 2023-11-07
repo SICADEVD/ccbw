@@ -403,7 +403,7 @@
                     </div>
 
                     <div class="form-group row">
-                        <?php echo Form::label(__('Avez-vous un numero d\'un collabarateur ou membre de la famille ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <?php echo Form::label(__('Avez-vous un proche à contacter pour vous joindre ?'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
                             <?php echo Form::select('autreMembre', ['non' => 'Non', 'oui' => 'Oui'], null, ['class' => 'form-control autreMembre']); ?>
                         </div>
@@ -431,7 +431,7 @@
                     <div class="form-group row">
                         <?php echo Form::label(__('Type de pièces'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('type_piece', ['CNI' => 'CNI', 'Carte Consulaire' => 'Carte Consulaire', 'Passeport' => 'Passeport', 'Attestation' => 'Attestation', 'Extrait de naissance' => 'Extrait de naissance', 'Permis de conduire' => 'Permis de conduire', 'CMU' => 'CMU'], null, ['placeholder' => __('Selectionner une option'), 'class' => 'form-control', 'required']); ?>
+                            <?php echo Form::select('type_piece', ['CNI' => 'CNI', 'Carte Consulaire' => 'Carte Consulaire', 'Passeport' => 'Passeport', 'Attestation' => 'Attestation', 'Extrait de naissance' => 'Extrait de naissance', 'Permis de conduire' => 'Permis de conduire', 'CMU' => 'CMU','Pas Disponible' => 'Pas Disponible'], null, ['placeholder' => __('Selectionner une option'), 'class' => 'form-control', 'required']); ?>
                         </div>
                     </div>
 
