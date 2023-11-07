@@ -29,8 +29,8 @@ class StoreInfoRequest extends FormRequest
             'autresCultures'  => 'required|max:255',
             'autreActivite' => 'required|max:255',
             'travailleurs'  => 'required|max:255',
-            'travailleurspermanents'  => ['required', 'integer', new ValidTravailleurs],
-            'travailleurstemporaires'  => ['required', 'integer', new ValidTravailleurs],
+            'travailleurspermanents'  => ['required', 'integer'],
+            'travailleurstemporaires'  => ['required', 'integer'],
             'mobileMoney'  => 'required|max:255',
             'mainOeuvreFamilial'  => 'required|max:255',
         ];

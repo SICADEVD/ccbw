@@ -235,11 +235,24 @@
                         </div>
 
                         <div class="form-group row">
-                            <?php echo Form::label(__('Nombre de Travailleurs Non Permanents'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <?php echo Form::label(__('Nombre de Travailleurs temporaires'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
                                 <?php echo Form::number('travailleurstemporaires', null, ['placeholder' => 'Nombre', 'class' => 'form-control', 'min' => '0']); ?>
                             </div>
                         </div>
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Etes vous membre de société de travail ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::select('societeTravail', ['non' => 'Non', 'oui' => 'Oui'], null, ['class' => 'form-control societeTravail', 'required']); ?>
+                            </div>
+                        </div>
+                        <div class="form-group row" id="societe">
+                            <?php echo Form::label(__('Nombre de Personne'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::number('nombrePersonne', null, ['placeholder' => 'Nombre','id'=>'nombrePersonne', 'class' => 'form-control nombrePersonne', 'min' => '0']); ?>
+                            </div>
+                        </div>
+
                         <hr class="panel-wide">
 
                         <div class="form-group row">
@@ -508,8 +521,7 @@
             });
 
         });
-        $('#listecultures,#gardePapiersChamps,#numeroCompteMM,#listeactivites,#nomBanque,#autreBanque,#travailleurFamilial')
-            .hide();
+        $('#listecultures,#gardePapiersChamps,#numeroCompteMM,#listeactivites,#nomBanque,#autreBanque,#travailleurFamilial,#societe').hide();
 
         $('.autresCultures').change(function() {
             var autresCultures = $('.autresCultures').val();
@@ -528,6 +540,17 @@
             } else {
                 $('#travailleurFamilial').hide('slow');
                 $('.travailleurFamilial').val('');
+            }
+        });
+       $('.societeTravail').change(function() {
+            var societeTravail = $('.societeTravail').val();
+            if (societeTravail == 'oui') {
+                $('#societe').show('slow');
+                $('#nombrePersonne').prop('required', true);
+            } else {
+                $('#societe').hide('slow');
+                $('#nombrePersonne').prop('required', false);
+                $('.nombrePersonne').val('');
             }
         });
 

@@ -301,6 +301,8 @@ class ProducteurController extends Controller
             $infoproducteur->nomBanque    = $request->nomBanque;
             $infoproducteur->mainOeuvreFamilial    = $request->mainOeuvreFamilial;
             $infoproducteur->travailleurFamilial    = $request->travailleurFamilial;
+            $infoproducteur->societeTravail = $request->societeTravail;
+            $infoproducteur->nombrePersonne = $request->nombrePersonne;
             $infoproducteur->userid = auth()->user()->id;
             // dd(json_encode($request->all()));
             $infoproducteur->save();
