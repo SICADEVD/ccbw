@@ -114,7 +114,7 @@
         <div class="d-grid d-lg-flex d-md-flex action-bar">
             <div id="table-actions" class="flex-grow-1 align-items-center">
               
-                    <x-forms.link-primary :link="route('manager.leaves.create')" class="mr-3 openRightModal float-left" icon="plus">
+                    <x-forms.link-primary :link="route('manager.leaves.create')" class="mr-3 float-left" icon="plus">
                         @lang('modules.leaves.addLeave')
                     </x-forms.link-primary>
                 

@@ -2,6 +2,8 @@
 
 return array(
     'addUnit' => 'Add New Unit',
+    'male' => "Male",
+    'female' => "Female",
     'units' => 'Units',
     'check' => 'Check',
     'true' => 'True',

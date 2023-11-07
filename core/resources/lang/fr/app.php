@@ -2,6 +2,8 @@
 
 return array(
     'addUnit' => "Ajouter une nouvelle unité",
+    'male' => "Homme",
+    'female' => "Femme",
     'units' => "Unités",
     'check' => "Vérifier",
     'true' => "Vrai",

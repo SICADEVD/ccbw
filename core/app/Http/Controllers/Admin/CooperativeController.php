@@ -51,13 +51,17 @@ class CooperativeController extends Controller
         $cooperative->codeApp   = isset($request->codeApp) ? $request->codeApp : $this->generecodeapp($request->name); 
         $cooperative->save();
 
-        $this->cooperativeAddress($cooperative);
-        $this->employeeShift($cooperative);
-        $this->attendanceSetting($cooperative);
-        $this->customFieldGroup($cooperative);
-        $this->leaveType($cooperative);
-        $cooperative->leaveSetting()->create();
-        $this->googleCalendar($cooperative);
+        if(!$request->id)
+        {
+            $this->cooperativeAddress($cooperative);
+            $this->employeeShift($cooperative);
+            $this->attendanceSetting($cooperative);
+            $this->customFieldGroup($cooperative);
+            $this->leaveType($cooperative);
+            $cooperative->leaveSetting()->create();
+            $this->googleCalendar($cooperative);
+        }
+        
 
         $notify[] = ['success',$message];
         return back()->withNotify($notify);

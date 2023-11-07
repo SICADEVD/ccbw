@@ -245,7 +245,7 @@ $('.dropify-fr').dropify({
                 success: function(response) {
                     if (response.status == 'success') {
                         $('#leaveID').val(response.leaveID);
-                        myDropzone.processQueue();
+                        // myDropzone.processQueue();
                         window.location.href = response.redirectUrl;
                     }
                 }
@@ -305,9 +305,9 @@ $('.dropify-fr').dropify({
                 success: function(response) {
                     if(response.status == 'success'){
                         if(response.users > 0 && response.users < 2){
-                            $('#users').text(response.users+' @lang('modules.leaves.employeeOnLeave')');
+                            $('#users').text(response.users+' @lang("modules.leaves.employeeOnLeave")');
                         }else if(response.users > 0){
-                            $('#users').text(response.users+' @lang('modules.leaves.employeesOnLeave')');
+                            $('#users').text(response.users+' @lang("modules.leaves.employeesOnLeave")');
                         }else{
                             $('#users').text('');
                         }

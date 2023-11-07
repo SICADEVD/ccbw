@@ -1412,7 +1412,7 @@ updateAlternate' => "Si le bouton <b>Mettre à jour maintenant</b> ne fonctionne
     'leaveRequest' => "Demande de congé",
     'upcomingLeaves' => "Congés à venir",
     'leavePaidStatus' => "Statut du congé payé",
-    'employeeOnLeave' => "L'employé est en congé",
+    'employeeOnLeave' => "L\'employé est en congé",
     'employeesOnLeave' => "Les employés sont en congé",
     'approvedAt' => "Approuvé à",
     'approvedBy' => "Approuvé par",
@@ -1875,8 +1875,6 @@ updateAlternate' => "Si le bouton <b>Mettre à jour maintenant</b> ne fonctionne
         'country' => "Pays",
         'postal_code' => "Code postal",
     ),
-    
-
     'emailNotification' => array(
         'new-expenseadded-by-admin' => "Nouvelle dépense ajoutée par l'administrateur",
         'new-expenseadded-by-member' => "Nouvelle dépense ajoutée par le membre",
@@ -2129,6 +2127,5 @@ updateAlternate' => "Si le bouton <b>Mettre à jour maintenant</b> ne fonctionne
         'unitType' => "Type d'unité"
     ),
     'addIpAddress' => "Ajouter une adresse IP",
-    
-    
+
 );

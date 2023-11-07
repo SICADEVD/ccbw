@@ -13,7 +13,7 @@
                 <th>@lang('app.designation')</th>
                 <th class="text-right">@lang('app.action')</th>
             </x-slot>
-
+ 
             @forelse($leaveTypes as $key=>$leaveType)
                 <tr id="type-{{ $leaveType->id }}">
                     <td>
@@ -191,7 +191,7 @@
         
         var url = "{{ route('manager.leaveType.edit',':id') }}";
         url = url.replace(':id',id);
-        
+         
         $(MODAL_XL + ' ' + MODAL_HEADING).html('...');
         $.ajaxModal(MODAL_XL, url);
         $(MODAL_XL).modal('show');

@@ -78,16 +78,17 @@ class LeaveTypeController extends AccountBaseController
     public function edit($id)
     {
        
-        $this->leaveType = LeaveType::find($id);
+        $leaveType = LeaveType::find($id);
         $this->allTeams = Team::all();
         $this->allDesignations = Designation::allDesignations(); 
-        $this->allGenders = ['Homme', 'Femme'];
-        $this->allMaritalStatus = ['marie', 'celibataire']; 
-        $this->gender = json_decode($this->leaveType->gender);
+        $this->allGenders = ['male', 'female'];
+        $this->allMaritalStatus = ['married', 'unmarried']; 
+        $this->gender = json_decode($leaveType->gender);
        
-        $this->maritalStatus = json_decode($this->leaveType->marital_status);
-        $this->department = json_decode($this->leaveType->department);
-        $this->designation = json_decode($this->leaveType->designation);
+        $this->maritalStatus = json_decode($leaveType->marital_status);
+        $this->department = json_decode($leaveType->department);
+        $this->designation = json_decode($leaveType->designation);
+        $this->leaveType = $leaveType;
        
         return view('manager.leave-settings.edit-leave-setting-type-modal', $this->data);
     }
