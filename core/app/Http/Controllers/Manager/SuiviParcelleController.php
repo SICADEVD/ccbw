@@ -18,6 +18,7 @@ use App\Http\Controllers\Controller;
 use App\Models\SuiviParcellesAnimal;
 use Illuminate\Support\Facades\Hash;
 use App\Exports\ExportSuiviParcelles;
+use App\Models\Suivi_parcelle_pesticide;
 use App\Models\SuiviParcellesInsecte;
 use App\Models\SuiviParcellesOmbrage;
 use App\Models\SuiviParcellesParasite;
@@ -105,23 +106,35 @@ class SuiviParcelleController extends Controller
         $suivi_parcelle->activiteRecolteSanitaire = $request->activiteRecolteSanitaire;
         $suivi_parcelle->intrantNPK = $request->intrantNPK;
         $suivi_parcelle->nombresacsNPK = $request->nombresacsNPK;
+        $suivi_parcelle->capaciteNPK = $request->capaciteNPK;
+        $suivi_parcelle->conteneurNPK = $request->conteneurNPK;
+        $suivi_parcelle->qteNPK = $request->qteNPK;
+
         $suivi_parcelle->intrantFiente = $request->intrantFiente;
         $suivi_parcelle->nombresacsFiente    = $request->nombresacsFiente;
+        $suivi_parcelle->capaciteFiente    = $request->capaciteFiente;
+        $suivi_parcelle->conteneurFiente    = $request->conteneurFiente;
+        $suivi_parcelle->qteFiente    = $request->qteFiente;
         $suivi_parcelle->intrantComposte    = $request->intrantComposte;
         $suivi_parcelle->nombresacsComposte    = $request->nombresacsComposte;
+        $suivi_parcelle->capaciteComposte    = $request->capaciteComposte;
+        $suivi_parcelle->conteneurComposte    = $request->conteneurComposte;
+        $suivi_parcelle->qteComposte    = $request->qteComposte;
         $suivi_parcelle->intrantDechetsAnimaux    = $request->intrantDechetsAnimaux;
         $suivi_parcelle->nombreDechetsAnimaux   = $request->nombreDechetsAnimaux;
+        $suivi_parcelle->capaciteDechetsAnimaux   = $request->capaciteDechetsAnimaux;
+        $suivi_parcelle->conteneurDechetsAnimaux   = $request->conteneurDechetsAnimaux;
+        $suivi_parcelle->qteDechetsAnimaux   = $request->qteDechetsAnimaux;
         $suivi_parcelle->qteBiofertilisant    = $request->qteBiofertilisant;
         $suivi_parcelle->uniteBioFertilisant   = $request->uniteBioFertilisant;
         $suivi_parcelle->qteEngraisOrganique    = $request->qteEngraisOrganique;
         $suivi_parcelle->uniteEngraisOrganique   = $request->uniteEngraisOrganique;
         $suivi_parcelle->frequencePesticide   = $request->frequencePesticide;
-        $suivi_parcelle->pesticideUtiliseAnne  = $request->pesticideUtiliseAnne;
         $suivi_parcelle->autrePesticide = $request->autrePesticide;
         $suivi_parcelle->presencePourritureBrune    = $request->presencePourritureBrune;
         $suivi_parcelle->presenceSwollenShoot    = $request->presenceSwollenShoot;
         $suivi_parcelle->presenceInsectesParasites    = $request->presenceInsectesParasites;
-        $suivi_parcelle->presenceInsectesParasitesRavageur    = $request->presenceInsectesParasitesRavageur;
+        // $suivi_parcelle->presenceInsectesParasitesRavageur    = $request->presenceInsectesParasitesRavageur;
         $suivi_parcelle->presenceBioAgresseur    = $request->presenceBioAgresseur;
         $suivi_parcelle->presenceInsectesRavageurs    = $request->presenceInsectesRavageurs;
         $suivi_parcelle->presenceFourmisRouge    = $request->presenceFourmisRouge;
@@ -132,6 +145,8 @@ class SuiviParcelleController extends Controller
         $suivi_parcelle->nombreInsecticide    = $request->nombreInsecticide;
         $suivi_parcelle->nomFongicide    = $request->nomFongicide;
         $suivi_parcelle->uniteFongicide    = $request->uniteFongicide;
+        $suivi_parcelle->qteFongicide    = $request->qteFongicide;
+        $suivi_parcelle->qteHerbicide    = $request->qteHerbicide;
         $suivi_parcelle->nomHerbicide    = $request->nomHerbicide;
         $suivi_parcelle->uniteHerbicide    = $request->uniteHerbicide;
         $suivi_parcelle->nombreDesherbage    = $request->nombreDesherbage;
@@ -235,6 +250,19 @@ class SuiviParcelleController extends Controller
             SuiviParcellesParasite::insert($datas3);
             SuiviParcellesInsecte::insert($datas5);
             SuiviParcellesOmbrage::insert($datas);
+
+            if($request->pesticideUtiliseAnne != null){
+                Suivi_parcelle_pesticide::where('suivi_parcelle_id', $id)->delete();
+                $i = 0;
+                foreach ($request->pesticideUtiliseAnne as $data) {
+                    DB::table('suivi_parcelle_pesticides')->insert([
+                        'suivi_parcelle_id' => $id,
+                        'pesticide' => $data,
+                    ]);
+                    
+                    $i++;
+                }
+            }
         }
 
         $notify[] = ['success', isset($message) ? $message : "Le suivi parcelle a été crée avec succès."];
