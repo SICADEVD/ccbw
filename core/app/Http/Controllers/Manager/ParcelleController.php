@@ -31,7 +31,7 @@ class ParcelleController extends Controller
     {
         $pageTitle      = "Gestion des parcelles";
         $manager   = auth()->user();
-        // $localites = Localite::active()->where('cooperative_id',$manager->cooperative_id)->get();
+        // $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->get();
         $cooperative = Cooperative::with('sections.localites')->find($manager->cooperative_id);
         $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
             return $localite->active();

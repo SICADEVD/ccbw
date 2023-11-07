@@ -175,7 +175,7 @@
                                         @if(old('items'))
                                             @foreach (old('items') as $item)
                                             <div class="row single-item gy-2">
-                                                <div class="col-md-3">
+                                                <div class="col-md-8">
                                                     <select class="form-control selected_type" name="items[{{ $loop->index}}][arbre]"
                                                     id='producteur-<?php echo $i; ?>' onchange=getParcelle(<?php echo $i; ?>) required>
                                                         <option disabled selected value="">@lang('Abres d\'ombrages')</option>
@@ -409,7 +409,7 @@
                
             let html = `
             <div class="row single-item gy-2">
-                <div class="col-md-3">
+                <div class="col-md-8">
                     <select class="form-control selected_type" name="items[${length}][arbre]" required id='arbre-${length}')>
                         <option disabled selected value="">@lang('Arbres d\'ombrages')</option>
                         @foreach($arbres as $arbre)

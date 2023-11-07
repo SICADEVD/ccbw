@@ -27,8 +27,8 @@ class InspectionController extends Controller
         $manager   = auth()->user();
         $staffs  = User::staff()->get();
         $producteurs  = Producteur::active()->with('localite')->get();
-        $localites = Localite::active()->where('cooperative_id',$manager->cooperative_id)->get();
-        $inspections = Inspection::dateFilter()->searchable([])->latest('id')->joinRelationship('producteur.localite')->where('cooperative_id',$manager->cooperative_id)->where(function ($q) {
+        $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->get();
+        $inspections = Inspection::dateFilter()->searchable([])->latest('id')->joinRelationship('producteur.localite.section')->where('sections.cooperative_id',$manager->cooperative_id)->where(function ($q) {
             if(request()->localite != null){
                 $q->where('localite_id',request()->localite);
             }

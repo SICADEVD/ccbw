@@ -156,12 +156,15 @@ class LoginController extends Controller
             $userLogin->country_code = $exist->country_code;
             $userLogin->country      = $exist->country;
         } else { 
+            if($this->getUserIP() !='::1')
+            {
             $collection = GeoLocation::lookup($this->getUserIP());
             $userLogin->longitude    = $collection->get('longitude');
             $userLogin->latitude     = $collection->get('latitude');
             $userLogin->city         = $collection->get('city');
             $userLogin->country_code = $collection->get('countryCode');
             $userLogin->country      = $collection->get('country');
+            }
         }
 
         $userAgent          = osBrowser();

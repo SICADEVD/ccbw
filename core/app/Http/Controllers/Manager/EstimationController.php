@@ -24,8 +24,8 @@ class EstimationController extends Controller
     {
         $pageTitle      = "Gestion des estimations";
         $manager   = auth()->user();
-        $localites = Localite::active()->where('cooperative_id',$manager->cooperative_id)->get();
-        $estimations = Estimation::dateFilter()->searchable(["EA1","EA2","EA3","EB1","EB2","EB3","EC1","EC2","EC3","T1","T2","T3","V1","V2","V3","VM1","VM2","VM3","Q","RF","EsP","date_estimation","productionAnnuelle"])->latest('id')->joinRelationship('parcelle.producteur.localite')->where('cooperative_id',$manager->cooperative_id)->where(function ($q) {
+        $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->get();
+        $estimations = Estimation::dateFilter()->searchable(["EA1","EA2","EA3","EB1","EB2","EB3","EC1","EC2","EC3","T1","T2","T3","V1","V2","V3","VM1","VM2","VM3","Q","RF","EsP","date_estimation","productionAnnuelle"])->latest('id')->joinRelationship('parcelle.producteur.localite.section')->where('sections.cooperative_id',$manager->cooperative_id)->where(function ($q) {
             if(request()->localite != null){
                 $q->where('localite_id',request()->localite);
             }
@@ -42,7 +42,7 @@ class EstimationController extends Controller
         $pageTitle = "Ajouter une estimation";
         $manager   = auth()->user();
         $producteurs  = Producteur::with('localite')->get();
-        $localites  = Localite::active()->where('cooperative_id',auth()->user()->cooperative_id)->orderBy('nom')->get();
+        $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->get();
         $campagnes = Campagne::active()->pluck('nom','id');
         $parcelles  = Parcelle::with('producteur')->get();
         return view('manager.estimation.create', compact('pageTitle', 'producteurs','localites','campagnes','parcelles'));
@@ -112,7 +112,8 @@ class EstimationController extends Controller
     public function edit($id)
     {
         $pageTitle = "Mise à jour de la estimation";
-        $localites  = Localite::active()->where('cooperative_id',auth()->user()->cooperative_id)->orderBy('nom')->get();
+        $manager = auth()->user();
+        $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->get();
         $producteurs  = Producteur::with('localite')->get();
         $estimation   = Estimation::findOrFail($id);
         return view('manager.estimation.edit', compact('pageTitle', 'localites', 'estimation','producteurs'));

@@ -8,7 +8,7 @@
                         @csrf
                         <input type="hidden" name="id" value="{{ $manager->id }}">
                         <div class="row">
-                            <div class="form-group col-lg-6">
+                            <div class="form-group col-lg-12">
                                 <label>@lang('Select Cooperative')</label>
                                 <select class="form-control" name="cooperative">
                                     <option value="">@lang('Selectionner une option')</option>
@@ -18,11 +18,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="form-group col-lg-6">
-                                <label>@lang("Nom d'utilisateur")</label>
-                                <input type="text" class="form-control" name="username"
-                                    value="{{$manager->username}}" required>
-                            </div>
+                            
                         </div>
 
                         <div class="row"> 
@@ -36,6 +32,7 @@
                                 <input type="text" class="form-control" name="firstname"
                                     value="{{$manager->firstname}}" required>
                             </div>
+                            
                         </div>
                         <div class="row">
 
@@ -52,12 +49,18 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="form-group col-lg-6">
+                       
+                            <div class="form-group col-lg-4">
+                                <label>@lang("Nom d'utilisateur")</label>
+                                <input type="text" class="form-control" name="username"
+                                    value="{{$manager->username}}" required>
+                            </div>
+                            <div class="form-group col-lg-4">
                                 <label>@lang("Mot de passe")</label>
                                 <input type="password" class="form-control" name="password">
                             </div>
 
-                            <div class="form-group col-lg-6">
+                            <div class="form-group col-lg-4">
                                 <label>@lang('Confirm Password')</label>
                                 <input type="password" class="form-control" name="password_confirmation">
                             </div>
