@@ -115,6 +115,7 @@
     <script src="{{ asset('assets/fcadmin/js/vendor/bootstrap-toggle.min.js') }}"></script>
     <script src="{{ asset('assets/global/js/jquery.validate.js') }}"></script>
     <script src="{{ asset('assets/global/js/messages_fr.js') }}"></script>
+    <script src="{{ asset('assets/global/js/jquery.mask.js') }}"></script>
     <script src="{{ asset('assets/fcadmin/js/vendor/jquery.slimscroll.min.js') }}"></script>
     @include('partials.plugins')
     @include('partials.notify')
@@ -149,6 +150,15 @@
                 $(".task-overlay").removeClass("in")
                 $(".close-task-detail").removeClass("in")
             });
+
+            //Datemask dd/mm/yyyy
+    $('.heure').mask('00:00',{placeholder: "__:__"});
+    $('.date').mask('00/00/0000',{placeholder: "__/__/____"});
+     $('.phone').mask('0000000000',{placeholder: "__ __ __ __ __"});
+     $('.age').mask('00',{placeholder: "__"});
+     $('.text2').mask('00',{placeholder: "__"});
+     $('.text4').mask('0000',{placeholder: "____"});
+     
             // Basic
             $('.dropify').dropify();
 

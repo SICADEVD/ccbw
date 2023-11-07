@@ -32,8 +32,8 @@ class ManagerController extends Controller
         $livraisonDelivered = LivraisonInfo::delivered()->count();
         $totalStaffCount  = User::staff()->where('cooperative_id', $manager->cooperative_id)->count();
         $cooperativeIncome     = LivraisonPayment::where('cooperative_id', $manager->cooperative_id)->where('status', Status::PAYE)->sum('final_amount');
-        $livraisonInfos     = $this->livraisons('queue');
-        return view('manager.dashboard', compact('pageTitle', 'cooperativeCount', 'livraisonShipCount', 'livraisonQueueCount', 'upcomingCount', 'deliveryQueueCount', 'totalStaffCount', 'totalSentCount', 'cooperativeIncome', 'livraisonInfoCount', 'livraisonDelivered', 'livraisonInfos'));
+  
+        return view('manager.dashboard', compact('pageTitle', 'cooperativeCount', 'livraisonShipCount', 'livraisonQueueCount', 'upcomingCount', 'deliveryQueueCount', 'totalStaffCount', 'totalSentCount', 'cooperativeIncome', 'livraisonInfoCount', 'livraisonDelivered'));
     }
 
     protected function livraisons($scope = null)
