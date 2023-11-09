@@ -77,27 +77,27 @@
             (activeTab == 'general') ? $('.actionBtn').addClass('d-none') : $('.actionBtn').removeClass('d-none')
         }
 
-        $("body").on("click", "#editSettings .nav a", function(event) {
-            event.preventDefault();
+        $("body").on("click", "#editSettings .nav a", function(event) { 
 
             $('.nav-item').removeClass('active');
             $(this).addClass('active');
              
             const requestUrl = this.href;
-              
-            $.easyAjax({
-                url: requestUrl,
-                blockUI: true,
-                container: "#nav-tabContent",
-                historyPush: true,
-                success: function(response) {
-                    if (response.status == "success") {
-                        showBtn(response.activeTab);
-                        $('#nav-tabContent').html(response.html);
-                        init('#nav-tabContent');
-                    }
-                }
-            });
+             
+            window.location.href = requestUrl
+            // $.easyAjax({
+            //     url: requestUrl,
+            //     blockUI: true,
+            //     container: "#nav-tabContent",
+            //     historyPush: true,
+            //     success: function(response) {
+            //         if (response.status == "success") {
+            //             showBtn(response.activeTab);
+            //             $('#nav-tabContent').html(response.html);
+            //             init('#nav-tabContent');
+            //         }
+            //     }
+            // });
         });
 
         $(MODAL_XL).on('shown.bs.modal', function () {

@@ -70,21 +70,21 @@
             $(this).addClass('active');
 
             const requestUrl = this.href;
+            window.location.href = requestUrl
+            // $.easyAjax({
+            //     url: requestUrl,
+            //     blockUI: true,
+            //     container: "#nav-tabContent",
+            //     historyPush: true,
+            //     success: function(response) {
+            //         if (response.status == "success") {
+            //             showBtn(response.activeTab);
 
-            $.easyAjax({
-                url: requestUrl,
-                blockUI: true,
-                container: "#nav-tabContent",
-                historyPush: true,
-                success: function(response) {
-                    if (response.status == "success") {
-                        showBtn(response.activeTab);
-
-                        $('#nav-tabContent').html(response.html);
-                        init('#nav-tabContent');
-                    }
-                }
-            });
+            //             $('#nav-tabContent').html(response.html);
+            //             init('#nav-tabContent');
+            //         }
+            //     }
+            // });
         });
     </script>
 @endpush

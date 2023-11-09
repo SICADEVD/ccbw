@@ -25,25 +25,29 @@ class LeaveSettingController extends AccountBaseController
     public function index()
     {
         $this->leaveTypes = DB::table('leave_types')->where('cooperative_id',auth()->user()->cooperative_id)->get();
-         
+        $leavePermission = LeaveSetting::first();
+        
         $tab = request('tab');
-
+       
         switch ($tab) {
         case 'general': 
-            $this->leavePermission = LeaveSetting::first();
-            $this->view = 'manager.leave-settings.ajax.general';
+            $this->leavePermission = $leavePermission; 
+            $this->view = 'manager.leave-settings.ajax.general'; 
                 break;
         default:
             $this->departments = Team::all();
-            $this->designations = Designation::all();
-            $this->view = 'manager.leave-settings.ajax.type';
+            $this->designations = Designation::all(); 
+            $this->view = 'manager.leave-settings.ajax.type'; 
                 break;
         }
 
         $this->activeTab = $tab ?: 'type';
-
+        $this->tab = $tab;
+     
         if (request()->ajax()) {
-            $html = view($this->view, $this->data)->render();
+             
+            
+             $html = view($this->view, $this->data)->render(); 
             return Reply::dataOnly(['status' => 'success', 'html' => $html, 'title' => $this->pageTitle, 'activeTab' => $this->activeTab]);
         }
 
