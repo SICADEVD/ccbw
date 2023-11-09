@@ -23,26 +23,27 @@ use App\Http\Controllers\Manager\CooperativeSettingController;
 use App\Http\Controllers\Manager\ProgrammeSettingController;
 use App\Http\Controllers\Manager\SectionSettingController;
 use App\Http\Controllers\Manager\LocaliteSettingController;
+use App\Http\Controllers\Manager\SettingController;
 
 Route::namespace('Manager\Auth')->group(function () {
 
     //Manager Login
     Route::controller('LoginController')->group(function () {
-        Route::get('/login', 'showLoginForm')->name('login');
-        Route::post('/login', 'login');
-        Route::get('logout', 'logout')->name('logout');
+Route::get('/login', 'showLoginForm')->name('login');
+Route::post('/login', 'login');
+Route::get('logout', 'logout')->name('logout');
     });
     //Manager Password Forgot
     Route::controller('ForgotPasswordController')->name('password.')->prefix('password')->group(function () {
-        Route::get('reset', 'showLinkRequestForm')->name('request');
-        Route::post('email', 'sendResetCodeEmail')->name('email');
-        Route::get('code-verify', 'codeVerify')->name('code.verify');
-        Route::post('verify-code', 'verifyCode')->name('verify.code');
+Route::get('reset', 'showLinkRequestForm')->name('request');
+Route::post('email', 'sendResetCodeEmail')->name('email');
+Route::get('code-verify', 'codeVerify')->name('code.verify');
+Route::post('verify-code', 'verifyCode')->name('verify.code');
     });
     //Manager Password Rest
     Route::controller('ResetPasswordController')->name('password.')->prefix('password')->group(function () {
-        Route::get('password/reset/{token}', 'showResetForm')->name('reset.form');
-        Route::post('password/reset/change', 'reset')->name('change');
+Route::get('password/reset/{token}', 'showResetForm')->name('reset.form');
+Route::post('password/reset/change', 'reset')->name('change');
     });
 });
 
@@ -53,41 +54,41 @@ Route::controller('SiteController')->group(function () {
 });
 
 Route::middleware('auth')->group(function () { 
-        Route::middleware('manager')->group(function () {
-            //Home Controller
-            Route::controller('Manager\ManagerController')->group(function () {
-                Route::get('dashboard', 'dashboard')->name('dashboard');
+Route::middleware('manager')->group(function () {
+    //Home Controller
+    Route::controller('Manager\ManagerController')->group(function () {
+Route::get('dashboard', 'dashboard')->name('dashboard');
 
-                //Manage Profile
-                Route::get('password', 'password')->name('password');
-                Route::get('profile', 'profile')->name('profile');
-                Route::post('profile/update', 'profileUpdate')->name('profile.update.data');
-                Route::post('password/update', 'passwordUpdate')->name('password.update.data');
+//Manage Profile
+Route::get('password', 'password')->name('password');
+Route::get('profile', 'profile')->name('profile');
+Route::post('profile/update', 'profileUpdate')->name('profile.update.data');
+Route::post('password/update', 'passwordUpdate')->name('password.update.data');
 
-                //Manage Cooperative
-                Route::name('cooperative.')->prefix('cooperative')->group(function () {
-                    Route::get('list', 'cooperativeList')->name('index');
-                    Route::get('income', 'cooperativeIncome')->name('income');
-                });
-            });
-            
-           
-            //Manage Staff
-            Route::controller('Manager\StaffController')->name('staff.')->prefix('staff')->group(function () {
-                Route::get('create', 'create')->name('create');
-                Route::get('list', 'index')->name('index');
-                Route::post('store', 'store')->name('store');
-                Route::get('edit/{id}', 'edit')->name('edit');
-                Route::post('status/{id}', 'status')->name('status');
+//Manage Cooperative
+Route::name('cooperative.')->prefix('cooperative')->group(function () {
+    Route::get('list', 'cooperativeList')->name('index');
+    Route::get('income', 'cooperativeIncome')->name('income');
+});
+    });
+    
+   
+    //Manage Staff
+    Route::controller('Manager\StaffController')->name('staff.')->prefix('staff')->group(function () {
+Route::get('create', 'create')->name('create');
+Route::get('list', 'index')->name('index');
+Route::post('store', 'store')->name('store');
+Route::get('edit/{id}', 'edit')->name('edit');
+Route::post('status/{id}', 'status')->name('status');
 
-                Route::get('magasin/{id}', 'magasinIndex')->name('magasin.index');
-                Route::post('magasin/store', 'magasinStore')->name('magasin.store');
-                Route::post('magasin/status/{id}', 'magasinStatus')->name('magasin.status');
-                Route::get('/exportStaffsExcel', 'exportExcel')->name('exportExcel.staffAll');
-                Route::get('staff/dashboard/{id}', 'staffLogin')->name('stafflogin');
-            }); 
+Route::get('magasin/{id}', 'magasinIndex')->name('magasin.index');
+Route::post('magasin/store', 'magasinStore')->name('magasin.store');
+Route::post('magasin/status/{id}', 'magasinStatus')->name('magasin.status');
+Route::get('/exportStaffsExcel', 'exportExcel')->name('exportExcel.staffAll');
+Route::get('staff/dashboard/{id}', 'staffLogin')->name('stafflogin');
+    }); 
 
-        // employee routes
+// employee routes
 Route::controller('Manager\EmployeeController')->name('hr.')->prefix('hr')->group(function () {
     Route::post('employees/apply-quick-action', [EmployeeController::class, 'applyQuickAction'])->name('employees.apply_quick_action');
     Route::post('employees/assignRole', [EmployeeController::class, 'assignRole'])->name('employees.assign_role');
@@ -139,6 +140,31 @@ Route::name('settings.')->prefix('settings')->group(function () {
     Route::post('localite-settings/status/{id}', [LocaliteSettingController::class, 'status'])->name('localite-settings.status');
     Route::post('localite-settings/uploadcontent', [LocaliteSettingController::class, 'uploadContent'])->name('localite-settings.uploadcontent');
     Route::post('leaves-settings/change-permission', [LeaveSettingController::class, 'changePermission'])->name('leaves-settings.changePermission');
+    Route::get('campagne/',[SettingController::class, 'campagneIndex'])->name('campagne.index');
+    Route::post('campagne/store',[SettingController::class, 'campagneStore'])->name('campagne.store');
+    Route::post('campagne/status/{id}',[SettingController::class, 'campagneStatus'])->name('campagne.status'); 
+    Route::get('travaux-dangereux/',[SettingController::class, 'travauxDangereuxIndex'])->name('travauxDangereux.index');
+    Route::post('travaux-dangereux/store',[SettingController::class, 'travauxDangereuxStore'])->name('travauxDangereux.store');
+    Route::post('travaux-dangereux/status/{id}',[SettingController::class, 'travauxDangereuxStatus'])->name('travauxDangereux.status'); 
+    Route::get('travaux-legers/',[SettingController::class, 'travauxLegersIndex'])->name('travauxLegers.index');
+    Route::post('travaux-legers/store',[SettingController::class, 'travauxLegersStore'])->name('travauxLegers.store');
+    Route::post('travaux-legers/status/{id}',[SettingController::class, 'travauxLegersStatus'])->name('travauxLegers.status');
+    Route::get('arret-ecole/',[SettingController::class, 'arretEcoleIndex'])->name('arretEcole.index');
+    Route::post('arret-ecole/store',[SettingController::class, 'arretEcoleStore'])->name('arretEcole.store');
+    Route::post('arret-ecole/status/{id}',[SettingController::class, 'arretEcoleStatus'])->name('arretEcole.status');
+    Route::get('type-formation/',[SettingController::class, 'typeFormationIndex'])->name('typeFormation.index');
+    Route::post('type-formation/store',[SettingController::class, 'typeFormationStore'])->name('typeFormation.store');
+    Route::post('type-formation/status/{id}',[SettingController::class, 'typeFormationStatus'])->name('typeFormation.status');
+    Route::get('theme-formation/',[SettingController::class, 'themeFormationIndex'])->name('themeFormation.index');
+    Route::post('theme-formation/store',[SettingController::class, 'themeFormationStore'])->name('themeFormation.store');
+    Route::post('theme-formation/status/{id}',[SettingController::class, 'themeFormationStatus'])->name('themeFormation.status');
+    Route::get('categorie-questionnaire/',[SettingController::class, 'categorieQuestionnaireIndex'])->name('categorieQuestionnaire.index');
+    Route::post('categorie-questionnaire/store',[SettingController::class, 'categorieQuestionnaireStore'])->name('categorieQuestionnaire.store');
+    Route::post('categorie-questionnaire/status/{id}',[SettingController::class, 'categorieQuestionnaireStatus'])->name('categorieQuestionnaire.status');
+    Route::get('questionnaire/',[SettingController::class, 'questionnaireIndex'])->name('questionnaire.index');
+    Route::post('questionnaire/store',[SettingController::class, 'questionnaireStore'])->name('questionnaire.store');
+    Route::post('questionnaire/status/{id}',[SettingController::class, 'questionnaireStatus'])->name('questionnaire.status');
+
   });
 
 Route::resource('leaveType', LeaveTypeController::class);
@@ -191,193 +217,193 @@ Route::get('attendance/{id}/{day}/{month}/{year}', [AttendanceController::class,
     // Timelogs
  
     Route::controller('Manager\TimelogController')->name('hr.')->prefix('hr')->group(function () {
-        
-        Route::get('by-employee', [TimelogController::class, 'byEmployee'])->name('timelogs.by_employee');
-        Route::get('export', [TimelogController::class, 'export'])->name('timelogs.export');
-        Route::get('show-active-timer', [TimelogController::class, 'showActiveTimer'])->name('timelogs.show_active_timer');
-        Route::get('show-timer', [TimelogController::class, 'showTimer'])->name('timelogs.show_timer');
-        Route::post('start-timer', [TimelogController::class, 'startTimer'])->name('timelogs.start_timer');
-        Route::get('timer-data', [TimelogController::class, 'timerData'])->name('timelogs.timer_data');
-        Route::post('stop-timer', [TimelogController::class, 'stopTimer'])->name('timelogs.stop_timer');
-        Route::post('pause-timer', [TimelogController::class, 'pauseTimer'])->name('timelogs.pause_timer');
-        Route::post('resume-timer', [TimelogController::class, 'resumeTimer'])->name('timelogs.resume_timer');
-        Route::post('apply-quick-action', [TimelogController::class, 'applyQuickAction'])->name('timelogs.apply_quick_action');
 
-        Route::post('employee_data', [TimelogController::class, 'employeeData'])->name('timelogs.employee_data');
-        Route::post('user_time_logs', [TimelogController::class, 'userTimelogs'])->name('timelogs.user_time_logs');
-        Route::post('approve_timelog', [TimelogController::class, 'approveTimelog'])->name('timelogs.approve_timelog');
+Route::get('by-employee', [TimelogController::class, 'byEmployee'])->name('timelogs.by_employee');
+Route::get('export', [TimelogController::class, 'export'])->name('timelogs.export');
+Route::get('show-active-timer', [TimelogController::class, 'showActiveTimer'])->name('timelogs.show_active_timer');
+Route::get('show-timer', [TimelogController::class, 'showTimer'])->name('timelogs.show_timer');
+Route::post('start-timer', [TimelogController::class, 'startTimer'])->name('timelogs.start_timer');
+Route::get('timer-data', [TimelogController::class, 'timerData'])->name('timelogs.timer_data');
+Route::post('stop-timer', [TimelogController::class, 'stopTimer'])->name('timelogs.stop_timer');
+Route::post('pause-timer', [TimelogController::class, 'pauseTimer'])->name('timelogs.pause_timer');
+Route::post('resume-timer', [TimelogController::class, 'resumeTimer'])->name('timelogs.resume_timer');
+Route::post('apply-quick-action', [TimelogController::class, 'applyQuickAction'])->name('timelogs.apply_quick_action');
+
+Route::post('employee_data', [TimelogController::class, 'employeeData'])->name('timelogs.employee_data');
+Route::post('user_time_logs', [TimelogController::class, 'userTimelogs'])->name('timelogs.user_time_logs');
+Route::post('approve_timelog', [TimelogController::class, 'approveTimelog'])->name('timelogs.approve_timelog');
     });
     Route::resource('timelog-calendar', TimelogCalendarController::class); 
     Route::resource('timelogs', TimelogController::class); 
-            //Manage Producteur
-            Route::controller('Manager\ProducteurController')->name('traca.producteur.')->prefix('producteur')->group(function () {
-                Route::get('list', 'index')->name('index');
-                Route::get('infos/{id}', 'infos')->name('infos');
-                Route::get('create', 'create')->name('create');
-                Route::post('store', 'store')->name('store');
-                Route::post('update/{id}','update')->name('update');
-                Route::post('info/store', 'storeinfo')->name('storeinfo');
-                Route::get('infos/edit/{id}', 'editinfo')->name('editinfo');
-                Route::get('edit/{id}', 'edit')->name('edit');
-                Route::post('status/{id}', 'status')->name('status');
-                Route::get('/exportProducteursExcel', 'exportExcel')->name('exportExcel.producteurAll');
-                Route::post('/uploadcontent', 'uploadContent')->name('uploadcontent');
-            });
+    //Manage Producteur
+    Route::controller('Manager\ProducteurController')->name('traca.producteur.')->prefix('producteur')->group(function () {
+Route::get('list', 'index')->name('index');
+Route::get('infos/{id}', 'infos')->name('infos');
+Route::get('create', 'create')->name('create');
+Route::post('store', 'store')->name('store');
+Route::post('update/{id}','update')->name('update');
+Route::post('info/store', 'storeinfo')->name('storeinfo');
+Route::get('infos/edit/{id}', 'editinfo')->name('editinfo');
+Route::get('edit/{id}', 'edit')->name('edit');
+Route::post('status/{id}', 'status')->name('status');
+Route::get('/exportProducteursExcel', 'exportExcel')->name('exportExcel.producteurAll');
+Route::post('/uploadcontent', 'uploadContent')->name('uploadcontent');
+    });
 
-            //Manage Parcelle
-            Route::controller('Manager\ParcelleController')->name('traca.parcelle.')->prefix('parcelle')->group(function () {
-                Route::get('list', 'index')->name('index'); 
-                Route::get('create', 'create')->name('create');
-                Route::post('store', 'store')->name('store'); 
-                Route::get('edit/{id}', 'edit')->name('edit');
-                Route::post('status/{id}', 'status')->name('status');
-                Route::get('/exportParcellesExcel', 'exportExcel')->name('exportExcel.parcelleAll');
-                Route::post('/uploadcontent', 'uploadContent')->name('uploadcontent');
-            });
+    //Manage Parcelle
+    Route::controller('Manager\ParcelleController')->name('traca.parcelle.')->prefix('parcelle')->group(function () {
+Route::get('list', 'index')->name('index'); 
+Route::get('create', 'create')->name('create');
+Route::post('store', 'store')->name('store'); 
+Route::get('edit/{id}', 'edit')->name('edit');
+Route::post('status/{id}', 'status')->name('status');
+Route::get('/exportParcellesExcel', 'exportExcel')->name('exportExcel.parcelleAll');
+Route::post('/uploadcontent', 'uploadContent')->name('uploadcontent');
+    });
 
-            //Manage Estimation
-            Route::controller('Manager\EstimationController')->name('traca.estimation.')->prefix('estimation')->group(function () {
-                Route::get('list', 'index')->name('index'); 
-                Route::get('create', 'create')->name('create');
-                Route::post('store', 'store')->name('store'); 
-                Route::get('edit/{id}', 'edit')->name('edit');
-                Route::post('status/{id}', 'status')->name('status');
-                Route::get('/exportEstimationsExcel', 'exportExcel')->name('exportExcel.estimationAll');
-                Route::post('/uploadcontent', 'uploadContent')->name('uploadcontent');
-            });
+    //Manage Estimation
+    Route::controller('Manager\EstimationController')->name('traca.estimation.')->prefix('estimation')->group(function () {
+Route::get('list', 'index')->name('index'); 
+Route::get('create', 'create')->name('create');
+Route::post('store', 'store')->name('store'); 
+Route::get('edit/{id}', 'edit')->name('edit');
+Route::post('status/{id}', 'status')->name('status');
+Route::get('/exportEstimationsExcel', 'exportExcel')->name('exportExcel.estimationAll');
+Route::post('/uploadcontent', 'uploadContent')->name('uploadcontent');
+    });
 
-            //Manage Suivi Menage
-            Route::controller('Manager\MenageController')->name('suivi.menage.')->prefix('menage')->group(function () {
-                Route::get('list', 'index')->name('index'); 
-                Route::get('create', 'create')->name('create');
-                Route::post('store', 'store')->name('store'); 
-                Route::get('edit/{id}', 'edit')->name('edit');
-                Route::post('status/{id}', 'status')->name('status');
-                Route::get('/exportMenagesExcel', 'exportExcel')->name('exportExcel.menageAll');
-            });
-
-
-             //Manage Suivi Parcelle
-            Route::controller('Manager\SuiviParcelleController')->name('suivi.parcelles.')->prefix('suivi/parcelles')->group(function () {
-                Route::get('list', 'index')->name('index'); 
-                Route::get('create', 'create')->name('create');
-                Route::post('store', 'store')->name('store'); 
-                Route::get('edit/{id}', 'edit')->name('edit');
-                Route::post('status/{id}', 'status')->name('status');
-                Route::get('/exportSuiviParcellesExcel', 'exportExcel')->name('exportExcel.suiviParcelleAll');
-            });
-
-            //Manage Suivi Formation
-            Route::controller('Manager\FormationController')->name('suivi.formation.')->prefix('formation')->group(function () {
-                Route::get('list', 'index')->name('index'); 
-                Route::get('create', 'create')->name('create');
-                Route::post('store', 'store')->name('store'); 
-                Route::get('edit/{id}', 'edit')->name('edit');
-                Route::post('status/{id}', 'status')->name('status');
-                Route::get('/exportFormationsExcel', 'exportExcel')->name('exportExcel.formationAll');
-            });
-
-            //Manage Suivi Inspection
-            Route::controller('Manager\InspectionController')->name('suivi.inspection.')->prefix('inspection')->group(function () {
-                Route::get('list', 'index')->name('index'); 
-                Route::get('create', 'create')->name('create');
-                Route::post('store', 'store')->name('store'); 
-                Route::get('edit/{id}', 'edit')->name('edit');
-                Route::post('status/{id}', 'status')->name('status');
-                Route::get('/exportInspectionsExcel', 'exportExcel')->name('exportExcel.inspectionAll');
-            });
-            //Manage Suivi Application
-            Route::controller('Manager\ApplicationController')->name('suivi.application.')->prefix('application')->group(function () {
-                Route::get('list', 'index')->name('index'); 
-                Route::get('create', 'create')->name('create');
-                Route::post('store', 'store')->name('store'); 
-                Route::get('edit/{id}', 'edit')->name('edit');
-                Route::post('status/{id}', 'status')->name('status');
-                Route::get('/exportApplicationsExcel', 'exportExcel')->name('exportExcel.applicationAll');
-            });
-
-            //Manage Suivi Ssrteclmrs
-            Route::controller('Manager\SsrteclmrsController')->name('suivi.ssrteclmrs.')->prefix('ssrteclmrs')->group(function () {
-                Route::get('list', 'index')->name('index'); 
-                Route::get('create', 'create')->name('create');
-                Route::post('store', 'store')->name('store'); 
-                Route::get('edit/{id}', 'edit')->name('edit');
-                Route::post('status/{id}', 'status')->name('status');
-                Route::get('/exportSsrteclmrsExcel', 'exportExcel')->name('exportExcel.ssrteclmrsAll');
-            });
-
-            //Manage Agroapprovisionnements
-            Route::controller('Manager\AgroapprovisionnementController')->name('agro.approvisionnement.')->prefix('agro/approvisionnement')->group(function () {
-                Route::get('list', 'index')->name('index'); 
-                Route::get('create', 'create')->name('create');
-                Route::post('store', 'store')->name('store'); 
-                Route::get('edit/{id}', 'edit')->name('edit');
-                Route::post('status/{id}', 'status')->name('status');
-                Route::get('/exportApprovisionnementExcel', 'exportExcel')->name('exportExcel.approvisionnementAll');
-            });
-
-            //Manage Agrodistributions
-            Route::controller('Manager\AgrodistributionController')->name('agro.distribution.')->prefix('agro/distribution')->group(function () {
-                Route::get('list', 'index')->name('index'); 
-                Route::get('create', 'create')->name('create');
-                Route::post('store', 'store')->name('store'); 
-                Route::post('update', 'update')->name('update'); 
-                Route::get('edit/{id}', 'edit')->name('edit');
-                Route::post('status/{id}', 'status')->name('status');
-                Route::get('/exportDistributionsExcel', 'exportExcel')->name('exportExcel.distributionAll');
-                Route::post('/get/agroparcelles/arbres', 'getAgroParcellesArbres')->name('getAgroParcellesArbres');
-            });
-
-            //Manage Agroevaluations
-            Route::controller('Manager\AgroevaluationController')->name('agro.evaluation.')->prefix('agro/evaluation')->group(function () {
-                Route::get('list', 'index')->name('index'); 
-                Route::get('create', 'create')->name('create');
-                Route::post('store', 'store')->name('store'); 
-                Route::get('destroy/{id}', 'destroy')->name('destroy'); 
-                Route::get('edit/{id}', 'edit')->name('edit');
-                Route::post('status/{id}', 'status')->name('status');
-                Route::get('/exportEvaluationsExcel', 'exportExcel')->name('exportExcel.evaluationsAll');
-            });
-
-            //Manage Agrodeforestations
-            Route::controller('Manager\AgrodeforestationController')->name('agro.deforestation.')->prefix('agro/deforestation')->group(function () {
-                Route::get('list', 'index')->name('index'); 
-                Route::get('create', 'create')->name('create');
-                Route::post('store', 'store')->name('store'); 
-                Route::get('edit/{id}', 'edit')->name('edit');
-                Route::post('status/{id}', 'status')->name('status');
-                Route::get('/exportDeforestationsExcel', 'exportExcel')->name('exportExcel.deforestationsAll');
-            });
-
-            //Manage Livraison
-         
-            Route::controller('Manager\LivraisonController')->name('livraison.')->prefix('livraison')->group(function () {
-                Route::get('list', 'livraisonInfo')->name('index');
-                Route::get('dispatch/list', 'dispatchLivraison')->name('dispatch');
-                Route::get('upcoming/list', 'upcoming')->name('upcoming');
-                Route::get('sent-queue/list', 'sentInQueue')->name('sentQueue');
-                Route::get('delivery-queue/list', 'deliveryInQueue')->name('deliveryInQueue');
-                Route::get('delivered', 'delivered')->name('delivered');
-                Route::get('search', 'livraisonSearch')->name('search');
-                Route::get('invoice/{id}', 'invoice')->name('invoice');
-                Route::get('sent', 'sentLivraison')->name('sent');
-                Route::get('/exportLivraisonsExcel', 'exportExcel')->name('exportExcel.livraisonAll');
-            });
-
-            Route::controller('Manager\ManagerTicketController')->prefix('ticket')->name('ticket.')->group(function () {
-                Route::get('/', 'supportTicket')->name('index');
-                Route::get('/new', 'openSupportTicket')->name('open');
-                Route::post('/create', 'storeSupportTicket')->name('store');
-                Route::get('/view/{ticket}', 'viewTicket')->name('view');
-                Route::post('/reply/{ticket}', 'replyTicket')->name('reply');
-                Route::post('/close/{ticket}', 'closeTicket')->name('close');
-                Route::get('/download/{ticket}', 'ticketDownload')->name('download');
-            });
-
-            
+    //Manage Suivi Menage
+    Route::controller('Manager\MenageController')->name('suivi.menage.')->prefix('menage')->group(function () {
+Route::get('list', 'index')->name('index'); 
+Route::get('create', 'create')->name('create');
+Route::post('store', 'store')->name('store'); 
+Route::get('edit/{id}', 'edit')->name('edit');
+Route::post('status/{id}', 'status')->name('status');
+Route::get('/exportMenagesExcel', 'exportExcel')->name('exportExcel.menageAll');
+    });
 
 
-        }); 
+     //Manage Suivi Parcelle
+    Route::controller('Manager\SuiviParcelleController')->name('suivi.parcelles.')->prefix('suivi/parcelles')->group(function () {
+Route::get('list', 'index')->name('index'); 
+Route::get('create', 'create')->name('create');
+Route::post('store', 'store')->name('store'); 
+Route::get('edit/{id}', 'edit')->name('edit');
+Route::post('status/{id}', 'status')->name('status');
+Route::get('/exportSuiviParcellesExcel', 'exportExcel')->name('exportExcel.suiviParcelleAll');
+    });
+
+    //Manage Suivi Formation
+    Route::controller('Manager\FormationController')->name('suivi.formation.')->prefix('formation')->group(function () {
+Route::get('list', 'index')->name('index'); 
+Route::get('create', 'create')->name('create');
+Route::post('store', 'store')->name('store'); 
+Route::get('edit/{id}', 'edit')->name('edit');
+Route::post('status/{id}', 'status')->name('status');
+Route::get('/exportFormationsExcel', 'exportExcel')->name('exportExcel.formationAll');
+    });
+
+    //Manage Suivi Inspection
+    Route::controller('Manager\InspectionController')->name('suivi.inspection.')->prefix('inspection')->group(function () {
+Route::get('list', 'index')->name('index'); 
+Route::get('create', 'create')->name('create');
+Route::post('store', 'store')->name('store'); 
+Route::get('edit/{id}', 'edit')->name('edit');
+Route::post('status/{id}', 'status')->name('status');
+Route::get('/exportInspectionsExcel', 'exportExcel')->name('exportExcel.inspectionAll');
+    });
+    //Manage Suivi Application
+    Route::controller('Manager\ApplicationController')->name('suivi.application.')->prefix('application')->group(function () {
+Route::get('list', 'index')->name('index'); 
+Route::get('create', 'create')->name('create');
+Route::post('store', 'store')->name('store'); 
+Route::get('edit/{id}', 'edit')->name('edit');
+Route::post('status/{id}', 'status')->name('status');
+Route::get('/exportApplicationsExcel', 'exportExcel')->name('exportExcel.applicationAll');
+    });
+
+    //Manage Suivi Ssrteclmrs
+    Route::controller('Manager\SsrteclmrsController')->name('suivi.ssrteclmrs.')->prefix('ssrteclmrs')->group(function () {
+Route::get('list', 'index')->name('index'); 
+Route::get('create', 'create')->name('create');
+Route::post('store', 'store')->name('store'); 
+Route::get('edit/{id}', 'edit')->name('edit');
+Route::post('status/{id}', 'status')->name('status');
+Route::get('/exportSsrteclmrsExcel', 'exportExcel')->name('exportExcel.ssrteclmrsAll');
+    });
+
+    //Manage Agroapprovisionnements
+    Route::controller('Manager\AgroapprovisionnementController')->name('agro.approvisionnement.')->prefix('agro/approvisionnement')->group(function () {
+Route::get('list', 'index')->name('index'); 
+Route::get('create', 'create')->name('create');
+Route::post('store', 'store')->name('store'); 
+Route::get('edit/{id}', 'edit')->name('edit');
+Route::post('status/{id}', 'status')->name('status');
+Route::get('/exportApprovisionnementExcel', 'exportExcel')->name('exportExcel.approvisionnementAll');
+    });
+
+    //Manage Agrodistributions
+    Route::controller('Manager\AgrodistributionController')->name('agro.distribution.')->prefix('agro/distribution')->group(function () {
+Route::get('list', 'index')->name('index'); 
+Route::get('create', 'create')->name('create');
+Route::post('store', 'store')->name('store'); 
+Route::post('update', 'update')->name('update'); 
+Route::get('edit/{id}', 'edit')->name('edit');
+Route::post('status/{id}', 'status')->name('status');
+Route::get('/exportDistributionsExcel', 'exportExcel')->name('exportExcel.distributionAll');
+Route::post('/get/agroparcelles/arbres', 'getAgroParcellesArbres')->name('getAgroParcellesArbres');
+    });
+
+    //Manage Agroevaluations
+    Route::controller('Manager\AgroevaluationController')->name('agro.evaluation.')->prefix('agro/evaluation')->group(function () {
+Route::get('list', 'index')->name('index'); 
+Route::get('create', 'create')->name('create');
+Route::post('store', 'store')->name('store'); 
+Route::get('destroy/{id}', 'destroy')->name('destroy'); 
+Route::get('edit/{id}', 'edit')->name('edit');
+Route::post('status/{id}', 'status')->name('status');
+Route::get('/exportEvaluationsExcel', 'exportExcel')->name('exportExcel.evaluationsAll');
+    });
+
+    //Manage Agrodeforestations
+    Route::controller('Manager\AgrodeforestationController')->name('agro.deforestation.')->prefix('agro/deforestation')->group(function () {
+Route::get('list', 'index')->name('index'); 
+Route::get('create', 'create')->name('create');
+Route::post('store', 'store')->name('store'); 
+Route::get('edit/{id}', 'edit')->name('edit');
+Route::post('status/{id}', 'status')->name('status');
+Route::get('/exportDeforestationsExcel', 'exportExcel')->name('exportExcel.deforestationsAll');
+    });
+
+    //Manage Livraison
+ 
+    Route::controller('Manager\LivraisonController')->name('livraison.')->prefix('livraison')->group(function () {
+Route::get('list', 'livraisonInfo')->name('index');
+Route::get('dispatch/list', 'dispatchLivraison')->name('dispatch');
+Route::get('upcoming/list', 'upcoming')->name('upcoming');
+Route::get('sent-queue/list', 'sentInQueue')->name('sentQueue');
+Route::get('delivery-queue/list', 'deliveryInQueue')->name('deliveryInQueue');
+Route::get('delivered', 'delivered')->name('delivered');
+Route::get('search', 'livraisonSearch')->name('search');
+Route::get('invoice/{id}', 'invoice')->name('invoice');
+Route::get('sent', 'sentLivraison')->name('sent');
+Route::get('/exportLivraisonsExcel', 'exportExcel')->name('exportExcel.livraisonAll');
+    });
+
+    Route::controller('Manager\ManagerTicketController')->prefix('ticket')->name('ticket.')->group(function () {
+Route::get('/', 'supportTicket')->name('index');
+Route::get('/new', 'openSupportTicket')->name('open');
+Route::post('/create', 'storeSupportTicket')->name('store');
+Route::get('/view/{ticket}', 'viewTicket')->name('view');
+Route::post('/reply/{ticket}', 'replyTicket')->name('reply');
+Route::post('/close/{ticket}', 'closeTicket')->name('close');
+Route::get('/download/{ticket}', 'ticketDownload')->name('download');
+    });
+
+    
+
+
+}); 
 
 });
 

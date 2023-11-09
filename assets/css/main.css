@@ -27580,7 +27580,7 @@ ul.thumbnails.image_picker_selector li .thumbnail.selected
 }
 .settings-box
     {
-    padding:20px 28px
+    padding:0px 28px
 }
 .sticky-note
     {
@@ -29669,7 +29669,7 @@ table.dataTable
 }
 .settings-sidebar
     {
-    height:calc(100% - 63px);max-height:100%;max-width:270px;position:fixed;white-space:nowrap;width:100%
+    height:calc(100% - 63px);max-width:270px;position:fixed;white-space:nowrap;width:100%
 }
 @media (max-width:991.98px)
     {
@@ -29682,17 +29682,9 @@ table.dataTable
 }
 .settings-sidebar .settings-menu
     {
-    height:calc(100vh - 150px);overflow:auto
+    height:calc(100vh - 260px);overflow:auto
 }
-@media (max-width:991.98px)
-    {
-    .settings-sidebar .settings-menu
-    {
-    height:calc(100vh - 80px)
-}
-
-
-}
+ 
 .settings-sidebar .settings-menu li a
     {
     padding:15px 24px;white-space:break-spaces
@@ -29728,7 +29720,7 @@ table.dataTable
 }
 .settings-box
     {
-    margin-left:250px;width:77%
+    margin-left:250px;width:79%
 }
 @media (max-width:1199.98px)
     {
