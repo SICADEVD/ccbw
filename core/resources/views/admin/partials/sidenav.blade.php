@@ -69,15 +69,7 @@
                         <span class="menu-title">@lang('Liste des Staffs')</span>
                     </a>
                 </li>
-
-                <li class="sidebar-menu-item sidebar-dropdown">
-                    <a href="javascript:void(0)" class="{{ menuActive('admin.config.*', 3) }}">
-                        <i class="menu-icon las la-tasks"></i>
-                        <span class="menu-title">{{ __($general->site_name) }} @lang('Setting')</span>
-                    </a>
-                    <div class="sidebar-submenu {{ menuActive('admin.config.*', 2) }} ">
-                        <ul> 
-                            <li class="sidebar-menu-item {{ menuActive('admin.roles.index') }}">
+                <li class="sidebar-menu-item {{ menuActive('admin.roles.index') }}">
                     <a href="{{ route('admin.roles.index') }}" class="nav-link ">
                         <i class="menu-icon las la-university"></i>
                         <span class="menu-title">@lang('Gestion des Roles')</span>
@@ -89,10 +81,6 @@
                         <i class="menu-icon las la-university"></i>
                         <span class="menu-title">@lang('Gestion des Permissions')</span>
                     </a>
-                </li>
-
-                        </ul>
-                    </div>
                 </li>
                 <li class="sidebar-menu-item sidebar-dropdown">
                     <a href="javascript:void(0)" class="{{ menuActive('admin.ticket*', 3) }}">
