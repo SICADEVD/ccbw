@@ -76,56 +76,7 @@
                         <span class="menu-title">{{ __($general->site_name) }} @lang('Setting')</span>
                     </a>
                     <div class="sidebar-submenu {{ menuActive('admin.config.*', 2) }} ">
-                        <ul>
-             
-                            <li class="sidebar-menu-item {{ menuActive('admin.config.campagne.index') }} ">
-                                <a href="{{ route('admin.config.campagne.index') }}" class="nav-link">
-                                    <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('Campagne')</span>
-                                </a>
-                            </li>
-                            <li class="sidebar-menu-item {{ menuActive('admin.config.travauxDangereux.index') }} ">
-                                <a href="{{ route('admin.config.travauxDangereux.index') }}" class="nav-link">
-                                    <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('Travaux Dangereux')</span>
-                                </a>
-                            </li>
-                            <li class="sidebar-menu-item {{ menuActive('admin.config.travauxLegers.index') }} ">
-                                <a href="{{ route('admin.config.travauxLegers.index') }}" class="nav-link">
-                                    <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('Travaux Legers')</span>
-                                </a>
-                            </li>
-                            <li class="sidebar-menu-item {{ menuActive('admin.config.arretEcole.index') }} ">
-                                <a href="{{ route('admin.config.arretEcole.index') }}" class="nav-link">
-                                    <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('Arret Ecole')</span>
-                                </a>
-                            </li>
-                            <li class="sidebar-menu-item {{ menuActive('admin.config.typeFormation.index') }} ">
-                                <a href="{{ route('admin.config.typeFormation.index') }}" class="nav-link">
-                                    <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('Type Formation')</span>
-                                </a>
-                            </li>
-                            <li class="sidebar-menu-item {{ menuActive('admin.config.themeFormation.index') }} ">
-                                <a href="{{ route('admin.config.themeFormation.index') }}" class="nav-link">
-                                    <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('Theme Formation')</span>
-                                </a>
-                            </li>
-                            <li class="sidebar-menu-item {{ menuActive('admin.config.categorieQuestionnaire.index') }} ">
-                                <a href="{{ route('admin.config.categorieQuestionnaire.index') }}" class="nav-link">
-                                    <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('Categorie Questionnaire')</span>
-                                </a>
-                            </li>
-                            <li class="sidebar-menu-item {{ menuActive('admin.config.questionnaire.index') }} ">
-                                <a href="{{ route('admin.config.questionnaire.index') }}" class="nav-link">
-                                    <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('Questionnaire')</span>
-                                </a>
-                            </li>
+                        <ul> 
                             <li class="sidebar-menu-item {{ menuActive('admin.roles.index') }}">
                     <a href="{{ route('admin.roles.index') }}" class="nav-link ">
                         <i class="menu-icon las la-university"></i>
