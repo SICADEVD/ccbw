@@ -12,7 +12,7 @@ class Menage_sourceEnergie extends Model
 {
     use HasFactory,Searchable, GlobalStatus, PowerJoins;
     
-    protected $table = 'menage_sourceenergies';
+    protected $table = 'menage_ordureMenageres';
     protected $guarded = [];
 
     public function menage()
