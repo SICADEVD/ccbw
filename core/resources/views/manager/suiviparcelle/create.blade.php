@@ -257,95 +257,97 @@
                                     </tfoot>
                                 </table>
                             </div>
-                            <div class="form-group row">
-                                <?php echo Form::label(__('Quels sont les Intrants (fertilisant, biofertilisant) utilisés l’année dernière'), null, ['class' => 'col-sm-12 control-label pt-3']); ?>
+                        </div>
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Quels sont les Intrants (fertilisant, biofertilisant) utilisés l’année dernière'), null, ['class' => 'col-sm-12 control-label pt-3']); ?>
 
-                                {{-- NPK   Compost   Biofertilisant/Bio stimulant Engrais organique préfabriqué --}}
-                                <div class="col-xs-12 col-sm-12">
-                                    <table class="table table-striped table-bordered">
-                                        <tbody id="intrantsAnneDerniere_area">
-                                            <tr>
-                                                <td class="row">
-                                                    <div class="col-xs-12 col-sm-12 bg-success">
-                                                        <badge class="btn  btn-outline--warning h-45 btn-sm">
-                                                            @lang('Intrant')
-                                                        </badge>
+                            {{-- NPK   Compost   Biofertilisant/Bio stimulant Engrais organique préfabriqué --}}
+                            <div class="col-xs-12 col-sm-12">
+                                <table class="table table-striped table-bordered">
+                                    <tbody id="intrantsAnneDerniere_area">
+                                        <tr>
+                                            <td class="row">
+                                                <div class="col-xs-12 col-sm-12 bg-success">
+                                                    <badge class="btn  btn-outline--warning h-45 btn-sm">
+                                                        @lang('Intrant')
+                                                    </badge>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-4">
+                                                    <div class="form-group row">
+                                                        <label class="control-label">Nom</label>
+                                                        <select name="intrantsAnneDerniere[]" id="intrantsAnneDerniere-1"
+                                                            class="form-control">
+                                                            <option value="Dechets animaux">Dechets animaux
+                                                            </option>
+                                                            <option value="NPK">NPK</option>
+                                                            <option value="Compost">Compost</option>
+                                                            <option value="Biofertilisant/Bio stimulant">
+                                                                Biofertilisant/Bio stimulant</option>
+                                                            <option value="Engrais organique préfabriqué">Engrais
+                                                                organique préfabriqué</option>
+                                                            <option value="Engrais organique préfabriqué">Engrais
+                                                                foliaire</option>
+                                                        </select>
                                                     </div>
-                                                    <div class="col-xs-12 col-sm-4">
-                                                        <div class="form-group row">
-                                                            <label class="control-label">Nom</label>
-                                                            <select name="intrantsAnneDerniere[]"
-                                                                id="intrantsAnneDerniere-1" class="form-control">
-                                                                <option value="Dechets animaux">Dechets animaux</option>
-                                                                <option value="NPK">NPK</option>
-                                                                <option value="Compost">Compost</option>
-                                                                <option value="Biofertilisant/Bio stimulant">
-                                                                    Biofertilisant/Bio stimulant</option>
-                                                                <option value="Engrais organique préfabriqué">Engrais
-                                                                    organique préfabriqué</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
+                                                </div>
 
-                                                    <div class="col-xs-12 col-sm-2">
-                                                        <div class="form-group row">
-                                                            <label class="control-label">Unité</label>
-                                                            <select class="form-control unite" name="unite[]"
-                                                                id="unite-1">
-                                                                <option value="Kg">Kg</option>
-                                                                <option value="L">L</option>
-                                                            </select>
-                                                        </div>
+                                                <div class="col-xs-12 col-sm-2">
+                                                    <div class="form-group row">
+                                                        <label class="control-label">Unité</label>
+                                                        <select class="form-control unite" name="unite[]" id="unite-1">
+                                                            <option value="Kg">Kg</option>
+                                                            <option value="L">L</option>
+                                                        </select>
                                                     </div>
+                                                </div>
 
-                                                    <div class="col-xs-12 col-sm-2">
-                                                        <div class="form-group row">
-                                                            <label class="control-label">Quantité</label>
+                                                <div class="col-xs-12 col-sm-2">
+                                                    <div class="form-group row">
+                                                        <label class="control-label">Quantité</label>
 
-                                                            <input type="number" name="quantite[]" id="quantite-1"
-                                                                class="form-control quantite" placeholder="Fréquence">
-                                                        </div>
+                                                        <input type="number" name="quantite[]" id="quantite-1"
+                                                            class="form-control quantite" placeholder="Fréquence">
                                                     </div>
-                                                    <div class="col-xs-12 col-sm-2">
-                                                        <div class="form-group row">
-                                                            {{ Form::label(__('Type de contenant'), null, ['class' => '']) }}
-                                                            <select class="form-control contenenant" name="contenenant[]"
-                                                                id="contenenant-1">
-                                                                <option value="Sac">Sac</option>
-                                                                <option value="Sachet">Sachet</option>
-                                                                <option value="Boîte">Boîte</option>
-                                                                <option value="Pot">Pot</option>
-                                                            </select>
-                                                        </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-2">
+                                                    <div class="form-group row">
+                                                        {{ Form::label(__('Type de contenant'), null, ['class' => '']) }}
+                                                        <select class="form-control contenenant" name="contenenant[]"
+                                                            id="contenenant-1">
+                                                            <option value="Sac">Sac</option>
+                                                            <option value="Sachet">Sachet</option>
+                                                            <option value="Boîte">Boîte</option>
+                                                            <option value="Pot">Pot</option>
+                                                        </select>
                                                     </div>
-                                                    <div class="col-xs-12 col-sm-2">
-                                                        <div class="form-group row">
-                                                            {{ Form::label(__('Fréquence'), null, ['class' => '']) }}
-                                                            <input type="number" name="frequence[]" id="frequence-1"
-                                                                class="form-control frequence" placeholder="Fréquence">
-                                                        </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-2">
+                                                    <div class="form-group row">
+                                                        {{ Form::label(__('Fréquence'), null, ['class' => '']) }}
+                                                        <input type="number" name="frequence[]" id="frequence-1"
+                                                            class="form-control frequence" placeholder="Fréquence">
                                                     </div>
+                                                </div>
 
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                        <tfoot style="background: #e3e3e3;">
-                                            <tr>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot style="background: #e3e3e3;">
+                                        <tr>
 
-                                                <td colspan="3">
-                                                    <button id="addRowIntrantsAnneDerniere" type="button"
-                                                        class="btn btn-success btn-sm"><i class="fa fa-plus"></i></button>
-                                                </td>
-                                            <tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
+                                            <td colspan="3">
+                                                <button id="addRowIntrantsAnneDerniere" type="button"
+                                                    class="btn btn-success btn-sm"><i class="fa fa-plus"></i></button>
+                                            </td>
+                                        <tr>
+                                    </tfoot>
+                                </table>
                             </div>
                         </div>
                     </div>
                     <div class="fieldset-like">
                         <legend class="legend-center">
-                            <h5 class="font-weight-bold text-decoration-underline">Technique agricole</h5>
+                            <h5 class="font-weight-bold text-decoration-underline">Technique culturale</h5>
                         </legend>
                         <div class="form-group row">
                             <?php echo Form::label(__('Activité de Taille dans la Parcelle'), null, ['class' => 'col-sm-4 control-label']); ?>
@@ -410,12 +412,12 @@
                                 parasites du cacaoyer dans la parcelle</h5>
                         </legend>
                         <div class="form-group row">
-                            <?php echo Form::label(__('Présence d’insectes parasites ou ravageurs ?'), null, ['class' => 'col-sm-4 control-label']); ?>
-                            <div class="col-xs-12 col-sm-8">
+                            <?php echo Form::label(__('Présence d’insectes parasites ou ravageurs ?'), null, ['class' => 'col-sm-6 control-label']); ?>
+                            <div class="col-xs-12 col-sm-6">
                                 <?php echo Form::select('presenceInsectesParasites', ['non' => __('non'), 'oui' => __('oui')], null, ['class' => 'form-control presenceInsectesParasites']); ?>
                             </div>
                         </div>
-                        {{-- présence de autre ravageur  --}}
+                        {{-- presence d'insecte  --}}
                         <div class="form-group row" id="presenceInsectesParasitesRavageurs">
 
                             <div class="col-xs-12 col-sm-12">
@@ -443,8 +445,8 @@
 
                                                 <div class="col-xs-12 col-sm-6">
                                                     <div class="form-group row">
-                                                        <label>Quantite</label>
-                                                        <?php echo Form::select('nombreinsectesParasites[]', ['Faible' => __('faible'), 'Moins' => __('Moins'), 'Elevé' => __('elevé')], null, ['class' => 'form-control nombreinsectesParasites', 'id' => 'nombreinsectesParasites-1']); ?>
+                                                        <label>Quantité</label>
+                                                        <?php echo Form::select('nombreinsectesParasites[]', ['Faible' => __('faible'), 'Moyen' => __('Moyen'), 'Elevé' => __('elevé')], null, ['class' => 'form-control nombreinsectesParasites', 'id' => 'nombreinsectesParasites-1']); ?>
                                                     </div>
                                                 </div>
 
@@ -464,11 +466,62 @@
                                 </table>
                             </div>
                         </div>
-                        {{-- présence de autre ravageur fin --}}
+                        {{-- fin presence d'insecte --}}
 
                         <div class="form-group row">
-                            <?php echo Form::label(__('Avez traitez votre parcelle ?'), null, ['class' => 'col-sm-4 control-label']); ?>
-                            <div class="col-xs-12 col-sm-8">
+                            <?php echo Form::label(__('Avez-vous observé d\'autres insectes ou ravageur qui n\'apparaissent pas dans la liste précédente ?'), null, ['class' => 'col-sm-6 control-label']); ?>
+                            <div class="col-xs-12 col-sm-6">
+                                <?php echo Form::select('autreInsecte', ['non' => __('non'), 'oui' => __('oui')], null, ['class' => 'form-control autreInsecte', 'id' => 'autreInsecte']); ?>
+                            </div>
+                        </div>
+
+                        {{-- autre insecte --}}
+                        <div class="form-group row" id="presenceAutreInsecte">
+                            <div class="col-xs-12 col-sm-12">
+                                <table class="table table-striped table-bordered">
+                                    <tbody id="presenceAutreInsecte_area">
+                                        <tr>
+                                            <td class="row">
+                                                <div class="col-xs-12 col-sm-12 bg-success">
+                                                    <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Autres insectes parasites ou ravageurs')
+                                                    </badge>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6">
+                                                    <div class="form-group row">
+                                                        {{ Form::label(__('Nom'), null, ['class' => 'control-label']) }}
+                                                        <input type="text" name="autreInsecteNom[]"
+                                                            id="autreInsecteNom-1" class="form-control autreInsecteNom"
+                                                            placeholder="Nom de l'insecte ou ravageur">
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-xs-12 col-sm-6">
+                                                    <div class="form-group row">
+                                                        <label>Quantite</label>
+                                                        <?php echo Form::select('nombreAutreInsectesParasites[]', ['Faible' => __('faible'), 'Moyen' => __('Moyen'), 'Elevé' => __('elevé')], null, ['class' => 'form-control nombreAutreInsectesParasites', 'id' => 'nombreAutreInsectesParasites-1']); ?>
+                                                    </div>
+                                                </div>
+
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                    <tfoot style="background: #e3e3e3;">
+                                        <tr>
+
+                                            <td colspan="3">
+                                                <button id="addRowPresenceAutreInsecte" type="button"
+                                                    class="btn btn-success btn-sm"><i class="fa fa-plus"></i></button>
+                                            </td>
+                                        <tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                        {{-- fin autre insecte --}}
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Avez-vous traitez votre parcelle ?'), null, ['class' => 'col-sm-6 control-label']); ?>
+                            <div class="col-xs-12 col-sm-6">
                                 <?php echo Form::select('traiterParcelle', ['non' => __('non'), 'oui' => __('oui')], null, ['class' => 'form-control traiterParcelle']); ?>
                             </div>
                         </div>
@@ -574,28 +627,28 @@
                         <div class="form-group row">
                             <?php echo Form::label(__('Présence de Fourmis Rouge'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::select('presenceFourmisRouge', ['Faible' => __('faible'), 'Moins' => __('moins'), 'Elevé' => __('elevé')], null, ['class' => 'form-control presenceFourmisRouge']); ?>
+                                <?php echo Form::select('presenceFourmisRouge', ['Faible' => __('faible'), 'Moyen' => __('moyen'), 'Elevé' => __('elevé')], null, ['class' => 'form-control presenceFourmisRouge']); ?>
                             </div>
                         </div>
 
                         <div class="form-group row">
                             <?php echo Form::label(__('Présence d’Araignée'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::select('presenceAraignee', ['Faible' => __('faible'), 'Moins' => __('moins'), 'Elevé' => __('elevé')], null, ['class' => 'form-control presenceAraignee']); ?>
+                                <?php echo Form::select('presenceAraignee', ['Faible' => __('faible'), 'Moyen' => __('moyen'), 'Elevé' => __('elevé')], null, ['class' => 'form-control presenceAraignee']); ?>
                             </div>
                         </div>
 
                         <div class="form-group row">
                             <?php echo Form::label(__('Présence de Ver de Terre'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::select('presenceVerTerre', ['Faible' => __('faible'), 'Moins' => __('moins'), 'Elevé' => __('elevé')], null, ['class' => 'form-control presenceVerTerre']); ?>
+                                <?php echo Form::select('presenceVerTerre', ['Faible' => __('faible'), 'Moyen' => __('moyen'), 'Elevé' => __('elevé')], null, ['class' => 'form-control presenceVerTerre']); ?>
                             </div>
                         </div>
 
                         <div class="form-group row">
                             <?php echo Form::label(__('Présence de Mente Religieuse'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::select('presenceMenteReligieuse', ['Faible' => __('faible'), 'Moins' => __('moins'), 'Elevé' => __('elevé')], null, ['class' => 'form-control presenceMenteReligieuse']); ?>
+                                <?php echo Form::select('presenceMenteReligieuse', ['Faible' => __('faible'), 'Moyen' => __('moyen'), 'Elevé' => __('elevé')], null, ['class' => 'form-control presenceMenteReligieuse']); ?>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -630,7 +683,7 @@
                                                 <div class="col-xs-12 col-sm-6">
                                                     <div class="form-group row">
                                                         {{ Form::label(__('Quantite'), null, ['class' => '']) }}
-                                                        <?php echo Form::select('nombreinsectesAmis[]', ['Faible' => __('faible'), 'Moins' => __('Moins'), 'Elevé' => _('elevé')], null, ['class' => 'form-control nombreinsectesAmis', 'id' => 'nombreinsectesAmis-1']); ?>
+                                                        <?php echo Form::select('nombreinsectesAmis[]', ['Faible' => __('faible'), 'Moyen' => __('moyen'), 'Elevé' => _('elevé')], null, ['class' => 'form-control nombreinsectesAmis', 'id' => 'nombreinsectesAmis-1']); ?>
                                                     </div>
                                                 </div>
 
@@ -790,9 +843,9 @@
                     insectesAmisCount +
                     '</badge></div><div class="col-xs-12 col-sm-6"><div class="form-group"><label for="insectesAmis" class="">Nom</label><input placeholder="Insecte amis..." class="form-control" id="insectesAmis-' +
                     insectesAmisCount +
-                    '" name="insectesAmis[]" type="text"></div></div><div class="col-xs-12 col-sm-6"><div class="form-group"><label for="nombreinsectesAmis" class="">Quantite</label><select name="nombreinsectesAmis[]" class="form-control nombreinsectesParasites" d="nombreinsectesAmis-' +
+                    '" name="insectesAmis[]" type="text"></div></div><div class="col-xs-12 col-sm-6"><div class="form-group"><label for="nombreinsectesAmis" class="">Quantite</label><select name="nombreinsectesAmis[]" class="form-control nombreinsectesParasites" id="nombreinsectesAmis-' +
                     insectesAmisCount +
-                    '" ><option value="Faible">faible</option><option value="Moins">moins</option><option value="Elevé">elevé</option></select></div></div><div class="col-xs-12 col-sm-8"><button type="button" id="' +
+                    '" ><option value="Faible">faible</option><option value="Moyen">moyen</option><option value="Elevé">elevé</option></select></div></div><div class="col-xs-12 col-sm-8"><button type="button" id="' +
                     insectesAmisCount +
                     '" class="removeRowinsectesAmis btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></div></td>';
 
@@ -824,9 +877,9 @@
                     insectesParasitesCount +
                     '</badge></div><div class="col-xs-12 col-sm-6"><div class="form-group"><label for="insectesParasites" class="">Nom</label><select class="form-control" id="insectesParasites-' +
                     insectesParasitesCount +
-                    '" name="insectesParasites[]"><option value="Mirides">Mirides</option> <option value="Punaises">Punaises</option> <option value="Foreurs">Foreurs</option><option value="Chenilles">Chenilles</option></select></div></div><div class="col-xs-12 col-sm-6"><div class="form-group"><label for="nombreinsectesParasites" class="">Quantite</label><select name="nombreinsectesParasites[]" class="form-control nombreinsectesParasites" d="nombreinsectesParasites-' +
+                    '" name="insectesParasites[]"><option value="Mirides">Mirides</option> <option value="Punaises">Punaises</option> <option value="Foreurs">Foreurs</option><option value="Chenilles">Chenilles</option></select></div></div><div class="col-xs-12 col-sm-6"><div class="form-group"><label for="nombreinsectesParasites" class="">Quantite</label><select name="nombreinsectesParasites[]" class="form-control nombreinsectesParasites" id="nombreinsectesParasites-' +
                     insectesParasitesCount +
-                    '" ><option value="Faible">Faible</option><option value="Moins">Moins</option><option value="Elevé">elevé</option></select></div></div><div class="col-xs-12 col-sm-8"><button type="button" id="' +
+                    '" ><option value="Faible">Faible</option><option value="Moyen">moyen</option><option value="Elevé">elevé</option></select></div></div><div class="col-xs-12 col-sm-8"><button type="button" id="' +
                     insectesParasitesCount +
                     '" class="removeRowinsectesParasites btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></div></td>';
 
@@ -846,6 +899,42 @@
                 }
             });
 
+            //presenceAutreInsecte
+            var presenceAutreInsecteCount = $("#presenceAutreInsecte_area tr").length + 1;
+
+            $(document).on('click', '#addRowPresenceAutreInsecte', function() {
+
+                //---> Start create table tr'
+
+                var html_table = '<tr>';
+                html_table +=
+
+                    '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm">Autres insectes parasites ou ravageurs ' +
+                    presenceAutreInsecteCount +
+                    '</badge></div><div class="col-xs-12 col-sm-6"><div class="form-group"><label for="autreInsecteNom" class="">Nom</label><input type="text" placeholder="Nom de l\'insecte ou ravageur" class="form-control" id="autreInsecteNom-' +
+                    presenceAutreInsecteCount +
+                    '" name="autreInsecteNom[]"></div></div><div class="col-xs-12 col-sm-6"><div class="form-group"><label for="nombreAutreInsectesParasites" class="">Quantite</label><select name="nombreAutreInsectesParasites[]" class="form-control nombreAutreInsectesParasites" id="nombreAutreInsectesParasites-' +
+                    presenceAutreInsecteCount +
+                    '" ><option value="Faible">Faible</option><option value="Moyen">moyen</option><option value="Elevé">elevé</option></select></div></div><div class="col-xs-12 col-sm-8"><button type="button" id="' +
+                    presenceAutreInsecteCount +
+                    '" class="removeRowPresenceAutreInsecte btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></div></td>';
+
+                html_table += '</tr>';
+                //---> End create table tr
+
+                presenceAutreInsecteCount = parseInt(presenceAutreInsecteCount) + 1;
+                $('#presenceAutreInsecte_area').append(html_table);
+
+            });
+
+            $(document).on('click', '.removeRowPresenceAutreInsecte', function() {
+                var row_id = $(this).attr('id');
+                if (row_id == $("#presenceAutreInsecte_area tr").length) {
+                    $(this).parents('tr').remove();
+                    presenceAutreInsecteCount = parseInt(presenceAutreInsecteCount) - 1;
+                }
+            });
+            //fin presenceAutreInsecte
 
             var traitementCount = $("#traitement_area tr").length + 1;
             $(document).on('click', '#addRowTraitement', function() {
@@ -933,7 +1022,7 @@
                     intrantsCount +
                     '</badge></div><div class="col-xs-12 col-sm-4 pr-0"><div class="form-group"><label for="" class="">Nom</label><select class="form-control" id="intrantsAnneDerniere-' +
                     intrantsCount +
-                    '" name="intrantsAnneDerniere[]"><option value="Dechets animaux">Dechets animaux</option><option value="Fongicides">Fongicides</option><option value="NPK">NPK</option><option value="Compost">Compost</option><option value="Biofertilisant/Bio stimulant">Biofertilisant/Bio stimulant</option><option value="Engrais organique préfabriqué">Engrais organique préfabriqué</option></select></div></div><div class="col-xs-12 col-sm-2"><div class="form-group row"><label>Unité</label><select class="form-control unite" name="unite[]" id="unite-' +
+                    '" name="intrantsAnneDerniere[]"><option value="Dechets animaux">Dechets animaux</option><option value="Fongicides">Fongicides</option><option value="NPK">NPK</option><option value="Compost">Compost</option><option value="Biofertilisant/Bio stimulant">Biofertilisant/Bio stimulant</option><option value="Engrais organique préfabriqué">Engrais organique préfabriqué</option><option value="Engrais foliaire">Engrais foliaire</option></select></div></div><div class="col-xs-12 col-sm-2"><div class="form-group row"><label>Unité</label><select class="form-control unite" name="unite[]" id="unite-' +
                     intrantsCount +
                     '"><option value="Kg">Kg</option><option value="L">L</option></select></div></div> <div class="col-xs-12 col-sm-2"><div class="form-group row"><label for="" class="">Quantité</label><input type="number" name ="quantite[]" id="quantite-' +
                     intrantsCount +
@@ -989,7 +1078,7 @@
                 }
             });
 
-            $('#courseaux,#agroforestiersobtenus,#presenceInsectesParasitesRavageurs,#recu,#autrePesticides,#autreInsectesAmis,#autrePresenceInsectesParasitesRavageurs,#traite')
+            $('#courseaux,#agroforestiersobtenus,#presenceInsectesParasitesRavageurs,#recu,#autrePesticides,#autreInsectesAmis,#autrePresenceInsectesParasitesRavageurs,#traite,#presenceAutreInsecte')
                 .hide();
 
             $('.arbresagroforestiers').change(function() {
@@ -1037,17 +1126,16 @@
                     $('#autrePresenceInsectesParasitesRavageurs').hide('slow');
                 }
             });
-
-            $('.presenceInsectesParasitesRavageur').change(function() {
-                var presenceInsectesParasitesRavageur = $('.presenceInsectesParasitesRavageur').val();
-                if (presenceInsectesParasitesRavageur == 'Autre') {
-                    $('#autrePresenceInsectesParasitesRavageurs').show('slow');
-
+            $('.autreInsecte').change(function() {
+                var autreInsecte = $('.autreInsecte').val();
+                if (autreInsecte == 'oui') {
+                    $('#presenceAutreInsecte').show('slow');
                 } else {
-                    $('#autrePresenceInsectesParasitesRavageurs').hide('slow');
-                    $('#autrePresenceInsectesParasitesRavageurs input').val('');
+                    $('#presenceAutreInsecte').hide('slow');
                 }
             });
+
+
             $('.presenceAutreTypeInsecteAmi').change(function() {
                 var presenceAutreTypeInsecteAmi = $('.presenceAutreTypeInsecteAmi').val();
                 if (presenceAutreTypeInsecteAmi == 'oui') {
