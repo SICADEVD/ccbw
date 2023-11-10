@@ -203,21 +203,21 @@
                     <hr class="panel-wide">
 
                     <div class="form-group row">
-                        <?php echo Form::label(__('Effectuez vous vous-même les traitement phyto sanitaire dans vos champs ?'), null, ['class' => 'col-sm-4 control-label', 'required']); ?>
-                        <div class="col-xs-12 col-sm-8">
+                        <?php echo Form::label(__('Effectuez vous vous-même les traitement phyto sanitaire dans vos champs ?'), null, ['class' => 'col-sm-6 control-label', 'required']); ?>
+                        <div class="col-xs-12 col-sm-6">
                             <?php echo Form::select('traitementChamps', ['non' => __('non'), 'oui' => __('oui')], null, ['class' => 'form-control traitementChamps', 'required']); ?>
                         </div>
                     </div>
                     <div class="form-group row" id="infosPersonneTraitant">
                         <div class="form-group row">
-                            <?php echo Form::label(__('Donnez le nom de la personne qui éffectue les traitement phyto sanitaire dans vos champs'), null, ['class' => 'col-sm-4 control-label']); ?>
-                            <div class="col-xs-12 col-sm-8">
+                            <?php echo Form::label(__('Nom de l\'applicateur'), null, ['class' => 'col-sm-6 control-label']); ?>
+                            <div class="col-xs-12 col-sm-6">
                                 <?php echo Form::text('nomApplicateur', null, ['id' => 'nomApplicateur', 'class' => 'form-control nomApplicateur']); ?>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <?php echo Form::label(__('Donnez son numéro de téléphone'), null, ['class' => 'col-sm-4 control-label']); ?>
-                            <div class="col-xs-12 col-sm-8">
+                            <?php echo Form::label(__('Téléphone de l\'applicateur'), null, ['class' => 'col-sm-6 control-label']); ?>
+                            <div class="col-xs-12 col-sm-6">
                                 <?php echo Form::text('numeroApplicateur', null, ['id' => 'numeroApplicateur', 'class' => 'form-control numeroApplicateur']); ?>
                             </div>
                         </div>
@@ -268,53 +268,89 @@
 
                     <div class="form-group row">
 
-                        <?php echo Form::label(__('Avez-vous des équipement individuel (EPI) ?'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
+                        <?php echo Form::label(__('Avez-vous des équipement individuel (EPI) ?'), null, ['class' => 'col-sm-6 control-label']); ?>
+                        <div class="col-xs-12 col-sm-6">
                             <?php echo Form::select('equipements', ['non' => __('non'), 'oui' => __('oui')], null, ['class' => 'form-control equipements', 'required']); ?>
                         </div>
                     </div>
 
                     <div class="form-group row" id="etatEpis">
-                        <?php echo Form::label(__('L\'équipement est-il en bon état?'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
+                        <?php echo Form::label(__('L\'équipement est-il en bon état?'), null, ['class' => 'col-sm-6 control-label']); ?>
+                        <div class="col-xs-12 col-sm-6">
                             <?php echo Form::select('etatEpi', ['' => null, 'oui' => __('oui'), 'non' => __('non')], null, ['id' => 'etatEpi', 'class' => 'form-control etatEpi']); ?>
                         </div>
                     </div>
-
                     <hr class="panel-wide">
-
-
                     <div class="form-group row">
-                        <?php echo Form::label(__("Votre conjoint(e) fait une activité qui produit de l'argent ?"), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
+                        <?php echo Form::label(__('Est-ce que votre conjoint(e) exerce une autre activité qui génère des revenus ?'), null, ['class' => 'col-sm-6 control-label']); ?>
+                        <div class="col-xs-12 col-sm-6">
                             <?php echo Form::select('activiteFemme', ['non' => __('non'), 'oui' => __('oui')], null, ['class' => 'form-control activiteFemme', 'required']); ?>
                         </div>
                     </div>
-
-                    <div class="form-group row" id="nomActiviteFemmes">
-                        <?php echo Form::label(__('Quelle Activité ?'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <input type="text" id="nomActiviteFemme" name="nomActiviteFemme"
-                                placeholder="Quelle Activité ?" class="form-control nomActiviteFemme"
-                                value="{{ old('nomActiviteFemme') }}">
+                    <div class="form-group row" id="typeActivites">
+                        <?php echo Form::label(__('Quel type d\'activité?'), null, ['class' => 'col-sm-6 control-label']); ?>
+                        <div class="col-xs-12 col-sm-6">
+                            <?php echo Form::select('typeActivite', [null => '', 'Activite agricole' => __('Activité agricole'), 'Activite non agricole' => __('Activité non agricole')], null, ['class' => 'form-control typeActivite', 'id' => 'typeActivite']); ?>
                         </div>
                     </div>
-                    <div class="form-group row" id="champFemmes">
-                        <?php echo Form::label(__('Es-tu prêt à donner une partie de ton champ à votre conjoint(e) ?'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('champFemme', ['non' => __('non'), 'oui' => __('oui')], null, ['id' => 'champFemme', 'class' => 'form-control champFemme']); ?>
+                    <div class="form-group row" id="nombreHectareConjoints">
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Quelle est sa superficie ?'), null, ['class' => 'col-sm-6 control-label']); ?>
+                            <div class="col-xs-12 col-sm-6">
+                                <input type="number" min="0.1" name="nombreHectareConjoint"
+                                    id="nombreHectareConjoint" placeholder="Ex: 2 ha"
+                                    class="form-control nombreHectareConjoint"
+                                    value="{{ old('nombreHectareConjoint') }}">
+                            </div>
                         </div>
                     </div>
+                    <div class="form-group row" id="nomActivites">
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Nom de l\'activité'), null, ['class' => 'col-sm-6 control-label']); ?>
+                            <div class="col-xs-12 col-sm-6">
+                                <input type="text" id="nomActivite" name="nomActivite"
+                                    placeholder="Nom de l'activité exercé par votre conjoint(e)"
+                                    class="form-control nomActivite" id="nomActivite" value="{{ old('nomActivite') }}">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Comment avez-vous obtenu le capital de démarrage ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::select('capitalDemarrage', [null => '', 'Vente de cacao' => __('Vente de cacao'), 'AVC' => __('AVC'), 'Association' => __('Association'), 'Subvention' => __('Subvention'), 'Crédit micro' => __('Crédit micro'), 'Autre' => __('Autre')], null, ['id' => 'capitalDemarrage', 'class' => 'form-control capitalDemarrage']); ?>
+                            </div>
+                        </div>
+                        <div class="form-group row" id="autreCapitals">
+                            <?php echo Form::label(__(''), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::number('autreCapital', null, ['id' => 'autreCapital', 'class' => 'form-control autreCapital', 'placeholder' => 'Autre capital']); ?>
+                            </div>
+                        </div>
 
-                    <div class="form-group row" id="nombreHectareFemmes">
-                        <?php echo Form::label(__("Combien d'hectare ?"), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <input type="text" name="nombreHectareFemme" id="nombreHectareFemme"
-                                placeholder="Ex: 2 ha" class="form-control nombreHectareFemme"
-                                value="{{ old('nombreHectareFemme') }}">
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Dépuis combien de temps(mois) pratiquez vous cette activité ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::number('dureeActivite', null, ['id' => 'dureeActivite', 'class' => 'form-control', 'placeholder' => 'Le mois en chiffre']); ?>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Avez-vous bénéficiez d\'une formation ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::select('formation', ['non' => 'non', 'oui' => __('oui')], null, ['id' => 'formation', 'class' => 'form-control formation']); ?>
+                            </div>
+                        </div>
+                        <div class="form-group row" id="entites">
+                            <?php echo Form::label(__('Par qui ? '), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::text('entite', null, ['id' => 'entite', 'class' => 'form-control entite', 'placeholder' => 'Entreprise / particulier']); ?>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Est-ce que cette activité vous a permis d\'obtenir des revenus supplémentaires?'), null, ['class' => 'col-sm-6 control-label']); ?>
+                            <div class="col-xs-12 col-sm-6">
+                                <?php echo Form::select('revenu', ['non' => 'non', 'oui' => __('oui')], null, ['id' => 'revenu', 'class' => 'form-control revenu']); ?>
+                            </div>
                         </div>
                     </div>
-
                     <hr class="panel-wide">
 
                     <div class="form-group row">
@@ -336,7 +372,7 @@
         $("#localite").chained("#section");
         $("#producteur").chained("#localite");
         $(document).ready(function() {
-            $('#avoirMachine,#boisChauffes,#etatatomiseurs, #nomActiviteFemmes,#nombreHectareFemmes,#autreMachine,#autreEndroits,#autreSourceEaux,#etatEpis')
+            $('#avoirMachine,#boisChauffes,#etatatomiseurs,#autreMachine,#autreEndroits,#autreSourceEaux,#etatEpis,#typeActivites,#nomActivites,#nombreHectareConjoints,#autreCapitals,#entites')
                 .hide();
 
             $('.traitementChamps').change(function() {
@@ -416,44 +452,6 @@
                 }
             });
 
-            $('.activiteFemme').change(function() {
-                var activiteFemme = $('.activiteFemme').val();
-                if (activiteFemme == 'oui') {
-                    $('#nomActiviteFemmes').show('slow');
-                    $('.nomActiviteFemme').show('slow');
-                    $('#nomActiviteFemme').prop('required', true);
-                    $('.nomActiviteFemme').css('display', 'block');
-
-                    $('#champFemmes').hide('slow');
-                    $('.champFemme').val('');
-                    $('#champFemme').prop('required', false);
-                } else {
-                    $('#nomActiviteFemmes').hide('slow');
-                    $('.nomActiviteFemme').val('');
-                    $('#nomActiviteFemme').prop('required', false);
-                    $('.nomActiviteFemme').hide('slow');
-
-                    $('#champFemmes').show('slow');
-                    $('.champFemme').show('slow');
-                    $('#champFemme').prop('required', true);
-                }
-            });
-
-            $('.champFemme').change(function() {
-                var champFemme = $('.champFemme').val();
-                if (champFemme == 'oui') {
-                    $('#nombreHectareFemmes').show('slow');
-                    $('.nombreHectareFemme').css('display', 'block');
-                    $('.nombreHectareFemme').show('slow');
-                    $('#nombreHectareFemme').prop('required', true);
-
-                } else {
-                    $('#nombreHectareFemmes').hide('slow');
-                    $('.nombreHectareFemme').val('');
-                    $('.nombreHectareFemme').hide('slow');
-                    $('#nombreHectareFemme').prop('required', false);
-                }
-            });
             $('.sources_eaux').change(function() {
                 var sources_eaux = $('.sources_eaux').val();
                 if (sources_eaux == 'Autre') {
@@ -476,6 +474,61 @@
                     $('#etatEpis').hide('slow');
                     $('.etatEpi').val('');
                     $('#etatEpi').prop('required', false);
+                }
+            });
+            $('.activiteFemme').change(function() {
+                var activiteFemme = $('.activiteFemme').val();
+                if (activiteFemme == 'oui') {
+                    $('#typeActivites').show('slow');
+                    $('#typeActivite').prop('required', true);
+                } else {
+                    $('#typeActivites').hide('slow');
+                    $('.typeActivite').val('');
+                    $('#typeActivite').prop('required', false);
+                }
+            });
+            $('.typeActivite').change(function() {
+                var typeActivite = $('.typeActivite').val();
+                if (typeActivite == 'Activite agricole' || typeActivite == 'Activite non agricole') {
+                    $('#nomActivite').prop('required', true);
+                    $('#nomActivites').show('slow');
+                } else {
+                    $('#nomActivites').hide('slow');
+                    $('#nomActivite').prop('required', false);
+                    $('.nomActivite').val('');
+                }
+            });
+            $('.typeActivite').change(function() {
+                var typeActivite = $('.typeActivite').val();
+                if (typeActivite == 'Activite agricole') {
+                    $('#nombreHectareConjoint').prop('required', true);
+                    $('#nombreHectareConjoints').show('slow');
+                } else {
+                    $('#nombreHectareConjoints').hide('slow');
+                    $('#nombreHectareConjoint').prop('required', false);
+                    $('.nombreHectareConjoint').val('');
+                }
+            });
+            $('.capitalDemarrage').change(function() {
+                var capitalDemarrage = $('.capitalDemarrage').val();
+                if (capitalDemarrage == 'Autre') {
+                    $('#autreCapitals').show('slow');
+                    $('#autreCapital').prop('required', true);
+                } else {
+                    $('#autreCapitals').hide('slow');
+                    $('#autreCapital').prop('required', false);
+                    $('.autreCapital').val('');
+                }
+            });
+            $('.formation').change(function() {
+                var formation = $('.formation').val();
+                if (formation == 'oui') {
+                    $('#entites').show('slow');
+                    $('#entite').prop('required', true);
+                } else {
+                    $('#entites').hide('slow');
+                    $('#entite').prop('required', false);
+                    $('.entite').val('');
                 }
             });
         });
