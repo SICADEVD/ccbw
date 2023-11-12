@@ -316,7 +316,7 @@
                         <div class="form-group row">
                             <?php echo Form::label(__('Comment avez-vous obtenu le capital de démarrage ?'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::select('capitalDemarrage', [null => '', 'Vente de cacao' => __('Vente de cacao'), 'AVC' => __('AVC'), 'Association' => __('Association'), 'Subvention' => __('Subvention'), 'Crédit micro' => __('Crédit micro'), 'Autre' => __('Autre')], null, ['id' => 'capitalDemarrage', 'class' => 'form-control capitalDemarrage']); ?>
+                                <?php echo Form::select('capitalDemarrage', [null => '', 'Vente de cacao' => __('Vente de cacao'), 'AVC' => __('AVC'), 'Association' => __('Association'), 'Subvention' => __('Subvention'), 'Micro crédit' => __('Micro crédit'), 'Autre' => __('Autre')], null, ['id' => 'capitalDemarrage', 'class' => 'form-control capitalDemarrage']); ?>
                             </div>
                         </div>
                         <div class="form-group row" id="autreCapitals">
