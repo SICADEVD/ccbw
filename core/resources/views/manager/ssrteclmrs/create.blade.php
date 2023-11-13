@@ -234,12 +234,45 @@
                     </div>
                     <hr class="panel-wide">
 
+                    <div class="fieldset-like">
+                        <legend class="legend-center">
+                            <h5 class="font-weight-bold text-decoration-underline">Informations sur l'enquêteur</h5>
+                        </legend>
+
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Nom de l\'enquêteur'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::text('nomEnqueteur', null, ['placeholder' => __('Nom de l\'enquêteur'), 'class' => 'form-control nomEnqueteur', 'id' => 'nomEnqueteur', 'required']); ?>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Prenom(s) de l\'enquêteur'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::text('prenomEnqueteur', null, ['placeholder' => __('Prenom(s) de l\'enquêteur'), 'class' => 'form-control prenomEnqueteur', 'id' => 'prenomEnqueteur', 'required']); ?>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Numéro de téléphone de l\'enquêteur'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::text('telephoneEnqueteur', null, ['placeholder' => __('Numéro de téléphone de l\'enquêteur'), 'class' => 'form-control telephoneEnqueteur', 'id' => 'telephoneEnqueteur', 'required']); ?>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="form-group row">
                         <?php echo Form::label(__("Date d'Enquête"), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
                             <?php echo Form::date('date_enquete', null, ['class' => 'form-control dateactivite dateEnquete', 'required']); ?>
                         </div>
                     </div>
+
+                    {!! Form::time('heure', null, ['id' => 'heure', 'style' => 'display: none;']) !!}
+
+                    {!! Form::text('timezome', null, ['id' => 'timezome', 'style' => 'display: none;']) !!}
+
+                    {!! Form::text('heureCourant', null, ['id' => 'timezome', 'style' => 'display: none;']) !!}
 
                     <hr class="panel-wide">
 
@@ -255,6 +288,31 @@
 
 @push('breadcrumb-plugins')
     <x-back route="{{ route('manager.suivi.ssrteclmrs.index') }}" />
+@endpush
+
+@push('style')
+    <style type="text/css">
+        /* Styles CSS personnalisés */
+        .fieldset-like {
+            border: 1px solid #ccc;
+            /* Ajoutez une bordure */
+            border-radius: 5px;
+            /* Ajoutez des coins arrondis */
+            padding: 10px;
+            /* Ajoutez de l'espace intérieur */
+            margin-bottom: 20px;
+            /* Ajoutez une marge en bas */
+            text-align: left;
+            /* Alignez le contenu du div à gauche */
+        }
+
+        .legend-center {
+            text-align: center;
+            /* Centrez horizontalement la légende */
+            margin-bottom: 10px;
+            /* Ajoutez de l'espace sous la légende */
+        }
+    </style>
 @endpush
 
 @push('script')

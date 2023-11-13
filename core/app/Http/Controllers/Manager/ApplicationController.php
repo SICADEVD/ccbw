@@ -27,10 +27,10 @@ class ApplicationController extends Controller
     {
         $pageTitle      = "Gestion des applications";
         $manager   = auth()->user();
-        $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->get();
-        $applications = Application::dateFilter()->searchable(["superficiePulverisee","marqueProduitPulverise","matieresActives","degreDangerosite","raisonApplication","nomInsectesCibles","delaisReentree","zoneTampons","presenceDouche"])->latest('id')->joinRelationship('parcelle.producteur.localite')->where('cooperative_id',$manager->cooperative_id)->where(function ($q) {
-            if(request()->localite != null){
-                $q->where('localite_id',request()->localite);
+        $localites = Localite::joinRelationship('section')->where([['cooperative_id', $manager->cooperative_id], ['localites.status', 1]])->get();
+        $applications = Application::dateFilter()->searchable(["superficiePulverisee", "marqueProduitPulverise", "matieresActives", "degreDangerosite", "raisonApplication", "nomInsectesCibles", "delaisReentree", "zoneTampons", "presenceDouche"])->latest('id')->joinRelationship('parcelle.producteur.localite.section')->where('cooperative_id', $manager->cooperative_id)->where(function ($q) {
+            if (request()->localite != null) {
+                $q->where('localite_id', request()->localite);
             }
         })->with('parcelle')->paginate(getPaginate());
 
@@ -39,7 +39,7 @@ class ApplicationController extends Controller
 
     public function create()
     {
-       
+
         $pageTitle = "Ajouter une application";
         $manager = auth()->user();
 

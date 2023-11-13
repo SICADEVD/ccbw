@@ -114,6 +114,7 @@ class SsrteclmrsController extends Controller
         $ssrteclmrs->avoirFrequente = $request->avoirFrequente;
         $ssrteclmrs->niveauEtudeAtteint    = $request->niveauEtudeAtteint;
         $ssrteclmrs->userid = auth()->user()->id;
+        $ssrteclmrs->autreRaisonArretEcole = $request->autreRaisonArretEcole;
         $ssrteclmrs->date_enquete     = $request->date_enquete;
 
         $ssrteclmrs->save();
