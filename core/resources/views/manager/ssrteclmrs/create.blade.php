@@ -205,34 +205,47 @@
 
                     </div>
                     <hr class="panel-wide">
-                    <div class="form-group row">
-                        <?php echo Form::label(__('Au cours de ces 2 dernières années lequel de ces travaux as-tu effectués ?'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('travauxDangereux[]', $travauxDangereux, [], ['class' => 'form-control travauxDangereux select2-multi-select', 'multiple', 'required']); ?>
+
+
+                    <div class="fieldset-like">
+                        <legend class="legend-center">
+                            <h5 class="font-weight-bold text-decoration-underline">Traveaux dangereux</h5>
+                        </legend>
+
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Au cours de ces 2 dernières années lequel de ces travaux as-tu effectués ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::select('travauxDangereux[]', $travauxDangereux, [], ['class' => 'form-control travauxDangereux select2-multi-select', 'multiple', 'required']); ?>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group row">
-                        <?php echo Form::label(__('Où as-tu effectué ces travaux ?'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('lieuTravauxDangereux[]', $lieuTravaux, [], ['class' => 'form-control lieuTravauxDangereux select2-multi-select', 'multiple', 'required']); ?>
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Où as-tu effectué ces travaux ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::select('lieuTravauxDangereux[]', $lieuTravaux, [], ['class' => 'form-control lieuTravauxDangereux select2-multi-select', 'multiple', 'required']); ?>
+                            </div>
                         </div>
+
                     </div>
 
-                    <hr class="panel-wide">
+                    <div class="fieldset-like">
+                        <legend class="legend-center">
+                            <h5 class="font-weight-bold text-decoration-underline">Traveaux legers</h5>
+                        </legend>
 
-                    <div class="form-group row">
-                        <?php echo Form::label(__('Au cours de ces 2 dernières années lequel de ces travaux a tu effectués ?'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('travauxLegers[]', $travauxLegers, [], ['class' => 'form-control travauxLegers select2-multi-select', 'multiple', 'required']); ?>
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Au cours de ces 2 dernières années lequel de ces travaux a tu effectués ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::select('travauxLegers[]', $travauxLegers, [], ['class' => 'form-control travauxLegers select2-multi-select', 'multiple', 'required']); ?>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group row">
-                        <?php echo Form::label(__('Où as-tu effectué ces travaux ?'), [], ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('lieuTravauxLegers[]', $lieuTravaux, null, ['class' => 'form-control lieuTravauxLegers select2-multi-select', 'multiple', 'required']); ?>
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Où as-tu effectué ces travaux ?'), [], ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::select('lieuTravauxLegers[]', $lieuTravaux, null, ['class' => 'form-control lieuTravauxLegers select2-multi-select', 'multiple', 'required']); ?>
+                            </div>
                         </div>
+
                     </div>
-                    <hr class="panel-wide">
 
                     <div class="fieldset-like">
                         <legend class="legend-center">

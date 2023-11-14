@@ -220,7 +220,7 @@
                                                         <label class="control-label">Quantité</label>
 
                                                         <input type="number" name="quantite[]" id="quantite-1"
-                                                            class="form-control quantite" placeholder="Fréquence">
+                                                            class="form-control quantite" placeholder="Quantité">
                                                     </div>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-2">
@@ -306,7 +306,7 @@
                                                         <label class="control-label">Quantité</label>
 
                                                         <input type="number" name="quantite[]" id="quantite-1"
-                                                            class="form-control quantite" placeholder="Fréquence">
+                                                            class="form-control quantite" placeholder="Quantité">
                                                     </div>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-2">
