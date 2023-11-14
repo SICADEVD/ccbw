@@ -224,17 +224,16 @@
                         </div>
                     </div>
 
-                    <div class="form-group row">
+                    <div class="form-group row mt-3">
                         <label class="col-sm-4 control-label">@lang('Maladies observées dans la parcelle')</label>
                         <div class="col-xs-12 col-sm-8">
-                            <select class="form-control select2-multi-select protections" name="maladies[]" multiple>
+                            <select class="form-control select2-multi-select protections" name="maladies[]" multiple required>
                                 <option value="">@lang('Selectionner les protections')</option>
                                 <option value="">Maladie1</option>
                                 <option value="">Maladie2</option>
                             </select>
                         </div>
                     </div>
-                    <hr class="panel-wide">
                     <div class="form-group row">
                         <?php echo Form::label(__('Superficie Pulvérisée'), null, ['class' => 'col-sm-4 control-label required']); ?>
                         <div class="col-xs-12 col-sm-8">
