@@ -33,7 +33,7 @@
     <x-setting-menu-item :active="$activeMenu" menu="themeFormation_settings" :href="route('manager.settings.themeFormation.index')" :text="__('Paramètre Themes de Formation')"/>
     <x-setting-menu-item :active="$activeMenu" menu="categorieQuestionnaire_settings" :href="route('manager.settings.categorieQuestionnaire.index')" :text="__('Paramètre Categorie Questionnaire')"/>
     <x-setting-menu-item :active="$activeMenu" menu="questionnaire_settings" :href="route('manager.settings.questionnaire.index')" :text="__('Paramètre Questionnaire')"/>
-
+    <x-setting-menu-item :active="$activeMenu" menu="especeArbre_settings" :href="route('manager.settings.especeArbre.index')" :text="__('Paramètre Espèces Arbres')"/>
         
 
     </ul>

@@ -2,23 +2,24 @@
 
 namespace App\Http\Controllers\manager;
 
+use App\Models\Unit;
 use App\Constants\Status;
-use App\Http\Controllers\Controller;
+use App\Models\Campagne; 
+use App\Models\ArretEcole;
 use App\Models\Cooperative;
 use App\Models\CourierInfo;
+use Illuminate\Http\Request;
+use App\Models\Questionnaire;
+use App\Models\TravauxLegers;
+use App\Models\TypeFormation;
 use App\Models\CourierPayment;
 use App\Models\CourierProduct;
-use App\Models\Campagne; 
-use App\Models\TravauxDangereux;
-use App\Models\TravauxLegers;
-use App\Models\ArretEcole;
-use App\Models\CategorieQuestionnaire;
-use App\Models\Questionnaire;
 use App\Models\ThemesFormation;
-use App\Models\TypeFormation;
-use App\Models\Unit;
-use Illuminate\Http\Request;
+use App\Models\Agroespecesarbre;
+use App\Models\TravauxDangereux;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use App\Models\CategorieQuestionnaire;
 
 class SettingController extends Controller
 {
@@ -247,7 +248,33 @@ class SettingController extends Controller
         $notify[] = ['success', isset($message) ? $message  : 'Questionnaire a été ajouté avec succès.'];
         return back()->withNotify($notify);
     }
-    
+    public function especeArbreIndex()
+    {
+        $pageTitle = "Manage Espaces Arbres"; 
+        $activeSettingMenu = 'especeArbre_settings';
+        $especeArbre     = Agroespecesarbre::orderBy('id','desc')->paginate(getPaginate());
+        return view('manager.config.especeArbre', compact('pageTitle', 'especeArbre','activeSettingMenu'));
+    }
+    public function especeArbreStore(Request $request)
+    {
+        $request->validate([ 
+            'nom'  => 'required', 
+        ]);
+
+        if ($request->id) {
+            $especeArbre    = Agroespecesarbre::findOrFail($request->id);
+            $message = "Espece Arbre a été mise à jour avec succès.";
+        } else {
+            $especeArbre = new Agroespecesarbre();
+        } 
+        $especeArbre->nom = trim($request->nom); 
+        $especeArbre->strate = trim($request->strate); 
+        $especeArbre->nom_scientifique = trim($request->nom_scientifique); 
+        $especeArbre->save();
+        $notify[] = ['success', isset($message) ? $message  : 'Espece Arbre a été ajouté avec succès.'];
+        return back()->withNotify($notify);
+    }
+
     public function campagneStatus($id)
     {
         return Campagne::changeStatus($id);
@@ -282,5 +309,9 @@ class SettingController extends Controller
     public function questionnaireStatus($id)
     {
         return Questionnaire::changeStatus($id);
+    }
+    public function especeArbreStatus($id)
+    {
+        return Agroespecesarbre::changeStatus($id);
     }
 }

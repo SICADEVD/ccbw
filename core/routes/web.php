@@ -24,6 +24,7 @@ use App\Http\Controllers\Manager\ProgrammeSettingController;
 use App\Http\Controllers\Manager\SectionSettingController;
 use App\Http\Controllers\Manager\LocaliteSettingController;
 use App\Http\Controllers\Manager\SettingController;
+use App\Http\Controllers\Manager\ArchivageController;
 
 Route::namespace('Manager\Auth')->group(function () {
 
@@ -164,6 +165,9 @@ Route::name('settings.')->prefix('settings')->group(function () {
     Route::get('questionnaire/',[SettingController::class, 'questionnaireIndex'])->name('questionnaire.index');
     Route::post('questionnaire/store',[SettingController::class, 'questionnaireStore'])->name('questionnaire.store');
     Route::post('questionnaire/status/{id}',[SettingController::class, 'questionnaireStatus'])->name('questionnaire.status');
+    Route::get('espece-arbre/',[SettingController::class, 'especeArbreIndex'])->name('especeArbre.index');
+    Route::post('espece-arbre/store',[SettingController::class, 'especeArbreStore'])->name('especeArbre.store');
+    Route::post('espece-arbre/status/{id}',[SettingController::class, 'especeArbreStatus'])->name('especeArbre.status');
 
   });
 
@@ -196,6 +200,9 @@ Route::resource('leaves', LeaveController::class);
 // leaves files routes
 Route::get('leave-files/download/{id}', [LeaveFileController::class, 'download'])->name('leave-files.download');
 Route::resource('leave-files', LeaveFileController::class);
+
+Route::match(['GET', 'POST'], '/archivages/export', [ArchivageController::class, 'export'])->name('archivages.export');
+Route::resource('archivages', ArchivageController::class);
 
 Route::controller('Manager\AttendanceController')->name('hr.')->prefix('hr')->group(function () {
 // Attendance
