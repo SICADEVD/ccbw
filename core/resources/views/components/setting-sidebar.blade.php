@@ -34,7 +34,7 @@
     <x-setting-menu-item :active="$activeMenu" menu="categorieQuestionnaire_settings" :href="route('manager.settings.categorieQuestionnaire.index')" :text="__('Paramètre Categorie Questionnaire')"/>
     <x-setting-menu-item :active="$activeMenu" menu="questionnaire_settings" :href="route('manager.settings.questionnaire.index')" :text="__('Paramètre Questionnaire')"/>
     <x-setting-menu-item :active="$activeMenu" menu="especeArbre_settings" :href="route('manager.settings.especeArbre.index')" :text="__('Paramètre Espèces Arbres')"/>
-        
+    <x-setting-menu-item :active="$activeMenu" menu="typeArchive_settings" :href="route('manager.settings.typeArchive.index')" :text="__('Paramètre Type Archives')"/> 
 
     </ul>
     <!-- SETTINGS MENU END -->

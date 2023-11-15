@@ -20,6 +20,7 @@ use App\Models\TravauxDangereux;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\CategorieQuestionnaire;
+use App\Models\TypeArchive;
 
 class SettingController extends Controller
 {
@@ -275,6 +276,30 @@ class SettingController extends Controller
         return back()->withNotify($notify);
     }
 
+    public function typeArchiveIndex()
+    {
+        $pageTitle = "Manage Type Archives"; 
+        $activeSettingMenu = 'typeArchive_settings';
+        $typeArchive     = TypeArchive::orderBy('id','desc')->paginate(getPaginate());
+        return view('manager.config.typeArchive', compact('pageTitle', 'typeArchive','activeSettingMenu'));
+    }
+    public function typeArchiveStore(Request $request)
+    {
+        $request->validate([ 
+            'nom'  => 'required', 
+        ]);
+
+        if ($request->id) {
+            $typeArchive    = TypeArchive::findOrFail($request->id);
+            $message = "Espece Arbre a été mise à jour avec succès.";
+        } else {
+            $typeArchive = new TypeArchive();
+        } 
+        $typeArchive->nom = trim($request->nom); 
+        $typeArchive->save();
+        $notify[] = ['success', isset($message) ? $message  : 'Le contenu a été ajouté avec succès.'];
+        return back()->withNotify($notify);
+    }
     public function campagneStatus($id)
     {
         return Campagne::changeStatus($id);
@@ -313,5 +338,9 @@ class SettingController extends Controller
     public function especeArbreStatus($id)
     {
         return Agroespecesarbre::changeStatus($id);
+    }
+    public function typeArchiveStatus($id)
+    {
+        return TypeArchive::changeStatus($id);
     }
 }

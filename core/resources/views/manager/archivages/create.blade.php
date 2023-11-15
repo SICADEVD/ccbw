@@ -19,7 +19,7 @@
     <div class="form-group row">
             <?php echo Form::label(__('Titre du document'), null, ['class' => 'col-sm-4 control-label']); ?>
             <div class="col-xs-12 col-sm-8">
-            <?php echo Form::text('titre', null,array('placeholder' => __('Titre du document'),'class' => 'form-control titre')); ?>
+            <?php echo Form::text('titre', null,array('placeholder' => __('Titre du document'),'class' => 'form-control titre','required'=>'required')); ?>
         </div>
     </div>
      
