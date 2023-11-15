@@ -41,7 +41,7 @@
                         <table class="table table--light style--two">
                             <thead>
                                 <tr> 
-                                    <th>@lang('Coopérative')</th> 
+                                    <th>@lang('Cooperative')</th> 
                                     <th>@lang('Titre')</th>
                                     <th>@lang('Type Archive')</th>
                                     <th>@lang('Document')</th> 
@@ -55,11 +55,11 @@
                                 @forelse($archivages as $archivage)
                                     <tr> 
                                         <td>
-                                            <span class="fw-bold">{{ __($cooperative->name) }}</span>
+                                            <span class="small">{{ $archivage->cooperative->name }}</span>
                                         </td> 
 
                                         <td>
-                                            <span class="small">
+                                            <span class=" fw-bold"">
                                                 <a href="{{ route('manager.archivages.edit', $archivage->id) }}">
                                                     <span>@</span>{{ $archivage->titre }}
                                                 </a>
@@ -70,10 +70,10 @@
                                         </td>
                                         <td>
 										<?php
-                    $ext=substr(strrchr($data->document,'.'),1);
+                    $ext=substr(strrchr($archivage->document,'.'),1);
                     if(!$ext){$ext='file';}
                       ?>
-                      <a href="<?php echo asset('storage/app/'.$data->document); ?>" target="_blank"><img src="<?php echo asset('public/images'); ?>/<?php echo $ext; ?>.png" width="30px" alt=""><br><i class="fa fa-download fa-2x" style="color: #05b50b;"></i></a> 
+                      <a href="<?php echo asset('storage/app/'.$archivage->document); ?>" target="_blank"><img src="<?php echo asset('public/images'); ?>/<?php echo $ext; ?>.png" width="30px" alt=""><i class="fa fa-download fa-2x" style="color: #05b50b;"></i></a> 
                                         </td> 
 										<td> @php echo $archivage->statusBadge; @endphp </td>
                                         <td>

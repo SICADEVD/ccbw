@@ -31,7 +31,7 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/css/daterangepicker.css') }}">
     <script src="{{ asset('assets/global/js/jquery-3.6.0.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/jquery/modernizr.min.js') }}"></script>
-
+    <script src="{{ asset('assets/tinymce/js/tinymce/tinymce.min.js') }}"></script>
     @stack('style')
     <style>
         hr {
@@ -120,7 +120,7 @@
     @include('partials.plugins')
     @include('partials.notify')
     @stack('script-lib')
-    <script src="{{ asset('assets/tinymce/js/tinymce/tinymce.min.js') }}"></script>
+    
     <script src="{{ asset('assets/fcadmin/js/nicEdit.js') }}"></script>
     <script src="{{ asset('assets/fcadmin/js/printThis.js') }}"></script>
     <script src="{{ asset('assets/fcadmin/js/vendor/select2.min.js') }}"></script>

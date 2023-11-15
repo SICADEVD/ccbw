@@ -30,13 +30,12 @@ class ArchivageController extends Controller
         $manager   = auth()->user();
         
  
-        $data['activePage'] ='archivages';
-        $data['pageTitle'] = 'Gestion des Archives';
-        $data['typearchives'] = TypeArchive::get();
-        $data['archivages'] = Archivage::dateFilter()
+        $activePage ='archivages';
+        $pageTitle = 'Gestion des Archives';
+        $typearchives = TypeArchive::get();
+        $archivages = Archivage::dateFilter()
             ->searchable(["titre", "resume", "document"])
-            ->latest('id')
-            ->joinRelationship('cooperative')
+            ->latest('id') 
             ->where(function ($q) {
                 if (request()->type_archive != null) {
                     $q->where('type_archive_id', request()->type_archive);
@@ -45,8 +44,8 @@ class ArchivageController extends Controller
             ->with('cooperative','typeArchive')
             ->where('archivages.cooperative_id', $manager->cooperative_id)
             ->paginate(getPaginate());
-
-        return view('manager.archivages.index', $data);
+ 
+        return view('manager.archivages.index', compact('activePage','pageTitle','typearchives','archivages'));
     }
 
  
@@ -66,7 +65,7 @@ class ArchivageController extends Controller
 	
         $data=array(); 
         
-            $data['type_archives'] = DB::table('type_archives')->pluck('nom','nom')->all();
+            $data['type_archives'] = DB::table('type_archives')->pluck('nom','id')->all();
         $data['activePage'] ='archivages';
         $data['pageTitle'] = "Création d'une archive";
         return view('manager.archivages.create', $data);
@@ -80,19 +79,19 @@ class ArchivageController extends Controller
      */
     public function store(Request $request)
     {
-	
+      $manager   = auth()->user();
         $this->validate($request,[
             'document' => 'mimes:doc,docx,xlsx,xls,pdf,ppt,pptx|max:4048',
            ]);
 
         $input = $request->all();
 
-        $titre = Str::slug($input['titre'],'-');
+        $titre = Str::slug($request->titre,'-');
         if($request->document){
           $fileName = $titre.'.'.$request->document->extension();
           $document = $request->file('document')->move('storage/app/archivages',$fileName);
 
-          $input['document'] = "archivages/$fileName";
+          $document = "archivages/$fileName";
         }
 
         if(isset($input['content'])){
@@ -103,13 +102,18 @@ class ArchivageController extends Controller
         $mpdf->WriteHTML($request->get('content'));
 
         //return the PDF for download
-        $input['document'] = "archivages/$titre.pdf";
-        $location = "storage/app/archivages/";
+        $document = "archivages/$titre.pdf";
+        $location = "core/storage/app/archivages/";
        $mpdf->Output($location.$titre . '.pdf', Destination::FILE);
         }
-
-      $input['userid'] = Auth::user()->id;
-        $archives = Archivage::create($input);
+$archive = new Archivage();
+$archive->cooperative_id = $manager->cooperative_id;
+$archive->type_archive_id = $request->type_archive_id;
+$archive->titre = $request->titre;
+$archive->resume = $request->resume;
+$archive->document = $document;
+$archive->userid = $manager->id;
+$archive->save(); 
          return redirect()->route('manager.archivages.index')
                       ->with('success','Le fichier d\'archivages a été crée avec succès.');
     }
@@ -145,46 +149,15 @@ class ArchivageController extends Controller
     {
 	
         $data=array();
-        $data['archivages'] = Archivage::select('archivages.*')
-            ->find($id);
-
-        if(Auth::user()->cooperatives_id){
-
-            $data['producteurs'] = Producteur::select('id','nom','prenoms','codeProd','localites_id')->where('localites_id',$data['archivages']->localites_id)->get();
-            $rolelocalites = $this->getAllIdLocalitesUsers(Auth::user()->id);
-            $rolelocalites=explode(',',$rolelocalites);
-          $data['localites'] = Localite::whereIn('id', $rolelocalites)->pluck('nom','id')->all();
-            $data['cooperatives'] = Cooperative::where('id', Auth::user()->cooperatives_id)->pluck('nom','id')->all();
-
-
-            }else{
-                $data['producteurs'] = Producteur::select('id','nom','prenoms','codeProdapp','localites_id')->where('localites_id',$data['archivages']->localites_id)->get();
-                $data['localites'] = Localite::pluck('nom','id')->all();
-                $data['cooperatives'] = Cooperative::pluck('nom','id')->all();
-            }
-
-            $data['type_programmes'] = DB::table('type_programmes')->pluck('nom','nom')->all();
-            $data['type_archives'] = DB::table('type_archives')->pluck('nom','nom')->all();
-            $data['domaine_archivages'] = DB::table('domaine_archivages')->pluck('nom','nom')->all();
+        $data['archivages'] = Archivage::find($id); 
+ 
+            $data['type_archives'] = DB::table('type_archives')->pluck('nom','id')->all(); 
 
             $data['activePage'] ='archivages';
-            $data['pageTitle'] = 'FieldConnect | Modification de suivi des applications';
+            $data['pageTitle'] = 'Modification Archive';
         return view('archivages.edit', $data);
     }
-
-    public function getAllIdLocalitesUsers($id){
-
-        $contents='';
-        $coop = DB::table('roles_localites')->join('localites as l','roles_localites.localites_id','=','l.id')->select('l.id')->where('users_id',$id)->get();
-            if(count($coop)){
-              foreach($coop as $data){
-                $nom[] = $data->id;
-              }
-                $contents = implode(',',$nom);
-            }
-
-        return $contents;
-    }
+ 
     /**
      * Update the specified resource in storage.
      *
@@ -194,27 +167,32 @@ class ArchivageController extends Controller
      */
     public function update(Request $request, $id)
     {
-	
+      $manager   = auth()->user();
         $this->validate($request,[
             'document' => 'mimes:doc,docx,xlsx,xls,pdf,ppt,pptx|max:4048',
            ]);
-
-        $input = $request->all();
-        $archivages = Archivage::find($id);
+ 
+        $archive = Archivage::find($id);
 
         // if($request->document){
         //     $document = $request->file('document')->store('archivages');
-        //     $input['document'] = $document;
+        //     $document = $document;
         //   }
-        $titre = Str::slug($input['titre'],'-');
+        $titre = Str::slug($request->titre,'-');
         if($request->document){
           $fileName = $titre.'.'.$request->document->extension();
-          $document = $request->file('document')->move('storage/app/archivages',$fileName);
+          $document = $request->file('document')->move('core/storage/app/archivages',$fileName);
 
-          $input['document'] = "archivages/$fileName";
+          $document = "archivages/$fileName";
         }
-        $archivages->update($input);
-        return redirect()->route('archivages.index')
+        $archive->cooperative_id = $manager->cooperative_id;
+        $archive->type_archive_id = $request->type_archive_id;
+        $archive->titre = $request->titre;
+        $archive->resume = $request->resume;
+        $archive->document = $document;
+        $archive->userid = $manager->id;
+        $archive->save(); 
+        return redirect()->route('manager.archivages.index')
                         ->with('success','Le fichier d\'archivages a été mise à jour avec succès.');
     }
 
@@ -254,5 +232,9 @@ class ArchivageController extends Controller
       Archivage::onlyTrashed()->restore();
 
         return redirect()->back();
+    }
+    public function status($id)
+    {
+        return Archivage::changeStatus($id);
     }
 }

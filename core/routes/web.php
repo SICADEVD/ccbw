@@ -205,6 +205,7 @@ Route::get('leave-files/download/{id}', [LeaveFileController::class, 'download']
 Route::resource('leave-files', LeaveFileController::class);
 
 Route::match(['GET', 'POST'], '/archivages/export', [ArchivageController::class, 'export'])->name('archivages.export');
+Route::match(['GET', 'POST'], '/archivages/status', [ArchivageController::class, 'export'])->name('archivages.status');
 Route::resource('archivages', ArchivageController::class);
 
 Route::controller('Manager\AttendanceController')->name('hr.')->prefix('hr')->group(function () {

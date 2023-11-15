@@ -28,6 +28,7 @@
         "messagebird/php-rest-api": "^1.20",
         "milon/barcode": "^9.0",
         "mollie/laravel-mollie": "^2.14",
+        "mpdf/mpdf": "*",
         "phpmailer/phpmailer": "^6.2",
         "razorpay/razorpay": "2.*",
         "sendgrid/sendgrid": "^7.6",

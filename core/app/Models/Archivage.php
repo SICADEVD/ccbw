@@ -12,11 +12,11 @@ class Archivage extends Model
 
     public function cooperative()
     {
-        return $this->belongsTo(Cooperative::class, 'cooperative_id', 'id');
+        return $this->belongsTo(Cooperative::class, 'cooperative_id');
     }
      
     public function typeArchive()
     {
-        return $this->belongsTo(TypeArchive::class, 'type_archive_id', 'id');
+        return $this->belongsTo(TypeArchive::class, 'type_archive_id','id');
     }
 }
