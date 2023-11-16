@@ -16,7 +16,7 @@
                                 <select name="type_archive" class="form-control">
                                     <option value="">@lang('Toutes')</option>
                                     @foreach ($typearchives as $local)
-                                        <option value="{{ $local->id }}">{{ $local->nom }}</option>
+                                        <option value="{{ $local->id }}" {{ request()->type_archive == $local->id ? 'selected' : '' }}>{{ $local->nom }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -24,7 +24,7 @@
                              
                             <div class="flex-grow-1">
                                 <label>@lang('Date')</label>
-                                <input name="date" type="text" class="date form-control"
+                                <input name="date" type="text" class="dates form-control"
                                     placeholder="@lang('Date de début - Date de fin')" autocomplete="off" value="{{ request()->date }}">
                             </div>
                             <div class="flex-grow-1 align-self-end">
@@ -163,7 +163,7 @@
                 $('#typeModel').modal('show');
             });
 
-            $('.date').datepicker({
+            $('.dates').datepicker({
                 maxDate: new Date(),
                 range: true,
                 multipleDatesSeparator: "-",

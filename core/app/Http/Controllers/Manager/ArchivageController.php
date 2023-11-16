@@ -92,7 +92,7 @@ class ArchivageController extends Controller
         $titre = Str::slug($request->titre,'-');
         if($request->document){
           $fileName = $titre.'.'.$request->document->extension();
-          $document = $request->file('document')->move('storage/app/public/archivages',$fileName);
+          $document = $request->file('document')->move(storage_path(). "/app/public/archivages",$fileName);
 
           $document = "archivages/$fileName";
         }
@@ -117,8 +117,8 @@ $archive->resume = $request->resume;
 $archive->document = $document;
 $archive->userid = $manager->id;
 $archive->save(); 
-         return redirect()->route('manager.archivages.index')
-                      ->with('success','Le fichier d\'archivages a été crée avec succès.');
+$notify[] = ['success', 'Le fichier d\'archivages a été crée avec succès.'];
+         return redirect()->route('manager.archivages.index')->withNotify($notify);
     }
 
 
@@ -138,7 +138,7 @@ $archive->save();
                 ->join('localites as l','p.localites_id','=','l.id')
                 ->join('cooperatives as c','l.cooperatives_id','=','c.id')
                 ->find($id);
-         $data['pageTitle'] = 'FieldConnect | Details de suivi des applications';
+         $data['pageTitle'] = 'Details Archive';
       return view('archivages.show', $data);
     }
 
@@ -158,7 +158,7 @@ $archive->save();
 
             $data['activePage'] ='archivages';
             $data['pageTitle'] = 'Modification Archive';
-        return view('archivages.edit', $data);
+        return view('manager.archivages.edit', $data);
     }
  
     /**
@@ -186,7 +186,7 @@ $archive->save();
         $titre = Str::slug($request->titre,'-');
         if($request->document){
           $fileName = $titre.'.'.$request->document->extension();
-          $document = $request->file('document')->move('core/storage/app/public/archivages',$fileName);
+          $document = $request->file('document')->move(storage_path(). "/app/public/archivages",$fileName);
           //$location = storage_path(). "/app/public/archivages/".$titre.'.pdf';
           $document = "archivages/$fileName";
         }
@@ -194,11 +194,11 @@ $archive->save();
         $archive->type_archive_id = $request->type_archive_id;
         $archive->titre = $request->titre;
         $archive->resume = $request->resume;
-        $archive->document = $document;
+        $archive->document = $request->document ? $document : $request->old_document;
         $archive->userid = $manager->id;
         $archive->save(); 
-        return redirect()->route('manager.archivages.index')
-                        ->with('success','Le fichier d\'archivages a été mise à jour avec succès.');
+        $notify[] = ['success', 'Le fichier d\'archivages a été mise à jour avec succès.'];
+         return redirect()->route('manager.archivages.index')->withNotify($notify);
     }
 
     /**
