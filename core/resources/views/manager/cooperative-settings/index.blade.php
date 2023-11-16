@@ -18,6 +18,15 @@
                     <input type="hidden" name="codeApp" value="{{ $cooperative->codeApp }}">
 
                     <div class="modal-body">
+                    <div class="form-group">
+                    <label>@lang('Statut juridique')</label>
+                                <select name="statut_juridique" class="form-control">
+                                    <option value="">@lang('Toutes')</option>
+                                    <option value="SCOOPS" {{ request()->localite == 'SCOOPS' ? 'selected' : '' }}>SCOOPS</option>
+                                        <option value="COOP CA" {{ request()->localite == 'COOP CA' ? 'selected' : '' }}>COOP CA</option>
+                                   
+                                </select>
+                        </div>
                         <div class="form-group">
                             <label>@lang('Nom de la cooperative')</label>
                             <input type="text" class="form-control" name="name" value="{{ $cooperative->name }}" readonly required>
@@ -37,12 +46,51 @@
                             <label>@lang('Contacts')</label>
                             <input type="text" class="form-control" value="{{ $cooperative->phone }}" name="phone" required>
                         </div>
-
+                       
 
                         <div class="form-group">
                             <label>@lang('Adresse de la coopérative')</label>
                             <input type="text" class="form-control" name="address" value="{{ $cooperative->address }}" required>
                         </div>
+                        <hr class="panel-wide">
+                        <div class="form-group">
+                            <label>@lang('Année de creation')</label>
+                            <input type="number" class="form-control years" min="1960" max="{{ gmdate('Y')}}" name="annee_creation" value="{{ $cooperative->annee_creation }}" >
+                        </div>
+                        <div class="form-group">
+                            <label>@lang('Code CCC')</label>
+                            <input type="text" class="form-control phone" name="code_ccc" value="{{ $cooperative->code_ccc }}" >
+                        </div>
+                        <div class="form-group">
+                            <label>@lang('Nombre de membres à la creation')</label>
+                            <input type="number" class="form-control" name="nb_membres_creation" value="{{ $cooperative->nb_membres_creation }}">
+                        </div>
+                        <div class="form-group">
+                            <label>@lang('Nombre de sections à la creation')</label>
+                            <input type="text" class="form-control" name="nb_sections_creation" value="{{ $cooperative->nb_sections_creation }}">
+                        </div>
+                        <div class="form-group">
+                            <label>@lang('Nombre de membres actuel')</label>
+                            <input type="number" class="form-control" name="nb_membres_actuel" value="{{ $cooperative->nb_membres_actuel }}" >
+                        </div>
+                        <div class="form-group">
+                            <label>@lang('Nombre de sections actuel')</label>
+                            <input type="text" class="form-control" name="nb_sections_actuel" value="{{ $cooperative->nb_sections_actuel }}">
+                        </div>
+                        <div class="form-group">
+                            <label>@lang('Nombre de PCA qui se sont succédés depuis la creation')</label>
+                            <input type="text" class="form-control" name="nb_pca_creation" value="{{ $cooperative->nb_pca_creation }}">
+                        </div>
+                        <div class="form-group">
+                    <label>@lang('Existence de Documents administratifs')</label><br>
+                                <select name="document" class="form-control select-picker" multiple>
+                                    <option value="">@lang('Toutes')</option>
+                                    @foreach ($documents as $local)
+                                        <option value="{{ $local->id }}" {{ request()->localite == $local->id ? 'selected' : '' }}>{{ $local->nom }}</option>
+                                    @endforeach
+                                </select>
+                        </div>
+                        <hr class="panel-wide">
                         <div class="form-group">
                             <label>@lang('Longitude')</label>
                             <input type="text" class="form-control" name="longitude" value="{{ $cooperative->longitude }}" required>
@@ -51,6 +99,7 @@
                             <label>@lang('Latitude')</label>
                             <input type="text" class="form-control" name="latitude" value="{{ $cooperative->latitude }}" required>
                         </div>
+                        <hr class="panel-wide">
                         <div class="form-group">
                             <label>@lang('Utilisateurs Mobile')</label>
                             <input type="number" class="form-control" name="mobile" value="{{ $cooperative->mobile }}" readonly required>

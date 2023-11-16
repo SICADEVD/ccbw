@@ -156,6 +156,7 @@
             //Datemask dd/mm/yyyy
     $('.heure').mask('00:00',{placeholder: "__:__"});
     $('.date').mask('00/00/0000',{placeholder: "__/__/____"});
+    $('.years').mask('0000',{placeholder: "____"});
      $('.phone').mask('0000000000',{placeholder: "__ __ __ __ __"});
      $('.age').mask('00',{placeholder: "__"});
      $('.text2').mask('00',{placeholder: "__"});

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Manager;
 
-use App\Http\Helpers\Reply;
 use App\Models\LeaveType;
+use App\Http\Helpers\Reply;
 use App\Models\Cooperative;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -12,6 +12,7 @@ use App\Models\CustomFieldGroup;
 use App\Models\AttendanceSetting;
 use App\Http\Controllers\Controller;
 use App\Models\GoogleCalendarModule;
+use App\Models\DocumentAdministratif;
 
 class CooperativeSettingController extends Controller
 {
@@ -22,8 +23,9 @@ class CooperativeSettingController extends Controller
         
         $pageTitle = "Paramètre de la coopérative";
         $cooperative  = Cooperative::where('id', auth()->user()->cooperative_id)->first();
+        $documents = DocumentAdministratif::get();
         $activeSettingMenu = 'cooperative_settings';
-        return view('manager.cooperative-settings.index', compact('pageTitle', 'cooperative','activeSettingMenu'));
+        return view('manager.cooperative-settings.index', compact('pageTitle', 'cooperative','activeSettingMenu','documents'));
     }
 
     public function update(Request $request)
