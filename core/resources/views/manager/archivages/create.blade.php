@@ -73,12 +73,8 @@
 @endpush
 
 @push('script')
-    <script type="text/javascript">
-        $("#section_id").chained("#localite");
-    </script>
-@endpush
-
-@push('script')
+<script src="{{ asset('assets/ckeditor/ckeditor.js') }}"></script>
+<script src="{{ asset('assets/ckeditor/adapters/jquery.js') }}"></script>
     <script type="text/javascript">
        $('#resume').keyup(function() {
     var characterCount = $(this).val().length,
@@ -88,5 +84,9 @@
         current_count.text(characterCount);
 });
     </script>
-     
+     <script>
+  $( 'textarea.editor' ).ckeditor( {
+    language: 'fr', 
+});
+  </script>
 @endpush

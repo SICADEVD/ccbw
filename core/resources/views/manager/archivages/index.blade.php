@@ -73,7 +73,7 @@
                     $ext=substr(strrchr($archivage->document,'.'),1);
                     if(!$ext){$ext='file';}
                       ?>
-                      <a href="<?php echo asset('storage/app/'.$archivage->document); ?>" target="_blank"><img src="<?php echo asset('public/images'); ?>/<?php echo $ext; ?>.png" width="30px" alt=""><i class="fa fa-download fa-2x" style="color: #05b50b;"></i></a> 
+                      <a href="<?php echo asset('core/storage/app/public/'.$archivage->document); ?>" target="_blank"><img src="<?php echo asset('public/images'); ?>/<?php echo $ext; ?>.png" width="30px" alt=""><i class="fa fa-download fa-2x" style="color: #05b50b;"></i></a> 
                                         </td> 
 										<td> @php echo $archivage->statusBadge; @endphp </td>
                                         <td>

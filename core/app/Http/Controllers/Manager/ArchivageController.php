@@ -11,6 +11,7 @@ use App\Models\Producteur;
 use App\Models\Archivage;
 use App\Models\TypeArchive;
 use Maatwebsite\Excel\Facades\Excel; 
+use Illuminate\Support\Facades\File;
 use Mpdf\Mpdf;
 use Mpdf\Output\Destination; 
 use Illuminate\Support\Facades\DB;
@@ -84,17 +85,19 @@ class ArchivageController extends Controller
             'document' => 'mimes:doc,docx,xlsx,xls,pdf,ppt,pptx|max:4048',
            ]);
 
-        $input = $request->all();
+           if(!file_exists(storage_path(). "/app/public/archivages")){ 
+            File::makeDirectory(storage_path(). "/app/public/archivages", 0777, true);
+          }
 
         $titre = Str::slug($request->titre,'-');
         if($request->document){
           $fileName = $titre.'.'.$request->document->extension();
-          $document = $request->file('document')->move('storage/app/archivages',$fileName);
+          $document = $request->file('document')->move('storage/app/public/archivages',$fileName);
 
           $document = "archivages/$fileName";
         }
 
-        if(isset($input['content'])){
+        if(isset($request->content)){
            //create PDF
         $mpdf = new Mpdf();
  
@@ -103,8 +106,8 @@ class ArchivageController extends Controller
 
         //return the PDF for download
         $document = "archivages/$titre.pdf";
-        $location = "core/storage/app/archivages/";
-       $mpdf->Output($location.$titre . '.pdf', Destination::FILE);
+        $location = storage_path(). "/app/public/archivages/".$titre.'.pdf';
+       $mpdf->Output($location, Destination::FILE);
         }
 $archive = new Archivage();
 $archive->cooperative_id = $manager->cooperative_id;
@@ -171,7 +174,9 @@ $archive->save();
         $this->validate($request,[
             'document' => 'mimes:doc,docx,xlsx,xls,pdf,ppt,pptx|max:4048',
            ]);
- 
+           if(!file_exists(storage_path(). "/app/public/archivages")){ 
+            File::makeDirectory(storage_path(). "/app/public/archivages", 0777, true);
+          }
         $archive = Archivage::find($id);
 
         // if($request->document){
@@ -181,8 +186,8 @@ $archive->save();
         $titre = Str::slug($request->titre,'-');
         if($request->document){
           $fileName = $titre.'.'.$request->document->extension();
-          $document = $request->file('document')->move('core/storage/app/archivages',$fileName);
-
+          $document = $request->file('document')->move('core/storage/app/public/archivages',$fileName);
+          //$location = storage_path(). "/app/public/archivages/".$titre.'.pdf';
           $document = "archivages/$fileName";
         }
         $archive->cooperative_id = $manager->cooperative_id;
