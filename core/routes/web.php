@@ -395,7 +395,12 @@ Route::get('/exportDeforestationsExcel', 'exportExcel')->name('exportExcel.defor
     //Manage Livraison
  
     Route::controller('Manager\LivraisonController')->name('livraison.')->prefix('livraison')->group(function () {
-Route::get('list', 'livraisonInfo')->name('index');
+        Route::get('send', 'create')->name('create');
+        Route::post('store', 'store')->name('store');
+        Route::post('update/{id}', 'update')->name('update');
+        Route::get('edit/{id}', 'edit')->name('edit');
+        Route::get('list', 'livraisonInfo')->name('index');
+        Route::get('parcelle', 'getParcelle')->name('get.parcelle');
 Route::get('dispatch/list', 'dispatchLivraison')->name('dispatch');
 Route::get('upcoming/list', 'upcoming')->name('upcoming');
 Route::get('sent-queue/list', 'sentInQueue')->name('sentQueue');

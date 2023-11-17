@@ -178,6 +178,13 @@
                     <div class="sidebar-submenu {{ menuActive('manager.livraison.*', 2) }} ">
                         <ul>
 
+                        <li class="sidebar-menu-item {{ menuActive('manager.livraison.create') }}">
+                                
+                                    <a href="{{ route('manager.livraison.create') }}" class="nav-link ">
+                                        <i class="menu-icon las la-shipping-fast"></i>
+                                        <span class="menu-title">@lang("Enregistrement")</span>
+                                    </a>
+                                    </li>
                             <li class="sidebar-menu-item {{ menuActive('manager.livraison.sentQueue') }}">
                                 <a href="{{ route('manager.livraison.sentQueue') }}" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>
