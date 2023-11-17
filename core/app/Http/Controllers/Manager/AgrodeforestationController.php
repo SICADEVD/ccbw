@@ -168,7 +168,7 @@ class AgrodeforestationController extends Controller
     public function edit($id)
     {
         $pageTitle = "Mise à jour de la parcelle";
-        $localites  = Localite::active()->where('cooperative_id',auth()->user()->cooperative_id)->orderBy('nom')->get();
+        $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->get();
         $producteurs  = Producteur::with('localite')->get();
         $parcelle   = Parcelle::findOrFail($id);
         return view('manager.parcelle.edit', compact('pageTitle', 'localites', 'parcelle','producteurs'));
