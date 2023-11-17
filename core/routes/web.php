@@ -159,6 +159,12 @@ Route::name('settings.')->prefix('settings')->group(function () {
     Route::get('theme-formation/',[SettingController::class, 'themeFormationIndex'])->name('themeFormation.index');
     Route::post('theme-formation/store',[SettingController::class, 'themeFormationStore'])->name('themeFormation.store');
     Route::post('theme-formation/status/{id}',[SettingController::class, 'themeFormationStatus'])->name('themeFormation.status');
+    Route::get('module-formation-staff/',[SettingController::class, 'moduleFormationStaffIndex'])->name('moduleFormationStaff.index');
+    Route::post('module-formation-staff/store',[SettingController::class, 'moduleFormationStaffStore'])->name('moduleFormationStaff.store');
+    Route::post('module-formation-staff/status/{id}',[SettingController::class, 'moduleFormationStaffStatus'])->name('moduleFormationStaff.status');
+    Route::get('theme-formation-staff/',[SettingController::class, 'themeFormationStaffIndex'])->name('themeFormationStaff.index');
+    Route::post('theme-formation-staff/store',[SettingController::class, 'themeFormationStaffStore'])->name('themeFormationStaff.store');
+    Route::post('theme-formation-staff/status/{id}',[SettingController::class, 'themeFormationStaffStatus'])->name('themeFormationStaff.status');
     Route::get('categorie-questionnaire/',[SettingController::class, 'categorieQuestionnaireIndex'])->name('categorieQuestionnaire.index');
     Route::post('categorie-questionnaire/store',[SettingController::class, 'categorieQuestionnaireStore'])->name('categorieQuestionnaire.store');
     Route::post('categorie-questionnaire/status/{id}',[SettingController::class, 'categorieQuestionnaireStatus'])->name('categorieQuestionnaire.status');

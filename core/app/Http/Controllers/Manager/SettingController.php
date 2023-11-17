@@ -8,6 +8,7 @@ use App\Models\Campagne;
 use App\Models\ArretEcole;
 use App\Models\Cooperative;
 use App\Models\CourierInfo;
+use App\Models\TypeArchive;
 use Illuminate\Http\Request;
 use App\Models\Questionnaire;
 use App\Models\TravauxLegers;
@@ -18,9 +19,10 @@ use App\Models\ThemesFormation;
 use App\Models\Agroespecesarbre;
 use App\Models\TravauxDangereux;
 use Illuminate\Support\Facades\DB;
+use App\Models\ThemeFormationStaff;
 use App\Http\Controllers\Controller;
+use App\Models\ModuleFormationStaff;
 use App\Models\CategorieQuestionnaire;
-use App\Models\TypeArchive;
 
 class SettingController extends Controller
 {
@@ -192,6 +194,61 @@ class SettingController extends Controller
         $themeFormation->type_formation_id = $request->typeformation;
         $themeFormation->save();
         $notify[] = ['success', isset($message) ? $message  : 'theme de Formation a été ajouté avec succès.'];
+        return back()->withNotify($notify);
+    }
+
+    public function moduleFormationStaffIndex()
+    {
+        $pageTitle = "Manage Module de Formation Staff"; 
+        $activeSettingMenu = 'moduleFormationStaff_settings';
+        $moduleFormations     = ModuleFormationStaff::orderBy('id','desc')->paginate(getPaginate());
+        return view('manager.config.moduleFormationStaff', compact('pageTitle', 'moduleFormations','activeSettingMenu'));
+    }
+
+    public function moduleFormationStaffStore(Request $request)
+    {
+        $request->validate([ 
+            'nom'  => 'required', 
+        ]);
+
+        if ($request->id) {
+            $moduleFormationStaff    = ModuleFormationStaff::findOrFail($request->id);
+            $message = "Module de Formation Staff a été mise à jour avec succès.";
+        } else {
+            $moduleFormationStaff = new ModuleFormationStaff();
+        } 
+        $moduleFormationStaff->nom = trim($request->nom); 
+        $moduleFormationStaff->save();
+        $notify[] = ['success', isset($message) ? $message  : 'Module de Formation Staff a été ajouté avec succès.'];
+        return back()->withNotify($notify);
+    }
+
+    public function themeFormationStaffIndex()
+    {
+        $pageTitle = "Manage theme de Formation Staff"; 
+        $activeSettingMenu = 'themeFormationStaff_settings';
+        $themeFormationStaff     = ThemeFormationStaff::with('moduleFormationStaff')->orderBy('id','desc')->paginate(getPaginate());
+        $moduleFormationStaffs = ModuleFormationStaff::get();
+        return view('manager.config.themeFormationStaff', compact('pageTitle', 'themeFormationStaff','moduleFormationStaffs','activeSettingMenu'));
+    }
+
+    public function themeFormationStaffStore(Request $request)
+    {
+        $request->validate([ 
+            'nom'  => 'required',
+            'moduleFormationStaff'=>'required',
+        ]);
+
+        if ($request->id) {
+            $themeFormationStaff    = ThemeFormationStaff::findOrFail($request->id);
+            $message = "theme de Formation Staff a été mise à jour avec succès.";
+        } else {
+            $themeFormationStaff = new ThemeFormationStaff();
+        } 
+        $themeFormationStaff->nom = trim($request->nom); 
+        $themeFormationStaff->module_formation_staff_id = $request->moduleFormationStaff;
+        $themeFormationStaff->save();
+        $notify[] = ['success', isset($message) ? $message  : 'theme de Formation Staff a été ajouté avec succès.'];
         return back()->withNotify($notify);
     }
 
