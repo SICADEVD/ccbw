@@ -83,7 +83,7 @@
                         </div>
                         <div class="form-group">
                     <label>@lang('Existence de Documents administratifs')</label><br>
-                                <select name="document" class="form-control select-picker" multiple>
+                                <select name="document[]" class="form-control select-picker" multiple>
                                     <option value="">@lang('Toutes')</option>
                                     @foreach ($documents as $local)
                                         <option value="{{ $local->id }}" {{ request()->localite == $local->id ? 'selected' : '' }}>{{ $local->nom }}</option>

@@ -68,7 +68,7 @@
                             <li class="sidebar-menu-item {{ menuActive('manager.hr.') }}">
                                 <a href="#" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('Formations Staff')</span>
+                                    <span class="menu-title">@lang('Formation Staffs')</span>
                                 </a>
                             </li> 
                             <li class="sidebar-menu-item {{ menuActive('manager.archivages.*') }}">

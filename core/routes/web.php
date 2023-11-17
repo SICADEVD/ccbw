@@ -25,6 +25,7 @@ use App\Http\Controllers\Manager\SectionSettingController;
 use App\Http\Controllers\Manager\LocaliteSettingController;
 use App\Http\Controllers\Manager\SettingController;
 use App\Http\Controllers\Manager\ArchivageController;
+use App\Http\Controllers\Manager\FormationStaffController;
 
 Route::namespace('Manager\Auth')->group(function () {
 
@@ -125,6 +126,10 @@ Route::resource('departments', DepartmentController::class);
 Route::get('quill-image/{image}', [ImageController::class, 'getImage'])->name('image.getImage');
 // Cropper Model
 Route::get('cropper/{element}', [ImageController::class, 'cropper'])->name('cropper');
+
+Route::post('formation-staff/status/{id}', [FormationStaffController::class, 'status'])->name('formation-staff.status');
+Route::post('formation-staff/exportFormationsExcel', [FormationStaffController::class, 'exportExcel'])->name('formation-staff.exportExcel.formationAll'); 
+Route::resource('formation-staff', FormationStaffController::class);
 
 Route::controller('Manager\ImportController')->name('hr.')->prefix('hr')->group(function () {
     Route::get('import/process/{name}/{id}', [ImportController::class, 'getImportProgress'])->name('import.process.progress');
