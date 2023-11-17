@@ -63,7 +63,7 @@
                                             <span class="fw-bold">{{ $formation->localite->nom }}</span>
                                         </td>
                                         <td>
-                                            <span> <a href="{{ route('manager.suivi.formation.edit', $formation->id) }}">
+                                            <span> <a href="{{ route('manager.formation-staff.edit', $formation->id) }}">
                                                     <span>@</span>{{ $formation->user->lastname }} {{ $formation->user->firstname }}
                                                 </a></span>
                                         </td> 
@@ -88,17 +88,17 @@
                                                     class="las la-ellipsis-v"></i>@lang('Action')
                                              </button>
                                             <div class="dropdown-menu p-0">
-                                                <a href="{{ route('manager.suivi.formation.edit', $formation->id) }}"
+                                                <a href="{{ route('manager.formation-staff.edit', $formation->id) }}"
                                                     class="dropdown-item"><i class="la la-pen"></i>@lang('Edit')</a> 
                                                 @if ($formation->status == Status::DISABLE)
                                                     <button type="button" class="confirmationBtn  dropdown-item"
-                                                        data-action="{{ route('manager.suivi.formation.status', $formation->id) }}"
+                                                        data-action="{{ route('manager.formation-staff.status', $formation->id) }}"
                                                         data-question="@lang('Are you sure to enable this formation?')">
                                                         <i class="la la-eye"></i> @lang('Activé')
                                                     </button>
                                                 @else
                                                     <button type="button" class="confirmationBtn dropdown-item"
-                                                        data-action="{{ route('manager.suivi.formation.status', $formation->id) }}"
+                                                        data-action="{{ route('manager.formation-staff.status', $formation->id) }}"
                                                         data-question="@lang('Are you sure to disable this formation?')">
                                                         <i class="la la-eye-slash"></i> @lang('Désactivé')
                                                     </button>
@@ -130,10 +130,10 @@
 
 @push('breadcrumb-plugins')
     <x-search-form placeholder="Search here..." />
-    <a href="{{ route('manager.suivi.formation.create') }}" class="btn  btn-outline--primary h-45 addNewCooperative">
+    <a href="{{ route('manager.formation-staff.create') }}" class="btn  btn-outline--primary h-45 addNewCooperative">
         <i class="las la-plus"></i>@lang("Ajouter nouveau")
     </a>
-    <a href="{{ route('manager.suivi.formation.exportExcel.formationAll') }}" class="btn  btn-outline--warning h-45"><i class="las la-cloud-download-alt"></i> Exporter en Excel</a>
+    <a href="{{ route('manager.formation-staff.exportExcel.formationAll') }}" class="btn  btn-outline--warning h-45"><i class="las la-cloud-download-alt"></i> Exporter en Excel</a>
 @endpush
 @push('style')
     <style>

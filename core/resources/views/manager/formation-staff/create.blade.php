@@ -4,7 +4,7 @@
         <div class="col-lg-12 mb-30">
             <div class="card">
                 <div class="card-body"> 
-                    {!! Form::open(array('route' => ['manager.suivi.formation.store'],'method'=>'POST','class'=>'form-horizontal', 'id'=>'flocal', 'enctype'=>'multipart/form-data')) !!} 
+                    {!! Form::open(array('route' => ['manager.formation-staff.store'],'method'=>'POST','class'=>'form-horizontal', 'id'=>'flocal', 'enctype'=>'multipart/form-data')) !!} 
                         
                             <div class="form-group row">
                                 <label class="col-sm-4 control-label">@lang('Selectionner une localite')</label>
@@ -109,7 +109,7 @@
 @endsection
 
 @push('breadcrumb-plugins')
-    <x-back route="{{ route('manager.suivi.formation.index') }}" />
+    <x-back route="{{ route('manager.formation-staff.index') }}" />
 @endpush
 
 @push('script')

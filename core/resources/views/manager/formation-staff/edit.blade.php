@@ -4,7 +4,7 @@
         <div class="col-lg-12 mb-30">
             <div class="card">
                 <div class="card-body"> 
-         {!! Form::model($formation, ['method' => 'POST','route' => ['manager.suivi.formation.store', $formation->id],'class'=>'form-horizontal', 'id'=>'flocal', 'enctype'=>'multipart/form-data']) !!}
+         {!! Form::model($formation, ['method' => 'POST','route' => ['manager.formation-staff.store', $formation->id],'class'=>'form-horizontal', 'id'=>'flocal', 'enctype'=>'multipart/form-data']) !!}
                         <input type="hidden" name="id" value="{{ $formation->id }}"> 
                         
                         <div class="form-group row"> 
@@ -112,7 +112,7 @@
 @endsection
 
 @push('breadcrumb-plugins')
-    <x-back route="{{ route('manager.suivi.formation.index') }}" />
+    <x-back route="{{ route('manager.formation-staff.index') }}" />
 @endpush
 
 @push('script')
