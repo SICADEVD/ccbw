@@ -117,7 +117,7 @@
                     </div>
                     <div id="frequentation">
                         <div class="form-group row">
-                            <?php echo Form::label(__('Quel niveau d’étude as-tu atteins ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <?php echo Form::label(__('Quel est ton niveau d\'étude ?'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
                                 <select class="form-control" name="niveauEtude" id="niveauEtude">
                                     <option value="">@lang('Selectionner une option')</option>
@@ -171,7 +171,6 @@
                         </div>
 
                     </div>
-
                     <div id="nonFrequentation">
                         <div class="form-group row">
                             <?php echo Form::label(__('As-tu été à l’école par le passé ?'), null, ['class' => 'col-sm-4 control-label']); ?>
@@ -180,33 +179,33 @@
                             </div>
                         </div>
                         <div id="ecoleAvant">
-
                             <div class="form-group row" id="niveauEtudeAtteint">
-                                <?php echo Form::label(__('Quel niveau d’étude as-tu atteins ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                                <?php echo Form::label(__('Quel a été ton niveau d\'étude ?'), null, ['class' => 'col-sm-4 control-label']); ?>
                                 <div class="col-xs-12 col-sm-8">
                                     <?php echo Form::select('niveauEtudeAtteint', $niveauEtudeAvant, null, ['placeholder' => __('Selectionner une option'), 'class' => 'form-control niveauEtudeAtteint']); ?>
                                 </div>
                             </div>
-
                             <div class="form-group row">
-                                <?php echo Form::label(__('Pourquoi ne vas-tu pas à l’école ou arrêté l’école ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                                <?php echo Form::label(__('Quel est le motif d\'arrêt de la scolarisation ?'), null, ['class' => 'col-sm-4 control-label']); ?>
                                 <div class="col-xs-12 col-sm-8">
-                                    <?php echo Form::select('raisonArretEcole[]', $raisonArretEcole, [], ['class' => 'form-control raisonArretEcole select2-multi-select', 'multiple']); ?>
+                                    <select class="form-control select2-multi-select raisonArretEcole"
+                                        name="raisonArretEcole[] " id="raisonArretEcole" multiple="multiple">
+                                        <option value="">@lang('Selectionner une option')</option>
+                                        @foreach ($raisonArretEcole as $raison)
+                                            <option value="{{ $raison->nom }}" @selected(old('raisonArretEcole'))>
+                                                {{ $raison->nom }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                         </div>
-
                         <div class="form-group row" id='autreRaisonArretEcole'>
                             <?php echo Form::label(__('Autre raison'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::text('autreRaisonArretEcole', null, ['placeholder' => __('Autre raison'), 'class' => 'form-control autreRaisonArretEcole']); ?>
+                                <?php echo Form::text('autreRaisonArretEcole', null, ['placeholder' => __('Autre raison'), 'class' => 'form-control mt-3 autreRaisonArretEcole']); ?>
                             </div>
                         </div>
-
                     </div>
-                    <hr class="panel-wide">
-
-
                     <div class="fieldset-like">
                         <legend class="legend-center">
                             <h5 class="font-weight-bold text-decoration-underline">Traveaux dangereux</h5>
@@ -224,9 +223,7 @@
                                 <?php echo Form::select('lieuTravauxDangereux[]', $lieuTravaux, [], ['class' => 'form-control lieuTravauxDangereux select2-multi-select', 'multiple', 'required']); ?>
                             </div>
                         </div>
-
                     </div>
-
                     <div class="fieldset-like">
                         <legend class="legend-center">
                             <h5 class="font-weight-bold text-decoration-underline">Traveaux legers</h5>
@@ -244,9 +241,7 @@
                                 <?php echo Form::select('lieuTravauxLegers[]', $lieuTravaux, null, ['class' => 'form-control lieuTravauxLegers select2-multi-select', 'multiple', 'required']); ?>
                             </div>
                         </div>
-
                     </div>
-
                     <div class="fieldset-like">
                         <legend class="legend-center">
                             <h5 class="font-weight-bold text-decoration-underline">Informations sur l'enquêteur</h5>
@@ -273,22 +268,14 @@
                             </div>
                         </div>
                     </div>
-
+                    <hr class="panel-wide">
                     <div class="form-group row">
                         <?php echo Form::label(__("Date d'Enquête"), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::date('date_enquete', null, ['class' => 'form-control dateactivite dateEnquete', 'required']); ?>
+                            <?php echo Form::date('date_enquete', null, ['class' => 'form-control', 'required']); ?>
                         </div>
                     </div>
-
-                    {!! Form::time('heure', null, ['id' => 'heure', 'style' => 'display: none;']) !!}
-
-                    {!! Form::text('timezome', null, ['id' => 'timezome', 'style' => 'display: none;']) !!}
-
-                    {!! Form::text('heureCourant', null, ['id' => 'timezome', 'style' => 'display: none;']) !!}
-
                     <hr class="panel-wide">
-
                     <div class="form-group row">
                         <button type="submit" class="btn btn--primary w-100 h-45"> @lang('Envoyer')</button>
                     </div>
@@ -391,12 +378,14 @@
                     $('#ecoleAvant').show('slow');
                     $('.niveauEtudeAtteint').attr('required', true);
                     $('.raisonArretEcole').attr('required', true);
+                    console.log('ok');
 
-                    $('.raisonArretEcole').change(function() {
-                        var protections = $('.raisonArretEcole').find(":selected").map((key,
+                    $('#raisonArretEcole').change(function() {
+                        var protections = $('#raisonArretEcole').find(":selected").map((key,
                             item) => {
                             return item.textContent.trim();
                         }).get();
+                        console.log(protections);
                         if (protections.includes("Autre")) {
 
                             $('#autreRaisonArretEcole').show('slow');

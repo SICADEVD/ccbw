@@ -49,7 +49,7 @@ class SsrteclmrsController extends Controller
         $sections = $cooperative->sections;
         $producteurs  = Producteur::with('localite')->get();
         $lienParente = DB::table('lien_parente')->pluck('nom', 'nom')->all();
-        $raisonArretEcole = DB::table('arret_ecoles')->pluck('nom', 'nom')->all();
+        $raisonArretEcole = DB::table('arret_ecoles')->get();
         $travauxDangereux = DB::table('travaux_dangereux')->pluck('nom', 'nom')->all();
         $lieuTravaux = DB::table('lieux_travaux')->pluck('nom', 'nom')->all();
         $travauxLegers = DB::table('travaux_legers')->pluck('nom', 'nom')->all();
@@ -61,23 +61,34 @@ class SsrteclmrsController extends Controller
 
         return view('manager.ssrteclmrs.create', compact('pageTitle', 'producteurs', 'localites', 'raisonArretEcole', 'travauxDangereux', 'lieuTravaux', 'travauxLegers', 'lienParente', 'niveauEtude', 'moyenTransport', 'classes', 'sections', 'niveauEtudeAvant'));
     }
+    public function edit($id)
+    {
+        $pageTitle = "Mise à jour de la ssrteclmrs";
+        // $localites  = Localite::active()->where('cooperative_id', auth()->user()->cooperative_id)->orderBy('nom')->get();
+        $manager   = auth()->user();
+        $cooperative = Cooperative::with('sections.localites', 'sections.localites.section')->find($manager->cooperative_id);
+        $sections = $cooperative->sections;
+        $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
+            return $localite->active();
+        });
+        $producteurs  = Producteur::with('localite')->get();
+        $niveauEtudeAvant = NiveauxEtude::pluck('nom', 'nom')->all();
+        $niveauEtude = NiveauxEtude::all();
+        $classes = ClasseEtude::with('niveau')->get();
+        $moyenTransport = DB::table('moyens_transport')->pluck('nom', 'nom')->all();
+        $lienParente = DB::table('lien_parente')->pluck('nom', 'nom')->all();
+        $raisonArretEcole = DB::table('arret_ecoles')->get();
+        $travauxDangereux = DB::table('travaux_dangereux')->get();
+        $lieuTravaux = DB::table('lieux_travaux')->get();
+        $travauxLegers = DB::table('travaux_legers')->get();
+        $ssrteclmrs   = Ssrteclmrs::findOrFail($id);
+
+        return view('manager.ssrteclmrs.edit', compact('pageTitle', 'localites', 'ssrteclmrs', 'producteurs', 'raisonArretEcole', 'travauxDangereux', 'lieuTravaux', 'travauxLegers', 'lienParente', 'niveauEtude', 'moyenTransport', 'classes', 'sections', 'niveauEtudeAvant'));
+    }
 
     public function store(Request $request)
     {
-        $validationRule = [
-            'producteur'    => 'required|exists:producteurs,id',
-            'nomMembre' => 'required|max:255',
-            'prenomMembre'  => 'required|max:255',
-            'sexeMembre'  => 'required|max:255',
-            'datenaissMembre'  => 'required|max:255',
-            'lienParente'  => 'required|max:255',
-            'frequente'  => 'required|max:255',
-            'date_enquete'  => 'required|max:255',
-        ];
 
-
-        $request->validate($validationRule);
-        //dd($request);
         //dd(response()->json($request));
 
         $localite = Localite::where('id', $request->localite)->first();
@@ -89,12 +100,35 @@ class SsrteclmrsController extends Controller
 
         if ($request->id) {
             $ssrteclmrs = Ssrteclmrs::findOrFail($request->id);
+            $validationRule = [
+                'producteur'    => 'required|exists:producteurs,id',
+                'nomMembre' => 'required|max:255',
+                'prenomMembre'  => 'required|max:255',
+                'sexeMembre'  => 'required|max:255',
+                'datenaissMembre'  => 'required|max:255',
+                'lienParente'  => 'required|max:255',
+                'frequente'  => 'required|max:255',
+                'date_enquete'  => 'required|max:255',
+                'telephoneEnqueteur' => 'required|regex:/^\d{10}$/|unique:ssrteclmrs,telephoneEnqueteur,' . $request->id,
+            ];
             $message = "La ssrteclmrs a été mise à jour avec succès";
         } else {
+            $validationRule = [
+                'producteur'    => 'required|exists:producteurs,id',
+                'nomMembre' => 'required|max:255',
+                'prenomMembre'  => 'required|max:255',
+                'sexeMembre'  => 'required|max:255',
+                'datenaissMembre'  => 'required|max:255',
+                'lienParente'  => 'required|max:255',
+                'frequente'  => 'required|max:255',
+                'date_enquete'  => 'required|max:255',
+                'telephoneEnqueteur' => 'required|regex:/^\d{10}$/|unique:ssrteclmrs,telephoneEnqueteur',
+            ];
             $ssrteclmrs = new Ssrteclmrs();
             $producteur = Producteur::where('id', $request->producteur)->first();
             $ssrteclmrs->codeMembre = $this->generecodessrte($request->producteur, $producteur->codeProdapp);
         }
+        $request->validate($validationRule);
 
         $ssrteclmrs->producteur_id  = $request->producteur;
         $ssrteclmrs->nomMembre  = $request->nomMembre;
@@ -115,6 +149,9 @@ class SsrteclmrsController extends Controller
         $ssrteclmrs->niveauEtudeAtteint    = $request->niveauEtudeAtteint;
         $ssrteclmrs->userid = auth()->user()->id;
         $ssrteclmrs->autreRaisonArretEcole = $request->autreRaisonArretEcole;
+        $ssrteclmrs->nomEnqueteur = $request->nomEnqueteur;
+        $ssrteclmrs->prenomEnqueteur = $request->prenomEnqueteur;
+        $ssrteclmrs->telephoneEnqueteur = $request->telephoneEnqueteur;
         $ssrteclmrs->date_enquete     = $request->date_enquete;
 
         $ssrteclmrs->save();
@@ -219,24 +256,7 @@ class SsrteclmrsController extends Controller
         return $codeParc;
     }
 
-    public function edit($id)
-    {
-        $pageTitle = "Mise à jour de la ssrteclmrs";
-        $localites  = Localite::active()->where('cooperative_id', auth()->user()->cooperative_id)->orderBy('nom')->get();
-        $producteurs  = Producteur::with('localite')->get();
-        $niveauEtude = NiveauxEtude::pluck('nom', 'id')->all();
-        $classes = ClasseEtude::with('niveau')->get();
-        $moyenTransport = DB::table('moyens_transport')->pluck('nom', 'nom')->all();
-        $lienParente = DB::table('lien_parente')->pluck('nom', 'nom')->all();
-        $raisonArretEcole = DB::table('arret_ecoles')->get();
-        $travauxDangereux = DB::table('travaux_dangereux')->get();
-        $lieuTravaux = DB::table('lieux_travaux')->get();
-        $travauxLegers = DB::table('travaux_legers')->get();
-        $ssrteclmrs   = Ssrteclmrs::findOrFail($id);
 
-
-        return view('manager.ssrteclmrs.edit', compact('pageTitle', 'localites', 'ssrteclmrs', 'producteurs', 'raisonArretEcole', 'travauxDangereux', 'lieuTravaux', 'travauxLegers', 'lienParente', 'niveauEtude', 'moyenTransport', 'classes'));
-    }
 
     public function status($id)
     {
