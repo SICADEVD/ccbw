@@ -62,11 +62,13 @@ class FormationController extends Controller
             'producteur' => 'required|max:255',
             'lieu_formation'  => 'required|max:255',
             'type_formation'  => 'required|max:255',
+            'formation_type'  => 'required|max:255',
+            'observation_formation'  => 'required|max:255',
+            'duree_formation' => 'required|date_format:H:i',
             'theme'  => 'required|max:255', 
             'date_formation' => 'required|max:255', 
         ];
  
-
         $request->validate($validationRule);
 
         $localite = Localite::where('id', $request->localite)->first();
@@ -89,7 +91,11 @@ class FormationController extends Controller
         $formation->user_id  = $request->staff;  
         $formation->lieu_formation  = $request->lieu_formation;
         $formation->type_formation_id  = $request->type_formation;
+        $formation->duree_formation = $request->duree_formation;
+        $formation->observation_formation = $request->observation_formation;
+        $formation->formation_type = $request->formation_type;
         $formation->date_formation     = $request->date_formation; 
+        $formation->userid = auth()->user()->id;
         if($request->hasFile('photo_formation')) {
             try {
                 $formation->photo_formation = $request->file('photo_formation')->store('public/formations');
@@ -98,7 +104,6 @@ class FormationController extends Controller
                 return back()->withNotify($notify);
             }
         } 
-
         $formation->save(); 
         if($formation !=null ){
             $id = $formation->id;
@@ -112,20 +117,6 @@ class FormationController extends Controller
                         $datas[] = [
                         'suivi_formation_id' => $id, 
                         'producteur_id' => $data,  
-                    ];
-                    } 
-                  $i++;
-                } 
-            }
-            if(($request->visiteurs !=null)) { 
-                SuiviFormationVisiteur::where('suivi_formation_id',$id)->delete();
-                $i=0; 
-                foreach($request->visiteurs as $data){
-                    if($data !=null)
-                    {
-                        $datas2[] = [
-                        'suivi_formation_id' => $id, 
-                        'visiteur' => $data,  
                     ];
                     } 
                   $i++;
@@ -146,7 +137,6 @@ class FormationController extends Controller
                 } 
             }
             SuiviFormationProducteur::insert($datas);
-            SuiviFormationVisiteur::insert($datas2); 
             SuiviFormationTheme::insert($datas3);
         }
         $notify[] = ['success', isset($message) ? $message : 'Le formation a été crée avec succès.'];
@@ -164,7 +154,6 @@ class FormationController extends Controller
         $staffs  = User::staff()->get();
         $formation   = SuiviFormation::findOrFail($id);
         $suiviProducteur = SuiviFormationProducteur::where('suivi_formation_id',$formation->id)->get();
-        $suiviVisiteur = SuiviFormationVisiteur::where('suivi_formation_id',$formation->id)->get();
         $suiviTheme = SuiviFormationTheme::where('suivi_formation_id',$formation->id)->get();
         $dataProducteur = $dataVisiteur=$dataTheme = array();
         if($suiviProducteur->count()){
