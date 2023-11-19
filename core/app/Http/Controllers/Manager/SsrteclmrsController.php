@@ -154,6 +154,8 @@ class SsrteclmrsController extends Controller
         $ssrteclmrs->telephoneEnqueteur = $request->telephoneEnqueteur;
         $ssrteclmrs->date_enquete     = $request->date_enquete;
 
+        dd(json_encode($request->all()));
+
         $ssrteclmrs->save();
 
         if ($ssrteclmrs != null) {
