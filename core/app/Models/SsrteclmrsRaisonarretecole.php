@@ -15,6 +15,4 @@ class SsrteclmrsRaisonarretecole extends Model
     {
         return $this->belongsTo(Ssrteclmrs::class);
     }
-     
-     
 }
