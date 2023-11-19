@@ -7,20 +7,16 @@ use App\Traits\Searchable;
 use Illuminate\Database\Eloquent\Model;
 use Kirschbaum\PowerJoins\PowerJoins;
 
-class FormationThemeStaff extends Model
+class FormationStaffVisiteur extends Model
 {
     use Searchable, GlobalStatus, PowerJoins; 
-    protected $table="formation_theme_staffs";
+
+    protected $table="formation_staff_visiteurs";
 
     public function formationStaff()
     {
         return $this->belongsTo(FormationStaff::class);
-    }
-
-    public function theme()
-    {
-        return $this->belongsTo(ThemeFormationStaff::class,'theme_formation_staff_id');
-    }
+    } 
      
      
 }

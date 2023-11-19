@@ -21,7 +21,7 @@
                     <div class="form-group">
                     <label>@lang('Statut juridique')</label>
                                 <select name="statut_juridique" class="form-control">
-                                    <option value="">@lang('Toutes')</option>
+                                    <option value="">@lang('Tous')</option>
                                     <option value="SCOOPS" {{ request()->localite == 'SCOOPS' ? 'selected' : '' }}>SCOOPS</option>
                                         <option value="COOP CA" {{ request()->localite == 'COOP CA' ? 'selected' : '' }}>COOP CA</option>
                                    
@@ -84,9 +84,18 @@
                         <div class="form-group">
                     <label>@lang('Existence de Documents administratifs')</label><br>
                                 <select name="document[]" class="form-control select-picker" multiple>
-                                    <option value="">@lang('Toutes')</option>
+                                    <option value="">@lang('--------------')</option>
                                     @foreach ($documents as $local)
-                                        <option value="{{ $local->id }}" {{ request()->localite == $local->id ? 'selected' : '' }}>{{ $local->nom }}</option>
+                                        <option value="{{ $local->id }}" @selected(in_array($local->id,$dataDocument))>{{ $local->nom }}</option>
+                                    @endforeach
+                                </select>
+                        </div>
+                        <div class="form-group">
+                    <label>@lang('Existence des instances')</label><br>
+                                <select name="instance[]" class="form-control select-picker" multiple>
+                                    <option value="">@lang('--------------')</option>
+                                    @foreach ($instances as $local)
+                                        <option value="{{ $local->id }}" @selected(in_array($local->id,$dataInstance))>{{ $local->nom }}</option>
                                     @endforeach
                                 </select>
                         </div>

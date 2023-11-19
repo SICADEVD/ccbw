@@ -6,28 +6,16 @@
                 <div class="card-body"> 
          {!! Form::model($formation, ['method' => 'POST','route' => ['manager.formation-staff.store', $formation->id],'class'=>'form-horizontal', 'id'=>'flocal', 'enctype'=>'multipart/form-data']) !!}
                         <input type="hidden" name="id" value="{{ $formation->id }}"> 
-                        
-                        <div class="form-group row"> 
-                                <label class="col-sm-4 control-label">@lang('Selectionner une localite')</label>
-                                <div class="col-xs-12 col-sm-8">
-                                <select class="form-control" name="localite" id="localite" required>
-                                    <option value="">@lang('Selectionner une option')</option>
-                                    @foreach($localites as $localite)
-                                        <option value="{{ $localite->id }}" @selected($localite->id==$formation->localite_id)>
-                                            {{ $localite->nom }}</option>
-                                    @endforeach
-                                </select>
-                                </div>
-                            </div>  
+                         
                        
                             <div class="form-group row">
-                                <label class="col-sm-4 control-label">@lang('Selectionner un producteur')</label>
+                                <label class="col-sm-4 control-label">@lang('Selectionner un membre')</label>
                                 <div class="col-xs-12 col-sm-8">
-                                <select class="form-control select2-multi-select" name="producteur[]" id="producteur" multiple required>
+                                <select class="form-control select2-multi-select" name="user[]" id="user" multiple required>
                                     <option value="">@lang('Selectionner une option')</option>
-                                    @foreach($producteurs as $producteur)
-                                        <option value="{{ $producteur->id }}" data-chained="{{ $producteur->localite->id }}" @selected(in_array($producteur->id,$dataProducteur))>
-                                            {{ $producteur->nom }} {{ $producteur->prenoms }}</option>
+                                    @foreach($staffs as $user)
+                                        <option value="{{ $user->id }}" @selected(in_array($user->id,$dataUser))>
+                                            {{ $user->lastname }} {{ $user->firstname }}</option>
                                     @endforeach
                                 </select>
                                 </div>
@@ -36,8 +24,8 @@
         <?php echo Form::label(__("Nom des visiteurs ayant participer à la formation"), null, ['class' => 'col-sm-4 control-label']); ?>
         <div class="col-xs-12 col-sm-8">
             <select name="visiteurs[]" id="visiteurs" class="form-control select2-auto-tokenize" multiple>
-            @if(@$suiviVisiteur->count())
-                                            @foreach($suiviVisiteur as $visiteur)
+            @if(@$visiteurStaff->count())
+                                            @foreach($visiteurStaff as $visiteur)
                                                 <option value="{{ $visiteur->visiteur }}" selected>{{ __($visiteur->visiteur) }}</option>
                                             @endforeach
                                         @endif
@@ -52,19 +40,20 @@
         </div>
     </div>
     <div class="form-group row">
-        <?php echo Form::label(__("Type de formations"), null, ['class' => 'col-sm-4 control-label']); ?>
+        <?php echo Form::label(__("Modules de formations"), null, ['class' => 'col-sm-4 control-label']); ?>
         <div class="col-xs-12 col-sm-8">
-               <?php echo Form::select('type_formation', $typeformations, $formation->type_formation_id, array('placeholder' => __('Selectionner une option'),'class' => 'form-control type_formations','id'=>'typeformation','required'=>'required')); ?>
+               <?php echo Form::select('module_formation', $ModuleFormationStaffs, $formation->module_formation_staff_id, array('placeholder' => __('Selectionner une option'),'class' => 'form-control type_formations','id'=>'typeformation','required'=>'required')); ?>
         </div>
     </div>
 
              <div class="form-group row">
+                 
              <?php echo Form::label(__("Thème de la formation"), null, ['class' => 'col-sm-4 control-label']); ?>
              <div class="col-xs-12 col-sm-8">
              <select class="form-control select2-multi-select" name="theme[]" id="theme" multiple required>
                                     <option value="">@lang('Selectionner une option')</option>
                                     @foreach($themes as $theme)
-                                        <option value="{{ $theme->id }}" data-chained="{{ $theme->type_formation_id }}" @selected(in_array($theme->id, $dataTheme))>
+                                        <option value="{{ $theme->id }}" data-chained="{{ $theme->module_formation_staff_id }}" @selected(in_array($theme->id, $dataTheme))>
                                             {{ $theme->nom }} </option>
                                     @endforeach
                                 </select> 

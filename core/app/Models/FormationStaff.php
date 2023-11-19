@@ -19,7 +19,7 @@ class FormationStaff extends Model
     }
     public function moduleFormationStaff()
     {
-        return $this->belongsTo(ModuleFormationStaff::class, 'type_formation_id');
+        return $this->belongsTo(ModuleFormationStaff::class, 'module_formation_staff_id');
     }
     public function campagne()
     {

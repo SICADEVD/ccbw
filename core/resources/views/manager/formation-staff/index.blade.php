@@ -10,18 +10,9 @@
                             <div class="flex-grow-1">
                                 <label>@lang('Recherche par Mot(s) clé(s)')</label>
                                 <input type="text" name="search" value="{{ request()->search }}" class="form-control">
-                            </div>
-                            <div class="flex-grow-1">
-                                <label>@lang('Localité')</label>
-                                <select name="localite" class="form-control">
-                                    <option value="">@lang('Toutes')</option>
-                                    @foreach($localites as $local)
-                                    <option value="{{ $local->id }}">{{ $local->nom }}</option>
-                                    @endforeach 
-                                </select>
                             </div> 
                             <div class="flex-grow-1">
-                                <label>@lang('Localité')</label>
+                                <label>@lang('Modules de formation')</label>
                                 <select name="module" class="form-control">
                                     <option value="">@lang('Tous')</option>
                                     @foreach($modules as $module)
@@ -46,7 +37,7 @@
                         <table class="table table--light style--two">
                             <thead>
                                 <tr> 
-                                    <th>@lang('Localite')</th>
+                                    <th>@lang('Cooperative')</th>
                                     <th>@lang('Formateur')</th>
                                     <th>@lang('Module')</th>
                                     <th>@lang('Lieu')</th>
@@ -60,7 +51,7 @@
                                 @forelse($formations as $formation)
                                     <tr>
                                         <td>
-                                            <span class="fw-bold">{{ $formation->localite->nom }}</span>
+                                            <span class="fw-bold">{{ $formation->cooperative->name }}</span>
                                         </td>
                                         <td>
                                             <span> <a href="{{ route('manager.formation-staff.edit', $formation->id) }}">
@@ -68,7 +59,7 @@
                                                 </a></span>
                                         </td> 
                                         <td>
-                                            <span>{{ $formation->typeFormation->nom }}</span>
+                                            <span>{{ $formation->moduleFormationStaff->nom }}</span>
                                         </td>
                                         <td>
                                             <span>{{ $formation->lieu_formation }}</span>

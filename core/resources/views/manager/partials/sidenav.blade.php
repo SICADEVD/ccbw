@@ -65,12 +65,12 @@
                                     <span class="menu-title">@lang('Désignations')</span>
                                 </a>
                             </li> 
-                            <li class="sidebar-menu-item {{ menuActive('manager.hr.') }}">
-                                <a href="#" class="nav-link">
+                            <li class="sidebar-menu-item {{ menuActive('manager.formation-staff.*') }}">
+                                <a href="{{ route('manager.formation-staff.index') }}" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('Formation Staffs')</span>
+                                    <span class="menu-title">@lang('Formations Staff')</span>
                                 </a>
-                            </li> 
+                            </li>
                             <li class="sidebar-menu-item {{ menuActive('manager.archivages.*') }}">
                                 <a href="{{ route('manager.archivages.index') }}" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>

@@ -5,28 +5,15 @@
             <div class="card">
                 <div class="card-body"> 
                     {!! Form::open(array('route' => ['manager.formation-staff.store'],'method'=>'POST','class'=>'form-horizontal', 'id'=>'flocal', 'enctype'=>'multipart/form-data')) !!} 
-                        
+                         
                             <div class="form-group row">
-                                <label class="col-sm-4 control-label">@lang('Selectionner une localite')</label>
+                                <label class="col-sm-4 control-label">@lang("Les membres présents à la formation")</label>
                                 <div class="col-xs-12 col-sm-8">
-                                <select class="form-control" name="localite" id="localite" required>
+                                <select class="form-control select2-multi-select" name="user[]" id="user" multiple required>
                                     <option value="">@lang('Selectionner une option')</option>
-                                    @foreach($localites as $localite)
-                                        <option value="{{ $localite->id }}" @selected(old('localite'))>
-                                            {{ $localite->nom }}</option>
-                                    @endforeach
-                                </select>
-                                </div>
-                            </div>  
-                       
-                            <div class="form-group row">
-                                <label class="col-sm-4 control-label">@lang("Les producteurs présents à la formation")</label>
-                                <div class="col-xs-12 col-sm-8">
-                                <select class="form-control select2-multi-select" name="producteur[]" id="producteur" multiple required>
-                                    <option value="">@lang('Selectionner une option')</option>
-                                    @foreach($producteurs as $producteur)
-                                        <option value="{{ $producteur->id }}" data-chained="{{ $producteur->localite->id }}" @selected(old('producteur'))>
-                                            {{ $producteur->nom }} {{ $producteur->prenoms }}</option>
+                                    @foreach($staffs as $user)
+                                        <option value="{{ $user->id }}"  @selected(old('user'))>
+                                            {{ $user->lastname }} {{ $user->firstname }}</option>
                                     @endforeach
                                 </select>
                                 </div>
@@ -48,9 +35,9 @@
         </div>
     </div>
     <div class="form-group row">
-        <?php echo Form::label(__("Type de formations"), null, ['class' => 'col-sm-4 control-label']); ?>
+        <?php echo Form::label(__("Modules de formations"), null, ['class' => 'col-sm-4 control-label']); ?>
         <div class="col-xs-12 col-sm-8">
-               <?php echo Form::select('type_formation', $typeformations, null, array('placeholder' => __('Selectionner une option'),'class' => 'form-control type_formations','id'=>'typeformation','required'=>'required')); ?>
+               <?php echo Form::select('module_formation', $ModuleFormationStaffs, null, array('placeholder' => __('Selectionner une option'),'class' => 'form-control type_formations','id'=>'typeformation','required'=>'required')); ?>
         </div>
     </div>
 
@@ -60,7 +47,7 @@
              <select class="form-control select2-multi-select" name="theme[]" id="theme" multiple required>
                                     <option value="">@lang('Selectionner une option')</option>
                                     @foreach($themes as $theme)
-                                        <option value="{{ $theme->id }}" data-chained="{{ $theme->type_formation_id }}" @selected(old('theme'))>
+                                        <option value="{{ $theme->id }}" data-chained="{{ $theme->module_formation_staff_id }}" @selected(old('theme'))>
                                             {{ $theme->nom }} </option>
                                     @endforeach
                                 </select> 
