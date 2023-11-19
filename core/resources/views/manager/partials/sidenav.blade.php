@@ -22,11 +22,11 @@
                     </a>
                 </li>
                 <li class="sidebar-menu-item sidebar-dropdown">
-                    <a href="javascript:void(0)" class="{{ menuActive(['manager.hr.*', 'manager.employees.index','manager.holidays.*','manager.departments.*','manager.designations.*','manager.holidays.*','manager.leaves.*'], 3) }}">
+                    <a href="javascript:void(0)" class="{{ menuActive(['manager.hr.*', 'manager.employees.index','manager.holidays.*','manager.departments.*','manager.designations.*','manager.holidays.*','manager.leaves.*','manager.archivages.*'], 3) }}">
                         <i class="menu-icon las la-users"></i>
-                        <span class="menu-title">@lang('Ressources Humaines') </span>
+                        <span class="menu-title">@lang('Gouvernance Ameliorée') </span>
                     </a>
-                    <div class="sidebar-submenu {{ menuActive(['manager.hr.*', 'manager.employees.*','manager.holidays.*','manager.departments.*','manager.designations.*','manager.holidays.*','manager.leaves.*'], 2) }} ">
+                    <div class="sidebar-submenu {{ menuActive(['manager.hr.*', 'manager.employees.*','manager.holidays.*','manager.departments.*','manager.designations.*','manager.holidays.*','manager.leaves.*','manager.archivages.*'], 2) }} ">
                         <ul>
 
                             <li class="sidebar-menu-item {{ menuActive('manager.employees.index') }}">
@@ -65,13 +65,18 @@
                                     <span class="menu-title">@lang('Désignations')</span>
                                 </a>
                             </li> 
-                            <li class="sidebar-menu-item {{ menuActive('manager.hr.') }}">
-                                <a href="#" class="nav-link">
+                            <li class="sidebar-menu-item {{ menuActive('manager.formation-staff.*') }}">
+                                <a href="{{ route('manager.formation-staff.index') }}" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>
                                     <span class="menu-title">@lang('Formations Staff')</span>
                                 </a>
-                            </li> 
-                            
+                            </li>
+                            <li class="sidebar-menu-item {{ menuActive('manager.archivages.*') }}">
+                                <a href="{{ route('manager.archivages.index') }}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('Archivages')</span>
+                                </a>
+                            </li>
 
                         </ul>
                     </div>
@@ -173,6 +178,13 @@
                     <div class="sidebar-submenu {{ menuActive('manager.livraison.*', 2) }} ">
                         <ul>
 
+                        <li class="sidebar-menu-item {{ menuActive('manager.livraison.create') }}">
+                                
+                                    <a href="{{ route('manager.livraison.create') }}" class="nav-link ">
+                                        <i class="menu-icon las la-shipping-fast"></i>
+                                        <span class="menu-title">@lang("Enregistrement")</span>
+                                    </a>
+                                    </li>
                             <li class="sidebar-menu-item {{ menuActive('manager.livraison.sentQueue') }}">
                                 <a href="{{ route('manager.livraison.sentQueue') }}" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>

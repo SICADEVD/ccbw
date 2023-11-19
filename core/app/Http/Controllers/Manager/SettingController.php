@@ -2,23 +2,27 @@
 
 namespace App\Http\Controllers\manager;
 
+use App\Models\Unit;
 use App\Constants\Status;
-use App\Http\Controllers\Controller;
+use App\Models\Campagne; 
+use App\Models\ArretEcole;
 use App\Models\Cooperative;
 use App\Models\CourierInfo;
+use App\Models\TypeArchive;
+use Illuminate\Http\Request;
+use App\Models\Questionnaire;
+use App\Models\TravauxLegers;
+use App\Models\TypeFormation;
 use App\Models\CourierPayment;
 use App\Models\CourierProduct;
-use App\Models\Campagne; 
-use App\Models\TravauxDangereux;
-use App\Models\TravauxLegers;
-use App\Models\ArretEcole;
-use App\Models\CategorieQuestionnaire;
-use App\Models\Questionnaire;
 use App\Models\ThemesFormation;
-use App\Models\TypeFormation;
-use App\Models\Unit;
-use Illuminate\Http\Request;
+use App\Models\Agroespecesarbre;
+use App\Models\TravauxDangereux;
 use Illuminate\Support\Facades\DB;
+use App\Models\ThemeFormationStaff;
+use App\Http\Controllers\Controller;
+use App\Models\ModuleFormationStaff;
+use App\Models\CategorieQuestionnaire;
 
 class SettingController extends Controller
 {
@@ -193,6 +197,61 @@ class SettingController extends Controller
         return back()->withNotify($notify);
     }
 
+    public function moduleFormationStaffIndex()
+    {
+        $pageTitle = "Manage Module de Formation Staff"; 
+        $activeSettingMenu = 'moduleFormationStaff_settings';
+        $moduleFormations     = ModuleFormationStaff::orderBy('id','desc')->paginate(getPaginate());
+        return view('manager.config.moduleFormationStaff', compact('pageTitle', 'moduleFormations','activeSettingMenu'));
+    }
+
+    public function moduleFormationStaffStore(Request $request)
+    {
+        $request->validate([ 
+            'nom'  => 'required', 
+        ]);
+
+        if ($request->id) {
+            $moduleFormationStaff    = ModuleFormationStaff::findOrFail($request->id);
+            $message = "Module de Formation Staff a été mise à jour avec succès.";
+        } else {
+            $moduleFormationStaff = new ModuleFormationStaff();
+        } 
+        $moduleFormationStaff->nom = trim($request->nom); 
+        $moduleFormationStaff->save();
+        $notify[] = ['success', isset($message) ? $message  : 'Module de Formation Staff a été ajouté avec succès.'];
+        return back()->withNotify($notify);
+    }
+
+    public function themeFormationStaffIndex()
+    {
+        $pageTitle = "Manage theme de Formation Staff"; 
+        $activeSettingMenu = 'themeFormationStaff_settings';
+        $themeFormationStaff     = ThemeFormationStaff::with('moduleFormationStaff')->orderBy('id','desc')->paginate(getPaginate());
+        $moduleFormationStaffs = ModuleFormationStaff::get();
+        return view('manager.config.themeFormationStaff', compact('pageTitle', 'themeFormationStaff','moduleFormationStaffs','activeSettingMenu'));
+    }
+
+    public function themeFormationStaffStore(Request $request)
+    {
+        $request->validate([ 
+            'nom'  => 'required',
+            'moduleFormationStaff'=>'required',
+        ]);
+
+        if ($request->id) {
+            $themeFormationStaff    = ThemeFormationStaff::findOrFail($request->id);
+            $message = "theme de Formation Staff a été mise à jour avec succès.";
+        } else {
+            $themeFormationStaff = new ThemeFormationStaff();
+        } 
+        $themeFormationStaff->nom = trim($request->nom); 
+        $themeFormationStaff->module_formation_staff_id = $request->moduleFormationStaff;
+        $themeFormationStaff->save();
+        $notify[] = ['success', isset($message) ? $message  : 'theme de Formation Staff a été ajouté avec succès.'];
+        return back()->withNotify($notify);
+    }
+
     public function categorieQuestionnaireIndex()
     {
         $pageTitle = "Manage Categorie Questionnaire"; 
@@ -247,7 +306,57 @@ class SettingController extends Controller
         $notify[] = ['success', isset($message) ? $message  : 'Questionnaire a été ajouté avec succès.'];
         return back()->withNotify($notify);
     }
-    
+    public function especeArbreIndex()
+    {
+        $pageTitle = "Manage Espaces Arbres"; 
+        $activeSettingMenu = 'especeArbre_settings';
+        $especeArbre     = Agroespecesarbre::orderBy('id','desc')->paginate(getPaginate());
+        return view('manager.config.especeArbre', compact('pageTitle', 'especeArbre','activeSettingMenu'));
+    }
+    public function especeArbreStore(Request $request)
+    {
+        $request->validate([ 
+            'nom'  => 'required', 
+        ]);
+
+        if ($request->id) {
+            $especeArbre    = Agroespecesarbre::findOrFail($request->id);
+            $message = "Espece Arbre a été mise à jour avec succès.";
+        } else {
+            $especeArbre = new Agroespecesarbre();
+        } 
+        $especeArbre->nom = trim($request->nom); 
+        $especeArbre->strate = trim($request->strate); 
+        $especeArbre->nom_scientifique = trim($request->nom_scientifique); 
+        $especeArbre->save();
+        $notify[] = ['success', isset($message) ? $message  : 'Espece Arbre a été ajouté avec succès.'];
+        return back()->withNotify($notify);
+    }
+
+    public function typeArchiveIndex()
+    {
+        $pageTitle = "Manage Type Archives"; 
+        $activeSettingMenu = 'typeArchive_settings';
+        $typeArchive     = TypeArchive::orderBy('id','desc')->paginate(getPaginate());
+        return view('manager.config.typeArchive', compact('pageTitle', 'typeArchive','activeSettingMenu'));
+    }
+    public function typeArchiveStore(Request $request)
+    {
+        $request->validate([ 
+            'nom'  => 'required', 
+        ]);
+
+        if ($request->id) {
+            $typeArchive    = TypeArchive::findOrFail($request->id);
+            $message = "Espece Arbre a été mise à jour avec succès.";
+        } else {
+            $typeArchive = new TypeArchive();
+        } 
+        $typeArchive->nom = trim($request->nom); 
+        $typeArchive->save();
+        $notify[] = ['success', isset($message) ? $message  : 'Le contenu a été ajouté avec succès.'];
+        return back()->withNotify($notify);
+    }
     public function campagneStatus($id)
     {
         return Campagne::changeStatus($id);
@@ -282,5 +391,13 @@ class SettingController extends Controller
     public function questionnaireStatus($id)
     {
         return Questionnaire::changeStatus($id);
+    }
+    public function especeArbreStatus($id)
+    {
+        return Agroespecesarbre::changeStatus($id);
+    }
+    public function typeArchiveStatus($id)
+    {
+        return TypeArchive::changeStatus($id);
     }
 }

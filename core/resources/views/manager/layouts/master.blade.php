@@ -31,7 +31,7 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/css/daterangepicker.css') }}">
     <script src="{{ asset('assets/global/js/jquery-3.6.0.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/jquery/modernizr.min.js') }}"></script>
-
+    
     @stack('style')
     <style>
         hr {
@@ -120,6 +120,7 @@
     @include('partials.plugins')
     @include('partials.notify')
     @stack('script-lib')
+    
     <script src="{{ asset('assets/fcadmin/js/nicEdit.js') }}"></script>
     <script src="{{ asset('assets/fcadmin/js/printThis.js') }}"></script>
     <script src="{{ asset('assets/fcadmin/js/vendor/select2.min.js') }}"></script>
@@ -135,10 +136,11 @@
 <script src="{{ asset('assets/vendor/jquery/daterangepicker.min.js')}}" defer=""></script> 
  <script src="{{ asset('assets/vendor/jquery/datepicker.min.js') }}"></script> 
 <script src="{{ asset('assets/vendor/jquery/bootstrap-select.js') }}"></script>  
+
 <script src="{{ asset('assets/js/main.js') }}"></script>
     <script src="{{ asset('assets/fcadmin/js/app.js') }}"></script>
 
-
+    
     @include('sections.modals')
     {{-- LOAD NIC EDIT --}}
 
@@ -154,6 +156,7 @@
             //Datemask dd/mm/yyyy
     $('.heure').mask('00:00',{placeholder: "__:__"});
     $('.date').mask('00/00/0000',{placeholder: "__/__/____"});
+    $('.years').mask('0000',{placeholder: "____"});
      $('.phone').mask('0000000000',{placeholder: "__ __ __ __ __"});
      $('.age').mask('00',{placeholder: "__"});
      $('.text2').mask('00',{placeholder: "__"});
@@ -202,7 +205,9 @@
         $(document).ready(function() {
             $("#flocal").validate();
         });
+        
     </script>
+    
     <script>
         "use strict";
         

@@ -48,7 +48,7 @@ class InspectionController extends Controller
         $pageTitle = "Ajouter une inspection";
         $manager   = auth()->user();
         $producteurs  = Producteur::with('localite')->get();
-        $localites  = Localite::active()->where('cooperative_id',auth()->user()->cooperative_id)->orderBy('nom')->get();
+        $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->get();
         $staffs  = User::staff()->get();
         $categoriequestionnaire = CategorieQuestionnaire::with('questions')->get();
         $notations = Notation::get();
@@ -118,7 +118,7 @@ class InspectionController extends Controller
         $pageTitle = "Mise à jour de l'inspection";
         $manager   = auth()->user();
         $producteurs  = Producteur::with('localite')->get();
-        $localites  = Localite::active()->where('cooperative_id',auth()->user()->cooperative_id)->orderBy('nom')->get();
+        $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->get();
         $staffs  = User::staff()->get();
         $categoriequestionnaire = CategorieQuestionnaire::with('questions')->get();
         $notations = Notation::get();

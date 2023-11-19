@@ -24,6 +24,8 @@ use App\Http\Controllers\Manager\ProgrammeSettingController;
 use App\Http\Controllers\Manager\SectionSettingController;
 use App\Http\Controllers\Manager\LocaliteSettingController;
 use App\Http\Controllers\Manager\SettingController;
+use App\Http\Controllers\Manager\ArchivageController;
+use App\Http\Controllers\Manager\FormationStaffController;
 
 Route::namespace('Manager\Auth')->group(function () {
 
@@ -125,6 +127,10 @@ Route::get('quill-image/{image}', [ImageController::class, 'getImage'])->name('i
 // Cropper Model
 Route::get('cropper/{element}', [ImageController::class, 'cropper'])->name('cropper');
 
+Route::post('formation-staff/status/{id}', [FormationStaffController::class, 'status'])->name('formation-staff.status');
+Route::post('formation-staff/exportFormationsExcel', [FormationStaffController::class, 'exportExcel'])->name('formation-staff.exportExcel.formationAll'); 
+Route::resource('formation-staff', FormationStaffController::class);
+
 Route::controller('Manager\ImportController')->name('hr.')->prefix('hr')->group(function () {
     Route::get('import/process/{name}/{id}', [ImportController::class, 'getImportProgress'])->name('import.process.progress');
     Route::get('employees/import/exception/{name}', [ImportController::class, 'getQueueException'])->name('import.process.exception');
@@ -158,12 +164,24 @@ Route::name('settings.')->prefix('settings')->group(function () {
     Route::get('theme-formation/',[SettingController::class, 'themeFormationIndex'])->name('themeFormation.index');
     Route::post('theme-formation/store',[SettingController::class, 'themeFormationStore'])->name('themeFormation.store');
     Route::post('theme-formation/status/{id}',[SettingController::class, 'themeFormationStatus'])->name('themeFormation.status');
+    Route::get('module-formation-staff/',[SettingController::class, 'moduleFormationStaffIndex'])->name('moduleFormationStaff.index');
+    Route::post('module-formation-staff/store',[SettingController::class, 'moduleFormationStaffStore'])->name('moduleFormationStaff.store');
+    Route::post('module-formation-staff/status/{id}',[SettingController::class, 'moduleFormationStaffStatus'])->name('moduleFormationStaff.status');
+    Route::get('theme-formation-staff/',[SettingController::class, 'themeFormationStaffIndex'])->name('themeFormationStaff.index');
+    Route::post('theme-formation-staff/store',[SettingController::class, 'themeFormationStaffStore'])->name('themeFormationStaff.store');
+    Route::post('theme-formation-staff/status/{id}',[SettingController::class, 'themeFormationStaffStatus'])->name('themeFormationStaff.status');
     Route::get('categorie-questionnaire/',[SettingController::class, 'categorieQuestionnaireIndex'])->name('categorieQuestionnaire.index');
     Route::post('categorie-questionnaire/store',[SettingController::class, 'categorieQuestionnaireStore'])->name('categorieQuestionnaire.store');
     Route::post('categorie-questionnaire/status/{id}',[SettingController::class, 'categorieQuestionnaireStatus'])->name('categorieQuestionnaire.status');
     Route::get('questionnaire/',[SettingController::class, 'questionnaireIndex'])->name('questionnaire.index');
     Route::post('questionnaire/store',[SettingController::class, 'questionnaireStore'])->name('questionnaire.store');
     Route::post('questionnaire/status/{id}',[SettingController::class, 'questionnaireStatus'])->name('questionnaire.status');
+    Route::get('espece-arbre/',[SettingController::class, 'especeArbreIndex'])->name('especeArbre.index');
+    Route::post('espece-arbre/store',[SettingController::class, 'especeArbreStore'])->name('especeArbre.store');
+    Route::post('espece-arbre/status/{id}',[SettingController::class, 'especeArbreStatus'])->name('especeArbre.status');
+    Route::get('type-archive/',[SettingController::class, 'typeArchiveIndex'])->name('typeArchive.index');
+    Route::post('type-archive/store',[SettingController::class, 'typeArchiveStore'])->name('typeArchive.store');
+    Route::post('type-archive/status/{id}',[SettingController::class, 'typeArchiveStatus'])->name('typeArchive.status');
 
   });
 
@@ -196,6 +214,10 @@ Route::resource('leaves', LeaveController::class);
 // leaves files routes
 Route::get('leave-files/download/{id}', [LeaveFileController::class, 'download'])->name('leave-files.download');
 Route::resource('leave-files', LeaveFileController::class);
+
+Route::match(['GET', 'POST'], '/archivages/export', [ArchivageController::class, 'export'])->name('archivages.export');
+Route::match(['GET', 'POST'], '/archivages/status/{id}', [ArchivageController::class, 'status'])->name('archivages.status');
+Route::resource('archivages', ArchivageController::class);
 
 Route::controller('Manager\AttendanceController')->name('hr.')->prefix('hr')->group(function () {
 // Attendance
@@ -378,7 +400,12 @@ Route::get('/exportDeforestationsExcel', 'exportExcel')->name('exportExcel.defor
     //Manage Livraison
  
     Route::controller('Manager\LivraisonController')->name('livraison.')->prefix('livraison')->group(function () {
-Route::get('list', 'livraisonInfo')->name('index');
+        Route::get('send', 'create')->name('create');
+        Route::post('store', 'store')->name('store');
+        Route::post('update/{id}', 'update')->name('update');
+        Route::get('edit/{id}', 'edit')->name('edit');
+        Route::get('list', 'livraisonInfo')->name('index');
+        Route::get('parcelle', 'getParcelle')->name('get.parcelle');
 Route::get('dispatch/list', 'dispatchLivraison')->name('dispatch');
 Route::get('upcoming/list', 'upcoming')->name('upcoming');
 Route::get('sent-queue/list', 'sentInQueue')->name('sentQueue');

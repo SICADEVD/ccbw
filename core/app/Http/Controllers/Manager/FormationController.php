@@ -47,7 +47,7 @@ class FormationController extends Controller
         $pageTitle = "Ajouter un formation";
         $manager   = auth()->user();
         $producteurs  = Producteur::with('localite')->get();
-        $localites  = Localite::active()->where('cooperative_id',auth()->user()->cooperative_id)->orderBy('nom')->get();
+        $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->get();
         $typeformations  = TypeFormation::all()->pluck('nom','id');
         $themes  = ThemesFormation::with('typeFormation')->get();
         $staffs  = User::staff()->get();
@@ -158,7 +158,7 @@ class FormationController extends Controller
         $pageTitle = "Mise à jour de la formation";
         $manager   = auth()->user();
         $producteurs  = Producteur::with('localite')->get();
-        $localites  = Localite::active()->where('cooperative_id',auth()->user()->cooperative_id)->orderBy('nom')->get();
+        $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->get();
         $typeformations  = TypeFormation::all()->pluck('nom','id');
         $themes  = ThemesFormation::with('typeFormation')->get();
         $staffs  = User::staff()->get();

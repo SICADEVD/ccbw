@@ -2,16 +2,20 @@
 
 namespace App\Http\Controllers\Manager;
 
-use App\Http\Helpers\Reply;
+use App\Models\Instance;
 use App\Models\LeaveType;
+use App\Http\Helpers\Reply;
 use App\Models\Cooperative;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\EmployeeShift;
 use App\Models\CustomFieldGroup;
 use App\Models\AttendanceSetting;
+use App\Models\CooperativeDocument;
+use App\Models\CooperativeInstance;
 use App\Http\Controllers\Controller;
 use App\Models\GoogleCalendarModule;
+use App\Models\DocumentAdministratif;
 
 class CooperativeSettingController extends Controller
 {
@@ -22,8 +26,24 @@ class CooperativeSettingController extends Controller
         
         $pageTitle = "Paramètre de la coopérative";
         $cooperative  = Cooperative::where('id', auth()->user()->cooperative_id)->first();
+        $documents = DocumentAdministratif::get();
+        $instances = Instance::get();
+        $dataDocument = $dataInstance= array();
+        $documentListe = CooperativeDocument::where('cooperative_id',auth()->user()->cooperative_id)->get();
+        if($documentListe->count()){
+            foreach($documentListe as $data){
+                $dataDocument[] = $data->document_administratif_id;
+            }
+        } 
+        $instanceListe = CooperativeInstance::where('cooperative_id',auth()->user()->cooperative_id)->get();
+        if($instanceListe->count()){
+            foreach($instanceListe as $data){
+                $dataInstance[] = $data->instance_id;
+            }
+        } 
         $activeSettingMenu = 'cooperative_settings';
-        return view('manager.cooperative-settings.index', compact('pageTitle', 'cooperative','activeSettingMenu'));
+
+        return view('manager.cooperative-settings.index', compact('pageTitle', 'cooperative','activeSettingMenu','documents','dataDocument','instances','dataInstance'));
     }
 
     public function update(Request $request)
@@ -49,8 +69,49 @@ class CooperativeSettingController extends Controller
         $cooperative->address = $request->address;
         $cooperative->web = $request->web;
         $cooperative->mobile = $request->mobile;
+        $cooperative->statut_juridique = isset($request->statut_juridique) ? $request->statut_juridique : '';
+        $cooperative->annee_creation = isset($request->annee_creation) ? $request->annee_creation : '';
+        $cooperative->code_ccc = isset($request->code_ccc) ? $request->code_ccc : '';
+        $cooperative->nb_membres_creation = isset($request->nb_membres_creation) ? $request->nb_membres_creation : '';
+        $cooperative->nb_sections_creation = isset($request->nb_sections_creation) ? $request->nb_sections_creation : '';
+        $cooperative->nb_membres_actuel = isset($request->nb_membres_actuel) ? $request->nb_membres_actuel : '';
+        $cooperative->nb_sections_actuel = isset($request->nb_sections_actuel) ? $request->nb_sections_actuel : '';
+        $cooperative->nb_pca_creation = isset($request->nb_pca_creation) ? $request->nb_pca_creation : '';
         $cooperative->codeApp   = isset($request->codeApp) ? $request->codeApp : $this->generecodeapp($request->name); 
         $cooperative->save();
+        if($cooperative !=null ){
+            $id = $cooperative->id;
+        if(($request->document !=null)) { 
+            CooperativeDocument::where('cooperative_id',$id)->delete();
+            $i=0; 
+            foreach($request->document as $data){
+                if($data !=null)
+                {
+                    $datas[] = [
+                    'cooperative_id' => $id, 
+                    'document_administratif_id' => $data,  
+                ];
+                } 
+              $i++;
+            } 
+            CooperativeDocument::insert($datas);
+        }
+        if(($request->instance !=null)) { 
+            CooperativeInstance::where('cooperative_id',$id)->delete();
+            $i=0; 
+            foreach($request->instance as $data){
+                if($data !=null)
+                {
+                    $datas2[] = [
+                    'cooperative_id' => $id, 
+                    'instance_id' => $data,  
+                ];
+                } 
+              $i++;
+            } 
+            CooperativeInstance::insert($datas2);
+        }
+    }
         return Reply::success(__('messages.updateSuccess'));
         }else{
         return Reply::success(__('messages.updateError'));

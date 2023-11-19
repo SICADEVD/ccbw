@@ -2,10 +2,23 @@
 
 namespace App\Http\Controllers\Manager;
 
+use App\Models\User;
+use App\Models\Campagne;
+use App\Models\Parcelle;
 use App\Constants\Status;
-use App\Exports\ExportLivraisons;
-use App\Http\Controllers\Controller;
+use App\Models\Producteur;
+use App\Models\Cooperative;
 use App\Models\LivraisonInfo;
+use App\Models\LivraisonPrime;
+use App\Models\LivraisonScelle;
+use App\Models\LivraisonPayment;
+use App\Models\LivraisonProduct;
+use App\Exports\ExportLivraisons;
+use App\Models\AdminNotification;
+use App\Models\Magasin_section;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Request;
 
 class LivraisonController extends Controller
 {
@@ -17,6 +30,286 @@ class LivraisonController extends Controller
         return view('manager.livraison.index', compact('pageTitle', 'livraisonInfos'));
     }
 
+    public function create()
+    {
+        $pageTitle = 'Enregistrement de livraison';
+        $staff = auth()->user();
+        // $cooperatives = Cooperative::active()->where('id', '!=', auth()->user()->cooperative_id)->orderBy('name')->get();
+        $cooperatives = Cooperative::active()->orderBy('name')->get(); 
+        $magasins = Magasin_section::join('users','magasin_sections.staff_id','=','users.id')->where([['cooperative_id',$staff->cooperative_id],['magasin_sections.status',1]])->with('user')->orderBy('nom')->select('magasin_sections.*')->get();
+        $staffs = User::active()->orderBy('lastname')->staff()->where('cooperative_id',$staff->cooperative_id)->with('cooperative')->get();
+        $producteurs  = Producteur::joinRelationship('localite.section')->where('sections.cooperative_id',$staff->cooperative_id)->select('producteurs.*')->orderBy('producteurs.nom')->get();
+        $campagne = Campagne::active()->first();
+        $parcelles  = Parcelle::with('producteur')->get();
+        
+        return view('manager.livraison.index', compact('pageTitle', 'cooperatives','staffs','magasins','producteurs','parcelles','campagne'));
+    }
+
+    public function store(Request $request)
+    {
+        // dd(response()->json($request));
+        
+        $request->validate([
+            'sender_staff' => 'required|exists:users,id',
+            'magasin_section' =>  'required|exists:magasin_sections,id', 
+            'items'            => 'required|array',
+            'items.*.type'     => 'required',
+            'items.*.producteur'     => 'required|integer',
+            'items.*.parcelle'     => 'required|integer',
+            'items.*.quantity' => 'required|numeric|gt:0',
+            'items.*.amount'   => 'required|numeric|gt:0', 
+            'estimate_date'    => 'required|date|date_format:Y-m-d|after_or_equal:today',
+            'payment_status'   => 'required|integer|in:0,1',
+        ]);
+
+        $sender                      = auth()->user();
+        $livraison                     = new LivraisonInfo();
+        $livraison->invoice_id         = getTrx();
+        $livraison->code               = getTrx();
+        $livraison->sender_cooperative_id   = $sender->cooperative_id;
+        $livraison->sender_staff_id    = $request->sender_staff;
+        $livraison->sender_name        = $request->sender_name;
+        $livraison->sender_email       = $request->sender_email;
+        $livraison->sender_phone       = $request->sender_phone;
+        $livraison->sender_address     = $request->sender_address;
+        $livraison->receiver_name      = $request->receiver_name;
+        $livraison->receiver_email     = $request->receiver_email;
+        $livraison->receiver_phone     = $request->receiver_phone;
+        $livraison->receiver_address   = $request->receiver_address;
+        $livraison->receiver_cooperative_id = $sender->cooperative_id;
+        $livraison->receiver_magasin_section_id = $request->magasin_section;
+        $livraison->estimate_date      = $request->estimate_date;
+        $livraison->save();
+
+        $subTotal = 0;
+        $campagne = Campagne::active()->first();
+        $data = $data2 = $data3 = [];
+        foreach ($request->items as $item) {
+            // $livraisonType = Type::where('id', $item['type'])->first();
+            // if (!$livraisonType) {
+            //     continue;
+            // }
+            $price = $campagne->prix_achat * $item['quantity'];
+            $subTotal += $price;
+           
+            $data[] = [
+                'livraison_info_id' => $livraison->id,
+                'parcelle_id' => $item['parcelle'],
+                'campagne_id' => $campagne->id,
+                'qty'             => $item['quantity'],
+                'type_produit'     => $item['type'],
+                'fee'             => $price,
+                'type_price'      => $campagne->prix_achat,
+                'created_at'      => now(),
+            ];
+            
+            if(count($item['scelle'])){
+                $scelles = implode(',', $item['scelle']);
+                $scelles = explode(',', $scelles);
+                foreach($scelles as $itemscelle){
+                    $data2[] = [
+                        'livraison_info_id' => $livraison->id,
+                        'parcelle_id' => $item['parcelle'],
+                        'campagne_id' => $campagne->id,
+                        'type_produit'     => $item['type'],
+                        'numero_scelle' => $itemscelle,
+                        'created_at'      => now(),
+                    ];
+                }
+            }
+
+            if($item['type']=='Certifie'){
+                $price_prime = $campagne->prime * $item['quantity'];
+                $data3[] = [
+                    'livraison_info_id' => $livraison->id,
+                    'parcelle_id' => $item['parcelle'],
+                    'campagne_id' => $campagne->id,
+                    'quantite'             => $item['quantity'], 
+                    'montant'             => $price_prime,
+                    'prime_campagne'      => $campagne->prime,
+                    'created_at'      => now(),
+                ];
+            }
+            
+
+        }
+
+        LivraisonProduct::insert($data);
+        LivraisonScelle::insert($data2);
+        LivraisonPrime::insert($data3);
+
+        $discount                        = $request->discount ?? 0;
+        $discountAmount                  = ($subTotal / 100) * $discount;
+        $totalAmount                     = $subTotal - $discountAmount;
+
+        $livraisonPayment                  = new LivraisonPayment();
+        $livraisonPayment->livraison_info_id = $livraison->id;
+        $livraisonPayment->campagne_id  = $campagne->id;
+        $livraisonPayment->amount          = $subTotal;
+        $livraisonPayment->discount        = $discountAmount;
+        $livraisonPayment->final_amount    = $totalAmount;
+        $livraisonPayment->percentage      = $request->discount;
+        $livraisonPayment->status          = $request->payment_status;
+        $livraisonPayment->save();
+
+        if ($livraisonPayment->status == Status::PAYE) {
+            $adminNotification            = new AdminNotification();
+            $adminNotification->user_id   = $sender->id;
+            $adminNotification->title     = 'Livraison Payment ' . $sender->username;
+            $adminNotification->click_url = urlPath('admin.livraison.info.details', $livraison->id);
+            $adminNotification->save();
+        }
+
+        $adminNotification            = new AdminNotification();
+        $adminNotification->user_id   = $sender->id;
+        $adminNotification->title     = 'New livraison created to' . $sender->username;
+        $adminNotification->click_url = urlPath('admin.livraison.info.details', $livraison->id);
+        $adminNotification->save();
+
+        $notify[] = ['success', 'Livraison added successfully'];
+        return to_route('manager.livraison.invoice', encrypt($livraison->id))->withNotify($notify);
+    }
+
+    public function update(Request $request, $id)
+    {
+
+        $id = decrypt($id);
+        
+        
+        $request->validate([
+            'sender_staff' => 'required|exists:users,id',
+            'magasin_section' =>  'required|exists:magasin_sections,id',  
+            'items'            => 'required|array',
+            'items.*.type'     => 'required',
+            'items.*.producteur'     => 'required|integer',
+            'items.*.parcelle'     => 'required|integer',
+            'items.*.quantity' => 'required|numeric|gt:0',
+            'items.*.amount'   => 'required|numeric|gt:0', 
+            'estimate_date'    => 'required|date|date_format:Y-m-d|after_or_equal:today',
+            'payment_status'   => 'required|integer|in:0,1',
+        ]);
+
+        $sender                      = auth()->user();
+        $livraison                     = LivraisonInfo::findOrFail($id);
+        $livraison->invoice_id         = getTrx();
+        $livraison->code               = getTrx();
+        $livraison->sender_cooperative_id   = $sender->cooperative_id;
+        $livraison->sender_staff_id    = $request->sender_staff;
+        $livraison->sender_name        = $request->sender_name;
+        $livraison->sender_email       = $request->sender_email;
+        $livraison->sender_phone       = $request->sender_phone;
+        $livraison->sender_address     = $request->sender_address;
+        $livraison->receiver_name      = $request->receiver_name;
+        $livraison->receiver_email     = $request->receiver_email;
+        $livraison->receiver_phone     = $request->receiver_phone;
+        $livraison->receiver_address   = $request->receiver_address;
+        $livraison->receiver_cooperative_id = $sender->cooperative_id;
+        $livraison->receiver_magasin_section_id = $request->magasin_section;
+        $livraison->estimate_date      = $request->estimate_date;
+        $livraison->save();
+
+        LivraisonProduct::where('livraison_info_id', $id)->delete();
+        LivraisonScelle::where('livraison_info_id', $id)->delete();
+        LivraisonPrime::where('livraison_info_id', $id)->delete();
+        $subTotal = 0;
+        $campagne = Campagne::active()->first();
+        $data = $data2 = $data3 = [];
+        foreach ($request->items as $item) {
+             
+            $price     = $campagne->prix_achat * $item['quantity'];
+            $subTotal += $price;
+
+            $data[] = [
+                'livraison_info_id' => $livraison->id,
+                'parcelle_id' => $item['parcelle'],
+                'campagne_id' => $campagne->id,
+                'qty'             => $item['quantity'],
+                'type_produit'     => $item['type'],
+                'fee'             => $price,
+                'type_price'      => $campagne->prix_achat,
+                'created_at'      => now(),
+            ];
+            if(count($item['scelle'])){
+                $scelles = implode(',', $item['scelle']);
+                $scelles = explode(',', $scelles);
+                foreach($scelles as $itemscelle){
+                    $data2[] = [
+                        'livraison_info_id' => $livraison->id,
+                        'parcelle_id' => $item['parcelle'],
+                        'campagne_id' => $campagne->id,
+                        'type_produit'     => $item['type'],
+                        'numero_scelle' => $itemscelle,
+                        'created_at'      => now(),
+                    ];
+                }
+            }
+            if($item['type']=='Certifie'){
+                $price_prime = $campagne->prime * $item['quantity'];
+                $data3[] = [
+                    'livraison_info_id' => $livraison->id,
+                    'parcelle_id' => $item['parcelle'],
+                    'campagne_id' => $campagne->id,
+                    'quantite'             => $item['quantity'], 
+                    'montant'             => $price_prime,
+                    'prime_campagne'      => $campagne->prime,
+                    'created_at'      => now(),
+                ];
+            }
+        }
+        LivraisonProduct::insert($data);
+        LivraisonScelle::insert($data2);
+        LivraisonPrime::insert($data3);
+
+        $discount = $request->discount ?? 0;
+        $discountAmount = ($subTotal / 100) * $discount;
+        $totalAmount = $subTotal - $discountAmount;
+
+        $user = auth()->user();
+        if ($request->payment_status == Status::PAYE) {
+
+            $livraisonPayment               = LivraisonPayment::where('livraison_info_id', $livraison->id)->first();
+            $livraisonPayment->campagne_id  = $campagne->id;
+            $livraisonPayment->amount       = $subTotal;
+            $livraisonPayment->discount     = $discountAmount;
+            $livraisonPayment->final_amount = $totalAmount;
+            $livraisonPayment->percentage   = $request->discount;
+            $livraisonPayment->status       = $request->payment_status;
+            $livraisonPayment->save();
+
+            $adminNotification            = new AdminNotification();
+            $adminNotification->user_id   = $sender->id;
+            $adminNotification->title     = $livraison->code . ' Livraison Payment Updated  by ' . $user->username;
+            $adminNotification->click_url = urlPath('admin.livraison.info.details', $livraison->id);
+            $adminNotification->save();
+        }
+
+        $adminNotification            = new AdminNotification();
+        $adminNotification->user_id   = $sender->id;
+        $adminNotification->title     = $livraison->code . ' Livraison update by ' . $user->username;
+        $adminNotification->click_url = urlPath('admin.livraison.info.details', $livraison->id);
+        $adminNotification->save();
+
+        $notify[] = ['success', 'Livraison updated successfully'];
+        return to_route('manager.livraison.invoice', encrypt($livraison->id))->withNotify($notify);
+    }
+
+    public function getParcelle(){
+        $input = request()->all();
+        $id = $input['id'];
+        $parcelles = Parcelle::where('producteur_id',$id)->get();
+        if ($parcelles->count()) {
+            $contents = '<option disabled selected value="">Parcelle</option>';
+
+            foreach ($parcelles as $data) {
+                $contents .= '<option value="' . $data->id . '" >Parcelle '. $data->codeParc . '</option>';
+            }
+        } else {
+            $contents = null;
+        }
+ 
+        return $contents;
+    }
+    
     public function sentInQueue()
     {
         $pageTitle    = "Liste des livraisons en attente";

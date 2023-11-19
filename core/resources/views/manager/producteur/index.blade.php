@@ -16,7 +16,7 @@
                                 <select name="localite" class="form-control">
                                     <option value="">@lang('Toutes')</option>
                                     @foreach ($localites as $local)
-                                        <option value="{{ $local->id }}">{{ $local->nom }}</option>
+                                        <option value="{{ $local->id }}" {{ request()->localite == $local->id ? 'selected' : '' }}>{{ $local->nom }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -25,7 +25,7 @@
                                 <select name="programme" class="form-control">
                                     <option value="">@lang('Tous')</option>
                                     @foreach ($programmes as $local)
-                                        <option value="{{ $local->id }}">{{ $local->libelle }}</option>
+                                        <option value="{{ $local->id }}" {{ request()->programme == $local->id ? 'selected' : '' }}>{{ $local->libelle }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -33,8 +33,8 @@
                                 <label>@lang('Statut')</label>
                                 <select name="status" class="form-control">
                                     <option value="">@lang('Tous')</option>
-                                    <option value="Candidat">Candidat</option>
-                                    <option value="Certifie">Certifie</option>
+                                    <option value="Candidat"  {{ request()->status == 'Candidat' ? 'selected' : '' }}>Candidat</option>
+                                    <option value="Certifie"  {{ request()->localite == 'Certifie' ? 'selected' : '' }}>Certifie</option>
                                 </select>
                             </div>
                             <div class="flex-grow-1">

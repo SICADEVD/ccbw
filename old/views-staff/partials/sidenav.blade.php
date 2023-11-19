@@ -37,8 +37,9 @@
                                         <i class="menu-icon las la-shipping-fast"></i>
                                         <span class="menu-title">@lang("Enregistrement")</span>
                                     </a>
+                                    </li>
                                 @endcan
-                    </li>
+                    
                                 @can('staff.livraison.sent.queue')
                                     <li class="sidebar-menu-item {{ menuActive('staff.livraison.sent.queue') }}">
                                         <a href="{{ route('staff.livraison.sent.queue') }}" class="nav-link ">
