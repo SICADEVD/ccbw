@@ -83,22 +83,32 @@
                         </div>
                         <div class="form-group">
                     <label>@lang('Existence de Documents administratifs')</label><br>
+                    <div class="input-group mb-3">
                                 <select name="document[]" class="form-control select-picker" multiple>
                                     <option value="">@lang('--------------')</option>
                                     @foreach ($documents as $local)
                                         <option value="{{ $local->id }}" @selected(in_array($local->id,$dataDocument))>{{ $local->nom }}</option>
                                     @endforeach
                                 </select>
+                                <button type="button"
+                                        class="btn btn-outline-secondary border-grey add-documentad"
+                                        data-toggle="tooltip" data-original-title="Ajouter un document administratif">Add</button>
+                        </div>
                         </div>
                         <div class="form-group">
                     <label>@lang('Existence des instances')</label><br>
+                    <div class="input-group mb-3">
                                 <select name="instance[]" class="form-control select-picker" multiple>
                                     <option value="">@lang('--------------')</option>
                                     @foreach ($instances as $local)
                                         <option value="{{ $local->id }}" @selected(in_array($local->id,$dataInstance))>{{ $local->nom }}</option>
                                     @endforeach
-                                </select>
+                                </select> 
+                                <button type="button"
+                                        class="btn btn-outline-secondary border-grey add-instance"
+                                        data-toggle="tooltip" data-original-title="Ajouter une instance">Add</button>
                         </div>
+                    </div>
                         <hr class="panel-wide">
                         <div class="form-group">
                             <label>@lang('Longitude')</label>
@@ -147,5 +157,21 @@
                 data: $('#editSettings').serialize(),
             })
         });
+        $('body').on('click', '.add-instance', function() {
+            var url = "{{ route('manager.settings.instance.index') }}";
+             
+            $(MODAL_XL + ' ' + MODAL_HEADING).html('...');
+            $.ajaxModal(MODAL_XL, url);
+            $(MODAL_XL).modal('show');
+        });
+
+        $('body').on('click', '.add-documentad', function() {
+            var url = "{{ route('manager.settings.documentad.index') }}";
+             
+            $(MODAL_XL + ' ' + MODAL_HEADING).html('...');
+            $.ajaxModal(MODAL_XL, url);
+            $(MODAL_XL).modal('show');
+        });
+        
     </script>
 @endpush

@@ -182,6 +182,10 @@ Route::name('settings.')->prefix('settings')->group(function () {
     Route::get('type-archive/',[SettingController::class, 'typeArchiveIndex'])->name('typeArchive.index');
     Route::post('type-archive/store',[SettingController::class, 'typeArchiveStore'])->name('typeArchive.store');
     Route::post('type-archive/status/{id}',[SettingController::class, 'typeArchiveStatus'])->name('typeArchive.status');
+    Route::get('instance/',[SettingController::class, 'instanceIndex'])->name('instance.index');
+    Route::post('instance/store',[SettingController::class, 'instanceStore'])->name('instance.store');
+    Route::get('document-ad/',[SettingController::class, 'documentadIndex'])->name('documentad.index');
+    Route::post('document-ad/store',[SettingController::class, 'documentadStore'])->name('documentad.store');
 
   });
 

@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\manager;
 
 use App\Models\Unit;
+use App\Models\Instance;
 use App\Constants\Status;
 use App\Models\Campagne; 
 use App\Models\ArretEcole;
+use App\Http\Helpers\Reply;
 use App\Models\Cooperative;
 use App\Models\CourierInfo;
 use App\Models\TypeArchive;
@@ -23,6 +25,7 @@ use App\Models\ThemeFormationStaff;
 use App\Http\Controllers\Controller;
 use App\Models\ModuleFormationStaff;
 use App\Models\CategorieQuestionnaire;
+use App\Models\DocumentAdministratif;
 
 class SettingController extends Controller
 {
@@ -356,6 +359,49 @@ class SettingController extends Controller
         $typeArchive->save();
         $notify[] = ['success', isset($message) ? $message  : 'Le contenu a été ajouté avec succès.'];
         return back()->withNotify($notify);
+    }
+    public function instanceIndex()
+    {
+        $this->pageTitle = "Ajouter une instance";   
+        return view('manager.config.create-instance-modal', $this->data);
+    }
+    public function instanceStore(Request $request)
+    {
+        $request->validate([ 
+            'nom'  => 'required', 
+        ]);
+
+        if ($request->id) {
+            $instance    = Instance::findOrFail($request->id);
+            $message = "Espece Arbre a été mise à jour avec succès.";
+        } else {
+            $instance = new Instance();
+        } 
+        $instance->nom = trim($request->nom); 
+        $instance->save();
+       
+        return Reply::successWithData(__('Le contenu a été ajouté avec succès.'), ['page_reload' => $request->page_reload]);
+    }
+    public function documentadIndex()
+    {
+        $this->pageTitle = "Ajouter un document administratif";   
+        return view('manager.config.create-document-modal', $this->data);
+    }
+    public function documentadStore(Request $request)
+    {
+        $request->validate([ 
+            'nom'  => 'required', 
+        ]);
+
+        if ($request->id) {
+            $documentad    = Instance::findOrFail($request->id); 
+        } else {
+            $documentad = new DocumentAdministratif();
+        } 
+        $documentad->nom = trim($request->nom); 
+        $documentad->save();
+       
+        return Reply::successWithData(__('Le contenu a été ajouté avec succès.'), ['page_reload' => $request->page_reload]);
     }
     public function campagneStatus($id)
     {
