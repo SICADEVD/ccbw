@@ -104,8 +104,11 @@
                     $('#producteur select[name="producteur"]').find('option[value=""]').prop('selected',
                         true);
                     $('#producteur select[name="producteur"]').hide('slow');
-                    $('#producteur input[name="lien"]').prop('required', false);
-                    $('#producteur input[name="lien"]').val('');
+                    $('#producteur select[name="lien"]').prop('required', false);
+                    $('#producteur select[name="lien"]').find('option[value=""]').prop('selected',
+                        true);
+                    $('#autre input[name="autre_lien"]').prop('required', false);
+                    $('#autre input[name="autre_lien"]').val('');
                 }
             });
             if ($('.representer').val() == 'Oui') {
