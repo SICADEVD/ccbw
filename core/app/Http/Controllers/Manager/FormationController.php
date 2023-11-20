@@ -227,7 +227,6 @@ class FormationController extends Controller
 
         if ($request->id) {
             $validationRule = [
-                'producteur' => 'required|exists:producteurs,id',
                 'nom'  => 'required|max:255',
                 'prenom'  => 'required|max:255',
                 'sexe'  => 'required|max:255',
@@ -237,7 +236,6 @@ class FormationController extends Controller
             $message = "La formation a été mise à jour avec succès";
         } else {
             $validationRule = [
-                'producteur' => 'required|exists:producteurs,id',
                 'nom'  => 'required|max:255',
                 'prenom'  => 'required|max:255',
                 'sexe'  => 'required|max:255',
