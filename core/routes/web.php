@@ -26,6 +26,7 @@ use App\Http\Controllers\Manager\LocaliteSettingController;
 use App\Http\Controllers\Manager\SettingController;
 use App\Http\Controllers\Manager\ArchivageController;
 use App\Http\Controllers\Manager\FormationStaffController;
+use App\Http\Controllers\Manager\EmployeeeFileController;
 
 Route::namespace('Manager\Auth')->group(function () {
 
@@ -189,6 +190,7 @@ Route::name('settings.')->prefix('settings')->group(function () {
 
   });
 
+Route::resource('employee-files', EmployeeeFileController::class);
 Route::resource('leaveType', LeaveTypeController::class);
 Route::post('employee-shifts/set-default', [EmployeeShiftController::class, 'setDefaultShift'])->name('employee-shifts.set_default');
 Route::resource('employee-shifts', EmployeeShiftController::class);

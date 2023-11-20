@@ -1,8 +1,8 @@
 <link rel="stylesheet" href="{{ asset('assets/vendor/css/tagify.css') }}">
-
+<link rel="stylesheet" href="{{ asset('assets/vendor/css/dropzone.min.css') }}">
 <div class="row">
     <div class="col-sm-12">
-        <x-form id="save-employee-data-form" :action="route('manager.employees.store')">
+        <x-form id="save-employee-data-form" enctype="multipart/form-data" :action="route('manager.employees.store')">
 
             <div class="add-client bg-white rounded">
                 <h4 class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-bottom-grey">
@@ -134,7 +134,17 @@
                             </x-forms.textarea>
                         </div>
                     </div>
-
+                    <div class="col-md-6">
+                        <div class="form-group my-3">  
+                            <x-forms.file-multiple class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('Contrats de travail')" fieldName="contrat_travail" :popover="__('Contrats de travail')" fieldId="contrat-travail" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group my-3"> 
+                        <x-forms.file-multiple class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('Fiches de poste')" fieldName="fiche_poste" :popover="__('Fiches de poste')" fieldId="fiche-poste" />
+                        
+                        </div>
+                    </div>
                 </div>
 
                 <h4 class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-top-grey">
@@ -146,24 +156,7 @@
                         <x-forms.text fieldId="tags" :fieldLabel="__('app.skills')" fieldName="tags"
                             :fieldPlaceholder="__('placeholders.skills')" />
                     </div>
-
-                    @if (function_exists('sms_setting') && sms_setting()->telegram_status)
-                        <div class="col-md-6">
-                            <x-forms.number fieldName="telegram_user_id" fieldId="telegram_user_id"
-                                fieldLabel="<i class='fab fa-telegram'></i> {{ __('sms::modules.telegramUserId') }}"
-                                :popover="__('sms::modules.userIdInfo')" />
-                            <p class="text-bold text-danger">
-                                @lang('sms::modules.telegramBotNameInfo')
-                            </p>
-                            <p class="text-bold"><span id="telegram-link-text">https://t.me/{{ sms_setting()->telegram_bot_name }}</span>
-                                <a href="javascript:;" class="btn-copy btn-secondary f-12 rounded p-1 py-2 ml-1"
-                                    data-clipboard-target="#telegram-link-text">
-                                    <i class="fa fa-copy mx-1"></i>@lang('app.copy')</a>
-                                <a href="https://t.me/{{ sms_setting()->telegram_bot_name }}" target="_blank" class="btn-secondary f-12 rounded p-1 py-2 ml-1">
-                                    <i class="fa fa-copy mx-1"></i>@lang('app.openInNewTab')</a>
-                            </p>
-                        </div>
-                    @endif
+ 
                     <div class="col-lg-3 col-md-6">
                         <x-forms.datepicker fieldId="probation_end_date" :fieldLabel="__('modules.employees.probationEndDate')"
                             fieldName="probation_end_date" :fieldPlaceholder="__('placeholders.date')"
@@ -219,8 +212,7 @@
                     <input type ="hidden" name="add_more" value="false" id="add_more" />
 
                 </div>
-                
-
+                <button type="submit" class="btn btn--primary w-100 h-45 ">@lang('Envoyer')</button>
                 <x-form-actions>
                 <x-form-button id="save-employee-form" class="mr-3 btn btn-primary" icon="check">
                         @lang('Enregistrer')
@@ -237,10 +229,12 @@
 </div>
 
 <script src="{{ asset('assets/vendor/jquery/tagify.min.js') }}"></script>
- 
+<script src="{{ asset('assets/vendor/jquery/dropzone.min.js') }}"></script>
 <script>
-    $(document).ready(function() {
+    $(document).ready(function() { 
+
         $('.dropify').dropify();
+        $('.dropify-fr').dropify();
         $('.custom-date-picker').each(function(ind, el) {
             datepicker(el, {
                 position: 'bl',
@@ -427,27 +421,49 @@
         $('#' + id).val(checkedData);
     }
 
-    
-    @if (function_exists('sms_setting') && sms_setting()->telegram_status)
-        var clipboard = new ClipboardJS('.btn-copy');
 
-        clipboard.on('success', function(e) {
-            Swal.fire({
-                icon: 'success',
-                text: '@lang("app.urlCopied")',
-                toast: true,
-                position: 'top-end',
-                timer: 3000,
-                timerProgressBar: true,
-                showConfirmButton: false,
-                customClass: {
-                    confirmButton: 'btn btn-primary',
-                },
-                showClass: {
-                    popup: 'swal2-noanimation',
-                    backdrop: 'swal2-noanimation'
-                },
-            })
+    Dropzone.autoDiscover = false;
+        //Dropzone class
+        myDropzone = new Dropzone("div#fiche-poste", {
+            dictDefaultMessage: "Charger des fichiers",
+            // url: "{{ route('manager.employee-files.store') }}",
+            url: " ",
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            paramName: "fiche_poste",
+            maxFilesize: 10,
+            maxFiles: 10,
+            autoProcessQueue: false,
+            uploadMultiple: true,
+            addRemoveLinks: true,
+            parallelUploads: 10,
+            acceptedFiles: "image/*,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/docx,application/pdf,text/plain,application/msword,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/zip,application/x-zip-compressed, application/x-compressed, multipart/x-zip,.xlsx,video/x-flv,video/mp4,application/x-mpegURL,video/MP2T,video/3gpp,video/quicktime,video/x-msvideo,video/x-ms-wmv,application/sla,.stl",
+            init: function() {
+                myDropzone = this;
+            }
         });
-    @endif
+
+        myDropzone2 = new Dropzone("div#contrat-travail", {
+            dictDefaultMessage: "Charger des fichiers",
+            // url: "{{ route('manager.employee-files.store') }}",
+            url: " ",
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            paramName: "contrat_travail",
+            maxFilesize: 10,
+            maxFiles: 10,
+            autoProcessQueue: false,
+            uploadMultiple: true,
+            addRemoveLinks: true,
+            parallelUploads: 10,
+            acceptedFiles: "image/*,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/docx,application/pdf,text/plain,application/msword,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/zip,application/x-zip-compressed, application/x-compressed, multipart/x-zip,.xlsx,video/x-flv,video/mp4,application/x-mpegURL,video/MP2T,video/3gpp,video/quicktime,video/x-msvideo,video/x-ms-wmv,application/sla,.stl",
+            init: function() {
+                myDropzone = this;
+            }
+        });
+         
+       
+  
 </script>
