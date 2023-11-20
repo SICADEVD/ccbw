@@ -47,7 +47,7 @@ class SsrteclmrsController extends Controller
             return $localite->active();
         });
         $sections = $cooperative->sections;
-        $producteurs  = Producteur::where('userid',$manager)->with('localite')->get();
+        $producteurs  = Producteur::with('localite')->get();
         $lienParente = DB::table('lien_parente')->pluck('nom', 'nom')->all();
         $raisonArretEcole = DB::table('arret_ecoles')->get();
         $travauxDangereux = DB::table('travaux_dangereux')->pluck('nom', 'nom')->all();
