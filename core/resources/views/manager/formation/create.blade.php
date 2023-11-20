@@ -60,7 +60,7 @@
                     </div>
 
                     <div class="form-group row">
-                        <?php echo Form::label(__('Thème de la formation '), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <?php echo Form::label(__('Thème de la formation'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
                             <select class="form-control select2-multi-select" name="theme[]" id="theme" multiple
                                 required>
@@ -97,7 +97,7 @@
                     <div class="form-group row">
                         <?php echo Form::label(__('Durée de la formation'), null, ['class' => 'col-sm-4 control-label required']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::time('duree_formation', null, ['class' => 'form-control duree_formation', 'required' => 'required']); ?>
+                            <?php echo Form::text('duree_formation', null, ['class' => 'form-control duree_formation', 'required' => 'required','placeholder'=>'Ex : 04:10']); ?>
                         </div>
                     </div>
                     <div class="form-group row">
