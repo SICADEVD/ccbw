@@ -70,29 +70,33 @@ class ApissrteclrmsController extends Controller
      */
     public function store(Request $request)
     {
-        // $input = $request->all();  
-        // $producteur = DB::table('producteurs')->where('id',$input['producteur_id'])->first();
+        
         $ssrteclmrs = new Ssrteclmrs(); 
         $producteur = Producteur::where('id',$request->producteur)->first();
         $ssrteclmrs->codeMembre = $this->generecodessrte($request->producteur,$producteur->codeProdapp);
-        $ssrteclmrs->producteur_id  = $request->producteur;  
+        $ssrteclmrs->producteur_id  = $request->producteur;
         $ssrteclmrs->nomMembre  = $request->nomMembre;
         $ssrteclmrs->prenomMembre  = $request->prenomMembre;
         $ssrteclmrs->sexeMembre     = $request->sexeMembre;
         $ssrteclmrs->datenaissMembre    = $request->datenaissMembre;
-        $ssrteclmrs->lienParente = $request->lienParente; 
-        $ssrteclmrs->autreLienParente    = $request->autreLienParente; 
+        $ssrteclmrs->lienParente = $request->lienParente;
+        $ssrteclmrs->autreLienParente    = $request->autreLienParente;
         $ssrteclmrs->frequente  = $request->frequente;
         $ssrteclmrs->niveauEtude     = $request->niveauEtude;
         $ssrteclmrs->classe    = $request->classe;
-        $ssrteclmrs->ecoleVillage = $request->ecoleVillage; 
+        $ssrteclmrs->ecoleVillage = $request->ecoleVillage;
         $ssrteclmrs->distanceEcole    = $request->distanceEcole;
         $ssrteclmrs->nomEcole     = $request->nomEcole;
         $ssrteclmrs->moyenTransport  = $request->moyenTransport;
         $ssrteclmrs->moyenTransport    = $request->moyenTransport;
-        $ssrteclmrs->avoirFrequente = $request->avoirFrequente; 
+        $ssrteclmrs->avoirFrequente = $request->avoirFrequente;
         $ssrteclmrs->niveauEtudeAtteint    = $request->niveauEtudeAtteint;
-        $ssrteclmrs->date_enquete     = $request->date_enquete; 
+        $ssrteclmrs->userid = $request->userid;
+        $ssrteclmrs->autreRaisonArretEcole = $request->autreRaisonArretEcole;
+        $ssrteclmrs->nomEnqueteur = $request->nomEnqueteur;
+        $ssrteclmrs->prenomEnqueteur = $request->prenomEnqueteur;
+        $ssrteclmrs->telephoneEnqueteur = $request->telephoneEnqueteur;
+        $ssrteclmrs->date_enquete     = $request->date_enquete;
 
         $ssrteclmrs->save(); 
         // $input['codeMembre']=$this->generecodessrte($input['producteur'],$producteur->codeProdapp); 

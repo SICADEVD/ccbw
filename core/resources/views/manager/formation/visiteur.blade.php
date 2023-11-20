@@ -21,7 +21,7 @@
                                 </select>
                             </div>
                             <div class="flex-grow-1">
-                                <label>@lang('Localité')</label>
+                                <label>@lang('Module de formation')</label>
                                 <select name="module" class="form-control">
                                     <option value="">@lang('Tous')</option>
                                     @foreach ($modules as $module)
@@ -48,67 +48,44 @@
                         <table class="table table--light style--two">
                             <thead>
                                 <tr>
-                                    <th>@lang('Localite')</th>
-                                    <th>@lang('Formateur')</th>
-                                    <th>@lang('Module')</th>
-                                    <th>@lang('Lieu')</th>
-                                    <th>@lang('Date formation')</th>
+                                    <th>@lang('Visiteur')</th>
+                                    <th>@lang('Sexe')</th>
+                                    <th>@lang('Téléphone')</th>
+                                    <th>@lang('Represente un producteur')</th>
                                     <th>@lang('Ajoutée le')</th>
-                                    <th>@lang('Status')</th>
                                     <th>@lang('Action')</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse($formations as $formation)
+                                @forelse($visiteurs as $formation)
                                     <tr>
                                         <td>
-                                            <span class="fw-bold">{{ $formation->localite->nom }}</span>
-                                        </td>
-                                        <td>
-                                            <span> <a href="{{ route('manager.suivi.formation.edit', $formation->id) }}">
-                                                    <span>@</span>{{ $formation->user->lastname }}
-                                                    {{ $formation->user->firstname }}
+                                            <span> <a href="{{ route('manager.suivi.formation.editvisiteur', $formation->id) }}">
+                                                    <span>@</span>{{ $formation->prenom }}
+                                                    {{ $formation->nom }}</a></span>
                                                 </a></span>
                                         </td>
                                         <td>
-                                            <span>{{ $formation->typeFormation->nom }}</span>
+                                            <span>{{$formation->sexe}}</span>
                                         </td>
                                         <td>
-                                            <span>{{ $formation->lieu_formation }}</span>
+                                            <span>{{$formation->telephone}}</span>
                                         </td>
                                         <td>
-                                            <span class="d-block">{{ showDateTime($formation->date_formation) }}</span>
-                                            <span>{{ diffForHumans($formation->date_formation) }}</span>
+                                            <span>{{$formation->representer}}</span>
                                         </td>
                                         <td>
                                             <span class="d-block">{{ showDateTime($formation->created_at) }}</span>
                                             <span>{{ diffForHumans($formation->created_at) }}</span>
                                         </td>
-                                        <td> @php echo $formation->statusBadge; @endphp </td>
                                         <td>
-                                            <a href="{{ route('manager.suivi.formation.visiteurs',$formation->id) }}"
-                                                class="icon-btn btn--info ml-1">@lang('Visiteurs')</a>
-
                                             <button type="button" class="btn btn-sm btn-outline--primary"
                                                 data-bs-toggle="dropdown" aria-expanded="false"><i
                                                     class="las la-ellipsis-v"></i>@lang('Action')
                                             </button>
                                             <div class="dropdown-menu p-0">
-                                                <a href="{{ route('manager.suivi.formation.edit', $formation->id) }}"
+                                                <a href="{{ route('manager.suivi.formation.editvisiteur', $formation->id) }}"
                                                     class="dropdown-item"><i class="la la-pen"></i>@lang('Edit')</a>
-                                                @if ($formation->status == Status::DISABLE)
-                                                    <button type="button" class="confirmationBtn  dropdown-item"
-                                                        data-action="{{ route('manager.suivi.formation.status', $formation->id) }}"
-                                                        data-question="@lang('Are you sure to enable this formation?')">
-                                                        <i class="la la-eye"></i> @lang('Activé')
-                                                    </button>
-                                                @else
-                                                    <button type="button" class="confirmationBtn dropdown-item"
-                                                        data-action="{{ route('manager.suivi.formation.status', $formation->id) }}"
-                                                        data-question="@lang('Are you sure to disable this formation?')">
-                                                        <i class="la la-eye-slash"></i> @lang('Désactivé')
-                                                    </button>
-                                                @endif
 
                                             </div>
                                         </td>
@@ -123,9 +100,9 @@
                         </table>
                     </div>
                 </div>
-                @if ($formations->hasPages())
+                @if ($visiteurs->hasPages())
                     <div class="card-footer py-4">
-                        {{ paginateLinks($formations) }}
+                        {{ paginateLinks($visiteurs) }}
                     </div>
                 @endif
             </div>
@@ -136,11 +113,15 @@
 
 @push('breadcrumb-plugins')
     <x-search-form placeholder="Search here..." />
-    <a href="{{ route('manager.suivi.formation.create') }}" class="btn  btn-outline--primary h-45 addNewCooperative">
+    <a href="{{ route('manager.suivi.formation.createvisiteur', $id) }}"
+        class="btn  btn-outline--primary h-45 addNewCooperative">
         <i class="las la-plus"></i>@lang('Ajouter nouveau')
     </a>
     <a href="{{ route('manager.suivi.formation.exportExcel.formationAll') }}" class="btn  btn-outline--warning h-45"><i
             class="las la-cloud-download-alt"></i> Exporter en Excel</a>
+@endpush
+@push('breadcrumb-plugins')
+    <x-back route="{{route('manager.suivi.formation.index')}}" />
 @endpush
 @push('style')
     <style>

@@ -99,7 +99,7 @@
 
                     <div id="infosIndependant">
                         <div class="form-group row">
-                            <?php echo Form::label(__('Est-ce qu\'il a suivi une formation ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <?php echo Form::label(__('A-t-il suivi une formation ?'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
                                 <?php echo Form::select('suiviFormation', ['non' => __('non'), 'oui' => __('oui')], null, ['class' => 'form-control suiviFormation']); ?>
                             </div>
