@@ -13,6 +13,7 @@ use App\Models\SuiviFormationTheme;
 use Illuminate\Support\Facades\File;
 use App\Models\SuiviFormationVisiteur;
 use App\Models\SuiviFormationProducteur;
+use App\Constants\Status;
 
 class ApisuiviformationController extends Controller
 {
@@ -59,6 +60,9 @@ class ApisuiviformationController extends Controller
             'producteur' => 'required|max:255',
             'lieu_formation'  => 'required|max:255',
             'type_formation'  => 'required|max:255',
+            'formation_type'  => 'required|max:255',
+            'observation_formation'  => 'required|max:255',
+            'duree_formation' => 'required|date_format:H:i',
             'theme'  => 'required|max:255', 
             'date_formation' => 'required|max:255', 
         ];
@@ -68,13 +72,18 @@ class ApisuiviformationController extends Controller
 
          
         $formation = new SuiviFormation();
+
         $campagne = Campagne::active()->first();
-        $formation->localite_id  = $request->localite;  
+        $formation->localite_id  = $request->localite;
         $formation->campagne_id  = $campagne->id;
-        $formation->user_id  = $request->staff;  
+        $formation->user_id  = $request->staff;
         $formation->lieu_formation  = $request->lieu_formation;
         $formation->type_formation_id  = $request->type_formation;
-        $formation->date_formation     = $request->date_formation; 
+        $formation->duree_formation = $request->duree_formation;
+        $formation->observation_formation = $request->observation_formation;
+        $formation->formation_type = $request->formation_type;
+        $formation->date_formation     = $request->date_formation;
+        $formation->userid = $request->userid;
        
        if($request->photo_formations){  
         $image = $request->photo_formations;  
@@ -105,20 +114,20 @@ class ApisuiviformationController extends Controller
                   $i++;
                 } 
             }
-            if(($request->visiteurs !=null)) { 
-                SuiviFormationVisiteur::where('suivi_formation_id',$id)->delete();
-                $i=0; 
-                foreach($request->visiteurs as $data){
-                    if($data !=null)
-                    {
-                        $datas2[] = [
-                        'suivi_formation_id' => $id, 
-                        'visiteur' => $data,  
-                    ];
-                    } 
-                  $i++;
-                } 
-            }
+            // if(($request->visiteurs !=null)) { 
+            //     SuiviFormationVisiteur::where('suivi_formation_id',$id)->delete();
+            //     $i=0; 
+            //     foreach($request->visiteurs as $data){
+            //         if($data !=null)
+            //         {
+            //             $datas2[] = [
+            //             'suivi_formation_id' => $id, 
+            //             'visiteur' => $data,  
+            //         ];
+            //         } 
+            //       $i++;
+            //     } 
+            // }
             if(($request->theme !=null)) { 
                 SuiviFormationTheme::where('suivi_formation_id',$id)->delete();
                 $i=0; 
@@ -134,11 +143,37 @@ class ApisuiviformationController extends Controller
                 } 
             }
             SuiviFormationProducteur::insert($datas);
-            SuiviFormationVisiteur::insert($datas2); 
+            // SuiviFormationVisiteur::insert($datas2); 
             SuiviFormationTheme::insert($datas3);
         }
 
         return response()->json($formation, 201);
+    }
+
+    public function storeVisiteur(Request $request){
+        $validationRule = [
+            'nom'  => 'required|max:255',
+            'prenom'  => 'required|max:255',
+            'sexe'  => 'required|max:255',
+            'telephone'  => 'required|regex:/^\d{10}$/|unique:suivi_formation_visiteurs,telephone',
+        ];
+        $request->validate($validationRule);
+        $localite = Localite::where('id', $request->localite)->first();
+        if ($localite->status == Status::NO) {
+            return response()->json(['message' => 'Cette localité est désactivée'], 401);
+        }
+        $visiteur = new SuiviFormationVisiteur();
+        $visiteur->producteur_id  = $request->producteur;
+        $visiteur->nom  = $request->nom;
+        $visiteur->prenom  = $request->prenom;
+        $visiteur->sexe  = $request->sexe;
+        $visiteur->telephone  = $request->telephone;
+        $visiteur->lien = $request->lien;
+        $visiteur->autre_lien = $request->autre_lien;
+        $visiteur->representer = $request->representer;
+        $visiteur->suivi_formation_id = $request->suivi_formation_id;
+        $visiteur->save();
+        return response()->json($visiteur, 201);
     }
 
     public function getTypethemeformation(){
