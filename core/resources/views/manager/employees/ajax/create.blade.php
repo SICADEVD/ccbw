@@ -1,8 +1,12 @@
-<link rel="stylesheet" href="{{ asset('assets/vendor/css/tagify.css') }}">
-
+<link rel="stylesheet" href="{{ asset('assets/vendor/css/tagify.css') }}"> 
+<style>
+.dropify-wrapper{
+    height: 84px;width: 89%;padding: 0px;margin: 0px;
+}
+    </style>
 <div class="row">
     <div class="col-sm-12">
-        <x-form id="save-employee-data-form" :action="route('manager.employees.store')">
+        <x-form id="save-employee-data-form" enctype="multipart/form-data" :action="route('manager.employees.store')">
 
             <div class="add-client bg-white rounded">
                 <h4 class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-bottom-grey">
@@ -134,7 +138,37 @@
                             </x-forms.textarea>
                         </div>
                     </div>
+                    <div class="col-md-6">
+                    <label class="control-label">@lang('Contrats de travail')</label>
+                        <div class="form-group my-3">   
+                            <input name="contrat_travail[]" id="contrat_travail1" type="file" multiple="" class="dropify" data-height="70"/> 
+                        </div>
+                        <div id="insertBefore"></div> 
+                        <!--  ADD ITEM START-->
+                <div class="row px-lg-4 px-md-4 px-3 pb-3 pt-0 mb-3  mt-2">
+                    <div class="col-md-12">
+                        <a class="f-15 f-w-500" href="javascript:;" id="add-item"><i
+                                class="icons icon-plus font-weight-bold mr-1"></i> @lang('app.add')</a>
+                    </div>
+                </div>
+                <!--  ADD ITEM END-->
+                    </div>
+                    <div class="col-md-6">
 
+                    <label class="control-label">@lang('Fiches de poste')</label>
+                        <div class="form-group my-3">   
+                            <input name="fiche_poste[]" id="fiche_poste1" type="file" multiple="" class="dropify" data-height="70"/> 
+                        </div>
+                        <div id="insertBeforeNew"></div> 
+                        <!--  ADD ITEM START-->
+                <div class="row px-lg-4 px-md-4 px-3 pb-3 pt-0 mb-3  mt-2">
+                    <div class="col-md-12">
+                        <a class="f-15 f-w-500" href="javascript:;" id="add-itemNew"><i
+                                class="icons icon-plus font-weight-bold mr-1"></i> @lang('app.add')</a>
+                    </div>
+                </div>
+                <!--  ADD ITEM END--> 
+                    </div>
                 </div>
 
                 <h4 class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-top-grey">
@@ -146,24 +180,7 @@
                         <x-forms.text fieldId="tags" :fieldLabel="__('app.skills')" fieldName="tags"
                             :fieldPlaceholder="__('placeholders.skills')" />
                     </div>
-
-                    @if (function_exists('sms_setting') && sms_setting()->telegram_status)
-                        <div class="col-md-6">
-                            <x-forms.number fieldName="telegram_user_id" fieldId="telegram_user_id"
-                                fieldLabel="<i class='fab fa-telegram'></i> {{ __('sms::modules.telegramUserId') }}"
-                                :popover="__('sms::modules.userIdInfo')" />
-                            <p class="text-bold text-danger">
-                                @lang('sms::modules.telegramBotNameInfo')
-                            </p>
-                            <p class="text-bold"><span id="telegram-link-text">https://t.me/{{ sms_setting()->telegram_bot_name }}</span>
-                                <a href="javascript:;" class="btn-copy btn-secondary f-12 rounded p-1 py-2 ml-1"
-                                    data-clipboard-target="#telegram-link-text">
-                                    <i class="fa fa-copy mx-1"></i>@lang('app.copy')</a>
-                                <a href="https://t.me/{{ sms_setting()->telegram_bot_name }}" target="_blank" class="btn-secondary f-12 rounded p-1 py-2 ml-1">
-                                    <i class="fa fa-copy mx-1"></i>@lang('app.openInNewTab')</a>
-                            </p>
-                        </div>
-                    @endif
+ 
                     <div class="col-lg-3 col-md-6">
                         <x-forms.datepicker fieldId="probation_end_date" :fieldLabel="__('modules.employees.probationEndDate')"
                             fieldName="probation_end_date" :fieldPlaceholder="__('placeholders.date')"
@@ -219,8 +236,7 @@
                     <input type ="hidden" name="add_more" value="false" id="add_more" />
 
                 </div>
-                
-
+                 
                 <x-form-actions>
                 <x-form-button id="save-employee-form" class="mr-3 btn btn-primary" icon="check">
                         @lang('Enregistrer')
@@ -236,11 +252,12 @@
     </div>
 </div>
 
-<script src="{{ asset('assets/vendor/jquery/tagify.min.js') }}"></script>
- 
+<script src="{{ asset('assets/vendor/jquery/tagify.min.js') }}"></script> 
 <script>
-    $(document).ready(function() {
+    $(document).ready(function() { 
+        
         $('.dropify').dropify();
+        $('.dropify-fr').dropify();
         $('.custom-date-picker').each(function(ind, el) {
             datepicker(el, {
                 position: 'bl',
@@ -427,27 +444,50 @@
         $('#' + id).val(checkedData);
     }
 
-    
-    @if (function_exists('sms_setting') && sms_setting()->telegram_status)
-        var clipboard = new ClipboardJS('.btn-copy');
+ // Add More Inputs
+ var $insertBefore = $('#insertBefore');
+ var $insertBeforeNew = $('#insertBeforeNew');
+        var i = 1;
+        var a = 1;
+ $('#add-item').click(function() {
+            i += 1;
+             
+            $(`<div id="addMoreBox${i}" class="row pl-20 pr-20 clearfix">
+            <div class="form-group my-3" style="padding: 0px;">  
+            <div class="input-group mb-3"> 
+                            <input name="contrat_travail[]" id="contrat_travail${i}" type="file" class="dropify" multiple="" data-height="78"/> <button type="button"
+                                        class="btn btn-outline-secondary border-grey"
+                                        data-toggle="tooltip" ><a href="javascript:;" class="d-flex align-items-center justify-content-center mt-5 remove-item" data-item-id="${i}" style="position: relative;top: -29px;"><i class="fa fa-times-circle f-20 text-lightest"></i></a></button>
+                                        </div></div> `)
+                .insertBefore($insertBefore);
 
-        clipboard.on('success', function(e) {
-            Swal.fire({
-                icon: 'success',
-                text: '@lang("app.urlCopied")',
-                toast: true,
-                position: 'top-end',
-                timer: 3000,
-                timerProgressBar: true,
-                showConfirmButton: false,
-                customClass: {
-                    confirmButton: 'btn btn-primary',
-                },
-                showClass: {
-                    popup: 'swal2-noanimation',
-                    backdrop: 'swal2-noanimation'
-                },
-            })
+                 $(".dropify").dropify(); 
+            // Recently Added date picker assign 
         });
-    @endif
+
+        // Remove fields
+        $('body').on('click', '.remove-item', function() {
+            var index = $(this).data('item-id');
+            $('#addMoreBox' + index).remove();
+        });
+        $('#add-itemNew').click(function() {
+            a += 1;
+             
+            $(`<div id="addMoreBoxNew${a}" class="row pl-20 pr-20 clearfix">
+            <div class="form-group my-3" style="padding: 0px;">  
+            <div class="input-group mb-3"> 
+                            <input name="fiche_poste[]" id="fiche_poste${a}" type="file" class="dropify" multiple="" data-height="78"/> <button type="button"
+                                        class="btn btn-outline-secondary border-grey"
+                                        data-toggle="tooltip" ><a href="javascript:;" class="d-flex align-items-center justify-content-center mt-5 remove-itemNew" data-item-id="${a}" style="position: relative;top: -29px;"><i class="fa fa-times-circle f-20 text-lightest"></i></a></button>
+                                        </div></div> `)
+                .insertBefore($insertBeforeNew);
+
+                 $(".dropify").dropify(); 
+            // Recently Added date picker assign 
+        });
+        $('body').on('click', '.remove-itemNew', function() {
+            var index = $(this).data('item-id');
+            $('#addMoreBoxNew' + index).remove();
+        });
+ 
 </script>

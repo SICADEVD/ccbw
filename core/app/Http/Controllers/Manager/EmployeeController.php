@@ -1,6 +1,5 @@
 <?php
 namespace App\Http\Controllers\Manager;
-use App\Http\Controllers\AccountBaseController;
 use Carbon\Carbon;
 use App\Models\Task;
 use App\Models\Team;
@@ -9,7 +8,6 @@ use App\Models\Leave;
 use App\Models\Skill;
 use App\Models\Module;
 use App\Models\Ticket;
-use App\Models\Cooperative;
 use App\Models\Passport;
 use App\Models\RoleUser;
 use App\Models\UserAuth;
@@ -19,6 +17,7 @@ use App\Models\Department;
 use App\Models\VisaDetail;
 use App\Http\Helpers\Files;
 use App\Http\Helpers\Reply;
+use App\Models\Cooperative;
 use App\Models\Designation;
 use App\Scopes\ActiveScope;
 use App\Traits\ImportExcel;
@@ -26,8 +25,6 @@ use Illuminate\Support\Str;
 use App\Models\Appreciation;
 use App\Models\Notification;
 use App\Models\UserActivity;
-use App\Scopes\CooperativeScope;
-use Illuminate\Support\Facades\Request;
 use App\Models\EmployeeSkill;
 use App\Models\EmployeeDetail;
 use App\Models\ProjectTimeLog;
@@ -38,19 +35,24 @@ use App\Models\EmployeeDetails;
 use App\Models\LanguageSetting;
 use App\Models\TaskboardColumn;
 use App\Models\UniversalSearch;
+use App\Scopes\CooperativeScope;
 use App\DataTables\LeaveDataTable;
 use App\DataTables\TasksDataTable;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use App\DataTables\TicketDataTable;
+use App\Models\EmployeeContratFile;
 use App\Models\PackageUpdateNotify;
 use App\Models\ProjectTimeLogBreak;
 use Illuminate\Support\Facades\Hash;
 use App\DataTables\ProjectsDataTable;
 use App\DataTables\TimeLogsDataTable;
 use App\DataTables\EmployeesDataTable;
-use App\Http\Requests\User\InviteEmailRequest;
+use App\Models\EmployeeFicheposteFile;
+use Illuminate\Support\Facades\Request;
 
+use App\Http\Requests\User\InviteEmailRequest;
+use App\Http\Controllers\AccountBaseController;
 use App\Http\Requests\Admin\Employee\StoreRequest;
 use App\Http\Requests\Admin\Employee\ImportRequest;
 use App\Http\Requests\Admin\Employee\UpdateRequest;
@@ -144,16 +146,24 @@ class EmployeeController extends AccountBaseController
             $user->type_compte = "web";  
             $user->password  =  Hash::make('azerty'); 
             // $user->user_auth_id = $userAuth->id;
-           
-
+            
             if ($request->hasFile('image')) {
-                Files::deleteFile($user->image, 'avatar');
-                $user->image = Files::uploadLocalOrS3($request->image, 'avatar', 400);
+                
+                try {
+                    // $old         = $user->image ?: null;
+                    // $user->image = fileUploader($request->image, getFilePath('userProfile'), getFileSize('userProfile'), $old);
+                    $user->image =  $request->file('image')->store('public/userProfile');
+                } catch (\Exception $exp) {
+                    $notify[] = ['error', 'Impossible de télécharger votre image'];
+                    return back()->withNotify($notify);
+                }
             }
-            $this->lastEmployeeID = EmployeeDetail::count();
-        $this->checkifExistEmployeeId =  EmployeeDetail::select('id')->where('employee_id', ($this->lastEmployeeID + 1))->first();
-        if($this->lastEmployeeID){
-           $employeeid = 'EMP-'.$this->lastEmployeeID+1;
+            
+            $lastEmployeeID = EmployeeDetail::count();
+        // $this->checkifExistEmployeeId =  EmployeeDetail::select('id')->where('employee_id', ($lastEmployeeID + 1))->first();
+        if($lastEmployeeID){
+            $lastEmployeeID = $lastEmployeeID+1;
+           $employeeid = 'EMP-'.$lastEmployeeID;
         }else{
             $employeeid ="";
         }
@@ -166,6 +176,27 @@ class EmployeeController extends AccountBaseController
                 if($role !=null)
                 {
                     $user->syncRoles($role->id);
+                }
+                
+            }
+            
+            if ($request->hasFile('contrat_travail')) {
+               
+                $files = $request->file('contrat_travail');
+                foreach ($files as $fileData) {
+                    $file = new EmployeeContratFile(); 
+                    $file->fichier =  $fileData->store('public/contratsTravail'); 
+                    $file->user_id = $user->id;
+                    $file->save();
+                }
+            }
+            if ($request->hasFile('fiche_poste')) {
+                $files = $request->file('fiche_poste');
+                foreach ($files as $fileData) {
+                    $file = new EmployeeFicheposteFile(); 
+                    $file->fichier =  $fileData->store('public/fichesPoste'); 
+                    $file->user_id = $user->id;
+                    $file->save();
                 }
             }
 
@@ -214,8 +245,6 @@ class EmployeeController extends AccountBaseController
 
 
        return Reply::successWithData(__('messages.recordSaved'), ['redirectUrl' => route('manager.employees.index')]);
-        // $notify[] = ['success', 'Cet employé a été crée avec succès.'];
-        // return redirect()->route('manager.employees.index')->withNotify($notify);
     }
 
     /**
