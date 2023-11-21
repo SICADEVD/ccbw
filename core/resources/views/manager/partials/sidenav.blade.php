@@ -52,19 +52,7 @@
                                     <i class="menu-icon las la-dot-circle"></i>
                                     <span class="menu-title">@lang('Jours Fériés')</span>
                                 </a>
-                            </li> 
-                            <li class="sidebar-menu-item {{ menuActive('manager.departments.index') }}">
-                                <a href="{{ route('manager.departments.index') }}" class="nav-link">
-                                    <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('Départements')</span>
-                                </a>
-                            </li> 
-                            <li class="sidebar-menu-item {{ menuActive('manager.designations.index') }}">
-                                <a href="{{ route('manager.designations.index') }}" class="nav-link">
-                                    <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('Désignations')</span>
-                                </a>
-                            </li> 
+                            </li>  
                             <li class="sidebar-menu-item {{ menuActive('manager.formation-staff.*') }}">
                                 <a href="{{ route('manager.formation-staff.index') }}" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>
