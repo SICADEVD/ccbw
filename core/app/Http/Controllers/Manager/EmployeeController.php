@@ -58,6 +58,7 @@ use App\Http\Requests\Admin\Employee\ImportRequest;
 use App\Http\Requests\Admin\Employee\UpdateRequest;
 use App\Http\Requests\User\CreateInviteLinkRequest;
 use App\Http\Requests\Admin\Employee\ImportProcessRequest;
+use App\Models\Countrie;
 use Symfony\Component\Mailer\Exception\TransportException;
 
 class EmployeeController extends AccountBaseController
@@ -103,7 +104,7 @@ class EmployeeController extends AccountBaseController
         $this->designations = Designation::allDesignations();
 
         $this->skills = Skill::all()->pluck('name')->toArray();
-        $this->countries = countries();
+        $this->countries = Countrie::get();
         $this->lastEmployeeID = EmployeeDetail::count();
         $this->checkifExistEmployeeId =  EmployeeDetail::select('id')->where('employee_id', ($this->lastEmployeeID + 1))->first();
          
