@@ -43,20 +43,6 @@
                             </div>
                             <div class="col-lg-4 col-md-6">
                                 <x-forms.label class="my-3" fieldId="category_id"
-                                    :fieldLabel="__('app.designation')" fieldRequired="true">
-                                </x-forms.label>
-                                <x-forms.input-group>
-                                    <select class="form-control select-picker" name="designation"
-                                        id="employee_designation" data-live-search="true">
-                                        <option value="">--</option>
-                                        @foreach ($designations as $designation)
-                                            <option value="{{ $designation->id }}">{{ $designation->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </x-forms.input-group>
-                            </div>
-                            <div class="col-lg-4 col-md-6">
-                                <x-forms.label class="my-3" fieldId="category_id"
                                     :fieldLabel="__('app.department')" fieldRequired="true">
                                 </x-forms.label>
                                 <x-forms.input-group>
@@ -69,6 +55,20 @@
                                     </select>
                                 </x-forms.input-group>
                             </div>
+                            <div class="col-lg-4 col-md-6">
+                                <x-forms.label class="my-3" fieldId="category_id"
+                                    :fieldLabel="__('app.designation')" fieldRequired="true">
+                                </x-forms.label>
+                                <x-forms.input-group>
+                                    <select class="form-control" name="designation"
+                                        id="employee_designation"> 
+                                        @foreach ($designations as $designation)
+                                            <option value="{{ $designation->id }}" data-chained="{{ $designation->parent_id }}">{{ $designation->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </x-forms.input-group>
+                            </div>
+                            
                             <div class="col-lg-4 col-md-6">
                         <x-forms.file allowedFileExtensions="png jpg jpeg svg bmp" class="mr-0 mr-lg-2 mr-md-2 cropper"
                             :fieldLabel="__('modules.profile.profilePicture')" fieldName="image" fieldId="image"
@@ -255,7 +255,7 @@
 <script src="{{ asset('assets/vendor/jquery/tagify.min.js') }}"></script> 
 <script>
     $(document).ready(function() { 
-        
+        $("#employee_designation").chained("#employee_department");
         $('.dropify').dropify();
         $('.dropify-fr').dropify();
         $('.custom-date-picker').each(function(ind, el) {
