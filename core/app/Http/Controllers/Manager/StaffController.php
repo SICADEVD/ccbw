@@ -30,9 +30,8 @@ class StaffController extends Controller
         $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
             return $localite->active();
         });
-        
-        return view('manager.staff.create', compact('pageTitle','localites','roles','sections'));
-        
+
+        return view('manager.staff.create', compact('pageTitle', 'localites', 'roles', 'sections'));
     }
 
     public function index()
@@ -50,11 +49,11 @@ class StaffController extends Controller
         $pageTitle = "Tous les Magasins";
         $manager   = auth()->user();
         $magasins    = Magasin_section::where('staff_id', $staffId)->with('user')->orderBy('id', 'DESC')->paginate(getPaginate());
-         
-        return view('manager.staff.magasin', compact('pageTitle', 'magasins','staffId'));
+
+        return view('manager.staff.magasin', compact('pageTitle', 'magasins', 'staffId'));
     }
 
-    public function edit($id ,User $user)
+    public function edit($id, User $user)
     {
         try {
             $id = decrypt($id);
@@ -78,15 +77,15 @@ class StaffController extends Controller
         $userLocalite = array();
         $userSection = array();
         $dataLocalite = $staff->userLocalites;
-        if($dataLocalite->count()){
-            foreach($dataLocalite as $data){
-                $userLocalite[]=$data->localite_id;
+        if ($dataLocalite->count()) {
+            foreach ($dataLocalite as $data) {
+                $userLocalite[] = $data->localite_id;
             }
-            foreach($dataLocalite as $data){
-                $userSection[]=$data->section_id;
+            foreach ($dataLocalite as $data) {
+                $userSection[] = $data->section_id;
             }
         }
-        return view('manager.staff.edit', compact('pageTitle', 'staff','localites','userLocalite','userRole','roles','sections','userSection'));
+        return view('manager.staff.edit', compact('pageTitle', 'staff', 'localites', 'userLocalite', 'userRole', 'roles', 'sections', 'userSection'));
     }
 
     public function store(Request $request)
@@ -113,36 +112,36 @@ class StaffController extends Controller
                 'mobile'   => 'required|max:40|unique:users',
                 'password' => 'required|confirmed|min:4',
                 'role'   => 'required|max:40',
-                'type_compte'   => 'required|max:40', 
+                'type_compte'   => 'required|max:40',
             ]);
         }
 
         $request->validate($validationRule);
 
         $staff = new User();
-        
 
-        if($request->id) {
+
+        if ($request->id) {
             $staff   = User::where('id', $request->id)->where('cooperative_id', $manager->cooperative_id)->firstOrFail();
             $message = "Staff updated successfully";
         }
-        if(($request->type_compte =='web') ||  ($request->type_compte =='mobile-web')) {
+        if (($request->type_compte == 'web') ||  ($request->type_compte == 'mobile-web')) {
             $hasStaff = User::where('cooperative_id', auth()->user()->cooperative_id)->where(function ($query) {
-                $query->orwhere('type_compte','web');
-                $query->orwhere('type_compte','mobile-web');
-                })->count();
-            if ($hasStaff>= auth()->user()->cooperative->web) {
+                $query->orwhere('type_compte', 'web');
+                $query->orwhere('type_compte', 'mobile-web');
+            })->count();
+            if ($hasStaff >= auth()->user()->cooperative->web) {
                 $nombre = auth()->user()->cooperative->web;
                 $notify[] = ['error', "Cette coopérative a atteint le nombre de compte Web qui est de : $nombre utilisateurs"];
                 return back()->withNotify($notify)->withInput();
             }
         }
-        if(($request->type_compte =='mobile') ||  ($request->type_compte =='mobile-web')) {
+        if (($request->type_compte == 'mobile') ||  ($request->type_compte == 'mobile-web')) {
             $hasStaff = User::where('cooperative_id', auth()->user()->cooperative_id)->where(function ($query) {
-                $query->orwhere('type_compte','mobile');
-                $query->orwhere('type_compte','mobile-web');
-                })->count();
-            if ($hasStaff>=auth()->user()->cooperative->mobile) {
+                $query->orwhere('type_compte', 'mobile');
+                $query->orwhere('type_compte', 'mobile-web');
+            })->count();
+            if ($hasStaff >= auth()->user()->cooperative->mobile) {
                 $nombre = auth()->user()->cooperative->mobile;
                 $notify[] = ['error', "Cette coopérative a atteint le nombre de compte Web qui est de : $nombre utilisateurs"];
                 return back()->withNotify($notify)->withInput();
@@ -156,39 +155,37 @@ class StaffController extends Controller
         $staff->email     = $request->email;
         $staff->mobile    = $request->mobile;
         $staff->adresse    = $request->adresse;
-        $staff->user_type = $request->role; 
-        $staff->type_compte = $request->type_compte; 
+        $staff->user_type = $request->role;
+        $staff->type_compte = $request->type_compte;
         $staff->password  = $request->password ? Hash::make($request->password) : $staff->password;
         //$staff->syncRoles($request->get('rolePermission'));
         $staff->save();
 
-        if($staff !=null ){
+        if ($staff != null) {
 
             $staff->syncRoles($request->role);
 
             $id = $staff->id;
-            
-              if(($request->localite !=null)) {
 
-                $verification   = User_localite::where('user_id',$id)->get();
-            if($verification->count()){ 
-                DB::table('user_localites')->where('user_id',$id)->delete();
-            }
-                $i=0;
-                
-                foreach($request->localite as $data){
-                    if($data !=null)
-                    {
-                        DB::table('user_localites')->insert(['user_id'=>$id,'localite_id'=>$data,'section_id'=>$request->section]);
-                    } 
-                  $i++;
+            if (($request->localite != null)) {
+
+                $verification   = User_localite::where('user_id', $id)->get();
+                if ($verification->count()) {
+                    DB::table('user_localites')->where('user_id', $id)->delete();
                 }
-                
+                $i = 0;
+
+                foreach ($request->localite as $data) {
+                    if ($data != null) {
+                        DB::table('user_localites')->insert(['user_id' => $id, 'localite_id' => $data,'section_id'=>$request->section]);
+                    }
+                    $i++;
+                }
             }
-        }else{
-            DB::table('model_has_roles')->where('model_id',$request->id)->delete();
+        } else {
+            DB::table('model_has_roles')->where('model_id', $request->id)->delete();
             $staff->syncRoles($request->get('role'));
-          }
+        }
 
         if (!$request->id) {
             notify($staff, 'STAFF_CREATE', [
@@ -205,17 +202,18 @@ class StaffController extends Controller
     {
         User::staff()->where('id', $id)->firstOrFail();
         auth()->loginUsingId($id);
-        return to_route('staff.dashboard');
+        // return to_route('staff.dashboard');
+        return to_route('manager.dashboard');
     }
-    
+
     public function magasinStore(Request $request)
     {
         $request->validate([
             'nom'  => 'required',
             'staff'  => 'required',
-            'phone'  => 'required', 
+            'phone'  => 'required',
         ]);
-        
+
 
         if ($request->id) {
             $magasin    = Magasin_section::findOrFail($request->id);
@@ -224,8 +222,8 @@ class StaffController extends Controller
             $magasin = new Magasin_section();
             $magasin->code = $this->generecodemagasin();
         }
-        
-        $magasin->nom    = $request->nom ;
+
+        $magasin->nom    = $request->nom;
         $magasin->staff_id = $request->staff;
         $magasin->phone = $request->phone;
         $magasin->email = $request->email;
@@ -237,24 +235,31 @@ class StaffController extends Controller
     private function generecodemagasin()
     {
 
-        $data = Magasin_section::select('code')->orderby('id','desc')->first();
+        $data = Magasin_section::select('code')->orderby('id', 'desc')->first();
 
-        if($data !=''){
+        if ($data != '') {
             $code = $data->code;
-        $chaine_number = Str::afterLast($code,'-');
-        if($chaine_number<10){$zero="00000";}
-        else if($chaine_number<100){$zero="0000";}
-        else if($chaine_number<1000){$zero="000";}
-        else if($chaine_number<10000){$zero="00";}
-        else if($chaine_number<100000){$zero="0";}
-        else{$zero="";}
-        }else{
-            $zero="00000";
-            $chaine_number=0;
+            $chaine_number = Str::afterLast($code, '-');
+            if ($chaine_number < 10) {
+                $zero = "00000";
+            } else if ($chaine_number < 100) {
+                $zero = "0000";
+            } else if ($chaine_number < 1000) {
+                $zero = "000";
+            } else if ($chaine_number < 10000) {
+                $zero = "00";
+            } else if ($chaine_number < 100000) {
+                $zero = "0";
+            } else {
+                $zero = "";
+            }
+        } else {
+            $zero = "00000";
+            $chaine_number = 0;
         }
-        $sub='MAG-';
-        $lastCode=$chaine_number+1;
-        $codeMagasinsections=$sub.$zero.$lastCode;
+        $sub = 'MAG-';
+        $lastCode = $chaine_number + 1;
+        $codeMagasinsections = $sub . $zero . $lastCode;
 
         return $codeMagasinsections;
     }
