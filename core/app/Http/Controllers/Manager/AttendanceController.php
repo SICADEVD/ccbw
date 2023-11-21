@@ -44,8 +44,8 @@ class AttendanceController extends AccountBaseController
 
     public function index(Request $request)
     {
-        $attendance = Attendance::find($request->employee_id);
-  
+        $this->attendance = Attendance::find($request->employee_id);
+        // $this->summaryData($request);
         if (request()->ajax()) {
             return $this->summaryData($request);
         }
@@ -65,6 +65,7 @@ class AttendanceController extends AccountBaseController
     public function summaryData($request)
     {
         
+         
         $employees = User::with(
             [
                 'attendance' => function ($query) use ($request) {
@@ -81,11 +82,11 @@ class AttendanceController extends AccountBaseController
                         ->whereRaw('YEAR(employee_shift_schedules.date) = ?', [$request->year]);
                 },
                 'leaves.type', 'shifts.shift', 'attendance.shift']
-        )->leftJoin('employee_details', 'employee_details.user_id', '=', 'users.id')
+        )->join('employee_details', 'employee_details.user_id', '=', 'users.id')
         ->where('users.cooperative_id', auth()->user()->cooperative_id)
-            ->select('users.id', 'users.firstname','users.lastname', 'users.email', 'users.created_at', 'employee_details.department_id', 'users.image') 
+            ->select('users.id', 'users.firstname','users.lastname', 'users.email', 'users.created_at', 'employee_details.department_id','employee_details.employee_id','employee_details.joining_date', 'users.image') 
             ->groupBy('users.id');
-
+             
         if ($request->department != 'all') {
             $employees = $employees->where('employee_details.department_id', $request->department);
         }
@@ -126,10 +127,10 @@ class AttendanceController extends AccountBaseController
             }
 
             if (!$requestedDate->isPast()) {
-                $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname] = array_replace($dataTillToday, $dataFromTomorrow);
+                $final[$employee->id . "#" . $employee->lastname." ".$employee->firstname] = array_replace($dataTillToday, $dataFromTomorrow);
 
             } else {
-                $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname] = array_replace($dataTillRequestedDate, $dataFromTomorrow);
+                $final[$employee->id . "#" . $employee->lastname." ".$employee->firstname] = array_replace($dataTillRequestedDate, $dataFromTomorrow);
             }
 
             $shiftScheduleCollection = $employee->shifts->keyBy('date');
@@ -137,7 +138,7 @@ class AttendanceController extends AccountBaseController
 
             foreach ($employee->shifts as $shifts) {
                 if ($shifts->shift->shift_name == 'Day Off') {
-                    $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][$shifts->date->day] = 'Day Off';
+                    $final[$employee->id . "#" . $employee->lastname." ".$employee->firstname][$shifts->date->day] = 'Day Off';
                 }
 
             }
@@ -150,24 +151,24 @@ class AttendanceController extends AccountBaseController
                     $shiftEndTime = Carbon::parse($clockInTime->copy()->toDateString() . ' ' . $shiftScheduleCollection[$clockInTime->copy()->startOfDay()->toDateTimeString()]->shift->office_end_time);
 
                     if ($clockInTime->between($shiftStartTime, $shiftEndTime)) {
-                        $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][$clockInTime->day] = '<a href="javascript:;" data-toggle="tooltip" data-original-title="'.($attendance->employee_shift_id ? $attendance->shift->shift_name : __('app.present')).'" class="view-attendance" data-attendance-id="' . $attendance->id . '"><i class="fa fa-'.($attendance->half_day == 'yes' ? 'star-half-alt' : ($attendance->late == 'yes' ? 'exclamation-circle' : 'check')).' text-primary"></i></a>';
+                        $final[$employee->id . "#" . $employee->lastname." ".$employee->firstname][$clockInTime->day] = '<a href="javascript:;" data-toggle="tooltip" data-original-title="'.($attendance->employee_shift_id ? $attendance->shift->shift_name : __('app.present')).'" class="view-attendance" data-attendance-id="' . $attendance->id . '"><i class="fa fa-'.($attendance->half_day == 'yes' ? 'star-half-alt' : ($attendance->late == 'yes' ? 'exclamation-circle' : 'check')).' text-primary"></i></a>';
 
                     }
                     else if ($attendance->employee_shift_id == $shiftScheduleCollection[$clockInTime->copy()->startOfDay()->toDateTimeString()]->shift->id) {
-                        $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][$clockInTime->day] = '<a href="javascript:;" data-toggle="tooltip" data-original-title="'.($attendance->employee_shift_id ? $attendance->shift->shift_name : __('app.present')).'" class="view-attendance" data-attendance-id="' . $attendance->id . '"><i class="fa fa-'.($attendance->half_day == 'yes' ? 'star-half-alt' : ($attendance->late == 'yes' ? 'exclamation-circle' : 'check')).' text-primary"></i></a>';
+                        $final[$employee->id . "#" . $employee->lastname." ".$employee->firstname][$clockInTime->day] = '<a href="javascript:;" data-toggle="tooltip" data-original-title="'.($attendance->employee_shift_id ? $attendance->shift->shift_name : __('app.present')).'" class="view-attendance" data-attendance-id="' . $attendance->id . '"><i class="fa fa-'.($attendance->half_day == 'yes' ? 'star-half-alt' : ($attendance->late == 'yes' ? 'exclamation-circle' : 'check')).' text-primary"></i></a>';
 
                     }
                     elseif ($clockInTime->betweenIncluded($shiftStartTime->copy()->subDay(), $shiftEndTime->copy()->subDay())) {
-                        $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][$clockInTime->copy()->subDay()->day] = '<a href="javascript:;" data-toggle="tooltip" data-original-title="'.($attendance->employee_shift_id ? $attendance->shift->shift_name : __('app.present')).'" class="view-attendance" data-attendance-id="' . $attendance->id . '"><i class="fa fa-'.($attendance->half_day == 'yes' ? 'star-half-alt' : ($attendance->late == 'yes' ? 'exclamation-circle' : 'check')).' text-primary"></i></a>';
+                        $final[$employee->id . "#" . $employee->lastname." ".$employee->firstname][$clockInTime->copy()->subDay()->day] = '<a href="javascript:;" data-toggle="tooltip" data-original-title="'.($attendance->employee_shift_id ? $attendance->shift->shift_name : __('app.present')).'" class="view-attendance" data-attendance-id="' . $attendance->id . '"><i class="fa fa-'.($attendance->half_day == 'yes' ? 'star-half-alt' : ($attendance->late == 'yes' ? 'exclamation-circle' : 'check')).' text-primary"></i></a>';
 
                     }
                     else {
-                        $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][$clockInTime->day] = '<a href="javascript:;" data-toggle="tooltip" data-original-title="'.($attendance->employee_shift_id ? $attendance->shift->shift_name : __('app.present')).'" class="view-attendance" data-attendance-id="' . $attendance->id . '"><i class="fa fa-'.($attendance->half_day == 'yes' ? 'star-half-alt' : ($attendance->late == 'yes' ? 'exclamation-circle' : 'check')).' text-primary"></i></a>';
+                        $final[$employee->id . "#" . $employee->lastname." ".$employee->firstname][$clockInTime->day] = '<a href="javascript:;" data-toggle="tooltip" data-original-title="'.($attendance->employee_shift_id ? $attendance->shift->shift_name : __('app.present')).'" class="view-attendance" data-attendance-id="' . $attendance->id . '"><i class="fa fa-'.($attendance->half_day == 'yes' ? 'star-half-alt' : ($attendance->late == 'yes' ? 'exclamation-circle' : 'check')).' text-primary"></i></a>';
                     }
 
                 }
                 else {
-                    $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][$clockInTime->day] = '<a href="javascript:;" class="view-attendance" data-attendance-id="' . $attendance->id . '"><i class="fa fa-'.($attendance->half_day == 'yes' ? 'star-half-alt' : ($attendance->late == 'yes' ? 'exclamation-circle' : 'check')).' text-primary"></i></a>';
+                    $final[$employee->id . "#" . $employee->lastname." ".$employee->firstname][$clockInTime->day] = '<a href="javascript:;" class="view-attendance" data-attendance-id="' . $attendance->id . '"><i class="fa fa-'.($attendance->half_day == 'yes' ? 'star-half-alt' : ($attendance->late == 'yes' ? 'exclamation-circle' : 'check')).' text-primary"></i></a>';
                 }
             }
 
@@ -175,49 +176,53 @@ class AttendanceController extends AccountBaseController
                 'user' => $employee
             ]);
 
-            $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][] = $emplolyeeName;
+            $final[$employee->id . "#" . $employee->lastname." ".$employee->firstname][] = $emplolyeeName;
+            
+            if ($employee->employeeDetail->joining_date->greaterThan(Carbon::parse(Carbon::parse('01-' . $request->month . '-' . $request->year)))) {
+                if ($request->month == $employee->employeeDetail->joining_date->format('m') && $request->year == $employee->employeeDetail->joining_date->format('Y')) {
+                    if ($employee->employeeDetail->joining_date->format('d') == '01') {
+                        $dataBeforeJoin = array_fill(1, $employee->employeeDetail->joining_date->format('d'), '-');
+                    }
+                    else {
+                        $dataBeforeJoin = array_fill(1, $employee->employeeDetail->joining_date->subDay()->format('d'), '-');
+                    }
+                }
 
-            // if ($employee->employeeDetail->joining_date->greaterThan(Carbon::parse(Carbon::parse('01-' . $request->month . '-' . $request->year)))) {
-            //     if ($request->month == $employee->employeeDetail->joining_date->format('m') && $request->year == $employee->employeeDetail->joining_date->format('Y')) {
-            //         if ($employee->employeeDetail->joining_date->format('d') == '01') {
-            //             $dataBeforeJoin = array_fill(1, $employee->employeeDetail->joining_date->format('d'), '-');
-            //         }
-            //         else {
-            //             $dataBeforeJoin = array_fill(1, $employee->employeeDetail->joining_date->subDay()->format('d'), '-');
-            //         }
-            //     }
-
-            //     if (($request->month < $employee->employeeDetail->joining_date->format('m') && $request->year == $employee->employeeDetail->joining_date->format('Y')) || $request->year < $employee->employeeDetail->joining_date->format('Y')) {
-            //         $dataBeforeJoin = array_fill(1, $this->daysInMonth, '-');
-            //     }
-            // }
+                if (($request->month < $employee->employeeDetail->joining_date->format('m') && $request->year == $employee->employeeDetail->joining_date->format('Y')) || $request->year < $employee->employeeDetail->joining_date->format('Y')) {
+                    $dataBeforeJoin = array_fill(1, $this->daysInMonth, '-');
+                }
+            }
 
             if (Carbon::parse('01-' . $request->month . '-' . $request->year)->isFuture()) {
                 $dataBeforeJoin = array_fill(1, $this->daysInMonth, '-');
             }
 
             if (!is_null($dataBeforeJoin)) {
-                $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname] = array_replace($final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname], $dataBeforeJoin);
+                $final[$employee->id . "#" . $employee->lastname." ".$employee->firstname] = array_replace($final[$employee->id . "#" . $employee->lastname." ".$employee->firstname], $dataBeforeJoin);
             }
 
             foreach ($employee->leaves as $leave) {
                 if ($leave->duration == 'half day') {
-                    if ($final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][$leave->leave_date->day] == '-' || $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][$leave->leave_date->day] == 'Absent') {
-                        $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][$leave->leave_date->day] = 'Half Day';
+                    if ($final[$employee->id . "#" . $employee->lastname." ".$employee->firstname][$leave->leave_date->day] == '-' || $final[$employee->id . "#" . $employee->lastname." ".$employee->firstname][$leave->leave_date->day] == 'Absent') {
+                        $final[$employee->id . "#" . $employee->lastname." ".$employee->firstname][$leave->leave_date->day] = 'Half Day';
                     }
                 }
                 else {
-                    $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][$leave->leave_date->day] = 'Leave';
+                    $final[$employee->id . "#" . $employee->lastname." ".$employee->firstname][$leave->leave_date->day] = 'Leave';
                     $leaveReasons[$employee->id][$leave->leave_date->day] = $leave->type->type_name.': '.$leave->reason;
                 }
 
             }
             
             foreach ($holidaysEmp as $holiday) {
-                if ($final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][$holiday->date->day] == 'Absent' || $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][$holiday->date->day] == '-') {
-                    $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][$holiday->date->day] = 'Holiday';
+               if(!in_array($holiday->date->day,[25,26])){
+                if($final[$employee->id . "#" . $employee->lastname." ".$employee->firstname][$holiday->date->day] == 'Absent' || $final[$employee->id . "#" . $employee->lastname." ".$employee->firstname][$holiday->date->day] == '-') { 
+                    $final[$employee->id . "#" . $employee->lastname." ".$employee->firstname][$holiday->date->day] = 'Holiday';
                     $holidayOccasions[$holiday->date->day] = $holiday->occassion;
                 }
+               }
+                
+                
             }
         }
 
@@ -1001,10 +1006,10 @@ class AttendanceController extends AccountBaseController
             }
 
             if (!$requestedDate->isPast()) {
-                $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname] = array_replace($dataTillToday, $dataFromTomorrow);
+                $final[$employee->id . "#" . $employee->lastname." ".$employee->firstname] = array_replace($dataTillToday, $dataFromTomorrow);
 
             } else {
-                $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname] = array_replace($dataTillRequestedDate, $dataFromTomorrow);
+                $final[$employee->id . "#" . $employee->lastname." ".$employee->firstname] = array_replace($dataTillRequestedDate, $dataFromTomorrow);
             }
 
             $totalMinutes = 0;
@@ -1013,7 +1018,7 @@ class AttendanceController extends AccountBaseController
 
             foreach ($employee->shifts as $shifts) {
                 if ($shifts->shift->shift_name == 'Day Off') {
-                    $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][$shifts->date->day] = 'Day Off';
+                    $final[$employee->id . "#" . $employee->lastname." ".$employee->firstname][$shifts->date->day] = 'Day Off';
                 }
 
             }
@@ -1040,7 +1045,7 @@ class AttendanceController extends AccountBaseController
                     $previousdate = $from->format('Y-m-d');
                 }
 
-                $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][Carbon::parse($attendance->clock_in_time)->timezone($this->timezone)->day] = '<a href="javascript:;" class="view-attendance" data-attendance-id="' . $attendance->id . '">' . intdiv($diffInMins, 60) . ':' . ($diffInMins % 60) . '</a>';
+                $final[$employee->id . "#" . $employee->lastname." ".$employee->firstname][Carbon::parse($attendance->clock_in_time)->timezone($this->timezone)->day] = '<a href="javascript:;" class="view-attendance" data-attendance-id="' . $attendance->id . '">' . intdiv($diffInMins, 60) . ':' . ($diffInMins % 60) . '</a>';
             }
 
             // Convert minutes to hours
@@ -1053,7 +1058,7 @@ class AttendanceController extends AccountBaseController
                 'user' => $employee
             ]);
 
-            $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][] = $emplolyeeName;
+            $final[$employee->id . "#" . $employee->lastname." ".$employee->firstname][] = $emplolyeeName;
 
             if ($employee->employeeDetail->joining_date->greaterThan(Carbon::parse(Carbon::parse('01-' . $request->month . '-' . $request->year)))) {
                 if ($request->month == $employee->employeeDetail->joining_date->format('m') && $request->year == $employee->employeeDetail->joining_date->format('Y')) {
@@ -1075,17 +1080,17 @@ class AttendanceController extends AccountBaseController
             }
 
             if (!is_null($dataBeforeJoin)) {
-                $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname] = array_replace($final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname], $dataBeforeJoin);
+                $final[$employee->id . "#" . $employee->lastname." ".$employee->firstname] = array_replace($final[$employee->id . "#" . $employee->lastname." ".$employee->firstname], $dataBeforeJoin);
             }
 
             foreach ($employee->leaves as $leave) {
                 if ($leave->duration == 'half day') {
-                    if ($final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][$leave->leave_date->day] == '-' || $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][$leave->leave_date->day] == 'Absent') {
-                        $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][$leave->leave_date->day] = 'Half Day';
+                    if ($final[$employee->id . "#" . $employee->lastname." ".$employee->firstname][$leave->leave_date->day] == '-' || $final[$employee->id . "#" . $employee->lastname." ".$employee->firstname][$leave->leave_date->day] == 'Absent') {
+                        $final[$employee->id . "#" . $employee->lastname." ".$employee->firstname][$leave->leave_date->day] = 'Half Day';
                     }
                 }
                 else {
-                    $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][$leave->leave_date->day] = 'Leave';
+                    $final[$employee->id . "#" . $employee->lastname." ".$employee->firstname][$leave->leave_date->day] = 'Leave';
                     $leaveReasons[$employee->id][$leave->leave_date->day] = $leave->type->type_name.': '.$leave->reason;
                 }
 
@@ -1093,14 +1098,14 @@ class AttendanceController extends AccountBaseController
 
             foreach ($employee->shifts as $shifts) {
                 if ($shifts->shift->shift_name == 'Day Off') {
-                    $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][$shifts->date->day] = 'Day Off';
+                    $final[$employee->id . "#" . $employee->lastname." ".$employee->firstname][$shifts->date->day] = 'Day Off';
                 }
 
             }
 
             foreach ($this->holidays as $holiday) {
-                if ($final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][$holiday->date->day] == 'Absent' || $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][$holiday->date->day] == '-') {
-                    $final[$employee->id . '#' . $employee->lastname.' '.$employee->firstname][$holiday->date->day] = 'Holiday';
+                if ($final[$employee->id . "#" . $employee->lastname." ".$employee->firstname][$holiday->date->day] == 'Absent' || $final[$employee->id . "#" . $employee->lastname." ".$employee->firstname][$holiday->date->day] == '-') {
+                    $final[$employee->id . "#" . $employee->lastname." ".$employee->firstname][$holiday->date->day] = 'Holiday';
                     $holidayOccasions[$holiday->date->day] = $holiday->occassion;
                 }
             }

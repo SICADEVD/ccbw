@@ -67,7 +67,23 @@ class EmployeeDetail extends Model
     {
         return $this->belongsTo(Department::class, 'department_id');
     }
-    
+    public function lead()
+    {
+        return $this->hasOne(Lead::class, 'user_id');
+    }
+
+    public function attendance()
+    {
+        return $this->hasMany(Attendance::class, 'user_id');
+    }
+    public function leaves()
+    {
+        return $this->hasMany(Leave::class, 'user_id');
+    }
+    public function shifts()
+    {
+        return $this->hasMany(EmployeeShiftSchedule::class, 'user_id');
+    }
     public function userBadge()
     {
         $itsYou = ' <span class="ml-2 badge badge-secondary pr-1">' . __('app.itsYou') . '</span>';

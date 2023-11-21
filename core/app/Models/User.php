@@ -180,6 +180,7 @@ class User extends Authenticatable
     {
         return $this->hasOne(EmployeeDetail::class, 'user_id');
     }
+    
 
     public function projects()
     {
