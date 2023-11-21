@@ -34,7 +34,12 @@ class Designation extends Model
 
     public function childs()
     {
-        return $this->hasMany(Designation::class, 'parent_id');
+        return $this->hasMany(Department::class, 'parent_id','id');
+    }
+
+    public function departement()
+    {
+        return $this->belongsTo(Department::class, 'parent_id','id');
     }
  
 }

@@ -7,6 +7,7 @@ use App\Models\Instance;
 use App\Constants\Status;
 use App\Models\Campagne; 
 use App\Models\ArretEcole;
+use App\Models\Department;
 use App\Http\Helpers\Reply;
 use App\Models\Cooperative;
 use App\Models\CourierInfo;
@@ -24,8 +25,9 @@ use Illuminate\Support\Facades\DB;
 use App\Models\ThemeFormationStaff;
 use App\Http\Controllers\Controller;
 use App\Models\ModuleFormationStaff;
-use App\Models\CategorieQuestionnaire;
 use App\Models\DocumentAdministratif;
+use App\Models\CategorieQuestionnaire;
+use App\Models\Designation;
 
 class SettingController extends Controller
 {
@@ -403,6 +405,62 @@ class SettingController extends Controller
        
         return Reply::successWithData(__('Le contenu a été ajouté avec succès.'), ['page_reload' => $request->page_reload]);
     }
+
+    public function departementIndex()
+    {
+       $pageTitle = "Manage Département"; 
+        $activeSettingMenu = 'departement_settings';
+        $departements     = Department::orderBy('id','desc')->paginate(getPaginate());
+        return view('manager.config.departement', compact('pageTitle', 'departements','activeSettingMenu'));
+    }
+    public function departementStore(Request $request)
+    {
+        $request->validate([ 
+            'nom'  => 'required', 
+        ]);
+
+        if ($request->id) {
+            $department    = Department::findOrFail($request->id);
+            $message = "Le contenu a été mise à jour avec succès.";
+        } else {
+            $department = new Department();
+        } 
+        $department->cooperative_id = auth()->user()->cooperative_id;
+        $department->department = trim($request->nom); 
+        $department->save();
+       
+        $notify[] = ['success', isset($message) ? $message  : 'Le contenu a été ajouté avec succès.'];
+        return back()->withNotify($notify);
+    }
+    public function designationIndex()
+    {
+       $pageTitle = "Manage Département"; 
+        $activeSettingMenu = 'departement_settings';
+        $departements = Department::get();
+        $designations     = Designation::orderBy('id','desc')->paginate(getPaginate());
+        return view('manager.config.designation', compact('pageTitle', 'departements','designations','activeSettingMenu'));
+    }
+    public function designationStore(Request $request)
+    {
+        $request->validate([ 
+            'nom'  => 'required', 
+			'departement_id'  => 'required',
+        ]);
+
+        if ($request->id) {
+            $designation    = Designation::findOrFail($request->id);
+            $message = "Le contenu a été mise à jour avec succès.";
+        } else {
+            $designation = new Designation();
+        } 
+        $designation->cooperative_id = auth()->user()->cooperative_id;
+        $designation->name = trim($request->nom); 
+		$designation->parent_id = trim($request->departement_id); 
+        $designation->save();
+       
+        $notify[] = ['success', isset($message) ? $message  : 'Le contenu a été ajouté avec succès.'];
+        return back()->withNotify($notify);
+    }
     public function campagneStatus($id)
     {
         return Campagne::changeStatus($id);
@@ -445,5 +503,14 @@ class SettingController extends Controller
     public function typeArchiveStatus($id)
     {
         return TypeArchive::changeStatus($id);
+    }
+
+    public function designationStatus($id)
+    {
+        return Designation::changeStatus($id);
+    }
+    public function departementStatus($id)
+    {
+        return Department::changeStatus($id);
     }
 }

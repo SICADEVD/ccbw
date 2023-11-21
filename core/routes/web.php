@@ -184,6 +184,15 @@ Route::middleware('auth')->group(function () {
             Route::get('type-archive/', [SettingController::class, 'typeArchiveIndex'])->name('typeArchive.index');
             Route::post('type-archive/store', [SettingController::class, 'typeArchiveStore'])->name('typeArchive.store');
             Route::post('type-archive/status/{id}', [SettingController::class, 'typeArchiveStatus'])->name('typeArchive.status');
+            
+            Route::get('departement/', [SettingController::class, 'departementIndex'])->name('departements.index');
+            Route::post('departement/store', [SettingController::class, 'departementStore'])->name('departements.store');
+            Route::post('departement/status/{id}', [SettingController::class, 'departementStatus'])->name('departements.status');
+
+            Route::get('designation/', [SettingController::class, 'designationIndex'])->name('designations.index');
+            Route::post('designation/store', [SettingController::class, 'designationStore'])->name('designations.store');
+            Route::post('designation/status/{id}', [SettingController::class, 'designationStatus'])->name('designations.status');
+
             Route::get('instance/', [SettingController::class, 'instanceIndex'])->name('instance.index');
             Route::post('instance/store', [SettingController::class, 'instanceStore'])->name('instance.store');
             Route::get('document-ad/', [SettingController::class, 'documentadIndex'])->name('documentad.index');

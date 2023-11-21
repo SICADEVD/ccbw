@@ -138,7 +138,7 @@
                                 </x-forms.label>
                                 &nbsp;<i class="fa fa-question-circle text-dark-grey" data-toggle="popover" data-placement="top" data-html="true"
                                         data-content="{{__('messages.leave.gender')}}" data-trigger="hover"></i>
-                                <select class="form-control multiple-option" multiple name="gender[]"
+                                <select class="form-control multiple-option select-picker" multiple name="gender[]"
                                         id="gender" data-live-search="true" data-size="8">
                                     @foreach ($allGenders as $allGender)
                                         <option value="{{ $allGender }}"
@@ -156,7 +156,7 @@
                                 </x-forms.label>
                                 &nbsp;<i class="fa fa-question-circle text-dark-grey" data-toggle="popover" data-placement="top" data-html="true"
                                         data-content="{{__('messages.leave.maritalStatus')}}" data-trigger="hover"></i>
-                                <select class="form-control multiple-option" multiple name="marital_status[]"
+                                <select class="form-control multiple-option select-picker" multiple name="marital_status[]"
                                     id="marital_status" data-live-search="true" data-size="8">
                                     @foreach ($allMaritalStatus as $status)
                                         <option value="{{ $status }}"
@@ -174,7 +174,7 @@
                                 </x-forms.label>
                                 &nbsp;<i class="fa fa-question-circle text-dark-grey" data-toggle="popover" data-placement="top" data-html="true"
                                         data-content="{{__('messages.leave.department')}}" data-trigger="hover"></i>
-                                <select class="form-control multiple-option" multiple name="department[]"
+                                <select class="form-control multiple-option select-picker" multiple name="department[]"
                                         id="department" data-live-search="true" data-size="8">
                                     @foreach ($allTeams as $allTeam)
                                         <option value="{{ $allTeam->id }}"
@@ -192,7 +192,7 @@
                                 </x-forms.label>
                                 &nbsp;<i class="fa fa-question-circle text-dark-grey" data-toggle="popover" data-placement="top" data-html="true"
                                         data-content="{{__('messages.leave.designation')}}" data-trigger="hover"></i>
-                                <select class="form-control multiple-option" multiple name="designation[]"
+                                <select class="form-control multiple-option select-picker" multiple name="designation[]"
                                         id="designation" data-live-search="true" data-size="8">
                                     @foreach ($allDesignations as $allDesignation)
                                         <option value="{{ $allDesignation->id }}"
@@ -218,31 +218,21 @@
 </div>
 <div class="modal-footer">
     
-</div>  
-
+</div>   
 <script>
     $(document).ready(function () {
         setTimeout(function () {
             $('[data-toggle="popover"]').popover();
         }, 500);
     });
-    // $('select').select2()
+   $('select').select2()
     $(".selectpicker").selectpicker();
 
     $('#colorpicker').colorpicker({
         "color": "{{ $leaveType->color }}"
     });
 
-    $(".multiple-option").selectpicker({
-        actionsBox: true,
-        selectAllText: "{{ __('modules.permission.selectAll') }}",
-        deselectAllText: "{{ __('modules.permission.deselectAll') }}",
-        multipleSeparator: ", ",
-        selectedTextFormat: "count > 8",
-        countSelectedText: function(selected, total) {
-            return selected + " {{ __('app.membersSelected') }} ";
-        }
-    });
+  
 
     $('#save-leave-setting').click(function() {
          console.log("Oui")

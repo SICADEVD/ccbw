@@ -20,12 +20,14 @@
     <!-- SETTINGS MENU START -->
     <ul class="settings-menu" id="settingsMenu">
     <x-setting-menu-item :active="$activeMenu" menu="cooperative_settings" :href="route('manager.settings.cooperative-settings.index')" :text="__('Paramètres de Coopérative')"/>
+    <x-setting-menu-item :active="$activeMenu" menu="campagne_settings" :href="route('manager.settings.campagne.index')" :text="__('Paramètre Campagne')"/>
     <x-setting-menu-item :active="$activeMenu" menu="durabilite_settings" :href="route('manager.settings.durabilite-settings.index')" :text="__('Paramètre Programme de Durabilité')"/>
     <x-setting-menu-item :active="$activeMenu" menu="section_settings" :href="route('manager.settings.section-settings.index')" :text="__('Paramètre de Section')"/>
     <x-setting-menu-item :active="$activeMenu" menu="localite_settings" :href="route('manager.settings.localite-settings.index')" :text="__('Paramètre de Localite')"/>
+    <x-setting-menu-item :active="$activeMenu" menu="departement_settings" :href="route('manager.settings.departements.index')" :text="__('Paramètre Départements')"/> 
+    <x-setting-menu-item :active="$activeMenu" menu="designation_settings" :href="route('manager.settings.designations.index')" :text="__('Paramètre Désignations')"/> 
     <x-setting-menu-item :active="$activeMenu" menu="attendance_settings" :href="route('manager.settings.attendance-settings.index')" :text="__('app.menu.attendanceSettings')"/>
     <x-setting-menu-item :active="$activeMenu" menu="leave_settings" :href="route('manager.settings.leaves-settings.index')" :text="__('app.menu.leaveSettings')"/>
-    <x-setting-menu-item :active="$activeMenu" menu="campagne_settings" :href="route('manager.settings.campagne.index')" :text="__('Paramètre Campagne')"/>
     <x-setting-menu-item :active="$activeMenu" menu="travauxDangereux_settings" :href="route('manager.settings.travauxDangereux.index')" :text="__('Paramètre Travaux Dangereux')"/>
     <x-setting-menu-item :active="$activeMenu" menu="travauxLegers_settings" :href="route('manager.settings.travauxLegers.index')" :text="__('Paramètre Travaux Legers')"/>
     <x-setting-menu-item :active="$activeMenu" menu="arretEcole_settings" :href="route('manager.settings.arretEcole.index')" :text="__('Paramètre Arrets Ecole')"/>

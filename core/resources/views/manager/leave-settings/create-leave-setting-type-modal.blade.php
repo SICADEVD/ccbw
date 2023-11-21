@@ -140,7 +140,7 @@
                                     </x-forms.label>
                                     &nbsp;<i class="fa fa-question-circle text-dark-grey" data-toggle="popover" data-placement="top" data-html="true"
                                             data-content="{{__('messages.leave.gender')}}" data-trigger="hover"></i>
-                                    <select class="form-control multiple-option" multiple name="gender[]"
+                                    <select class="form-control multiple-option select-picker" multiple name="gender[]"
                                         id="gender" data-live-search="true" data-size="8">
                                         <option value="Homme" selected>@lang('app.male')</option>
                                         <option value="Femme" selected>@lang('app.female')</option> 
@@ -153,7 +153,7 @@
                                     </x-forms.label>
                                     &nbsp;<i class="fa fa-question-circle text-dark-grey" data-toggle="popover" data-placement="top" data-html="true"
                                             data-content="{{__('messages.leave.maritalStatus')}}" data-trigger="hover"></i>
-                                    <select class="form-control multiple-option" multiple name="marital_status[]"
+                                    <select class="form-control multiple-option select-picker" multiple name="marital_status[]"
                                         id="marital_status" data-live-search="true" data-size="8">
                                         <option value="married" selected>@lang('modules.leaves.married')</option>
                                         <option value="unmarried" selected>@lang('modules.leaves.unmarried')</option>
@@ -166,7 +166,7 @@
                                     </x-forms.label>
                                     &nbsp;<i class="fa fa-question-circle text-dark-grey" data-toggle="popover" data-placement="top" data-html="true"
                                             data-content="{{__('messages.leave.department')}}" data-trigger="hover"></i>
-                                    <select class="form-control multiple-option" multiple name="department[]"
+                                    <select class="form-control multiple-option select-picker" multiple name="department[]"
                                             id="department" data-live-search="true" data-size="8">
                                         @foreach ($teams as $team)
                                             <option value="{{ $team->id }}" selected>{{ $team->department }}</option>
@@ -180,7 +180,7 @@
                                     </x-forms.label>
                                     &nbsp;<i class="fa fa-question-circle text-dark-grey" data-toggle="popover" data-placement="top" data-html="true"
                                             data-content="{{__('messages.leave.designation')}}" data-trigger="hover"></i>
-                                    <select class="form-control multiple-option" multiple name="designation[]"
+                                    <select class="form-control multiple-option select-picker" multiple name="designation[]"
                                             id="designation" data-live-search="true" data-size="8">
                                         @foreach ($designations as $designation)
                                             <option value="{{ $designation->id }}" selected>{{ $designation->name }}</option>
