@@ -166,7 +166,7 @@ class EmployeeController extends AccountBaseController
             $lastEmployeeID = $lastEmployeeID+1;
            $employeeid = 'EMP-'.$lastEmployeeID;
         }else{
-            $employeeid ="";
+            $employeeid ="EMP-1";
         }
   
             $user->save();
