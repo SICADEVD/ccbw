@@ -55,6 +55,7 @@ Route::match(['POST'],'getparcelleupdate', [ApiparcelleController::class, 'getpa
 Route::match(['POST'],'apisuiviparcelle', [ApisuiviparcelleController::class, 'store']);
 Route::match(['POST'],'apisuiviformation', [ApisuiviformationController::class, 'store']); 
 Route::match(['POST'],'apivisiteur', [ApisuiviformationController::class, 'storeVisiteur']);
+Route::match(['POST'],'getvisiteurs', [ApisuiviformationController::class, 'getvisiteurs']);
 Route::match(['POST'],'apitypethemeformation', [ApisuiviformationController::class, 'getTypethemeformation']); 
 Route::match(['POST'],'gettypeformation', [ApisuiviformationController::class, 'getTypeformation']); 
 Route::match(['POST'],'getthemes', [ApisuiviformationController::class, 'getThemes']); 

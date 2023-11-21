@@ -149,6 +149,13 @@ class ApisuiviformationController extends Controller
 
         return response()->json($formation, 201);
     }
+    
+    public function getvisiteurs(Request $request)
+    {
+        $suivi_formation_id = $request->suivi_formation_id;
+        $visiteurs = SuiviFormationVisiteur::where('suivi_formation_id', $suivi_formation_id)->get();
+        return response()->json($visiteurs);
+    }
 
     public function storeVisiteur(Request $request){
         $validationRule = [

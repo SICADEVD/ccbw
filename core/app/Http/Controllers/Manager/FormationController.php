@@ -259,7 +259,7 @@ class FormationController extends Controller
         $notify[] = ['success', isset($message) ? $message : 'Le visiteur a été crée avec succès.'];
         return back()->withNotify($notify);
     }
-
+   
     public function status($id)
     {
         return SuiviFormation::changeStatus($id);
