@@ -408,7 +408,7 @@ class SettingController extends Controller
 
     public function departementIndex()
     {
-       $pageTitle = "Manage Département"; 
+       $pageTitle = "Manage Départements"; 
         $activeSettingMenu = 'departement_settings';
         $departements     = Department::orderBy('id','desc')->paginate(getPaginate());
         return view('manager.config.departement', compact('pageTitle', 'departements','activeSettingMenu'));
@@ -434,7 +434,7 @@ class SettingController extends Controller
     }
     public function designationIndex()
     {
-       $pageTitle = "Manage Département"; 
+       $pageTitle = "Manage Désignations"; 
         $activeSettingMenu = 'departement_settings';
         $departements = Department::get();
         $designations     = Designation::orderBy('id','desc')->paginate(getPaginate());
