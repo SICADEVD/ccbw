@@ -62,6 +62,7 @@
                                 <x-forms.input-group>
                                     <select class="form-control" name="designation"
                                         id="employee_designation"> 
+                                        <option value="">--</option>
                                         @foreach ($designations as $designation)
                                             <option value="{{ $designation->id }}" data-chained="{{ $designation->parent_id }}">{{ $designation->name }}</option>
                                         @endforeach
