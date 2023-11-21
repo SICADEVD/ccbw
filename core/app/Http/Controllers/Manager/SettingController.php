@@ -435,7 +435,7 @@ class SettingController extends Controller
     public function designationIndex()
     {
        $pageTitle = "Manage Désignations"; 
-        $activeSettingMenu = 'departement_settings';
+        $activeSettingMenu = 'designation_settings';
         $departements = Department::get();
         $designations     = Designation::orderBy('id','desc')->paginate(getPaginate());
         return view('manager.config.designation', compact('pageTitle', 'departements','designations','activeSettingMenu'));
