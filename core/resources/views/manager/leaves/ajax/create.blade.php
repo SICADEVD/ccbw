@@ -187,7 +187,7 @@ $('.dropify-fr').dropify({
 
             $('#multiStartDate').val(startDate);
             $('#multiEndDate').val(endDate);
-            $('.date-range-days').html(totalDays +' Days Selected');
+            $('.date-range-days').html(totalDays +' Jours sélectionnés');
         })
 
         $('input[type=radio][name=duration]').change(function() {

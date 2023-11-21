@@ -2,24 +2,25 @@
 
 namespace App\Http\Controllers\Manager;
 
-use App\Constants\Status;
-use App\Exports\ExportFormations;
-use App\Http\Controllers\Controller;
+use Excel;
+use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Campagne;
+use App\Constants\Status;
 use App\Models\Localite; 
 use App\Models\Producteur; 
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use App\Models\FormationStaff;
+use App\Exports\ExportFormations;
+use Illuminate\Support\Facades\DB;
 use App\Models\FormationStaffListe;
 use App\Models\FormationStaffTheme;
-use App\Models\FormationStaffVisiteur;
 use App\Models\ThemeFormationStaff;
+use App\Http\Controllers\Controller;
 use App\Models\ModuleFormationStaff;
-use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
-use Excel;
+use App\Models\FormationStaffVisiteur;
 
 class FormationStaffController extends Controller
 {
@@ -53,12 +54,10 @@ class FormationStaffController extends Controller
     public function store(Request $request)
     {
         $validationRule = [
-            'staff' => 'required|exists:users,id',
-            'user' => 'required|max:255',
+            'formateur' => 'required|max:255',
             'lieu_formation'  => 'required|max:255',
             'module_formation'  => 'required|max:255',
             'theme'  => 'required', 
-            'date_formation' => 'required|max:255', 
         ];
  
         $manager   = auth()->user(); 
@@ -76,10 +75,15 @@ class FormationStaffController extends Controller
         $campagne = Campagne::active()->first();
         $formation->cooperative_id  = $manager->cooperative_id;  
         $formation->campagne_id  = $campagne->id;
-        $formation->user_id  = $request->staff;  
+        $formation->formateur  = $request->formateur;  
         $formation->lieu_formation  = $request->lieu_formation;
         $formation->module_formation_staff_id  = $request->module_formation;
-        $formation->date_formation     = $request->date_formation; 
+        $formation->observation_formation = $request->observation_formation;
+        $formation->duree_formation     = $request->duree_formation; 
+
+        $formation->date_debut_formation = $request->multiStartDate;
+        $formation->date_fin_formation = $request->multiEndDate;
+        
         if($request->hasFile('photo_formation')) {
             try {
                 $formation->photo_formation = $request->file('photo_formation')->store('public/formation-staffs');
@@ -88,11 +92,18 @@ class FormationStaffController extends Controller
                 return back()->withNotify($notify);
             }
         } 
-
+        if($request->hasFile('rapport_formation')) {
+            try {
+                $formation->rapport_formation = $request->file('rapport_formation')->store('public/formation-staffs');
+            } catch (\Exception $exp) {
+                $notify[] = ['error', 'Impossible de télécharger votre image'];
+                return back()->withNotify($notify);
+            }
+        } 
         $formation->save(); 
         if($formation !=null ){
             $id = $formation->id;
-            $datas = $datas2 = $datas3 = $datas4 = [];
+            $datas = $datas2 = $datas3 = [];
             if(($request->user !=null)) { 
                 FormationStaffListe::where('formation_staff_id',$id)->delete();
                 $i=0; 

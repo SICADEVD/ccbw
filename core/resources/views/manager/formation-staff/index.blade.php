@@ -55,7 +55,7 @@
                                         </td>
                                         <td>
                                             <span> <a href="{{ route('manager.formation-staff.edit', $formation->id) }}">
-                                                    <span>@</span>{{ $formation->user->lastname }} {{ $formation->user->firstname }}
+                                                    <span>@</span>{{ $formation->formateur }}
                                                 </a></span>
                                         </td> 
                                         <td>

@@ -33,11 +33,7 @@
     <script src="{{ asset('assets/vendor/jquery/modernizr.min.js') }}"></script>
     
     @stack('style')
-    <style>
-        hr {
-            margin-top: 30px;
-            margin-bottom: 30px;
-        }
+    <style> 
 
         .error {
             color: red;
@@ -103,6 +99,11 @@
         #flocal>div:nth-child(21)>div>span>span.selection>span {
             height: 45px !important;
         }
+        hr {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-top: 1px solid #ddd;
+}
     </style>
 </head>
 
