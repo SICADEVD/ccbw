@@ -1,5 +1,9 @@
-<link rel="stylesheet" href="{{ asset('assets/vendor/css/tagify.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/vendor/css/dropzone.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/vendor/css/tagify.css') }}"> 
+<style>
+.dropify-wrapper{
+    height: 84px;width: 89%;padding: 0px;margin: 0px;
+}
+    </style>
 <div class="row">
     <div class="col-sm-12">
         <x-form id="save-employee-data-form" enctype="multipart/form-data" :action="route('manager.employees.store')">
@@ -135,15 +139,35 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="form-group my-3">  
-                            <x-forms.file-multiple class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('Contrats de travail')" fieldName="contrat_travail" :popover="__('Contrats de travail')" fieldId="contrat-travail" />
+                    <label class="control-label">@lang('Contrats de travail')</label>
+                        <div class="form-group my-3">   
+                            <input name="contrat_travail[]" id="contrat_travail1" type="file" multiple="" class="dropify" data-height="70"/> 
                         </div>
+                        <div id="insertBefore"></div> 
+                        <!--  ADD ITEM START-->
+                <div class="row px-lg-4 px-md-4 px-3 pb-3 pt-0 mb-3  mt-2">
+                    <div class="col-md-12">
+                        <a class="f-15 f-w-500" href="javascript:;" id="add-item"><i
+                                class="icons icon-plus font-weight-bold mr-1"></i> @lang('app.add')</a>
+                    </div>
+                </div>
+                <!--  ADD ITEM END-->
                     </div>
                     <div class="col-md-6">
-                        <div class="form-group my-3"> 
-                        <x-forms.file-multiple class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('Fiches de poste')" fieldName="fiche_poste" :popover="__('Fiches de poste')" fieldId="fiche-poste" />
-                        
+
+                    <label class="control-label">@lang('Fiches de poste')</label>
+                        <div class="form-group my-3">   
+                            <input name="fiche_poste[]" id="fiche_poste1" type="file" multiple="" class="dropify" data-height="70"/> 
                         </div>
+                        <div id="insertBeforeNew"></div> 
+                        <!--  ADD ITEM START-->
+                <div class="row px-lg-4 px-md-4 px-3 pb-3 pt-0 mb-3  mt-2">
+                    <div class="col-md-12">
+                        <a class="f-15 f-w-500" href="javascript:;" id="add-itemNew"><i
+                                class="icons icon-plus font-weight-bold mr-1"></i> @lang('app.add')</a>
+                    </div>
+                </div>
+                <!--  ADD ITEM END--> 
                     </div>
                 </div>
 
@@ -212,7 +236,7 @@
                     <input type ="hidden" name="add_more" value="false" id="add_more" />
 
                 </div>
-                <button type="submit" class="btn btn--primary w-100 h-45 ">@lang('Envoyer')</button>
+                 
                 <x-form-actions>
                 <x-form-button id="save-employee-form" class="mr-3 btn btn-primary" icon="check">
                         @lang('Enregistrer')
@@ -228,11 +252,10 @@
     </div>
 </div>
 
-<script src="{{ asset('assets/vendor/jquery/tagify.min.js') }}"></script>
-<script src="{{ asset('assets/vendor/jquery/dropzone.min.js') }}"></script>
+<script src="{{ asset('assets/vendor/jquery/tagify.min.js') }}"></script> 
 <script>
     $(document).ready(function() { 
-
+        
         $('.dropify').dropify();
         $('.dropify-fr').dropify();
         $('.custom-date-picker').each(function(ind, el) {
@@ -421,49 +444,50 @@
         $('#' + id).val(checkedData);
     }
 
+ // Add More Inputs
+ var $insertBefore = $('#insertBefore');
+ var $insertBeforeNew = $('#insertBeforeNew');
+        var i = 1;
+        var a = 1;
+ $('#add-item').click(function() {
+            i += 1;
+             
+            $(`<div id="addMoreBox${i}" class="row pl-20 pr-20 clearfix">
+            <div class="form-group my-3" style="padding: 0px;">  
+            <div class="input-group mb-3"> 
+                            <input name="contrat_travail[]" id="contrat_travail${i}" type="file" class="dropify" multiple="" data-height="78"/> <button type="button"
+                                        class="btn btn-outline-secondary border-grey"
+                                        data-toggle="tooltip" ><a href="javascript:;" class="d-flex align-items-center justify-content-center mt-5 remove-item" data-item-id="${i}" style="position: relative;top: -29px;"><i class="fa fa-times-circle f-20 text-lightest"></i></a></button>
+                                        </div></div> `)
+                .insertBefore($insertBefore);
 
-    Dropzone.autoDiscover = false;
-        //Dropzone class
-        myDropzone = new Dropzone("div#fiche-poste", {
-            dictDefaultMessage: "Charger des fichiers",
-            // url: "{{ route('manager.employee-files.store') }}",
-            url: " ",
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            paramName: "fiche_poste",
-            maxFilesize: 10,
-            maxFiles: 10,
-            autoProcessQueue: false,
-            uploadMultiple: true,
-            addRemoveLinks: true,
-            parallelUploads: 10,
-            acceptedFiles: "image/*,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/docx,application/pdf,text/plain,application/msword,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/zip,application/x-zip-compressed, application/x-compressed, multipart/x-zip,.xlsx,video/x-flv,video/mp4,application/x-mpegURL,video/MP2T,video/3gpp,video/quicktime,video/x-msvideo,video/x-ms-wmv,application/sla,.stl",
-            init: function() {
-                myDropzone = this;
-            }
+                 $(".dropify").dropify(); 
+            // Recently Added date picker assign 
         });
 
-        myDropzone2 = new Dropzone("div#contrat-travail", {
-            dictDefaultMessage: "Charger des fichiers",
-            // url: "{{ route('manager.employee-files.store') }}",
-            url: " ",
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            paramName: "contrat_travail",
-            maxFilesize: 10,
-            maxFiles: 10,
-            autoProcessQueue: false,
-            uploadMultiple: true,
-            addRemoveLinks: true,
-            parallelUploads: 10,
-            acceptedFiles: "image/*,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/docx,application/pdf,text/plain,application/msword,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/zip,application/x-zip-compressed, application/x-compressed, multipart/x-zip,.xlsx,video/x-flv,video/mp4,application/x-mpegURL,video/MP2T,video/3gpp,video/quicktime,video/x-msvideo,video/x-ms-wmv,application/sla,.stl",
-            init: function() {
-                myDropzone = this;
-            }
+        // Remove fields
+        $('body').on('click', '.remove-item', function() {
+            var index = $(this).data('item-id');
+            $('#addMoreBox' + index).remove();
         });
-         
-       
-  
+        $('#add-itemNew').click(function() {
+            a += 1;
+             
+            $(`<div id="addMoreBoxNew${a}" class="row pl-20 pr-20 clearfix">
+            <div class="form-group my-3" style="padding: 0px;">  
+            <div class="input-group mb-3"> 
+                            <input name="fiche_poste[]" id="fiche_poste${a}" type="file" class="dropify" multiple="" data-height="78"/> <button type="button"
+                                        class="btn btn-outline-secondary border-grey"
+                                        data-toggle="tooltip" ><a href="javascript:;" class="d-flex align-items-center justify-content-center mt-5 remove-itemNew" data-item-id="${a}" style="position: relative;top: -29px;"><i class="fa fa-times-circle f-20 text-lightest"></i></a></button>
+                                        </div></div> `)
+                .insertBefore($insertBeforeNew);
+
+                 $(".dropify").dropify(); 
+            // Recently Added date picker assign 
+        });
+        $('body').on('click', '.remove-itemNew', function() {
+            var index = $(this).data('item-id');
+            $('#addMoreBoxNew' + index).remove();
+        });
+ 
 </script>

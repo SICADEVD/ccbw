@@ -127,7 +127,7 @@ class EmployeeController extends AccountBaseController
      */
     public function store(StoreRequest $request)
     { 
-      
+         
         DB::beginTransaction();
         try { 
 
@@ -179,7 +179,7 @@ class EmployeeController extends AccountBaseController
                 }
                 
             }
-            dd($request->file('contrat_travail'));
+            
             if ($request->hasFile('contrat_travail')) {
                
                 $files = $request->file('contrat_travail');

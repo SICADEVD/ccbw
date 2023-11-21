@@ -1,33 +1,41 @@
 <?php
 namespace App\Http\Controllers\Manager;
+use App\Http\Controllers\AccountBaseController;
 use App\Models\Leave;
 
 use App\Models\LeaveFile;
 use App\Http\Helpers\Files;
 use App\Http\Helpers\Reply;
-use Illuminate\Http\Request;
-use App\Http\Controllers\AccountBaseController;
+use Illuminate\Http\Request; 
 
 class EmployeeFileController extends AccountBaseController
 {
+    public function index(Request $request)
+    {
+        $ret = array();
+        if ($request->hasFile('file')) {
+               
+            $files = $request->file('file');
+            foreach ($files as $fileData) { 
+                $ret =  $fileData->store('public/contratsTravail');  
+            }
+            echo json_encode($ret);
+        }
+    }
 
     public function store(Request $request)
     {
-
-        if ($request->hasFile('file')) {
-            foreach ($request->file as $fileData) {
-                $file = new LeaveFile();
-                $file->leave_id = $request->leave_id;
-
-                $filename = Files::uploadLocalOrS3($fileData, LeaveFile::FILE_PATH . '/' . $request->leave_id);
-
-                $file->user_id = user()->id;
-                $file->filename = $fileData->getClientOriginalName();
-                $file->hashname = $filename;
-                $file->size = $fileData->getSize();
-                $file->save();
+ 
+        $ret = array();
+        if ($request->hasFile('myfile')) {
+               
+            $files = $request->file('myfile');
+            foreach ($files as $fileData) { 
+                $ret =  $fileData->store('public/contratsTravail');  
             }
+            echo json_encode($ret);
         }
+ 
 
     }
 
