@@ -4,7 +4,7 @@
 @section('panel')
     
 <div class="content-wrapper">
-    @include($view)
+    @include('manager.employees.ajax.create')
 </div>
 
 @endsection
