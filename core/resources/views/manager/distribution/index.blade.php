@@ -37,8 +37,7 @@
                         <table class="table table--light style--two">
                             <thead>
                                 <tr> 
-                                    <th>@lang('Localite')</th>
-                                    <th>@lang('Parcelle')</th>
+                                    <th>@lang('Localite')</th> 
                                     <th>@lang('Producteur')</th>
                                     <th>@lang('Quantite')</th> 
                                     <th>@lang('Ajoutée le')</th> 
@@ -49,16 +48,11 @@
                                 @forelse($distributions as $distribution)
                                     <tr>
                                         <td>
-                                            <span class="fw-bold">{{ $distribution->parcelle->producteur->localite->nom }}</span>
-                                        </td>
-                                        <td>
-                                            <span> <a href="{{ route('manager.agro.distribution.edit', $distribution->id) }}">
-                                                    <span>@</span>{{ $distribution->parcelle->codeParc }}
-                                                </a></span>
-                                        </td>
+                                            <span class="fw-bold">{{ $distribution->producteur->localite->nom }}</span>
+                                        </td> 
                                         <td> 
                                             <span class="small">
-                                            {{ $distribution->parcelle->producteur->nom }} {{ $distribution->parcelle->producteur->prenoms }}
+                                            {{ $distribution->producteur->nom }} {{ $distribution->producteur->prenoms }}
                                             </span>
                                         </td>
                                         <td>
