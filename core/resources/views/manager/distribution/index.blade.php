@@ -56,7 +56,7 @@
                                             </span>
                                         </td>
                                         <td>
-                                            <span>{{ array_sum(Arr::pluck(json_decode($distribution->especes),'total')) }}</span>
+                                            <span>{{ $distribution->quantite }}</span>
                                         </td> 
                                         <td>
                                             <span class="d-block">{{ showDateTime($distribution->created_at) }}</span>

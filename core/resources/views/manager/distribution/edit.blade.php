@@ -6,7 +6,13 @@
                 <div class="card-body"> 
          {!! Form::model($distribution, ['method' => 'POST','route' => ['manager.agro.distribution.update', $distribution->id],'class'=>'form-horizontal', 'id'=>'flocal', 'enctype'=>'multipart/form-data']) !!}
                         <input type="hidden" name="id" value="{{ $distribution->id }}"> 
- 
+                        <div class="form-group row">
+                                <label class="col-sm-4 control-label" style="font-weight:bold;font-size:20px;">@lang('Producteur')</label>
+                                <div class="col-xs-12 col-sm-8">  
+                                {!! Form::text('producteurs', $distribution->producteur->nom.' '.$distribution->producteur->prenoms, array('placeholder' => __('Producteur'),'class' => 'form-control', 'readonly')) !!}
+                                 
+                                </div>
+                            </div>
                         <div class="form-group">
      <?php echo Form::label(__('ESPECES D\'ARBRE'), null, ['class' => 'col-sm-12 control-label', 'style'=>'font-weight:bold;font-size:20px;']); ?>
      <div class="col-xs-12 col-sm-12">

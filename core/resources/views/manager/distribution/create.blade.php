@@ -4,7 +4,7 @@
         <div class="col-lg-12 mb-30">
             <div class="card">
                 <div class="card-body"> 
-                    {!! Form::open(array('route' => ['manager.agro.distribution.store'],'method'=>'POST','class'=>'form-horizontal', 'id'=>'flocal', 'enctype'=>'multipart/form-data')) !!} 
+                    {!! Form::open(array('route' => ['manager.agro.distribution.store'],'method'=>'POST','class'=>'form-horizontal', 'id'=>'flocal', 'enctype'=>'multipart/form-data','style'=>'margin-bottom:200px;')) !!} 
                         
                             <div class="form-group row">
                                 <label class="col-sm-4 control-label">@lang('Selectionner une localite')</label>
@@ -44,6 +44,14 @@
      </div>
      </div>
     <hr class="panel-wide">
+    <div style="
+    position: fixed;
+    bottom: 0px;
+    left: 270px;
+    width: 78%;
+    overflow: hidden;
+    background: #e9ecef;
+">
     <div class="form-group row">
         <?php echo Form::label(__('QUANTITE DEMANDEE'), null, ['class' => 'col-sm-4 control-label', 'style'=>'font-weight:bold;font-size:20px;']); ?>
         <div class="col-xs-12 col-sm-8">
@@ -61,6 +69,7 @@
                         <div class="form-group row">
                             <button type="submit" class="btn btn--primary w-100 h-45"> @lang('Envoyer')</button>
                         </div>
+                    </div>
                         {!! Form::close() !!}
                 </div>
             </div>
@@ -96,8 +105,6 @@ var urlsend='{{ route("manager.agro.distribution.getAgroParcellesArbres") }}';
  
 $('#flocal').change('keyup change blur',function() {
   var total= $('#total').val();
-  
-    
 });
 function getQuantite(id,k,s)
   { 
@@ -115,9 +122,9 @@ function update_amounts(id,k,s)
     $('.quantity-'+id).each(function() {
     var qty = $(this).val();
      quantite = parseInt(quantite) + parseInt(qty);
-     if(quantite>max){
-        $('#qte-'+k).val(0); 
-        } 
+    //  if(quantite>max){
+    //     $('#qte-'+k).val(0); 
+    //     } 
     });
      
     $('.totaux').each(function() {
@@ -135,19 +142,14 @@ function update_amounts(id,k,s)
             $('#qtelivre').val(sum);
         }
         for(let i = 1; i < 6; i++) {
-            var soustotal = 0;
-            let maxparc = $('.st-'+i).attr('parc-'+i); 
-            console.log(maxparc);
+            var soustotal = 0; 
+             
             $('.st-'+i).each(function() {
         var nb = $(this).val(); 
         soustotal = parseInt(soustotal) + parseInt(nb);  
-                if(soustotal>maxparc){ 
-                    $('#qte-'+k).val(0);  
-                }
+                
             });
-            if(soustotal<=maxparc){ 
-                $('#soustotal-'+i).val(soustotal); 
-                }
+            $('#soustotal-'+i).val(soustotal); 
             
         }  
     
