@@ -314,8 +314,10 @@ class AgrodistributionController extends Controller
           if($data->total !=$data->total_restant) {
             $totalespece = $data->total - $data->total_restant; 
             
-            if(in_array($data->id, $dataEspece)){$qte = $dataQuantite[$data->id];}else{$qte=0;}
-            
+            // if(in_array($data->id, $dataEspece)){$qte = $dataQuantite[$data->id];}else{$qte=0;}
+            $qte = AgroevaluationEspece::where([['agroespecesarbre_id',$data->id],['agroevaluation_id',$agroeval->id]])->first();
+            if($qte !=null){$qte=$qte->total;}
+            else{$qte =0;}
             $results .='<tr><td>'.$data->agroespecesarbre->nom.'</td>';
             $results .='<td><button class="btn btn-primary" type="button">'.$totalespece.'</button></td>'; 
             $results .='<td><button class="btn btn-info" type="button">'.$qte.'</button></td>';
