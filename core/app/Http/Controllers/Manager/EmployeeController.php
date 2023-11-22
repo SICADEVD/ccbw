@@ -132,12 +132,12 @@ class EmployeeController extends AccountBaseController
         DB::beginTransaction();
         try { 
 
-            $manager        = auth()->user();
+            $manager = auth()->user();
             $user = new User();
             $user->cooperative_id = $manager->cooperative_id;
             $user->lastname = $request->lastname;
             $user->firstname = $request->firstname; 
-            $user->username  = Str::limit(Str::slug($request->prenom,""),12,'.').Str::limit(Str::slug($request->nom,""),1,'');
+            $user->username  = Str::limit(Str::slug($request->firstname,""),12,'.').Str::limit(Str::slug($request->lastname,""),1,'');
             $user->email  = $request->email;
             $user->mobile = $request->mobile; 
             $user->country_id = $request->country;
