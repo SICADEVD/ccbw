@@ -49,8 +49,14 @@ class AgroevaluationController extends Controller
         $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->orderBy('nom')->get();
         $campagnes = Campagne::active()->pluck('nom','id');
         $especesarbres  = Agroespecesarbre::orderby('strate','asc')->orderby('nom','asc')->get(); 
-        
-        $producteurs = Producteur::doesntHave('agroevaluation')->get();
+        $listeprod = Agroevaluation::select('producteur_id')->get();
+        $dataProd = array();
+        if($listeprod->count()){
+            foreach($listeprod as $data){
+                $dataProd[] = $data->producteur_id; 
+            }
+        } 
+        $producteurs = Producteur::joinRelationship('localite.section')->where('cooperative_id',$manager->cooperative_id)->whereNotIn('producteurs.id',$dataProd)->get();
  
         return view('manager.agroevaluation.create', compact('pageTitle', 'producteurs','localites','campagnes','especesarbres'));
     }

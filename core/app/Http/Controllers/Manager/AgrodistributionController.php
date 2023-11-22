@@ -315,6 +315,7 @@ class AgrodistributionController extends Controller
             $max[] = $totalespece;
             $idespeces[]=$data->agroespecesarbre_id;
             if(in_array($data->id, $dataEspece)){$qte = $dataQuantite[$data->id];}else{$qte=0;}
+            
             $results .='<tr><td>'.$data->agroespecesarbre->nom.'</td>';
             $results .='<td><button class="btn btn-primary" type="button">'.$totalespece.'</button></td>'; 
             $results .='<td><button class="btn btn-info" type="button">'.$qte.'</button></td>';
