@@ -307,12 +307,12 @@ class AgrodistributionController extends Controller
          
          $i=0;
          $k=1;
-         
+         $qte=0;
         foreach($especes as $data)
         {
           if($data->total !=$data->total_restant) {
             $totalespece = $data->total - $data->total_restant; 
-            if(in_array($data->id, $dataEspece)){$qte = 'oui';}else{$qte='non';}
+            if(in_array($data->id, $dataEspece)){$qte = $dataQuantite[$data->id];}
             
             $results .='<tr><td>'.$data->agroespecesarbre->nom.'</td>';
             $results .='<td><button class="btn btn-primary" type="button">'.$totalespece.'</button></td>'; 
@@ -323,6 +323,7 @@ class AgrodistributionController extends Controller
               $k++;
               $s++; 
             $i++;
+            $qte=0;
             $results .='</tr>';
           }
         }
