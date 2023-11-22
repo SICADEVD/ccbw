@@ -273,7 +273,7 @@
                 <li class="sidebar-menu-item {{ menuActive('manager.settings.*') }}">
                                 <a href="{{ route('manager.settings.cooperative-settings.index') }}" class="nav-link">
                                     <i class="menu-icon las la-cogs"></i>
-                                    <span class="menu-title">@lang('Settings')</span>
+                                    <span class="menu-title">@lang('Paramètres')</span>
                                 </a>
                             </li> 
             </ul>
