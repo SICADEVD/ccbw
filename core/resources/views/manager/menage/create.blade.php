@@ -296,26 +296,26 @@
                     <div class="form-group row" id="agricole">
                         <?php echo Form::label(__('Nom de l\'activité'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('nomActivite', ['' => 'Selectionner une option', 'Cacao' => __('Cacao'), 'Café' => __('Café'), 'Hévéa' => __('Hévéa'), 'Palmier' => __('Palmier'), 'Anacarde' => __('Anacarde'), 'Banane' => __('Banane'), 'Riz' => __('Riz'), 'Igname' => __('Igname'), 'Manioc' => __('Manioc'), 'Maïs' => __('Maïs'), 'Autre' => __('Autre')], null, ['class' => 'form-control nomActivite']); ?>
+                            <?php echo Form::select('nomActiviteAgricole', ['' => 'Selectionner une option', 'Cacao' => __('Cacao'), 'Café' => __('Café'), 'Hévéa' => __('Hévéa'), 'Palmier' => __('Palmier'), 'Anacarde' => __('Anacarde'), 'Banane' => __('Banane'), 'Riz' => __('Riz'), 'Igname' => __('Igname'), 'Manioc' => __('Manioc'), 'Maïs' => __('Maïs'), 'Autre' => __('Autre')], null, ['class' => 'form-control nomActiviteAgricole']); ?>
                         </div>
                     </div>
                     <div class="form-group row" id="autreAgricole">
                         <?php echo Form::label(__('Autre activité'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::text('autreActivite', null, ['class' => 'form-control autreActivite', 'placeholder' => 'Autre activité']); ?>
+                            <?php echo Form::text('autreActiviteAgricole', null, ['class' => 'form-control autreActiviteAgricole', 'placeholder' => 'Autre activité']); ?>
                         </div>
                     </div>
 
                     <div class="form-group row" id="nonAgricole">
                         <?php echo Form::label(__('Nom de l\'activité'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('nomActivite', ['' => 'Selectionner une option', 'Commerce' => __('Commerce'), 'Elevage' => __('Elevage'), 'Autre' => __('Autre')], null, ['class' => 'form-control nomActivite']); ?>
+                            <?php echo Form::select('nomActiviteNonAgricole', ['' => 'Selectionner une option', 'Commerce' => __('Commerce'), 'Elevage' => __('Elevage'), 'Autre' => __('Autre')], null, ['class' => 'form-control nomActiviteNonAgricole']); ?>
                         </div>
                     </div>
                     <div class="form-group row" id="autreNonAgricole">
                         <?php echo Form::label(__('Autre activité'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::text('autreActivite', null, ['class' => 'form-control autreActivite', 'placeholder' => 'Autre activité']); ?>
+                            <?php echo Form::text('autreActiviteNonAgricole', null, ['class' => 'form-control autreActiviteNonAgricole', 'placeholder' => 'Autre activité']); ?>
                         </div>
                     </div>
                     <div class="form-group row" id="nombreHectareConjoint">
@@ -336,7 +336,7 @@
                         <div class="form-group row" id="autreCapital">
                             <?php echo Form::label(__('Autre capital'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::number('autreCapital', null, ['class' => 'form-control autreCapital', 'placeholder' => 'Autre capital']); ?>
+                                <?php echo Form::text('autreCapital', null, ['class' => 'form-control autreCapital', 'placeholder' => 'Autre capital']); ?>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -380,7 +380,8 @@
         $("#localite").chained("#section");
         $("#producteur").chained("#localite");
         $(document).ready(function() {
-            $('#avoirMachine,#boisChauffes,#etatatomiseurs,#autreMachine,#autreEndroits,#autreSourceEaux,#etatEpis,#typeActivite,#agricole,#nonAgricole,#nombreHectareConjoint,#autreInfos,#autreCapital,#entite,#autreAgricole,#autreNonAgricole').hide();
+            $('#avoirMachine,#boisChauffes,#etatatomiseurs,#autreMachine,#autreEndroits,#autreSourceEaux,#etatEpis,#typeActivite,#agricole,#nonAgricole,#nombreHectareConjoint,#autreInfos,#autreCapital,#entite,#autreAgricole,#autreNonAgricole')
+                .hide();
 
             $('.traitementChamps').change(function() {
                 var traitementChamps = $('.traitementChamps').val();
@@ -489,10 +490,12 @@
                 if (activiteFemme == 'oui') {
                     $('#typeActivite').show('slow');
                     $('.typeActivite').show('slow');
+                    $('.typeActivite').prop('required', true);
 
                 } else {
                     $('#typeActivite').hide('slow');
                     $('.typeActivite').hide('slow');
+                    $('.typeActivite').prop('required', false);
                 }
             });
 
@@ -500,22 +503,52 @@
                 var typeActivite = $('.typeActivite').val();
                 if (typeActivite == 'Activite agricole') {
                     $('#agricole').show('slow');
-                    $('#agricole select[name="nomActivite"]').show('slow');
-                    $('#agricole select[name="nomActivite"]').prop('required', true);
+                    $('#agricole select[name="nomActiviteAgricole"]').show('slow');
+                    $('#agricole select[name="nomActiviteAgricole"]').prop('required', true);
                     $('#nombreHectareConjoint').show('slow');
                     $('.nombreHectareConjoint').show('slow');
                     $('.nombreHectareConjoint').prop('required', true);
                 } else {
                     $('#agricole').hide('slow');
-                    $('#agricole select[name="nomActivite"]').hide('slow');
-                    $('#agricole select[name="nomActivite"]').prop('required', false);
-                    $('#agricole select[name="nomActivite"]').find('option[value=""]').prop('selected',
+                    $('#agricole select[name="nomActiviteAgricole"]').hide('slow');
+                    $('#agricole select[name="nomActiviteAgricole"]').prop('required', false);
+                    $('#agricole select[name="nomActiviteAgricole"]').find('option[value=""]').prop(
+                        'selected',
                         true);
                     $('#nombreHectareConjoint').hide('slow');
                     $('.nombreHectareConjoint').hide('slow');
                     $('.nombreHectareConjoint').prop('required', false);
                     $('.nombreHectareConjoint').val('');
                 }
+            });
+            $('.nomActiviteAgricole').change(function() {
+                var nomActiviteAgricole = $('.nomActiviteAgricole').val();
+                if (nomActiviteAgricole == 'Autre') {
+                    $('#autreAgricole').show('slow');
+                    $('.autreActiviteAgricole').show('slow');
+                    $('.autreActiviteAgricole').prop('required', true);
+                } else {
+                    $('#autreAgricole').hide('slow');
+                    $('.autreActiviteAgricole').val('');
+                    $('.autreActiviteAgricole').prop('required', false);
+                }
+            });
+
+            $('.nomActiviteNonAgricole').change(function() {
+                var nomActiviteNonAgricole = $('.nomActiviteNonAgricole').val();
+                if (nomActiviteNonAgricole == 'Autre') {
+                    $('#autreNonAgricole').show('slow');
+                    $('.autreActiviteNonAgricole').show('slow');
+                    $('.autreActiviteNonAgricole').prop('required', true);
+                } else {
+                    $('#autreNonAgricole').hide('slow');
+                    $('.autreActiviteNonAgricole').val('');
+                    $('.autreActiviteNonAgricole').prop('required', false);
+                }
+            });
+
+            $('.typeActivite').change(function() {
+                var typeActivite = $('.typeActivite').val();
                 if (typeActivite == 'Activite non agricole') {
                     $('#nonAgricole').show('slow');
                     $('#nonAgricole select[name="nomActivite"]').show('slow');
@@ -528,6 +561,7 @@
                         true);
                 }
             });
+
             $('.typeActivite').change(function() {
                 var typeActivite = $('.typeActivite').val();
                 if (typeActivite == 'Activite agricole' || typeActivite == 'Activite non agricole') {
@@ -554,35 +588,6 @@
                     $('#autreInfos input[name="dureeActivite"]').val('');
                 }
             });
-            $('#agricole select[name="nomActivite"]').change(function() {
-                var nomActivite = $('#agricole select[name="nomActivite"]').val();
-                if (nomActivite == 'Autre') {
-                    $('#autreAgricole').show('slow');
-                    $('#autreAgricole input[name="autreActivite"]').show('slow');
-                    $('#autreAgricole input[name="autreActivite"]').prop('required', true);
-
-                } else {
-                    $('#autreAgricole').hide('slow');
-                    $('#autreAgricole input[name="autreActivite"]').hide('slow');
-                    $('#autreAgricole input[name="autreActivite"]').prop('required', false);
-                    $('#autreAgricole input[name="autreActivite"]').val('');
-                }
-            });
-            $('#nonAgricole select[name="nomActivite"]').change(function() {
-                var nomActivite = $('#nonAgricole select[name="nomActivite"]').val();
-                if (nomActivite == 'Autre') {
-                    $('#autreNonAgricole').show('slow');
-                    $('#autreNonAgricole input[name="autreActivite"]').show('slow');
-                    $('#autreNonAgricole input[name="autreActivite"]').prop('required', true);
-
-                } else {
-                    $('#autreNonAgricole').hide('slow');
-                    $('#autreNonAgricole input[name="autreActivite"]').hide('slow');
-                    $('#autreNonAgricole input[name="autreActivite"]').prop('required', false);
-                    $('#autreNonAgricole input[name="autreActivite"]').val('');
-                }
-            });
-
             $('.capitalDemarrage').change(function() {
                 var capitalDemarrage = $('.capitalDemarrage').val();
                 if (capitalDemarrage == 'Autre') {

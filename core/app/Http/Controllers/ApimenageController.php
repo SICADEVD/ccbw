@@ -187,6 +187,16 @@ class ApimenageController extends Controller
         $menage->etatAutreMachine   = $request->etatAutreMachine;
         $menage->etatatomiseur   = $request->etatatomiseur;
         $menage->etatEpi  = $request->etatEpi;
+        $menage->typeActivite = $request->typeActivite;
+        $menage->nomActiviteAgricole = $request->nomActiviteAgricole;
+        $menage->autreActiviteAgricole = $request->autreActiviteAgricole;
+        $menage->nomActiviteNonAgricole = $request->nomActiviteNonAgricole;
+        $menage->autreActiviteNonAgricole = $request->autreActiviteNonAgricole;
+        $menage->capitalDemarrage = $request->capitalDemarrage;
+        $menage->formation = $request->formation;
+        $menage->dureeActivite = $request->dureeActivite;
+        $menage->autreCapital = $request->autreCapital;
+        $menage->entite = $request->entite;
         //dd(json_encode($request->all()));
 
         $menage->save();

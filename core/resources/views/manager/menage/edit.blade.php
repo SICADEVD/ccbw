@@ -258,29 +258,80 @@
 
 
                     <div class="form-group row">
-                        <?php echo Form::label(__("Votre conjoint(e) fait une activité qui produit de l'argent ?"), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <?php echo Form::label(__('Votre conjoint(e) exerce-t-il/elle une autre activité générant des revenus ?'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('activiteFemme', ['non' => __('non'), 'oui' => __('oui')], null, ['class' => 'form-control activiteFemme', 'required']); ?>
+                            <?php echo Form::select('activiteFemme', ['' => 'Selectionner une option', 'non' => __('non'), 'oui' => __('oui')], null, ['class' => 'form-control activiteFemme', 'required']); ?>
+                        </div>
+                    </div>
+                    <div class="form-group row" id="typeActivite">
+                        <?php echo Form::label(__('Quel type d\'activité ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-12 col-sm-8">
+                            <?php echo Form::select('typeActivite', ['' => 'Selectionner une option', 'Activite agricole' => __('Activité agricole'), 'Activite non agricole' => __('Activité non agricole')], null, ['class' => 'form-control typeActivite']); ?>
+                        </div>
+                    </div>
+                    <div class="form-group row" id="agricole">
+                        <?php echo Form::label(__('Nom de l\'activité'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-12 col-sm-8">
+                            <?php echo Form::select('nomActiviteAgricole', ['' => 'Selectionner une option', 'Cacao' => __('Cacao'), 'Café' => __('Café'), 'Hévéa' => __('Hévéa'), 'Palmier' => __('Palmier'), 'Anacarde' => __('Anacarde'), 'Banane' => __('Banane'), 'Riz' => __('Riz'), 'Igname' => __('Igname'), 'Manioc' => __('Manioc'), 'Maïs' => __('Maïs'), 'Autre' => __('Autre')], null, ['class' => 'form-control nomActiviteAgricole']); ?>
+                        </div>
+                    </div>
+                    <div class="form-group row" id="autreAgricole">
+                        <?php echo Form::label(__('Autre activité'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-12 col-sm-8">
+                            <?php echo Form::text('autreActiviteAgricole', null, ['class' => 'form-control autreActiviteAgricole', 'placeholder' => 'Autre activité']); ?>
                         </div>
                     </div>
 
-                    <div class="form-group row" id="nomActiviteFemmes">
-                        <?php echo Form::label(__('Quelle Activité ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                    <div class="form-group row" id="nonAgricole">
+                        <?php echo Form::label(__('Nom de l\'activité'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::text('nomActiviteFemme', null, ['id' => 'nomActiviteFemme', 'class' => 'form-control nomActiviteFemme', 'placeholder' => __('Quelle Activité ?')]); ?>
+                            <?php echo Form::select('nomActiviteNonAgricole', ['' => 'Selectionner une option', 'Commerce' => __('Commerce'), 'Elevage' => __('Elevage'), 'Autre' => __('Autre')], null, ['class' => 'form-control nomActiviteNonAgricole']); ?>
                         </div>
                     </div>
-                    <div class="form-group row" id="champFemmes">
-                        <?php echo Form::label(__('Es-tu prêt à donner une partie de ton champ à votre conjoint(e) ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                    <div class="form-group row" id="autreNonAgricole">
+                        <?php echo Form::label(__('Autre activité'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('champFemme', ['non' => __('non'), 'oui' => __('oui')], null, ['id' => 'champFemme', 'class' => 'form-control champFemme']); ?>
+                            <?php echo Form::text('autreActiviteNonAgricole', null, ['class' => 'form-control autreActiviteNonAgricole', 'placeholder' => 'Autre activité']); ?>
+                        </div>
+                    </div>
+                    <div class="form-group row" id="nombreHectareConjoint">
+                        <?php echo Form::label(__('Quelle est sa superficie ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-12 col-sm-8">
+                            <input type="number" min="0.1" name="nombreHectareConjoint" placeholder="Ex: 2 ha"
+                                class="form-control nombreHectareConjoint" value="{{ old('nombreHectareConjoint') }}">
                         </div>
                     </div>
 
-                    <div class="form-group row" id="nombreHectareFemmes">
-                        <?php echo Form::label(__("Combien d'hectare ?"), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::text('nombreHectareFemme', null, ['id' => 'nombreHectareFemme', 'class' => 'form-control nombreHectareFemme', 'placeholder' => __('Ex: 2 ha')]); ?>
+                    <div id="autreInfos">
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Comment avez-vous obtenu le capital de démarrage ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::select('capitalDemarrage', ['' => 'Selectionner une option', 'Vente de cacao' => __('Vente de cacao'), 'AVEC' => __('AVEC'), 'Association' => __('Association'), 'Subvention' => __('Subvention'), 'Micro crédit' => __('Micro crédit'), 'Autre' => __('Autre')], null, ['id' => 'capitalDemarrage', 'class' => 'form-control capitalDemarrage']); ?>
+                            </div>
+                        </div>
+                        <div class="form-group row" id="autreCapital">
+                            <?php echo Form::label(__('Autre capital'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::text('autreCapital', null, ['class' => 'form-control autreCapital', 'placeholder' => 'Autre capital']); ?>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Dépuis combien de temps(mois) pratiquez vous cette activité ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::number('dureeActivite', null, ['id' => 'dureeActivite', 'class' => 'form-control dureeActivite', 'placeholder' => 'Le mois en chiffre']); ?>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Avez-vous bénéficiez d\'une formation ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::select('formation', ['' => 'Selectionner une option', 'non' => 'non', 'oui' => __('oui')], null, ['id' => 'formation', 'class' => 'form-control formation']); ?>
+                            </div>
+                        </div>
+                        <div class="form-group row" id="entite">
+                            <?php echo Form::label(__('Par qui ? '), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::text('entite', null, ['class' => 'form-control entite', 'placeholder' => 'Entreprise / particulier']); ?>
+                            </div>
                         </div>
                     </div>
 
@@ -303,7 +354,7 @@
         $("#localite").chained("#section");
         $("#producteur").chained("#localite");
         $(document).ready(function() {
-            $('#avoirMachine,#boisChauffes,#etatatomiseurs, #nomActiviteFemmes,#nombreHectareFemmes,#autreMachine,#autreEndroits')
+            $('#avoirMachine,#boisChauffes,#etatatomiseurs,#autreMachine,#autreEndroits,#autreSourceEaux,#etatEpis,#typeActivite,#agricole,#nonAgricole,#nombreHectareConjoint,#autreInfos,#autreCapital,#entite,#autreAgricole,#autreNonAgricole')
                 .hide();
             $('.traitementChamps').change(function() {
                 var traitementChamps = $('.traitementChamps').val();
@@ -446,77 +497,6 @@
                 $('#boisChauffe').prop('required', false);
             }
 
-
-            $('.activiteFemme').change(function() {
-                var activiteFemme = $('.activiteFemme').val();
-                if (activiteFemme == 'oui') {
-                    $('#nomActiviteFemmes').show('slow');
-                    $('.nomActiviteFemme').show('slow');
-                    $('#nomActiviteFemme').prop('required', true);
-                    $('.nomActiviteFemme').css('display', 'block');
-
-                    $('#champFemmes').hide('slow');
-                    $('.champFemme').val('');
-                    $('#champFemme').prop('required', false);
-                } else {
-                    $('#nomActiviteFemmes').hide('slow');
-                    $('.nomActiviteFemme').val('');
-                    $('#nomActiviteFemme').prop('required', false);
-                    $('.nomActiviteFemme').hide('slow');
-
-                    $('#champFemmes').show('slow');
-                    $('.champFemme').show('slow');
-                    $('#champFemme').prop('required', true);
-                }
-            });
-
-            if ($('.activiteFemme').val() == 'oui') {
-                $('#nomActiviteFemmes').show('slow');
-                $('.nomActiviteFemme').show('slow');
-                $('#nomActiviteFemme').prop('required', true);
-                $('.nomActiviteFemme').css('display', 'block');
-
-                $('#champFemmes').hide('slow');
-                $('.champFemme').val('');
-                $('#champFemme').prop('required', false);
-            } else {
-                $('#nomActiviteFemmes').hide('slow');
-                $('.nomActiviteFemme').val('');
-                $('#nomActiviteFemme').prop('required', false);
-                $('.nomActiviteFemme').hide('slow');
-
-                $('#champFemmes').show('slow');
-                $('.champFemme').show('slow');
-                $('#champFemme').prop('required', true);
-            }
-
-
-            $('.champFemme').change(function() {
-                var champFemme = $('.champFemme').val();
-                if (champFemme == 'oui') {
-                    $('#nombreHectareFemmes').show('slow');
-                    $('.nombreHectareFemme').css('display', 'block');
-                    $('.nombreHectareFemme').show('slow');
-                    $('#nombreHectareFemme').prop('required', true);
-
-                } else {
-                    $('#nombreHectareFemmes').hide('slow');
-                    $('.nombreHectareFemme').val('');
-                    $('.nombreHectareFemme').hide('slow');
-                    $('#nombreHectareFemme').prop('required', false);
-                }
-            });
-            if ($('.champFemme').val() == 'oui') {
-                $('#nombreHectareFemmes').show('slow');
-                $('.nombreHectareFemme').css('display', 'block');
-                $('.nombreHectareFemme').show('slow');
-                $('#nombreHectareFemme').prop('required', true);
-            } else {
-                $('#nombreHectareFemmes').hide('slow');
-                $('.nombreHectareFemme').val('');
-                $('.nombreHectareFemme').hide('slow');
-                $('#nombreHectareFemme').prop('required', false);
-            }
             $('.sources_eaux').change(function() {
                 var sources_eaux = $('.sources_eaux').val();
                 if (sources_eaux == 'Autre') {
@@ -529,6 +509,7 @@
                     $('#autreSourceEau').prop('required', false);
                 }
             });
+
             if ($('.sources_eaux').val() == 'Autre') {
                 $('#autreSourceEaux').show('slow');
                 $('.autreSourceEau').show('slow');
@@ -537,6 +518,206 @@
                 $('#autreSourceEaux').hide('slow');
                 $('.autreSourceEau').val('');
                 $('#autreSourceEau').prop('required', false);
+            }
+            $('.activiteFemme').change(function() {
+                var activiteFemme = $('.activiteFemme').val();
+                if (activiteFemme == 'oui') {
+                    $('#typeActivite').show('slow');
+                    $('.typeActivite').show('slow');
+                    $('.typeActivite').prop('required', true);
+
+                } else {
+                    $('#typeActivite').hide('slow');
+                    $('.typeActivite').hide('slow');
+                    $('.typeActivite').prop('required', false);
+                }
+            });
+            if ($('.activiteFemme').val() == 'oui') {
+                $('#typeActivite').show('slow');
+                $('.typeActivite').show('slow');
+                $('.typeActivite').prop('required', true);
+            } else {
+                $('#typeActivite').hide('slow');
+                $('.typeActivite').hide('slow');
+                $('.typeActivite').prop('required', false);
+            }
+
+            $('.typeActivite').change(function() {
+                var typeActivite = $('.typeActivite').val();
+                if (typeActivite == 'Activite agricole') {
+                    $('#agricole').show('slow');
+                    $('#agricole select[name="nomActiviteAgricole"]').show('slow');
+                    $('#agricole select[name="nomActiviteAgricole"]').prop('required', true);
+                    $('#nombreHectareConjoint').show('slow');
+                    $('.nombreHectareConjoint').show('slow');
+                    $('.nombreHectareConjoint').prop('required', true);
+                } else {
+                    $('#agricole').hide('slow');
+                    $('#agricole select[name="nomActiviteAgricole"]').hide('slow');
+                    $('#agricole select[name="nomActiviteAgricole"]').prop('required', false);
+                    $('#agricole select[name="nomActiviteAgricole"]').find('option[value=""]').prop(
+                        'selected',
+                        true);
+                    $('#nombreHectareConjoint').hide('slow');
+                    $('.nombreHectareConjoint').hide('slow');
+                    $('.nombreHectareConjoint').prop('required', false);
+                    $('.nombreHectareConjoint').val('');
+                }
+            });
+            if ($('.typeActivite').val() == 'Activite agricole') {
+                $('#agricole').show('slow');
+                $('#agricole select[name="nomActiviteAgricole"]').show('slow');
+                $('#agricole select[name="nomActiviteAgricole"]').prop('required', true);
+                $('#nombreHectareConjoint').show('slow');
+                $('.nombreHectareConjoint').show('slow');
+                $('.nombreHectareConjoint').prop('required', true);
+            } else {
+                $('#agricole').hide('slow');
+                $('#agricole select[name="nomActiviteAgricole"]').hide('slow');
+                $('#agricole select[name="nomActiviteAgricole"]').prop('required', false);
+                $('#agricole select[name="nomActiviteAgricole"]').find('option[value=""]').prop(
+                    'selected',
+                    true);
+                $('#nombreHectareConjoint').hide('slow');
+                $('.nombreHectareConjoint').hide('slow');
+                $('.nombreHectareConjoint').prop('required', false);
+                $('.nombreHectareConjoint').val('');
+            }
+            $('.nomActiviteAgricole').change(function() {
+                var nomActiviteAgricole = $('.nomActiviteAgricole').val();
+                if (nomActiviteAgricole == 'Autre') {
+                    $('#autreAgricole').show('slow');
+                    $('.autreActiviteAgricole').show('slow');
+                    $('.autreActiviteAgricole').prop('required', true);
+                } else {
+                    $('#autreAgricole').hide('slow');
+                    $('.autreActiviteAgricole').val('');
+                    $('.autreActiviteAgricole').prop('required', false);
+                }
+            });
+
+            if ($('.nomActiviteAgricole').val() == 'Autre') {
+                $('#autreAgricole').show('slow');
+                $('.autreActiviteAgricole').show('slow');
+                $('.autreActiviteAgricole').prop('required', true);
+            } else {
+                $('#autreAgricole').hide('slow');
+                $('.autreActiviteAgricole').val('');
+                $('.autreActiviteAgricole').prop('required', false);
+            }
+            $('.nomActiviteNonAgricole').change(function() {
+                var nomActiviteNonAgricole = $('.nomActiviteNonAgricole').val();
+                if (nomActiviteNonAgricole == 'Autre') {
+                    $('#autreNonAgricole').show('slow');
+                    $('.autreActiviteNonAgricole').show('slow');
+                    $('.autreActiviteNonAgricole').prop('required', true);
+                } else {
+                    $('#autreNonAgricole').hide('slow');
+                    $('.autreActiviteNonAgricole').val('');
+                    $('.autreActiviteNonAgricole').prop('required', false);
+                }
+            });
+
+            if ($('.nomActiviteNonAgricole').val() == 'Autre') {
+                $('#autreNonAgricole').show('slow');
+                $('.autreActiviteNonAgricole').show('slow');
+                $('.autreActiviteNonAgricole').prop('required', true);
+            } else {
+                $('#autreNonAgricole').hide('slow');
+                $('.autreActiviteNonAgricole').val('');
+                $('.autreActiviteNonAgricole').prop('required', false);
+            }
+            $('.typeActivite').change(function() {
+                var typeActivite = $('.typeActivite').val();
+                if (typeActivite == 'Activite agricole' || typeActivite == 'Activite non agricole') {
+                    $('#autreInfos').show('slow');
+                    $('#autreInfos select[name="capitalDemarrage"]').show('slow');
+                    $('#autreInfos select[name="capitalDemarrage"]').prop('required', true);
+                    $('#autreInfos select[name="formation"]').show('slow');
+                    $('#autreInfos select[name="formation"]').prop('required', true);
+                    $('#autreInfos input[name="dureeActivite"]').show('slow');
+                    $('#autreInfos input[name="dureeActivite"]').prop('required', true);
+                } else {
+                    $('#autreInfos').hide('slow');
+                    $('#autreInfos select[name="capitalDemarrage"]').hide('slow');
+                    $('#autreInfos select[name="capitalDemarrage"]').prop('required', false);
+                    $('#autreInfos select[name="capitalDemarrage"]').find('option[value=""]').prop(
+                        'selected',
+                        true);
+                    $('#autreInfos select[name="formation"]').hide('slow');
+                    $('#autreInfos select[name="formation"]').prop('required', false);
+                    $('#autreInfos select[name="formation"]').find('option[value=""]').prop('selected',
+                        true);
+                    $('#autreInfos input[name="dureeActivite"]').hide('slow');
+                    $('#autreInfos input[name="dureeActivite"]').prop('required', false);
+                    $('#autreInfos input[name="dureeActivite"]').val('');
+                }
+            });
+            
+            if ($('.typeActivite').val() == 'Activite agricole' || $('.typeActivite').val() == 'Activite non agricole') {
+                $('#autreInfos').show('slow');
+                $('#autreInfos select[name="capitalDemarrage"]').show('slow');
+                $('#autreInfos select[name="capitalDemarrage"]').prop('required', true);
+                $('#autreInfos select[name="formation"]').show('slow');
+                $('#autreInfos select[name="formation"]').prop('required', true);
+                $('#autreInfos input[name="dureeActivite"]').show('slow');
+                $('#autreInfos input[name="dureeActivite"]').prop('required', true);
+            } else {
+                $('#autreInfos').hide('slow');
+                $('#autreInfos select[name="capitalDemarrage"]').hide('slow');
+                $('#autreInfos select[name="capitalDemarrage"]').prop('required', false);
+                $('#autreInfos select[name="capitalDemarrage"]').find('option[value=""]').prop(
+                    'selected',
+                    true);
+                $('#autreInfos select[name="formation"]').hide('slow');
+                $('#autreInfos select[name="formation"]').prop('required', false);
+                $('#autreInfos select[name="formation"]').find('option[value=""]').prop('selected',
+                    true);
+                $('#autreInfos input[name="dureeActivite"]').hide('slow');
+                $('#autreInfos input[name="dureeActivite"]').prop('required', false);
+                $('#autreInfos input[name="dureeActivite"]').val('');
+            }
+            $('.capitalDemarrage').change(function() {
+                var capitalDemarrage = $('.capitalDemarrage').val();
+                if (capitalDemarrage == 'Autre') {
+                    $('#autreCapital').show('slow');
+                    $('.autreCapital').show('slow');
+                    $('.autreCapital').prop('required', true);
+                } else {
+                    $('#autreCapital').hide('slow');
+                    $('.autreCapital').val('');
+                    $('.autreCapital').prop('required', false);
+                }
+            });
+            if ($('.capitalDemarrage').val() == 'Autre') {
+                $('#autreCapital').show('slow');
+                $('.autreCapital').show('slow');
+                $('.autreCapital').prop('required', true);
+            } else {
+                $('#autreCapital').hide('slow');
+                $('.autreCapital').val('');
+                $('.autreCapital').prop('required', false);
+            }
+            $('.formation').change(function() {
+                var formation = $('.formation').val();
+                if (formation == 'oui') {
+                    $('#entite').show('slow');
+                    $('.entite').show('slow');
+                    $('.entite').prop('required', true);
+                } else {
+                    $('#entite').hide('slow');
+                    $('.entite').val('');
+                    $('.entite').prop('required', false);
+                }
+            });
+            if ($('.formation').val() == 'oui') {
+                $('#entite').show('slow');
+                $('.entite').show('slow');
+                $('.entite').prop('required', true);
+            } else {
+                $('#entite').hide('slow');
+                $('.entite').val('');
+                $('.entite').prop('required', false);
             }
         });
     </script>
