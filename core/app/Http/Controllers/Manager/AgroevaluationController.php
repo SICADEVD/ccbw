@@ -2,21 +2,23 @@
 
 namespace App\Http\Controllers\Manager;
 
-use App\Constants\Status;
-use App\Exports\ExportAgroevaluations;
-use App\Exports\ExportParcelles;
-use App\Http\Controllers\Controller;
-use App\Imports\ParcelleImport;
-use App\Models\Agroevaluation;
-use App\Models\Campagne;
-use App\Models\Localite; 
-use App\Models\Producteur; 
-use App\Models\Parcelle; 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 use Excel;
+use App\Models\Campagne;
+use App\Constants\Status;
+use App\Models\Localite; 
+use App\Models\Parcelle; 
+use App\Models\Producteur; 
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Models\Agroevaluation;
+use App\Imports\ParcelleImport;
+use App\Exports\ExportParcelles;
+use App\Models\Agroespecesarbre;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use App\Models\AgroevaluationEspece;
+use Illuminate\Support\Facades\Hash;
+use App\Exports\ExportAgroevaluations;
 
 class AgroevaluationController extends Controller
 {
@@ -26,14 +28,14 @@ class AgroevaluationController extends Controller
         $pageTitle      = "Evaluation des besoins en arbres";
         $manager   = auth()->user();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->get();
-        $agroevaluations = Agroevaluation::dateFilter()->searchable([])->latest('id')->joinRelationship('parcelle.producteur.localite.section')->where('sections.cooperative_id',$manager->cooperative_id)->where(function ($q) {
+        $agroevaluations = Agroevaluation::dateFilter()->searchable([])->latest('id')->joinRelationship('producteur.localite.section')->where('sections.cooperative_id',$manager->cooperative_id)->where(function ($q) {
             if(request()->localite != null){
                 $q->where('localite_id',request()->localite);
             }
             if(request()->status != null){
                 $q->where('agroevaluations.status',request()->status);
             }
-        })->with('parcelle')->paginate(getPaginate());
+        })->with('producteur')->paginate(getPaginate());
          
         return view('manager.agroevaluation.index', compact('pageTitle', 'agroevaluations','localites'));
     }
@@ -45,15 +47,18 @@ class AgroevaluationController extends Controller
         $producteurs  = Producteur::with('localite')->get();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->orderBy('nom')->get();
         $campagnes = Campagne::active()->pluck('nom','id');
-        $parcelles  = Parcelle::with('producteur')->get();
+        $especesarbres  = Agroespecesarbre::get(); 
        
-        return view('manager.agroevaluation.create', compact('pageTitle', 'producteurs','localites','campagnes','parcelles'));
+        return view('manager.agroevaluation.create', compact('pageTitle', 'producteurs','localites','campagnes','especesarbres'));
     }
 
     public function store(Request $request)
     {
         $validationRule = [ 
             'localite'    => 'required|exists:localites,id',
+            'producteur'    => 'required|exists:producteurs,id',
+            'especesarbre'            => 'required|array',
+            'quantite'            => 'required|array', 
         ];
  
 
@@ -65,92 +70,47 @@ class AgroevaluationController extends Controller
             $notify[] = ['error', 'Cette localité est désactivée'];
             return back()->withNotify($notify)->withInput();
         }
+        if ($request->id) {
+            $agroevaluation = Agroevaluation::findOrFail($request->id);
+            $message = "Le contenu a été mise à jour avec succès";
+        } else {
+            $agroevaluation = new Agroevaluation();
+        }
+
+        $agroevaluation->producteur_id  = $request->producteur;
+        $agroevaluation->quantite  = array_sum($request->quantite);
+        $agroevaluation->save();
         $k=0;
         $i=0;
         $datas = [];  
-        if($request->localite){
-
-            if($request->producteur){
-
-                if($request->parcelle !=null) {  
-            
-                    foreach($request->parcelle as $data){
-                        $parc = Parcelle::findOrFail($data);
-                        $superficie = $parc->superficie;
-                        $quantite = 70 * $superficie;
-                        $verification = Agroevaluation::where('parcelle_id', $data)->count();
-                        if(!$verification){
-                            $datas[] = [
-                                'parcelle_id' => $data,  
-                                'quantite' => $quantite, 
-                                'created_at' =>now()
-                            ];  
-                            $i++;
-                        }else{
-                            $k++;
-                        }
-                           
-                    } 
-                }else{
-                    $parcelle = Parcelle::where('producteur_id', $request->producteur)->get();
-                    if($parcelle->count()){ 
-                        foreach($parcelle as $data){ 
-                            $superficie = $data->superficie;
-                            $quantite = 70 * $superficie;
-                        $verification = Agroevaluation::where('parcelle_id', $data->id)->count();
-                        if(!$verification){
-                            $datas[] = [
-                                'parcelle_id' => $data->id,  
-                                'quantite' => $quantite, 
-                                'created_at' =>now()
-                            ];
-                            $i++;
-                        }else{
-                            $k++;
-                        }
-                               
-                        }
+        if($agroevaluation !=null){
+            $id = $agroevaluation->id;
+            if($request->especesarbre){
+                AgroevaluationEspece::where('agroevaluation_id',$id)->delete();
+            $quantite = $request->quantite;
+            foreach($request->especesarbre as $key => $data){
+                 
+                $total = $quantite[$key];  
+                     if($total !=null)
+                    {   
+                    $datas[] = [ 
+                        'agroevaluation_id'=>$id,
+                        'agroespecesarbre_id' => $data,  
+                        'total' => $total,  
+                    ]; 
+                    $i++;
+                    }else{
+                        $k++;
                     }
-                }
-
-            }else{
-
-                $localites = Producteur::where('localite_id', $request->localite)->get();
-                if($localites->count()){
-                    foreach($localites as $loc){
-
-                        $parcelle = Parcelle::where('producteur_id', $loc->id)->get();
-                    if($parcelle->count()){ 
-                        foreach($parcelle as $data){ 
-                            $superficie = $data->superficie;
-                            $quantite = 70 * $superficie;
-                        $verification = Agroevaluation::where('parcelle_id', $data->id)->count();
-                        if(!$verification){
-                            $datas[] = [
-                                'parcelle_id' => $data->id,  
-                                'quantite' => $quantite, 
-                                'created_at' =>now()
-                            ];
-                            $i++;
-                        }else{
-                            $k++;
-                        }
-                               
-                        }
-                    }
-
-                    }
-                }
-            }
+                      
+            } 
+            AgroevaluationEspece::insert($datas); 
+                      
+            } 
 
         }
         
-        if(count($datas)){
-            Agroevaluation::insert($datas); 
-            $notify[] = ['success', "$i parcelles ont été évaluées en besoins d'arbres à ombrage. $k parcelles ont déjà été évaluées."];
-        }else{
-            $notify[] = ['error', "Aucune parcelle a évaluée"];
-        }
+        $notify[] = ['success', isset($message) ? $message : "$i arbres à ombrage ont été exprimés comme besoin de cet Producteur."];
          
         return back()->withNotify($notify);
     }
@@ -163,8 +123,18 @@ class AgroevaluationController extends Controller
         $manager = auth()->user();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->orderBy('nom')->get();
         $producteurs  = Producteur::with('localite')->get();
-        $estimation   = Agroevaluation::findOrFail($id);
-        return view('manager.agroevaluation.edit', compact('pageTitle', 'localites', 'estimation','producteurs'));
+        $evaluation   = Agroevaluation::findOrFail($id);
+        $especesarbres  = Agroespecesarbre::get(); 
+        $agroevaluationEspece  = AgroevaluationEspece::where('agroevaluation_id', $evaluation->id)->get(); 
+        $dataEspece = $dataQuantite = array();
+        if($agroevaluationEspece->count()){
+            foreach($agroevaluationEspece as $data){
+                $dataEspece[] = $data->agroespecesarbre_id;
+                $dataQuantite[$data->agroespecesarbre_id] = $data->total;
+            }
+        } 
+       
+        return view('manager.agroevaluation.edit', compact('pageTitle', 'localites', 'evaluation','especesarbres','producteurs','dataEspece','dataQuantite'));
     } 
 
     public function status($id)

@@ -46,9 +46,7 @@
                             <thead>
                                 <tr> 
                                     <th>@lang('Localite')</th> 
-                                    <th>@lang('Producteur')</th>
-                                    <th>@lang('Parcelle')</th>
-                                    <th>@lang('Superficie')</th>  
+                                    <th>@lang('Producteur')</th>  
                                     <th>@lang('Quantite')</th>  
                                     <th>@lang("Date")</th> 
                                     <th>@lang('Action')</th>
@@ -58,23 +56,13 @@
                                 @forelse($agroevaluations as $agroevaluation)
                                     <tr>
                                         <td>
-                                            <span class="fw-bold">{{ $agroevaluation->parcelle->producteur->localite->nom }}</span>
+                                            <span class="fw-bold">{{ $agroevaluation->producteur->localite->nom }}</span>
                                         </td>
                                         <td> 
                                             <span class="small">
-                                            {{ $agroevaluation->parcelle->producteur->nom }} {{ $agroevaluation->parcelle->producteur->prenoms }}
+                                            {{ $agroevaluation->producteur->nom }} {{ $agroevaluation->producteur->prenoms }}
                                             </span>
-                                        </td>
-                                        <td>
-                                            <span> <a href="{{ route('manager.agro.evaluation.edit', $agroevaluation->id) }}">
-                                                    <span>@</span>{{ $agroevaluation->parcelle->codeParc }}
-                                                </a></span>
-                                        </td>
-                                        
-                                        <td>
-                                            <span>{{ $agroevaluation->parcelle->superficie }}</span>
-                                        </td>
-                                        
+                                        </td> 
                                         <td>
                                             <span>{{ $agroevaluation->quantite }}</span>
                                         </td>
@@ -83,9 +71,19 @@
                                             <span>{{ diffForHumans($agroevaluation->created_at) }}</span>
                                         </td> 
                                         <td>
-                                        <a href="{{ route('manager.agro.evaluation.destroy', encrypt($agroevaluation->id)) }}"
-                                                class="btn btn-sm btn-outline--danger"><i
+                                        <button type="button" class="btn btn-sm btn-outline--primary"
+                                                data-bs-toggle="dropdown" aria-expanded="false"><i
+                                                    class="las la-ellipsis-v"></i>@lang('Action')
+                                            </button>
+                                            <div class="dropdown-menu p-0">
+                                                <a href="{{ route('manager.agro.evaluation.edit', $agroevaluation->id) }}"
+                                                    class="dropdown-item"><i class="la la-pen"></i>@lang('Edit')</a>
+                                                    <a href="{{ route('manager.agro.evaluation.destroy', encrypt($agroevaluation->id)) }}"
+                                                class="dropdown-item"><i
                                                     class="las la-trash"></i>@lang('Delete')</a>
+
+                                            </div>
+                                        
                                             
                                         </td>
                                     </tr>

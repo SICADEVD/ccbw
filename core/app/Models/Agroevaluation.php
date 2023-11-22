@@ -16,9 +16,9 @@ class Agroevaluation extends Model
         return $this->belongsTo(Campagne::class);
     }
 
-    public function parcelle()
+    public function producteur()
     {
-        return $this->belongsTo(Parcelle::class);
+        return $this->belongsTo(Producteur::class);
     }
      
      

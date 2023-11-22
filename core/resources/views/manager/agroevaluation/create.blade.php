@@ -31,23 +31,41 @@
                                 </select>
                                 </div>
                             </div>
-                            <div class="form-group row">
-                                <label class="col-sm-4 control-label">@lang('Parcelle')</label>
-                                <div class="col-xs-12 col-sm-8">
-                                <select class="form-control select2-multi-select" name="parcelle[]" id="parcelle" multiple>
-                                    <option value="">@lang('Selectionner une option')</option>
-                                    @foreach($parcelles as $parcelle)
-                                        <option value="{{ $parcelle->id }}" data-superficie="{{ $parcelle->superficie }}" data-chained="{{ $parcelle->producteur->id }}" @selected(old('parcelle'))>
-                                           {{ __('Parcelle')}} {{ $parcelle->codeParc }}</option>
-                                    @endforeach
-                                </select>
-                                </div>
-                            </div> 
-     
+<hr class="panel-wide">               
+<div class="form-group row">
+            {{ Form::label(__("Espèce D'arbres"), null, ['class' => 'col-sm-4 control-label']) }}
+    <div class="col-xs-12 col-sm-8">
+    <table class="table table-striped table-bordered">
+    <tbody>
+        @foreach($especesarbres as $data)
+ <tr>
+            <td class="row">
+            <div class="col-xs-12 col-sm-9">
+        <div class="form-group">
+            {!! Form::hidden('especesarbre[]', $data->id, array()) !!}
+            {!! Form::text('nom', $data->nom, array('class' => 'form-control','readonly')) !!}
+        </div>
+        </div>
+
+    <div class="col-xs-12 col-sm-3">
+        <div class="form-group">
+            {!! Form::number('quantite[]', null, array('placeholder' => __('Qté'),'class' => 'form-control', 'min'=>'0')) !!}
+
+        </div>
+    </div>
+
+        </td>
+        </tr>
+        @endforeach
+    </tbody>
+
+</table>
+</div>
+    </div>
 <hr class="panel-wide">
  
                         <div class="form-group row">
-                            <button type="submit" class="btn btn--primary w-100 h-45"> @lang('PROCEDEZ AU CALCUL D\'ARBRES DES PARCELLES')</button>
+                            <button type="submit" class="btn btn--primary w-100 h-45"> @lang('ENREGISTRER')</button>
                         </div>
                         {!! Form::close() !!}
                 </div>
