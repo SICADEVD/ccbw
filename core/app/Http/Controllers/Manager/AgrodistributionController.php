@@ -307,12 +307,13 @@ class AgrodistributionController extends Controller
          
          $i=0;
          $k=1;
-         $qte=0;
+         
         foreach($especes as $data)
         {
+            if(in_array($data->id, $dataEspece)){$qte = $dataQuantite[$data->id];}else{$qte=0;}
           if($data->total !=$data->total_restant) {
             $totalespece = $data->total - $data->total_restant; 
-            if(in_array($data->id, $dataEspece)){$qte = $dataQuantite[$data->id];}
+            
             
             $results .='<tr><td>'.$data->agroespecesarbre->nom.'</td>';
             $results .='<td><button class="btn btn-primary" type="button">'.$totalespece.'</button></td>'; 
@@ -322,8 +323,7 @@ class AgrodistributionController extends Controller
               $results .='<td><div class="input-group"><input type="number" name="quantite['.$producteurId.']['.$data->agroespecesarbre_id.']" value="0" min="0" max="'.$totalespece.'" parc-'.$s.'="'.$qte.'" id="qte-'.$k.'"  class="form-control totaux quantity-'.$i.' st-'.$s.'" onchange=getQuantite('.$i.','.$k.','.$s.') style="width: 100px;"><span class="input-group-btn"></span></div></td>'; 
               $k++;
               $s++; 
-            $i++;
-            $qte=0;
+            $i++; 
             $results .='</tr>';
           }
         }
