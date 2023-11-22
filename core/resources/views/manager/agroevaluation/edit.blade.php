@@ -6,30 +6,21 @@
                 <div class="card-body"> 
          {!! Form::model($evaluation, ['method' => 'POST','route' => ['manager.agro.evaluation.store', $evaluation->id],'class'=>'form-horizontal', 'id'=>'flocal', 'enctype'=>'multipart/form-data']) !!}
                         <input type="hidden" name="id" value="{{ $evaluation->id }}"> 
-                        
+                        <input type="hidden" name="producteur" value="{{ $evaluation->producteur_id }}"> 
+                        <input type="hidden" name="localite" value="{{ $evaluation->producteur->localite->id }}"> 
                         <div class="form-group row">
                                 <label class="col-sm-4 control-label">@lang('Selectionner une localite')</label>
                                 <div class="col-xs-12 col-sm-8">
-                                <select class="form-control" name="localite" id="localite" required>
-                                    <option value="">@lang('Selectionner une option')</option>
-                                    @foreach($localites as $localite)
-                                        <option value="{{ $localite->id }}" @selected($localite->id==$evaluation->producteur->localite->id)>
-                                            {{ $localite->nom }}</option>
-                                    @endforeach
-                                </select>
+                                
+                                {!! Form::text('localites', $producteurs->localite->nom, array('placeholder' => __('Localite'),'class' => 'form-control', 'readonly')) !!}
                                 </div>
                             </div>  
                        
                             <div class="form-group row">
-                                <label class="col-sm-4 control-label">@lang('Selectionner un producteur')</label>
+                                <label class="col-sm-4 control-label">@lang('Producteur')</label>
                                 <div class="col-xs-12 col-sm-8">
-                                <select class="form-control" name="producteur" id="producteur" required>
-                                    <option value="">@lang('Selectionner une option')</option>
-                                    @foreach($producteurs as $producteur)
-                                        <option value="{{ $producteur->id }}" data-chained="{{ $producteur->localite->id }}" @selected($producteur->id==$evaluation->producteur_id)>
-                                            {{ $producteur->nom }} {{ $producteur->prenoms }}</option>
-                                    @endforeach
-                                </select>
+                                {!! Form::text('producteurs', $producteurs->nom.' '.$producteurs->prenoms, array('placeholder' => __('Producteur'),'class' => 'form-control', 'readonly')) !!}
+                                 
                                 </div>
                             </div>
  

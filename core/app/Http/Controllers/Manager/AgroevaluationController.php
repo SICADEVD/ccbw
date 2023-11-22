@@ -42,7 +42,7 @@ class AgroevaluationController extends Controller
  
     public function create()
     {
-        $pageTitle = "Ajouter une estimation";
+        $pageTitle = "Ajouter une évaluation AgroForesterie";
         $manager   = auth()->user();
         $producteurs  = Producteur::with('localite')->get();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->orderBy('nom')->get();
@@ -119,11 +119,12 @@ class AgroevaluationController extends Controller
 
     public function edit($id)
     {
-        $pageTitle = "Mise à jour de la estimation";
+        $pageTitle = "Mise à jour de l'évaluation AgroForesterie";
         $manager = auth()->user();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->orderBy('nom')->get();
-        $producteurs  = Producteur::with('localite')->get();
+        
         $evaluation   = Agroevaluation::findOrFail($id);
+        $producteurs  = Producteur::where('id', $evaluation->producteur_id)->first();
         $especesarbres  = Agroespecesarbre::get(); 
         $agroevaluationEspece  = AgroevaluationEspece::where('agroevaluation_id', $evaluation->id)->get(); 
         $dataEspece = $dataQuantite = array();
@@ -134,7 +135,7 @@ class AgroevaluationController extends Controller
             }
         } 
        
-        return view('manager.agroevaluation.edit', compact('pageTitle', 'localites', 'evaluation','especesarbres','producteurs','dataEspece','dataQuantite'));
+        return view('manager.agroevaluation.edit', compact('pageTitle', 'evaluation','especesarbres','producteurs','dataEspece','dataQuantite'));
     } 
 
     public function status($id)
