@@ -9,7 +9,7 @@
                         <input type="hidden" name="producteur" value="{{ $evaluation->producteur_id }}"> 
                         <input type="hidden" name="localite" value="{{ $evaluation->producteur->localite->id }}"> 
                         <div class="form-group row">
-                                <label class="col-sm-4 control-label">@lang('Selectionner une localite')</label>
+                                <label class="col-sm-4 control-label">@lang('Localité')</label>
                                 <div class="col-xs-12 col-sm-8">
                                 
                                 {!! Form::text('localites', $producteurs->localite->nom, array('placeholder' => __('Localite'),'class' => 'form-control', 'readonly')) !!}
@@ -31,6 +31,13 @@
             {{ Form::label(__("Espèce D'arbres"), null, ['class' => 'col-sm-4 control-label']) }}
     <div class="col-xs-12 col-sm-8">
     <table class="table table-striped table-bordered">
+    <thead>
+            <tr>
+                <th>Variété</th>
+                <th>Strate</th>
+                <th>Quantité</th>
+            </tr>
+        </thead>
     <tbody>
         @foreach($especesarbres as $data)
 
@@ -38,21 +45,15 @@
         if(in_array($data->id, $dataEspece)){$qte = $dataQuantite[$data->id];}else{$qte=0;}
         ?>
  <tr>
-            <td class="row">
-            <div class="col-xs-12 col-sm-9">
-        <div class="form-group">
+            <td> 
             {!! Form::hidden('especesarbre[]', $data->id, array()) !!}
-            {!! Form::text('nom', $data->nom, array('class' => 'form-control','readonly')) !!}
-        </div>
-        </div>
-
-    <div class="col-xs-12 col-sm-3">
-        <div class="form-group">
-            {!! Form::number('quantite[]', $qte, array('placeholder' => __('Qté'),'class' => 'form-control', 'min'=>'0')) !!}
-
-        </div>
-    </div>
-
+            {{$data->nom}} 
+            </td>
+            <td>
+                strate {{ $data->strate}}
+            </td>
+            <td>
+            {!! Form::number('quantite[]', $qte, array('placeholder' => __('Qté'),'class' => 'form-control', 'min'=>'0')) !!} 
         </td>
         </tr>
         @endforeach

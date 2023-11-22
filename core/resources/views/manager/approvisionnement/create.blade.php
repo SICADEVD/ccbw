@@ -10,24 +10,25 @@
             {{ Form::label(__("Espèce D'arbres"), null, ['class' => 'col-sm-4 control-label']) }}
     <div class="col-xs-12 col-sm-8">
     <table class="table table-striped table-bordered">
+    <thead>
+            <tr>
+                <th>Variété</th>
+                <th>Strate</th>
+                <th>Quantité</th>
+            </tr>
+        </thead>
     <tbody>
         @foreach($especesarbres as $data)
  <tr>
-            <td class="row">
-            <div class="col-xs-12 col-sm-9">
-        <div class="form-group">
-            {!! Form::hidden('especesarbre[]', $data->id, array()) !!}
-            {!! Form::text('nom', $data->nom, array('class' => 'form-control','readonly')) !!}
-        </div>
-        </div>
-
-    <div class="col-xs-12 col-sm-3">
-        <div class="form-group">
-            {!! Form::number('quantite[]', null, array('placeholder' => __('Qté'),'class' => 'form-control', 'min'=>'0')) !!}
-
-        </div>
-    </div>
-
+            <td> 
+            {!! Form::hidden('especesarbre[]', $data->id, array()) !!} 
+            {{ $data->nom }}
+            </td>
+            <td>
+            strate {{ $data->strate}}
+            </td>
+            <td>
+            {!! Form::number('quantite[]', null, array('placeholder' => __('Qté'),'class' => 'form-control', 'min'=>'0')) !!} 
         </td>
         </tr>
         @endforeach

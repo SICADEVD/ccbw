@@ -19,6 +19,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AgroevaluationEspece;
 use Illuminate\Support\Facades\Hash;
 use App\Exports\ExportAgroevaluations;
+use Illuminate\Database\Eloquent\Builder;
 
 class AgroevaluationController extends Controller
 {
@@ -44,11 +45,13 @@ class AgroevaluationController extends Controller
     {
         $pageTitle = "Ajouter une évaluation AgroForesterie";
         $manager   = auth()->user();
-        $producteurs  = Producteur::with('localite')->get();
+       // $producteurs  = Producteur::with('localite')->get();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->orderBy('nom')->get();
         $campagnes = Campagne::active()->pluck('nom','id');
-        $especesarbres  = Agroespecesarbre::get(); 
-       
+        $especesarbres  = Agroespecesarbre::orderby('strate','asc')->orderby('nom','asc')->get(); 
+        
+        $producteurs = Producteur::doesntHave('agroevaluation')->get();
+ 
         return view('manager.agroevaluation.create', compact('pageTitle', 'producteurs','localites','campagnes','especesarbres'));
     }
 
@@ -125,7 +128,7 @@ class AgroevaluationController extends Controller
         
         $evaluation   = Agroevaluation::findOrFail($id);
         $producteurs  = Producteur::where('id', $evaluation->producteur_id)->first();
-        $especesarbres  = Agroespecesarbre::get(); 
+        $especesarbres  = Agroespecesarbre::orderby('strate','asc')->orderby('nom','asc')->get(); 
         $agroevaluationEspece  = AgroevaluationEspece::where('agroevaluation_id', $evaluation->id)->get(); 
         $dataEspece = $dataQuantite = array();
         if($agroevaluationEspece->count()){

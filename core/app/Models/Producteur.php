@@ -29,5 +29,9 @@ class Producteur extends Model
     {
         return $this->hasMany(Producteur_certification::class, 'producteur_id', 'id');
     }
+    public function agroevaluation()
+    {
+        return $this->hasMany(Agroevaluation::class, 'producteur_id');
+    }
     
 }

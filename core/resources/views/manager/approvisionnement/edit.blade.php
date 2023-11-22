@@ -6,10 +6,24 @@
                 <div class="card-body"> 
          {!! Form::model($approvisionnement, ['method' => 'POST','route' => ['manager.agro.approvisionnement.store', $approvisionnement->id],'class'=>'form-horizontal', 'id'=>'flocal', 'enctype'=>'multipart/form-data']) !!}
                         <input type="hidden" name="id" value="{{ $approvisionnement->id }}"> 
+                         <div class="form-group row">
+                                <label class="col-sm-4 control-label">@lang('Coopérative')</label>
+                                <div class="col-xs-12 col-sm-8">
+                                
+                                {!! Form::text('cooperative', $approvisionnement->cooperative->name, array('placeholder' => __('Localite'),'class' => 'form-control', 'readonly')) !!}
+                                </div>
+                            </div> 
                         <div class="form-group row">
             {{ Form::label(__("Espèce D'arbres"), null, ['class' => 'col-sm-4 control-label']) }}
     <div class="col-xs-12 col-sm-8">
     <table class="table table-striped table-bordered">
+    <thead>
+            <tr>
+                <th>Variété</th>
+                <th>Strate</th>
+                <th>Quantité</th>
+            </tr>
+        </thead>
     <tbody>
    
     <?php
@@ -20,16 +34,15 @@ use Illuminate\Support\Arr;
         @foreach($especesarbres as $data)
         
  <tr>
-            <td class="row">
-            <div class="col-xs-12 col-sm-9">
-        <div class="form-group">
+            <td> 
             {!! Form::hidden('especesarbre[]', $data->id, array()) !!}
             {!! Form::text('nom', $data->nom, array('class' => 'form-control','readonly')) !!}
-        </div>
-        </div>
-
-    <div class="col-xs-12 col-sm-3">
-        <div class="form-group">
+            </td>
+            <td>
+            strate {{ $data->strate}}
+            </td>
+            <td>
+                
             <?php
             $quantite=null;
             foreach($approvisionnement->especes as $espece)
@@ -40,10 +53,7 @@ use Illuminate\Support\Arr;
             }
             ?>
             {!! Form::number('quantite[]', $quantite, array('placeholder' => __('Qté'),'class' => 'form-control', 'min'=>'0')) !!}
-
-        </div>
-    </div>
-
+ 
         </td>
         </tr>
         @endforeach
