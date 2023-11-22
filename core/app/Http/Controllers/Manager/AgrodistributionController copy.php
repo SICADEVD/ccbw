@@ -50,7 +50,7 @@ class AgrodistributionController extends Controller
     public function store(Request $request)
     {
         $validationRule = [  
-            'quantite' => 'required|array',  
+            'quantite'            => 'required|array',  
         ];
  
 
