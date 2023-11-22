@@ -140,6 +140,7 @@ class EmployeeController extends AccountBaseController
             $user->username  = Str::limit(Str::slug($request->firstname,""),12,'.').Str::limit(Str::slug($request->lastname,""),1,'');
             $user->email  = $request->email;
             $user->mobile = $request->mobile; 
+            $user->adresse = $request->address; 
             $user->country_id = $request->country;
             $user->country_phonecode = $request->country_phonecode;
             $user->genre = $request->gender;
