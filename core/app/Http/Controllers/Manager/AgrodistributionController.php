@@ -316,11 +316,11 @@ class AgrodistributionController extends Controller
             
             // if(in_array($data->id, $dataEspece)){$qte = $dataQuantite[$data->id];}else{$qte=0;}
             $qte = AgroevaluationEspece::where([['agroespecesarbre_id',$data->id],['agroevaluation_id',$agroeval->id]])->first();
-            if($qte !=null){$qte=$qte->total;}
-            else{$qte =0;}
+            if($qte !=null){$quant=$qte->total;}
+            else{$quant =0;}
             $results .='<tr><td>'.$data->agroespecesarbre->nom.'</td>';
             $results .='<td><button class="btn btn-primary" type="button">'.$totalespece.'</button></td>'; 
-            $results .='<td><button class="btn btn-info" type="button">'.$qte.'</button></td>';
+            $results .='<td><button class="btn btn-info" type="button">'.$quant.'</button></td>';
             $s=1; 
                  
               $results .='<td><div class="input-group"><input type="number" name="quantite['.$producteurId.']['.$data->agroespecesarbre_id.']" value="0" min="0" max="'.$totalespece.'" parc-'.$s.'="'.$qte.'" id="qte-'.$k.'"  class="form-control totaux quantity-'.$i.' st-'.$s.'" onchange=getQuantite('.$i.','.$k.','.$s.') style="width: 100px;"><span class="input-group-btn"></span></div></td>'; 
