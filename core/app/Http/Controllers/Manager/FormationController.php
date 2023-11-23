@@ -94,8 +94,7 @@ class FormationController extends Controller
         $formation->type_formation_id  = $request->type_formation;
         $formation->duree_formation = $request->duree_formation;
         $formation->observation_formation = $request->observation_formation;
-        $formation->formation_type = $request->formation_type;
-        $formation->formation_type = $request->formation_type;
+        $formation->formation_type = $request->formation_type; 
         $formation->date_debut_formation = $request->multiStartDate;
         $formation->date_fin_formation = $request->multiEndDate;
         $formation->userid = auth()->user()->id;
@@ -107,10 +106,18 @@ class FormationController extends Controller
                 return back()->withNotify($notify);
             }
         }
+        if ($request->hasFile('rapport_formation')) {
+            try {
+                $formation->rapport_formation = $request->file('rapport_formation')->store('public/formations');
+            } catch (\Exception $exp) {
+                $notify[] = ['error', 'Impossible de télécharger votre image'];
+                return back()->withNotify($notify);
+            }
+        }
         $formation->save();
         if ($formation != null) {
             $id = $formation->id;
-            $datas = $datas2 = $datas3 = $datas4 = [];
+            $datas = $datas2 = [];
             if (($request->producteur != null)) {
                 SuiviFormationProducteur::where('suivi_formation_id', $id)->delete();
                 $i = 0;
@@ -123,22 +130,24 @@ class FormationController extends Controller
                     }
                     $i++;
                 }
+                SuiviFormationProducteur::insert($datas);
             }
             if (($request->theme != null)) {
                 SuiviFormationTheme::where('suivi_formation_id', $id)->delete();
                 $i = 0;
                 foreach ($request->theme as $data) {
                     if ($data != null) {
-                        $datas3[] = [
+                        $datas2[] = [
                             'suivi_formation_id' => $id,
                             'themes_formation_id' => $data,
                         ];
                     }
                     $i++;
                 }
+                SuiviFormationTheme::insert($datas2);
             }
-            SuiviFormationProducteur::insert($datas);
-            SuiviFormationTheme::insert($datas3);
+            
+            
         }
         $notify[] = ['success', isset($message) ? $message : 'Le formation a été crée avec succès.'];
         return back()->withNotify($notify);
