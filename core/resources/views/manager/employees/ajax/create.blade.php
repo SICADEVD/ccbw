@@ -57,7 +57,7 @@
                             </div>
                             <div class="col-lg-4 col-md-6">
                                 <x-forms.label class="my-3" fieldId="category_id"
-                                    :fieldLabel="__('app.designation')" fieldRequired="true">
+                                    :fieldLabel="__('Poste')" fieldRequired="true">
                                 </x-forms.label>
                                 <x-forms.input-group>
                                     <select class="form-control" name="designation"
@@ -139,7 +139,7 @@
                             </x-forms.textarea>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                     <label class="control-label">@lang('Contrats de travail')</label>
                         <div class="form-group my-3">   
                             <input name="contrat_travail[]" id="contrat_travail1" type="file" multiple="" class="dropify" data-height="70"/> 
@@ -154,7 +154,7 @@
                 </div>
                 <!--  ADD ITEM END-->
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
 
                     <label class="control-label">@lang('Fiches de poste')</label>
                         <div class="form-group my-3">   
@@ -165,6 +165,22 @@
                 <div class="row px-lg-4 px-md-4 px-3 pb-3 pt-0 mb-3  mt-2">
                     <div class="col-md-12">
                         <a class="f-15 f-w-500" href="javascript:;" id="add-itemNew"><i
+                                class="icons icon-plus font-weight-bold mr-1"></i> @lang('app.add')</a>
+                    </div>
+                </div>
+                <!--  ADD ITEM END--> 
+                    </div>
+                    <div class="col-md-4">
+
+                    <label class="control-label">@lang("Autres documents(CVs, CNI,...)")</label>
+                        <div class="form-group my-3">   
+                            <input name="autre_document[]" id="autre_document1" type="file" multiple="" class="dropify" data-height="70"/> 
+                        </div>
+                        <div id="insertBeforeAutre"></div> 
+                        <!--  ADD ITEM START-->
+                <div class="row px-lg-4 px-md-4 px-3 pb-3 pt-0 mb-3  mt-2">
+                    <div class="col-md-12">
+                        <a class="f-15 f-w-500" href="javascript:;" id="add-itemAutre"><i
                                 class="icons icon-plus font-weight-bold mr-1"></i> @lang('app.add')</a>
                     </div>
                 </div>
@@ -202,21 +218,18 @@
 
                     <div class="col-lg-3 col-md-6">
                         <x-forms.select fieldId="employment_type" :fieldLabel="__('modules.employees.employmentType')"
-                            fieldName="employment_type" :fieldPlaceholder="__('placeholders.date')">
+                            fieldName="employment_type" fieldRequired="true" :fieldPlaceholder="__('placeholders.date')">
                             <option value="">--</option>
-                            <option value="full_time">@lang('app.fullTime')</option>
-                            <option value="part_time">@lang('app.partTime')</option>
-                            <option value="on_contract">@lang('app.onContract')</option>
-                            <option value="internship">@lang('app.internship')</option>
-                            <option value="trainee">@lang('app.trainee')</option>
+                            <option value="CDI">@lang('CDI')</option>
+                            <option value="CDD">@lang('CDD')</option>
+                            <option value="Stage">@lang('Stage')</option>
+                            <option value="Interim">@lang('Interim')</option>
+                            <option value="Consultance">@lang('Consultance')</option>
+                            <option value="Journalier">@lang('Journalier')</option>
                         </x-forms.select>
                     </div>
-
-                    <div class="col-lg-3 col-md-6 d-none internship-date">
-                        <x-forms.datepicker fieldId="internship_end_date" :fieldLabel="__('modules.employees.internshipEndDate')"
-                            fieldName="internship_end_date" :fieldPlaceholder="__('placeholders.date')"/>
-                    </div>
-                    <div class="col-lg-3 col-md-6 d-none contract-date">
+ 
+                    <div class="col-lg-3 col-md-6">
                         <x-forms.datepicker fieldId="contract_end_date" :fieldLabel="__('modules.employees.contractEndDate')"
                             fieldName="contract_end_date" :fieldPlaceholder="__('placeholders.date')"/>
                     </div>
@@ -224,8 +237,8 @@
                     <div class="col-lg-3 col-md-6">
                         <x-forms.select fieldId="marital_status" :fieldLabel="__('modules.employees.maritalStatus')"
                             fieldName="marital_status" :fieldPlaceholder="__('placeholders.date')">
-                            <option value="unmarried">@lang('modules.leaves.unmarried')</option>
-                            <option value="married">@lang('modules.leaves.married')</option>
+                            <option value="celibataire">@lang('modules.leaves.unmarried')</option>
+                            <option value="marie(e)">@lang('modules.leaves.married')</option>
                         </x-forms.select>
                     </div>
 
@@ -448,6 +461,7 @@
  // Add More Inputs
  var $insertBefore = $('#insertBefore');
  var $insertBeforeNew = $('#insertBeforeNew');
+ var $insertBeforeAutre = $('#insertBeforeAutre');
         var i = 1;
         var a = 1;
  $('#add-item').click(function() {
@@ -458,7 +472,7 @@
             <div class="input-group mb-3"> 
                             <input name="contrat_travail[]" id="contrat_travail${i}" type="file" class="dropify" multiple="" data-height="78"/> <button type="button"
                                         class="btn btn-outline-secondary border-grey"
-                                        data-toggle="tooltip" ><a href="javascript:;" class="d-flex align-items-center justify-content-center mt-5 remove-item" data-item-id="${i}" style="position: relative;top: -29px;"><i class="fa fa-times-circle f-20 text-lightest"></i></a></button>
+                                        data-toggle="tooltip" style="width: 10px;"><a href="javascript:;" class="d-flex align-items-center justify-content-center mt-5 remove-item" data-item-id="${i}" style="position: relative;top: -29px;"><i class="fa fa-times-circle f-20 text-lightest"></i></a></button>
                                         </div></div> `)
                 .insertBefore($insertBefore);
 
@@ -479,7 +493,7 @@
             <div class="input-group mb-3"> 
                             <input name="fiche_poste[]" id="fiche_poste${a}" type="file" class="dropify" multiple="" data-height="78"/> <button type="button"
                                         class="btn btn-outline-secondary border-grey"
-                                        data-toggle="tooltip" ><a href="javascript:;" class="d-flex align-items-center justify-content-center mt-5 remove-itemNew" data-item-id="${a}" style="position: relative;top: -29px;"><i class="fa fa-times-circle f-20 text-lightest"></i></a></button>
+                                        data-toggle="tooltip" style="width: 10px;"><a href="javascript:;" class="d-flex align-items-center justify-content-center mt-5 remove-itemNew" data-item-id="${a}" style="position: relative;top: -29px;"><i class="fa fa-times-circle f-20 text-lightest"></i></a></button>
                                         </div></div> `)
                 .insertBefore($insertBeforeNew);
 
@@ -490,5 +504,23 @@
             var index = $(this).data('item-id');
             $('#addMoreBoxNew' + index).remove();
         });
- 
+        $('#add-itemAutre').click(function() {
+            a += 1;
+             
+            $(`<div id="addMoreBoxAutre${a}" class="row pl-20 pr-20 clearfix">
+            <div class="form-group my-3" style="padding: 0px;">  
+            <div class="input-group mb-3"> 
+                            <input name="autre_document[]" id="autre_document${a}" type="file" class="dropify" multiple="" data-height="78"/> <button type="button"
+                                        class="btn btn-outline-secondary border-grey"
+                                        data-toggle="tooltip" style="width: 10px;"><a href="javascript:;" class="d-flex align-items-center justify-content-center mt-5 remove-itemAutre" data-item-id="${a}" style="position: relative;top: -29px;"><i class="fa fa-times-circle f-20 text-lightest"></i></a></button>
+                                        </div></div> `)
+                .insertBefore($insertBeforeAutre);
+
+                 $(".dropify").dropify(); 
+            // Recently Added date picker assign 
+        });
+        $('body').on('click', '.remove-itemAutre', function() {
+            var index = $(this).data('item-id');
+            $('#addMoreBoxAutre' + index).remove();
+        });
 </script>

@@ -275,7 +275,7 @@ return array(
         'dateOfBirth' => 'Date of Birth',
         'reportingTo' => 'Reporting To',
         'reportingTeam' => 'Reporting Team',
-        'probationEndDate' => 'Probation End Date',
+        'probationEndDate' => 'Essai End Date',
         'noticePeriodStartDate' => 'Notice Period Start Date',
         'noticePeriodEndDate' => 'Notice Period End Date',
         'internshipEndDate' => 'Internship End Date',

@@ -201,6 +201,15 @@ class EmployeeController extends AccountBaseController
                     $file->save();
                 }
             }
+            if ($request->hasFile('autre_document')) {
+                $files = $request->file('autre_document');
+                foreach ($files as $fileData) {
+                    $file = new EmployeeFicheposteFile(); 
+                    $file->fichier =  $fileData->store('public/autresDocument'); 
+                    $file->user_id = $user->id;
+                    $file->save();
+                }
+            }
 
             $tags = json_decode($request->tags);
 
