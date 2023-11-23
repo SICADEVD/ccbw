@@ -218,7 +218,7 @@
 
                     <div class="col-lg-3 col-md-6">
                         <x-forms.select fieldId="employment_type" :fieldLabel="__('modules.employees.employmentType')"
-                            fieldName="employment_type" :fieldPlaceholder="__('placeholders.date')">
+                            fieldName="employment_type" fieldRequired="true" :fieldPlaceholder="__('placeholders.date')">
                             <option value="">--</option>
                             <option value="CDI">@lang('CDI')</option>
                             <option value="CDD">@lang('CDD')</option>
