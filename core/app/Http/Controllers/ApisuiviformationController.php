@@ -48,6 +48,10 @@ class ApisuiviformationController extends Controller
     public function store(Request $request)
     {
 		 
+        if(!file_exists(storage_path(). "/app/public/formations"))
+        { 
+            File::makeDirectory(storage_path(). "/app/public/formations", 0777, true);
+        }
 
         if(!file_exists(storage_path(). "/app/public/formations"))
         { 
@@ -61,16 +65,12 @@ class ApisuiviformationController extends Controller
             'lieu_formation'  => 'required|max:255',
             'type_formation'  => 'required|max:255',
             'formation_type'  => 'required|max:255',
-            'observation_formation'  => 'required|max:255',
             'duree_formation' => 'required|date_format:H:i',
-            'theme'  => 'required|max:255', 
-            'date_formation' => 'required|max:255', 
+            'theme'  => 'required|max:255',
         ];
- 
 
         $request->validate($validationRule);
 
-         
         $formation = new SuiviFormation();
 
         $campagne = Campagne::active()->first();
@@ -82,70 +82,66 @@ class ApisuiviformationController extends Controller
         $formation->duree_formation = $request->duree_formation;
         $formation->observation_formation = $request->observation_formation;
         $formation->formation_type = $request->formation_type;
-        $formation->date_formation     = $request->date_formation;
+        $formation->formation_type = $request->formation_type;
+        $formation->date_debut_formation = $request->multiStartDate;
+        $formation->date_fin_formation = $request->multiEndDate;
         $formation->userid = $request->userid;
-       
-       if($request->photo_formations){  
-        $image = $request->photo_formations;  
-        $image = Str::after($image,'base64,');
-        $image = str_replace(' ', '+', $image);
-        $imageName = (string) Str::uuid().'.'.'jpg';
-         File::put(storage_path(). "/app/public/formations/" . $imageName, base64_decode($image)); 
-        $photo_formations = "public/formations/$imageName";
-        $input['photo_formation'] = $photo_formations; 
-      }
-      $formation->save(); 
-      
 
-        if($formation !=null ){
+        if ($request->photo_formations) {
+            $image = $request->photo_formations;
+            $image = Str::after($image, 'base64,');
+            $image = str_replace(' ', '+', $image);
+            $imageName = (string) Str::uuid() . '.' . 'jpg';
+            File::put(storage_path() . "/app/public/formations/" . $imageName, base64_decode($image));
+            $photo_formations = "public/formations/$imageName";
+            $input['photo_formation'] = $photo_formations;
+        }
+        if ($request->hasFile('rapport_formation')) {
+            try {
+                $formation->rapport_formation = $request->file('rapport_formation')->store('public/formation-staffs');
+            } catch (\Exception $exp) {
+                $notify[] = ['error', 'Impossible de télécharger votre image'];
+                return back()->withNotify($notify);
+            }
+        }
+
+        $formation->save();
+
+
+        if ($formation != null) {
             $id = $formation->id;
             $datas = $datas2 = $datas3 = [];
-            if(($request->producteur !=null)) { 
-                SuiviFormationProducteur::where('suivi_formation_id',$id)->delete();
-                $i=0; 
-                foreach($request->producteur as $data){
-                    if($data !=null)
-                    {
+            if (($request->producteur != null)) {
+                SuiviFormationProducteur::where('suivi_formation_id', $id)->delete();
+                $i = 0;
+                foreach ($request->producteur as $data) {
+                    if ($data != null) {
                         $datas[] = [
-                        'suivi_formation_id' => $id, 
-                        'producteur_id' => $data,  
-                    ];
-                    } 
-                  $i++;
-                } 
+                            'suivi_formation_id' => $id,
+                            'producteur_id' => $data,
+                        ];
+                    }
+                    $i++;
+                }
             }
-            // if(($request->visiteurs !=null)) { 
-            //     SuiviFormationVisiteur::where('suivi_formation_id',$id)->delete();
-            //     $i=0; 
-            //     foreach($request->visiteurs as $data){
-            //         if($data !=null)
-            //         {
-            //             $datas2[] = [
-            //             'suivi_formation_id' => $id, 
-            //             'visiteur' => $data,  
-            //         ];
-            //         } 
-            //       $i++;
-            //     } 
-            // }
-            if(($request->theme !=null)) { 
-                SuiviFormationTheme::where('suivi_formation_id',$id)->delete();
-                $i=0; 
-                foreach($request->theme as $data){
-                    if($data !=null)
-                    {
+
+            if (($request->theme != null)) {
+                SuiviFormationTheme::where('suivi_formation_id', $id)->delete();
+                $i = 0;
+                foreach ($request->theme as $data) {
+                    if ($data != null) {
                         $datas3[] = [
-                        'suivi_formation_id' => $id, 
-                        'themes_formation_id' => $data,  
-                    ];
-                    } 
-                  $i++;
-                } 
+                            'suivi_formation_id' => $id,
+                            'themes_formation_id' => $data,
+                        ];
+                    }
+                    $i++;
+                }
             }
             SuiviFormationProducteur::insert($datas);
-            // SuiviFormationVisiteur::insert($datas2); 
             SuiviFormationTheme::insert($datas3);
         }
+
 
         return response()->json($formation, 201);
     }
