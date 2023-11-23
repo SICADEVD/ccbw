@@ -35,7 +35,7 @@
                     <div class="form-group row">
                         <label class="col-sm-4 control-label">@lang('Les producteurs présents à la formation')</label>
                         <div class="col-xs-12 col-sm-8">
-                            <select class="form-control select2-multi-select" name="producteur[]" id="producteur" multiple
+                            <select class="form-control select2-multi-select" name="producteur[]" id="producteur" 
                                 required>
                                 <option value="">@lang('Selectionner une option')</option>
                                 @foreach ($producteurs as $producteur)
