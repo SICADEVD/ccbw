@@ -320,7 +320,7 @@ class AgrodistributionController extends Controller
             else{$quant =0;}
             $results .='<tr><td>'.$data->agroespecesarbre->nom.'</td>';
             $results .='<td><button class="btn btn-primary" type="button">'.$totalespece.'</button></td>'; 
-            $results .='<td><button class="btn btn-info" type="button">'.$quant.'</button></td>';
+            $results .='<td><button class="btn btn-info" type="button">'.@$qte->total.'</button></td>';
             $s=1; 
                  
               $results .='<td><div class="input-group"><input type="number" name="quantite['.$producteurId.']['.$data->agroespecesarbre_id.']" value="0" min="0" max="'.$totalespece.'" parc-'.$s.'="'.$qte.'" id="qte-'.$k.'"  class="form-control totaux quantity-'.$i.' st-'.$s.'" onchange=getQuantite('.$i.','.$k.','.$s.') style="width: 100px;"><span class="input-group-btn"></span></div></td>'; 
