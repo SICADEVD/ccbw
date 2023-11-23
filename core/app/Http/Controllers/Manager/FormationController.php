@@ -57,6 +57,7 @@ class FormationController extends Controller
 
     public function store(Request $request)
     {
+        
         $validationRule = [
             'localite'    => 'required|exists:localites,id',
             'staff' => 'required|exists:users,id',
@@ -64,13 +65,13 @@ class FormationController extends Controller
             'lieu_formation'  => 'required|max:255',
             'type_formation'  => 'required|max:255',
             'formation_type'  => 'required|max:255',
-            'observation_formation'  => 'required|max:255',
             'duree_formation' => 'required|date_format:H:i',
             'theme'  => 'required|max:255',
-            'date_formation' => 'required|max:255',
         ];
 
         $request->validate($validationRule);
+
+        // dd($request->all());
 
         $localite = Localite::where('id', $request->localite)->first();
 
@@ -94,7 +95,9 @@ class FormationController extends Controller
         $formation->duree_formation = $request->duree_formation;
         $formation->observation_formation = $request->observation_formation;
         $formation->formation_type = $request->formation_type;
-        $formation->date_formation     = $request->date_formation;
+        $formation->formation_type = $request->formation_type;
+        $formation->date_debut_formation = $request->multiStartDate;
+        $formation->date_fin_formation = $request->multiEndDate;
         $formation->userid = auth()->user()->id;
         if ($request->hasFile('photo_formation')) {
             try {
@@ -151,22 +154,16 @@ class FormationController extends Controller
         $themes  = ThemesFormation::with('typeFormation')->get();
         $staffs  = User::staff()->get();
         $formation   = SuiviFormation::findOrFail($id);
-        $formattedDureeFormation = Carbon::createFromFormat('H:i:s', $formation->duree_formation)->format('H:i');
-        $suiviProducteur = SuiviFormationProducteur::where('suivi_formation_id', $formation->id)->get();
         $suiviTheme = SuiviFormationTheme::where('suivi_formation_id', $formation->id)->get();
         $dataProducteur = $dataVisiteur = $dataTheme = array();
-        if ($suiviProducteur->count()) {
-            foreach ($suiviProducteur as $data) {
-                $dataProducteur[] = $data->producteur_id;
-            }
-        }
-
+        
+      
         if ($suiviTheme->count()) {
             foreach ($suiviTheme as $data) {
                 $dataTheme[] = $data->themes_formation_id;
             }
         }
-        return view('manager.formation.edit', compact('pageTitle', 'localites', 'formation', 'producteurs', 'typeformations', 'themes', 'staffs', 'dataProducteur', 'dataTheme', 'formattedDureeFormation'));
+        return view('manager.formation.edit', compact('pageTitle', 'localites', 'formation', 'producteurs', 'typeformations', 'themes', 'staffs', 'dataProducteur', 'dataTheme'));
     }
 
     public function visiteur($id)
