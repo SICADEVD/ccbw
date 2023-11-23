@@ -8,6 +8,7 @@ use App\Models\Leave;
 use App\Models\Skill;
 use App\Models\Module;
 use App\Models\Ticket;
+use App\Models\Countrie;
 use App\Models\Passport;
 use App\Models\RoleUser;
 use App\Models\UserAuth;
@@ -47,10 +48,11 @@ use App\Models\ProjectTimeLogBreak;
 use Illuminate\Support\Facades\Hash;
 use App\DataTables\ProjectsDataTable;
 use App\DataTables\TimeLogsDataTable;
+use App\Models\EmployeeAutredocument;
 use App\DataTables\EmployeesDataTable;
+
 use App\Models\EmployeeFicheposteFile;
 use Illuminate\Support\Facades\Request;
-
 use App\Http\Requests\User\InviteEmailRequest;
 use App\Http\Controllers\AccountBaseController;
 use App\Http\Requests\Admin\Employee\StoreRequest;
@@ -58,7 +60,6 @@ use App\Http\Requests\Admin\Employee\ImportRequest;
 use App\Http\Requests\Admin\Employee\UpdateRequest;
 use App\Http\Requests\User\CreateInviteLinkRequest;
 use App\Http\Requests\Admin\Employee\ImportProcessRequest;
-use App\Models\Countrie;
 use Symfony\Component\Mailer\Exception\TransportException;
 
 class EmployeeController extends AccountBaseController
@@ -204,7 +205,7 @@ class EmployeeController extends AccountBaseController
             if ($request->hasFile('autre_document')) {
                 $files = $request->file('autre_document');
                 foreach ($files as $fileData) {
-                    $file = new EmployeeFicheposteFile(); 
+                    $file = new EmployeeAutredocument(); 
                     $file->fichier =  $fileData->store('public/autresDocument'); 
                     $file->user_id = $user->id;
                     $file->save();
