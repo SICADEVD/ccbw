@@ -138,6 +138,7 @@ class AgrodistributionController extends Controller
         $campagne = Campagne::active()->first(); 
         $distribution   = Agrodistribution::findOrFail($id);
         $total = Agroevaluation::where('producteur_id',$distribution->producteur_id)->sum('quantite');
+        $evaluation = Agroevaluation::where('producteur_id',$distribution->producteur_id)->first();
         $somme = AgrodistributionEspece::where([['agrodistribution_id',$id]])->sum('total');
         
         $especes = AgroapprovisionnementEspece::joinRelationship('agroapprovisionnement','agroespecesarbre')->where([['cooperative_id',$manager->cooperative_id],['campagne_id',$campagne->id]])->get(); 
@@ -173,11 +174,12 @@ class AgrodistributionController extends Controller
             if($existe !=null){
                 $nombre = $existe->total;
             }
-            if(in_array($data->id, $dataEspece)){$qte = $dataQuantite[$data->id];}else{$qte=0;}
+            $qte = AgroevaluationEspece::where([['agroespecesarbre_id',$data->agroespecesarbre_id],['agroevaluation_id',$evaluation->id]])->select('total')->first();
+
             $idespeces[]=$data->agroespecesarbre_id;
             $results .='<tr><td>'.$data->agroespecesarbre->nom.'</td>';
             $results .='<td><button class="btn btn-primary" type="button">'.$totalespece.'</button></td>';
-            $results .='<td><button class="btn btn-info" type="button">'.$qte.'</button></td>';
+            $results .='<td><button class="btn btn-info" type="button">'.@$qte->total.'</button></td>';
             $s=1; 
 
               $results .='<td><div class="input-group"><input type="number" name="quantite['.$distribution->producteur_id.']['.$data->agroespecesarbre_id.']" value="'.$nombre.'" min="0" max="'.$totalespece+$nombre.'"  parc-'.$s.'="'.$distribution->quantite.'" id="qte-'.$k.'" st-'.$s.'" class="form-control totaux quantity-'.$i.'" onchange=getQuantite('.$i.','.$k.','.$s.') style="width: 100px;"><span class="input-group-btn"></span></div></td>'; 
@@ -283,15 +285,7 @@ class AgrodistributionController extends Controller
         
   
             if($agroeval !=null && count($especes)){
-             
-                $agroevaluationEspece  = AgroevaluationEspece::where('agroevaluation_id', $agroeval->id)->get(); 
-        $dataEspece = $dataQuantite = array();
-        if($agroevaluationEspece->count()){
-            foreach($agroevaluationEspece as $data){
-                $dataEspece[] = $data->agroespecesarbre_id;
-                $dataQuantite[$data->agroespecesarbre_id] = $data->total;
-            }
-        }
+              
                 $existing = Agrodistribution::where('producteur_id', $producteurId)->exists();
                 if(!$existing)
                 {
