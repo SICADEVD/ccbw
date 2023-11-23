@@ -57,7 +57,7 @@
                             </div>
                             <div class="col-lg-4 col-md-6">
                                 <x-forms.label class="my-3" fieldId="category_id"
-                                    :fieldLabel="__('Poste')" fieldRequired="true">
+                                    :fieldLabel="__('app.designation')" fieldRequired="true">
                                 </x-forms.label>
                                 <x-forms.input-group>
                                     <select class="form-control" name="designation"
@@ -218,7 +218,7 @@
 
                     <div class="col-lg-3 col-md-6">
                         <x-forms.select fieldId="employment_type" :fieldLabel="__('modules.employees.employmentType')"
-                            fieldName="employment_type" fieldRequired="true" :fieldPlaceholder="__('placeholders.date')">
+                            fieldName="employment_type" :fieldPlaceholder="__('placeholders.date')">
                             <option value="">--</option>
                             <option value="CDI">@lang('CDI')</option>
                             <option value="CDD">@lang('CDD')</option>
@@ -228,7 +228,11 @@
                             <option value="Journalier">@lang('Journalier')</option>
                         </x-forms.select>
                     </div>
- 
+
+                    <div class="col-lg-3 col-md-6 d-none internship-date">
+                        <x-forms.datepicker fieldId="internship_end_date" :fieldLabel="__('modules.employees.internshipEndDate')"
+                            fieldName="internship_end_date" :fieldPlaceholder="__('placeholders.date')"/>
+                    </div>
                     <div class="col-lg-3 col-md-6">
                         <x-forms.datepicker fieldId="contract_end_date" :fieldLabel="__('modules.employees.contractEndDate')"
                             fieldName="contract_end_date" :fieldPlaceholder="__('placeholders.date')"/>
@@ -237,8 +241,8 @@
                     <div class="col-lg-3 col-md-6">
                         <x-forms.select fieldId="marital_status" :fieldLabel="__('modules.employees.maritalStatus')"
                             fieldName="marital_status" :fieldPlaceholder="__('placeholders.date')">
-                            <option value="celibataire">@lang('modules.leaves.unmarried')</option>
-                            <option value="marie(e)">@lang('modules.leaves.married')</option>
+                            <option value="unmarried">@lang('modules.leaves.unmarried')</option>
+                            <option value="married">@lang('modules.leaves.married')</option>
                         </x-forms.select>
                     </div>
 
@@ -464,6 +468,7 @@
  var $insertBeforeAutre = $('#insertBeforeAutre');
         var i = 1;
         var a = 1;
+        var b = 1;
  $('#add-item').click(function() {
             i += 1;
              
@@ -505,14 +510,14 @@
             $('#addMoreBoxNew' + index).remove();
         });
         $('#add-itemAutre').click(function() {
-            a += 1;
+            b += 1;
              
-            $(`<div id="addMoreBoxAutre${a}" class="row pl-20 pr-20 clearfix">
+            $(`<div id="addMoreBoxAutre${b}" class="row pl-20 pr-20 clearfix">
             <div class="form-group my-3" style="padding: 0px;">  
             <div class="input-group mb-3"> 
-                            <input name="autre_document[]" id="autre_document${a}" type="file" class="dropify" multiple="" data-height="78"/> <button type="button"
+                            <input name="autre_document[]" id="autre_document${b}" type="file" class="dropify" multiple="" data-height="78"/> <button type="button"
                                         class="btn btn-outline-secondary border-grey"
-                                        data-toggle="tooltip" style="width: 10px;"><a href="javascript:;" class="d-flex align-items-center justify-content-center mt-5 remove-itemAutre" data-item-id="${a}" style="position: relative;top: -29px;"><i class="fa fa-times-circle f-20 text-lightest"></i></a></button>
+                                        data-toggle="tooltip" style="width: 10px;"><a href="javascript:;" class="d-flex align-items-center justify-content-center mt-5 remove-itemAutre" data-item-id="${b}" style="position: relative;top: -29px;"><i class="fa fa-times-circle f-20 text-lightest"></i></a></button>
                                         </div></div> `)
                 .insertBefore($insertBeforeAutre);
 
