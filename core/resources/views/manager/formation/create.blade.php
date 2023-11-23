@@ -15,13 +15,20 @@
                     <div class="form-group row">
                         <label class="col-sm-4 control-label">@lang('Selectionner une localite')</label>
                         <div class="col-xs-12 col-sm-8">
-                            <select class="form-control" name="localite" id="localite" required>
+                            <select class="form-control" name="localite" id="localite" onchange="nonMultiple()" required>
                                 <option value="">@lang('Selectionner une option')</option>
                                 @foreach ($localites as $localite)
                                     <option value="{{ $localite->id }}" @selected(old('localite'))>
                                         {{ $localite->nom }}</option>
                                 @endforeach
                             </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <?php echo Form::label(__('Type de la formation'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-12 col-sm-8">
+                            <?php echo Form::select('formation_type', ['Cible' => 'Ciblé', 'Groupe' => 'Groupé'], null, ['placeholder' => __('Selectionner une option'), 'class' => 'form-control', 'id' => 'formation_type', 'required' => 'required']); ?>
                         </div>
                     </div>
 
@@ -133,5 +140,29 @@
     <script type="text/javascript">
         $("#producteur").chained("#localite");
         $("#theme").chained("#typeformation");
+
+
+        function nonMultiple(){
+            $('#producteur').removeAttr('multiple');
+        }
+
+        $('.formation_type').change(function() {
+            var formation_type = $('.formation_type').val();
+            if (formation_type == 'Groupe') {
+                $('#producteur').attr('multiple', 'multiple');
+            } else {
+                nonMultiple();
+            }
+        });
+
+        $('#formation_').change(function() {
+            var formation_type = $('#formation_').val();
+            if (formation_type == 'Cible') {
+                nonMultiple();
+            } else {
+                
+                $('#producteur').attr('multiple', 'multiple');
+            }
+        });
     </script>
 @endpush
