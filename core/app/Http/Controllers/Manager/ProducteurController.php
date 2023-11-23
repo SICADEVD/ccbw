@@ -44,7 +44,7 @@ class ProducteurController extends Controller
         $producteurs = Producteur::dateFilter()
             ->searchable(["nationalite", "type_piece", "codeProd", "codeProdapp", "producteurs.nom", "prenoms", "sexe", "dateNaiss", "phone1", "niveau_etude", "numPiece", "consentement", "statut", "certificat"])
             ->latest('id')
-            ->joinRelationship('localite')
+            ->joinRelationship('localite.section')
             ->where(function ($q) {
                 if (request()->localite != null) {
                     $q->where('producteurs.localite_id', request()->localite);
@@ -57,7 +57,7 @@ class ProducteurController extends Controller
                 }
             })
             ->with('localite.section')
-            ->where('producteurs.userid', $manager->id)
+            ->where('cooperative_id', $manager->cooperative_id)
             ->paginate(getPaginate());
 
         return view('manager.producteur.index', compact('pageTitle', 'producteurs', 'localites', 'programmes'));

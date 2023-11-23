@@ -37,7 +37,8 @@
                         <table class="table table--light style--two">
                             <thead>
                                 <tr> 
-                                    <th>@lang('Localite')</th> 
+                                    <th>@lang('Localite')</th>
+                                    <th>@lang('Parcelle')</th>
                                     <th>@lang('Producteur')</th>
                                     <th>@lang('Quantite')</th> 
                                     <th>@lang('Ajoutée le')</th> 
@@ -48,15 +49,20 @@
                                 @forelse($distributions as $distribution)
                                     <tr>
                                         <td>
-                                            <span class="fw-bold">{{ $distribution->producteur->localite->nom }}</span>
-                                        </td> 
+                                            <span class="fw-bold">{{ $distribution->parcelle->producteur->localite->nom }}</span>
+                                        </td>
+                                        <td>
+                                            <span> <a href="{{ route('manager.agro.distribution.edit', $distribution->id) }}">
+                                                    <span>@</span>{{ $distribution->parcelle->codeParc }}
+                                                </a></span>
+                                        </td>
                                         <td> 
                                             <span class="small">
-                                            {{ $distribution->producteur->nom }} {{ $distribution->producteur->prenoms }}
+                                            {{ $distribution->parcelle->producteur->nom }} {{ $distribution->parcelle->producteur->prenoms }}
                                             </span>
                                         </td>
                                         <td>
-                                            <span>{{ $distribution->quantite }}</span>
+                                            <span>{{ array_sum(Arr::pluck(json_decode($distribution->especes),'total')) }}</span>
                                         </td> 
                                         <td>
                                             <span class="d-block">{{ showDateTime($distribution->created_at) }}</span>

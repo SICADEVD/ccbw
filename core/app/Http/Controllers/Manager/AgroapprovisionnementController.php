@@ -41,7 +41,7 @@ class AgroapprovisionnementController extends Controller
     {
         $pageTitle = "Ajouter un approvisionnement";
         $manager   = auth()->user();
-        $especesarbres  = Agroespecesarbre::get(); 
+        $especesarbres  = Agroespecesarbre::orderby('strate','asc')->orderby('nom','asc')->get(); 
         return view('manager.approvisionnement.create', compact('pageTitle', 'especesarbres'));
     }
 
@@ -123,7 +123,7 @@ class AgroapprovisionnementController extends Controller
     {
         $pageTitle = "Mise à jour de la approvisionnement";
          
-        $especesarbres  = Agroespecesarbre::get(); 
+        $especesarbres  = Agroespecesarbre::orderby('strate','asc')->orderby('nom','asc')->get(); 
         $approvisionnement   = Agroapprovisionnement::findOrFail($id);
         return view('manager.approvisionnement.edit', compact('pageTitle', 'especesarbres', 'approvisionnement'));
     } 

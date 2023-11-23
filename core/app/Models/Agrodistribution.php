@@ -12,9 +12,9 @@ class Agrodistribution extends Model
     use Searchable, GlobalStatus, PowerJoins;
 
     
-    public function parcelle()
+    public function producteur()
     {
-        return $this->belongsTo(Parcelle::class,'parcelle_id');
+        return $this->belongsTo(Producteur::class,'producteur_id');
     }
 
     public function cooperative()

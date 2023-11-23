@@ -3,14 +3,15 @@
 namespace App\Models;
 
 use App\Traits\GlobalStatus;
+use App\Traits\HasCooperative;
 use App\Traits\Searchable;
 use Illuminate\Database\Eloquent\Model;
 use Kirschbaum\PowerJoins\PowerJoins;
 
 class Localite extends Model
 {
-    use Searchable, GlobalStatus, PowerJoins;
- 
+    use Searchable, GlobalStatus, PowerJoins; 
+
     public function ecoleprimaires()
     {
         return $this->hasMany(Localite_ecoleprimaire::class,'localite_id', 'id');
@@ -34,5 +35,10 @@ class Localite extends Model
     public function eaux()
     {
         return $this->hasMany(Localite_source_eau::class, 'localite_id', 'id');
+    }
+
+    public function producteur()
+    {
+        return $this->hasMany(Producteur::class, 'localite_id');
     }
 }

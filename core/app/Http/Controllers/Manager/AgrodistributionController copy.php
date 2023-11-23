@@ -2,25 +2,24 @@
 
 namespace App\Http\Controllers\Manager;
 
-use Excel;
-use App\Models\Campagne;
-use App\Models\Section; 
 use App\Constants\Status;
-use App\Models\Localite; 
-use App\Models\Producteur; 
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
-use App\Models\Agroevaluation;
-use App\Models\Agrodistribution;
-use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
-use App\Models\AgroevaluationEspece;
-use Illuminate\Support\Facades\Hash;
-use App\Models\Agroapprovisionnement;
-use App\Models\AgrodistributionEspece;
-use App\Imports\AgrodistributionImport;
 use App\Exports\ExportAgrodistributions;
+use App\Http\Controllers\Controller;
+use App\Imports\AgrodistributionImport;
+use App\Models\Agroapprovisionnement;
 use App\Models\AgroapprovisionnementEspece;
+use App\Models\Localite; 
+use App\Models\Section; 
+use App\Models\Producteur; 
+use App\Models\Agrodistribution;
+use App\Models\AgrodistributionEspece;
+use App\Models\Agroevaluation;
+use App\Models\Campagne;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use Excel;
 
 class AgrodistributionController extends Controller
 {
@@ -30,7 +29,7 @@ class AgrodistributionController extends Controller
         $pageTitle      = "Gestion des distributions";
         $manager   = auth()->user();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->get();
-        $distributions = Agrodistribution::dateFilter()->searchable([])->latest('id')->joinRelationship('producteur.localite.section')->where('sections.cooperative_id',$manager->cooperative_id)->where(function ($q) {
+        $distributions = Agrodistribution::dateFilter()->searchable([])->latest('id')->joinRelationship('parcelle.producteur.localite.section')->where('sections.cooperative_id',$manager->cooperative_id)->where(function ($q) {
             if(request()->localite != null){
                 $q->where('localite_id',request()->localite);
             }
@@ -51,7 +50,7 @@ class AgrodistributionController extends Controller
     public function store(Request $request)
     {
         $validationRule = [  
-            'quantite' => 'required|array',  
+            'quantite'            => 'required|array',  
         ];
  
 
@@ -72,9 +71,9 @@ class AgrodistributionController extends Controller
         $i=0;
         $nb=0;
         if($request->quantite){
-            foreach($request->quantite as $producteurid => $agroespeces){
+            foreach($request->quantite as $parcellesid => $agroespeces){
 
-              $existe = Agrodistribution::where('producteur_id',$producteurid)->first();
+              $existe = Agrodistribution::where('parcelle_id',$parcellesid)->first();
                
               if($existe !=null){
                 $distributionID = $existe->id;
@@ -82,8 +81,7 @@ class AgrodistributionController extends Controller
                 
                 $distribution = new Agrodistribution(); 
                 $distribution->cooperative_id = $manager->cooperative_id;
-                $distribution->producteur_id = $producteurid;
-                $distribution->quantite = $request->qtelivre;
+                $distribution->parcelle_id = $parcellesid;
                 $distribution-> save(); 
                 $distributionID = $distribution->id;
                 $nb++;
@@ -126,7 +124,7 @@ class AgrodistributionController extends Controller
           }
 
  
-    $notify[] = ['success', isset($message) ? $message : "$i nouveau(x) types d'arbres à ombrage ont été distribué au producteur."];
+    $notify[] = ['success', isset($message) ? $message : "$i nouveau(x) types d'arbres à ombrage ont été distribué pour $nb parcelle(s)."];
          
         return back()->withNotify($notify);
     }
@@ -137,29 +135,22 @@ class AgrodistributionController extends Controller
         $manager   = auth()->user(); 
         $campagne = Campagne::active()->first(); 
         $distribution   = Agrodistribution::findOrFail($id);
-        $total = Agroevaluation::where('producteur_id',$distribution->producteur_id)->sum('quantite');
-        $evaluation = Agroevaluation::where('producteur_id',$distribution->producteur_id)->first();
+        $total = Agroevaluation::where('parcelle_id',$distribution->parcelle_id)->sum('quantite');
         $somme = AgrodistributionEspece::where([['agrodistribution_id',$id]])->sum('total');
         
-        $especes = AgroapprovisionnementEspece::joinRelationship('agroapprovisionnement','agroespecesarbre')->where([['cooperative_id',$manager->cooperative_id],['campagne_id',$campagne->id]])->get(); 
+        $especes = AgroapprovisionnementEspece::joinRelationship('agroapprovisionnement','agroespecesarbre')->where([['cooperative_id',$manager->cooperative_id],['campagne_id',$campagne->id]])->get();
+        $parcelles = Agroevaluation::joinRelationship('parcelle')->where('parcelle_id',$distribution->parcelle_id)->get();
     
-            if($distribution !=null && count($especes)){
+            if(count($parcelles) && count($especes)){
   
-                $agroevaluationEspece  = AgroevaluationEspece::joinRelationship('agroevaluation')->where('producteur_id', $distribution->producteur_id)->get(); 
-                $dataEspece = $dataQuantite = array();
-                if($agroevaluationEspece->count()){
-                    foreach($agroevaluationEspece as $data){
-                        $dataEspece[] = $data->agroespecesarbre_id;
-                        $dataQuantite[$data->agroespecesarbre_id] = $data->total;
-                    }
-                }
-                
-              $results ='<table class="table table-bordered"><thead><tr>';
-              $results .='<th>Variété</th>'; 
-              $results .='<th></th>'; 
-              $results .='<th>Demande Producteur</th>'; 
-              $results .='<th style="text-align:left;">Quantité livrée</th>';  
-               
+              $nbparcelle = count($parcelles);
+              $results ='<table class="table table-bordered"><thead><tr><th scope="col">&nbsp;</th>';
+              foreach($parcelles as $data)
+              {
+                if($data->parcelle->anneeCreation !=null) $annee='('.$data->parcelle->anneeCreation.')';
+                      else $annee=''; 
+              $results .='<th style="text-align:left;">Parcelle '.$data->parcelle->codeParc.$annee.' <button class="btn btn-primary" type="button">'.$data->quantite.'</button></th>';  
+              }
                
         $results .=' </tr></thead><tbody>';
         $i=0;
@@ -174,17 +165,15 @@ class AgrodistributionController extends Controller
             if($existe !=null){
                 $nombre = $existe->total;
             }
-            $qte = AgroevaluationEspece::where([['agroespecesarbre_id',$data->agroespecesarbre_id],['agroevaluation_id',$evaluation->id]])->select('total')->first();
-
             $idespeces[]=$data->agroespecesarbre_id;
-            $results .='<tr><td>'.$data->agroespecesarbre->nom.'</td>';
-            $results .='<td><button class="btn btn-primary" type="button">'.$totalespece.'</button></td>';
-            $results .='<td><button class="btn btn-info" type="button">'.@$qte->total.'</button></td>';
-            $s=1; 
+            $results .='<tr><td>'.$data->agroespecesarbre->nom.' <button class="btn btn-primary" type="button">'.$totalespece.'</button></td>';
+            $s=1;
+            foreach($parcelles as $data2){
 
-              $results .='<td><div class="input-group"><input type="number" name="quantite['.$distribution->producteur_id.']['.$data->agroespecesarbre_id.']" value="'.$nombre.'" min="0" max="'.$totalespece+$nombre.'"  parc-'.$s.'="'.$distribution->quantite.'" id="qte-'.$k.'" st-'.$s.'" class="form-control totaux quantity-'.$i.'" onchange=getQuantite('.$i.','.$k.','.$s.') style="width: 100px;"><span class="input-group-btn"></span></div></td>'; 
+              $results .='<td><div class="input-group"><input type="number" name="quantite['.$data2->parcelle_id.']['.$data->agroespecesarbre_id.']" value="'.$nombre.'" min="0" max="'.$totalespece+$nombre.'"  parc-'.$s.'="'.$data2->quantite.'" id="qte-'.$k.'" st-'.$s.'" class="form-control totaux quantity-'.$i.'" onchange=getQuantite('.$i.','.$k.','.$s.') style="width: 100px;"><span class="input-group-btn"></span></div></td>'; 
               $k++;
-              $s++; 
+              $s++;
+            }
             $i++;
             $results .='</tr>';
           
@@ -225,7 +214,7 @@ class AgrodistributionController extends Controller
                 }
             }
             
-            foreach($request->quantite as $producteurid => $agroespeces){
+            foreach($request->quantite as $parcellesid => $agroespeces){
 
               $agroespeces = array_filter($agroespeces);
                foreach($agroespeces as $agroespecesarbresid => $total){
@@ -281,21 +270,26 @@ class AgrodistributionController extends Controller
 
               $campagneId = $campagne->id;
         $especes = AgroapprovisionnementEspece::joinRelationship('agroapprovisionnement','agroespecesarbre')->where([['cooperative_id',$manager->cooperative_id],['campagne_id',$campagneId]])->get();
-        $agroeval = Agroevaluation::where('producteur_id',$producteurId)->first();
-        
+        $parcelles = Agroevaluation::joinRelationship('parcelle')->where('producteur_id',$producteurId)->get();
   
-            if($agroeval !=null && count($especes)){
-              
-                $existing = Agrodistribution::where('producteur_id', $producteurId)->exists();
+  
+            if(count($parcelles) && count($especes)){
+            
+             foreach($parcelles as $verif)   
+             {
+                $existing = Agrodistribution::where('parcelle_id', $verif->parcelle_id)->exists();
                 if(!$existing)
                 {
-                    $somme = $agroeval->quantite;
-              
-              $results ='<table class="table table-bordered"><thead><tr>';
-              $results .='<th>Variété</th>';
-              $results .='<th></th>';
-              $results .='<th>Demande Producteur</th>';
-              $results .='<th>Quantité acceptée</th>';   
+                    $somme = $somme+$verif->quantite;
+              $nbparcelle = count($parcelles);
+              $results ='<table class="table table-bordered"><thead><tr><th scope="col">&nbsp;</th>';
+              foreach($parcelles as $data)
+              {
+                
+                if($data->parcelle->anneeCreation !=null) $annee='('.$data->parcelle->anneeCreation.')';
+                      else $annee=''; 
+              $results .='<th>Parcelle '.$data->parcelle->codeParc.$annee.' <button class="btn btn-primary" type="button">'.$data->quantite.'</button></th>';  
+              }
                
         $results .=' </tr></thead><tbody>';
          
@@ -304,37 +298,41 @@ class AgrodistributionController extends Controller
          
         foreach($especes as $data)
         {
-            
           if($data->total !=$data->total_restant) {
-            $totalespece = $data->total - $data->total_restant; 
-            
-            // if(in_array($data->id, $dataEspece)){$qte = $dataQuantite[$data->id];}else{$qte=0;}
-            $qte = AgroevaluationEspece::where([['agroespecesarbre_id',$data->agroespecesarbre_id],['agroevaluation_id',$agroeval->id]])->select('total')->first();
-             
-            $results .='<tr><td>'.$data->agroespecesarbre->nom.'</td>';
-            $results .='<td><button class="btn btn-primary" type="button">'.$totalespece.'</button></td>'; 
-            $results .='<td><button class="btn btn-info" type="button">'.@$qte->total.'</button></td>';
-            $s=1; 
+            $totalespece = $data->total - $data->total_restant;
+            $max[] = $totalespece;
+            $idespeces[]=$data->agroespecesarbre_id;
+            $results .='<tr><td>'.$data->agroespecesarbre->nom.' <button class="btn btn-primary" type="button">'.$totalespece.'</button></td>';
+            $s=1;
+            foreach($parcelles as $data2){
                  
-              $results .='<td><div class="input-group"><input type="number" name="quantite['.$producteurId.']['.$data->agroespecesarbre_id.']" value="0" min="0" max="'.$totalespece.'" id="qte-'.$k.'"  class="form-control totaux quantity-'.$i.' st-'.$s.'" onchange=getQuantite('.$i.','.$k.','.$s.') style="width: 100px;"><span class="input-group-btn"></span></div></td>'; 
+              $results .='<td><div class="input-group"><input type="number" name="quantite['.$data2->parcelle_id.']['.$data->agroespecesarbre_id.']" value="0" min="0" max="'.$totalespece.'" parc-'.$s.'="'.$data2->quantite.'" id="qte-'.$k.'"  class="form-control totaux quantity-'.$i.' st-'.$s.'" onchange=getQuantite('.$i.','.$k.','.$s.') style="width: 100px;"><span class="input-group-btn"></span></div></td>'; 
               $k++;
-              $s++; 
-            $i++; 
+              $s++;
+            }
+            $i++;
             $results .='</tr>';
           }
         }
        
-        $results .='</tbody></table>';
-        $n=1;  
-       $n++; 
+        $results .='</tbody><tfooter><tr><td scope="col" style="font-weight:bold; font-size: 20px;">Total</td>';
+        $n=1;
+        foreach($parcelles as $data)
+              { 
+                
+              $results .='<td><input type="number" name="soustotal[]" id="soustotal-'.$n.'" value="0" class="form-control" style="font-weight:bold; font-size: 20px;"/></td>';  
+              $n++;
+              }
+
+        $results .='</tr></tfooter></table>';
                     }else{
                         $results='<span style="
                 text-align: center;
                 color: #f70000;
                 font-weight: bold;
-            ">Ce producteur a déjà bénéficié des arbres à ombrage. Veuillez procéder aux modifications dépuis la liste des distributions</span>';             
+            ">Ce producteur a déjà des parcelles qui ont bénéficié des arbres à ombrage. Veuillez procéder aux modifications dépuis la liste des distributions</span>';             
                     }
-                
+                }
             }else{
                 $results='<span style="
                 text-align: center;
