@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApiAbreController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController; 
@@ -78,5 +79,9 @@ Route::match(['POST'],'getsections',[ApisectionController::class, 'getsections']
 //route pour la gestion des programmes
 
 Route::match(['POST'],'getprogrammes',[ApiProgrammeController::class, 'index']);
+
+// get arbre 
+
+Route::match(['POST'],'getarbre',[ApiAbreController::class, 'getarbre']);
 
 
