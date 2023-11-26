@@ -13,4 +13,9 @@ class Entreprise extends Model
     use HasFactory, PowerJoins, GlobalStatus, Searchable;
 
     protected $table = "entreprises";
+
+    public function formateurs()
+    {
+        return $this->hasMany(FormateurStaff::class, 'entreprise_id');
+    }
 }

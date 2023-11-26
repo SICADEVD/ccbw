@@ -1,155 +1,177 @@
 @extends('manager.layouts.app')
 @section('panel')
-
     <div class="row mb-none-30">
         <div class="col-lg-12 mb-30">
             <div class="card">
-                <div class="card-body"> 
-                    {!! Form::open(array('route' => ['manager.formation-staff.store'],'method'=>'POST','class'=>'form-horizontal', 'id'=>'flocal', 'enctype'=>'multipart/form-data')) !!} 
-                         
-                            <div class="form-group row">
-                                <label class="col-sm-4 control-label">@lang("Les membres présents à la formation")</label>
-                                <div class="col-xs-12 col-sm-8">
-                                <select class="form-control select2-multi-select" name="user[]" id="user" multiple required>
-                                    <option value="">@lang('Selectionner une option')</option>
-                                    @foreach($staffs as $user)
-                                        <option value="{{ $user->id }}"  @selected(old('user'))>
-                                            {{ $user->lastname }} {{ $user->firstname }}</option>
-                                    @endforeach
-                                </select>
-                                </div>
-                            </div>
+                <div class="card-body">
+                    {!! Form::open([
+                        'route' => ['manager.formation-staff.store'],
+                        'method' => 'POST',
+                        'class' => 'form-horizontal',
+                        'id' => 'flocal',
+                        'enctype' => 'multipart/form-data',
+                    ]) !!}
 
-                            <div class="form-group row">
-        <?php echo Form::label(__("Nom des visiteurs ayant participer à la formation"), null, ['class' => 'col-sm-4 control-label']); ?>
-        <div class="col-xs-12 col-sm-8">
-            <select name="visiteurs[]" id="visiteurs" class="form-control select2-auto-tokenize" multiple>
-                                                   <option value="null" disabled>@lang('Entrer un nom')</option>
-                                                </select>
-        </div>
-    </div>
-      <hr class="panel-wide">
-    <div class="form-group row">
-        <?php echo Form::label(__("Lieu de la formation"), null, ['class' => 'col-sm-4 control-label']); ?>
-        <div class="col-xs-12 col-sm-8">
-            <?php echo Form::select('lieu_formation', ["Dans le ménage"=>"Dans le ménage","Place Publique"=>"Place Publique","Champs Ecole"=>"Champs Ecole","En salle"=>"En salle"], null, array('placeholder' => __('Selectionner une option'),'class' => 'form-control', 'id'=>'lieu_formations','required'=>'required')); ?>
-        </div>
-    </div>
-    <div class="form-group row">
-        <?php echo Form::label(__("Modules de formations"), null, ['class' => 'col-sm-4 control-label']); ?>
-        <div class="col-xs-12 col-sm-8">
-               <?php echo Form::select('module_formation', $ModuleFormationStaffs, null, array('placeholder' => __('Selectionner une option'),'class' => 'form-control type_formations','id'=>'typeformation','required'=>'required')); ?>
-        </div>
-    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4 control-label">@lang('Les membres présents à la formation')</label>
+                        <div class="col-xs-12 col-sm-8">
+                            <select class="form-control select2-multi-select" name="user[]" id="user" multiple required>
+                                <option value="">@lang('Selectionner une option')</option>
+                                @foreach ($staffs as $user)
+                                    <option value="{{ $user->id }}" @selected(old('user'))>
+                                        {{ $user->lastname }} {{ $user->firstname }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
 
-             <div class="form-group row">
-             <?php echo Form::label(__("Thème de la formation"), null, ['class' => 'col-sm-4 control-label']); ?>
-             <div class="col-xs-12 col-sm-8">
-             <select class="form-control select2-multi-select" name="theme[]" id="theme" multiple required>
-                                    <option value="">@lang('Selectionner une option')</option>
-                                    @foreach($themes as $theme)
-                                        <option value="{{ $theme->id }}" data-chained="{{ $theme->module_formation_staff_id }}" @selected(old('theme'))>
-                                            {{ $theme->nom }} </option>
-                                    @endforeach
-                                </select> 
-             </div>
-    </div>
+                    <div class="form-group row">
+                        <?php echo Form::label(__('Nom des visiteurs ayant participer à la formation'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-12 col-sm-8">
+                            <select name="visiteurs[]" id="visiteurs" class="form-control select2-auto-tokenize" multiple>
+                                <option value="null" disabled>@lang('Entrer un nom')</option>
+                            </select>
+                        </div>
+                    </div>
+                    <hr class="panel-wide">
+                    <div class="form-group row">
+                        <?php echo Form::label(__('Lieu de la formation'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-12 col-sm-8">
+                            <?php echo Form::text('lieu_formation', null, ['placeholder' => __('Saisissez le lieu de la formation'), 'class' => 'form-control', 'id' => 'lieu_formations', 'required' => 'required']); ?>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <?php echo Form::label(__('Modules de formations'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-12 col-sm-8">
+                            <?php echo Form::select('module_formation', $ModuleFormationStaffs, null, ['placeholder' => __('Selectionner une option'), 'class' => 'form-control type_formations', 'id' => 'typeformation', 'required' => 'required']); ?>
+                        </div>
+                    </div>
 
-    <hr class="panel-wide">
+                    <div class="form-group row">
+                        <?php echo Form::label(__('Thème de la formation'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-12 col-sm-8">
+                            <select class="form-control select2-multi-select" name="theme[]" id="theme" multiple
+                                required>
+                                <option value="">@lang('Selectionner une option')</option>
+                                @foreach ($themes as $theme)
+                                    <option value="{{ $theme->id }}"
+                                        data-chained="{{ $theme->module_formation_staff_id }}" @selected(old('theme'))>
+                                        {{ $theme->nom }} </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
 
-    <div class="form-group row">
-        <?php echo Form::label(__("Formateur"), null, ['class' => 'col-sm-4 control-label']); ?>
-        <div class="col-xs-12 col-sm-8"> 
-        <?php echo Form::text('formateur', null, ['class' => 'form-control','id'=>'formateur', 'required' => 'required']); ?>
-            
-        </div>
-    </div>
-    <hr class="panel-wide">
-    <div class="form-group row">  
-    <?php echo Form::label(__('Date de Début & Fin de la formation'), null, ['class' => 'col-sm-4 control-label required']); ?>
-        <div class="col-xs-12 col-sm-8">
-         
-        <?php echo Form::text('multi_date', now('Africa/Abidjan')->translatedFormat('Y-m-d'), ['class' => 'form-control','id'=>'multi_date', 'required' => 'required']); ?>
-        </div>
-    </div>
-    <div class="form-group row">  
-    <?php echo Form::label(__('Durée de la formation'), null, ['class' => 'col-sm-4 control-label required']); ?>
-        <div class="col-xs-12 col-sm-8 bootstrap-timepicker timepicker">
-        <?php echo Form::text('duree_formation', null, ['class' => 'form-control', 'required' => 'required','placeholder'=>'Ex : 04:10']); ?>
-         
-        </div>
-    </div>
-    <hr class="panel-wide">
-    <div class="form-group row">
-                     <?php echo Form::label(__('Photo de la formation'), null, ['class' => 'col-sm-4 control-label']); ?>
-                     <div class="col-xs-12 col-sm-8">
-                           <input type="file" name="photo_formation" class="form-control dropify-fr" data-allowed-file-extensions="jpg jpeg png" >
-                 </div>
-     </div>
-     <div class="form-group row">
-                     <?php echo Form::label(__('Rapport de la formation'), null, ['class' => 'col-sm-4 control-label']); ?>
-                     <div class="col-xs-12 col-sm-8">
-                           <input type="file" name="rapport_formation" class="form-control dropify-fr" data-allowed-file-extensions="pdf docx doc xls xlsx" >
-                 </div>
-     </div>
-     <div class="form-group row">
+                    <hr class="panel-wide">
+
+                    <div class="form-group row">
+                        <?php echo Form::label(__('Entreprise du formateur'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-12 col-sm-8">
+                            <?php echo Form::select('entreprise_id', $entreprises, null, ['placeholder' => __('Selectionner une option'), 'class' => 'form-control', 'id' => 'entreprise_formateur', 'required' => 'required']); ?>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <?php echo Form::label(__('Formateur'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-12 col-sm-8">
+                            <select class="form-control" name="formateur" id="formateur"
+                                required>
+                                <option value="">@lang('Selectionner une option')</option>
+                                @foreach ($formateurs as $formateur)
+                                    <option value="{{ $formateur->id }}" data-chained="{{ $formateur->entreprise_id }}"
+                                        @selected(old('formateur'))>
+                                        {{ $formateur->nom_formateur }} {{ $formateur->prenom_formateur }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <hr class="panel-wide">
+                    <div class="form-group row">
+                        <?php echo Form::label(__('Date de Début & Fin de la formation'), null, ['class' => 'col-sm-4 control-label required']); ?>
+                        <div class="col-xs-12 col-sm-8">
+
+                            <?php echo Form::text('multi_date', now('Africa/Abidjan')->translatedFormat('Y-m-d'), ['class' => 'form-control', 'id' => 'multi_date', 'required' => 'required']); ?>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <?php echo Form::label(__('Durée de la formation'), null, ['class' => 'col-sm-4 control-label required']); ?>
+                        <div class="col-xs-12 col-sm-8 bootstrap-timepicker timepicker">
+                            <?php echo Form::text('duree_formation', null, ['class' => 'form-control', 'required' => 'required', 'placeholder' => 'Ex : 04:10']); ?>
+
+                        </div>
+                    </div>
+                    <hr class="panel-wide">
+                    <div class="form-group row">
+                        <?php echo Form::label(__('Photo de la formation'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-12 col-sm-8">
+                            <input type="file" name="photo_formation" class="form-control dropify-fr"
+                                data-allowed-file-extensions="jpg jpeg png">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <?php echo Form::label(__('Rapport de la formation'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-12 col-sm-8">
+                            <input type="file" name="rapport_formation" class="form-control dropify-fr"
+                                data-allowed-file-extensions="pdf docx doc xls xlsx">
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <?php echo Form::label(__('Observation de la formation'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
                             <?php echo Form::textarea('observation_formation', null, ['class' => 'form-control duree_formation', 'rows' => 4]); ?>
                         </div>
                     </div>
-<hr class="panel-wide">
-<input type="hidden" name="multiStartDate" id="multiStartDate">
-<input type="hidden" name="multiEndDate" id="multiEndDate">
-                        <div class="form-group row">
-                            <button type="submit" class="btn btn--primary w-100 h-45"> @lang('Envoyer')</button>
-                        </div>
-                        {!! Form::close() !!}
+                    <hr class="panel-wide">
+                    <input type="hidden" name="multiStartDate" id="multiStartDate">
+                    <input type="hidden" name="multiEndDate" id="multiEndDate">
+                    <div class="form-group row">
+                        <button type="submit" class="btn btn--primary w-100 h-45"> @lang('Envoyer')</button>
+                    </div>
+                    {!! Form::close() !!}
                 </div>
             </div>
         </div>
-    </div>
+    @endsection
 
+    @push('breadcrumb-plugins')
+        <x-back route="{{ route('manager.formation-staff.index') }}" />
+    @endpush
 
-@endsection
+    @push('script')
+        <link rel="stylesheet" href="{{ asset('assets/vendor/css/daterangepicker.css') }}">
+        <script src="{{ asset('assets/vendor/jquery/daterangepicker.min.js') }}"></script>
+        <script type="text/javascript">
+            $("#producteur").chained("#localite");
+            $("#theme").chained("#typeformation");
+            $("#formateur").chained("#entreprise_formateur");
+            $('#duree_formation').timepicker({
+                showMeridian: (false)
+            });
+            $('#multi_date').daterangepicker({
+                linkedCalendars: false,
+                multidate: true,
+                todayHighlight: true,
+                format: 'yyyy-mm-d'
+            });
+            $('#multi_date').change(function() {
+                var dates = $(this).val();
 
-@push('breadcrumb-plugins')
-    <x-back route="{{ route('manager.formation-staff.index') }}" />
-@endpush
+                var startDate = moment(new Date(dates.split(' - ')[0]));
+                var endDate = moment(new Date(dates.split(' - ')[1]));
+                var totalDays = endDate.diff(startDate, 'days') + 1;
 
-@push('script')
-<link rel="stylesheet" href="{{ asset('assets/vendor/css/daterangepicker.css') }}">
-<script src="{{ asset('assets/vendor/jquery/daterangepicker.min.js')}}"></script>
-<script type="text/javascript">
-    $("#producteur").chained("#localite");
-    $("#theme").chained("#typeformation");
-    $('#duree_formation').timepicker({
-            showMeridian: (false)
-        });
-    $('#multi_date').daterangepicker({
-            linkedCalendars: false,
-            multidate: true,
-            todayHighlight: true,
-            format: 'yyyy-mm-d'
-        });
-        $('#multi_date').change(function() {
-            var dates = $(this).val();
+                startDate = startDate.format('YYYY-MM-DD');
 
-            var startDate = moment(new Date(dates.split(' - ')[0]));
-            var endDate = moment(new Date(dates.split(' - ')[1]));
-            var totalDays = endDate.diff(startDate, 'days')+1;
+                endDate = endDate.format('YYYY-MM-DD');
 
-            startDate = startDate.format('YYYY-MM-DD');
-             
-            endDate = endDate.format('YYYY-MM-DD');
+                var multiDate = [];
+                multiDate = [startDate, endDate];
+                $('#multi_date').val(multiDate);
 
-            var multiDate = [];
-            multiDate = [startDate, endDate];
-            $('#multi_date').val(multiDate);
-
-            $('#multiStartDate').val(startDate);
-            $('#multiEndDate').val(endDate);
-            $('.date-range-days').html(totalDays +' Jours sélectionnés');
-        })
- </script>
-@endpush
+                $('#multiStartDate').val(startDate);
+                $('#multiEndDate').val(endDate);
+                $('.date-range-days').html(totalDays + ' Jours sélectionnés');
+            });
+        </script>
+    @endpush

@@ -13,8 +13,10 @@ class FormateurStaff extends Model
     use HasFactory, PowerJoins, GlobalStatus, Searchable;
     protected $table = "formateur_staffs";
 
-    public function entreprise()
-    {
-        return $this->belongsTo(Entreprise::class, 'entreprise_id');
+    public function formations(){
+        return $this->hasMany(FormationStaff::class,'formateur_staff_id','id');
+    }
+    public function entreprise(){
+        return $this->belongsTo(Entreprise::class,'entreprise_id','id');
     }
 }
