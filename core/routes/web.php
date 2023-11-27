@@ -197,6 +197,15 @@ Route::middleware('auth')->group(function () {
             Route::post('instance/store', [SettingController::class, 'instanceStore'])->name('instance.store');
             Route::get('document-ad/', [SettingController::class, 'documentadIndex'])->name('documentad.index');
             Route::post('document-ad/store', [SettingController::class, 'documentadStore'])->name('documentad.store');
+            
+            Route::get('magasin-section/', [SettingController::class, 'magasinSectionIndex'])->name('magasinSection.index');
+            Route::post('magasin-section/store', [SettingController::class, 'magasinSectionStore'])->name('magasinSection.store');
+            Route::post('magasin-section/status/{id}', [SettingController::class, 'magasinSectionStatus'])->name('magasinSection.status');
+
+            Route::get('magasin-central/', [SettingController::class, 'magasinCentralIndex'])->name('magasinCentral.index');
+            Route::post('magasin-central/store', [SettingController::class, 'magasinCentralStore'])->name('magasinCentral.store');
+            Route::post('magasin-central/status/{id}', [SettingController::class, 'magasinCentralStatus'])->name('magasinCentral.status');
+
             Route::get('formateur-staff/', [SettingController::class, 'formateurStaffIndex'])->name('formateurStaff.index');
             Route::post('formateur-staff/store', [SettingController::class, 'formateurStaffStore'])->name('formateurStaff.store');
             
