@@ -53,10 +53,7 @@ class ApisuiviformationController extends Controller
             File::makeDirectory(storage_path(). "/app/public/formations", 0777, true);
         }
 
-        if(!file_exists(storage_path(). "/app/public/formations"))
-        { 
-            File::makeDirectory(storage_path(). "/app/public/formations", 0777, true);
-        }
+       
         
         $validationRule = [
             'localite'    => 'required|exists:localites,id',

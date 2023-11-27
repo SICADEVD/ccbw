@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Campagne;
 use App\Constants\Status;
 use App\Models\Localite; 
+use App\Models\Entreprise;
 use App\Models\Producteur; 
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -18,6 +19,8 @@ use App\Models\FormationStaffListe;
 use App\Models\FormationStaffTheme;
 use App\Models\ThemeFormationStaff;
 use App\Http\Controllers\Controller;
+use App\Models\FormateurStaff;
+use App\Models\FormationStaffFormateur;
 use App\Models\ModuleFormationStaff;
 use Illuminate\Support\Facades\Hash;
 use App\Models\FormationStaffVisiteur;
@@ -35,7 +38,7 @@ class FormationStaffController extends Controller
             if(request()->module != null){
                 $q->where('module_formation_staff_id',request()->module);
             }
-        })->with('cooperative','campagne','ModuleFormationStaff')->paginate(getPaginate());
+        })->with('cooperative','campagne','ModuleFormationStaff','formateur')->paginate(getPaginate());
          
         return view('manager.formation-staff.index', compact('pageTitle', 'formations','modules'));
     }
@@ -47,8 +50,10 @@ class FormationStaffController extends Controller
        
         $ModuleFormationStaffs  = ModuleFormationStaff::all()->pluck('nom','id');
         $themes  = ThemeFormationStaff::with('ModuleFormationStaff')->get();
+        $entreprises = Entreprise::all()->pluck('nom_entreprise','id');
+        $formateurs = FormateurStaff::with('entreprise')->get();
         $staffs  = User::get();
-        return view('manager.formation-staff.create', compact('pageTitle','ModuleFormationStaffs','themes','staffs'));
+        return view('manager.formation-staff.create', compact('pageTitle','ModuleFormationStaffs','themes','staffs','entreprises','formateurs'));
     }
 
     public function store(Request $request)
@@ -58,6 +63,7 @@ class FormationStaffController extends Controller
             'lieu_formation'  => 'required|max:255',
             'module_formation'  => 'required|max:255',
             'theme'  => 'required', 
+            'entreprise_id'  => 'required',
         ];
  
         $manager   = auth()->user(); 
@@ -75,9 +81,9 @@ class FormationStaffController extends Controller
         $campagne = Campagne::active()->first();
         $formation->cooperative_id  = $manager->cooperative_id;  
         $formation->campagne_id  = $campagne->id;
-        $formation->formateur  = $request->formateur;  
         $formation->lieu_formation  = $request->lieu_formation;
         $formation->module_formation_staff_id  = $request->module_formation;
+        $formation->formateur_staff_id  = $request->formateur;
         $formation->observation_formation = $request->observation_formation;
         $formation->duree_formation     = $request->duree_formation; 
 
@@ -103,7 +109,7 @@ class FormationStaffController extends Controller
         $formation->save(); 
         if($formation !=null ){
             $id = $formation->id;
-            $datas = $datas2 = $datas3 = [];
+            $datas = $datas2 = $datas3 = $datas4 = [];
             if(($request->user !=null)) { 
                 FormationStaffListe::where('formation_staff_id',$id)->delete();
                 $i=0; 
@@ -146,9 +152,17 @@ class FormationStaffController extends Controller
                   $i++;
                 } 
             }
+            if(($request->formateur !=null)) { 
+                FormationStaffFormateur::where('formation_staff_id',$id)->delete();
+                $datas4[] = [
+                    'formation_staff_id' => $id, 
+                    'formateur_staff_id' => $request->formateur,  
+                ];
+            }
             FormationStaffListe::insert($datas);
             FormationStaffVisiteur::insert($datas2); 
             FormationStaffTheme::insert($datas3);
+            FormationStaffFormateur::insert($datas4);
         }
         $notify[] = ['success', isset($message) ? $message : 'Le formation a été crée avec succès.'];
         return back()->withNotify($notify);
@@ -161,12 +175,16 @@ class FormationStaffController extends Controller
          
         $ModuleFormationStaffs  = ModuleFormationStaff::all()->pluck('nom','id');
         $themes  = ThemeFormationStaff::with('ModuleFormationStaff')->get();
+        $entreprises = Entreprise::all();
+        $formateurs = FormateurStaff::with('entreprise')->get();
+        $formateur_staff_formations = FormationStaffFormateur::where('formation_staff_id',$id)->get();
+
         $staffs  = User::get();
         $formation   = FormationStaff::findOrFail($id);
         $staffsListe = FormationStaffListe::where('formation_staff_id',$formation->id)->get();
         $visiteurStaff = FormationStaffVisiteur::where('formation_staff_id',$formation->id)->get();
         $themeStaff = FormationStaffTheme::where('formation_staff_id',$formation->id)->get();
-        $dataUser = $dataVisiteur=$dataTheme = array();
+        $dataUser = $dataVisiteur=$dataTheme = $dataEntreprise = array();
         if($staffsListe->count()){
             foreach($staffsListe as $data){
                 $dataUser[] = $data->user_id;
@@ -178,7 +196,9 @@ class FormationStaffController extends Controller
                 $dataTheme[] = $data->theme_formation_staff_id;
             }
         }
-        return view('manager.formation-staff.edit', compact('pageTitle', 'formation','ModuleFormationStaffs','themes','staffs','dataUser','visiteurStaff','dataTheme'));
+        
+
+        return view('manager.formation-staff.edit', compact('pageTitle', 'formation','ModuleFormationStaffs','themes','staffs','dataUser','visiteurStaff','dataTheme','entreprises','formateurs'));
     } 
 
     public function status($id)

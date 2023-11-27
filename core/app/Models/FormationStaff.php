@@ -26,6 +26,10 @@ class FormationStaff extends Model
         return $this->belongsTo(Campagne::class);
     }
 
+    public function formateur(){
+        return $this->belongsTo(FormateurStaff::class,'formateur_staff_id');
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class,'user_id');
@@ -39,6 +43,4 @@ class FormationStaff extends Model
     {
         return $this->hasMany(FormationThemeStaff::class, 'formation_staff_id', 'id');
     }
-     
-     
 }
