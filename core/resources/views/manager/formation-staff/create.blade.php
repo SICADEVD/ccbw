@@ -68,6 +68,8 @@
                         <?php echo Form::label(__('Entreprise du formateur'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8 input-group mb-3">
                             <?php echo Form::select('entreprise_id', $entreprises, null, ['placeholder' => __('Selectionner une option'), 'class' => 'form-control', 'id' => 'entreprise_formateur', 'required' => 'required']); ?>
+                            <button type="button" class="btn btn-outline-secondary border-grey add-entreprise"
+                                data-toggle="tooltip" data-original-title="Ajouter un formateur">Add</button>
                         </div>
                     </div>
 
@@ -177,6 +179,13 @@
 
             $('body').on('click', '.add-formateur', function() {
                 var url = "{{ route('manager.settings.formateurStaff.index') }}";
+
+                $(MODAL_XL + ' ' + MODAL_HEADING).html('...');
+                $.ajaxModal(MODAL_XL, url);
+                $(MODAL_XL).modal('show');
+            });
+            $('body').on('click', '.add-entreprise', function() {
+                var url = "{{ route('manager.settings.entreprise.index') }}";
 
                 $(MODAL_XL + ' ' + MODAL_HEADING).html('...');
                 $.ajaxModal(MODAL_XL, url);

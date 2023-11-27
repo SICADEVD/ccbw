@@ -406,6 +406,27 @@ class SettingController extends Controller
        
         return Reply::successWithData(__('Le contenu a été ajouté avec succès.'), ['page_reload' => $request->page_reload]);
     }
+    public function entrepriseIndex()
+    {
+        $pageTitle = "Ajouter une entreprise"; 
+        return view('manager.config.create-entreprise-modal', compact('pageTitle'));
+    }
+    public function entrepriseStore(Request $request)
+    {
+        $request->validate([ 
+            'nom_entreprise'  => 'required',
+            'telephone_entreprise'  => 'required',
+            'adresse_entreprise'  => 'required',
+            'email_entreprise'  => 'required|email|unique:entreprises,email_entreprise',
+        ]);
+        $entreprise = new Entreprise();
+        $entreprise->nom = trim($request->nom); 
+        $entreprise->telephone = trim($request->telephone);
+        $entreprise->adresse = trim($request->adresse);
+        $entreprise->email = trim($request->email);
+        $entreprise->save();
+        return Reply::successWithData(__('L\'entreprise a été ajouté avec succès.'), ['page_reload' => $request->page_reload]);
+    }
 
     public function formateurStaffIndex()
     {
