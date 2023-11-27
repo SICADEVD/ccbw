@@ -1,5 +1,7 @@
 @extends('manager.layouts.app')
 @section('panel')
+<link  rel="stylesheet" href="{{asset('assets/fcadmin/css/vendor/datepicker.min.css')}}">
+<link  rel="stylesheet" href="{{asset('assets/fcadmin/css/tokens.css')}}">
 <div class="row mb-none-30">
     <div class="col-lg-12 col-md-12 mb-30">
         <div class="card">
@@ -8,9 +10,9 @@
                     @csrf
                     <div class="row">
                         <div class="col-6 form-group">
-                            <label for="">@lang("Date estimée de livraison")</label>
+                            <label for="">@lang("Date de livraison")</label>
                             <div class="input-group">
-                                <input name="estimate_date" value="{{ old('estimate_date') }}" type="text" autocomplete="off"  class="form-control date" placeholder="Date estimée de livraison" required>
+                                <input name="estimate_date" value="{{ old('estimate_date') }}" type="text" autocomplete="off"  class="form-control dates" placeholder="Date de livraison" required>
                                 <span class="input-group-text"><i class="las la-calendar"></i></span>
                             </div>
                         </div>
@@ -245,20 +247,14 @@
     </div>
 </div>
 </div>
-@endsection
-@push('script-lib')
+@endsection  
+
+ 
+
+@push('script')
 <script src="{{asset('assets/fcadmin/js/vendor/datepicker.min.js')}}"></script>
 <script src="{{asset('assets/fcadmin/js/vendor/datepicker.en.js')}}"></script>
 <script src="{{asset('assets/fcadmin/js/tokens.js')}}"></script>
-@endpush
-
-@push('style-lib')
-<link  rel="stylesheet" href="{{asset('assets/fcadmin/css/vendor/datepicker.min.css')}}">
-<link  rel="stylesheet" href="{{asset('assets/fcadmin/css/tokens.css')}}">
-
-@endpush
-
-@push('script')
 <script>
     "use strict"; 
     $(".scelleOld").select2({tags: true });
@@ -433,10 +429,10 @@
             $('.total').text(total.toFixed(0));
         };
 
-        $('.date').datepicker({
+        $('.dates').datepicker({
             language  : 'en',
             dateFormat: 'yyyy-mm-dd',
-            minDate   : new Date()
+            maxDate   : new Date()
         });
 
         @if(old('items'))

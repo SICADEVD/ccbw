@@ -10,7 +10,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Exports\ExportStaffs;
 use App\Models\User_localite;
-use App\Models\Magasin_section;
+use App\Models\MagasinSection;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
@@ -48,7 +48,7 @@ class StaffController extends Controller
     {
         $pageTitle = "Tous les Magasins";
         $manager   = auth()->user();
-        $magasins    = Magasin_section::where('staff_id', $staffId)->with('user')->orderBy('id', 'DESC')->paginate(getPaginate());
+        $magasins    = MagasinSection::where('staff_id', $staffId)->with('user')->orderBy('id', 'DESC')->paginate(getPaginate());
 
         return view('manager.staff.magasin', compact('pageTitle', 'magasins', 'staffId'));
     }
@@ -82,7 +82,7 @@ class StaffController extends Controller
                 $userLocalite[] = $data->localite_id;
             }
             foreach ($dataLocalite as $data) {
-                $userSection[] = $data->section_id;
+                $userSection[] = $data->localite->section->id;
             }
         }
         return view('manager.staff.edit', compact('pageTitle', 'staff', 'localites', 'userLocalite', 'userRole', 'roles', 'sections', 'userSection'));
@@ -177,7 +177,7 @@ class StaffController extends Controller
 
                 foreach ($request->localite as $data) {
                     if ($data != null) {
-                        DB::table('user_localites')->insert(['user_id' => $id, 'localite_id' => $data,'section_id'=>$request->section]);
+                        DB::table('user_localites')->insert(['user_id' => $id, 'localite_id' => $data]);
                     }
                     $i++;
                 }
@@ -216,10 +216,10 @@ class StaffController extends Controller
 
 
         if ($request->id) {
-            $magasin    = Magasin_section::findOrFail($request->id);
+            $magasin    = MagasinSection::findOrFail($request->id);
             $message = "Magasin a été mise à jour avec succès.";
         } else {
-            $magasin = new Magasin_section();
+            $magasin = new MagasinSection();
             $magasin->code = $this->generecodemagasin();
         }
 
@@ -235,7 +235,7 @@ class StaffController extends Controller
     private function generecodemagasin()
     {
 
-        $data = Magasin_section::select('code')->orderby('id', 'desc')->first();
+        $data = MagasinSection::select('code')->orderby('id', 'desc')->first();
 
         if ($data != '') {
             $code = $data->code;
@@ -269,7 +269,7 @@ class StaffController extends Controller
     }
     public function magasinStatus($id)
     {
-        return Magasin_section::changeStatus($id);
+        return MagasinSection::changeStatus($id);
     }
     public function exportExcel()
     {

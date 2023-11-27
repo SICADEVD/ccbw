@@ -26,6 +26,8 @@
     <x-setting-menu-item :active="$activeMenu" menu="localite_settings" :href="route('manager.settings.localite-settings.index')" :text="__('Paramètre de Localite')"/>
     <x-setting-menu-item :active="$activeMenu" menu="departement_settings" :href="route('manager.settings.departements.index')" :text="__('Paramètre Départements')"/> 
     <x-setting-menu-item :active="$activeMenu" menu="designation_settings" :href="route('manager.settings.designations.index')" :text="__('Paramètre Désignations')"/> 
+    <x-setting-menu-item :active="$activeMenu" menu="magasinSection_settings" :href="route('manager.settings.magasinSection.index')" :text="__('Paramètre Magasins Sections')"/> 
+    <x-setting-menu-item :active="$activeMenu" menu="magasinCentral_settings" :href="route('manager.settings.magasinCentral.index')" :text="__('Paramètre Magasins Centraux')"/> 
     <x-setting-menu-item :active="$activeMenu" menu="attendance_settings" :href="route('manager.settings.attendance-settings.index')" :text="__('app.menu.attendanceSettings')"/>
     <x-setting-menu-item :active="$activeMenu" menu="leave_settings" :href="route('manager.settings.leaves-settings.index')" :text="__('app.menu.leaveSettings')"/>
     <x-setting-menu-item :active="$activeMenu" menu="travauxDangereux_settings" :href="route('manager.settings.travauxDangereux.index')" :text="__('Paramètre Travaux Dangereux')"/>
