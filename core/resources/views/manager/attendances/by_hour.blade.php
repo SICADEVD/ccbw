@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('manager.layouts.app')
 
 @push('styles')
     <style>
@@ -10,7 +10,8 @@
 @endpush
 
 @section('filter-section')
-
+ 
+<div id="filter-bloc">
     <x-filters.filter-box>
         <div class="select-box d-flex py-2 pr-2 border-right-grey border-right-grey-sm-0">
             <p class="mb-0 pr-2 f-14 text-dark-grey d-flex align-items-center">@lang('app.employee')</p>
@@ -24,10 +25,10 @@
             </div>
         </div>
 
-        @if ($viewAttendancePermission == 'owned')
+       
             <input type="hidden" name="department" id="department" value="all">
             <input type="hidden" name="designation" id="designation" value="all">
-        @else
+        
             <div class="select-box d-flex py-2 px-lg-2 px-md-2 px-0 border-right-grey border-right-grey-sm-0">
                 <p class="mb-0 pr-2 f-14 text-dark-grey d-flex align-items-center">@lang('app.department')</p>
                 <div class="select-status">
@@ -52,7 +53,7 @@
                     </select>
                 </div>
             </div>
-        @endif
+  
 
         <div class="select-box d-flex py-2 px-lg-2 px-md-2 px-0 border-right-grey border-right-grey-sm-0">
             <p class="mb-0 pr-2 f-14 text-dark-grey d-flex align-items-center">@lang('app.month')</p>
@@ -85,21 +86,17 @@
         <!-- RESET END -->
 
     </x-filters.filter-box>
-
+</div>
 @endsection
-
-@php
-$addAttendancePermission = user()->permission('add_attendance');
-@endphp
-
-@section('content')
+ 
+@section('panel')
     <!-- CONTENT WRAPPER START -->
     <div class="content-wrapper px-4">
 
         <div class="d-grid d-lg-flex d-md-flex action-bar">
 
             <div id="table-actions" class="flex-grow-1 align-items-center">
-                @if ($addAttendancePermission == 'all' || $addAttendancePermission == 'added')
+              
                     <x-forms.link-primary :link="route('manager.hr.attendances.create')"
                         data-redirect-url="{{ route('manager.hr.attendances.by_member') }}" class="mr-3 openRightModal float-left"
                         icon="plus">
@@ -109,14 +106,12 @@ $addAttendancePermission = user()->permission('add_attendance');
                     <x-forms.button-secondary id="export-all" class="mr-3 mb-2 mb-lg-0" icon="file-export">
                         @lang('app.exportExcel')
                     </x-forms.button-secondary>
-                @endif
-
-                @if ($addAttendancePermission == 'all' || $addAttendancePermission == 'added')
+                
                     <x-forms.link-secondary :link="route('manager.hr.attendances.import')" class="mr-3 openRightModal float-left d-none d-lg-block"
                         icon="file-upload">
                         @lang('app.importExcel')
                     </x-forms.link-secondary>
-                @endif
+                
             </div>
 
             <div class="btn-group mt-2 mt-lg-0 mt-md-0 ml-0 ml-lg-3 ml-md-3" role="group">

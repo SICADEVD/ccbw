@@ -22,8 +22,8 @@
                     <label>@lang('Statut juridique')</label>
                                 <select name="statut_juridique" class="form-control">
                                     <option value="">@lang('Tous')</option>
-                                    <option value="SCOOPS" {{ request()->localite == 'SCOOPS' ? 'selected' : '' }}>SCOOPS</option>
-                                        <option value="COOP CA" {{ request()->localite == 'COOP CA' ? 'selected' : '' }}>COOP CA</option>
+                                    <option value="SCOOPS" {{ $cooperative->statut_juridique == 'SCOOPS' ? 'selected' : '' }}>SCOOPS</option>
+                                        <option value="COOP CA" {{ $cooperative->statut_juridique == 'COOP CA' ? 'selected' : '' }}>COOP CA</option>
                                    
                                 </select>
                         </div>
@@ -92,7 +92,7 @@
                                 </select>
                                 <button type="button"
                                         class="btn btn-outline-secondary border-grey add-documentad"
-                                        data-toggle="tooltip" data-original-title="Ajouter un document administratif">Add</button>
+                                        data-toggle="tooltip" data-original-title="Ajouter un document administratif"><i class="fa fa-plus"></i></button>
                         </div>
                         </div>
                         <div class="form-group">
@@ -106,7 +106,7 @@
                                 </select> 
                                 <button type="button"
                                         class="btn btn-outline-secondary border-grey add-instance"
-                                        data-toggle="tooltip" data-original-title="Ajouter une instance">Add</button>
+                                        data-toggle="tooltip" data-original-title="Ajouter une instance"><i class="fa fa-plus"></i></button>
                         </div>
                     </div>
                         <hr class="panel-wide">

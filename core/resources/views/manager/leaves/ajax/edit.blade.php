@@ -41,15 +41,10 @@
                             <select class="form-control select-picker" name="leave_type_id" id="leave_type_id"
                                 data-live-search="true">
                                 <option value="">--</option>
-                                @foreach ($leaveQuotas as $leaveQuota)
-                                    @php
-                                        $leaveType = new \App\Models\LeaveType();
-                                    @endphp
-
-                                    @if($leaveType->leaveTypeCodition($leaveQuota, $userRole))
+                                @foreach ($leaveQuotas as $leaveQuota) 
                                         <option @if ($leave->leave_type_id == $leaveQuota->id) selected @endif value="{{ $leaveQuota->id }}">
                                             {{ $leaveQuota->type_name }}</option>
-                                    @endif
+                                     
                                 @endforeach
                             </select>
 

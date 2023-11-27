@@ -14,12 +14,12 @@ use App\Models\Designation;
 use App\Traits\ImportExcel;
 use Illuminate\Http\Request;
 use App\Models\EmployeeShift;
-use App\Models\CooperativeAddress;
 use App\Models\EmployeeDetail;
 use App\Exports\AttendanceExport;
 use App\Imports\AttendanceImport;
 use App\Jobs\ImportAttendanceJob;
 use App\Models\AttendanceSetting;
+use App\Models\CooperativeAddress;
 use Illuminate\Support\Facades\DB; 
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\EmployeeShiftSchedule;
@@ -65,7 +65,6 @@ class AttendanceController extends AccountBaseController
     public function summaryData($request)
     {
         
-         
         $employees = User::with(
             [
                 'attendance' => function ($query) use ($request) {
@@ -314,7 +313,7 @@ class AttendanceController extends AccountBaseController
         $this->maxClockIn = $attendanceActivity->count() < $attendanceSettingss->clockin_in_day;
 
         /** @phpstan-ignore-next-line */
-        $this->totalTime = CarbonInterval::formatHuman($this->totalTime, true);
+        $this->totalTime = CarbonInterval::formatHuman($this->totalTime);
         $this->attendanceActivity = $attendanceSettingss;
         $this->attendance = $attendance;
 
@@ -576,6 +575,7 @@ class AttendanceController extends AccountBaseController
         $userId = $request->userId;
 
         $attendances = Attendance::userAttendanceByDate($startDate, $endDate, $userId); // Getting Attendance Data
+       
         $holidays = Holiday::getHolidayByDates($startDate, $endDate); // Getting Holiday Data
         $userId = $request->userId;
 
@@ -1050,7 +1050,7 @@ class AttendanceController extends AccountBaseController
 
             // Convert minutes to hours
             /** @phpstan-ignore-next-line */
-            $resultTotalTime = CarbonInterval::formatHuman($totalMinutes);
+            $resultTotalTime =  CarbonInterval::formatHuman($totalMinutes);
 
             $total[$count] = $resultTotalTime;
 

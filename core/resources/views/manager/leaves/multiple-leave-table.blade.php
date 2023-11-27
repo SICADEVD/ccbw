@@ -2,13 +2,8 @@
     <x-slot name="thead">
         <th>@lang('app.leaveDate')</th>
         <th>@lang('app.leaveType')</th>
-        <th>@lang('app.status')</th>
-        @if ($approveRejectPermission == 'all' || ($deleteLeavePermission == 'all'
-                                || ($deleteLeavePermission == 'added' && user()->id == $leave->added_by)
-                                || ($deleteLeavePermission == 'owned' && user()->id == $leave->user_id)
-                                || ($deleteLeavePermission == 'both' && (user()->id == $leave->user_id || user()->id == $leave->added_by))))
-            <th class="text-right pr-20">@lang('app.action')</th>
-        @endif
+        <th>@lang('app.status')</th> 
+        <th class="text-right pr-20">@lang('app.action')</th> 
     </x-slot>
 
     @forelse($multipleLeaves as $leave)
@@ -36,14 +31,10 @@
                 @endphp
 
                 <i class="fa fa-circle mr-1 {{$class}} f-10"></i> {{$status}}
-            </td>
-            @if ($approveRejectPermission == 'all' || ($deleteLeavePermission == 'all'
-                                || ($deleteLeavePermission == 'added' && user()->id == $leave->added_by)
-                                || ($deleteLeavePermission == 'owned' && user()->id == $leave->user_id)
-                                || ($deleteLeavePermission == 'both' && (user()->id == $leave->user_id || user()->id == $leave->added_by))))
+            </td> 
                 @if($viewType == 'model')
                     <td class="text-right">
-                        @if ($leave->status == 'pending' && $approveRejectPermission == 'all')
+                        @if ($leave->status == 'pending')
                             <div class="task_view">
                                 <a class="dropdown-item leave-action-approved action-hover" data-leave-id={{ $leave->id }}
                                     data-leave-action="approved" data-toggle="tooltip" data-original-title="@lang('app.approve')" data-leave-type-id="{{ $leave->leave_type_id }}" href="javascript:;">
@@ -56,18 +47,14 @@
                                         <i class="fa fa-times mr-2"></i>
                                 </a>
                             </div>
-                        @endif
-                        @if ($deleteLeavePermission == 'all'
-                                    || ($deleteLeavePermission == 'added' && user()->id == $leave->added_by)
-                                    || ($deleteLeavePermission == 'owned' && user()->id == $leave->user_id)
-                                    || ($deleteLeavePermission == 'both' && (user()->id == $leave->user_id || user()->id == $leave->added_by)))
+                        @endif 
                             <div class="task_view mt-1 mt-lg-0 mt-md-0">
                                 <a data-leave-id={{$leave->id}} data-type="multiple-leave" data-unique-id="{{$leave->unique_id}}"
                                     class="dropdown-item delete-table-row action-hover"  data-toggle="tooltip" data-original-title="@lang('app.delete')" href="javascript:;">
                                     <i class="fa fa-trash mr-2"></i>
                                 </a>
                             </div>
-                        @endif
+                         
                     </td>
                 @else
                     <td class="text-right pr-20">
@@ -79,7 +66,7 @@
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink-41" tabindex="0" x-placement="bottom-end" style="position: absolute; transform: translate3d(-137px, 26px, 0px); top: 0px; left: 0px; will-change: transform;">
                                     <a href="{{route('manager.leaves.show', $leave->id) }}?type=single" class="dropdown-item openRightModal"><i class="fa fa-eye mr-2"></i>@lang('app.view')</a>
 
-                                    @if ($leave->status == 'pending')
+                                    @if($leave->status == 'pending')
                                         <a class="dropdown-item leave-action-approved" data-leave-id={{ $leave->id }}
                                             data-leave-action="approved" data-user-id="{{ $leave->user_id }}" data-leave-type-id="{{ $leave->leave_type_id }}" href="javascript:;">
                                             <i class="fa fa-check mr-2"></i>@lang('app.approve')
@@ -87,37 +74,27 @@
                                         <a data-leave-id={{ $leave->id }}
                                                 data-leave-action="rejected" data-user-id="{{ $leave->user_id }}" data-leave-type-id="{{ $leave->leave_type_id }}" class="dropdown-item leave-action-reject" href="javascript:;">
                                                 <i class="fa fa-times mr-2"></i>@lang('app.reject')
-                                        </a>
-                                        @if ($editLeavePermission == 'all'
-                                        || ($editLeavePermission == 'added' && user()->id == $leave->added_by)
-                                        || ($editLeavePermission == 'owned' && user()->id == $leave->user_id)
-                                        || ($editLeavePermission == 'both' && (user()->id == $leave->user_id || user()->id == $leave->added_by))
-                                        )
+                                        </a> 
                                             <div class="mt-1 mt-lg-0 mt-md-0">
                                                 <a class="dropdown-item openRightModal" href="{{ route('manager.leaves.edit', $leave->id) }}">
                                                     <i class="fa fa-edit mr-2"></i>@lang('app.edit')
                                             </a>
                                             </div>
-                                        @endif
-                                    @endif
-
-                                    @if ($deleteLeavePermission == 'all'
-                                    || ($deleteLeavePermission == 'added' && user()->id == $leave->added_by)
-                                    || ($deleteLeavePermission == 'owned' && user()->id == $leave->user_id)
-                                    || ($deleteLeavePermission == 'both' && (user()->id == $leave->user_id || user()->id == $leave->added_by)))
+                                        
+                                    @endif 
                                         <div class="mt-1 mt-lg-0 mt-md-0">
                                             <a data-leave-id="{{ $leave->id }}" data-unique-id=" {{ $leave->unique_id }}"
                                                 data-duration="{{ $leave->duration }}" class="dropdown-item delete-multiple-leave" href="javascript:;">
                                                 <i class="fa fa-trash mr-2"></i>@lang('app.delete')
                                             </a>
                                         </div>
-                                    @endif
+                                   
                                 </div>
                             </div>
                         </div>
                     </td>
                 @endif
-            @endif
+            
         </tr>
     @empty
         <tr>

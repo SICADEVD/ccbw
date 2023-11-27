@@ -145,11 +145,6 @@
                 <a href="{{ route('manager.leaves.index') }}" class="btn btn-secondary f-14 btn-active" data-toggle="tooltip"
                     data-original-title="@lang('modules.leaves.tableView')"><i class="side-icon bi bi-list-ul"></i></a>
 
-                <a href="{{ route('manager.leaves.calendar') }}" class="btn btn-secondary f-14" data-toggle="tooltip"
-                    data-original-title="@lang('app.menu.calendar')"><i class="side-icon bi bi-calendar"></i></a>
-
-                <a href="{{ route('manager.leaves.personal') }}" class="btn btn-secondary f-14" data-toggle="tooltip"
-                    data-original-title="@lang('modules.leaves.myLeaves')"><i class="side-icon bi bi-person"></i></a>
             </div>
         </div>
 
@@ -477,7 +472,7 @@ $(MODAL_LG).modal('show');
 
             var url = "{{ route('manager.leaves.view_related_leave', ':id') }}?uniqueId="+uniqueId;
             url = url.replace(':id', leaveId);
-
+            
             $(MODAL_LG + ' ' + MODAL_HEADING).html('...');
             $.ajaxModal(MODAL_LG, url);
 $(MODAL_LG).modal('show');

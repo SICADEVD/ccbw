@@ -54,7 +54,7 @@ use Illuminate\Support\Arr;
                                             <span class="fw-bold">{{ $approvisionnement->cooperative->name }}</span>
                                         </td>  
                                         <td>
-                                            <span>{{ $approvisionnement->total }}</span>
+                                            <span>{{ array_sum(Arr::pluck(json_decode($approvisionnement->especes),'total')) }}</span>
                                         </td>
                                         <td>
                                             <span>
@@ -66,9 +66,7 @@ use Illuminate\Support\Arr;
                                             <span>{{ diffForHumans($approvisionnement->created_at) }}</span>
                                         </td> 
                                         <td>
-                                        <a href="{{ route('manager.agro.approvisionnement.section') }}"
-                                                class="btn btn-sm btn-outline--primary"><i
-                                                    class="las la-pen"></i>@lang('Approv par Section')</a>
+                                      
                                         <a href="{{ route('manager.agro.approvisionnement.edit', $approvisionnement->id) }}"
                                                 class="btn btn-sm btn-outline--primary"><i
                                                     class="las la-pen"></i>@lang('Edit')</a>
@@ -100,7 +98,7 @@ use Illuminate\Support\Arr;
 
 @push('breadcrumb-plugins')
     
-    <a href="{{ route('manager.agro.approvisionnement.create') }}" class="btn  btn-outline--primary h-45 addNewCooperative">
+    <a href="{{ route('manager.agro.approvisionnement.create-section') }}" class="btn  btn-outline--primary h-45 addNewCooperative">
         <i class="las la-plus"></i>@lang("Ajouter nouveau")
     </a>
      

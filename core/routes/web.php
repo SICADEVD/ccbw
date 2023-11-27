@@ -381,10 +381,14 @@ Route::resource('settings', SettingsController::class)->only(['edit', 'update', 
 
         //Manage Agroapprovisionnements
         Route::controller('Manager\AgroapprovisionnementController')->name('agro.approvisionnement.')->prefix('agro/approvisionnement')->group(function () {
-            Route::get('list', 'index')->name('index');
+            Route::get('', 'index')->name('index');
+            Route::get('section', 'section')->name('section');
             Route::get('create', 'create')->name('create');
             Route::post('store', 'store')->name('store');
             Route::get('edit/{id}', 'edit')->name('edit');
+            Route::get('create-section', 'create_section')->name('create-section');
+            Route::post('store-section', 'store_section')->name('store-section');
+            Route::get('edit-section/{id}', 'edit_section')->name('edit-section');
             Route::post('status/{id}', 'status')->name('status');
             Route::get('/exportApprovisionnementExcel', 'exportExcel')->name('exportExcel.approvisionnementAll');
         });
