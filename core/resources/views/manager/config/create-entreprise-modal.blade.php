@@ -5,6 +5,7 @@
 <div class="modal-body">
     <div class="portlet-body">
         <x-form id="createEntreprise" method="POST" class="ajax-form">
+            @csrf
 
             <div class="row">
                 <input type="hidden" value="true" name="page_reload" id="page_reload">
