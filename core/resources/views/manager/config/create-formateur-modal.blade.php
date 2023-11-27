@@ -1,10 +1,22 @@
 <div class="modal-header">
-    <h5 class="modal-title">@lang('Ajouter un Formateur')</h5>
+    <h5 class="modal-title">{{$pageTitle}}</h5>
     <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">×</button>
 </div>
 <div class="modal-body">
     <div class="portlet-body">
         <x-form id="createFormateur" method="POST" class="ajax-form">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <label for="entreprise_id" class="control-label">@lang('Entreprise')</label>
+                   <select class="form-control" name="entreprise_id" id="entreprise_id" required>
+                        <option value="">@lang('Choisir une entreprise')</option>
+                        @foreach($entreprises as $entreprise)
+                            <option value="{{ $entreprise->id }}">{{ $entreprise->nom_entreprise }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
 
             <div class="row">
                 <input type="hidden" value="true" name="page_reload" id="page_reload">

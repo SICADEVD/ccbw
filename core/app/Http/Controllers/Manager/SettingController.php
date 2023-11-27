@@ -409,14 +409,15 @@ class SettingController extends Controller
 
     public function formateurStaffIndex()
     {
-        $this->pageTitle = "Ajouter un formateur staff";   
-        return view('manager.config.create-formateur-modal', $this->data);
+        $pageTitle = "Ajouter un formateur staff";   
+        $entreprises = Entreprise::get();
+        return view('manager.config.create-formateur-modal',compact('pageTitle','entreprises'));
     }
     public function formateurStaffStore(Request $request)
     {
         $request->validate([ 
             'nom_formateur'  => 'required',
-            'entreprise'=>'required',
+            'entreprise_id'=>'required',
             'prenom_formateur'  => 'required',
             'telephone_formateur'  => 'required',
             'poste_formateur'  => 'required',
@@ -428,14 +429,16 @@ class SettingController extends Controller
         } else {
             $formateurStaff = new FormateurStaff();
         } 
-        $formateurStaff->entreprise_id = $request->entreprise;
+        $formateurStaff->entreprise_id = $request->entreprise_id;
         $formateurStaff->nom_formateur = trim($request->nom_formateur); 
         $formateurStaff->prenom_formateur = trim($request->prenom_formateur);
         $formateurStaff->telephone_formateur = trim($request->telephone_formateur);
         $formateurStaff->poste_formateur = trim($request->poste_formateur);
+        
         $formateurStaff->save();
-        $notify[] = ['success', isset($message) ? $message  : 'Formateur Staff a été ajouté avec succès.'];
-        return back()->withNotify($notify);
+        return Reply::successWithData(__('Formateur Staff a été ajouté avec succès.'), ['page_reload' => $request->page_reload]);
+        // $notify[] = ['success', isset($message) ? $message  : 'Formateur Staff a été ajouté avec succès.'];
+        // return back()->withNotify($notify);
     }
 
     public function departementIndex()
