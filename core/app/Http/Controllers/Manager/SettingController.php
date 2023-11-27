@@ -8,9 +8,11 @@ use App\Constants\Status;
 use App\Models\Campagne; 
 use App\Models\ArretEcole;
 use App\Models\Department;
+use App\Models\Entreprise;
 use App\Http\Helpers\Reply;
 use App\Models\Cooperative;
 use App\Models\CourierInfo;
+use App\Models\Designation;
 use App\Models\TypeArchive;
 use Illuminate\Http\Request;
 use App\Models\Questionnaire;
@@ -18,6 +20,7 @@ use App\Models\TravauxLegers;
 use App\Models\TypeFormation;
 use App\Models\CourierPayment;
 use App\Models\CourierProduct;
+use App\Models\FormateurStaff;
 use App\Models\ThemesFormation;
 use App\Models\Agroespecesarbre;
 use App\Models\TravauxDangereux;
@@ -27,7 +30,6 @@ use App\Http\Controllers\Controller;
 use App\Models\ModuleFormationStaff;
 use App\Models\DocumentAdministratif;
 use App\Models\CategorieQuestionnaire;
-use App\Models\Designation;
 
 class SettingController extends Controller
 {
@@ -172,7 +174,6 @@ class SettingController extends Controller
         $notify[] = ['success', isset($message) ? $message  : 'Type Formation a été ajouté avec succès.'];
         return back()->withNotify($notify);
     }
-
     public function themeFormationIndex()
     {
         $pageTitle = "Manage theme de Formation"; 
@@ -404,6 +405,37 @@ class SettingController extends Controller
         $documentad->save();
        
         return Reply::successWithData(__('Le contenu a été ajouté avec succès.'), ['page_reload' => $request->page_reload]);
+    }
+
+    public function formateurStaffIndex()
+    {
+        $this->pageTitle = "Ajouter un formateur staff";   
+        return view('manager.config.create-formateur-modal', $this->data);
+    }
+    public function formateurStaffStore(Request $request)
+    {
+        $request->validate([ 
+            'nom_formateur'  => 'required',
+            'entreprise'=>'required',
+            'prenom_formateur'  => 'required',
+            'telephone_formateur'  => 'required',
+            'poste_formateur'  => 'required',
+        ]);
+
+        if ($request->id) {
+            $formateurStaff    = FormateurStaff::findOrFail($request->id);
+            $message = "Formateur Staff a été mise à jour avec succès.";
+        } else {
+            $formateurStaff = new FormateurStaff();
+        } 
+        $formateurStaff->entreprise_id = $request->entreprise;
+        $formateurStaff->nom_formateur = trim($request->nom_formateur); 
+        $formateurStaff->prenom_formateur = trim($request->prenom_formateur);
+        $formateurStaff->telephone_formateur = trim($request->telephone_formateur);
+        $formateurStaff->poste_formateur = trim($request->poste_formateur);
+        $formateurStaff->save();
+        $notify[] = ['success', isset($message) ? $message  : 'Formateur Staff a été ajouté avec succès.'];
+        return back()->withNotify($notify);
     }
 
     public function departementIndex()

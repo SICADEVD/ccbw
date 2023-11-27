@@ -197,6 +197,8 @@ Route::middleware('auth')->group(function () {
             Route::post('instance/store', [SettingController::class, 'instanceStore'])->name('instance.store');
             Route::get('document-ad/', [SettingController::class, 'documentadIndex'])->name('documentad.index');
             Route::post('document-ad/store', [SettingController::class, 'documentadStore'])->name('documentad.store');
+            Route::get('formateur-staff/', [SettingController::class, 'formateurStaffIndex'])->name('formateurStaff.index');
+            Route::post('formateur-staff/store', [SettingController::class, 'formateurStaffStore'])->name('formateurStaff.store');
         });
 
 Route::resource('employee-files', EmployeeFileController::class);
