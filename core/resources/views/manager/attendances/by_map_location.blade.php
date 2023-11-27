@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('manager.layouts.app')
 
 @push('styles')
     <style>
@@ -9,7 +9,7 @@
 @endpush
 
 @section('filter-section')
-
+<div id="filter-bloc">
     <x-filters.filter-box>
 
         <div class="select-box d-flex py-2 pr-2 border-right-grey border-right-grey-sm-0">
@@ -69,10 +69,10 @@
         <!-- RESET END -->
 
     </x-filters.filter-box>
-
+</div>
 @endsection
 
-@section('content')
+@section('panel')
     <!-- CONTENT WRAPPER START -->
     <div class="content-wrapper px-4">
 

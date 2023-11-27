@@ -428,27 +428,27 @@ class LeaveController extends AccountBaseController
      */
     public function show($id)
     {
-        $this->leave = Leave::with('approvedBy', 'user')->where(function($q) use($id){
+        $leave = Leave::with('approvedBy', 'user')->where(function($q) use($id){
             $q->where('id', $id);
             $q->orWhere('unique_id', $id);
         })->firstOrFail();
 
         $this->reportingTo = EmployeeDetail::where('reporting_to', user()->id)->first();
  
-
-        $this->pageTitle = $this->leave->user->name; 
-
+        
+        $this->pageTitle = $leave->user->name; 
+        $this->leave = $leave;
         if (request()->ajax()) {
             $html = view('manager.leaves.ajax.show', $this->data)->render();
 
             return Reply::dataOnly(['status' => 'success', 'html' => $html, 'title' => $this->pageTitle]);
         }
 
-        if($this->leave->duration == 'multiple' && !is_null($this->leave->unique_id) && (request()->type != 'single' || !request()->has('type'))){
-            $this->multipleLeaves = Leave::with('type', 'user')->where('unique_id', $id)->orderBy('leave_date', 'DESC')->get();
+        if($leave->duration == 'multiple' && !is_null($leave->unique_id) && (request()->type != 'single' || !request()->has('type'))){
+            $multipleLeaves = Leave::with('type', 'user')->where('unique_id', $id)->orderBy('leave_date', 'DESC')->get();
             $this->viewType = 'multiple';
-            $this->pendingCountLeave = $this->multipleLeaves->where('status', 'pending')->count();
-
+            $this->pendingCountLeave = $multipleLeaves->where('status', 'pending')->count();
+            $this->multipleLeaves = $multipleLeaves;
             $this->view = 'manager.leaves.ajax.multiple-leaves';
         }
         else {
@@ -466,12 +466,12 @@ class LeaveController extends AccountBaseController
      */
     public function edit($id)
     {
-        $this->leave = Leave::with('files')->findOrFail($id);
+        $leave = Leave::with('files')->findOrFail($id);
  
 
         $this->employees = User::allEmployees();
 
-        $this->pageTitle = $this->leave->user->name;
+        $this->pageTitle = $leave->user->name;
 
         $leaveQuotas = LeaveType::select('leave_types.*', 'employee_details.notice_period_start_date', 'employee_details.probation_end_date',
         'employee_details.department_id as employee_department', 'employee_details.designation_id as employee_designation',
@@ -485,9 +485,11 @@ class LeaveController extends AccountBaseController
             $this->leaveTypeRole(request()->default_assign);
         }
         else {
-            $this->leaveQuotas = $leaveQuotas->where('users.id', $this->leave->user_id)->get();
-            $this->leaveTypeRole($this->leave->user_id);
+            $this->leaveQuotas = $leaveQuotas->where('users.id', $leave->user_id)->get();
+            $this->leaveTypeRole($leave->user_id);
+            
         }
+        $this->leave = $leave;
 
         if (request()->ajax()) {
             $html = view('manager.leaves.ajax.edit', $this->data)->render();
@@ -849,9 +851,9 @@ class LeaveController extends AccountBaseController
     public function viewRelatedLeave(Request $request)
     {
     
-        $this->multipleLeaves = Leave::with('type', 'user')->where('unique_id', $request->uniqueId)->orderBy('leave_date', 'DESC')->get();
-        $this->pendingCountLeave = $this->multipleLeaves->where('status', 'pending')->count();
-
+        $multipleLeaves = Leave::with('type', 'user')->where('unique_id', $request->uniqueId)->orderBy('leave_date', 'DESC')->get();
+        $this->pendingCountLeave = $multipleLeaves->where('status', 'pending')->count();
+        $this->multipleLeaves = $multipleLeaves;
         $this->viewType = 'model';
         return view('manager.leaves.view-multiple-related-leave', $this->data);
     }

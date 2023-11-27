@@ -36,7 +36,19 @@ class AgroapprovisionnementController extends Controller
          
         return view('manager.approvisionnement.index', compact('pageTitle', 'approvisionnements','localites'));
     }
- 
+    public function section()
+    {
+        $pageTitle      = "Gestion des approvisionnements de section";
+        $manager   = auth()->user();
+        $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->get();
+        $approvisionnements = Agroapprovisionnement::dateFilter()->searchable([])->latest('id')->where('cooperative_id',$manager->cooperative_id)->where(function ($q) {
+            if(request()->localite != null){
+                $q->where('localite_id',request()->localite);
+            }
+        })->paginate(getPaginate());
+         
+        return view('manager.approvisionnement.section', compact('pageTitle', 'approvisionnements','localites'));
+    }
     public function create()
     {
         $pageTitle = "Ajouter un approvisionnement";
@@ -44,6 +56,15 @@ class AgroapprovisionnementController extends Controller
         $especesarbres  = Agroespecesarbre::orderby('strate','asc')->orderby('nom','asc')->get(); 
         return view('manager.approvisionnement.create', compact('pageTitle', 'especesarbres'));
     }
+    public function create_section()
+    {
+        $pageTitle = "Ajouter un approvisionnement de section";
+        $manager   = auth()->user();
+        $sections = Section::get();
+        $especesarbres  = Agroespecesarbre::orderby('strate','asc')->orderby('nom','asc')->get(); 
+        return view('manager.approvisionnement.create-section', compact('pageTitle', 'especesarbres','sections'));
+    }
+
 
     public function store(Request $request)
     {
@@ -74,6 +95,7 @@ class AgroapprovisionnementController extends Controller
         } 
 
         $approvisionnement->campagne_id = $campagne->id;
+        $approvisionnement->total = array_sum($request->quantite);
         $approvisionnement->cooperative_id = $manager->cooperative_id;
          
         if($request->hasFile('bon_livraison')) {

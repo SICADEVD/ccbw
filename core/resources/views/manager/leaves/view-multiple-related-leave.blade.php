@@ -8,7 +8,7 @@
 </style>
 <div class="modal-header">
     <h5 class="modal-title">@lang('app.total') @lang('app.leave') ( {{$multipleLeaves[0]->user->name}} )</h5>
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">×</button>
 </div>
 <div class="col-lg-12 col-md-12 ntfcn-tab-content-left w-100 p-0">
    @include('manager.leaves.multiple-leave-table')
@@ -25,7 +25,7 @@
             }
         @endphp
 
-        @if ($pendingCountLeave > 0 && $approveRejectPermission == 'all')
+        @if ($pendingCountLeave > 0 )
             <a class="btn btn-secondary rounded f-14 p-2 leave-action-approved" data-leave-id="{{ $multipleLeaves->first()->unique_id }}"
                 data-leave-action="approved" data-type="approveAll" class="mr-3" icon="check" href="javascript:;">
                 <i class="fa fa-check mr-2"></i>{{$approveTitle}}</a>
@@ -35,5 +35,5 @@
                 <i class="fa fa-times mr-2"></i>{{$rejectTitle}}</a>
         @endif
 
-    <x-forms.button-cancel data-dismiss="modal" class="border-0 mr-3">@lang('app.cancel')</x-forms.button-cancel>
+    <x-forms.button-cancel data-bs-dismiss="modal" class="border-0 mr-3">@lang('app.cancel')</x-forms.button-cancel>
 </div>

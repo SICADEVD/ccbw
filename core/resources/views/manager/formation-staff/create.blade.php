@@ -32,7 +32,7 @@
     <div class="form-group row">
         <?php echo Form::label(__("Lieu de la formation"), null, ['class' => 'col-sm-4 control-label']); ?>
         <div class="col-xs-12 col-sm-8">
-            <?php echo Form::select('lieu_formation', ["Dans le ménage"=>"Dans le ménage","Place Publique"=>"Place Publique","Champs Ecole"=>"Champs Ecole","En salle"=>"En salle"], null, array('placeholder' => __('Selectionner une option'),'class' => 'form-control', 'id'=>'lieu_formations','required'=>'required')); ?>
+            <?php echo Form::text('lieu_formation', null, array('placeholder' => __('Saisissez un lieu'),'class' => 'form-control', 'id'=>'lieu_formations','required'=>'required')); ?>
         </div>
     </div>
     <div class="form-group row">

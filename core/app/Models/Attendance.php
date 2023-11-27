@@ -298,7 +298,7 @@ class Attendance extends BaseModel
         }
 
         /** @phpstan-ignore-next-line */
-        return CarbonInterval::formatHuman($totalTime);
+        //return CarbonInterval::formatHuman($totalTime);
     }
 
 }

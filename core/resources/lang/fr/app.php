@@ -84,7 +84,7 @@ return array(
     'sir' => "Monsieur",
     'madam' => "Madame",
     'invoiceGenerate' => "Facture générée",
-    'leave' => "Congé",
+    'leave' => "Congés",
     'holiday' => "Jour férié ( :nom)",
     'inProcess' => "En cours",
     'overdue' => "En retard",

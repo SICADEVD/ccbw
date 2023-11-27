@@ -10,7 +10,7 @@
                         </div>
                         <div class="col-md-2 col-2 text-right">
                             <div class="dropdown">
-                                @if ($leave->status == 'pending')
+                            @if ($leave->status == 'pending')
                                     <button class="btn f-14 px-0 py-0 text-dark-grey dropdown-toggle" type="button"
                                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <i class="fa fa-ellipsis-h"></i>
@@ -18,7 +18,7 @@
 
                                     <div class="dropdown-menu dropdown-menu-right border-grey rounded b-shadow-4 p-0"
                                         aria-labelledby="dropdownMenuLink" tabindex="0">
-                                            @if ($reportingTo && $leave->user_id != user()->id && !in_array('admin', user_roles()))
+                                            @if ($reportingTo && $leave->user_id != user()->id)
                                                
                                                     <a data-leave-id="{{ $leave->id }}" data-leave-action="rejected" data-user-id="{{ $leave->user_id }}" data-leave-type-id="{{ $leave->leave_type_id }}" class="dropdown-item leave-action-reject" href="javascript:;">
                                                             <i class="fa fa-times mr-2"></i>
@@ -34,7 +34,7 @@
                                                             <i class="fa fa-check mr-2"></i>
                                                             @lang('app.preApprove')
                                                     </a>
-             
+                                            @endif
                                             @if ($leave->status == 'pending')
                                                 <a class="dropdown-item leave-action-approved" data-leave-id="{{ $leave->id }}" data-leave-action="approved" data-user-id="{{ $leave->user_id }}" data-leave-type-id="{{ $leave->leave_type_id }}" href="javascript:;">
                                                     <i class="fa fa-check mr-2"></i>

@@ -167,11 +167,11 @@ class LeaveDataTable extends BaseDataTable
                                     ' . __('app.approve') . '
                             </a>';
                     
-                        $actions .= '<a data-leave-id=' . $row->id . '
-                             data-leave-action="pre-approve" data-user-id="' . $row->user_id . '" data-leave-type-id="' . $row->leave_type_id . '" class="dropdown-item leave-action-preapprove" href="javascript:;">
-                               <i class="fa fa-check mr-2"></i>
-                                ' . __('app.preApprove') . '
-                        </a>';
+                        // $actions .= '<a data-leave-id=' . $row->id . '
+                        //      data-leave-action="pre-approve" data-user-id="' . $row->user_id . '" data-leave-type-id="' . $row->leave_type_id . '" class="dropdown-item leave-action-preapprove" href="javascript:;">
+                        //        <i class="fa fa-check mr-2"></i>
+                        //         ' . __('app.preApprove') . '
+                        // </a>';
                    
                 }
 

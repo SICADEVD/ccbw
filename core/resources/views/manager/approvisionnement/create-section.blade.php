@@ -4,7 +4,9 @@
         <div class="col-lg-12 mb-30">
             <div class="card">
                 <div class="card-body"> 
-                    {!! Form::open(array('route' => ['manager.agro.approvisionnement.store'],'method'=>'POST','class'=>'form-horizontal', 'id'=>'flocal', 'enctype'=>'multipart/form-data')) !!} 
+                    {!! Form::open(array('route' => ['manager.agro.approvisionnement.store-section'],'method'=>'POST','class'=>'form-horizontal', 'id'=>'flocal', 'enctype'=>'multipart/form-data')) !!} 
+                  
+                    
                     <div class="form-group row">
                                 <label class="col-sm-4 control-label">@lang('Coopérative')</label>
                                 <div class="col-xs-12 col-sm-8">
@@ -12,6 +14,18 @@
                                 {!! Form::text('cooperative', auth()->user()->cooperative->name, array('placeholder' => __('Localite'),'class' => 'form-control', 'readonly')) !!}
                                 </div>
                             </div> 
+                            <div class="form-group row">
+                                <label class="col-sm-4 control-label">@lang('Section')</label>
+                                <div class="col-xs-12 col-sm-8">
+                                <select class="form-control" name="section" id="section" required>
+                                    <option value="">@lang('Selectionner une option')</option>
+                                    @foreach($sections as $section)
+                                        <option value="{{ $section->id }}" @selected(old('section'))>
+                                            {{ $section->libelle }}</option>
+                                    @endforeach
+                                </select>
+                                </div>
+                            </div>  
                     <div class="form-group row">
             {{ Form::label(__("Espèce D'arbres"), null, ['class' => 'col-sm-4 control-label']) }}
     <div class="col-xs-12 col-sm-8">
