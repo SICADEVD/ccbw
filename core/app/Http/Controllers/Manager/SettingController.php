@@ -417,13 +417,13 @@ class SettingController extends Controller
             'nom_entreprise'  => 'required',
             'telephone_entreprise'  => 'required',
             'adresse_entreprise'  => 'required',
-            'email_entreprise'  => 'required|email|unique:entreprises,email_entreprise',
+            'mail_entreprise'  => 'required|email|unique:entreprises,mail_entreprise',
         ]);
         $entreprise = new Entreprise();
-        $entreprise->nom = trim($request->nom); 
-        $entreprise->telephone = trim($request->telephone);
-        $entreprise->adresse = trim($request->adresse);
-        $entreprise->email = trim($request->email);
+        $entreprise->nom_entreprise = trim($request->nom_entreprise); 
+        $entreprise->mail_entreprise = trim($request->mail_entreprise);
+        $entreprise->telephone_entreprise = trim($request->telephone_entreprise);
+        $entreprise->adresse_entreprise = trim($request->adresse_entreprise);
         $entreprise->save();
         return Reply::successWithData(__('L\'entreprise a été ajouté avec succès.'), ['page_reload' => $request->page_reload]);
     }

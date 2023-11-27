@@ -5,8 +5,6 @@
 <div class="modal-body">
     <div class="portlet-body">
         <x-form id="createEntreprise" method="POST" class="ajax-form">
-            @csrf
-
             <div class="row">
                 <input type="hidden" value="true" name="page_reload" id="page_reload">
                 <div class="col-lg-12">
@@ -33,8 +31,8 @@
             <div class="row">
                 <input type="hidden" value="true" name="page_reload" id="page_reload">
                 <div class="col-lg-12">
-                    <x-forms.text :fieldLabel="__('Adresse de l\'entreprise')" :fieldPlaceholder="__('Adresse de l\'entreprise')" fieldName="adresse_formateur"
-                        fieldId="adresse_formateur" fieldValue="" :fieldRequired="true" />
+                    <x-forms.text :fieldLabel="__('Adresse de l\'entreprise')" :fieldPlaceholder="__('Adresse de l\'entreprise')" fieldName="adresse_entreprise"
+                        fieldId="adresse_entreprise" fieldValue="" :fieldRequired="true" />
                 </div>
             </div>
         </x-form>
@@ -63,7 +61,7 @@
             buttonSelector: "#save-entreprise",
             errorPosition: 'inline',
             url: "{{ route('manager.settings.entreprise.store') }}",
-            data: $('#createFormateur').serialize(),
+            data: $('#createEntreprise').serialize(),
             success: function(response) {
                 if (response.status == 'success') {
                     if (response.page_reload == 'true') {
