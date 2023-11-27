@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\manager;
 
 use App\Models\Unit;
+use App\Models\User;
+use App\Models\Section;
 use App\Models\Instance;
 use App\Constants\Status;
 use App\Models\Campagne; 
@@ -20,6 +22,8 @@ use App\Models\TravauxLegers;
 use App\Models\TypeFormation;
 use App\Models\CourierPayment;
 use App\Models\CourierProduct;
+use App\Models\MagasinCentral;
+use App\Models\MagasinSection;
 use App\Models\FormateurStaff;
 use App\Models\ThemesFormation;
 use App\Models\Agroespecesarbre;
@@ -30,6 +34,8 @@ use App\Http\Controllers\Controller;
 use App\Models\ModuleFormationStaff;
 use App\Models\DocumentAdministratif;
 use App\Models\CategorieQuestionnaire;
+use App\Models\UserLocalite;
+use Google\Service\Blogger\UserLocale;
 
 class SettingController extends Controller
 {
@@ -517,6 +523,78 @@ class SettingController extends Controller
         $notify[] = ['success', isset($message) ? $message  : 'Le contenu a été ajouté avec succès.'];
         return back()->withNotify($notify);
     }
+
+    public function magasinSectionIndex()
+    {
+
+       $pageTitle = "Manage des Magasins de Section"; 
+       $manager = auth()->user();
+        $activeSettingMenu = 'magasinSection_settings';
+        $sections = UserLocalite::get();
+        $users = User::whereHas('roles', function($q){ $q->where('name', 'Magasinier'); })
+                ->where('cooperative_id', $manager->cooperative_id)
+                ->select('id',DB::raw("CONCAT(lastname,' ', firstname) as nom"))
+                ->get(); 
+        $magasinSections     = MagasinSection::orderBy('id','desc')->paginate(getPaginate());
+        return view('manager.config.magasinSection', compact('pageTitle', 'magasinSections','activeSettingMenu','users','sections'));
+    }
+public function magasinSectionStore(Request $request)
+    {
+        $request->validate([ 
+            'nom'  => 'required',
+            'user'  => 'required',
+            'section'  => 'required', 
+        ]);
+
+        if ($request->id) {
+            $magasin    = MagasinSection::findOrFail($request->id);
+            $message = "Le contenu a été mise à jour avec succès.";
+        } else {
+            $magasin = new MagasinSection();
+        } 
+        $magasin->staff_id = trim($request->user); 
+        $magasin->section_id = trim($request->section);
+        $magasin->nom = trim($request->nom); 
+        $magasin->save();
+       
+        $notify[] = ['success', isset($message) ? $message  : 'Le contenu a été ajouté avec succès.'];
+        return back()->withNotify($notify);
+    }
+     
+    public function magasinCentralIndex()
+    {
+       $pageTitle = "Manage des Magasins Centraux"; 
+       $manager = auth()->user();
+        $activeSettingMenu = 'magasinCentral_settings';
+        $users = User::whereHas('roles', function($q){ $q->where('name', 'Magasinier'); })
+        ->where('cooperative_id', $manager->cooperative_id)
+        ->select('id',DB::raw("CONCAT(lastname,' ', firstname) as nom"))
+        ->get(); 
+        $magasinCentraux     = MagasinCentral::orderBy('id','desc')->paginate(getPaginate());
+        return view('manager.config.magasinCentral', compact('pageTitle', 'magasinCentraux','activeSettingMenu','users'));
+    }
+public function magasinCentralStore(Request $request)
+    {
+        $request->validate([ 
+            'nom'  => 'required', 
+            'user'  => 'required',
+        ]);
+
+        if ($request->id) {
+            $magasin    = MagasinCentral::findOrFail($request->id);
+            $message = "Le contenu a été mise à jour avec succès.";
+        } else {
+            $magasin = new MagasinCentral();
+        } 
+        $magasin->cooperative_id = auth()->user()->cooperative_id;
+        $magasin->staff_id = trim($request->user); 
+        $magasin->nom = trim($request->nom); 
+        $magasin->save();
+       
+        $notify[] = ['success', isset($message) ? $message  : 'Le contenu a été ajouté avec succès.'];
+        return back()->withNotify($notify);
+    }
+     
     public function campagneStatus($id)
     {
         return Campagne::changeStatus($id);
@@ -568,5 +646,13 @@ class SettingController extends Controller
     public function departementStatus($id)
     {
         return Department::changeStatus($id);
+    }
+    public function magasinSectionStatus($id)
+    {
+        return MagasinSection::changeStatus($id);
+    }
+    public function magasinCentralStatus($id)
+    {
+        return MagasinCentral::changeStatus($id);
     }
 }

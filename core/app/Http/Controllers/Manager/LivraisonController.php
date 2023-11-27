@@ -10,13 +10,14 @@ use App\Models\Producteur;
 use App\Models\Cooperative;
 use App\Models\LivraisonInfo;
 use App\Models\LivraisonPrime;
+use App\Models\MagasinSection;
 use App\Models\LivraisonScelle;
 use App\Models\LivraisonPayment;
 use App\Models\LivraisonProduct;
 use App\Exports\ExportLivraisons;
 use App\Models\AdminNotification;
-use App\Models\Magasin_section;
 
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Request;
 
@@ -36,8 +37,13 @@ class LivraisonController extends Controller
         $staff = auth()->user();
         // $cooperatives = Cooperative::active()->where('id', '!=', auth()->user()->cooperative_id)->orderBy('name')->get();
         $cooperatives = Cooperative::active()->orderBy('name')->get(); 
-        $magasins = Magasin_section::join('users','magasin_sections.staff_id','=','users.id')->where([['cooperative_id',$staff->cooperative_id],['magasin_sections.status',1]])->with('user')->orderBy('nom')->select('magasin_sections.*')->get();
-        $staffs = User::active()->orderBy('lastname')->staff()->where('cooperative_id',$staff->cooperative_id)->with('cooperative')->get();
+        $magasins = MagasinSection::join('users','magasin_sections.staff_id','=','users.id')->where([['cooperative_id',$staff->cooperative_id],['magasin_sections.status',1]])->with('user')->orderBy('nom')->select('magasin_sections.*')->get();
+    
+        $staffs = User::whereHas('roles', function($q){ $q->whereIn('name', ['Magasinier','PR']); })
+                ->where('cooperative_id', $staff->cooperative_id)
+                ->select('users.*')
+                ->get(); 
+
         $producteurs  = Producteur::joinRelationship('localite.section')->where('sections.cooperative_id',$staff->cooperative_id)->select('producteurs.*')->orderBy('producteurs.nom')->get();
         $campagne = Campagne::active()->first();
         $parcelles  = Parcelle::with('producteur')->get();
@@ -51,7 +57,7 @@ class LivraisonController extends Controller
         
         $request->validate([
             'sender_staff' => 'required|exists:users,id',
-            'magasin_section' =>  'required|exists:magasin_sections,id', 
+            'MagasinSection' =>  'required|exists:MagasinSections,id', 
             'items'            => 'required|array',
             'items.*.type'     => 'required',
             'items.*.producteur'     => 'required|integer',
@@ -77,7 +83,7 @@ class LivraisonController extends Controller
         $livraison->receiver_phone     = $request->receiver_phone;
         $livraison->receiver_address   = $request->receiver_address;
         $livraison->receiver_cooperative_id = $sender->cooperative_id;
-        $livraison->receiver_magasin_section_id = $request->magasin_section;
+        $livraison->receiver_MagasinSection_id = $request->MagasinSection;
         $livraison->estimate_date      = $request->estimate_date;
         $livraison->save();
 
@@ -178,7 +184,7 @@ class LivraisonController extends Controller
         
         $request->validate([
             'sender_staff' => 'required|exists:users,id',
-            'magasin_section' =>  'required|exists:magasin_sections,id',  
+            'MagasinSection' =>  'required|exists:MagasinSections,id',  
             'items'            => 'required|array',
             'items.*.type'     => 'required',
             'items.*.producteur'     => 'required|integer',
@@ -204,7 +210,7 @@ class LivraisonController extends Controller
         $livraison->receiver_phone     = $request->receiver_phone;
         $livraison->receiver_address   = $request->receiver_address;
         $livraison->receiver_cooperative_id = $sender->cooperative_id;
-        $livraison->receiver_magasin_section_id = $request->magasin_section;
+        $livraison->receiver_MagasinSection_id = $request->MagasinSection;
         $livraison->estimate_date      = $request->estimate_date;
         $livraison->save();
 
