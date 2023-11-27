@@ -22,12 +22,9 @@ use App\Models\TravauxLegers;
 use App\Models\TypeFormation;
 use App\Models\CourierPayment;
 use App\Models\CourierProduct;
-<<<<<<< HEAD
 use App\Models\MagasinCentral;
 use App\Models\MagasinSection;
-=======
 use App\Models\FormateurStaff;
->>>>>>> b48bb8542c0940a5111a4df7f5aa0e27d9c7882b
 use App\Models\ThemesFormation;
 use App\Models\Agroespecesarbre;
 use App\Models\TravauxDangereux;
@@ -37,11 +34,8 @@ use App\Http\Controllers\Controller;
 use App\Models\ModuleFormationStaff;
 use App\Models\DocumentAdministratif;
 use App\Models\CategorieQuestionnaire;
-<<<<<<< HEAD
 use App\Models\UserLocalite;
 use Google\Service\Blogger\UserLocale;
-=======
->>>>>>> b48bb8542c0940a5111a4df7f5aa0e27d9c7882b
 
 class SettingController extends Controller
 {
