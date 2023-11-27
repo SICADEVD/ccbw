@@ -31,9 +31,12 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/css/daterangepicker.css') }}">
     <script src="{{ asset('assets/global/js/jquery-3.6.0.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/jquery/modernizr.min.js') }}"></script>
-    
+
     @stack('style')
-    <style> 
+    <style>
+        span.select2.select2-container {
+            z-index: 15 !important;
+        }
 
         .error {
             color: red;
@@ -99,11 +102,12 @@
         #flocal>div:nth-child(21)>div>span>span.selection>span {
             height: 45px !important;
         }
+
         hr {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    border-top: 1px solid #ddd;
-}
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border-top: 1px solid #ddd;
+        }
     </style>
 </head>
 
@@ -121,27 +125,27 @@
     @include('partials.plugins')
     @include('partials.notify')
     @stack('script-lib')
-    
+
     <script src="{{ asset('assets/fcadmin/js/nicEdit.js') }}"></script>
     <script src="{{ asset('assets/fcadmin/js/printThis.js') }}"></script>
     <script src="{{ asset('assets/fcadmin/js/vendor/select2.min.js') }}"></script>
     <script src="{{ asset('assets/dropify/js/dropify.min.js') }}"></script>
     <script src="{{ asset('assets/fcadmin/js/jquery.chained.js') }}"></script>
-<script src="{{ asset('assets/fcadmin/js/popper.min.js') }}"></script>
-<script src="{{ asset('assets/global/js/bootstrap.min.js') }}"></script>
-<script src="{{ asset('assets/fcadmin/js/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('assets/fcadmin/js/dataTables.bootstrap4.min.js') }}"></script> 
-<script src="{{ asset('assets/vendor/jquery/bootstrap-datepicker.min.js') }}"></script>
-<script src="{{ asset('assets/vendor/jquery/bootstrap-timepicker.min.js') }}"></script>
-<script src="{{ asset('assets/vendor/jquery/dropzone.min.js') }}"></script>
-<script src="{{ asset('assets/vendor/jquery/daterangepicker.min.js')}}" defer=""></script> 
- <script src="{{ asset('assets/vendor/jquery/datepicker.min.js') }}"></script> 
-<script src="{{ asset('assets/vendor/jquery/bootstrap-select.js') }}"></script>  
+    <script src="{{ asset('assets/fcadmin/js/popper.min.js') }}"></script>
+    <script src="{{ asset('assets/global/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('assets/fcadmin/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('assets/fcadmin/js/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jquery/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jquery/bootstrap-timepicker.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jquery/dropzone.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jquery/daterangepicker.min.js') }}" defer=""></script>
+    <script src="{{ asset('assets/vendor/jquery/datepicker.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jquery/bootstrap-select.js') }}"></script>
 
-<script src="{{ asset('assets/js/main.js') }}"></script>
+    <script src="{{ asset('assets/js/main.js') }}"></script>
     <script src="{{ asset('assets/fcadmin/js/app.js') }}"></script>
 
-    
+
     @include('sections.modals')
     {{-- LOAD NIC EDIT --}}
 
@@ -155,14 +159,28 @@
             });
 
             //Datemask dd/mm/yyyy
-    $('.heure').mask('00:00',{placeholder: "__:__"});
-    $('.date').mask('00/00/0000',{placeholder: "__/__/____"});
-    $('.years').mask('0000',{placeholder: "____"});
-     $('.phone').mask('0000000000',{placeholder: "__ __ __ __ __"});
-     $('.age').mask('00',{placeholder: "__"});
-     $('.text2').mask('00',{placeholder: "__"});
-     $('.text4').mask('0000',{placeholder: "____"});
-     
+            $('.heure').mask('00:00', {
+                placeholder: "__:__"
+            });
+            $('.date').mask('00/00/0000', {
+                placeholder: "__/__/____"
+            });
+            $('.years').mask('0000', {
+                placeholder: "____"
+            });
+            $('.phone').mask('0000000000', {
+                placeholder: "__ __ __ __ __"
+            });
+            $('.age').mask('00', {
+                placeholder: "__"
+            });
+            $('.text2').mask('00', {
+                placeholder: "__"
+            });
+            $('.text4').mask('0000', {
+                placeholder: "____"
+            });
+
             // Basic
             $('.dropify').dropify();
 
@@ -206,13 +224,12 @@
         $(document).ready(function() {
             $("#flocal").validate();
         });
-        
     </script>
-    
+
     <script>
         "use strict";
-        
-		 $('.select-picker').selectpicker('refresh');
+
+        $('.select-picker').selectpicker('refresh');
         const datepickerConfig = {
             formatter: (input, date, instance) => {
                 input.value = moment(date).format('YYYY-MM-DD')

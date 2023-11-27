@@ -10,6 +10,7 @@ use App\Constants\Status;
 use App\Models\Campagne; 
 use App\Models\ArretEcole;
 use App\Models\Department;
+use App\Models\Entreprise;
 use App\Http\Helpers\Reply;
 use App\Models\Cooperative;
 use App\Models\CourierInfo;
@@ -21,8 +22,12 @@ use App\Models\TravauxLegers;
 use App\Models\TypeFormation;
 use App\Models\CourierPayment;
 use App\Models\CourierProduct;
+<<<<<<< HEAD
 use App\Models\MagasinCentral;
 use App\Models\MagasinSection;
+=======
+use App\Models\FormateurStaff;
+>>>>>>> b48bb8542c0940a5111a4df7f5aa0e27d9c7882b
 use App\Models\ThemesFormation;
 use App\Models\Agroespecesarbre;
 use App\Models\TravauxDangereux;
@@ -32,8 +37,11 @@ use App\Http\Controllers\Controller;
 use App\Models\ModuleFormationStaff;
 use App\Models\DocumentAdministratif;
 use App\Models\CategorieQuestionnaire;
+<<<<<<< HEAD
 use App\Models\UserLocalite;
 use Google\Service\Blogger\UserLocale;
+=======
+>>>>>>> b48bb8542c0940a5111a4df7f5aa0e27d9c7882b
 
 class SettingController extends Controller
 {
@@ -178,7 +186,6 @@ class SettingController extends Controller
         $notify[] = ['success', isset($message) ? $message  : 'Type Formation a été ajouté avec succès.'];
         return back()->withNotify($notify);
     }
-
     public function themeFormationIndex()
     {
         $pageTitle = "Manage theme de Formation"; 
@@ -410,6 +417,61 @@ class SettingController extends Controller
         $documentad->save();
        
         return Reply::successWithData(__('Le contenu a été ajouté avec succès.'), ['page_reload' => $request->page_reload]);
+    }
+    public function entrepriseIndex()
+    {
+        $pageTitle = "Ajouter une entreprise"; 
+        return view('manager.config.create-entreprise-modal', compact('pageTitle'));
+    }
+    public function entrepriseStore(Request $request)
+    {
+        $request->validate([ 
+            'nom_entreprise'  => 'required',
+            'telephone_entreprise'  => 'required',
+            'adresse_entreprise'  => 'required',
+            'email_entreprise'  => 'required|email|unique:entreprises,email_entreprise',
+        ]);
+        $entreprise = new Entreprise();
+        $entreprise->nom = trim($request->nom); 
+        $entreprise->telephone = trim($request->telephone);
+        $entreprise->adresse = trim($request->adresse);
+        $entreprise->email = trim($request->email);
+        $entreprise->save();
+        return Reply::successWithData(__('L\'entreprise a été ajouté avec succès.'), ['page_reload' => $request->page_reload]);
+    }
+
+    public function formateurStaffIndex()
+    {
+        $pageTitle = "Ajouter un formateur staff";   
+        $entreprises = Entreprise::get();
+        return view('manager.config.create-formateur-modal',compact('pageTitle','entreprises'));
+    }
+    public function formateurStaffStore(Request $request)
+    {
+        $request->validate([ 
+            'nom_formateur'  => 'required',
+            'entreprise_id'=>'required',
+            'prenom_formateur'  => 'required',
+            'telephone_formateur'  => 'required',
+            'poste_formateur'  => 'required',
+        ]);
+
+        if ($request->id) {
+            $formateurStaff    = FormateurStaff::findOrFail($request->id);
+            $message = "Formateur Staff a été mise à jour avec succès.";
+        } else {
+            $formateurStaff = new FormateurStaff();
+        } 
+        $formateurStaff->entreprise_id = $request->entreprise_id;
+        $formateurStaff->nom_formateur = trim($request->nom_formateur); 
+        $formateurStaff->prenom_formateur = trim($request->prenom_formateur);
+        $formateurStaff->telephone_formateur = trim($request->telephone_formateur);
+        $formateurStaff->poste_formateur = trim($request->poste_formateur);
+        
+        $formateurStaff->save();
+        return Reply::successWithData(__('Formateur Staff a été ajouté avec succès.'), ['page_reload' => $request->page_reload]);
+        // $notify[] = ['success', isset($message) ? $message  : 'Formateur Staff a été ajouté avec succès.'];
+        // return back()->withNotify($notify);
     }
 
     public function departementIndex()
