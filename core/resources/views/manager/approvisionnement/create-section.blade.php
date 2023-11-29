@@ -20,6 +20,11 @@
                                 <select class="form-control" name="section" id="section" required>
                                     <option value="">@lang('Selectionner une option')</option>
                                     @foreach($sections as $section)
+                                    <?php 
+                                        if(in_array($section->id,$dataSection)){
+                                            continue;
+                                        }
+                                        ?>
                                         <option value="{{ $section->id }}" @selected(old('section'))>
                                             {{ $section->libelle }}</option>
                                     @endforeach
@@ -34,11 +39,17 @@
             <tr>
                 <th>Variété</th>
                 <th>Strate</th>
+                <th>Quantité Initiale</th>
                 <th>Quantité</th>
             </tr>
         </thead>
     <tbody>
         @foreach($especesarbres as $data)
+        <?php 
+        if(!in_array($data->id,$dataEspece)){
+            continue;
+        }
+        ?>
  <tr>
             <td> 
             {!! Form::hidden('especesarbre[]', $data->id, array()) !!} 
@@ -48,7 +59,10 @@
             strate {{ $data->strate}}
             </td>
             <td>
-            {!! Form::number('quantite[]', null, array('placeholder' => __('Qté'),'class' => 'form-control', 'min'=>'0')) !!} 
+            <span class="badge badge-info">{{ $dataQuantite[$data->id]}}</span> 
+            </td>
+            <td>
+            {!! Form::number('quantite[]', null, array('placeholder' => __('Qté'),'class' => 'form-control', 'min'=>'0','max'=>$dataQuantite[$data->id])) !!} 
         </td>
         </tr>
         @endforeach
@@ -83,7 +97,7 @@
 @endsection
 
 @push('breadcrumb-plugins')
-    <x-back route="{{ route('manager.agro.approvisionnement.index') }}" />
+    <x-back route="{{ url()->previous() }}" />
 @endpush
 
 @push('script')

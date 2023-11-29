@@ -66,6 +66,8 @@ class SettingController extends Controller
         } else {
             $campagne = new Campagne();
         }
+        $manager = auth()->user();
+        $campagne->cooperative_id = $manager->cooperative_id;
         $campagne->produit    = $request->produit ;
         $campagne->nom = $request->nom;
         $campagne->periode_debut = $request->periode_debut;

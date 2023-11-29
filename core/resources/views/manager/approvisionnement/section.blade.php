@@ -41,6 +41,7 @@ use Illuminate\Support\Arr;
                             <thead>
                                 <tr> 
                                     <th>@lang('Cooperative')</th> 
+                                    <th>@lang('Section')</th>
                                     <th>@lang('Quantité')</th>
                                     <th>@lang('Bon de livraison')</th> 
                                     <th>@lang('Ajoutée le')</th> 
@@ -51,10 +52,13 @@ use Illuminate\Support\Arr;
                                 @forelse($approvisionnements as $approvisionnement)
                                     <tr>
                                         <td>
-                                            <span class="fw-bold">{{ $approvisionnement->cooperative->name }}</span>
-                                        </td>  
+                                            <span class="fw-bold">{{ $approvisionnement->section->cooperative->name }}</span>
+                                        </td> 
                                         <td>
-                                            <span>{{ array_sum(Arr::pluck(json_decode($approvisionnement->especes),'total')) }}</span>
+                                            <span class="fw-bold">{{ $approvisionnement->section->libelle }}</span>
+                                        </td> 
+                                        <td>
+                                            <span>{{ $approvisionnement->total }}</span>
                                         </td>
                                         <td>
                                             <span>
@@ -103,6 +107,7 @@ use Illuminate\Support\Arr;
     </a>
      
     <a href="{{ route('manager.agro.approvisionnement.exportExcel.approvisionnementAll') }}" class="btn  btn-outline--warning h-45"><i class="las la-cloud-download-alt"></i> Exporter en Excel</a>
+    <x-back route="{{ route('manager.agro.approvisionnement.index') }}" class="btn  btn-outline--warning h-45" />
 @endpush
 @push('style')
     <style>
