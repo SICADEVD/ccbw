@@ -19,7 +19,7 @@ class AgroapprovisionnementSection extends Model
 
     public function section()
     {
-        return $this->belongsTo(Section::class);
+        return $this->belongsTo(Section::class,'section_id','id');
     }
 
     public function especes()

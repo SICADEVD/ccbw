@@ -22,6 +22,7 @@ use App\Imports\AgrodistributionImport;
 use App\Exports\ExportAgrodistributions;
 use App\Models\AgroapprovisionnementEspece;
 use App\Models\AgroapprovisionnementSectionEspece;
+use Google\Service\ContainerAnalysis\Distribution;
 
 class AgrodistributionController extends Controller
 {
@@ -44,10 +45,17 @@ class AgrodistributionController extends Controller
     {
         $pageTitle = "Ajouter une distribution";
         $manager   = auth()->user();
+        $producteurDistri = array();
         $producteurs  = Producteur::with('localite')->get();
+        $produc = Agrodistribution::select('producteur_id')->get();
+        if($produc){
+            foreach($produc as $data){
+                $producteurDistri[]=$data->producteur_id;
+            }
+        }
         $sections = Section::get();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->orderBy('nom')->get();
-        return view('manager.distribution.create', compact('pageTitle', 'producteurs','localites','sections'));
+        return view('manager.distribution.create', compact('pageTitle', 'producteurs','localites','sections','producteurDistri'));
     }
 
     public function store(Request $request)
@@ -108,7 +116,7 @@ class AgrodistributionController extends Controller
                             'created_at' => NOW()
                           ]);
 
-                          $agroapprov = AgroapprovisionnementEspece::joinRelationship('agroapprovisionnement')->where([['cooperative_id',$manager->cooperative_id],['campagne_id',$campagne->id],['agroespecesarbre_id',$agroespecesarbresid]])->first();
+                          $agroapprov = AgroapprovisionnementSectionEspece::joinRelationship('agroapprovisionnementSection')->where([['agroapprovisionnement_section_id',$request->agroapprovisionnementsection],['agroapprovisionnement_section_especes.agroespecesarbre_id',$agroespecesarbresid]])->first();
                           if($agroapprov !=null){
                             $agroapprov->total_restant = $agroapprov->total_restant + $total;
                             $agroapprov->save();
@@ -287,8 +295,12 @@ class AgrodistributionController extends Controller
         $agroeval = Agroevaluation::where('producteur_id',$producteurId)->first();
         
   
-            if($agroeval !=null && count($especes)){
+            if(count($especes)){
               
+                if($producteurId !=null)
+                {
+                if($agroeval !=null){
+
                 $existing = Agrodistribution::where('producteur_id', $producteurId)->exists();
                 if(!$existing)
                 {
@@ -296,7 +308,7 @@ class AgrodistributionController extends Controller
               
               $results ='<table class="table table-bordered"><thead><tr>';
               $results .='<th>Variété</th>';
-              $results .='<th></th>';
+              $results .='<th>Quantité Section</th>';
               $results .='<th>Demande Producteur</th>';
               $results .='<th>Quantité acceptée</th>';   
                
@@ -314,7 +326,7 @@ class AgrodistributionController extends Controller
             // if(in_array($data->id, $dataEspece)){$qte = $dataQuantite[$data->id];}else{$qte=0;}
             $qte = AgroevaluationEspece::where([['agroespecesarbre_id',$data->agroespecesarbre_id],['agroevaluation_id',$agroeval->id]])->select('total')->first();
              
-            $results .='<tr><td>'.$data->agroespecesarbre->nom.'</td>';
+            $results .='<tr><td><input type="hidden" name="agroapprovisionnementsection" value="'.$data->agroapprovisionnement_section_id.'">'.$data->agroespecesarbre->nom.'</td>';
             $results .='<td><button class="btn btn-primary" type="button">'.$totalespece.'</button></td>'; 
             $results .='<td><button class="btn btn-info" type="button">'.@$qte->total.'</button></td>';
             $s=1; 
@@ -337,7 +349,20 @@ class AgrodistributionController extends Controller
                 font-weight: bold;
             ">Ce producteur a déjà bénéficié des arbres à ombrage. Veuillez procéder aux modifications dépuis la liste des distributions</span>';             
                     }
-                
+                }else{
+                        $results='<span style="
+                        text-align: center;
+                        color: #f70000;
+                        font-weight: bold;
+                    ">Ce producteur n\'a pas été évalué. Veuillez procéder à son évaluation puis revenez faire la distribution.</span>';
+                    }
+                }else{
+                    $results='<span style="
+                    text-align: center;
+                    color: #f70000;
+                    font-weight: bold;
+                ">Veuillez choisir un producteur.</span>';
+                }
             }else{
                 $results='<span style="
                 text-align: center;

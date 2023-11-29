@@ -38,6 +38,11 @@
                                 <select class="form-control" name="producteur" id="producteur" required>
                                     <option value="">@lang('Selectionner une option')</option>
                                     @foreach($producteurs as $producteur)
+                                    <?php 
+                                    if(in_array($producteur->id,$producteurDistri)){
+                                        continue;
+                                    }
+                                    ?>
                                         <option value="{{ $producteur->id }}" data-chained="{{ $producteur->localite->id }}" @selected(old('producteur'))>
                                             {{ $producteur->nom }} {{ $producteur->prenoms }}</option>
                                     @endforeach

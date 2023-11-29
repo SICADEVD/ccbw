@@ -53,10 +53,10 @@ use Illuminate\Support\Arr;
                                 @forelse($approvisionnements as $approvisionnement)
                                     <tr>
                                         <td>
-                                            <span class="fw-bold">{{ $approvisionnement->section->cooperative->name }}</span>
+                                            <span class="fw-bold">{{ @$approvisionnement->section->cooperative->name }}</span>
                                         </td> 
                                         <td>
-                                            <span class="fw-bold">{{ $approvisionnement->section->libelle }}</span>
+                                            <span class="fw-bold">{{ @$approvisionnement->section->libelle }}</span>
                                         </td> 
                                         <td>
                                             <span>{{ $approvisionnement->total }}</span>
