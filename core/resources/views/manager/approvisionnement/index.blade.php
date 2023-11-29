@@ -66,7 +66,7 @@ use Illuminate\Support\Arr;
                                             <span>{{ diffForHumans($approvisionnement->created_at) }}</span>
                                         </td> 
                                         <td>
-                                        <a href="{{ route('manager.agro.approvisionnement.section') }}"
+                                        <a href="{{ route('manager.agro.approvisionnement.section',['id'=>encrypt($approvisionnement->id)]) }}"
                                                 class="btn btn-sm btn-outline--primary"><i
                                                     class="las la-pen"></i>@lang('Approv par Section')</a>
                                         <a href="{{ route('manager.agro.approvisionnement.edit', $approvisionnement->id) }}"

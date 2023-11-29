@@ -37,6 +37,7 @@ use Illuminate\Support\Arr;
             <div class="card b-radius--10 ">
                 <div class="card-body  p-0">
                     <div class="table-responsive--sm table-responsive">
+                        <?php $somme = 0; ?>
                         <table class="table table--light style--two">
                             <thead>
                                 <tr> 
@@ -76,6 +77,7 @@ use Illuminate\Support\Arr;
                                                     class="las la-pen"></i>@lang('Edit')</a>
                                              
                                         </td>
+                                        <?php $somme = $somme+$approvisionnement->total; ?>
                                     </tr>
                                 @empty
                                     <tr>
@@ -84,6 +86,16 @@ use Illuminate\Support\Arr;
                                 @endforelse
 
                             </tbody>
+                            <tfoot>
+                                <tr>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td><span class="fw-bold">{{$somme}}</span></td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </div>
@@ -102,7 +114,7 @@ use Illuminate\Support\Arr;
 
 @push('breadcrumb-plugins')
     
-    <a href="{{ route('manager.agro.approvisionnement.create-section') }}" class="btn  btn-outline--primary h-45 addNewCooperative">
+    <a href="{{ route('manager.agro.approvisionnement.create-section',['id'=>request()->id]) }}" class="btn  btn-outline--primary h-45 addNewCooperative">
         <i class="las la-plus"></i>@lang("Ajouter nouveau")
     </a>
      

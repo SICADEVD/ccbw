@@ -1,12 +1,15 @@
 @extends('manager.layouts.app')
 @section('panel')
+<?php
+use App\Models\AgroapprovisionnementSectionEspece; 
+                                        ?>
     <div class="row mb-none-30">
         <div class="col-lg-12 mb-30">
             <div class="card">
                 <div class="card-body"> 
                     {!! Form::open(array('route' => ['manager.agro.approvisionnement.store-section'],'method'=>'POST','class'=>'form-horizontal', 'id'=>'flocal', 'enctype'=>'multipart/form-data')) !!} 
                   
-                    
+                    <input type="hidden" name="agroapprovisionnement" value="{{ decrypt(request()->id)}}"/>
                     <div class="form-group row">
                                 <label class="col-sm-4 control-label">@lang('Coopérative')</label>
                                 <div class="col-xs-12 col-sm-8">
@@ -21,6 +24,7 @@
                                     <option value="">@lang('Selectionner une option')</option>
                                     @foreach($sections as $section)
                                     <?php 
+
                                         if(in_array($section->id,$dataSection)){
                                             continue;
                                         }
@@ -49,6 +53,10 @@
         if(!in_array($data->id,$dataEspece)){
             continue;
         }
+        $somme = AgroapprovisionnementSectionEspece::joinRelationship('agroapprovisionnementSection')->where([['agroapprovisionnement_id',decrypt(request()->id)],['agroespecesarbre_id',$data->id]])->sum('agroapprovisionnement_section_especes.total');
+        if($dataQuantite[$data->id]<=$somme){
+            continue;
+        }
         ?>
  <tr>
             <td> 
@@ -59,10 +67,10 @@
             strate {{ $data->strate}}
             </td>
             <td>
-            <span class="badge badge-info">{{ $dataQuantite[$data->id]}}</span> 
+            <span class="badge badge-info">{{ $dataQuantite[$data->id]-$somme}}</span> 
             </td>
             <td>
-            {!! Form::number('quantite[]', null, array('placeholder' => __('Qté'),'class' => 'form-control', 'min'=>'0','max'=>$dataQuantite[$data->id])) !!} 
+            {!! Form::number('quantite[]', null, array('placeholder' => __('Qté'),'class' => 'form-control', 'min'=>'0','max'=>$dataQuantite[$data->id]-$somme)) !!} 
         </td>
         </tr>
         @endforeach

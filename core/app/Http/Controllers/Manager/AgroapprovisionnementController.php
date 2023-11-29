@@ -40,12 +40,13 @@ class AgroapprovisionnementController extends Controller
          
         return view('manager.approvisionnement.index', compact('pageTitle', 'approvisionnements','localites'));
     }
-    public function section()
+    public function section(Request $request)
     {
         $pageTitle      = "Gestion des approvisionnements de section";
         $manager   = auth()->user();
+        $idapprov = decrypt($request->id);
         $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->get();
-        $approvisionnements = AgroapprovisionnementSection::dateFilter()->joinRelationship('section')->searchable([])->latest('id')->where('cooperative_id',$manager->cooperative_id)->where(function ($q) {
+        $approvisionnements = AgroapprovisionnementSection::dateFilter()->joinRelationship('section')->searchable([])->latest('id')->where('agroapprovisionnement_id',$idapprov)->where(function ($q) {
             if(request()->localite != null){
                 $q->where('localite_id',request()->localite);
             }
@@ -60,16 +61,18 @@ class AgroapprovisionnementController extends Controller
         $especesarbres  = Agroespecesarbre::orderby('strate','asc')->orderby('nom','asc')->get(); 
         return view('manager.approvisionnement.create', compact('pageTitle', 'especesarbres'));
     }
-    public function create_section()
+    public function create_section(Request $request)
     {
         $pageTitle = "Ajouter un approvisionnement de section";
         $manager   = auth()->user();
         $sections = Section::get();
         $campagne = Campagne::active()->first();
         $approvSect = $dataSection = array();
-        if($campagne !=null)
+        $idapprov = decrypt($request->id);
+        if($campagne !=null && $idapprov)
         {
-        $agroaprov = Agroapprovisionnement::where([['cooperative_id',$manager->cooperative_id],['campagne_id',$campagne->id]])->first();
+
+        $agroaprov = Agroapprovisionnement::where([['id',$idapprov]])->first();
         if($agroaprov !=null)
         {
         $agroaprovEspece = AgroapprovisionnementEspece::where('agroapprovisionnement_id',$agroaprov->id)->get();
@@ -197,6 +200,7 @@ class AgroapprovisionnementController extends Controller
         } 
 
         $approvisionnement->campagne_id = $campagne->id;
+        $approvisionnement->agroapprovisionnement_id = $request->agroapprovisionnement;
         $approvisionnement->total = array_sum($request->quantite);
         $approvisionnement->section_id = $request->section;
          
