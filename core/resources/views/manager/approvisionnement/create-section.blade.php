@@ -105,7 +105,7 @@ use App\Models\AgroapprovisionnementSectionEspece;
 @endsection
 
 @push('breadcrumb-plugins')
-    <x-back route="{{ url()->previous() }}" />
+    <x-back route="{{ route('manager.agro.approvisionnement.section',['id'=>request()->id]) }}" />
 @endpush
 
 @push('script')
