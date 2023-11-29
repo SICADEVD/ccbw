@@ -21,6 +21,7 @@ use App\Models\AgrodistributionEspece;
 use App\Imports\AgrodistributionImport;
 use App\Exports\ExportAgrodistributions;
 use App\Models\AgroapprovisionnementEspece;
+use App\Models\AgroapprovisionnementSectionEspece;
 
 class AgrodistributionController extends Controller
 {
@@ -44,8 +45,9 @@ class AgrodistributionController extends Controller
         $pageTitle = "Ajouter une distribution";
         $manager   = auth()->user();
         $producteurs  = Producteur::with('localite')->get();
+        $sections = Section::get();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->orderBy('nom')->get();
-        return view('manager.distribution.create', compact('pageTitle', 'producteurs','localites'));
+        return view('manager.distribution.create', compact('pageTitle', 'producteurs','localites','sections'));
     }
 
     public function store(Request $request)
@@ -277,10 +279,11 @@ class AgrodistributionController extends Controller
         $manager = auth()->user();
         $somme=0;
         $producteurId= $input['producteur'];
+        $sectionid= $input['section'];
         $cooperative= $manager->cooperative_id;
 
               $campagneId = $campagne->id;
-        $especes = AgroapprovisionnementEspece::joinRelationship('agroapprovisionnement','agroespecesarbre')->where([['cooperative_id',$manager->cooperative_id],['campagne_id',$campagneId]])->get();
+        $especes = AgroapprovisionnementSectionEspece::joinRelationship('agroapprovisionnementSection','agroespecesarbre')->where([['section_id',$sectionid]])->get();
         $agroeval = Agroevaluation::where('producteur_id',$producteurId)->first();
         
   
@@ -340,7 +343,7 @@ class AgrodistributionController extends Controller
                 text-align: center;
                 color: #f70000;
                 font-weight: bold;
-            ">Aucune donnée n\'a été trouvé</span>';
+            ">Il n\'y a pas d\'arbres disponibles pour cette section.</span>';
             }
   
             $contents['tableau'] = $results;
