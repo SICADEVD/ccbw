@@ -96,13 +96,6 @@
                                     <span class="menu-title">@lang('Estimations')</span>
                                 </a>
                             </li>
-                            <li class="sidebar-menu-item {{ menuActive('manager.livraison.deliveryInQueue') }}">
-                                <a href="{{ route('manager.livraison.deliveryInQueue') }}" class="nav-link">
-                                    <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('Livraison')</span>
-                                </a>
-                            </li> 
-
                         </ul>
                     </div>
                 </li>
@@ -165,58 +158,18 @@
                     </a>
                     <div class="sidebar-submenu {{ menuActive('manager.livraison.*', 2) }} ">
                         <ul>
-
-                        <li class="sidebar-menu-item {{ menuActive('manager.livraison.create') }}">
-                                
-                                    <a href="{{ route('manager.livraison.create') }}" class="nav-link ">
-                                        <i class="menu-icon las la-shipping-fast"></i>
-                                        <span class="menu-title">@lang("Enregistrement")</span>
-                                    </a>
-                                    </li>
-                            <li class="sidebar-menu-item {{ menuActive('manager.livraison.sentQueue') }}">
-                                <a href="{{ route('manager.livraison.sentQueue') }}" class="nav-link">
-                                    <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang("En attente d'expédition")</span>
-                                </a>
-                            </li>
-                            <li class="sidebar-menu-item {{ menuActive('manager.livraison.dispatch') }}">
-                                <a href="{{ route('manager.livraison.dispatch') }}" class="nav-link">
-                                    <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('Expédiée')</span>
-                                </a>
-                            </li>
-
-                            <li class="sidebar-menu-item {{ menuActive('manager.livraison.upcoming') }}">
-                                <a href="{{ route('manager.livraison.upcoming') }}" class="nav-link">
-                                    <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('Encours')</span>
-                                </a>
-                            </li>
-                            <li class="sidebar-menu-item {{ menuActive('manager.livraison.deliveryInQueue') }}">
-                                <a href="{{ route('manager.livraison.deliveryInQueue') }}" class="nav-link">
-                                    <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('En attente de reception')</span>
-                                </a>
-                            </li>
-
-                            <li class="sidebar-menu-item {{ menuActive('manager.livraison.delivered') }}">
-                                <a href="{{ route('manager.livraison.delivered') }}" class="nav-link">
-                                    <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang("Livré")</span>
-                                </a>
-                            </li>
-
-                            <li class="sidebar-menu-item {{ menuActive('manager.livraison.sent') }}">
-                                <a href="{{ route('manager.livraison.sent') }}" class="nav-link">
-                                    <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('Toutes les envoies')</span>
-                                </a>
-                            </li>
+ 
 
                             <li class="sidebar-menu-item {{ menuActive('manager.livraison.index') }}">
                                 <a href="{{ route('manager.livraison.index') }}" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('Toutes les livraisons')</span>
+                                    <span class="menu-title">@lang('Livraisons Mag de Section')</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-menu-item {{ menuActive('manager.livraison.index') }}">
+                                <a href="{{ route('manager.livraison.index') }}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('Livraisons Mag Centraux')</span>
                                 </a>
                             </li>
 

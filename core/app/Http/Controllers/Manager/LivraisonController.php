@@ -48,7 +48,7 @@ class LivraisonController extends Controller
         $campagne = Campagne::active()->first();
         $parcelles  = Parcelle::with('producteur')->get();
         
-        return view('manager.livraison.index', compact('pageTitle', 'cooperatives','staffs','magasins','producteurs','parcelles','campagne'));
+        return view('manager.livraison.create', compact('pageTitle', 'cooperatives','staffs','magasins','producteurs','parcelles','campagne'));
     }
 
     public function store(Request $request)
