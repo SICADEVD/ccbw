@@ -46,7 +46,7 @@
                                             <button type="button" class="btn btn-sm btn-outline--primary  updateType"
                                                 data-id="{{ $designation->id }}" 
                                                 data-nom="{{ $designation->name }}"
-                                                data-departement="{{ $designation->departement_formation_staff_id }}"><i
+                                                data-departement="{{ $designation->parent_id }}"><i
                                                  class="las la-pen"></i>@lang('Edit')</button>
 
                                             @if ($designation->status == Status::DISABLE)

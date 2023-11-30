@@ -16,25 +16,26 @@ use App\Models\Cooperative;
 use App\Models\CourierInfo;
 use App\Models\Designation;
 use App\Models\TypeArchive;
+use App\Models\UserLocalite;
 use Illuminate\Http\Request;
 use App\Models\Questionnaire;
 use App\Models\TravauxLegers;
 use App\Models\TypeFormation;
 use App\Models\CourierPayment;
 use App\Models\CourierProduct;
+use App\Models\FormateurStaff;
 use App\Models\MagasinCentral;
 use App\Models\MagasinSection;
-use App\Models\FormateurStaff;
 use App\Models\ThemesFormation;
 use App\Models\Agroespecesarbre;
 use App\Models\TravauxDangereux;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
 use App\Models\ThemeFormationStaff;
 use App\Http\Controllers\Controller;
 use App\Models\ModuleFormationStaff;
 use App\Models\DocumentAdministratif;
 use App\Models\CategorieQuestionnaire;
-use App\Models\UserLocalite;
 use Google\Service\Blogger\UserLocale;
 
 class SettingController extends Controller
@@ -516,12 +517,23 @@ class SettingController extends Controller
             $message = "Le contenu a été mise à jour avec succès.";
         } else {
             $designation = new Designation();
+            
         } 
         $designation->cooperative_id = auth()->user()->cooperative_id;
         $designation->name = trim($request->nom); 
 		$designation->parent_id = trim($request->departement_id); 
         $designation->save();
-       
+       if($designation !=null){
+        if($request->id){
+            $role = Role::where('name',$request->nom)->first();
+             if($role ==null){
+                $role = Role::create(['name' => trim($request->nom)]);
+             } 
+        }else{
+            $role = Role::create(['name' => trim($request->nom)]);
+        }
+        
+       }
         $notify[] = ['success', isset($message) ? $message  : 'Le contenu a été ajouté avec succès.'];
         return back()->withNotify($notify);
     }
