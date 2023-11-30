@@ -127,14 +127,14 @@ use Illuminate\Notifications\Notifiable;
  * @method static \Illuminate\Database\Eloquent\Builder|Task whereRepeatType($value)
  * @property string|null $event_id
  * @method static \Illuminate\Database\Eloquent\Builder|Task whereEventId($value)
- * @property int|null $cooperative_id
+ * @property int|null $company_id
  * @property string|null $task_short_code
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \App\Models\Project|null $activeProject
- * @property-read \App\Models\Cooperative|null $cooperative
+ * @property-read \App\Models\Company|null $company
  * @property-read int|null $task_users_count
  * @method static \Illuminate\Database\Query\Builder|Task onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|Task whereCooperativeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Task whereCompanyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Task whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Task whereTaskShortCode($value)
  * @method static \Illuminate\Database\Query\Builder|Task withTrashed()
@@ -161,7 +161,7 @@ class Task extends BaseModel
     ];
     protected $appends = ['due_on', 'create_on'];
     protected $guarded = ['id'];
-    protected $with = ['cooperative:id,date_format'];
+    protected $with = ['company:id,date_format'];
 
     const CUSTOM_FIELD_MODEL = 'App\Models\Task';
 
@@ -310,7 +310,7 @@ class Task extends BaseModel
             return '';
         }
 
-        return $this->due_date->format($this->cooperative->date_format);
+        return $this->due_date->format($this->company->date_format);
 
     }
 
@@ -320,7 +320,7 @@ class Task extends BaseModel
             return '';
         }
 
-        return $this->start_date->format($this->cooperative->date_format);
+        return $this->start_date->format($this->company->date_format);
     }
 
     public function getIsTaskUserAttribute()

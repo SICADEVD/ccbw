@@ -276,7 +276,7 @@ class User extends Authenticatable
     {
         $taskBoardColumn = TaskboardColumn::completeColumn();
 
-        return $this->belongsToMany(Task::class, 'task_users')->where('tasks.board_column_id', '<>', $taskBoardColumn->id);
+        return $this->belongsToMany(Task::class, 'task_users')->where('tasks.board_column_id', '<>', @$taskBoardColumn->id);
     }
 
     public function tickets()

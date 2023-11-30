@@ -115,14 +115,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|Project whereHash($value)
  * @property int $public
  * @method static \Illuminate\Database\Eloquent\Builder|Project wherePublic($value)
- * @property int|null $cooperative_id
+ * @property int|null $company_id
  * @property string|null $project_short_code
  * @property int $enable_miroboard
  * @property string|null $miro_board_id
  * @property int $client_access
- * @property-read \App\Models\Cooperative|null $cooperative
+ * @property-read \App\Models\Company|null $company
  * @method static \Illuminate\Database\Eloquent\Builder|Project whereClientAccess($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Project whereCooperativeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Project whereCompanyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Project whereEnableMiroboard($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Project whereMiroBoardId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Project whereProjectShortCode($value)
@@ -387,7 +387,7 @@ class Project extends BaseModel
 
     public function scopeOverdue($query)
     {
-        $setting = cooperative();
+        $setting = company();
 
         return $query->where('completion_percent', '<>', '100')
             ->where('deadline', '<', Carbon::today()->timezone($setting->timezone));

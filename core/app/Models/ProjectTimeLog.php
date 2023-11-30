@@ -75,10 +75,10 @@ use Illuminate\Support\Facades\DB;
  * @property-read Collection|\App\Models\ProjectTimeLogBreak[] $breaks
  * @property-read int|null $breaks_count
  * @method static \Illuminate\Database\Eloquent\Builder|ProjectTimeLog whereTotalBreakMinutes($value)
- * @property int|null $cooperative_id
- * @property-read \App\Models\Cooperative|null $cooperative
+ * @property int|null $company_id
+ * @property-read \App\Models\Company|null $company
  * @property-read mixed $extras
- * @method static \Illuminate\Database\Eloquent\Builder|ProjectTimeLog whereCooperativeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ProjectTimeLog whereCompanyId($value)
  * @property-read mixed $hours_only
  * @mixin \Eloquent
  */
