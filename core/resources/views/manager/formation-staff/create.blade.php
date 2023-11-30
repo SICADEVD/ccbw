@@ -69,7 +69,9 @@
                         <div class="col-xs-12 col-sm-8 input-group mb-3">
                             <?php echo Form::select('entreprise_id', $entreprises, null, ['placeholder' => __('Selectionner une option'), 'class' => 'form-control', 'id' => 'entreprise_formateur', 'required' => 'required']); ?>
                             <button type="button" class="btn btn-outline-secondary border-grey add-entreprise"
-                                data-toggle="tooltip" data-original-title="Ajouter un formateur">Add</button>
+                                data-toggle="tooltip" data-original-title="Ajouter un formateur"><i class="las la-plus"></i></button>
+                            {{-- <a class="btn btn-outline-secondary border-grey add-entreprise"
+                                data-toggle="tooltip" data-original-title="Ajouter un formateur"><i class="las la-plus"></i></a> --}}
                         </div>
                     </div>
 
@@ -85,7 +87,7 @@
                                 @endforeach
                             </select>
                             <button type="button" class="btn btn-outline-secondary border-grey add-formateur"
-                                data-toggle="tooltip" data-original-title="Ajouter un formateur">Add</button>
+                                data-toggle="tooltip" data-original-title="Ajouter un formateur"><i class="las la-plus"></i></button>
                         </div>
                     </div>
 
