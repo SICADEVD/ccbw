@@ -9,28 +9,19 @@
                 <div class="card-body">
                     @csrf
                     <div class="row">
-                        <div class="col-6 form-group">
+                        <div class="col-12 form-group">
                             <label for="">@lang("Date de livraison")</label>
                             <div class="input-group">
                                 <input name="estimate_date" value="{{ old('estimate_date') }}" type="text" autocomplete="off"  class="form-control dates" placeholder="Date de livraison" required>
                                 <span class="input-group-text"><i class="las la-calendar"></i></span>
                             </div>
                         </div>
-                        <div class="col-6 form-group">
-                            <label for="">@lang('Status de paiement')</label>
-                            <div class="input-group">
-                                <select class="form-control" required name="payment_status">
-                                    <option value="0" selected>@lang('IMPAYE')</option>
-                                    <option value="1">@lang('PAYE')</option>
-                                </select>
-                                <span class="input-group-text"><i class="las la-money-bill-wave-alt"></i></span>
-                            </div>
-                        </div>
+                        
                     </div>
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="card border--primary mt-3">
-                                <h5 class="card-header bg--primary  text-white">@lang('Information Expéditeur')</h5>
+                                <h5 class="card-header bg--primary  text-white">@lang('Information Expéditeur(Délégué)')</h5>
                                 <div class="card-body">
                                     <div class="row">
                                     <div class="form-group col-lg-12">
@@ -182,7 +173,7 @@
                                                 <div class="col-md-3">
                                                     <div class="input-group mb-3">
                                                         <input type="number" class="form-control quantity" value="{{$item['quantity']}}"  name="items[{{ $loop->index }}][quantity]"  required>
-                                                        <span class="input-group-text unit"><i class="las la-balance-scale"></i></span>
+                                                        <span class="input-group-text unit">Kg</i></span>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-7">
@@ -212,15 +203,7 @@
                                     <div class="border-line-area">
                                         <h6 class="border-line-title">@lang('Resume')</h6>
                                     </div>
-                                    <div class="d-flex justify-content-end">
-                                        <div class="col-md-3">
-                                            <div class="input-group">
-                                                <span class="input-group-text">@lang('Réduction')</span>
-                                                <input type="number" name="discount"  value="{{ old('discount') }}" class="form-control bg-white text-dark discount" min="0">
-                                                <span class="input-group-text">%</span>
-                                            </div>
-                                        </div>
-                                    </div>
+                                   
                                     <div class=" d-flex justify-content-end mt-2">
                                         <div class="col-md-3  d-flex justify-content-between">
                                             <span class="fw-bold">@lang('Sous-total'):</span>
@@ -338,7 +321,7 @@
                 <div class="col-md-3">
                     <div class="input-group mb-3">
                         <input type="number" class="form-control quantity" placeholder="@lang('Qte')" disabled name="items[${length}][quantity]"  required>
-                        <span class="input-group-text unit"><i class="las la-balance-scale"></i></span>
+                        <span class="input-group-text unit">Kg</span>
                     </div>
                 </div>
                 <div class="col-md-7">
@@ -420,13 +403,14 @@
                 subTotal+=price*quantity;
             });
 
-            subTotal=parseFloat(subTotal);
+            // subTotal=parseFloat(subTotal);
 
-            let discountAmount = (subTotal/100)*discount;
-            let total          = subTotal-discountAmount;
+            // let discountAmount = (subTotal/100)*discount;
+            // let total          = subTotal-discountAmount;
 
-            $('.subtotal').text(subTotal.toFixed(0));
-            $('.total').text(total.toFixed(0));
+            // $('.subtotal').text(subTotal.toFixed(0));
+            // $('.total').text(total.toFixed(0));
+            $('.total').text(subTotal.toFixed(0));
         };
 
         $('.dates').datepicker({

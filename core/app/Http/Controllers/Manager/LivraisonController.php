@@ -39,7 +39,7 @@ class LivraisonController extends Controller
         $cooperatives = Cooperative::active()->orderBy('name')->get(); 
         $magasins = MagasinSection::join('users','magasin_sections.staff_id','=','users.id')->where([['cooperative_id',$staff->cooperative_id],['magasin_sections.status',1]])->with('user')->orderBy('nom')->select('magasin_sections.*')->get();
     
-        $staffs = User::whereHas('roles', function($q){ $q->whereIn('name', ['Magasinier','PR']); })
+        $staffs = User::whereHas('roles', function($q){ $q->whereIn('name', ['Delegue']); })
                 ->where('cooperative_id', $staff->cooperative_id)
                 ->select('users.*')
                 ->get(); 

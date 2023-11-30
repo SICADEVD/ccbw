@@ -124,6 +124,7 @@
                     <input type="hidden" name="multiStartDate" id="multiStartDate">
                     <input type="hidden" name="multiEndDate" id="multiEndDate">
                 </div> 
+               
                 <x-form-actions>
                     <x-forms.button-primary id="save-leave-form" class="mr-3" icon="check">@lang('app.save')
                     </x-forms.button-primary>

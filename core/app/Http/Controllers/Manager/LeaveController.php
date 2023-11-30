@@ -171,18 +171,18 @@ class LeaveController extends AccountBaseController
                 $sDate = Carbon::createFromFormat(cooperative()->date_format, $request->multiStartDate);
                 $eDate = Carbon::createFromFormat(cooperative()->date_format, $request->multiEndDate);
                 $multipleDates = CarbonPeriod::create($sDate, $eDate);
-
+                 
                 foreach ($multipleDates as $multipleDate) {
                     $multiDates[] = $multipleDate->format('Y-m-d');
                 }
-
+                
                 /** @phpstan-ignore-next-line */
                 foreach ($multiDates as $dateData) {
                     $leaveTaken = LeaveType::byUser($request->user_id, $request->leave_type_id, array('approved', 'pending'), Carbon::parse($dateData)->format(cooperative()->date_format));
                     $leaveTaken = $leaveTaken->first();
-
+                     
                     /** @phpstan-ignore-next-line */
-                    if (!is_null($leaveTaken->leavesCount) && (($leaveTaken->leavesCount->count - ($leaveTaken->leavesCount->halfday * 0.5)) + count($multipleDates)) > $totalAllowedLeaves) {
+                    if (!is_null(@$leaveTaken->leavesCount) && ((@$leaveTaken->leavesCount->count - (@$leaveTaken->leavesCount->halfday * 0.5)) + count($multipleDates)) > $totalAllowedLeaves) {
                         return Reply::error(__('messages.leaveLimitError'));
                     }
                     elseif (count($multipleDates) > $totalAllowedLeaves) { /** @phpstan-ignore-line */
@@ -193,7 +193,7 @@ class LeaveController extends AccountBaseController
                     array_push($multiDates, Carbon::parse($dateData)->format('Y-m-d'));
                 }
 
-
+               
                 foreach ($multiDates as $dateData) {
                     $dateApplied = Carbon::parse($dateData);
 
@@ -295,13 +295,16 @@ class LeaveController extends AccountBaseController
             /* check leave limit for the selected leave type end */
 
             $leaveId = '';
-
+            $dateexiste = array();
             /** @phpstan-ignore-next-line */
             foreach ($multiDates as $date) {
 
                 $dateInsert = Carbon::parse($date)->format('Y-m-d');
-
+                if(in_array($dateInsert,$dateexiste)){
+                    continue;
+                }
                 if (!in_array($dateInsert, $holidays)) {
+                    
                     $leave = new Leave();
                     $leave->user_id = $request->user_id;
                     $leave->unique_id = $uniqueId;
@@ -312,7 +315,7 @@ class LeaveController extends AccountBaseController
                     $leave->reason = $request->reason;
                     $leave->status = ($request->has('status') ? $request->status : 'pending');
                     $leave->save();
-
+                    $dateexiste[]=$dateInsert;
                     $leaveId = $leave->id;
                     session()->forget('leaves_duration');
                 }

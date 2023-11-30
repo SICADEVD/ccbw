@@ -104,7 +104,7 @@
         <div class="d-grid d-lg-flex d-md-flex action-bar">
             <div id="table-actions" class="flex-grow-1 align-items-center">
                  
-                    <x-forms.link-primary :link="route('manager.hr.attendances.create')" class="mr-3 openRightModal float-left"
+                    <x-forms.link-primary :link="route('manager.hr.attendances.create')" class="mr-3 float-left"
                                           icon="plus">
                         Marquer une Présence
                     </x-forms.link-primary>
@@ -112,12 +112,7 @@
                 <x-forms.button-secondary id="export-all" class="mr-3 mb-2 mb-lg-0" icon="file-export">
                     Exporter
                 </x-forms.button-secondary>
-                 
-                    <x-forms.link-secondary :link="route('manager.hr.attendances.import')" class="mr-3 openRightModal float-left d-none d-lg-block"
-                                            icon="file-upload">
-                        Importer
-                    </x-forms.link-secondary>
-                
+                  
             </div>
 
             <div class="btn-group mt-2 mt-lg-0 mt-md-0 ml-0 ml-lg-3 ml-md-3" role="group">

@@ -820,7 +820,7 @@ class AttendanceController extends AccountBaseController
                 && $date->greaterThanOrEqualTo($userData->employeeDetail->joining_date)
                 && $date->lessThanOrEqualTo($currentDate)
                 && !in_array($date->format('Y-m-d'), $holidays)
-                && $this->attendanceSettings->shift_name != 'Day Off'
+                && @$this->attendanceSettings->shift_name != 'Day Off'
                 ) { // Attendance should not exist for the user for the same date
 
                     $clockIn = Carbon::createFromFormat('Y-m-d H:i', $date->format('Y-m-d') . ' ' . $request->clock_in_time, $this->timezone);
@@ -847,7 +847,7 @@ class AttendanceController extends AccountBaseController
                         'late' => $request->late,
                         'half_day' => $request->half_day,
                         'added_by' => user()->id,
-                        'employee_shift_id' => $this->attendanceSettings->id,
+                        'employee_shift_id' => @$this->attendanceSettings->id,
                         'overwrite_attendance' => request()->has('overwrite_attendance') ? $request->overwrite_attendance : 'no',
                         'last_updated_by' => user()->id
                     ];
@@ -860,10 +860,11 @@ class AttendanceController extends AccountBaseController
         $redirectUrl = urldecode($request->redirect_url);
 
         if ($redirectUrl == '') {
-            $redirectUrl = route('manager.attendances.index');
+            $redirectUrl = route('manager.hr.attendances.index');
         }
 
-        return Reply::redirect($redirectUrl, __('messages.attendanceSaveSuccess'));
+        //return Reply::redirect($redirectUrl, __('messages.attendanceSaveSuccess'));
+        return Reply::successWithData(__('messages.attendanceSaveSuccess'), ['redirectUrl' => $redirectUrl]);
     }
 
     public function destroy($id)

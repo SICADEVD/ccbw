@@ -2,6 +2,7 @@
 <div class="row">
     <div class="col-sm-12">
         <x-form id="save-attendance-data-form">
+          
             <div class="add-client bg-white rounded">
                 <h4 class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-bottom-grey">
                     @lang('app.menu.attendance') @lang('app.details')</h4>
@@ -156,7 +157,9 @@
                                           fieldRequired="true" :popover="__('messages.overwriteAttendanceTooltip')"/>
                     </div>
                 </div>
-
+                <input type="hidden" name="multiStartDate" id="multiStartDate">
+                <input type="hidden" name="multiEndDate" id="multiEndDate">
+                 
                 <x-form-actions>
                     <x-forms.button-primary class="mr-3" id="save-attendance-form" icon="check">@lang('app.save')
                     </x-forms.button-primary>
@@ -192,6 +195,23 @@
             format: 'yyyy-mm-d'
         });
 
+        $('#multi_date').change(function() {
+            var dates = $(this).val();
+
+            var startDate = moment(new Date(dates.split(' - ')[0]));
+            var endDate = moment(new Date(dates.split(' - ')[1]));
+            startDate = startDate.format('YYYY-MM-DD');
+             
+            endDate = endDate.format('YYYY-MM-DD');
+
+            var multiDate = [];
+            multiDate = [startDate, endDate];
+            $('#multi_date').val(multiDate);
+
+            $('#multiStartDate').val(startDate);
+            $('#multiEndDate').val(endDate); 
+        })
+
         $('input[type=radio][name=mark_attendance_by]').change(function() {
             if(this.value=='date') {
                 $('#multi_date').daterangepicker('clearDates').daterangepicker({
@@ -201,6 +221,13 @@
                     format: 'yyyy-mm-d',
                     maxDate: new Date(),
                 });
+                // $('#multi_date').daterangepicker('clearDates').daterangepicker({
+                //     linkedCalendars: false,
+                //     multidate: true,
+                //     todayHighlight: true,
+                //     format: 'yyyy-mm-d',
+                //     maxDate: new Date(),
+                // });
             }
 
         });
@@ -233,9 +260,9 @@
         });
 
         $('#save-attendance-form').click(function() {
-            var dateRange = $('#multi_date').data('daterangepicker');
-            startDate = dateRange.startDate.format('Y-m-d');
-            endDate = dateRange.endDate.format('Y-m-d');
+            var dateRange = $('#multi_date').data('daterangepicker'); 
+            startDate = dateRange.startDate.format('YYYY-MM-DD');
+            endDate = dateRange.endDate.format('YYYY-MM-DD');
             var multiDate = [];
             multiDate = [startDate, endDate];
             $('#multi_date').val(multiDate);
@@ -248,7 +275,12 @@
                 disableButton: true,
                 blockUI: true,
                 buttonSelector: "#save-attendance-form",
-                data: $('#save-attendance-data-form').serialize()
+                data: $('#save-attendance-data-form').serialize(),
+                success: function(response) {
+                    if (response.status == 'success') { 
+                        window.location.href = response.redirectUrl;
+                    }
+                }
             });
         });
 
