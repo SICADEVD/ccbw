@@ -155,7 +155,7 @@ class StaffController extends Controller
         $staff->email     = $request->email;
         $staff->mobile    = $request->mobile;
         $staff->adresse    = $request->adresse;
-        $staff->user_type = $request->role;
+        $staff->user_type = 'staff';
         $staff->type_compte = $request->type_compte;
         $staff->password  = $request->password ? Hash::make($request->password) : $staff->password;
         //$staff->syncRoles($request->get('rolePermission'));

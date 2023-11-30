@@ -146,7 +146,8 @@ class EmployeeController extends AccountBaseController
             $user->country_id = $request->country;
             $user->country_phonecode = $request->country_phonecode;
             $user->genre = $request->gender;
-            $user->user_type = "Employe"; 
+            $user->user_type = "staff"; 
+            
             $user->type_compte = "web";  
             $user->password  =  Hash::make('azerty'); 
             // $user->user_auth_id = $userAuth->id;
@@ -176,7 +177,8 @@ class EmployeeController extends AccountBaseController
             
 
             if($user->id){
-                $role = DB::table('roles')->where('name','Employe')->first();
+                 
+                $role = DB::table('roles')->where('name',$request->designation)->first();
                 if($role !=null)
                 {
                     $user->syncRoles($role->id);
