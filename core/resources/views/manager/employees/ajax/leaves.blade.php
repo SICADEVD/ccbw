@@ -1,6 +1,3 @@
-@php
-$addLeavePermission = user()->permission('add_leave');
-@endphp
 
 <!-- ROW START -->
 <div class="row py-0 py-md-0 py-lg-3">
@@ -73,12 +70,12 @@ $addLeavePermission = user()->permission('add_leave');
         <!-- Add Task Export Buttons Start -->
         <div class="d-flex justify-content-between action-bar">
             <div id="table-actions" class="align-items-center">
-                @if ($addLeavePermission == 'all' || ($addLeavePermission == 'added' && user()->id == $employee->id))
+                
                     <x-forms.link-primary :link="route('leaves.create').'?default_assign='.$employee->id"
                         class="mr-3 openRightModal float-left" data-redirect-url="{{ url()->full() }}" icon="plus">
                         @lang('modules.leaves.addLeave')
                     </x-forms.link-primary>
-                @endif
+                 
             </div>
 
             <x-datatable.actions>

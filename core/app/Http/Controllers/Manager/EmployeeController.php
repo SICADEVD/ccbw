@@ -497,14 +497,13 @@ class EmployeeController extends AccountBaseController
     public function show($id)
     {
    
-
-        $this->employee = User::with(['employeeDetail.designation', 'employeeDetail.department','appreciations', 'appreciations.award', 'appreciations.award.awardIcon', 'employeeDetail.reportingTo', 'country', 'emergencyContacts', 'reportingTeam' => function ($query) {
+        
+        $employee = User::with(['employeeDetail.designation', 'employeeDetail.department', 'employeeDetail.reportingTo', 'country', 'emergencyContacts', 'reportingTeam' => function ($query) {
             $query->join('users', 'users.id', '=', 'employee_details.user_id');
             $query->where('users.status', '=', 'active');
-        }, 'reportingTeam.user', 'leaveTypes', 'leaveTypes.leaveType', 'appreciationsGrouped', 'appreciationsGrouped.award', 'appreciationsGrouped.award.awardIcon'])
+        }, 'reportingTeam.user', 'leaveTypes', 'leaveTypes.leaveType'])
         ->withoutGlobalScope(ActiveScope::class)
         ->withOut('clientDetails')
-        ->withCount('member', 'agents', 'openTasks')
         ->findOrFail($id);
  
 
@@ -526,15 +525,15 @@ class EmployeeController extends AccountBaseController
                     ->whereBetween(DB::raw('DATE(`leave_date`)'), [$this->fromDate, $this->toDate])
                     ->first();
 
-                $this->leavesTaken = (!is_null($this->leavesTaken)) ? $this->leavesTaken->count - ($this->leavesTaken->halfday * 0.5) : 0;
+                $this->leavesTaken = (!is_null($this->leavesTaken)) ? @$this->leavesTaken->count - (@$this->leavesTaken->halfday * 0.5) : 0;
 
                 $this->taskChart = $this->taskChartData($id);
                 $this->ticketChart = $this->ticketChartData($id);
 
-                if (!is_null($this->employee->employeeDetail)) {
-                    $this->employeeDetail = $this->employee->employeeDetail->withCustomFields();
+                if (!is_null($employee->employeeDetail)) {
+                    $employeeDetail = $employee->employeeDetail->withCustomFields();
 
-                    $customFields = $this->employeeDetail->getCustomFieldGroupsWithFields();
+                    $customFields = $employeeDetail->getCustomFieldGroupsWithFields();
 
                     if (!empty($customFields)) {
                         $this->fields = $customFields->fields;
@@ -546,35 +545,25 @@ class EmployeeController extends AccountBaseController
 
        
 
-        $this->pageTitle = $this->employee->firstname;
+        $this->pageTitle = $employee->firstname;
 
         switch ($tab) {
-        case 'tickets':
-            return $this->tickets();
-        case 'projects':
-            return $this->projects();
-
-        case 'tasks':
-            return $this->tasks();
         case 'leaves':
+            $this->employee = $employee;
             return $this->leaves();
-        case 'timelogs':
-            return $this->timelogs();
             break;
         case 'emergency-contacts':
+            $this->employee = $employee;
             $this->view = 'manager.employees.ajax.emergency-contacts';
-            break;
-        case 'appreciation': 
-            $this->appreciations = $this->appreciation($this->employee->id);
-            $this->view = 'manager.employees.ajax.appreciations';
             break;
         case 'leaves-quota':
             $this->leaveQuota($id);
-            $this->leavesTakenByUser = Leave::byUserCount($this->employee);
-            $this->leaveTypes = LeaveType::byUser($this->employee);
-            $this->employeeLeavesQuotas = $this->employee->leaveTypes;
+            $this->employee = $employee;
+            $this->leavesTakenByUser = Leave::byUserCount($employee);
+            $this->leaveTypes = LeaveType::byUser($employee);
+            $this->employeeLeavesQuotas = $employee->leaveTypes;
             $this->employeeLeavesQuota = clone $this->employeeLeavesQuotas;
-
+            
             $totalLeaves = 0;
 
             foreach($this->leaveTypes as $key => $leavesCount)
@@ -589,20 +578,6 @@ class EmployeeController extends AccountBaseController
             $this->allowedLeaves = $totalLeaves;
             $this->view = 'manager.employees.ajax.leaves_quota';
             break;
-        case 'shifts': 
-            $this->view = 'manager.employees.ajax.shifts';
-            break;
-        case 'activity':
-            $this->activities = UserActivity::where('user_id', $id)->orderBy('id', 'desc')->get();
-            $this->view = 'manager.employees.ajax.activity';
-            break;
-
-        case 'immigration': 
-            $this->passport = Passport::with('country')->where('user_id', $this->employee->id )->first();
-            $this->visa = VisaDetail::with('country')->where('user_id', $this->employee->id)->get();
-            $this->view = 'manager.employees.ajax.immigration';
-            break;
-
         default:
             $this->view = 'manager.employees.ajax.profile';
             break;
@@ -615,7 +590,7 @@ class EmployeeController extends AccountBaseController
         }
 
         $this->activeTab = $tab ?: 'profile';
-
+        $this->employee = $employee;
         return view('manager.employees.show', $this->data);
     }
 
@@ -651,9 +626,9 @@ class EmployeeController extends AccountBaseController
         $data['colors'] = ['#D30000', '#FCBD01', '#2CB100', '#1d82f5'];
         $data['values'] = [];
 
-        foreach ($labels as $label) {
-            $data['values'][] = Ticket::where('agent_id', $id)->where('status', $label)->count();
-        }
+        // foreach ($labels as $label) {
+        //     $data['values'][] = Ticket::where('agent_id', $id)->where('status', $label)->count();
+        // }
 
         return $data;
     }
@@ -696,7 +671,7 @@ class EmployeeController extends AccountBaseController
 
         $dataTable = new ProjectsDataTable();
 
-        return $dataTable->render('employees.show', $this->data);
+        return $dataTable->render('manager.employees.show', $this->data);
 
     }
 
@@ -708,7 +683,7 @@ class EmployeeController extends AccountBaseController
         $this->view = 'manager.employees.ajax.tickets';
         $dataTable = new TicketDataTable();
 
-        return $dataTable->render('employees.show', $this->data);
+        return $dataTable->render('manager.employees.show', $this->data);
 
     }
 
@@ -722,7 +697,7 @@ class EmployeeController extends AccountBaseController
 
         $dataTable = new TasksDataTable();
 
-        return $dataTable->render('employees.show', $this->data);
+        return $dataTable->render('manager.employees.show', $this->data);
     }
 
     public function leaves()
@@ -735,7 +710,7 @@ class EmployeeController extends AccountBaseController
 
         $dataTable = new LeaveDataTable();
 
-        return $dataTable->render('employees.show', $this->data);
+        return $dataTable->render('manager.employees.show', $this->data);
     }
 
     public function timelogs()
@@ -747,7 +722,7 @@ class EmployeeController extends AccountBaseController
 
         $dataTable = new TimeLogsDataTable();
 
-        return $dataTable->render('employees.show', $this->data);
+        return $dataTable->render('manager.employees.show', $this->data);
     }
 
     /**

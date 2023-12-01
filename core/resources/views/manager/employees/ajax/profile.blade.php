@@ -18,22 +18,10 @@
 </style>
 @php
 
-$showFullProfile = false;
-
-if ($viewPermission == 'all'
-    || ($viewPermission == 'added' && $employee->employeeDetail->added_by == user()->id)
-    || ($viewPermission == 'owned' && $employee->employeeDetail->user_id == user()->id)
-    || ($viewPermission == 'both' && ($employee->employeeDetail->user_id == user()->id || $employee->employeeDetail->added_by == user()->id))
-) {
-    $showFullProfile = true;
-}
-
+$showFullProfile = true;
+ 
 @endphp
-
-@php
-$editEmployeePermission = user()->permission('edit_employees');
-$viewAppreciationPermission = user()->permission('view_appreciation');
-@endphp
+ 
 
 <div class="d-lg-flex">
 
@@ -55,7 +43,7 @@ $viewAppreciationPermission = user()->permission('view_appreciation');
                                         @endisset
                                     </h4>
                                 </div>
-                                @if ($editEmployeePermission == 'all' || ($editEmployeePermission == 'added' && $employee->employeeDetail->added_by == user()->id))
+                                @if ( $employee->employeeDetail->added_by == user()->id))
                                     <div class="col-2 text-right">
                                         <div class="dropdown">
                                             <button class="btn f-14 px-0 py-0 text-dark-grey dropdown-toggle"
@@ -113,7 +101,7 @@ $viewAppreciationPermission = user()->permission('view_appreciation');
                                         <span>
                                             <label class="f-11 text-dark-grey mb-12 text-capitalize"
                                                 for="usr">@lang('modules.employees.hoursLogged')</label>
-                                            <p class="mb-0 f-18 f-w-500">{{ $hoursLogged }}</p>
+                                            <p class="mb-0 f-18 f-w-500">{{ @$hoursLogged }}</p>
                                         </span>
                                         <span>
                                             <label class="f-11 text-dark-grey mb-12 text-capitalize"
@@ -172,22 +160,13 @@ $viewAppreciationPermission = user()->permission('view_appreciation');
 
                                 <x-cards.data-row :label="__('app.mobile')"
                                 :value="$employee->mobile_with_phonecode" />
-
-                                <x-cards.data-row :label="__('modules.employees.slackUsername')"
-                                    :value="(isset($employee->employeeDetail) && !is_null($employee->employeeDetail->slack_username)) ? '@'.$employee->employeeDetail->slack_username : '--'" />
-
-                                <x-cards.data-row :label="__('modules.employees.hourlyRate')"
-                                    :value="(!is_null($employee->employeeDetail)) ? cooperative()->currency->currency_symbol.$employee->employeeDetail->hourly_rate : '--'" />
-
+ 
                                 <x-cards.data-row :label="__('app.address')"
                                     :value="$employee->employeeDetail->address ?? '--'" />
 
                                 <x-cards.data-row :label="__('app.skills')"
                                     :value="$employee->skills() ? implode(', ', $employee->skills()) : '--'" />
-
-                                <x-cards.data-row :label="__('app.language')"
-                                    :value="$employeeLanguage->language_name ?? '--'" />
-
+ 
                                 <x-cards.data-row :label="__('modules.employees.probationEndDate')"
                                 :value="$employee->employeeDetail->probation_end_date ? Carbon\Carbon::parse($employee->employeeDetail->probation_end_date)->translatedFormat('Y-m-d') : '--'" />
 
@@ -231,21 +210,7 @@ $viewAppreciationPermission = user()->permission('view_appreciation');
                     </div>
 
                     <div class="col-xl-5 col-lg-6 col-md-6">
-
-                        @if ($showFullProfile)
-                            <x-cards.data class="mb-4" :title="__('modules.appreciations.appreciation')">
-                                @forelse ($employee->appreciationsGrouped as $item)
-                                <div class="float-left position-relative mb-2" style="width: 50px" data-toggle="tooltip" data-original-title="@if(isset($item->award->title)){{  $item->award->title }} @endif">
-                                    @if(isset($item->award->awardIcon->icon))
-                                        <x-award-icon :award="$item->award" />
-                                    @endif
-                                    <span class="position-absolute badge badge-secondary rounded-circle border-additional-grey appreciation-count">{{ $item->no_of_awards }}</span>
-                                </div>
-                                @empty
-                                    <x-cards.no-record icon="medal" :message="__('messages.noRecordFound')" />
-                                @endforelse
-                            </x-cards.data>
-                        @endif
+ 
 
                         <x-cards.data class="mb-4">
                             <div class="d-flex justify-content-between">
@@ -265,7 +230,7 @@ $viewAppreciationPermission = user()->permission('view_appreciation');
                                             @if (count($employee->reportingTeam) > 1)
                                                 @foreach ($employee->reportingTeam as $item)
                                                     <div class="taskEmployeeImg rounded-circle mr-1">
-                                                        <a href="{{ route('manager.hr.employees.show', $item->user->id) }}">
+                                                        <a href="{{ route('manager.employees.show', $item->user->id) }}">
                                                             <img data-toggle="tooltip" data-original-title="{{ $item->user->name }}"
                                                                 src="{{ $item->user->image_url }}">
                                                         </a>
@@ -287,40 +252,19 @@ $viewAppreciationPermission = user()->permission('view_appreciation');
 
                         @if ($showFullProfile)
                             <div class="row">
-                                @if (in_array('attendance', user_modules()))
+                                 
                                     <div class="col-xl-6 col-sm-12 mb-4">
                                         <x-cards.widget :title="__('modules.dashboard.lateAttendanceMark')"
                                             :value="$lateAttendance" :info="__('modules.dashboard.thisMonth')"
                                             icon="map-marker-alt" />
                                     </div>
-                                @endif
-                                @if (in_array('leaves', user_modules()))
+                                 
                                     <div class="col-xl-6 col-sm-12 mb-4">
                                         <x-cards.widget :title="__('modules.dashboard.leavesTaken')" :value="$leavesTaken"
                                             :info="__('modules.dashboard.thisMonth')" icon="sign-out-alt" />
                                     </div>
-                                @endif
-                            </div>
-                            <div class="row">
-                                @if (in_array('tasks', user_modules()))
-                                    <div class="col-md-12 mb-4">
-                                        <x-cards.data :title="__('app.menu.tasks')" padding="false">
-                                            <x-pie-chart id="task-chart" :labels="$taskChart['labels']"
-                                                :values="$taskChart['values']" :colors="$taskChart['colors']" height="250"
-                                                width="300" />
-                                        </x-cards.data>
-                                    </div>
-                                @endif
-                                @if (in_array('tickets', user_modules()))
-                                    <div class="col-md-12 mb-4">
-                                        <x-cards.data :title="__('app.menu.tickets')" padding="false">
-                                            <x-pie-chart id="ticket-chart" :labels="$ticketChart['labels']"
-                                                :values="$ticketChart['values']" :colors="$ticketChart['colors']"
-                                                height="250" width="300" />
-                                        </x-cards.data>
-                                    </div>
-                                @endif
-                            </div>
+                                
+                            </div> 
                         @endif
 
                     </div>
