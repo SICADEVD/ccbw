@@ -17,6 +17,8 @@
                                 <tr>
                                     <th>@lang('Produit')</th>
                                     <th>@lang('Campagne')</th>
+                                    <th>@lang('Prix d\'achat')</th>
+                                    <th>@lang('Prix Bord Champ')</th>
                                     <th>@lang('Prime')</th>
                                     <th>@lang('Date début')</th>
                                     <th>@lang('Date fin')</th>
@@ -35,7 +37,12 @@
                                         <td>
                                             <span>{{ __($campagne->nom) }}</span>
                                         </td>
-
+                                        <td>
+                                            <span>{{ $campagne->prix_achat }} {{ __($general->cur_text) }}</span>
+                                        </td>
+                                        <td>
+                                            <span>{{ $campagne->prix_champ }} {{ __($general->cur_text) }}</span>
+                                        </td>
                                         <td>
                                             <span>{{ $campagne->prime }} {{ __($general->cur_text) }}</span>
                                         </td>
@@ -64,6 +71,7 @@
                                                 data-debut="{{ $campagne->periode_debut }}"
                                                 data-fin="{{ $campagne->periode_fin }}"
                                                 data-prix="{{ $campagne->prix_achat }}"
+                                                data-champ="{{ $campagne->prix_champ }}"
                                                 data-prime="{{ $campagne->prime }}"><i
                                                  class="las la-pen"></i>@lang('Edit')</button>
 
@@ -152,6 +160,12 @@
     </div>
     <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="form-group">
+            {{ Form::label(__("Prix bord champ"), null, ['class' => 'control-label']) }}
+            {!! Form::number('prix_champ', null, array('class' => 'form-control','required')) !!}
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="form-group">
             {{ Form::label(__('Prime du producteur'), null, ['class' => 'control-label required']) }}
             {!! Form::number('prime', null, array('class' => 'form-control','min'=>'50', 'max'=>'5000')) !!}
         </div>
@@ -219,6 +233,12 @@
     </div> 
     <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="form-group">
+            {{ Form::label(__("Prix Bord Champ"), null, ['class' => 'control-label']) }}
+            {!! Form::number('prix_champ', null, array('class' => 'form-control','required')) !!}
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="form-group">
             {{ Form::label(__('Prime du producteur'), null, ['class' => 'control-label required']) }}
             {!! Form::number('prime', null, array('class' => 'form-control')) !!}
         </div>
@@ -258,6 +278,7 @@
                 modal.find('input[name=periode_debut]').val($(this).data('debut'));
                 modal.find('input[name=periode_fin]').val($(this).data('fin'));
                 modal.find('input[name=prix_achat]').val($(this).data('prix'));
+                modal.find('input[name=prix_champ]').val($(this).data('champ'));
                 modal.find('input[name=prime]').val($(this).data('prime'));
                 modal.modal('show');
             });

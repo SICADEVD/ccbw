@@ -58,6 +58,7 @@ class SettingController extends Controller
             'periode_debut'  => 'required',
             'periode_fin'  => 'required', 
             'prix_achat' => 'required|gt:0|numeric',
+            'prix_champ' => 'required|gt:0|numeric',
             'prime' => 'required|gt:0|numeric',
         ]);
 
@@ -74,6 +75,7 @@ class SettingController extends Controller
         $campagne->periode_debut = $request->periode_debut;
         $campagne->periode_fin = $request->periode_fin;
         $campagne->prix_achat   = $request->prix_achat;
+        $campagne->prix_champ   = $request->prix_champ;
         $campagne->prime   = $request->prime;
         $campagne->save();
         $notify[] = ['success', isset($message) ? $message  : 'Campagne a été ajouté avec succès.'];
