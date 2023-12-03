@@ -11,7 +11,7 @@
                         @lang('Date'):
                         {{ showDateTime($livraisonInfo->created_at) }}
                         <br>
-                        @lang('Estimate Delivery Date: ') {{ showDateTime($livraisonInfo->estimate_date, 'd M Y') }}
+                        @lang('Date de livraison: ') {{ showDateTime($livraisonInfo->estimate_date, 'd M Y') }}
                     </h3>
                 </div>
 
@@ -29,17 +29,9 @@
                              
                         </div>
                         <div>
-                            <b>@lang('N° Commande') #{{ $livraisonInfo->code }}</b><br>
-
-                            <b>@lang("Paiement Status"):</b>
-                            @if ($livraisonInfo->payment->status == Status::PAYE)
-                                <span class="badge badge--success">@lang('Paye')</span>
-                            @else
-                                <span class="badge badge--danger">@lang('Impaye')</span>
-                            @endif
-                            <br>
-                            <b>@lang('Sender At Cooperative'):</b> {{ __($livraisonInfo->senderCooperative->name) }}<br>
-                            <b>@lang('Received At Cooperative'):</b> {{ __($livraisonInfo->receiverCooperative->name) }}
+                            <b>@lang('N° Commande') #{{ $livraisonInfo->code }}</b><br> 
+                            <b>@lang('Cooperative d\'envoi'):</b> {{ __($livraisonInfo->senderCooperative->name) }}<br>
+                            <b>@lang('Cooperative de reception'):</b> {{ __($livraisonInfo->receiverCooperative->name) }}
                         </div>
                     </div>
                     <hr>
@@ -52,13 +44,7 @@
                                 @lang('Contact'): {{ $livraisonInfo->sender_phone }}<br>
                                 @lang('Email'): {{ $livraisonInfo->sender_email }}
                             </address>
-                        </div>
-                        <div style="width:40%;">
-                        <strong> @lang('NUMEROS DE SCELLES') </strong>
-                            <address>
-                            {{$numeroScelle}}
-                            </address>
-                        </div>
+                        </div> 
                         <div style="width:30%;">
                         @lang('A')
                             <address>
@@ -77,6 +63,7 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
+                                        <th>@lang('Producteur')</th>
                                         <th>@lang('Parcelle')</th>
                                         <th>@lang('Type produit')</th>
                                         <th>@lang("Date d'envoi")</th>
@@ -89,6 +76,7 @@
                                     @foreach ($livraisonInfo->products as $livraisonProductInfo)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $livraisonProductInfo->parcelle->producteur->nom }} {{ $livraisonProductInfo->parcelle->producteur->prenoms }}</td>
                                             <td>{{ $livraisonProductInfo->parcelle->codeParc }}</td>
                                             <td>{{ __(@$livraisonProductInfo->type_produit) }}</td>
                                             <td>
@@ -108,19 +96,7 @@
                             <div class="table-responsive">
                                 <table class="table">
                                     <tbody>
-                                        <tr>
-                                            <th>@lang('Sous-total'):</th>
-                                            <td>{{ showAmount(@$livraisonInfo->payment->final_amount) }} {{ $general->cur_sym }}
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>@lang('Reduction'):</th>
-                                            <td>{{ showAmount($livraisonInfo->payment->discount) }} {{ $general->cur_sym }}
-                                                <small class="text--danger">
-                                                    ({{ getAmount($livraisonInfo->payment->percentage)}}%)
-                                                </small>
-                                            </td>
-                                        </tr>
+                                        
                                         <tr>
                                             <th>@lang('Total'):</th>
                                             <td>{{ showAmount(@$livraisonInfo->payment->final_amount) }} {{ $general->cur_sym }}

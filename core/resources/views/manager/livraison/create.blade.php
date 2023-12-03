@@ -123,6 +123,7 @@
                             </div>
                         </div>
                     </div>
+                    
                     <div class="row mb-30">
                         <div class="col-lg-12">
                             <div class="card border--primary mt-3">
@@ -144,7 +145,7 @@
                                                         @foreach($producteurs as $producteur)
                                                             <option value="{{$producteur->id}}" @selected($item['producteur']==$producteur->id)
                                                             data-id="{{$producteur->id}}"
-                                                                 data-price="{{ getAmount($campagne->prix_achat)}}"  >
+                                                                 data-price="{{ $campagne->prix_champ}}"  >
                                                                 {{__($producteur->nom)}} 
                                                                 {{__($producteur->prenom)}}
                                                             </option>
@@ -161,7 +162,7 @@
                                                         @endforeach
                                                     </select>
                                                 </div>
-                                             <div class="col-md-3">
+                                             <div class="col-md-2">
                                             <select class="form-control selected_type" name="items[{{ $loop->index}}][type]" required>
                                                     <option disabled selected value="">@lang('Type')</option> 
                                                         <option value="{{ __('Certifie') }}"
@@ -175,17 +176,8 @@
                                                         <input type="number" class="form-control quantity" value="{{$item['quantity']}}"  name="items[{{ $loop->index }}][quantity]"  required>
                                                         <span class="input-group-text unit">Kg</i></span>
                                                     </div>
-                                                </div>
-                                                <div class="col-md-7">
-                                                    <select class="form-control scelleOld" name="items[{{ $loop->index}}][scelle][]" multiple > 
-                                                    @if(@$item['scelle'])
-                                                        @foreach($item['scelle'] as $option) 
-                                                        <option value="{{ $option }}" selected>{{ __($option) }}</option>
-                                                        @endforeach
-                                                    @endif
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-4">
+                                                </div> 
+                                                <div class="col-md-3">
                                                     <div class="input-group">
                                                         <input type="text"  class="form-control single-item-amount" value="{{$item['amount']}}"  name="items[{{ $loop->index }}][amount]" required readonly>
                                                         <span class="input-group-text">{{__($general->cur_text)}}</span>
@@ -204,12 +196,7 @@
                                         <h6 class="border-line-title">@lang('Resume')</h6>
                                     </div>
                                    
-                                    <div class=" d-flex justify-content-end mt-2">
-                                        <div class="col-md-3  d-flex justify-content-between">
-                                            <span class="fw-bold">@lang('Sous-total'):</span>
-                                            <div><span class="subtotal">0</span> {{$general->cur_sym}}</div>
-                                        </div>
-                                    </div>
+                                    
                                     <div class=" d-flex justify-content-end mt-2">
                                         <div class="col-md-3  d-flex justify-content-between">
                                             <span class="fw-bold">@lang('Total'):</span>
@@ -302,7 +289,7 @@
                     <select class="form-control selected_type" name="items[${length}][producteur]" required id='producteur-${length}' onchange=getParcelle(${length})>
                         <option disabled selected value="">@lang('Producteur')</option>
                         @foreach($producteurs as $producteur)
-                            <option value="{{$producteur->id}}" data-id="{{$producteur->id}}" data-price={{ getAmount($campagne->prix_achat)}} >{{__($producteur->nom)}} {{__($producteur->prenoms)}}</option>
+                            <option value="{{$producteur->id}}" data-id="{{$producteur->id}}" data-price={{ $campagne->prix_champ}} >{{__($producteur->nom)}} {{__($producteur->prenoms)}}</option>
                         @endforeach
                     </select>
                 </div>
@@ -311,7 +298,7 @@
                         
                     </select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                 <select class="form-control" name="items[${length}][type]" required>
                         <option disabled selected value="">@lang('Type')</option> 
                             <option value="{{ __('Certifie') }}">{{ __('Certifie') }}</option>
@@ -323,11 +310,8 @@
                         <input type="number" class="form-control quantity" placeholder="@lang('Qte')" disabled name="items[${length}][quantity]"  required>
                         <span class="input-group-text unit">Kg</span>
                     </div>
-                </div>
-                <div class="col-md-7">
-                <input  type="text" class="form-control scelle" name="items[${length}][scelle][]" placeholder="@lang('Numéros du Scellé')">  
-                </div>
-                <div class="col-md-4">
+                </div> 
+                <div class="col-md-3">
                     <div class="input-group">
                         <input type="text"  class="form-control single-item-amount" placeholder="@lang('Entrer le prix')" name="items[${length}][amount]" required readonly>
                         <span class="input-group-text">{{__($general->cur_text)}}</span>

@@ -18,8 +18,8 @@ use App\Exports\ExportLivraisons;
 use App\Models\AdminNotification;
 
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Request;
+use App\Http\Controllers\Controller; 
+use Illuminate\Http\Request;
 
 class LivraisonController extends Controller
 {
@@ -46,6 +46,7 @@ class LivraisonController extends Controller
 
         $producteurs  = Producteur::joinRelationship('localite.section')->where('sections.cooperative_id',$staff->cooperative_id)->select('producteurs.*')->orderBy('producteurs.nom')->get();
         $campagne = Campagne::active()->first();
+      
         $parcelles  = Parcelle::with('producteur')->get();
         
         return view('manager.livraison.create', compact('pageTitle', 'cooperatives','staffs','magasins','producteurs','parcelles','campagne'));
@@ -57,15 +58,14 @@ class LivraisonController extends Controller
         
         $request->validate([
             'sender_staff' => 'required|exists:users,id',
-            'MagasinSection' =>  'required|exists:MagasinSections,id', 
+            'magasin_section' =>  'required|exists:magasin_sections,id', 
             'items'            => 'required|array',
             'items.*.type'     => 'required',
             'items.*.producteur'     => 'required|integer',
             'items.*.parcelle'     => 'required|integer',
             'items.*.quantity' => 'required|numeric|gt:0',
             'items.*.amount'   => 'required|numeric|gt:0', 
-            'estimate_date'    => 'required|date|date_format:Y-m-d|after_or_equal:today',
-            'payment_status'   => 'required|integer|in:0,1',
+            'estimate_date'    => 'required|date|date_format:Y-m-d', 
         ]);
 
         $sender                      = auth()->user();
@@ -83,7 +83,7 @@ class LivraisonController extends Controller
         $livraison->receiver_phone     = $request->receiver_phone;
         $livraison->receiver_address   = $request->receiver_address;
         $livraison->receiver_cooperative_id = $sender->cooperative_id;
-        $livraison->receiver_MagasinSection_id = $request->MagasinSection;
+        $livraison->receiver_magasin_section_id = $request->magasin_section;
         $livraison->estimate_date      = $request->estimate_date;
         $livraison->save();
 
@@ -95,7 +95,7 @@ class LivraisonController extends Controller
             // if (!$livraisonType) {
             //     continue;
             // }
-            $price = $campagne->prix_achat * $item['quantity'];
+            $price = $campagne->prix_champ * $item['quantity'];
             $subTotal += $price;
            
             $data[] = [
@@ -105,24 +105,24 @@ class LivraisonController extends Controller
                 'qty'             => $item['quantity'],
                 'type_produit'     => $item['type'],
                 'fee'             => $price,
-                'type_price'      => $campagne->prix_achat,
+                'type_price'      => $campagne->prix_champ,
                 'created_at'      => now(),
             ];
             
-            if(count($item['scelle'])){
-                $scelles = implode(',', $item['scelle']);
-                $scelles = explode(',', $scelles);
-                foreach($scelles as $itemscelle){
-                    $data2[] = [
-                        'livraison_info_id' => $livraison->id,
-                        'parcelle_id' => $item['parcelle'],
-                        'campagne_id' => $campagne->id,
-                        'type_produit'     => $item['type'],
-                        'numero_scelle' => $itemscelle,
-                        'created_at'      => now(),
-                    ];
-                }
-            }
+            // if(count($item['scelle'])){
+            //     $scelles = implode(',', $item['scelle']);
+            //     $scelles = explode(',', $scelles);
+            //     foreach($scelles as $itemscelle){
+            //         $data2[] = [
+            //             'livraison_info_id' => $livraison->id,
+            //             'parcelle_id' => $item['parcelle'],
+            //             'campagne_id' => $campagne->id,
+            //             'type_produit'     => $item['type'],
+            //             'numero_scelle' => $itemscelle,
+            //             'created_at'      => now(),
+            //         ];
+            //     }
+            // }
 
             if($item['type']=='Certifie'){
                 $price_prime = $campagne->prime * $item['quantity'];
@@ -144,18 +144,15 @@ class LivraisonController extends Controller
         LivraisonScelle::insert($data2);
         LivraisonPrime::insert($data3);
 
-        $discount                        = $request->discount ?? 0;
-        $discountAmount                  = ($subTotal / 100) * $discount;
-        $totalAmount                     = $subTotal - $discountAmount;
+        // $discount                        = $request->discount ?? 0;
+        // $discountAmount                  = ($subTotal / 100) * $discount;
+        $totalAmount                     = $subTotal;
 
         $livraisonPayment                  = new LivraisonPayment();
         $livraisonPayment->livraison_info_id = $livraison->id;
         $livraisonPayment->campagne_id  = $campagne->id;
-        $livraisonPayment->amount          = $subTotal;
-        $livraisonPayment->discount        = $discountAmount;
-        $livraisonPayment->final_amount    = $totalAmount;
-        $livraisonPayment->percentage      = $request->discount;
-        $livraisonPayment->status          = $request->payment_status;
+        $livraisonPayment->amount          = $subTotal; 
+        $livraisonPayment->final_amount    = $totalAmount;  
         $livraisonPayment->save();
 
         if ($livraisonPayment->status == Status::PAYE) {
@@ -184,15 +181,14 @@ class LivraisonController extends Controller
         
         $request->validate([
             'sender_staff' => 'required|exists:users,id',
-            'MagasinSection' =>  'required|exists:MagasinSections,id',  
+            'magasin_section' =>  'required|exists:magasin_sections,id',  
             'items'            => 'required|array',
             'items.*.type'     => 'required',
             'items.*.producteur'     => 'required|integer',
             'items.*.parcelle'     => 'required|integer',
             'items.*.quantity' => 'required|numeric|gt:0',
             'items.*.amount'   => 'required|numeric|gt:0', 
-            'estimate_date'    => 'required|date|date_format:Y-m-d|after_or_equal:today',
-            'payment_status'   => 'required|integer|in:0,1',
+            'estimate_date'    => 'required|date|date_format:Y-m-d', 
         ]);
 
         $sender                      = auth()->user();
@@ -210,7 +206,7 @@ class LivraisonController extends Controller
         $livraison->receiver_phone     = $request->receiver_phone;
         $livraison->receiver_address   = $request->receiver_address;
         $livraison->receiver_cooperative_id = $sender->cooperative_id;
-        $livraison->receiver_MagasinSection_id = $request->MagasinSection;
+        $livraison->receiver_magasin_section_id = $request->magasin_section;
         $livraison->estimate_date      = $request->estimate_date;
         $livraison->save();
 
@@ -222,7 +218,7 @@ class LivraisonController extends Controller
         $data = $data2 = $data3 = [];
         foreach ($request->items as $item) {
              
-            $price     = $campagne->prix_achat * $item['quantity'];
+            $price     = $campagne->prix_champ * $item['quantity'];
             $subTotal += $price;
 
             $data[] = [
@@ -232,23 +228,23 @@ class LivraisonController extends Controller
                 'qty'             => $item['quantity'],
                 'type_produit'     => $item['type'],
                 'fee'             => $price,
-                'type_price'      => $campagne->prix_achat,
+                'type_price'      => $campagne->prix_champ,
                 'created_at'      => now(),
             ];
-            if(count($item['scelle'])){
-                $scelles = implode(',', $item['scelle']);
-                $scelles = explode(',', $scelles);
-                foreach($scelles as $itemscelle){
-                    $data2[] = [
-                        'livraison_info_id' => $livraison->id,
-                        'parcelle_id' => $item['parcelle'],
-                        'campagne_id' => $campagne->id,
-                        'type_produit'     => $item['type'],
-                        'numero_scelle' => $itemscelle,
-                        'created_at'      => now(),
-                    ];
-                }
-            }
+            // if(count($item['scelle'])){
+            //     $scelles = implode(',', $item['scelle']);
+            //     $scelles = explode(',', $scelles);
+            //     foreach($scelles as $itemscelle){
+            //         $data2[] = [
+            //             'livraison_info_id' => $livraison->id,
+            //             'parcelle_id' => $item['parcelle'],
+            //             'campagne_id' => $campagne->id,
+            //             'type_produit'     => $item['type'],
+            //             'numero_scelle' => $itemscelle,
+            //             'created_at'      => now(),
+            //         ];
+            //     }
+            // }
             if($item['type']=='Certifie'){
                 $price_prime = $campagne->prime * $item['quantity'];
                 $data3[] = [
@@ -266,19 +262,17 @@ class LivraisonController extends Controller
         LivraisonScelle::insert($data2);
         LivraisonPrime::insert($data3);
 
-        $discount = $request->discount ?? 0;
-        $discountAmount = ($subTotal / 100) * $discount;
-        $totalAmount = $subTotal - $discountAmount;
+        // $discount = $request->discount ?? 0;
+        // $discountAmount = ($subTotal / 100) * $discount;
+        $totalAmount = $subTotal;
 
         $user = auth()->user();
         if ($request->payment_status == Status::PAYE) {
 
             $livraisonPayment               = LivraisonPayment::where('livraison_info_id', $livraison->id)->first();
             $livraisonPayment->campagne_id  = $campagne->id;
-            $livraisonPayment->amount       = $subTotal;
-            $livraisonPayment->discount     = $discountAmount;
-            $livraisonPayment->final_amount = $totalAmount;
-            $livraisonPayment->percentage   = $request->discount;
+            $livraisonPayment->amount       = $subTotal; 
+            $livraisonPayment->final_amount = $totalAmount; 
             $livraisonPayment->status       = $request->payment_status;
             $livraisonPayment->save();
 

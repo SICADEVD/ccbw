@@ -11,8 +11,7 @@
                                     <th>@lang("Coopérative Expéditeur - Staff")</th>
                                     <th>@lang('Coopérative Destinataire - Magasin')</th>
                                     <th>@lang("Montant - Numéro Commande")</th>
-                                    <th>@lang('Creations Date')</th>
-                                    <th>@lang("Paiement Status")</th>
+                                    <th>@lang('Date de livraison')</th>
                                     <th>@lang('Status')</th>
                                     <th>@lang('Action')</th>
                                 </tr>
@@ -23,7 +22,7 @@
                                         <td>
                                             <span>{{ __($livraisonInfo->senderCooperative->name) }}</span><br>
                                             <a class="text--primary" href="{{ route('manager.staff.edit', encrypt($livraisonInfo->senderStaff->id)) }}">
-                                                <span class="text--primary">@</span>{{ __($livraisonInfo->senderStaff->username) }}
+                                                <span class="text--primary">@</span>{{ __($livraisonInfo->senderStaff->lastname) }} {{ __($livraisonInfo->senderStaff->firstname) }}
                                             </a>
                                         </td>
                                         <td>
@@ -35,8 +34,8 @@
                                                 @endif
                                             </span>
                                             <br>
-                                            @if(@$livraisonInfo->receiver_staff_id)
-                                                <span class="text--primary">{{ __($livraisonInfo->receiverStaff->username) }}</span>
+                                            @if(@$livraisonInfo->receiver_magasin_section_id)
+                                                <span class="text--primary">{{ __($livraisonInfo->magasinSection->nom) }}</span>
                                             @else
                                                 <span>@lang('N/A')</span>
                                             @endif
@@ -49,17 +48,10 @@
                                         </td>
 
                                         <td>
-                                            {{ showDateTime($livraisonInfo->created_at, 'd M Y') }}<br>
-                                            {{ diffForHumans($livraisonInfo->created_at) }}
+                                            {{ showDateTime($livraisonInfo->estimate_date, 'd M Y') }}<br>
+                                            {{ diffForHumans($livraisonInfo->estimate_date) }}
                                         </td>
 
-                                        <td>
-                                            @if ($livraisonInfo->paymentInfo->status == Status::PAYE)
-                                                <span class="badge badge--success">@lang('Paye')</span>
-                                            @elseif($livraisonInfo->paymentInfo->status == Status::IMPAYE)
-                                                <span class="badge badge--danger">@lang('Impaye')</span>
-                                            @endif
-                                        </td>
 
                                         <td>
                                             @if ($livraisonInfo->status == Status::COURIER_QUEUE)

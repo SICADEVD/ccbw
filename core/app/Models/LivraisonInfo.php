@@ -28,7 +28,7 @@ class LivraisonInfo extends Model
     }
     public function magasinSection()
     {
-        return $this->belongsTo(Magasin_section::class, 'receiver_magasin_section_id');
+        return $this->belongsTo(MagasinSection::class, 'receiver_magasin_section_id');
     }
     public function campagne()
     {
