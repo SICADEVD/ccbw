@@ -1,7 +1,7 @@
 <div class="card border-0 b-shadow-4">
     <div class="card-horizontal align-items-center">
         <div class="card-img">
-            <img class="" src="{{ $image }}" alt="">
+            <img class="" src="{{ asset('core/storage/app/' .$image) }}" alt="">
         </div>
         <div class="card-body border-0 pl-0">
             {{ $slot }}

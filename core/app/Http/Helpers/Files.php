@@ -13,8 +13,8 @@ use Intervention\Image\ImageManagerStatic as Image;
 class Files
 {
 
-    const UPLOAD_FOLDER = 'user-uploads';
-    const IMPORT_FOLDER = 'import-files';
+    const UPLOAD_FOLDER = 'core/storage/app';
+    const IMPORT_FOLDER = 'core/storage/app/import-files';
 
     /**
      * @param mixed $image
@@ -165,6 +165,7 @@ class Files
     public static function fileStore($file, $folder, $generateNewName = '')
     {
 
+         
         // Keep $generateNewName empty if you do not want to generate new name
         $newName = ($generateNewName == '') ? self::generateNewFileName($file->getClientOriginalName()) : $generateNewName;
         $setting = StorageSetting::where('status', 'enabled')->first();

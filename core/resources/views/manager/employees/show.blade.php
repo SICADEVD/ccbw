@@ -38,7 +38,9 @@ $showFullProfile = true;
                     <li>
                         <x-tab :href="route('manager.employees.show', $employee->id) . '?tab=leaves-quota'" :text="__('app.menu.leavesQuota')" class="leaves-quota" />
                     </li>
-                      
+                    <li>
+                            <x-tab :href="route('manager.employees.show', $employee->id) . '?tab=documents'" :text="__('app.menu.documents')" class="documents" />
+                        </li>
                         <li>
                             <x-tab :href="route('manager.employees.show', $employee->id) . '?tab=emergency-contacts'" :text="__('modules.emergencyContact.emergencyContact')" class="emergency-contacts" />
                         </li> 

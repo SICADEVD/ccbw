@@ -1,11 +1,7 @@
-@php
-    $managePermission = user()->permission('manage_emergency_contact');
-@endphp
-
+ 
 <!-- TAB CONTENT START -->
 <div class="tab-pane fade show active mt-5" role="tabpanel" aria-labelledby="nav-email-tab">
-
-    @if ($managePermission == 'all' || ($employee->id == user()->id))
+ 
         <div class="d-flex justify-content-between action-bar mb-3">
             <x-forms.link-primary
                 class="mr-3 float-left emergency-contacts-btn"
@@ -14,8 +10,7 @@
                 @lang('app.create') @lang('app.new')
             </x-forms.link-primary>
         </div>
-    @endif
-
+  
     <x-cards.data :title="__('modules.emergencyContact.emergencyContact')">
 
         <div class="table-responsive">
@@ -103,7 +98,7 @@
             buttonsStyling: false
         }).then((result) => {
             if (result.isConfirmed) {
-                let url = "{{ route('emergency-contacts.destroy', ':id') }}";
+                let url = "{{ route('manager.emergency-contacts.destroy', ':id') }}";
                 url = url.replace(':id', id);
 
                 const token = "{{ csrf_token() }}";
@@ -128,32 +123,35 @@
 
     // Add new emergency contact modal
     $('body').on('click', '.emergency-contacts-btn', function () {
-        var url = "{{ route('emergency-contacts.create') }}?user_id=" + "{{ $employee->id }}";
-
+        var url = "{{ route('manager.emergency-contacts.create') }}?user_id=" + "{{ $employee->id }}";
+        
         $(MODAL_LG + ' ' + MODAL_HEADING).html('...');
         $.ajaxModal(MODAL_LG, url);
+        $(MODAL_LG).modal('show');
     });
 
     // Edit emergency contact modal
     $('body').on('click', '.edit-contact', function () {
         var id = $(this).data('contact-id');
 
-        var url = "{{ route('emergency-contacts.edit', ':id') }}";
+        var url = "{{ route('manager.emergency-contacts.edit', ':id') }}";
         url = url.replace(':id', id);
 
         $(MODAL_LG + ' ' + MODAL_HEADING).html('...');
         $.ajaxModal(MODAL_LG, url);
+        $(MODAL_LG).modal('show');
     });
 
     // Show emergency contact modal
     $('body').on('click', '.show-contact', function () {
         const id = $(this).data('contact-id');
 
-        let url = "{{ route('emergency-contacts.show', ':id') }}";
+        let url = "{{ route('manager.emergency-contacts.show', ':id') }}";
         url = url.replace(':id', id);
 
         $(MODAL_LG + ' ' + MODAL_HEADING).html('...');
         $.ajaxModal(MODAL_LG, url);
+        $(MODAL_LG).modal('show');
     });
 
     $('.table-responsive').on('show.bs.dropdown', function () {

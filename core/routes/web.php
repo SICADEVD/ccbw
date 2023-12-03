@@ -28,6 +28,7 @@ use App\Http\Controllers\Manager\SettingController;
 use App\Http\Controllers\Manager\ArchivageController;
 use App\Http\Controllers\Manager\FormationStaffController;
 use App\Http\Controllers\Manager\EmployeeFileController;
+use App\Http\Controllers\Manager\EmergencyContactController;
 
 Route::namespace('Manager\Auth')->group(function () {
 
@@ -220,7 +221,7 @@ Route::resource('employee-shifts', EmployeeShiftController::class);
 Route::resource('settings', SettingsController::class)->only(['edit', 'update', 'index']);
 
         Route::resource('employees', EmployeeController::class);
-
+        Route::resource('emergency-contacts', EmergencyContactController::class);
         Route::get('employee-docs/download/{id}', [EmployeeDocController::class, 'download'])->name('employee-docs.download');
         Route::resource('employee-docs', EmployeeDocController::class);
 

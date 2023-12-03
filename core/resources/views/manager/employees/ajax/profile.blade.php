@@ -1,4 +1,4 @@
-<script src="{{ asset('vendor/jquery/Chart.min.js') }}"></script>
+<script src="{{ asset('assets/vendor/jquery/Chart.min.js') }}"></script>
 <style>
     .card-img {
         width: 120px;
@@ -33,17 +33,17 @@ $showFullProfile = true;
                 <div class="row">
                     <div class="col-xl-7 col-md-6 mb-4 mb-lg-0">
 
-                        <x-cards.user :image="$employee->image_url">
+                        <x-cards.user :image="$employee->image">
                             <div class="row">
                                 <div class="col-10">
                                     <h4 class="card-title f-15 f-w-500 text-darkest-grey mb-0">
-                                        {{ $employee->salutation . ' ' . $employee->name }}
+                                        {{ $employee->salutation . ' ' . $employee->lastname.' '.$employee->firstname }}
                                         @isset($employee->country)
                                             <x-flag :country="$employee->country" />
                                         @endisset
                                     </h4>
                                 </div>
-                                @if ( $employee->employeeDetail->added_by == user()->id))
+                                
                                     <div class="col-2 text-right">
                                         <div class="dropdown">
                                             <button class="btn f-14 px-0 py-0 text-dark-grey dropdown-toggle"
@@ -55,21 +55,21 @@ $showFullProfile = true;
                                             <div class="dropdown-menu dropdown-menu-right border-grey rounded b-shadow-4 p-0"
                                                 aria-labelledby="dropdownMenuLink" tabindex="0">
                                                 <a class="dropdown-item openRightModal"
-                                                    href="{{ route('manager.hr.employees.edit', $employee->id) }}">@lang('app.edit')</a>
+                                                    href="{{ route('manager.employees.edit', $employee->id) }}">@lang('app.edit')</a>
                                             </div>
                                         </div>
                                     </div>
-                                @endif
+                            
 
                             </div>
 
                             <p class="f-12 font-weight-normal text-dark-grey mb-0">
                                 {{ !is_null($employee->employeeDetail) && !is_null($employee->employeeDetail->designation) ? $employee->employeeDetail->designation->name : '' }}
                                 &bull;
-                                {{ isset($employee->employeeDetail) && !is_null($employee->employeeDetail->department) && !is_null($employee->employeeDetail->department) ? $employee->employeeDetail->department->team_name : '' }}
+                                {{ isset($employee->employeeDetail) && !is_null($employee->employeeDetail->department) && !is_null($employee->employeeDetail->department) ? $employee->employeeDetail->department->department : '' }}
                             </p>
 
-                            @if ($employee->status == 'active')
+                            @if ($employee->status == '1')
                                 <p class="card-text f-11 text-lightest">@lang('app.lastLogin')
 
                                     @if (!is_null($employee->last_login))
@@ -85,32 +85,7 @@ $showFullProfile = true;
                                 </p>
                             @endif
 
-                            @if ($showFullProfile)
-                                <div class="card-footer bg-white border-top-grey pl-0">
-                                    <div class="d-flex flex-wrap justify-content-between">
-                                        <span>
-                                            <label class="f-11 text-dark-grey mb-12 text-capitalize"
-                                                for="usr">@lang('app.open') @lang('app.menu.tasks')</label>
-                                            <p class="mb-0 f-18 f-w-500">{{ $employee->open_tasks_count }}</p>
-                                        </span>
-                                        <span>
-                                            <label class="f-11 text-dark-grey mb-12 text-capitalize"
-                                                for="usr">@lang('app.menu.projects')</label>
-                                            <p class="mb-0 f-18 f-w-500">{{ $employee->member_count }}</p>
-                                        </span>
-                                        <span>
-                                            <label class="f-11 text-dark-grey mb-12 text-capitalize"
-                                                for="usr">@lang('modules.employees.hoursLogged')</label>
-                                            <p class="mb-0 f-18 f-w-500">{{ @$hoursLogged }}</p>
-                                        </span>
-                                        <span>
-                                            <label class="f-11 text-dark-grey mb-12 text-capitalize"
-                                                for="usr">@lang('app.menu.tickets')</label>
-                                            <p class="mb-0 f-18 f-w-500">{{ $employee->agents_count }}</p>
-                                        </span>
-                                    </div>
-                                </div>
-                            @endif
+                             
                         </x-cards.user>
 
                         @if ($employee->employeeDetail->about_me != '')
@@ -125,19 +100,19 @@ $showFullProfile = true;
                                 :value="(!is_null($employee->employeeDetail) && !is_null($employee->employeeDetail->employee_id)) ? ($employee->employeeDetail->employee_id) : '--'" />
 
                             <x-cards.data-row :label="__('modules.employees.fullName')"
-                                :value="$employee->name" />
+                                :value="$employee->lastname.' '.$employee->firstname" />
 
                             <x-cards.data-row :label="__('app.designation')"
                                 :value="(!is_null($employee->employeeDetail) && !is_null($employee->employeeDetail->designation)) ? ($employee->employeeDetail->designation->name) : '--'" />
 
                             <x-cards.data-row :label="__('app.department')"
-                                :value="(isset($employee->employeeDetail) && !is_null($employee->employeeDetail->department) && !is_null($employee->employeeDetail->department)) ? ($employee->employeeDetail->department->team_name) : '--'" />
+                                :value="(isset($employee->employeeDetail) && !is_null($employee->employeeDetail->department) && !is_null($employee->employeeDetail->department)) ? ($employee->employeeDetail->department->department) : '--'" />
 
                             <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
                                 <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">
                                     @lang('modules.employees.gender')</p>
                                 <p class="mb-0 text-dark-grey f-14 w-70">
-                                    <x-gender :gender='$employee->gender' />
+                                    <x-gender :gender='$employee->genre' />
                                 </p>
                             </div>
 

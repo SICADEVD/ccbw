@@ -1,7 +1,7 @@
-<x-form id="update-employee-file-data-form">
+<x-form id="update-employee-file-data-form" enctype="multipart/form-data">
     <div class="modal-header">
         <h5 class="modal-title" id="modelHeading">@lang('app.editFile')</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span
                 aria-hidden="true">×</span></button>
     </div>
     <div class="modal-body">
@@ -23,7 +23,7 @@
 
     </div>
     <div class="modal-footer">
-        <x-forms.button-cancel data-dismiss="modal" class="border-0 mr-3">@lang('app.cancel')</x-forms.button-cancel>
+        <x-forms.button-cancel data-bs-dismiss="modal" class="border-0 mr-3">@lang('app.cancel')</x-forms.button-cancel>
         <x-forms.button-primary id="submit-document" icon="check">@lang('app.submit')
         </x-forms.button-primary>
     </div>
@@ -31,10 +31,10 @@
 <script>
 
     $(document).ready(function () {
-        init('#update-employee-file-data-form');
+        // init('#update-employee-file-data-form');
 
         $('body').on('click', '#submit-document', function () {
-            var url = "{{ route('employee-docs.update', $file->id) }}";
+            var url = "{{ route('manager.employee-docs.update', $file->id) }}";
 
             $.easyAjax({
                 url: url,

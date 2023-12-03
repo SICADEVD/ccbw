@@ -1,10 +1,4 @@
-@php
-$addDocumentPermission = user()->permission('add_documents');
-$viewDocumentPermission = user()->permission('view_documents');
-$deleteDocumentPermission = user()->permission('delete_documents');
-$editDocumentPermission = user()->permission('edit_documents');
-@endphp
-
+ 
 <style>
     .file-action {
         visibility: hidden;
@@ -20,7 +14,7 @@ $editDocumentPermission = user()->permission('edit_documents');
 <div class="tab-pane fade show active mt-5" role="tabpanel" aria-labelledby="nav-email-tab">
     <x-cards.data :title="__('app.menu.documents')">
 
-        @if ($addDocumentPermission == 'all' || $addDocumentPermission == 'added')
+         
 
             <div class="row">
                 <div class="col-md-12">
@@ -30,7 +24,7 @@ $editDocumentPermission = user()->permission('edit_documents');
                 </div>
             </div>
 
-            <x-form id="save-taskfile-data-form" class="d-none">
+            <x-form id="save-taskfile-data-form" class="d-none" enctype="multipart/form-data">
                 <input type="hidden" name="user_id" value="{{ $employee->id }}">
                 <div class="row">
                     <div class="col-md-12">
@@ -45,6 +39,7 @@ $editDocumentPermission = user()->permission('edit_documents');
                     </div>
                     <div class="col-md-12">
                         <div class="w-100 justify-content-end d-flex mt-2">
+                       
                             <x-forms.button-cancel id="cancel-document" class="border-0 mr-3">@lang('app.cancel')
                             </x-forms.button-cancel>
                             <x-forms.button-primary id="submit-document" icon="check">@lang('app.submit')
@@ -53,18 +48,11 @@ $editDocumentPermission = user()->permission('edit_documents');
                     </div>
                 </div>
             </x-form>
-        @endif
-
+       
         <div class="d-flex flex-wrap mt-3" id="task-file-list">
-            @php
-                $totalDocuments = ($user->clientDocuments) ? count($user->clientDocuments) : 0;
-                $permission = 0; // assuming we do have permission for all uploaded files
-            @endphp
+            
             @forelse($employee->documents as $file)
-                @if ($viewDocumentPermission == 'all'
-                || ($viewDocumentPermission == 'added' && $file->added_by == user()->id)
-                || ($viewDocumentPermission == 'owned' && ($file->user_id == user()->id && $file->added_by != user()->id))
-                || ($viewDocumentPermission == 'both' && ($file->added_by == user()->id || $file->user_id == user()->id)))
+                
                     <x-file-card :fileName="$file->name" :dateAdded="$file->created_at->diffForHumans()">
                         @if ($file->icon == 'images')
                             <img src="{{ $file->doc_url }}">
@@ -81,43 +69,27 @@ $editDocumentPermission = user()->permission('edit_documents');
 
                                 <div class="dropdown-menu dropdown-menu-right border-grey rounded b-shadow-4 p-0"
                                     aria-labelledby="dropdownMenuLink" tabindex="0">
-                                    @if ($viewDocumentPermission == 'all'
-                                    || ($viewDocumentPermission == 'added' && $file->added_by == user()->id)
-                                    || ($viewDocumentPermission == 'owned' && ($file->user_id == user()->id && $file->added_by != user()->id))
-                                    || ($viewDocumentPermission == 'both' && ($file->added_by == user()->id || $file->user_id == user()->id)))
+                                     
 
                                         <a class="cursor-pointer d-block text-dark-grey f-13 pt-3 px-3 "
                                             target="_blank" href="{{ $file->doc_url }}">@lang('app.view')</a>
 
                                         <a class="cursor-pointer d-block text-dark-grey f-13 py-3 px-3 "
                                             href="{{ route('employee-docs.download', md5($file->id)) }}">@lang('app.download')</a>
-                                    @endif
-
-                                    @if ($editDocumentPermission == 'all'
-                                    || ($editDocumentPermission == 'added' && $file->added_by == user()->id)
-                                    || ($editDocumentPermission == 'owned' && ($file->user_id == user()->id && $file->added_by != user()->id))
-                                    || ($editDocumentPermission == 'both' && ($file->added_by == user()->id || $file->user_id == user()->id)))
+                                  
+ 
                                         <a class="cursor-pointer d-block text-dark-grey pb-3 f-13 px-3 edit-file"
                                             href="javascript:;" data-file-id="{{ $file->id }}">@lang('app.edit')</a>
-                                    @endif
-
-                                    @if ($deleteDocumentPermission == 'all'
-                                    || ($deleteDocumentPermission == 'added' && $file->added_by == user()->id)
-                                    || ($deleteDocumentPermission == 'owned' && ($file->user_id == user()->id && $file->added_by != user()->id))
-                                    || ($deleteDocumentPermission == 'both' && ($file->added_by == user()->id || $file->user_id == user()->id)))
+                                     
                                         <a class="cursor-pointer d-block text-dark-grey f-13 pb-3 px-3 delete-file"
                                             data-row-id="{{ $file->id }}"
                                             href="javascript:;">@lang('app.delete')</a>
-                                    @endif
+                                     
                                 </div>
                             </div>
                         </x-slot>
                     </x-file-card>
-                @else
-                    @php
-                        $permission++;
-                    @endphp
-                @endif
+                 
             @empty
                 <div class="align-items-center d-flex flex-column text-lightest p-20 w-100">
                     <i class="fa fa-file f-21 w-100"></i>
@@ -127,15 +99,7 @@ $editDocumentPermission = user()->permission('edit_documents');
                     </div>
                 </div>
             @endforelse
-            @if (isset($user->clientDocuments) && $totalDocuments > 0 && $totalDocuments == $permission)
-                <div class="align-items-center d-flex flex-column text-lightest p-20 w-100">
-                    <i class="fa fa-file-excel f-21 w-100"></i>
-
-                    <div class="f-15 mt-4">
-                        - @lang('messages.noFileUploaded') -
-                    </div>
-                </div>
-            @endif
+            
         </div>
     </x-cards.data>
 </div>
@@ -149,11 +113,12 @@ $editDocumentPermission = user()->permission('edit_documents');
 
     $('body').on('click', '.edit-file', function() {
         var fileId = $(this).data('file-id');
-        var url = "{{ route('employee-docs.edit', ':id') }}";
+        var url = "{{ route('manager.employee-docs.edit', ':id') }}";
         url = url.replace(':id', fileId);
 
         $(MODAL_DEFAULT + ' ' + MODAL_HEADING).html('...');
         $.ajaxModal(MODAL_DEFAULT, url);
+        $(MODAL_DEFAULT).modal('show');
     });
 
     $('#cancel-document').click(function() {
@@ -162,7 +127,7 @@ $editDocumentPermission = user()->permission('edit_documents');
     });
 
     $('#submit-document').click(function() {
-        var url = "{{ route('employee-docs.store') }}";
+        var url = "{{ route('manager.employee-docs.store') }}";
 
         $.easyAjax({
             url: url,
@@ -204,7 +169,7 @@ $editDocumentPermission = user()->permission('edit_documents');
             buttonsStyling: false
         }).then((result) => {
             if (result.isConfirmed) {
-                var url = "{{ route('employee-docs.destroy', ':id') }}";
+                var url = "{{ route('manager.employee-docs.destroy', ':id') }}";
                 url = url.replace(':id', id);
 
                 var token = "{{ csrf_token() }}";

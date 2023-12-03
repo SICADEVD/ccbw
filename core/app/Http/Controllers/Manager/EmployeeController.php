@@ -545,12 +545,17 @@ class EmployeeController extends AccountBaseController
 
        
 
-        $this->pageTitle = $employee->firstname;
+        $this->pageTitle = '';
 
         switch ($tab) {
         case 'leaves':
             $this->employee = $employee;
             return $this->leaves();
+            break;
+        case 'documents': 
+            $this->employee = $employee;
+             
+            $this->view = 'manager.employees.ajax.documents';
             break;
         case 'emergency-contacts':
             $this->employee = $employee;
