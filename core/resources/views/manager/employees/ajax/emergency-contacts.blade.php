@@ -43,7 +43,7 @@
                                     <div class="dropdown-menu dropdown-menu-right"
                                          aria-labelledby="dropdownMenuLink-{{$count}}" tabindex="0">
 
-                                        @if ($managePermission == 'all')
+                                     
                                             <a href="javascript:;" class="dropdown-item show-contact"
                                                data-contact-id="{{ $contact->id }}"><i
                                                     class="fa fa-eye mr-2"></i>@lang('app.view')</a>
@@ -59,7 +59,7 @@
                                                 <i class="fa fa-trash mr-2"></i>
                                                 @lang('app.delete')
                                             </a>
-                                        @endif
+                                         
                                     </div>
                                 </div>
                             </div>
