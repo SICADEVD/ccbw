@@ -11,6 +11,7 @@
                                     <th>@lang("Coopérative Expéditeur - Staff")</th>
                                     <th>@lang('Coopérative Destinataire - Magasin')</th>
                                     <th>@lang("Montant - Numéro Commande")</th>
+                                    <th>@lang('Quantite')</th>
                                     <th>@lang('Date de livraison')</th>
                                     <th>@lang('Status')</th>
                                     <th>@lang('Action')</th>
@@ -46,7 +47,9 @@
                                                 {{ __($general->cur_text) }}</span><br>
                                             <span>{{ $livraisonInfo->code }}</span>
                                         </td>
-
+                                        <td>
+                                            {{ $livraisonInfo->quantity }} 
+                                        </td>
                                         <td>
                                             {{ showDateTime($livraisonInfo->estimate_date, 'd M Y') }}<br>
                                             {{ diffForHumans($livraisonInfo->estimate_date) }}

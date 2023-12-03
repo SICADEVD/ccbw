@@ -8,27 +8,29 @@ use App\Models\Parcelle;
 use App\Constants\Status;
 use App\Models\Producteur;
 use App\Models\Cooperative;
+use Illuminate\Support\Arr;
+use Illuminate\Http\Request;
 use App\Models\LivraisonInfo;
 use App\Models\LivraisonPrime;
 use App\Models\MagasinSection;
 use App\Models\LivraisonScelle;
 use App\Models\LivraisonPayment;
 use App\Models\LivraisonProduct;
+
 use App\Exports\ExportLivraisons;
 use App\Models\AdminNotification;
-
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller; 
-use Illuminate\Http\Request;
 
 class LivraisonController extends Controller
 {
 
     public function livraisonInfo()
-    {
-        $pageTitle    = "Liste des Livraisons";
+    { 
         $livraisonInfos = $this->livraisons();
-        return view('manager.livraison.index', compact('pageTitle', 'livraisonInfos'));
+        $total = $livraisonInfos->sum('quantity');
+        $pageTitle    = "Liste des Livraisons ($total)";
+        return view('manager.livraison.index', compact('pageTitle', 'livraisonInfos','total'));
     }
 
     public function create()
@@ -85,6 +87,8 @@ class LivraisonController extends Controller
         $livraison->receiver_cooperative_id = $sender->cooperative_id;
         $livraison->receiver_magasin_section_id = $request->magasin_section;
         $livraison->estimate_date      = $request->estimate_date;
+       
+        $livraison->quantity      = array_sum(Arr::pluck($request->items,'quantity'));
         $livraison->save();
 
         $subTotal = 0;
