@@ -16,6 +16,11 @@ class ThemesFormation extends Model
     {
         return $this->belongsTo(TypeFormation::class, 'type_formation_id');
     }
+
+    public function sousThemeFormation()
+    {
+        return $this->hasMany(SousThemeFormation::class, 'theme_formation_id');
+    }
      
      
 }

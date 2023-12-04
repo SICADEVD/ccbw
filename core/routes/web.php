@@ -167,6 +167,9 @@ Route::middleware('auth')->group(function () {
             Route::get('theme-formation/', [SettingController::class, 'themeFormationIndex'])->name('themeFormation.index');
             Route::post('theme-formation/store', [SettingController::class, 'themeFormationStore'])->name('themeFormation.store');
             Route::post('theme-formation/status/{id}', [SettingController::class, 'themeFormationStatus'])->name('themeFormation.status');
+            Route::get('sous-theme-formation/', [SettingController::class, 'sousThemeFormationIndex'])->name('sousThemeFormation.index');
+            Route::post('sous-theme-formation/store', [SettingController::class, 'sousThemeFormationStore'])->name('sousThemeFormation.store');
+            Route::post('sous-theme-formation/status/{id}', [SettingController::class, 'sousThemeFormationStatus'])->name('sousThemeFormation.status');
             Route::get('module-formation-staff/', [SettingController::class, 'moduleFormationStaffIndex'])->name('moduleFormationStaff.index');
             Route::post('module-formation-staff/store', [SettingController::class, 'moduleFormationStaffStore'])->name('moduleFormationStaff.store');
             Route::post('module-formation-staff/status/{id}', [SettingController::class, 'moduleFormationStaffStatus'])->name('moduleFormationStaff.status');

@@ -29,6 +29,7 @@ use App\Models\MagasinSection;
 use App\Models\ThemesFormation;
 use App\Models\Agroespecesarbre;
 use App\Models\TravauxDangereux;
+use App\Models\SousThemeFormation;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use App\Models\ThemeFormationStaff;
@@ -193,6 +194,35 @@ class SettingController extends Controller
         $typeFormation = TypeFormation::get();
         return view('manager.config.themeFormation', compact('pageTitle', 'themeFormation','typeFormation','activeSettingMenu'));
     }
+    public function sousThemeFormationIndex()
+    {
+        $pageTitle = "Manage Sous theme de Formation"; 
+        $activeSettingMenu = 'sousThemeFormation_settings';
+        $sousThemeFormation     = SousThemeFormation::with('themeFormation')->orderBy('id','desc')->paginate(getPaginate());
+        $themeFormation = ThemesFormation::with('typeFormation')->get();
+        $typeFormation = TypeFormation::get();
+        return view('manager.config.sousThemeFormation', compact('pageTitle', 'sousThemeFormation','themeFormation','activeSettingMenu','typeFormation'));
+    }
+
+    public function sousThemeFormationStore(Request $request)
+    {
+        $request->validate([ 
+            'nom'  => 'required',
+            'themeformation'=>'required',
+        ]);
+
+        if ($request->id) {
+            $sousThemeFormation    = SousThemeFormation::findOrFail($request->id);
+            $message = "Sous theme de Formation a été mise à jour avec succès.";
+        } else {
+            $sousThemeFormation = new SousThemeFormation();
+        } 
+        $sousThemeFormation->nom = trim($request->nom); 
+        $sousThemeFormation->theme_formation_id = $request->themeformation;
+        $sousThemeFormation->save();
+        $notify[] = ['success', isset($message) ? $message  : 'Sous theme de Formation a été ajouté avec succès.'];
+        return back()->withNotify($notify);
+    }
 
     public function themeFormationStore(Request $request)
     {
@@ -213,7 +243,7 @@ class SettingController extends Controller
         $notify[] = ['success', isset($message) ? $message  : 'theme de Formation a été ajouté avec succès.'];
         return back()->withNotify($notify);
     }
-
+    
     public function moduleFormationStaffIndex()
     {
         $pageTitle = "Manage Module de Formation Staff"; 
@@ -635,6 +665,10 @@ public function magasinCentralStore(Request $request)
     public function themeFormationStatus($id)
     {
         return ThemesFormation::changeStatus($id);
+    }
+    public function sousThemeFormationStatus($id)
+    {
+        return SousThemeFormation::changeStatus($id);
     }
 
     public function categorieQuestionnaireStatus($id)

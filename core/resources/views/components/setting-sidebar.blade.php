@@ -35,6 +35,7 @@
     <x-setting-menu-item :active="$activeMenu" menu="arretEcole_settings" :href="route('manager.settings.arretEcole.index')" :text="__('Paramètre Arrets Ecole')"/>
     <x-setting-menu-item :active="$activeMenu" menu="typeFormation_settings" :href="route('manager.settings.typeFormation.index')" :text="__('Paramètre Types de Formation')"/>
     <x-setting-menu-item :active="$activeMenu" menu="themeFormation_settings" :href="route('manager.settings.themeFormation.index')" :text="__('Paramètre Themes de Formation')"/>
+    <x-setting-menu-item :active="$activeMenu" menu="sousThemeFormation_settings" :href="route('manager.settings.sousThemeFormation.index')" :text="__('Paramètre Sous theme formation')"/>
     <x-setting-menu-item :active="$activeMenu" menu="moduleFormationStaff_settings" :href="route('manager.settings.moduleFormationStaff.index')" :text="__('Paramètre Modules de Formation Staffs')"/>
     <x-setting-menu-item :active="$activeMenu" menu="themeFormationStaff_settings" :href="route('manager.settings.themeFormationStaff.index')" :text="__('Paramètre Themes de Formation Staffs')"/>
     <x-setting-menu-item :active="$activeMenu" menu="categorieQuestionnaire_settings" :href="route('manager.settings.categorieQuestionnaire.index')" :text="__('Paramètre Categorie Questionnaire')"/>
