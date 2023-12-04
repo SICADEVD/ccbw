@@ -44,8 +44,11 @@
 
                                         <td>
                                             <button type="button" class="btn btn-sm btn-outline--primary  updateType"
-                                                data-id="{{ $sousTheme->id }}" data-nom="{{ $sousTheme->nom }}"
-                                                data-typeformation="{{ $sousTheme->type_formation_id }}"><i
+                                                data-id="{{ $sousTheme->id }}" 
+                                                data-nom="{{ $sousTheme->nom }}"
+                                                data-typeFormation="{{$sousTheme->themeFormation->type_formation_id}}"
+                                                data-themeFormation="{{$sousTheme->theme_formation_id}}">
+                                                <i
                                                     class="las la-pen"></i>@lang('Edit')</button>
 
                                             @if ($sousTheme->status == Status::DISABLE)
@@ -166,7 +169,7 @@
                 var modal = $('#typeModel');
                 modal.find('input[name=id]').val($(this).data('id'));
                 modal.find('select[name=themeFormation]').val($(this).data('themeformation'));
-                modal.find('select[name=typeformation]').val($(this).data('typeformation'));
+                modal.find('select[name=typeFormation]').val($(this).data('typeformation'));
                 modal.find('input[name=nom]').val($(this).data('nom'));
                 modal.modal('show');
             });
