@@ -26,7 +26,7 @@
                                 @forelse($sousThemeFormation as $sousTheme)
                                     <tr>
                                         <td>
-                                            <span>{{ __($sousTheme->typeFormation->nom) }}</span>
+                                            <span>{{ __($sousTheme->themeFormation->nom) }}</span>
                                         </td>
                                         <td>
                                             <span>{{ __($sousTheme->nom) }}</span>
