@@ -165,8 +165,9 @@
             $('.updateType').on('click', function() {
                 var modal = $('#typeModel');
                 modal.find('input[name=id]').val($(this).data('id'));
-                modal.find('input[name=nom]').val($(this).data('nom'));
+                modal.find('select[name=themeFormation]').val($(this).data('themeformation'));
                 modal.find('select[name=typeformation]').val($(this).data('typeformation'));
+                modal.find('input[name=nom]').val($(this).data('nom'));
                 modal.modal('show');
             });
         })(jQuery);
