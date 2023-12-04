@@ -208,7 +208,7 @@ class SettingController extends Controller
     {
         $request->validate([ 
             'nom'  => 'required',
-            'themeformation'=>'required',
+            'themeFormation'=>'required',
         ]);
 
         if ($request->id) {
@@ -218,7 +218,7 @@ class SettingController extends Controller
             $sousThemeFormation = new SousThemeFormation();
         } 
         $sousThemeFormation->nom = trim($request->nom); 
-        $sousThemeFormation->theme_formation_id = $request->themeformation;
+        $sousThemeFormation->theme_formation_id = $request->themeFormation;
         $sousThemeFormation->save();
         $notify[] = ['success', isset($message) ? $message  : 'Sous theme de Formation a été ajouté avec succès.'];
         return back()->withNotify($notify);
