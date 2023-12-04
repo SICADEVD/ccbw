@@ -55,7 +55,7 @@
                         <div class="col-xs-12 col-sm-8">
                             <select class="form-control select2-multi-select certificats" name="certificats[]" multiple
                                 required>
-                                <option value="">@lang('Selectionner les protections')</option>
+                                <option value="">@lang('Selectionner les certificats')</option>
                                 <option value="Rainforest"
                                     {{ in_array('Rainforest', old('certificats', [])) ? 'selected' : '' }}>Rainforest
                                 </option>
@@ -78,7 +78,7 @@
                     </div>
                     {{-- selection sections --}}
                     <div class="form-group row">
-                        <label class="col-sm-4 control-label">@lang('Selectionner une section')</label>
+                        <label class="col-sm-4 control-label">@lang('Section')</label>
                         <div class="col-xs-12 col-sm-8">
                             <select class="form-control" name="section" id="section" required>
                                 <option value="">@lang('Selectionner une option')</option>
@@ -92,7 +92,7 @@
 
                     {{-- selection localite --}}
                     <div class="form-group row">
-                        <label class="col-sm-4 control-label">@lang('Selectionner une localite')</label>
+                        <label class="col-sm-4 control-label">@lang('Localite')</label>
                         <div class="col-xs-12 col-sm-8">
                             <select class="form-control" name="localite_id" id="localite_id" required>
                                 <option value="">@lang('Selectionner une option')</option>
@@ -108,7 +108,7 @@
                     {{-- programme de durabilité --}}
 
                     <div class="form-group row">
-                        <label class="col-sm-4 control-label">@lang('Selectionner un programme')</label>
+                        <label class="col-sm-4 control-label">@lang('Programme')</label>
                         <div class="col-xs-12 col-sm-8">
                             <select class="form-control programme_id" name="programme_id" id="programme_id" required>
                                 <option value="">@lang('Selectionner une option')</option>

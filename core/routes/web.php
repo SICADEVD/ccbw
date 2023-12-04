@@ -29,6 +29,7 @@ use App\Http\Controllers\Manager\ArchivageController;
 use App\Http\Controllers\Manager\FormationStaffController;
 use App\Http\Controllers\Manager\EmployeeFileController;
 use App\Http\Controllers\Manager\EmergencyContactController;
+use App\Http\Controllers\Manager\LivraisonCentraleController;
 
 Route::namespace('Manager\Auth')->group(function () {
 
@@ -138,7 +139,7 @@ Route::middleware('auth')->group(function () {
             Route::get('import/process/{name}/{id}', [ImportController::class, 'getImportProgress'])->name('import.process.progress');
             Route::get('employees/import/exception/{name}', [ImportController::class, 'getQueueException'])->name('import.process.exception');
         });
-
+       
         Route::name('settings.')->prefix('settings')->group(function () {
             Route::resource('attendance-settings', AttendanceSettingController::class);
             Route::resource('leaves-settings', LeaveSettingController::class);
@@ -443,6 +444,9 @@ Route::resource('settings', SettingsController::class)->only(['edit', 'update', 
         });
 
         //Manage Livraison
+        Route::name('livraison.')->prefix('livraison')->group(function () {
+            Route::resource('magcentral', LivraisonCentraleController::class);
+        });
 
         Route::controller('Manager\LivraisonController')->name('livraison.')->prefix('livraison')->group(function () {
             Route::get('send', 'create')->name('create');
