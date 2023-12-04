@@ -9,14 +9,25 @@
                 <div class="card-body">
                     @csrf
                     <div class="row">
-                        <div class="col-12 form-group">
+                        <div class="col-6 form-group">
                             <label for="">@lang("Date de livraison")</label>
                             <div class="input-group">
                                 <input name="estimate_date" value="{{ old('estimate_date') }}" type="text" autocomplete="off"  class="form-control dates" placeholder="Date de livraison" required>
                                 <span class="input-group-text"><i class="las la-calendar"></i></span>
                             </div>
                         </div>
-                        
+                        <div class="col-6 form-group">
+                            <label for="">@lang("Statut")</label>
+                            <div class="input-group">
+                            <select class="form-control selected_type" id="statut" onchange=getProducteur() name="statut" required>
+                                                    <option disabled selected value="">@lang('Selectionner une option')</option> 
+                                                        <option value="{{ __('Certifie') }}"
+                                                        @selected(old('statut')=='Certifie')>{{ __('Certifie') }}</option>
+                                                        <option value="{{ __('Ordinaire') }}"
+                                                        @selected(old('statut')=='Ordinaire')>{{ __('Ordinaire') }}</option>
+                                                </select>
+                            </div>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-lg-6">
@@ -138,9 +149,9 @@
                                         @if(old('items'))
                                             @foreach (old('items') as $item)
                                             <div class="row single-item gy-2">
-                                                <div class="col-md-3">
-                                                    <select class="form-control selected_type" name="items[{{ $loop->index}}][producteur]"
-                                                    id='producteur-<?php echo $i; ?>' onchange=getParcelle(<?php echo $i; ?>) required>
+                                                <div class="col-md-4">
+                                                    <select class="form-control selected_type select2" name="items[{{ $loop->index}}][producteur]"
+                                                    id='producteur-<?php echo $i; ?>' required>
                                                         <option disabled selected value="">@lang('Producteurs')</option>
                                                         @foreach($producteurs as $producteur)
                                                             <option value="{{$producteur->id}}" @selected($item['producteur']==$producteur->id)
@@ -152,32 +163,14 @@
                                                         @endforeach
                                                     </select>
                                                 </div>
-                                                <div class="col-md-3">
-                                                    <select class="form-control" name="items[{{ $loop->index}}][parcelle]" id="parcelle-<?php echo $i; ?>" required>
-                                                        <option disabled selected value="">@lang('Parcelles')</option>
-                                                        @foreach($parcelles as $parcelle)
-                                                            <option value="{{$parcelle->id}}" @selected($item['parcelle']==$parcelle->id) >{{ __('Parcelle')}} 
-                                                                {{__($parcelle->codeParc)}}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                             <div class="col-md-2">
-                                            <select class="form-control selected_type" name="items[{{ $loop->index}}][type]" required>
-                                                    <option disabled selected value="">@lang('Type')</option> 
-                                                        <option value="{{ __('Certifie') }}"
-                                                        @selected($item['type']=='Certifie')>{{ __('Certifie') }}</option>
-                                                        <option value="{{ __('Ordinaire') }}"
-                                                        @selected($item['type']=='Ordinaire')>{{ __('Ordinaire') }}</option>
-                                                </select> 
-                                            </div>
+                                               
                                                 <div class="col-md-3">
                                                     <div class="input-group mb-3">
                                                         <input type="number" class="form-control quantity" value="{{$item['quantity']}}"  name="items[{{ $loop->index }}][quantity]"  required>
                                                         <span class="input-group-text unit">Kg</i></span>
                                                     </div>
                                                 </div> 
-                                                <div class="col-md-3">
+                                                <div class="col-md-4">
                                                     <div class="input-group">
                                                         <input type="text"  class="form-control single-item-amount" value="{{$item['amount']}}"  name="items[{{ $loop->index }}][amount]" required readonly>
                                                         <span class="input-group-text">{{__($general->cur_text)}}</span>
@@ -253,6 +246,7 @@
     function getParcelle(id){
         
         let prod = $("#producteur-" + id).find(':selected').data('id');  
+        
         $.ajax({
                 type:'get',
                 url: "{{ route('manager.livraison.get.parcelle') }}",
@@ -274,6 +268,30 @@
           
     }
  
+    function getProducteur(){
+         
+        let prod = $("#statut").val(); 
+         
+        $.ajax({
+                type:'get',
+                url: "{{ route('manager.livraison.get.producteur') }}",
+                data: {
+                    'id': prod
+                },
+                success:function(html){ 
+                  if(html)
+                  {
+                    
+                //   $("#qty").val(html);
+                  $(".producteur").html(html);
+                  }else{
+                    $(".producteur").html('<option disabled selected value="">Producteur</option>');
+                  }
+
+                }
+            });
+          
+    }
 
     (function ($) {
 
@@ -285,33 +303,21 @@
                
             let html = `
             <div class="row single-item gy-2">
-                <div class="col-md-3">
-                    <select class="form-control selected_type" name="items[${length}][producteur]" required id='producteur-${length}' onchange=getParcelle(${length})>
+                <div class="col-md-4">
+                    <select class="form-control selected_type select2 producteur" name="items[${length}][producteur]" required id='producteur-${length}' >
                         <option disabled selected value="">@lang('Producteur')</option>
                         @foreach($producteurs as $producteur)
                             <option value="{{$producteur->id}}" data-id="{{$producteur->id}}" data-price={{ $campagne->prix_champ}} >{{__($producteur->nom)}} {{__($producteur->prenoms)}}</option>
                         @endforeach
                     </select>
-                </div>
-                <div class="col-md-3">
-                    <select class="form-control" name="items[${length}][parcelle]" required id="parcelle-${length}">
-                        
-                    </select>
-                </div>
-                <div class="col-md-2">
-                <select class="form-control" name="items[${length}][type]" required>
-                        <option disabled selected value="">@lang('Type')</option> 
-                            <option value="{{ __('Certifie') }}">{{ __('Certifie') }}</option>
-                            <option value="{{ __('Ordinaire') }}">{{ __('Ordinaire') }}</option>
-                    </select> 
-                </div>
+                </div>  
                 <div class="col-md-3">
                     <div class="input-group mb-3">
                         <input type="number" class="form-control quantity" placeholder="@lang('Qte')" disabled name="items[${length}][quantity]"  required>
                         <span class="input-group-text unit">Kg</span>
                     </div>
                 </div> 
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="input-group">
                         <input type="text"  class="form-control single-item-amount" placeholder="@lang('Entrer le prix')" name="items[${length}][amount]" required readonly>
                         <span class="input-group-text">{{__($general->cur_text)}}</span>

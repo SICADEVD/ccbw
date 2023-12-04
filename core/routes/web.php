@@ -448,6 +448,7 @@ Route::resource('settings', SettingsController::class)->only(['edit', 'update', 
             Route::get('edit/{id}', 'edit')->name('edit');
             Route::get('list', 'livraisonInfo')->name('index');
             Route::get('parcelle', 'getParcelle')->name('get.parcelle');
+            Route::get('producteur', 'getProducteur')->name('get.producteur');
             Route::get('dispatch/list', 'dispatchLivraison')->name('dispatch');
             Route::get('upcoming/list', 'upcoming')->name('upcoming');
             Route::get('sent-queue/list', 'sentInQueue')->name('sentQueue');
