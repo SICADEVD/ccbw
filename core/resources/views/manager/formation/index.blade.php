@@ -50,7 +50,6 @@
                                 <tr>
                                     <th>@lang('Localite')</th>
                                     <th>@lang('Formateur')</th>
-                                    <th>@lang('Module')</th>
                                     <th>@lang('Lieu')</th>
                                     <th>@lang('Date formation')</th>
                                     <th>@lang('Ajoutée le')</th>
@@ -70,9 +69,7 @@
                                                     {{ $formation->user->firstname }}
                                                 </a></span>
                                         </td>
-                                        <td>
-                                            <span>{{ $formation->typeFormation->nom }}</span>
-                                        </td>
+                                        
                                         <td>
                                             <span>{{ $formation->lieu_formation }}</span>
                                         </td>
