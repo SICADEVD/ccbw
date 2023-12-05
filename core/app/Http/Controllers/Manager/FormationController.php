@@ -6,8 +6,8 @@ use Excel;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Campagne;
-use App\Constants\Status;
 use App\Models\Localite;
+use App\Constants\Status;
 use App\Models\Producteur;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -15,6 +15,7 @@ use App\Models\TypeFormation;
 use App\Models\SuiviFormation;
 use App\Models\ThemesFormation;
 use App\Exports\ExportFormations;
+use App\Models\SousThemeFormation;
 use Illuminate\Support\Facades\DB;
 use App\Models\SuiviFormationTheme;
 use App\Http\Controllers\Controller;
@@ -49,10 +50,11 @@ class FormationController extends Controller
         $manager   = auth()->user();
         $producteurs  = Producteur::with('localite')->get();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id', $manager->cooperative_id], ['localites.status', 1]])->get();
-        $typeformations  = TypeFormation::all()->pluck('nom', 'id');
+        $typeformations  = TypeFormation::all();
         $themes  = ThemesFormation::with('typeFormation')->get();
+        $sousThemes  = SousThemeFormation::with('themeFormation')->get();
         $staffs  = User::staff()->get();
-        return view('manager.formation.create', compact('pageTitle', 'producteurs', 'localites', 'typeformations', 'themes', 'staffs'));
+        return view('manager.formation.create', compact('pageTitle', 'producteurs', 'localites', 'typeformations', 'themes', 'staffs', 'sousThemes'));
     }
 
     public function store(Request $request)
@@ -114,6 +116,7 @@ class FormationController extends Controller
                 return back()->withNotify($notify);
             }
         }
+        dd($request->all());
         $formation->save();
         if ($formation != null) {
             $id = $formation->id;

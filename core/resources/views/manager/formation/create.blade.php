@@ -55,7 +55,14 @@
                     <div class="form-group row">
                         <?php echo Form::label(__('Module de la formation'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('type_formation', $typeformations, null, ['placeholder' => __('Selectionner une option'), 'class' => 'form-control type_formations', 'id' => 'typeformation', 'required' => 'required']); ?>
+                            <select class="form-control select2-multi-select" name="type_formation[]" id="typeformation"
+                                multiple required>
+                                <option value="">@lang('Selectionner une option')</option>
+                                @foreach ($typeformations as $typeformation)
+                                    <option value="{{ $typeformation->id }}" @selected(old('type_formation'))>
+                                        {{ $typeformation->nom }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -65,9 +72,23 @@
                                 required>
                                 <option value="">@lang('Selectionner une option')</option>
                                 @foreach ($themes as $theme)
-                                    <option value="{{ $theme->id }}" data-chained="{{ $theme->type_formation_id }}"
+                                    <option value="{{ $theme->id }}" data-chained="{{ $theme->type_formation_id ?? '' }}"
                                         @selected(old('theme'))>
                                         {{ $theme->nom }} </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <?php echo Form::label(__('Sous-thème de la formation'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-12 col-sm-8">
+                            <select class="form-control select2-multi-select" name="sous_theme[]" id="sous_theme"
+                                multiple required>
+                                <option value="">@lang('Selectionner une option')</option>
+                                @foreach ($sousThemes as $soustheme)
+                                    <option value="{{ $soustheme->id }}" data-chained="{{ $soustheme->theme_formation_id ?? '' }}"
+                                        @selected(old('sous_theme'))>
+                                        {{ $soustheme->nom }} </option>
                                 @endforeach
                             </select>
                         </div>
@@ -149,7 +170,7 @@
     <script src="{{ asset('assets/vendor/jquery/daterangepicker.min.js') }}"></script>
     <script type="text/javascript">
         $("#producteur").chained("#localite");
-        $("#theme").chained("#typeformation");
+
 
         $('#duree_formation').timepicker({
             showMeridian: (false)
@@ -180,5 +201,76 @@
             $('#multiEndDate').val(endDate);
             $('.date-range-days').html(totalDays + ' Jours sélectionnés');
         });
+        $(document).ready(function() {
+            //creation de l'objet optionsParModule
+            var optionsParModule = new Object();
+            $("#theme option").each(function() {
+                //on assigne les themes à lobjet optionsParModule
+                var curreentArray = optionsParModule[($(this).data('chained'))] ? optionsParModule[($(this)
+                    .data('chained'))] : [];
+                curreentArray[$(this).val()] = $(this).text().trim();
+                Object.assign(optionsParModule, {
+                    [$(this).data('chained')]: curreentArray
+                });
+                $(this).remove();
+            });
+
+            $('#typeformation').change(function() {
+                var typeformation = $(this).val();
+                $("#theme").empty();
+                var optionsHtml2 = "";
+                $(this).find('option:selected').each(function() {
+                    console.log($(this).val());
+                    optionsHtml2 = updateTheme(optionsHtml2, $(this).val(), optionsParModule);
+                })
+            });
+        });
+
+        function updateTheme(optionsHtml2, id, optionsParModule) {
+            var optionsHtml = optionsHtml2
+            if (id != '') {
+                optionsParModule[id].forEach(function(key, element) {
+                    optionsHtml += '<option value="' + element + '">' + key + '</option>';
+                });
+                $("#theme").html(optionsHtml);
+            }
+            return optionsHtml;
+        }
+
+        $(document).ready(function() {
+            //creation de l'objet optionsParModule
+            var optionsParModule3 = new Object();
+            $("#sous_theme option").each(function() {
+                //on assigne les themes à lobjet optionsParModule
+                var curreentArray = optionsParModule[($(this).data('chained'))] ? optionsParModule3[($(this)
+                    .data('chained'))] : [];
+                curreentArray[$(this).val()] = $(this).text().trim();
+                Object.assign(optionsParModule3, {
+                    [$(this).data('chained')]: curreentArray
+                });
+                $(this).remove();
+            });
+
+            $('#theme').change(function() {
+                var theme = $(this).val();
+                $("#sous_theme").empty();
+                var optionsHtml4 = "";
+                $(this).find('option:selected').each(function() {
+                    console.log($(this).val());
+                    optionsHtml2 = updateSousTheme(optionsHtml4, $(this).val(), optionsParModule3);
+                })
+            });
+        });
+
+        function updateSousTheme(optionsHtml4, id, optionsParModule3) {
+            var optionsHtml = optionsHtml2
+            if (id != '') {
+                optionsParModule[id].forEach(function(key, element) {
+                    optionsHtml += '<option value="' + element + '">' + key + '</option>';
+                });
+                $("#sous_theme").html(optionsHtml);
+            }
+            return optionsHtml;
+        }
     </script>
 @endpush
