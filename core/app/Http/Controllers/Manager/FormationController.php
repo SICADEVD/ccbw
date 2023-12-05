@@ -13,15 +13,18 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\TypeFormation;
 use App\Models\SuiviFormation;
+use App\Models\ThemeSousTheme;
 use App\Models\ThemesFormation;
 use App\Exports\ExportFormations;
 use App\Models\SousThemeFormation;
+use App\Models\TypeFormationTheme;
 use Illuminate\Support\Facades\DB;
 use App\Models\SuiviFormationTheme;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use App\Models\SuiviFormationVisiteur;
 use App\Models\SuiviFormationProducteur;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx\Theme;
 
 class FormationController extends Controller
 {
@@ -73,8 +76,6 @@ class FormationController extends Controller
 
         $request->validate($validationRule);
 
-        // dd($request->all());
-
         $localite = Localite::where('id', $request->localite)->first();
 
         if ($localite->status == Status::NO) {
@@ -93,7 +94,6 @@ class FormationController extends Controller
         $formation->campagne_id  = $campagne->id;
         $formation->user_id  = $request->staff;
         $formation->lieu_formation  = $request->lieu_formation;
-        $formation->type_formation_id  = $request->type_formation;
         $formation->duree_formation = $request->duree_formation;
         $formation->observation_formation = $request->observation_formation;
         $formation->formation_type = $request->formation_type; 
@@ -116,7 +116,7 @@ class FormationController extends Controller
                 return back()->withNotify($notify);
             }
         }
-        dd($request->all());
+        
         $formation->save();
         if ($formation != null) {
             $id = $formation->id;
@@ -135,22 +135,29 @@ class FormationController extends Controller
                 }
                 SuiviFormationProducteur::insert($datas);
             }
-            if (($request->theme != null)) {
-                SuiviFormationTheme::where('suivi_formation_id', $id)->delete();
-                $i = 0;
-                foreach ($request->theme as $data) {
-                    if ($data != null) {
-                        $datas2[] = [
-                            'suivi_formation_id' => $id,
-                            'themes_formation_id' => $data,
-                        ];
-                    }
-                    $i++;
-                }
-                SuiviFormationTheme::insert($datas2);
+
+            $selectedThemes = $request->theme;
+            foreach ($selectedThemes as $themeId) {
+                list($typeFormationId, $themeItemId) = explode('-', $themeId);
+                $datas3 = [
+                    'suivi_formation_id' => $id,
+                    'type_formation_id' => $typeFormationId,
+                    'theme_formation_id' => $themeItemId,
+                ];
+                TypeFormationTheme::insert($datas3);
             }
-            
-            
+
+            $selectedSousThemes = $request->sous_theme;
+            foreach ($selectedSousThemes as $sthemeId) {
+                list($themeFormationId, $sousthemeItemId) = explode('-', $sthemeId);
+                $datas2 = [
+                    'suivi_formation_id' => $id,
+                    'theme_id' => $themeFormationId,
+                    'sous_theme_id' => $sousthemeItemId,
+                ];
+                ThemeSousTheme::insert($datas2);
+            }
+
         }
         $notify[] = ['success', isset($message) ? $message : 'Le formation a été crée avec succès.'];
         return back()->withNotify($notify);
@@ -166,15 +173,15 @@ class FormationController extends Controller
         $themes  = ThemesFormation::with('typeFormation')->get();
         $staffs  = User::staff()->get();
         $formation   = SuiviFormation::findOrFail($id);
-        $suiviTheme = SuiviFormationTheme::where('suivi_formation_id', $formation->id)->get();
+        // $suiviTheme = SuiviFormationTheme::where('suivi_formation_id', $formation->id)->get();
         $dataProducteur = $dataVisiteur = $dataTheme = array();
         
       
-        if ($suiviTheme->count()) {
-            foreach ($suiviTheme as $data) {
-                $dataTheme[] = $data->themes_formation_id;
-            }
-        }
+        // if ($suiviTheme->count()) {
+        //     foreach ($suiviTheme as $data) {
+        //         $dataTheme[] = $data->themes_formation_id;
+        //     }
+        // }
         return view('manager.formation.edit', compact('pageTitle', 'localites', 'formation', 'producteurs', 'typeformations', 'themes', 'staffs', 'dataProducteur', 'dataTheme'));
     }
 

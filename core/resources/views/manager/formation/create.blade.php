@@ -242,7 +242,7 @@
                 window.optionSousTheme = "";
                 $(this).find('option:selected').each(function() {
                     //console.log($(this).val());
-                    window.optionSousTheme = updateSousTheme(window.optionSousTheme, $(this).val(), optionParSousTheme);
+                    window.optionSousTheme = updateSousTheme(window.optionSousTheme, $(this).val().split("-")[1], optionParSousTheme);
                 })
             });
         });
@@ -251,7 +251,7 @@
             var optionsHtml = optionsHtml2
             if (id != '') {
                 optionParTheme[id].forEach(function(key, element) {
-                    optionsHtml += '<option value="' + element + '">' + key + '</option>';
+                    optionsHtml += '<option value="'+id+'-' + element + '">' + key + '</option>';
                     window.optionSousTheme = updateSousTheme(window.optionSousTheme, element, optionParSousTheme);
                 });
                 $("#theme").html(optionsHtml);
@@ -263,7 +263,7 @@
             var optionsHtml = optionsHtml2
             if (id != '' && optionParSousTheme[id] != undefined) {
                 optionParSousTheme[id].forEach(function(key, element) {
-                    optionsHtml += '<option value="' + element + '">' + key + '</option>';
+                    optionsHtml += '<option value="'+id+'-' + element + '">' + key + '</option>';
                 });
                 $("#sous_theme").html(optionsHtml);
             }
