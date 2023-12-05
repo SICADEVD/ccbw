@@ -170,8 +170,7 @@
     <script src="{{ asset('assets/vendor/jquery/daterangepicker.min.js') }}"></script>
     <script type="text/javascript">
         $("#producteur").chained("#localite");
-
-
+       
         $('#duree_formation').timepicker({
             showMeridian: (false)
         });
@@ -202,70 +201,68 @@
             $('.date-range-days').html(totalDays + ' Jours sélectionnés');
         });
         $(document).ready(function() {
-            //creation de l'objet optionsParModule
-            var optionsParModule = new Object();
+            //idée de ce bloque de code c'est de remplire l'objet optionParTheme avec les themes provenant de la base de données
+            var optionParTheme = new Object();
             $("#theme option").each(function() {
-                //on assigne les themes à lobjet optionsParModule
-                var curreentArray = optionsParModule[($(this).data('chained'))] ? optionsParModule[($(this)
+                var curreentArray = optionParTheme[($(this).data('chained'))] ? optionParTheme[($(this)
                     .data('chained'))] : [];
                 curreentArray[$(this).val()] = $(this).text().trim();
-                Object.assign(optionsParModule, {
+                Object.assign(optionParTheme, {
                     [$(this).data('chained')]: curreentArray
                 });
                 $(this).remove();
+            });
+
+            var optionParSousTheme = new Object();
+            $("#sous_theme option").each(function() {
+                var curreentArray = optionParSousTheme[($(this).data('chained'))] ? optionParSousTheme[($(this)
+                    .data('chained'))] : [];
+                curreentArray[$(this).val()] = $(this).text().trim();
+                Object.assign(optionParSousTheme, {
+                    [$(this).data('chained')]: curreentArray
+                });
+                $(this).remove();
+                console.log(optionParSousTheme);
             });
 
             $('#typeformation').change(function() {
                 var typeformation = $(this).val();
                 $("#theme").empty();
+                $("#sous_theme").empty();
                 var optionsHtml2 = "";
+                window.optionSousTheme = "";
                 $(this).find('option:selected').each(function() {
-                    console.log($(this).val());
-                    optionsHtml2 = updateTheme(optionsHtml2, $(this).val(), optionsParModule);
+                    //console.log($(this).val());
+                    optionsHtml2 = updateTheme(optionsHtml2, $(this).val(), optionParTheme, optionParSousTheme);
+                })
+            });
+
+            $('#theme').change(function() {
+                $("#sous_theme").empty();
+                window.optionSousTheme = "";
+                $(this).find('option:selected').each(function() {
+                    //console.log($(this).val());
+                    window.optionSousTheme = updateSousTheme(window.optionSousTheme, $(this).val(), optionParSousTheme);
                 })
             });
         });
 
-        function updateTheme(optionsHtml2, id, optionsParModule) {
+        function updateTheme(optionsHtml2, id, optionParTheme, optionParSousTheme) {
             var optionsHtml = optionsHtml2
             if (id != '') {
-                optionsParModule[id].forEach(function(key, element) {
+                optionParTheme[id].forEach(function(key, element) {
                     optionsHtml += '<option value="' + element + '">' + key + '</option>';
+                    window.optionSousTheme = updateSousTheme(window.optionSousTheme, element, optionParSousTheme);
                 });
                 $("#theme").html(optionsHtml);
             }
             return optionsHtml;
         }
-
-        $(document).ready(function() {
-            //creation de l'objet optionsParModule
-            var optionsParModule3 = new Object();
-            $("#sous_theme option").each(function() {
-                //on assigne les themes à lobjet optionsParModule
-                var curreentArray = optionsParModule[($(this).data('chained'))] ? optionsParModule3[($(this)
-                    .data('chained'))] : [];
-                curreentArray[$(this).val()] = $(this).text().trim();
-                Object.assign(optionsParModule3, {
-                    [$(this).data('chained')]: curreentArray
-                });
-                $(this).remove();
-            });
-
-            $('#theme').change(function() {
-                var theme = $(this).val();
-                $("#sous_theme").empty();
-                var optionsHtml4 = "";
-                $(this).find('option:selected').each(function() {
-                    console.log($(this).val());
-                    optionsHtml2 = updateSousTheme(optionsHtml4, $(this).val(), optionsParModule3);
-                })
-            });
-        });
-
-        function updateSousTheme(optionsHtml4, id, optionsParModule3) {
+        
+        function updateSousTheme(optionsHtml2, id, optionParSousTheme) {
             var optionsHtml = optionsHtml2
-            if (id != '') {
-                optionsParModule[id].forEach(function(key, element) {
+            if (id != '' && optionParSousTheme[id] != undefined) {
+                optionParSousTheme[id].forEach(function(key, element) {
                     optionsHtml += '<option value="' + element + '">' + key + '</option>';
                 });
                 $("#sous_theme").html(optionsHtml);
