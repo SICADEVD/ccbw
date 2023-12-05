@@ -12,7 +12,7 @@ class SousThemeFormation extends Model
 {
     use HasFactory, PowerJoins, GlobalStatus, Searchable;
 
-    protected $table = 'sous_themes_formations';
+    protected $table = 'formation_sous_themes';
 
     public function themeFormation()
     {
