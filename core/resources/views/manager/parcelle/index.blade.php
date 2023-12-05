@@ -22,7 +22,7 @@
                             </div>
                             <div class="flex-grow-1">
                                 <label>@lang('Date')</label>
-                                <input name="date" type="text" class="date form-control"
+                                <input name="date" type="text" class="dates form-control"
                                     placeholder="@lang('Date de début - Date de fin')" autocomplete="off" value="{{ request()->date }}">
                             </div>
                             <div class="flex-grow-1 align-self-end">
@@ -183,7 +183,7 @@
 @push('style-lib')
     <link rel="stylesheet" href="{{ asset('assets/fcadmin/css/vendor/datepicker.min.css') }}">
 @endpush
-@push('script-lib')
+@push('script')
     <script src="{{ asset('assets/fcadmin/js/vendor/datepicker.min.js') }}"></script>
     <script src="{{ asset('assets/fcadmin/js/vendor/datepicker.en.js') }}"></script>
 @endpush
@@ -196,7 +196,7 @@
                 $('#typeModel').modal('show');
             });
 
-            $('.date').datepicker({
+            $('.dates').datepicker({
                 maxDate: new Date(),
                 range: true,
                 multipleDatesSeparator: "-",
@@ -213,5 +213,9 @@
             }
 
         })(jQuery)
+
+        $('form select').on('change', function(){
+    $(this).closest('form').submit();
+});
     </script>
 @endpush

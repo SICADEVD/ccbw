@@ -5153,10 +5153,14 @@ th.w-85 {
 }
 
 .sidebar__menu .sidebar-submenu .sidebar-menu-item a {
-    padding: 10px 20px 10px 15px;
+    padding: 10px 6px 10px 8px;
     transition: all 0.3s;
 }
-
+.dropdown-item.active, .dropdown-item:active {
+    color: #fff;
+    text-decoration: none;
+    background-color: var(--main-color);
+}
 .sidebar__menu .sidebar-submenu .sidebar-menu-item a:hover .menu-icon {
     color: var(--main-color);
 }

@@ -25,7 +25,7 @@ use Illuminate\Support\Arr;
                             </div> 
                             <div class="flex-grow-1">
                                 <label>@lang('Date')</label>
-                                <input name="date" type="text" class="date form-control" placeholder="@lang('Date de début - Date de fin')" autocomplete="off" value="{{ request()->date }}">
+                                <input name="date" type="text" class="dates form-control" placeholder="@lang('Date de début - Date de fin')" autocomplete="off" value="{{ request()->date }}">
                             </div>
                             <div class="flex-grow-1 align-self-end">
                                 <button class="btn btn--primary w-100 h-45"><i class="fas fa-filter"></i> @lang('Filter')</button>
@@ -116,7 +116,7 @@ use Illuminate\Support\Arr;
 @push('style-lib')
     <link rel="stylesheet" href="{{ asset('assets/fcadmin/css/vendor/datepicker.min.css') }}">
 @endpush
-@push('script-lib')
+@push('script')
     <script src="{{ asset('assets/fcadmin/js/vendor/datepicker.min.js') }}"></script>
     <script src="{{ asset('assets/fcadmin/js/vendor/datepicker.en.js') }}"></script>
 @endpush
@@ -129,7 +129,7 @@ use Illuminate\Support\Arr;
                 $('#typeModel').modal('show');
             });
             
-            $('.date').datepicker({
+            $('.dates').datepicker({
                 maxDate:new Date(),
                 range:true,
                 multipleDatesSeparator:"-",

@@ -23,10 +23,10 @@ use App\Models\AdminNotification;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller; 
 
-class LivraisonController extends Controller
+class LivraisonCentraleController extends Controller
 {
 
-    public function livraisonInfo()
+    public function index()
     { 
         $staff = auth()->user(); 
         $livraisonInfos = LivraisonInfo::dateFilter()->searchable(['code'])->with('senderCooperative', 'receiverCooperative', 'senderStaff', 'receiverStaff', 'paymentInfo')
@@ -39,10 +39,10 @@ class LivraisonController extends Controller
         ->paginate(getPaginate());
 
         $total = $livraisonInfos->sum('quantity');
-        $pageTitle    = "Stock des Magasins de Section ($total)";
+        $pageTitle    = "Stock des Magasins Centraux ($total)";
         $magasins  = MagasinSection::joinRelationship('section')->where('cooperative_id',$staff->cooperative_id)->get();
         $sections = Section::get();
-        return view('manager.livraison.index', compact('pageTitle', 'livraisonInfos','total','sections','magasins'));
+        return view('manager.livraison-centrale.index', compact('pageTitle', 'livraisonInfos','total','sections','magasins'));
     }
 
     public function create()
