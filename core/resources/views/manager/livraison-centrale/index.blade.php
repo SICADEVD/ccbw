@@ -141,7 +141,8 @@
 @endpush 
 @push('script')
 <script src="{{ asset('assets/fcadmin/js/vendor/datepicker.min.js') }}"></script>
-    <script src="{{ asset('assets/fcadmin/js/vendor/datepicker.en.js') }}"></script>
+    <script src="{{ asset('assets/fcadmin/js/vendor/datepicker.fr.js') }}"></script>
+<script src="{{ asset('assets/fcadmin/js/vendor/datepicker.en.js') }}"></script>
     <script>
         (function($) {
             "use strict";
@@ -154,7 +155,7 @@
                 maxDate: new Date(),
                 range: true,
                 multipleDatesSeparator: "-",
-                language: 'en'
+                language: 'fr'
             });
 
             let url = new URL(window.location).searchParams;
