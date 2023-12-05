@@ -33,10 +33,18 @@ class SuiviFormation extends Model
     {
         return $this->hasMany(SuiviFormationProducteur::class, 'suivi_formation_id', 'id');
     }
-    public function formationTheme()
+
+    public function themeSousTheme()
     {
-        return $this->hasMany(SuiviFormationTheme::class, 'suivi_formation_id', 'id');
+        return $this->hasMany(ThemeSousTheme::class, 'suivi_formation_id', 'id');
     }
+
+    public function typeFormationTheme()
+    {
+        return $this->hasMany(TypeFormationTheme::class, 'suivi_formation_id', 'id');
+    }
+
+    
      
      
 }
