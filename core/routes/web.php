@@ -213,7 +213,7 @@ Route::middleware('auth')->group(function () {
 
             Route::get('formateur-staff/', [SettingController::class, 'formateurStaffIndex'])->name('formateurStaff.index');
             Route::post('formateur-staff/store', [SettingController::class, 'formateurStaffStore'])->name('formateurStaff.store');
-            
+
             Route::get('entreprise/', [SettingController::class, 'entrepriseIndex'])->name('entreprise.index');
             Route::post('entreprise/store', [SettingController::class, 'entrepriseStore'])->name('entreprise.store');
         });

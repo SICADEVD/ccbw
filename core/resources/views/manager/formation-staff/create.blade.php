@@ -43,7 +43,15 @@
                     <div class="form-group row">
                         <?php echo Form::label(__('Modules de formations'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('module_formation', $ModuleFormationStaffs, null, ['placeholder' => __('Selectionner une option'), 'class' => 'form-control type_formations', 'id' => 'typeformation', 'required' => 'required']); ?>
+                            <select class="form-control select2-multi-select" name="module_formation[]" id="typeformation"
+                                multiple required>
+                                <option value="">@lang('Selectionner une option')</option>
+                                @foreach ($ModuleFormationStaffs as $ModuleFormationStaff)
+                                    <option value="{{ $ModuleFormationStaff->id }}"@selected(old('module_formation'))>
+                                        {{ $ModuleFormationStaff->nom }}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
 
@@ -69,7 +77,8 @@
                         <div class="col-xs-12 col-sm-8 input-group mb-3">
                             <?php echo Form::select('entreprise_id', $entreprises, null, ['placeholder' => __('Selectionner une option'), 'class' => 'form-control', 'id' => 'entreprise_formateur', 'required' => 'required']); ?>
                             <button type="button" class="btn btn-outline-secondary border-grey add-entreprise"
-                                data-toggle="tooltip" data-original-title="Ajouter un formateur"><i class="las la-plus"></i></button>
+                                data-toggle="tooltip" data-original-title="Ajouter un formateur"><i
+                                    class="las la-plus"></i></button>
                             {{-- <a class="btn btn-outline-secondary border-grey add-entreprise"
                                 data-toggle="tooltip" data-original-title="Ajouter un formateur"><i class="las la-plus"></i></a> --}}
                         </div>
@@ -87,7 +96,8 @@
                                 @endforeach
                             </select>
                             <button type="button" class="btn btn-outline-secondary border-grey add-formateur"
-                                data-toggle="tooltip" data-original-title="Ajouter un formateur"><i class="las la-plus"></i></button>
+                                data-toggle="tooltip" data-original-title="Ajouter un formateur"><i
+                                    class="las la-plus"></i></button>
                         </div>
                     </div>
 
@@ -148,7 +158,7 @@
         <script src="{{ asset('assets/vendor/jquery/daterangepicker.min.js') }}"></script>
         <script type="text/javascript">
             $("#producteur").chained("#localite");
-            $("#theme").chained("#typeformation");
+            //$("#theme").chained("#typeformation");
             $("#formateur").chained("#entreprise_formateur");
             $('#duree_formation').timepicker({
                 showMeridian: (false)
@@ -193,5 +203,42 @@
                 $.ajaxModal(MODAL_XL, url);
                 $(MODAL_XL).modal('show');
             });
+
+
+            $(document).ready(function() {
+                
+                var optionParTheme = new Object();
+                $("#theme option").each(function() {
+                    //on assigne les themes à lobjet optionParTheme
+                    var curreentArray = optionParTheme[($(this).data('chained'))] ? optionParTheme[($(this)
+                        .data('chained'))] : [];
+                    curreentArray[$(this).val()] = $(this).text().trim();
+                    Object.assign(optionParTheme, {
+                        [$(this).data('chained')]: curreentArray
+                    });
+                    $(this).remove();
+                });
+
+                $('#typeformation').change(function() {
+                    var typeformation = $(this).val();
+                    $("#theme").empty();
+                    var optionsHtml2 = "";
+                    $(this).find('option:selected').each(function() {
+                        console.log($(this).val());
+                        optionsHtml2 = updateTheme(optionsHtml2, $(this).val(), optionParTheme);
+                    })
+                });
+            });
+
+            function updateTheme(optionsHtml2, id, optionParTheme) {
+            var optionsHtml = optionsHtml2
+            if (id != '') {
+                optionParTheme[id].forEach(function(key, element) {
+                    optionsHtml += '<option value="'+id+'-' + element + '">' + key + '</option>';
+                });
+                $("#theme").html(optionsHtml);
+            }
+            return optionsHtml;
+        }
         </script>
     @endpush
