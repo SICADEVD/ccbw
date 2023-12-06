@@ -39,7 +39,6 @@
                                 <tr> 
                                     <th>@lang('Cooperative')</th>
                                     <th>@lang('Formateur')</th>
-                                    <th>@lang('Module')</th>
                                     <th>@lang('Lieu')</th>
                                     <th>@lang('Date formation')</th> 
                                     <th>@lang('Ajoutée le')</th>
@@ -58,9 +57,6 @@
                                                     <span>@</span>{{$formation->formateur->nom_formateur}} {{$formation->formateur->prenom_formateur}}
                                                 </a></span>
                                         </td> 
-                                        <td>
-                                            <span>{{ $formation->moduleFormationStaff->nom }}</span>
-                                        </td>
                                         <td>
                                             <span>{{ $formation->lieu_formation }}</span>
                                         </td> 

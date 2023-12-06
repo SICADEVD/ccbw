@@ -39,8 +39,9 @@ class FormationStaff extends Model
     {
         return $this->hasMany(FormationStaffUser::class, 'formation_staff_id', 'id');
     }
-    public function formationThemeStaff()
+
+    public function formationStaffModuleTheme()
     {
-        return $this->hasMany(FormationThemeStaff::class, 'formation_staff_id', 'id');
+        return $this->hasMany(FormationStaffModuleTheme::class, 'formation_staff_id', 'id');
     }
 }
