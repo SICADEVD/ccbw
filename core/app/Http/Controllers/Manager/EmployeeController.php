@@ -333,10 +333,9 @@ class EmployeeController extends AccountBaseController
         $exceptUsers = [$id]; 
 
         /** @phpstan-ignore-next-line */
-        if (count($employee->reportingTeam) > 0) {
-            /** @phpstan-ignore-next-line */
-            $exceptUsers = array_merge($this->employee->reportingTeam->pluck('user_id')->toArray(), $exceptUsers);
-        }
+        // if (count($employee->reportingTeam) > 0) { 
+        //     $exceptUsers = array_merge($this->employee->reportingTeam->pluck('user_id')->toArray(), $exceptUsers);
+        // }
 
         $this->employees = User::allEmployees($exceptUsers, true);
         $this->employee = $employee;
