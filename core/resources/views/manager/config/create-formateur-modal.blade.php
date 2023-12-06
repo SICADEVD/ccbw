@@ -28,7 +28,7 @@
             <div class="row">
                 <input type="hidden" value="true" name="page_reload" id="page_reload">
                 <div class="col-lg-12">
-                    <x-forms.text :fieldLabel="__('Prenom du formateur')" :fieldPlaceholder="__('Prenom du formateur')" fieldName="prenom_formateur" fieldId="prenom_formateur"
+                    <x-forms.text :fieldLabel="__('Prenoms du formateur')" :fieldPlaceholder="__('Prenom du formateur')" fieldName="prenom_formateur" fieldId="prenom_formateur"
                         fieldValue="" :fieldRequired="true" />
                 </div>
             </div>
@@ -42,7 +42,7 @@
             <div class="row">
                 <input type="hidden" value="true" name="page_reload" id="page_reload">
                 <div class="col-lg-12">
-                    <x-forms.text :fieldLabel="__('Poste du formateur')" :fieldPlaceholder="__('Poste du formateur')" fieldName="poste_formateur" fieldId="poste_formateur"
+                    <x-forms.text :fieldLabel="__('Domaine de compétence')" :fieldPlaceholder="__('Domaine de compétence')" fieldName="poste_formateur" fieldId="poste_formateur"
                         fieldValue="" :fieldRequired="true" />
                 </div>
             </div>
