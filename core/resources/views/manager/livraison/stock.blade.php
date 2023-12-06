@@ -10,7 +10,6 @@
                                 <label>@lang('Recherche par Mot(s) clé(s)')</label>
                                 <input type="text" name="search"  value="{{ request()->search }}" class="form-control">
                             </div>
-                            
                             <div class="flex-grow-1">
                                 <label>@lang('Magasin de Section')</label>
                                 <select name="magasin" class="form-control">
@@ -19,16 +18,6 @@
                                         <option value="{{ $local->id }}" {{ request()->magasin == $local->id ? 'selected' : '' }}>{{ $local->nom }}</option>
                                     @endforeach
                                 </select>
-                            </div>
-                            <div class="flex-grow-1">
-                            <label>@lang('Type de produit')</label>
-                            <select class="form-control" name="produit">
-                                                    <option  value="">@lang('Tous')</option> 
-                                                        <option value="{{ __('Certifie') }}"
-                                                        @selected(request()->produit=='Certifie')>{{ __('Certifie') }}</option>
-                                                        <option value="{{ __('Ordinaire') }}"
-                                                        @selected(request()->produit=='Ordinaire')>{{ __('Ordinaire') }}</option>
-                                                </select> 
                             </div>
                             <div class="flex-grow-1">
                                 <label>@lang('Date')</label>
@@ -49,68 +38,46 @@
                         <table class="table table--light style--two">
                             <thead>
                                 <tr>
-                                <th>@lang("Campagne")</th>
-                                    <th>@lang("Staff Expéditeur")</th>
+                                <th>@lang("Campagne")</th> 
                                     <th>@lang('Magasin Section')</th>
-                                    <th>@lang('Producteur - Parcelle')</th>
-                                    <th>@lang('Type Produit')</th>
-                                    <th>@lang("Montant - Numéro Livraison")</th>
-                                    <th>@lang('Quantite')</th>
-                                    <th>@lang('Date de livraison')</th> 
+                                    <th>@lang('Producteur')</th>
+                                    <th>@lang('Type Produit')</th> 
+                                    <th>@lang('Stock entrant')</th> 
+                                    <th>@lang('Stock sortant')</th> 
                                     <th>@lang('Action')</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse($livraisonProd as $produit)
+                                @forelse($stocks as $produit)
                                     <tr>
                                     <td>
                                             {{ $produit->campagne->nom }} 
-                                        </td>
-                                        <td>
-                                            <span>{{ __($produit->livraisonInfo->senderCooperative->name) }}</span><br>
-                                            <a class="text--primary" href="{{ route('manager.staff.edit', encrypt($produit->livraisonInfo->senderStaff->id)) }}">
-                                                <span class="text--primary">@</span>{{ __($produit->livraisonInfo->senderStaff->lastname) }} {{ __($produit->livraisonInfo->senderStaff->firstname) }}
-                                            </a>
-                                        </td>
-                                        <td>
-                                            <span>
-                                                @if (@$produit->livraisonInfo->receiver_cooperative_id)
-                                                    {{ __($produit->livraisonInfo->receiverCooperative->name) }}
-                                                @else
-                                                    @lang('N/A')
-                                                @endif
-                                            </span>
-                                            <br>
-                                            @if(@$produit->livraisonInfo->receiver_magasin_section_id)
-                                                <span class="text--primary">{{ __($produit->livraisonInfo->magasinSection->nom) }}</span>
+                                        </td> 
+                                        <td> 
+                                            @if(@$produit->magasin_section_id)
+                                                <span class="text--primary">{{ __($produit->magasinSection->nom) }}</span>
                                             @else
                                                 <span>@lang('N/A')</span>
                                             @endif
                                         </td>
                                         <td>
-                                            <span class="fw-bold">{{ $produit->parcelle->producteur->nom }} {{ $produit->parcelle->producteur->prenoms }}</span><br>
-                                            <span>{{ $produit->parcelle->codeParc }}</span>
+                                            <span class="fw-bold">{{ $produit->producteur->nom }} {{ $produit->producteur->prenoms }}</span>
                                         </td>
                                         <td>
                                             {{ $produit->type_produit }} 
                                         </td>
+                                         
                                         <td>
-                                            <span class="fw-bold">{{ showAmount(@$produit->fee) }}
-                                                {{ __($general->cur_text) }}</span><br>
-                                            <span>{{ $produit->livraisonInfo->code }}</span>
+                                            {{ $produit->stocks_entrant }} 
                                         </td>
                                         <td>
-                                            {{ $produit->qty }} 
-                                        </td>
-                                        <td>
-                                            {{ showDateTime($produit->livraisonInfo->estimate_date, 'd M Y') }}<br>
-                                            {{ diffForHumans($produit->livraisonInfo->estimate_date) }}
-                                        </td>
+                                            {{ $produit->stocks_sortant }} 
+                                        </td> 
  
                                         <td>
-                                            <a href="{{ route('manager.livraison.invoice', encrypt($produit->livraison_info_id)) }}"
+                                            <a href="{{ route('manager.livraison.index', ['search'=>'','magasin'=>$produit->magasin_section_id,'produit'=>$produit->type_produit,'date'=>request()->date,'producteur'=>$produit->producteur_id]) }}"
                                                 title="" class="btn btn-sm btn-outline--info">
-                                                <i class="las la-file-invoice"></i> @lang("Facture")
+                                                <i class="las la-file-invoice"></i> @lang("Détails livraisons")
                                             </a>
                                         </td>
                                     </tr>
@@ -124,9 +91,9 @@
                         </table>
                     </div>
                 </div>
-                @if ($livraisonProd->hasPages())
+                @if ($stocks->hasPages())
                     <div class="card-footer py-4">
-                        {{ paginateLinks($livraisonProd) }}
+                        {{ paginateLinks($stocks) }}
                     </div>
                 @endif
             </div>
@@ -137,7 +104,7 @@
 @push('breadcrumb-plugins') 
 
 <a href="{{ route('manager.livraison.create') }}" class="btn  btn-outline--primary h-45 addNewCooperative">
-        <i class="las la-plus"></i>@lang("Enregistrer une livraison")
+        <i class="las la-plus"></i>@lang("Enregistrer Livraison vers Magasin Central")
     </a>
 <a href="{{ route('manager.livraison.exportExcel.livraisonAll') }}" class="btn  btn-outline--warning h-45"><i class="las la-cloud-download-alt"></i> Exporter en Excel</a>
 @endpush

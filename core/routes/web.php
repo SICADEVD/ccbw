@@ -453,7 +453,8 @@ Route::resource('settings', SettingsController::class)->only(['edit', 'update', 
             Route::post('store', 'store')->name('store');
             Route::post('update/{id}', 'update')->name('update');
             Route::get('edit/{id}', 'edit')->name('edit');
-            Route::get('list', 'livraisonInfo')->name('index');
+            Route::get('list', 'livraisonInfo')->name('index'); 
+            Route::get('stock', 'stockSection')->name('stock.section');
             Route::get('parcelle', 'getParcelle')->name('get.parcelle');
             Route::get('producteur', 'getProducteur')->name('get.producteur');
             Route::get('dispatch/list', 'dispatchLivraison')->name('dispatch');

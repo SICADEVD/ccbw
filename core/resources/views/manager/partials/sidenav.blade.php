@@ -153,24 +153,35 @@ Productivité') </span>
                 </li>
 
                 <li class="sidebar-menu-item sidebar-dropdown">
-                    <a href="javascript:void(0)" class="{{ menuActive(['manager.livraison.*','manager.livraison.magcentral.*'], 3) }}">
+                    <a href="javascript:void(0)" class="{{ menuActive(['manager.livraison.*','manager.livraison.magcentral.*','manager.livraison.stock.section'], 3) }}">
                         <i class="menu-icon las la-university"></i>
                         <span class="menu-title">@lang('Gestion des livraisons') </span>
                     </a>
-                    <div class="sidebar-submenu {{ menuActive(['manager.livraison.*','manager.livraison.magcentral.*'], 2) }} ">
+                    <div class="sidebar-submenu {{ menuActive(['manager.livraison.*','manager.livraison.magcentral.*','manager.livraison.stock.section'], 2) }} ">
                         <ul>
- 
-
-                            <li class="sidebar-menu-item {{ menuActive('manager.livraison.index') }}">
+                            <li class="sidebar-menu-item {{ menuActive(['manager.livraison.index','manager.livraison.stock.section']) }}">
                                 <a href="{{ route('manager.livraison.index') }}" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>
                                     <span class="menu-title">@lang('Livraison Magasins de Section')</span>
+                                </a>
+                                
+                            </li>
+                            <li class="sidebar-menu-item {{ menuActive(['manager.livraison.index','manager.livraison.stock.section']) }}">
+                                <a href="{{ route('manager.livraison.stock.section') }}" class="nav-link">
+                                    <i class="menu-icon las la-server"></i>
+                                    <span class="menu-title">@lang('Stock Magasins de Section')</span>
                                 </a>
                             </li>
                             <li class="sidebar-menu-item {{ menuActive('manager.livraison.magcentral.index') }}">
                                 <a href="{{ route('manager.livraison.magcentral.index') }}" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>
                                     <span class="menu-title">@lang('Livraison Magasins Centraux')</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-menu-item {{ menuActive('manager.livraison.magcentral.index') }}">
+                                <a href="{{ route('manager.livraison.magcentral.index') }}" class="nav-link">
+                                    <i class="menu-icon las la-server"></i>
+                                    <span class="menu-title">@lang('Stock Magasins Centraux')</span>
                                 </a>
                             </li>
 

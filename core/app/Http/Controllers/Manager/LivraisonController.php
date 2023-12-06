@@ -21,7 +21,8 @@ use App\Models\LivraisonProduct;
 use App\Exports\ExportLivraisons;
 use App\Models\AdminNotification;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller; 
+use App\Http\Controllers\Controller;
+use App\Models\StockMagasinSection;
 
 class LivraisonController extends Controller
 {
@@ -29,20 +30,43 @@ class LivraisonController extends Controller
     public function livraisonInfo()
     { 
         $staff = auth()->user(); 
-        $livraisonInfos = LivraisonInfo::dateFilter()->searchable(['code'])->with('senderCooperative', 'receiverCooperative', 'senderStaff', 'receiverStaff', 'paymentInfo')
+        $livraisonProd = LivraisonProduct::dateFilter()->searchable(['code'])->joinRelationship('livraisonInfo')->joinRelationship('parcelle')->with('livraisonInfo','campagne', 'parcelle')
         ->where(function ($query) use ($staff) {
             $query->where('sender_cooperative_id', $staff->cooperative_id)->orWhere('receiver_cooperative_id', $staff->cooperative_id);
         })
         ->when(request()->magasin, function ($query, $magasin) {
             $query->where('receiver_magasin_section_id',$magasin); 
         })
+        ->when(request()->produit, function ($query, $produit) {
+            $query->where('type_produit',$produit); 
+        })
+        ->when(request()->producteur, function ($query, $producteur) {
+            $query->where('producteur_id',$producteur); 
+        })
         ->paginate(getPaginate());
+ 
+        $total = $livraisonProd->sum('qty');
+        $pageTitle    = "Livraison des Magasins de Section ($total)";
+        $magasins  = MagasinSection::joinRelationship('section')->where('cooperative_id',$staff->cooperative_id)->get();
+        $sections = Section::get();
+        return view('manager.livraison.index', compact('pageTitle', 'livraisonProd','total','sections','magasins'));
+    }
 
-        $total = $livraisonInfos->sum('quantity');
+    public function stockSection()
+    { 
+        $staff = auth()->user(); 
+        $stocks = StockMagasinSection::dateFilter()->joinRelationship('producteur.localite.section')
+        ->where([['cooperative_id',$staff->cooperative_id]]) 
+        ->when(request()->magasin, function ($query, $magasin) {
+            $query->where('magasin_section_id',$magasin); 
+        })
+        ->paginate(getPaginate());
+ 
+        $total = $stocks->sum('stocks_entrant');
         $pageTitle    = "Stock des Magasins de Section ($total)";
         $magasins  = MagasinSection::joinRelationship('section')->where('cooperative_id',$staff->cooperative_id)->get();
         $sections = Section::get();
-        return view('manager.livraison.index', compact('pageTitle', 'livraisonInfos','total','sections','magasins'));
+        return view('manager.livraison.stock', compact('pageTitle', 'stocks','total','sections','magasins'));
     }
 
     public function create()
@@ -103,7 +127,7 @@ class LivraisonController extends Controller
         $livraison->quantity      = array_sum(Arr::pluck($request->items,'quantity'));
         $livraison->save();
 
-        $subTotal = 0;
+        $subTotal = $stock = 0;
         $campagne = Campagne::active()->first();
         $data = $data2 = $data3 = [];
         foreach ($request->items as $item) {
@@ -124,6 +148,17 @@ class LivraisonController extends Controller
                 'type_price'      => $campagne->prix_champ,
                 'created_at'      => now(),
             ];
+            $prod = StockMagasinSection::where([['campagne_id',$campagne->id],['magasin_section_id',$request->magasin_section],['producteur_id',$item['producteur']],['type_produit',$item['type']]])->first();
+            if($prod ==null){
+                $prod = new StockMagasinSection();
+            }
+           
+            $prod->magasin_section_id = $request->magasin_section;
+            $prod->producteur_id = $item['producteur'];
+            $prod->campagne_id = $campagne->id;
+            $prod->stocks_entrant = $prod->stocks_entrant + $item['quantity'];
+            $prod->type_produit = $item['type']; 
+            $prod->save();
             
             // if(count($item['scelle'])){
             //     $scelles = implode(',', $item['scelle']);

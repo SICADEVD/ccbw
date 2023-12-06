@@ -7,22 +7,23 @@ use Illuminate\Database\Eloquent\Model;
 use App\Traits\Searchable;
 use Kirschbaum\PowerJoins\PowerJoins;
 
-class LivraisonProduct extends Model
+class StockMagasinSection extends Model
 {
 
     use Searchable, GlobalStatus, PowerJoins;
+    protected $table="stock_magasin_sections";
 
-    public function livraisonInfo()
+    public function producteur()
     {
-        return $this->belongsTo(LivraisonInfo::class, 'livraison_info_id');
+        return $this->belongsTo(Producteur::class, 'producteur_id');
     }
     
     public function campagne()
     {
         return $this->belongsTo(Campagne::class, 'campagne_id');
     }
-    public function parcelle()
+    public function magasinSection()
     {
-        return $this->belongsTo(Parcelle::class, 'parcelle_id');
+        return $this->belongsTo(MagasinSection::class, 'magasin_section_id');
     }
 }
