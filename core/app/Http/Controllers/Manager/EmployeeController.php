@@ -153,16 +153,10 @@ class EmployeeController extends AccountBaseController
             // $user->user_auth_id = $userAuth->id;
             
             if ($request->hasFile('image')) {
-                
-                try {
-                    // $old         = $user->image ?: null;
-                    // $user->image = fileUploader($request->image, getFilePath('userProfile'), getFileSize('userProfile'), $old);
-                    $user->image =  $request->file('image')->store('public/userProfile');
-                } catch (\Exception $exp) {
-                    $notify[] = ['error', 'Impossible de télécharger votre image'];
-                    return back()->withNotify($notify);
-                }
+                Files::deleteFile($user->image, 'avatar');
+                $user->image = Files::uploadLocalOrS3($request->image, 'avatar', 300);
             }
+
             
             $lastEmployeeID = EmployeeDetail::count();
         // $this->checkifExistEmployeeId =  EmployeeDetail::select('id')->where('employee_id', ($lastEmployeeID + 1))->first();
@@ -324,9 +318,9 @@ class EmployeeController extends AccountBaseController
      */
     public function edit($id)
     {
-        $this->employee = User::withoutGlobalScope(ActiveScope::class)->with('employeeDetail', 'reportingTeam')->findOrFail($id);
-        $this->emailCountInCompanies = User::withoutGlobalScopes([ActiveScope::class, CooperativeScope::class])
-            ->where('email', $this->employee->email)
+        $employee = User::withoutGlobalScope(ActiveScope::class)->with('employeeDetail', 'reportingTeam')->findOrFail($id);
+        $emailCountInCompanies = User::withoutGlobalScopes([ActiveScope::class, CooperativeScope::class])
+            ->where('email', $employee->email)
             ->whereNotNull('email')
             ->count();
          
@@ -339,21 +333,19 @@ class EmployeeController extends AccountBaseController
         $exceptUsers = [$id]; 
 
         /** @phpstan-ignore-next-line */
-        if (count($this->employee->reportingTeam) > 0) {
+        if (count($employee->reportingTeam) > 0) {
             /** @phpstan-ignore-next-line */
             $exceptUsers = array_merge($this->employee->reportingTeam->pluck('user_id')->toArray(), $exceptUsers);
         }
 
         $this->employees = User::allEmployees($exceptUsers, true);
-
-        if (!is_null($this->employee->employeeDetail)) {
-            $this->employeeDetail = $this->employee->employeeDetail->withCustomFields();
-
-            if ($this->employeeDetail->getCustomFieldGroupsWithFields()) {
-                $this->fields = $this->employeeDetail->getCustomFieldGroupsWithFields()->fields;
-            }
+        $this->employee = $employee;
+        $this->emailCountInCompanies = $emailCountInCompanies;
+        if (!is_null($employee->employeeDetail)) {
+            $this->employeeDetail = $employee->employeeDetail->withCustomFields();
+ 
         }
-
+        
         if (request()->ajax()) {
             $html = view('manager.employees.ajax.edit', $this->data)->render();
 
