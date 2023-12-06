@@ -329,7 +329,7 @@ class EmployeeController extends AccountBaseController
         $this->skills = Skill::all()->pluck('name')->toArray();
         $this->teams = Team::allDepartments();
         $this->designations = Designation::allDesignations();
-        $this->countries = countries(); 
+        $this->countries = Countrie::get(); 
         $exceptUsers = [$id]; 
 
         /** @phpstan-ignore-next-line */
