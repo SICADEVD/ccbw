@@ -79,6 +79,40 @@
                     </div>
                 </li>
                 <li class="sidebar-menu-item sidebar-dropdown">
+                    <a href="javascript:void(0)" class="{{ menuActive(['manager.suivi.menage.*','manager.suivi.ssrteclmrs.*'], 3) }}">
+                        <i class=" menu-icon las la-universal-access"></i>
+                        <span class="menu-title">@lang('SSRTE') </span>
+                    </a>
+                    <div class="sidebar-submenu {{ menuActive(['manager.suivi.menage.*'], 2) }} ">
+                        <ul>
+                            <li class="sidebar-menu-item {{ menuActive('manager.suivi.menage.index') }}">
+                                <a href="{{ route('manager.suivi.menage.index') }}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('Menages')</span>
+                                </a>
+                            </li>
+
+                            <li class="sidebar-menu-item {{ menuActive('manager.suivi.ssrteclmrs.index') }}">
+                                <a href="{{ route('manager.suivi.ssrteclmrs.index') }}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('SSRTE-CLMRS')</span>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </li>
+                <li class="sidebar-menu-item sidebar-dropdown">
+                    <a href="javascript:void(0)" class="{{ menuActive([], 3) }}">
+                        <i class=" menu-icon las la-universal-access"></i>
+                        <span class="menu-title">@lang('Communauté résiliente') </span>
+                    </a>
+                    <div class="sidebar-submenu {{ menuActive([], 2) }} ">
+                        <ul>
+                        </ul>
+                    </div>
+                </li>
+                <li class="sidebar-menu-item sidebar-dropdown">
                     <a href="javascript:void(0)" class="{{ menuActive('manager.traca.*', 3) }}">
                         <i class="menu-icon las la-users"></i>
                         <span class="menu-title">@lang('Gestion de la Traçabilites') </span>
@@ -113,17 +147,10 @@
                     <a href="javascript:void(0)" class="{{ menuActive('manager.suivi*', 3) }}">
                         <i class="menu-icon las la-users"></i>
                         <span class="menu-title">@lang('Gestion Suivi
-                                                Productivité') </span>
+                                                                        Productivité') </span>
                     </a>
                     <div class="sidebar-submenu {{ menuActive('manager.suivi*', 2) }} ">
                         <ul>
-
-                            <li class="sidebar-menu-item {{ menuActive('manager.suivi.menage.index') }}">
-                                <a href="{{ route('manager.suivi.menage.index') }}" class="nav-link">
-                                    <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('Menages')</span>
-                                </a>
-                            </li>
 
                             <li class="sidebar-menu-item {{ menuActive('manager.suivi.parcelles.index') }}">
                                 <a href="{{ route('manager.suivi.parcelles.index') }}" class="nav-link">
@@ -150,13 +177,6 @@
                                     <span class="menu-title">@lang('Applications Phytos')</span>
                                 </a>
                             </li>
-                            <li class="sidebar-menu-item {{ menuActive('manager.suivi.ssrteclmrs.index') }}">
-                                <a href="{{ route('manager.suivi.ssrteclmrs.index') }}" class="nav-link">
-                                    <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('SSRTE-CLMRS')</span>
-                                </a>
-                            </li>
-
                         </ul>
                     </div>
                 </li>
