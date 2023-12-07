@@ -35,7 +35,7 @@ class MenageController extends Controller
             return $localite->active();
         });
         $menages = Menage::dateFilter()->searchable([
-            "quartier", "sources_energies", "boisChauffe", "ordures_menageres",
+            "quartier", "boisChauffe",
             "separationMenage", "eauxToillette", "eauxVaisselle", "wc",
             "menages.sources_eaux", "type_machines", "garde_machines", "equipements",
             "traitementChamps", "activiteFemme", "nomActiviteFemme", "champFemme", "nombreHectareFemme"
@@ -109,8 +109,6 @@ class MenageController extends Controller
                 'ageEnfant6A17.required' => 'Le champ ageEnfant6A17 est obligatoire',
                 'enfantscolarises.required' => 'Le champ enfantscolarises est obligatoire',
                 'enfantsPasExtrait.required' => 'Le champ enfantsPasExtrait est obligatoire',
-                'sources_energies.required' => 'Le champ sources_energies est obligatoire',
-                'ordures_menageres.required' => 'Le champ ordures_menageres est obligatoire',
                 'separationMenage.required' => 'Le champ separationMenage est obligatoire',
                 'eauxToillette.required' => 'Le champ eauxToillette est obligatoire',
                 'eauxVaisselle.required' => 'Le champ eauxVaisselle est obligatoire',
@@ -161,8 +159,6 @@ class MenageController extends Controller
                 'ageEnfant6A17.required' => 'Le champ ageEnfant6A17 est obligatoire',
                 'enfantscolarises.required' => 'Le champ enfantscolarises est obligatoire',
                 'enfantsPasExtrait.required' => 'Le champ enfantsPasExtrait est obligatoire',
-                'sources_energies.required' => 'Le champ sources_energies est obligatoire',
-                'ordures_menageres.required' => 'Le champ ordures_menageres est obligatoire',
                 'separationMenage.required' => 'Le champ separationMenage est obligatoire',
                 'eauxToillette.required' => 'Le champ eauxToillette est obligatoire',
                 'eauxVaisselle.required' => 'Le champ eauxVaisselle est obligatoire',
