@@ -10,11 +10,11 @@
                 <li class="sidebar-menu-item {{ menuActive('manager.dashboard') }}">
                     <a href="{{ route('manager.dashboard') }}" class="nav-link ">
                         <i class="menu-icon las la-home"></i>
-                        <span class="menu-title">@lang("Tableau de bord")</span>
+                        <span class="menu-title">@lang('Tableau de bord')</span>
                     </a>
                 </li>
-                
-                 
+
+
                 <li class="sidebar-menu-item {{ menuActive('manager.staff.index') }}">
                     <a href="{{ route('manager.staff.index') }}" class="nav-link ">
                         <i class="menu-icon las la-user-friends"></i>
@@ -22,37 +22,46 @@
                     </a>
                 </li>
                 <li class="sidebar-menu-item sidebar-dropdown">
-                    <a href="javascript:void(0)" class="{{ menuActive(['manager.hr.*', 'manager.employees.index','manager.holidays.*','manager.departments.*','manager.designations.*','manager.holidays.*','manager.leaves.*','manager.archivages.*','manager.formation-staff.*'], 3) }}">
+                    <a href="javascript:void(0)"
+                        class="{{ menuActive(['manager.hr.*', 'manager.employees.index', 'manager.holidays.*', 'manager.departments.*', 'manager.designations.*', 'manager.holidays.*', 'manager.leaves.*', 'manager.archivages.*', 'manager.formation-staff.*', 'presentation-coop.*'], 3) }}">
                         <i class="menu-icon las la-users"></i>
                         <span class="menu-title">@lang('Gouvernance Ameliorée') </span>
                     </a>
-                    <div class="sidebar-submenu {{ menuActive(['manager.hr.*', 'manager.employees.*','manager.holidays.*','manager.departments.*','manager.designations.*','manager.holidays.*','manager.leaves.*','manager.archivages.*','manager.formation-staff.*'], 2) }} ">
+                    <div
+                        class="sidebar-submenu {{ menuActive(['manager.hr.*', 'manager.employees.*', 'manager.holidays.*', 'manager.departments.*', 'manager.designations.*', 'manager.holidays.*', 'manager.leaves.*', 'manager.archivages.*', 'manager.formation-staff.*', 'presentation-coop.*'], 2) }} ">
                         <ul>
+
+                            <li class="sidebar-menu-item {{ menuActive('presentation-coop.index') }}">
+                                <a href="{{ route('presentation-coop.index') }}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('Présentation de la coopérative')</span>
+                                </a>
+                            </li>
 
                             <li class="sidebar-menu-item {{ menuActive('manager.employees.index') }}">
                                 <a href="{{ route('manager.employees.index') }}" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>
                                     <span class="menu-title">@lang('Tous les employés')</span>
                                 </a>
-                            </li> 
+                            </li>
                             <li class="sidebar-menu-item {{ menuActive('manager.hr.attendances.index') }}">
                                 <a href="{{ route('manager.hr.attendances.index') }}" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>
                                     <span class="menu-title">@lang('Présences')</span>
                                 </a>
-                            </li> 
+                            </li>
                             <li class="sidebar-menu-item {{ menuActive('manager.leaves.index') }}">
-                                <a href="{{ route('manager.leaves.index')}}" class="nav-link">
+                                <a href="{{ route('manager.leaves.index') }}" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>
                                     <span class="menu-title">@lang('Congés')</span>
                                 </a>
-                            </li> 
+                            </li>
                             <li class="sidebar-menu-item {{ menuActive('manager.holidays.index') }}">
-                                <a href="{{route('manager.holidays.index')}}" class="nav-link">
+                                <a href="{{ route('manager.holidays.index') }}" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>
                                     <span class="menu-title">@lang('Jours Fériés')</span>
                                 </a>
-                            </li>  
+                            </li>
                             <li class="sidebar-menu-item {{ menuActive('manager.formation-staff.*') }}">
                                 <a href="{{ route('manager.formation-staff.index') }}" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>
@@ -104,25 +113,25 @@
                     <a href="javascript:void(0)" class="{{ menuActive('manager.suivi*', 3) }}">
                         <i class="menu-icon las la-users"></i>
                         <span class="menu-title">@lang('Gestion Suivi
-Productivité') </span>
+                                                Productivité') </span>
                     </a>
                     <div class="sidebar-submenu {{ menuActive('manager.suivi*', 2) }} ">
                         <ul>
- 
-                           <li class="sidebar-menu-item {{ menuActive('manager.suivi.menage.index') }}">
+
+                            <li class="sidebar-menu-item {{ menuActive('manager.suivi.menage.index') }}">
                                 <a href="{{ route('manager.suivi.menage.index') }}" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>
                                     <span class="menu-title">@lang('Menages')</span>
                                 </a>
                             </li>
 
-							<li class="sidebar-menu-item {{ menuActive('manager.suivi.parcelles.index') }}">
+                            <li class="sidebar-menu-item {{ menuActive('manager.suivi.parcelles.index') }}">
                                 <a href="{{ route('manager.suivi.parcelles.index') }}" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>
                                     <span class="menu-title">@lang('Parcelles')</span>
                                 </a>
                             </li>
-							
+
                             <li class="sidebar-menu-item {{ menuActive('manager.suivi.formation.index') }}">
                                 <a href="{{ route('manager.suivi.formation.index') }}" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>
@@ -138,7 +147,7 @@ Productivité') </span>
                             <li class="sidebar-menu-item {{ menuActive('manager.suivi.application.index') }}">
                                 <a href="{{ route('manager.suivi.application.index') }}" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('Applications')</span>
+                                    <span class="menu-title">@lang('Applications Phytos')</span>
                                 </a>
                             </li>
                             <li class="sidebar-menu-item {{ menuActive('manager.suivi.ssrteclmrs.index') }}">
@@ -146,27 +155,31 @@ Productivité') </span>
                                     <i class="menu-icon las la-dot-circle"></i>
                                     <span class="menu-title">@lang('SSRTE-CLMRS')</span>
                                 </a>
-                            </li> 
-							 
+                            </li>
+
                         </ul>
                     </div>
                 </li>
 
                 <li class="sidebar-menu-item sidebar-dropdown">
-                    <a href="javascript:void(0)" class="{{ menuActive(['manager.livraison.*','manager.livraison.magcentral.*','manager.livraison.stock.section'], 3) }}">
+                    <a href="javascript:void(0)"
+                        class="{{ menuActive(['manager.livraison.*', 'manager.livraison.magcentral.*', 'manager.livraison.stock.section'], 3) }}">
                         <i class="menu-icon las la-university"></i>
                         <span class="menu-title">@lang('Gestion des livraisons') </span>
                     </a>
-                    <div class="sidebar-submenu {{ menuActive(['manager.livraison.*','manager.livraison.magcentral.*','manager.livraison.stock.section'], 2) }} ">
+                    <div
+                        class="sidebar-submenu {{ menuActive(['manager.livraison.*', 'manager.livraison.magcentral.*', 'manager.livraison.stock.section'], 2) }} ">
                         <ul>
-                            <li class="sidebar-menu-item {{ menuActive(['manager.livraison.index','manager.livraison.stock.section']) }}">
+                            <li
+                                class="sidebar-menu-item {{ menuActive(['manager.livraison.index', 'manager.livraison.stock.section']) }}">
                                 <a href="{{ route('manager.livraison.index') }}" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>
                                     <span class="menu-title">@lang('Livraison Magasins de Section')</span>
                                 </a>
-                                
+
                             </li>
-                            <li class="sidebar-menu-item {{ menuActive(['manager.livraison.index','manager.livraison.stock.section']) }}">
+                            <li
+                                class="sidebar-menu-item {{ menuActive(['manager.livraison.index', 'manager.livraison.stock.section']) }}">
                                 <a href="{{ route('manager.livraison.stock.section') }}" class="nav-link">
                                     <i class="menu-icon las la-server"></i>
                                     <span class="menu-title">@lang('Stock Magasins de Section')</span>
@@ -189,7 +202,7 @@ Productivité') </span>
                         </ul>
                     </div>
                 </li>
-                
+
                 <li class="sidebar-menu-item sidebar-dropdown">
                     <a href="javascript:void(0)" class="{{ menuActive('manager.agro*', 3) }}">
                         <i class="menu-icon las la-tree"></i>
@@ -197,21 +210,21 @@ Productivité') </span>
                     </a>
                     <div class="sidebar-submenu {{ menuActive('manager.agro*', 2) }} ">
                         <ul>
- 
-                           <li class="sidebar-menu-item {{ menuActive('manager.agro.evaluation.index') }}">
+
+                            <li class="sidebar-menu-item {{ menuActive('manager.agro.evaluation.index') }}">
                                 <a href="{{ route('manager.agro.evaluation.index') }}" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>
                                     <span class="menu-title">@lang('Evaluation des besoins')</span>
                                 </a>
                             </li>
 
-							<li class="sidebar-menu-item {{ menuActive('manager.agro.approvisionnement.index') }}">
+                            <li class="sidebar-menu-item {{ menuActive('manager.agro.approvisionnement.index') }}">
                                 <a href="{{ route('manager.agro.approvisionnement.index') }}" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>
                                     <span class="menu-title">@lang('Approvisionnement')</span>
                                 </a>
                             </li>
-							
+
                             <li class="sidebar-menu-item {{ menuActive('manager.agro.distribution.index') }}">
                                 <a href="{{ route('manager.agro.distribution.index') }}" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>
@@ -224,8 +237,8 @@ Productivité') </span>
                                     <span class="menu-title">@lang('Risques Déforestation')</span>
                                 </a>
                             </li>
-                            
-							 
+
+
                         </ul>
                     </div>
                 </li>
@@ -236,17 +249,17 @@ Productivité') </span>
                     </a>
                 </li>
                 <li class="sidebar-menu-item {{ menuActive('manager.settings.*') }}">
-                                <a href="{{ route('manager.settings.cooperative-settings.index') }}" class="nav-link">
-                                    <i class="menu-icon las la-cogs"></i>
-                                    <span class="menu-title">@lang('Paramètres')</span>
-                                </a>
-                            </li> 
+                    <a href="{{ route('manager.settings.cooperative-settings.index') }}" class="nav-link">
+                        <i class="menu-icon las la-cogs"></i>
+                        <span class="menu-title">@lang('Paramètres')</span>
+                    </a>
+                </li>
             </ul>
-             
+
         </div>
 
 
-         
+
     </div>
 </div>
 <!-- sidebar end -->

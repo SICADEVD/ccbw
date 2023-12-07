@@ -17,7 +17,7 @@ class SuiviFormation extends Model
     }
     public function typeFormation()
     {
-        return $this->belongsTo(TypeFormation::class, 'type_formation_id');
+        return $this->belongsTo(TypeFormation::class, 'type_formation_id', 'id');
     }
     public function campagne()
     {

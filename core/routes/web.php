@@ -77,8 +77,12 @@ Route::middleware('auth')->group(function () {
                 Route::get('income', 'cooperativeIncome')->name('income');
             });
         });
-
-
+        //Présentation cooperative
+        Route::controller('Manager\PresentationCoopController')->name('presentation-coop.')->prefix('presentation-coop')->group(function () {
+            Route::get('index', 'index')->name('index');
+            Route::get('create', 'create')->name('create');
+            Route::post('store', 'store')->name('store');
+        });
         //Manage Staff
         Route::controller('Manager\StaffController')->name('staff.')->prefix('staff')->group(function () {
             Route::get('create', 'create')->name('create');
@@ -139,7 +143,7 @@ Route::middleware('auth')->group(function () {
             Route::get('import/process/{name}/{id}', [ImportController::class, 'getImportProgress'])->name('import.process.progress');
             Route::get('employees/import/exception/{name}', [ImportController::class, 'getQueueException'])->name('import.process.exception');
         });
-       
+
         Route::name('settings.')->prefix('settings')->group(function () {
             Route::resource('attendance-settings', AttendanceSettingController::class);
             Route::resource('leaves-settings', LeaveSettingController::class);
@@ -189,7 +193,7 @@ Route::middleware('auth')->group(function () {
             Route::get('type-archive/', [SettingController::class, 'typeArchiveIndex'])->name('typeArchive.index');
             Route::post('type-archive/store', [SettingController::class, 'typeArchiveStore'])->name('typeArchive.store');
             Route::post('type-archive/status/{id}', [SettingController::class, 'typeArchiveStatus'])->name('typeArchive.status');
-            
+
             Route::get('departement/', [SettingController::class, 'departementIndex'])->name('departements.index');
             Route::post('departement/store', [SettingController::class, 'departementStore'])->name('departements.store');
             Route::post('departement/status/{id}', [SettingController::class, 'departementStatus'])->name('departements.status');
@@ -202,7 +206,7 @@ Route::middleware('auth')->group(function () {
             Route::post('instance/store', [SettingController::class, 'instanceStore'])->name('instance.store');
             Route::get('document-ad/', [SettingController::class, 'documentadIndex'])->name('documentad.index');
             Route::post('document-ad/store', [SettingController::class, 'documentadStore'])->name('documentad.store');
-            
+
             Route::get('magasin-section/', [SettingController::class, 'magasinSectionIndex'])->name('magasinSection.index');
             Route::post('magasin-section/store', [SettingController::class, 'magasinSectionStore'])->name('magasinSection.store');
             Route::post('magasin-section/status/{id}', [SettingController::class, 'magasinSectionStatus'])->name('magasinSection.status');
@@ -213,7 +217,6 @@ Route::middleware('auth')->group(function () {
 
             Route::get('formateur-staff/', [SettingController::class, 'formateurStaffIndex'])->name('formateurStaff.index');
             Route::post('formateur-staff/store', [SettingController::class, 'formateurStaffStore'])->name('formateurStaff.store');
-
             Route::get('vehicule/', [SettingController::class, 'vehiculeIndex'])->name('vehicule.index');
             Route::post('vehicule/store', [SettingController::class, 'vehiculeStore'])->name('vehicule.store');
             Route::post('vehicule/status/{id}', [SettingController::class, 'vehiculeStatus'])->name('vehicule.status');
@@ -226,11 +229,11 @@ Route::middleware('auth')->group(function () {
             Route::post('entreprise/store', [SettingController::class, 'entrepriseStore'])->name('entreprise.store');
         });
 
-Route::resource('employee-files', EmployeeFileController::class);
-Route::resource('leaveType', LeaveTypeController::class);
-Route::post('employee-shifts/set-default', [EmployeeShiftController::class, 'setDefaultShift'])->name('employee-shifts.set_default');
-Route::resource('employee-shifts', EmployeeShiftController::class);
-Route::resource('settings', SettingsController::class)->only(['edit', 'update', 'index']);
+        Route::resource('employee-files', EmployeeFileController::class);
+        Route::resource('leaveType', LeaveTypeController::class);
+        Route::post('employee-shifts/set-default', [EmployeeShiftController::class, 'setDefaultShift'])->name('employee-shifts.set_default');
+        Route::resource('employee-shifts', EmployeeShiftController::class);
+        Route::resource('settings', SettingsController::class)->only(['edit', 'update', 'index']);
 
         Route::resource('employees', EmployeeController::class);
         Route::resource('emergency-contacts', EmergencyContactController::class);
@@ -299,6 +302,7 @@ Route::resource('settings', SettingsController::class)->only(['edit', 'update', 
         });
         Route::resource('timelog-calendar', TimelogCalendarController::class);
         Route::resource('timelogs', TimelogController::class);
+
         //Manage Producteur
         Route::controller('Manager\ProducteurController')->name('traca.producteur.')->prefix('producteur')->group(function () {
             Route::get('list', 'index')->name('index');
@@ -373,7 +377,7 @@ Route::resource('settings', SettingsController::class)->only(['edit', 'update', 
             Route::get('visiteur/edit/{id}', 'editvisiteur')->name('editvisiteur');
         });
 
-       
+
 
         //Manage Suivi Inspection
         Route::controller('Manager\InspectionController')->name('suivi.inspection.')->prefix('inspection')->group(function () {
@@ -461,7 +465,7 @@ Route::resource('settings', SettingsController::class)->only(['edit', 'update', 
             Route::post('store', 'store')->name('store');
             Route::post('update/{id}', 'update')->name('update');
             Route::get('edit/{id}', 'edit')->name('edit');
-            Route::get('list', 'livraisonInfo')->name('index'); 
+            Route::get('list', 'livraisonInfo')->name('index');
             Route::get('stock', 'stockSection')->name('stock.section');
             Route::get('parcelle', 'getParcelle')->name('get.parcelle');
             Route::get('producteur', 'getProducteur')->name('get.producteur');

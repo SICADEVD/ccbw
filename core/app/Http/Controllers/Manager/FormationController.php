@@ -176,20 +176,29 @@ class FormationController extends Controller
         $manager   = auth()->user();
         $producteurs  = Producteur::with('localite')->get();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id', $manager->cooperative_id], ['localites.status', 1]])->get();
-        $typeformations  = TypeFormation::all()->pluck('nom', 'id');
-        $themes  = ThemesFormation::with('typeFormation')->get();
-        $staffs  = User::staff()->get();
         $formation   = SuiviFormation::findOrFail($id);
-        // $suiviTheme = SuiviFormationTheme::where('suivi_formation_id', $formation->id)->get();
+        $typeformations  = TypeFormation::all();
+        
+        $modules = array();
+        $themesSelected = array();
+        $sousThemesSelected = array();
+        
+        foreach ($formation->typeFormationTheme as $item) {
+            $modules[] = $item->type_formation_id; 
+            $themesSelected[] = $item->theme_formation_id;
+        }
+        
+        foreach ($formation->themeSousTheme as $item) {
+            $sousThemesSelected[] = $item->sous_theme_id;
+        }
+
+        $themes  = ThemesFormation::with('typeFormation')->get();
+        $sousthemes  = SousThemeFormation::with('themeFormation')->get();
+        $staffs  = User::staff()->get();
+        
         $dataProducteur = $dataVisiteur = $dataTheme = array();
 
-
-        // if ($suiviTheme->count()) {
-        //     foreach ($suiviTheme as $data) {
-        //         $dataTheme[] = $data->themes_formation_id;
-        //     }
-        // }
-        return view('manager.formation.edit', compact('pageTitle', 'localites', 'formation', 'producteurs', 'typeformations', 'themes', 'staffs', 'dataProducteur', 'dataTheme'));
+        return view('manager.formation.edit', compact('pageTitle', 'localites', 'formation', 'producteurs', 'typeformations', 'themes', 'staffs', 'dataProducteur', 'dataTheme', 'modules', 'themesSelected', 'sousthemes', 'sousThemesSelected'));
     }
 
     public function visiteur($id)
