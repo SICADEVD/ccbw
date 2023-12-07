@@ -157,7 +157,7 @@ class SuiviParcelleController extends Controller
         // dd($request->all());
         $suivi_parcelle->save();
         if ($suivi_parcelle != null) {
-            $datas2=$datas3=$datas4=$datas5=$datas6=[];
+            $datas2=$datas3=$datas4=$datas5=$datas6=$datas7=$datas8=$datas9=[];
             $id = $suivi_parcelle->id;
            
             //pesticide utilisé l'année dernière
@@ -306,7 +306,7 @@ class SuiviParcelleController extends Controller
             SuiviParcellesAutreParasite::insert($datas6);
             SuiviParcellesInsecteAmi::insert($datas7);
             SuiviParcellesOmbrage::insert($datas);
-            SuiviParcellesAgroforesterie::insert($data8);
+            SuiviParcellesAgroforesterie::insert($datas8);
             SuiviParcellesAnimal::insert($datas9);
         }
 
