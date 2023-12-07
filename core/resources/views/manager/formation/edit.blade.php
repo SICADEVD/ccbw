@@ -73,7 +73,7 @@
                             <select class="form-control select2-multi-select" name="theme_formation" id="theme" multiple required>
                                 <option value="">@lang('Selectionner une option')</option>
                                 @foreach ($themes as $theme)
-                                    <option value="{{ $theme->id }}" data-chained="{{ $theme->type_formation_id ?? '' }}" @selected($theme->id == $formation->theme_formation)>
+                                    <option value="{{ $theme->id }}" data-chained="{{ $theme->type_formation_id ?? '' }}">
                                         {{ $theme->nom }}</option>
                                 @endforeach
                             </select>
@@ -86,7 +86,7 @@
                             <select class="form-control select2-multi-select" name="sous_theme_formation" id="sous_theme" multiple required>
                                 <option value="">@lang('Selectionner une option')</option>
                                 @foreach ($sousthemes as $soustheme)
-                                    <option value="{{ $soustheme->id }}" data-chained="{{ $soustheme->theme_formation_id ?? '' }}" @selected($soustheme->id == $formation->sous_theme_formation)>
+                                    <option value="{{ $soustheme->id }}" data-chained="{{ $soustheme->theme_formation_id ?? '' }}" >
                                         {{ $soustheme->nom }}</option>
                                 @endforeach
                             </select>
