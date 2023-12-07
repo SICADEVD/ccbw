@@ -141,7 +141,6 @@ class SuiviParcelleController extends Controller
         $suivi_parcelle->presenceSwollenShoot    = $request->presenceSwollenShoot;
         $suivi_parcelle->presenceInsectesParasites    = $request->presenceInsectesParasites;
         // $suivi_parcelle->presenceInsectesParasitesRavageur    = $request->presenceInsectesParasitesRavageur;
-        $suivi_parcelle->presenceBioAgresseur    = $request->presenceBioAgresseur;
         $suivi_parcelle->presenceFourmisRouge    = $request->presenceFourmisRouge;
         $suivi_parcelle->presenceAraignee    = $request->presenceAraignee;
         $suivi_parcelle->presenceVerTerre    = $request->presenceVerTerre;
