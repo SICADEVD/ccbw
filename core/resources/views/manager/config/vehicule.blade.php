@@ -15,62 +15,58 @@
                         <table class="table table--light style--two">
                             <thead>
                                 <tr>
-                                    <th>@lang('Cooperative')</th> 
-                                    <th>@lang('Staff')</th> 
-                                    <th>@lang('Nom magasin')</th>
-                                    <th>@lang('Code')</th>
+                                <th>@lang('Cooperative')</th> 
+                                    <th>@lang('Marque')</th>
+                                    <th>@lang('Matricule véhicule')</th>
                                     <th>@lang('Status')</th>
                                     <th>@lang('Last Update')</th>
                                     <th>@lang('Action')</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse($magasinCentraux as $magasin)
+                                @forelse($vehicules as $vehicule)
                                     <tr>
                                     <td>
-                                            <span>{{ __($magasin->cooperative->name) }}</span>
+                                            <span>{{ $vehicule->cooperative->name }}</span>
                                         </td> 
                                     <td>
-                                            <span>{{  $magasin->user->lastname }} {{  $magasin->user->firstname }}</span>
+                                            <span>{{  $vehicule->marque->nom }}</span>
                                         </td> 
                                         
                                         <td>
-                                            <span>{{ __($magasin->nom) }}</span>
+                                            <span>{{ __($vehicule->vehicule_immat) }}</span>
                                         </td> 
-                                        <td>
-                                            <span>{{ __($magasin->code) }}</span>
-                                        </td> 
+                                        
                                         <td>
                                             @php
-                                                echo $magasin->statusBadge;
+                                                echo $vehicule->statusBadge;
                                             @endphp
                                         </td>
 
                                         <td>
-                                            <span class="d-block">{{ showDateTime($magasin->updated_at) }}</span>
-                                            <span>{{ diffForHumans($magasin->updated_at) }}</span>
+                                            <span class="d-block">{{ showDateTime($vehicule->updated_at) }}</span>
+                                            <span>{{ diffForHumans($vehicule->updated_at) }}</span>
                                         </td>
 
                                         <td>
                                             <button type="button" class="btn btn-sm btn-outline--primary  updateType"
-                                                data-id="{{ $magasin->id }}" 
-                                                data-nom="{{ $magasin->nom }}"
-                                                data-code="{{ $magasin->code }}"
-                                                data-user="{{ $magasin->staff_id }}"><i
+                                                data-id="{{ $vehicule->id }}" 
+                                                data-marque="{{ $vehicule->marque_id }}"
+                                                data-matricule="{{ $vehicule->vehicule_immat }}"><i
                                                  class="las la-pen"></i>@lang('Edit')</button>
 
-                                            @if ($magasin->status == Status::DISABLE)
+                                            @if ($vehicule->status == Status::DISABLE)
                                                 <button type="button"
                                                     class="btn btn-sm btn-outline--success confirmationBtn"
-                                                    data-action="{{ route('manager.settings.magasinCentral.status', $magasin->id) }}"
-                                                    data-question="@lang('Etes-vous sûr de vouloir activer ce magasin de formation?')">
+                                                    data-action="{{ route('manager.settings.vehicule.status', $vehicule->id) }}"
+                                                    data-question="@lang('Etes-vous sûr de vouloir activer ce vehicule?')">
                                                     <i class="la la-eye"></i> @lang('Activé')
                                                 </button>
                                             @else
                                                 <button type="button"
                                                     class="btn btn-sm btn-outline--danger confirmationBtn"
-                                                    data-action="{{ route('manager.settings.magasinCentral.status', $magasin->id) }}"
-                                                    data-question="@lang('Etes-vous sûr de vouloir désactiver ce magasin de formation?')">
+                                                    data-action="{{ route('manager.settings.vehicule.status', $vehicule->id) }}"
+                                                    data-question="@lang('Etes-vous sûr de vouloir désactiver ce vehicule?')">
                                                     <i class="la la-eye-slash"></i>@lang('Désactivé')
                                                 </button>
                                             @endif
@@ -86,9 +82,9 @@
                         </table>
                     </div>
                 </div>
-                @if ($magasinCentraux->hasPages())
+                @if ($vehicules->hasPages())
                     <div class="card-footer py-4">
-                        {{ paginateLinks($magasinCentraux) }}
+                        {{ paginateLinks($vehicules) }}
                     </div>
                 @endif
             </div>
@@ -98,41 +94,34 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">@lang('Ajouter un Magasin Central')</h5>
+                    <h5 class="modal-title">@lang('Ajouter un Magasin de Section')</h5>
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <i class="las la-times"></i> </button>
                 </div>
-                <form action="{{ route('manager.settings.magasinCentral.store') }}" method="POST">
+                <form action="{{ route('manager.settings.vehicule.store') }}" method="POST">
                     @csrf
                     <div class="modal-body"> 
                     <input type="hidden" name='id'>
-                    <div class="form-group row">
-                                <label class="col-sm-4 control-label">@lang('Nom Staff')</label>
+                    
+                            <div class="form-group row">
+                                <label class="col-sm-4 control-label">@lang('Marque de Véhicule')</label>
                                 <div class="col-xs-12 col-sm-8">
-                                <select class="form-control" name="user" id="user" required>
+                                <select class="form-control select-picker" data-live-search="true" name="marque" id="marque" required>
                                     <option value="">@lang('Selectionner une option')</option>
-                                    @foreach($users as $user)
-                                        <option value="{{ $user->id }}" @selected(old('user'))>
-                                            {{ __($user->nom) }}</option>
+                                    @foreach($marques as $marque)
+                                        <option value="{{ $marque->id }}" @selected(old('marque'))>
+                                            {{ __($marque->nom) }}</option>
                                     @endforeach
                                 </select>
                                 </div>
                             </div> 
-                             
 
         <div class="form-group row">
-            {{ Form::label(__('Nom du magasin'), null, ['class' => 'control-label col-sm-4']) }}
+            {{ Form::label(__('Nom du vehicule'), null, ['class' => 'control-label col-sm-4']) }}
             <div class="col-xs-12 col-sm-8 col-md-8">
-            {!! Form::text('nom', null, array('placeholder' => __('Nom du magasin'),'class' => 'form-control','required')) !!}
+            {!! Form::text('matricule', null, array('placeholder' => __('Matricule du vehicule'),'class' => 'form-control','required')) !!}
         </div>
-    </div>
-    <div class="form-group row">
-            {{ Form::label(__('Code du magasin'), null, ['class' => 'control-label col-sm-4']) }}
-            <div class="col-xs-12 col-sm-8 col-md-8">
-            {!! Form::text('code', $codemag, array('placeholder' => __('Code du magasin'),'class' => 'form-control','readonly'=>'readonly')) !!}
-        </div>
-    </div>
- 
+    </div> 
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn--primary w-100 h-45 ">@lang('Enregistrer')</button>
@@ -160,9 +149,8 @@
             $('.updateType').on('click', function() {
                 var modal = $('#typeModel'); 
                 modal.find('input[name=id]').val($(this).data('id')); 
-                modal.find('input[name=nom]').val($(this).data('nom'));  
-                modal.find('input[name=code]').val($(this).data('code'));  
-                modal.find('select[name=user]').val($(this).data('user'));  
+                modal.find('input[name=marque]').val($(this).data('marque'));  
+                modal.find('input[name=matricule]').val($(this).data('matricule'));   
                 modal.modal('show');
             });
         })(jQuery);

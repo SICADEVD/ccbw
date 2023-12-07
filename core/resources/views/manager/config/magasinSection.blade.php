@@ -18,6 +18,7 @@
                                 <th>@lang('Section')</th>
                                     <th>@lang('Staff')</th> 
                                     <th>@lang('Nom magasin')</th>
+                                    <th>@lang('Code')</th>
                                     <th>@lang('Status')</th>
                                     <th>@lang('Last Update')</th>
                                     <th>@lang('Action')</th>
@@ -37,6 +38,9 @@
                                             <span>{{ __($magasin->nom) }}</span>
                                         </td> 
                                         <td>
+                                            <span>{{ __($magasin->code) }}</span>
+                                        </td> 
+                                        <td>
                                             @php
                                                 echo $magasin->statusBadge;
                                             @endphp
@@ -51,6 +55,7 @@
                                             <button type="button" class="btn btn-sm btn-outline--primary  updateType"
                                                 data-id="{{ $magasin->id }}" 
                                                 data-nom="{{ $magasin->nom }}"
+                                                data-code="{{ $magasin->code }}"
                                                 data-user="{{ $magasin->staff_id }}"
                                                 data-section="{{ $magasin->section_id }}"><i
                                                  class="las la-pen"></i>@lang('Edit')</button>
@@ -133,8 +138,12 @@
             {!! Form::text('nom', null, array('placeholder' => __('Nom du magasin'),'class' => 'form-control','required')) !!}
         </div>
     </div>
-    
- 
+    <div class="form-group row">
+            {{ Form::label(__('Code du magasin'), null, ['class' => 'control-label col-sm-4']) }}
+            <div class="col-xs-12 col-sm-8 col-md-8">
+            {!! Form::text('code', $codemag, array('placeholder' => __('Code du magasin'),'class' => 'form-control','readonly'=>'readonly')) !!}
+        </div>
+    </div>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn--primary w-100 h-45 ">@lang('Enregistrer')</button>
@@ -163,6 +172,7 @@
                 var modal = $('#typeModel'); 
                 modal.find('input[name=id]').val($(this).data('id')); 
                 modal.find('input[name=nom]').val($(this).data('nom'));  
+                modal.find('input[name=code]').val($(this).data('code'));  
                 modal.find('select[name=user]').val($(this).data('user')); 
                 modal.find('select[name=section]').val($(this).data('section'));
                 modal.modal('show');
