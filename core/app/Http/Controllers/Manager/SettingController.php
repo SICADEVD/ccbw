@@ -4,18 +4,25 @@ namespace App\Http\Controllers\manager;
 
 use App\Models\Unit;
 use App\Models\User;
+use App\Models\Marque;
 use App\Models\Section;
+use App\Models\Countrie;
 use App\Models\Instance;
+use App\Models\Vehicule;
 use App\Constants\Status;
 use App\Models\Campagne; 
 use App\Models\ArretEcole;
 use App\Models\Department;
 use App\Models\Entreprise;
+use App\Http\Helpers\Files;
 use App\Http\Helpers\Reply;
 use App\Models\Cooperative;
 use App\Models\CourierInfo;
 use App\Models\Designation;
 use App\Models\TypeArchive;
+use Illuminate\Support\Str;
+use App\Models\NiveauxEtude;
+use App\Models\Transporteur;
 use App\Models\UserLocalite;
 use Illuminate\Http\Request;
 use App\Models\Questionnaire;
@@ -582,7 +589,8 @@ class SettingController extends Controller
                 ->select('id',DB::raw("CONCAT(lastname,' ', firstname) as nom"))
                 ->get(); 
         $magasinSections     = MagasinSection::orderBy('id','desc')->paginate(getPaginate());
-        return view('manager.config.magasinSection', compact('pageTitle', 'magasinSections','activeSettingMenu','users','sections'));
+        $codemag=$this->generecodemagasin();
+        return view('manager.config.magasinSection', compact('pageTitle', 'magasinSections','activeSettingMenu','users','sections','codemag'));
     }
 public function magasinSectionStore(Request $request)
     {
@@ -601,12 +609,62 @@ public function magasinSectionStore(Request $request)
         $magasin->staff_id = trim($request->user); 
         $magasin->section_id = trim($request->section);
         $magasin->nom = trim($request->nom); 
+        $magasin->code = isset($request->code) ? $request->code : $this->generecodemagasin();
         $magasin->save();
        
         $notify[] = ['success', isset($message) ? $message  : 'Le contenu a été ajouté avec succès.'];
         return back()->withNotify($notify);
     }
-     
+    private function generecodemagasin()
+    {
+
+        $data = MagasinSection::select('code')->orderby('id','desc')->first();
+
+        if($data !=null){
+            $code = $data->code;
+        $chaine_number = Str::afterLast($code,'-');
+        if($chaine_number<10){$zero="00000";}
+        else if($chaine_number<100){$zero="0000";}
+        else if($chaine_number<1000){$zero="000";}
+        else if($chaine_number<10000){$zero="00";}
+        else if($chaine_number<100000){$zero="0";}
+        else{$zero="";}
+        }else{
+            $zero="00000";
+            $chaine_number=0;
+        }
+        if(!$chaine_number) $chaine_number = 0;
+        $sub='MAG-';
+        $lastCode=$chaine_number+1;
+        $code=$sub.$zero.$lastCode;
+
+        return $code;
+    }
+    private function generecodemagasincentral()
+    {
+
+        $data = MagasinCentral::select('code')->orderby('id','desc')->first();
+
+        if($data !=null){
+            $code = $data->code;
+        $chaine_number = Str::afterLast($code,'-');
+        if($chaine_number<10){$zero="00000";}
+        else if($chaine_number<100){$zero="0000";}
+        else if($chaine_number<1000){$zero="000";}
+        else if($chaine_number<10000){$zero="00";}
+        else if($chaine_number<100000){$zero="0";}
+        else{$zero="";}
+        }else{
+            $zero="00000";
+            $chaine_number=0;
+        }
+        if(!$chaine_number) $chaine_number = 0;
+        $sub='MAG-CENTRAL-';
+        $lastCode=$chaine_number+1;
+        $code=$sub.$zero.$lastCode;
+
+        return $code;
+    }
     public function magasinCentralIndex()
     {
        $pageTitle = "Manage des Magasins Centraux"; 
@@ -617,7 +675,8 @@ public function magasinSectionStore(Request $request)
         ->select('id',DB::raw("CONCAT(lastname,' ', firstname) as nom"))
         ->get(); 
         $magasinCentraux     = MagasinCentral::orderBy('id','desc')->paginate(getPaginate());
-        return view('manager.config.magasinCentral', compact('pageTitle', 'magasinCentraux','activeSettingMenu','users'));
+        $codemag=$this->generecodemagasincentral();
+        return view('manager.config.magasinCentral', compact('pageTitle', 'magasinCentraux','activeSettingMenu','users','codemag'));
     }
 public function magasinCentralStore(Request $request)
     {
@@ -635,12 +694,106 @@ public function magasinCentralStore(Request $request)
         $magasin->cooperative_id = auth()->user()->cooperative_id;
         $magasin->staff_id = trim($request->user); 
         $magasin->nom = trim($request->nom); 
+        $magasin->code = isset($request->code) ? $request->code : $this->generecodemagasincentral();
         $magasin->save();
        
         $notify[] = ['success', isset($message) ? $message  : 'Le contenu a été ajouté avec succès.'];
         return back()->withNotify($notify);
     }
-     
+    
+    public function vehiculeIndex()
+    {
+
+       $pageTitle = "Manage des Véhicules"; 
+       $manager = auth()->user();
+        $activeSettingMenu = 'vehicule_settings';
+        $marques = Marque::get();  
+        $vehicules = Vehicule::orderBy('id','desc')->paginate(getPaginate());
+         
+        return view('manager.config.vehicule', compact('pageTitle', 'vehicules','activeSettingMenu','marques'));
+    }
+public function vehiculeStore(Request $request)
+    {
+        $request->validate([ 
+            'matricule'  => 'required',
+            'marque'  => 'required', 
+        ]);
+
+        if ($request->id) {
+            $vehicule    = Vehicule::findOrFail($request->id);
+            $message = "Le contenu a été mise à jour avec succès.";
+        } else {
+            $vehicule = new Vehicule();
+        } 
+		$manager = auth()->user();  
+        $vehicule->cooperative_id = $manager->cooperative_id;
+        $vehicule->vehicule_immat = trim($request->matricule); 
+        $vehicule->marque_id = $request->marque;
+        $vehicule->save();
+       
+        $notify[] = ['success', isset($message) ? $message  : 'Le contenu a été ajouté avec succès.'];
+        return back()->withNotify($notify);
+    }
+    public function transporteurIndex()
+    {
+
+       $pageTitle = "Manage des Transporteurs"; 
+       $manager = auth()->user();
+        $activeSettingMenu = 'transporteur_settings';  
+        $transporteurs = Transporteur::orderBy('id','desc')->paginate(getPaginate());
+        $countries = Countrie::get(); 
+        $niveaux = NiveauxEtude::get();
+        return view('manager.config.transporteur', compact('pageTitle', 'transporteurs','activeSettingMenu','countries','niveaux'));
+    }
+public function transporteurStore(Request $request)
+    {
+        $request->validate([ 
+            'nom'  => 'required',
+            'prenoms'  => 'required', 
+            'sexe'  => 'required',
+            'phone1'  => 'required',
+            'phone2'  => 'required',
+        ]);
+
+        if ($request->id) {
+            $transporteur    = Transporteur::findOrFail($request->id);
+            $message = "Le contenu a été mise à jour avec succès.";
+        } else {
+            $transporteur = new Transporteur();
+        } 
+		$manager = auth()->user();  
+        $transporteur->cooperative_id = $manager->cooperative_id;
+        $transporteur->nom = trim($request->nom); 
+        $transporteur->prenoms = trim($request->prenoms);
+        $transporteur->sexe = trim($request->sexe);
+        $transporteur->date_naiss = trim($request->date_naiss);
+        $transporteur->phone1 = trim($request->phone1);
+        $transporteur->phone2 = trim($request->phone2);
+        $transporteur->nationalite = trim($request->nationalite);
+        $transporteur->niveau_etude = trim($request->niveau_etude);
+        $transporteur->type_piece = trim($request->type_piece);
+        $transporteur->num_piece = trim($request->num_piece);
+        $transporteur->num_permis = trim($request->num_permis);
+        if($request->hasFile('photo')) { 
+            Files::deleteFile($transporteur->photo, 'transporteur');
+            $transporteur->photo = Files::uploadLocalOrS3($request->photo, 'transporteur', 600);
+        }
+
+        if($request->hasFile('photo_piece_identite')) { 
+            Files::deleteFile($transporteur->photo_piece_identite, 'transporteur');
+            $transporteur->photo_piece_identite = Files::uploadLocalOrS3($request->photo_piece_identite, 'transporteur', 600);
+        }
+
+        if($request->hasFile('photo_permis_conduire')) { 
+            Files::deleteFile($transporteur->photo_permis_conduire, 'transporteur');
+            $transporteur->photo_permis_conduire = Files::uploadLocalOrS3($request->photo_permis_conduire, 'transporteur', 600);
+        }
+         
+        $transporteur->save();
+       
+        $notify[] = ['success', isset($message) ? $message  : 'Le contenu a été ajouté avec succès.'];
+        return back()->withNotify($notify);
+    }
     public function campagneStatus($id)
     {
         return Campagne::changeStatus($id);
@@ -704,5 +857,13 @@ public function magasinCentralStore(Request $request)
     public function magasinCentralStatus($id)
     {
         return MagasinCentral::changeStatus($id);
+    }
+    public function vehiculeStatus($id)
+    {
+        return Vehicule::changeStatus($id);
+    }
+    public function transporteurStatus($id)
+    {
+        return Transporteur::changeStatus($id);
     }
 }

@@ -214,6 +214,14 @@ Route::middleware('auth')->group(function () {
             Route::get('formateur-staff/', [SettingController::class, 'formateurStaffIndex'])->name('formateurStaff.index');
             Route::post('formateur-staff/store', [SettingController::class, 'formateurStaffStore'])->name('formateurStaff.store');
 
+            Route::get('vehicule/', [SettingController::class, 'vehiculeIndex'])->name('vehicule.index');
+            Route::post('vehicule/store', [SettingController::class, 'vehiculeStore'])->name('vehicule.store');
+            Route::post('vehicule/status/{id}', [SettingController::class, 'vehiculeStatus'])->name('vehicule.status');
+
+            Route::get('transporteur/', [SettingController::class, 'transporteurIndex'])->name('transporteur.index');
+            Route::post('transporteur/store', [SettingController::class, 'transporteurStore'])->name('transporteur.store');
+            Route::post('transporteur/status/{id}', [SettingController::class, 'transporteurStatus'])->name('transporteur.status');
+            
             Route::get('entreprise/', [SettingController::class, 'entrepriseIndex'])->name('entreprise.index');
             Route::post('entreprise/store', [SettingController::class, 'entrepriseStore'])->name('entreprise.store');
         });
