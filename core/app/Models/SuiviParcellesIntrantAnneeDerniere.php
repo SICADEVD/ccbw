@@ -8,11 +8,11 @@ use App\Traits\GlobalStatus;
 use App\Traits\Searchable;
 use Kirschbaum\PowerJoins\PowerJoins;
 
-class SuiviParcellesInsecte extends Model
+class SuiviParcellesIntrantAnneeDerniere extends Model
 {
     use HasFactory,Searchable, GlobalStatus, PowerJoins;
 
-    protected $table = 'suivi_parcelles_insectes';
+    protected $table = 'suivi_parcelles_intrant_annee_dernieres';
 
     public function suiviParcelle()
     {

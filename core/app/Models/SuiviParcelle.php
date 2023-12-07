@@ -40,11 +40,21 @@ class SuiviParcelle extends Model
         return $this->hasMany(SuiviParcellesAgroforesterie::class, 'suivi_parcelle_id', 'id');
     }
     public function insectes(){
-        return $this->hasMany(SuiviParcellesInsecte::class, 'suivi_parcelle_id', 'id');
+        return $this->hasMany(SuiviParcellesInsecteAmi::class, 'suivi_parcelle_id', 'id');
     }
     public function pesticides(){
         return $this->hasMany(Suivi_parcelle_pesticide::class, 'suivi_parcelle_id', 'id');
     }
-     
-     
+    public function autreParasite(){
+        return $this->hasMany(SuiviParcellesAutreParasite::class, 'suivi_parcelle_id', 'id');
+    }
+    public function traitements(){
+        return $this->hasMany(SuiviParcellesTraitements::class, 'suivi_parcelle_id', 'id');
+    }
+    public function pesticidesAnneDerniere(){
+        return $this->hasMany(SuiviParcellesPesticideAnneDerniere::class, 'suivi_parcelle_id', 'id');
+    }
+    public function intrantsAnneDerniere(){
+        return $this->hasMany(SuiviParcellesIntrantAnneeDerniere::class, 'suivi_parcelle_id', 'id');
+    }
 }

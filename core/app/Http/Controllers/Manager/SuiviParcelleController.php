@@ -18,11 +18,16 @@ use App\Http\Controllers\Controller;
 use App\Models\SuiviParcellesAnimal;
 use Illuminate\Support\Facades\Hash;
 use App\Exports\ExportSuiviParcelles;
-use App\Models\Suivi_parcelle_pesticide;
 use App\Models\SuiviParcellesInsecte;
 use App\Models\SuiviParcellesOmbrage;
 use App\Models\SuiviParcellesParasite;
+use App\Models\Suivi_parcelle_pesticide;
+use App\Models\SuiviParcellesInsecteAmi;
+use App\Models\SuiviParcellesTraitement;
+use App\Models\SuiviParcellesAutreParasite;
 use App\Models\SuiviParcellesAgroforesterie;
+use App\Models\SuiviParcellesIntrantAnneeDerniere;
+use App\Models\SuiviParcellesPesticideAnneDerniere;
 
 class SuiviParcelleController extends Controller
 {
@@ -37,7 +42,7 @@ class SuiviParcelleController extends Controller
         });
         $sections = $cooperative->sections;
         $suiviparcelles = SuiviParcelle::dateFilter()
-            ->searchable(["varieteAbres", "nombreSauvageons", "arbresagroforestiers", "activiteTaille", "activiteEgourmandage", "activiteDesherbageManuel", "activiteRecolteSanitaire", "intrantNPK", "nombresacsNPK", "intrantFiente", "nombresacsFiente", "intrantComposte", "nombresacsComposte", "presencePourritureBrune", "presenceBioAgresseur", "presenceInsectesRavageurs", "presenceFourmisRouge", "presenceAraignee", "presenceVerTerre", "presenceMenteReligieuse", "presenceSwollenShoot", "presenceInsectesParasites", "nomInsecticide", "nombreInsecticide", "nomFongicide", "uniteFongicide", "nomHerbicide", "uniteHerbicide", "nombreDesherbage"])
+            ->searchable(["nombreSauvageons","activiteTaille", "activiteEgourmandage", "activiteDesherbageManuel", "activiteRecolteSanitaire", "presencePourritureBrune","presenceInsectesRavageurs", "presenceFourmisRouge", "presenceAraignee", "presenceVerTerre", "presenceMenteReligieuse", "presenceSwollenShoot", "presenceInsectesParasites", "nombreDesherbage"])
             ->latest('id')
             ->joinRelationship('parcelle.producteur.localite')
             ->where(function ($q) {
@@ -77,6 +82,34 @@ class SuiviParcelleController extends Controller
             'dateVisite'  => 'required|max:255',
             'items.*.arbre'     => 'required|integer',
             'items.*.nombre'     => 'required|integer',
+
+            'pesticidesAnneDerniere.*.nom'     => 'required|string',
+            'pesticidesAnneDerniere.*.unite'     => 'required|string',
+            'pesticidesAnneDerniere.*.quantite'     => 'required|integer',
+            'pesticidesAnneDerniere.*.contenant'     => 'required|string',
+            'pesticidesAnneDerniere.*.frequence'     => 'required|string',
+
+            'intrantsAnneDerniere.*.nom'     => 'required|string',
+            'intrantsAnneDerniere.*.unite'     => 'required|string',
+            'intrantsAnneDerniere.*.quantite'     => 'required|integer',
+            'intrantsAnneDerniere.*.contenant'     => 'required|string',
+            'intrantsAnneDerniere.*.frequence'     => 'required|string',
+
+
+            'traitement.*.nom'     => 'required_if:traiterParcelle,oui',
+            'traitement.*.unite'     => 'required_if:traiterParcelle,oui',
+            'traitement.*.quantite'     => 'required_if:traiterParcelle,oui',
+            'traitement.*.contenant'     => 'required_if:traiterParcelle,oui',
+            'traitement.*.frequence'     => 'required_if:traiterParcelle,oui',
+
+            'presenceAutreInsecte.*.autreInsecteNom' => 'required_if:autreInsecte,oui',
+            'presenceAutreInsecte.*.nombreAutreInsectesParasites' => 'required_if:autreInsecte,oui',
+
+            'insectesParasites.*.nom' => 'required_if:presenceInsectesParasites,oui',
+            'insectesParasites.*.nombreinsectesParasites' => 'required_if:presenceInsectesParasites,oui',
+
+            'insectesAmis.*' => 'required_if:presenceInsectesAmis,oui',
+            'nombreinsectesAmis.*' => 'required_if:presenceInsectesAmis,oui',
         ];
 
         $request->validate($validationRule);
@@ -104,33 +137,6 @@ class SuiviParcelleController extends Controller
         $suivi_parcelle->activiteDesherbageManuel = $request->activiteDesherbageManuel;
         $suivi_parcelle->activiteRecolteSanitaire = $request->activiteRecolteSanitaire;
         $suivi_parcelle->activiteRecolteSanitaire = $request->activiteRecolteSanitaire;
-        $suivi_parcelle->intrantNPK = $request->intrantNPK;
-        $suivi_parcelle->nombresacsNPK = $request->nombresacsNPK;
-        $suivi_parcelle->capaciteNPK = $request->capaciteNPK;
-        $suivi_parcelle->conteneurNPK = $request->conteneurNPK;
-        $suivi_parcelle->qteNPK = $request->qteNPK;
-
-        $suivi_parcelle->intrantFiente = $request->intrantFiente;
-        $suivi_parcelle->nombresacsFiente    = $request->nombresacsFiente;
-        $suivi_parcelle->capaciteFiente    = $request->capaciteFiente;
-        $suivi_parcelle->conteneurFiente    = $request->conteneurFiente;
-        $suivi_parcelle->qteFiente    = $request->qteFiente;
-        $suivi_parcelle->intrantComposte    = $request->intrantComposte;
-        $suivi_parcelle->nombresacsComposte    = $request->nombresacsComposte;
-        $suivi_parcelle->capaciteComposte    = $request->capaciteComposte;
-        $suivi_parcelle->conteneurComposte    = $request->conteneurComposte;
-        $suivi_parcelle->qteComposte    = $request->qteComposte;
-        $suivi_parcelle->intrantDechetsAnimaux    = $request->intrantDechetsAnimaux;
-        $suivi_parcelle->nombreDechetsAnimaux   = $request->nombreDechetsAnimaux;
-        $suivi_parcelle->capaciteDechetsAnimaux   = $request->capaciteDechetsAnimaux;
-        $suivi_parcelle->conteneurDechetsAnimaux   = $request->conteneurDechetsAnimaux;
-        $suivi_parcelle->qteDechetsAnimaux   = $request->qteDechetsAnimaux;
-        $suivi_parcelle->qteBiofertilisant    = $request->qteBiofertilisant;
-        $suivi_parcelle->uniteBioFertilisant   = $request->uniteBioFertilisant;
-        $suivi_parcelle->qteEngraisOrganique    = $request->qteEngraisOrganique;
-        $suivi_parcelle->uniteEngraisOrganique   = $request->uniteEngraisOrganique;
-        $suivi_parcelle->frequencePesticide   = $request->frequencePesticide;
-        $suivi_parcelle->autrePesticide = $request->autrePesticide;
         $suivi_parcelle->presencePourritureBrune    = $request->presencePourritureBrune;
         $suivi_parcelle->presenceSwollenShoot    = $request->presenceSwollenShoot;
         $suivi_parcelle->presenceInsectesParasites    = $request->presenceInsectesParasites;
@@ -141,32 +147,53 @@ class SuiviParcelleController extends Controller
         $suivi_parcelle->presenceAraignee    = $request->presenceAraignee;
         $suivi_parcelle->presenceVerTerre    = $request->presenceVerTerre;
         $suivi_parcelle->presenceMenteReligieuse    = $request->presenceMenteReligieuse;
-        $suivi_parcelle->nomInsecticide    = $request->nomInsecticide;
-        $suivi_parcelle->nombreInsecticide    = $request->nombreInsecticide;
-        $suivi_parcelle->nomFongicide    = $request->nomFongicide;
-        $suivi_parcelle->uniteFongicide    = $request->uniteFongicide;
-        $suivi_parcelle->qteFongicide    = $request->qteFongicide;
-        $suivi_parcelle->qteHerbicide    = $request->qteHerbicide;
-        $suivi_parcelle->nomHerbicide    = $request->nomHerbicide;
-        $suivi_parcelle->uniteHerbicide    = $request->uniteHerbicide;
         $suivi_parcelle->nombreDesherbage    = $request->nombreDesherbage;
         $suivi_parcelle->presenceFourmisRouge   = $request->presenceFourmisRouge;
         $suivi_parcelle->presenceAraignee   = $request->presenceAraignee;
         $suivi_parcelle->presenceVerTerre   = $request->presenceVerTerre;
         $suivi_parcelle->presenceMenteReligieuse   = $request->presenceMenteReligieuse;
-        $suivi_parcelle->arbresagroforestiers  = $request->arbresagroforestiers;
         $suivi_parcelle->dateVisite    = $request->dateVisite;
-        $suivi_parcelle->presenceAutreTypeInsecteAmi    = $request->presenceAutreTypeInsecteAmi;
+        $suivi_parcelle->traiterParcelle    = $request->traiterParcelle;
         $suivi_parcelle->userid   = auth()->user()->id;
-        //dd(json_encode($request->all()));
+        // dd(json_encode($request->all()));
+        // dd($request->all());
         $suivi_parcelle->save();
         if ($suivi_parcelle != null) {
+            $datas2=$datas3=$datas4=$datas5=$datas6=[];
             $id = $suivi_parcelle->id;
-            $datas = [];
-            $datas2 = [];
-            $datas3 = [];
-            $datas4 = [];
-            $datas5 = [];
+           
+            //pesticide utilisé l'année dernière
+            if($request->pesticidesAnneDerniere[0]["nom"] != null && $request->pesticidesAnneDerniere[0]["unite"] != null && $request->pesticidesAnneDerniere[0]["quantite"] != null && $request->pesticidesAnneDerniere[0]["contenant"] != null && $request->pesticidesAnneDerniere[0]["frequence"] != null){
+                SuiviParcellesPesticideAnneDerniere::where('suivi_parcelle_id', $id)->delete();
+                foreach ($request->pesticidesAnneDerniere as $pesticide) {
+                    $datas2[] = [
+                        'suivi_parcelle_id' => $id,
+                        'nom' => $pesticide['nom'],
+                        'unite' => $pesticide['unite'],
+                        'quantite' => $pesticide['quantite'],
+                        'contenant' => $pesticide['contenant'],
+                        'frequence' => $pesticide['frequence'],
+                    ];
+                }
+            }
+            //fin pesticide utilisé l'année dernière 
+
+            //intrants utilisés l'année dernière
+            if($request->intrantsAnneDerniere[0]["nom"] != null && $request->intrantsAnneDerniere[0]["unite"] != null && $request->intrantsAnneDerniere[0]["quantite"] != null && $request->intrantsAnneDerniere[0]["contenant"] != null && $request->intrantsAnneDerniere[0]["frequence"] != null){
+                SuiviParcellesIntrantAnneeDerniere::where('suivi_parcelle_id', $id)->delete();
+                foreach ($request->intrantsAnneDerniere as $intrant) {
+                    $datas3[] = [
+                        'suivi_parcelle_id' => $id,
+                        'nom' => $intrant['nom'],
+                        'unite' => $intrant['unite'],
+                        'quantite' => $intrant['quantite'],
+                        'contenant' => $intrant['contenant'],
+                        'frequence' => $intrant['frequence'],
+                    ];
+                }
+            
+            }
+            //fin
             //arbre d'ombrage souhaite tu avoir
             if (($request->arbre != null)) {
                 SuiviParcellesOmbrage::where('suivi_parcelle_id', $id)->delete();
@@ -188,7 +215,7 @@ class SuiviParcelleController extends Controller
                 SuiviParcellesAgroforesterie::where('suivi_parcelle_id', $id)->delete();
                 foreach ($request->items as $item) {
 
-                    $data2[] = [
+                    $data8[] = [
                         'suivi_parcelle_id' => $id,
                         'nombre' => $item['nombre'],
                         'agroespeceabre_id' => $item['arbre'],
@@ -197,32 +224,59 @@ class SuiviParcelleController extends Controller
             }
             //fin les arbres agro-forestiers obtenus
 
-            //autres insectes parasites ou ravageurs
-            if (($request->insectesParasites != null)) {
+            //insectes parasites ou ravageurs
+            if (($request->insectesParasites[0]['nom']!= null && $request->insectesParasites[0]['nombreinsectesParasites'] != null)) {
                 SuiviParcellesParasite::where('suivi_parcelle_id', $id)->delete();
-                $i = 0;
-                foreach ($request->insectesParasites as $data) {
-                    if ($data != null) {
-                        $datas3[] = [
-                            'suivi_parcelle_id' => $id,
-                            'parasite' => $data,
-                            'nombre' => $request->nombreinsectesParasites[$i]
-                        ];
-                    }
-                    $i++;
+                foreach ($request->insectesParasites as $parasite) {
+                    $datas5[] = [
+                        'suivi_parcelle_id' => $id,
+                        'parasite' =>$parasite['nom'],
+                        'nombre' => $parasite['nombreinsectesParasites']
+                    ];
                 }
             }
-            //fin autres insectes parasites ou ravageurs
+            //fin insectes parasites ou ravageurs
+
+            //autre parasite ne figurant pas dans la liste
+             if (($request->presenceAutreInsecte[0]['autreInsecteNom']!= null && $request->presenceAutreInsecte[0]['nombreAutreInsectesParasites'] != null)) {
+                SuiviParcellesAutreParasite::where('suivi_parcelle_id', $id)->delete();
+                foreach ($request->presenceAutreInsecte as $parasite) {
+                    $datas6[] = [
+                        'suivi_parcelle_id' => $id,
+                        'parasite' =>$parasite['autreInsecteNom'],
+                        'nombre' => $parasite['nombreAutreInsectesParasites']
+                    ];
+                }
+            }
+           
+            //fin autre parasite ne figurant pas dans la liste
+
+            //traitement parcelle
+
+            if (($request->traitement[0]['nom'] != null && $request->traitement[0]['unite'] != null && $request->traitement[0]['quantite'] != null && $request->traitement[0]['contenant'] != null && $request->traitement[0]['frequence'] != null)) {
+                SuiviParcellesTraitement::where('suivi_parcelle_id', $id)->delete();
+                foreach ($request->traitement as $trait) {
+                    $datas4[] = [
+                        'suivi_parcelle_id' => $id,
+                        'nom' => $trait['nom'],
+                        'unite' => $trait['unite'],
+                        'quantite' => $trait['quantite'],
+                        'contenant' => $trait['contenant'],
+                        'frequence' => $trait['frequence'],
+                    ];
+                }
+            }
+            //fin traitement parcelle
 
             //insectes amis
             if (($request->insectesParasites != null)) {
-                SuiviParcellesInsecte::where('suivi_parcelle_id', $id)->delete();
+                SuiviParcellesInsecteAmi::where('suivi_parcelle_id', $id)->delete();
                 $i = 0;
                 foreach ($request->insectesAmis as $data) {
                     if ($data != null) {
-                        $datas5[] = [
+                        $datas7[] = [
                             'suivi_parcelle_id' => $id,
-                            'insecte' => $data,
+                            'nom' => $data,
                             'nombre' => $request->nombreinsectesAmis[$i]
                         ];
                     }
@@ -231,13 +285,13 @@ class SuiviParcelleController extends Controller
             }
             //fin insectes amis
 
-
+            //animaux rencontres
             if (($request->animauxRencontres != null)) {
                 SuiviParcellesAnimal::where('suivi_parcelle_id', $id)->delete();
                 $i = 0;
                 foreach ($request->animauxRencontres as $data) {
                     if ($data != null) {
-                        $datas4[] = [
+                        $datas9[] = [
                             'suivi_parcelle_id' => $id,
                             'animal' => $data
                         ];
@@ -245,24 +299,17 @@ class SuiviParcelleController extends Controller
                     $i++;
                 }
             }
-            SuiviParcellesAnimal::insert($datas4);
-            SuiviParcellesAgroforesterie::insert($data2);
-            SuiviParcellesParasite::insert($datas3);
-            SuiviParcellesInsecte::insert($datas5);
-            SuiviParcellesOmbrage::insert($datas);
+            //fin animaux rencontres
 
-            if($request->pesticideUtiliseAnne != null){
-                Suivi_parcelle_pesticide::where('suivi_parcelle_id', $id)->delete();
-                $i = 0;
-                foreach ($request->pesticideUtiliseAnne as $data) {
-                    DB::table('suivi_parcelle_pesticides')->insert([
-                        'suivi_parcelle_id' => $id,
-                        'pesticide' => $data,
-                    ]);
-                    
-                    $i++;
-                }
-            }
+            SuiviParcellesPesticideAnneDerniere::insert($datas2);
+            SuiviParcellesIntrantAnneeDerniere::insert($datas3);
+            SuiviParcellesTraitement::insert($datas4);
+            SuiviParcellesParasite::insert($datas5);
+            SuiviParcellesAutreParasite::insert($datas6);
+            SuiviParcellesInsecteAmi::insert($datas7);
+            SuiviParcellesOmbrage::insert($datas);
+            SuiviParcellesAgroforesterie::insert($data8);
+            SuiviParcellesAnimal::insert($datas9);
         }
 
         $notify[] = ['success', isset($message) ? $message : "Le suivi parcelle a été crée avec succès."];
