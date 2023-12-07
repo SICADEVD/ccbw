@@ -42,7 +42,7 @@ class SuiviParcelleController extends Controller
         });
         $sections = $cooperative->sections;
         $suiviparcelles = SuiviParcelle::dateFilter()
-            ->searchable(["nombreSauvageons","activiteTaille", "activiteEgourmandage", "activiteDesherbageManuel", "activiteRecolteSanitaire", "presencePourritureBrune","presenceInsectesRavageurs", "presenceFourmisRouge", "presenceAraignee", "presenceVerTerre", "presenceMenteReligieuse", "presenceSwollenShoot", "presenceInsectesParasites", "nombreDesherbage"])
+            ->searchable(["nombreSauvageons","activiteTaille", "activiteEgourmandage", "activiteDesherbageManuel", "activiteRecolteSanitaire", "presencePourritureBrune","presenceFourmisRouge", "presenceAraignee", "presenceVerTerre", "presenceMenteReligieuse", "presenceSwollenShoot", "presenceInsectesParasites", "nombreDesherbage"])
             ->latest('id')
             ->joinRelationship('parcelle.producteur.localite')
             ->where(function ($q) {
@@ -142,7 +142,6 @@ class SuiviParcelleController extends Controller
         $suivi_parcelle->presenceInsectesParasites    = $request->presenceInsectesParasites;
         // $suivi_parcelle->presenceInsectesParasitesRavageur    = $request->presenceInsectesParasitesRavageur;
         $suivi_parcelle->presenceBioAgresseur    = $request->presenceBioAgresseur;
-        $suivi_parcelle->presenceInsectesRavageurs    = $request->presenceInsectesRavageurs;
         $suivi_parcelle->presenceFourmisRouge    = $request->presenceFourmisRouge;
         $suivi_parcelle->presenceAraignee    = $request->presenceAraignee;
         $suivi_parcelle->presenceVerTerre    = $request->presenceVerTerre;
