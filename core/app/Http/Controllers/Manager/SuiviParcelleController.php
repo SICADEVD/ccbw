@@ -152,6 +152,8 @@ class SuiviParcelleController extends Controller
         $suivi_parcelle->presenceMenteReligieuse   = $request->presenceMenteReligieuse;
         $suivi_parcelle->dateVisite    = $request->dateVisite;
         $suivi_parcelle->traiterParcelle    = $request->traiterParcelle;
+        $suivi_parcelle->autreInsecte    = $request->autreInsecte;
+        $suivi_parcelle->presenceAutreTypeInsecteAmi   = $request->presenceAutreTypeInsecteAmi;
         $suivi_parcelle->userid   = auth()->user()->id;
         // dd(json_encode($request->all()));
         // dd($request->all());
