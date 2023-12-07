@@ -172,8 +172,6 @@ class FormationStaffController extends Controller
         $pageTitle = "Mise à jour de la formation aux staffs";
         $manager   = auth()->user();
 
-        $ModuleFormationStaffs  = ModuleFormationStaff::all()->pluck('nom', 'id');
-        $themes  = ThemeFormationStaff::with('ModuleFormationStaff')->get();
         $entreprises = Entreprise::all();
         $formateurs = FormateurStaff::with('entreprise')->get();
         $formateur_staff_formations = FormationStaffFormateur::where('formation_staff_id', $id)->get();
@@ -182,22 +180,28 @@ class FormationStaffController extends Controller
         $formation   = FormationStaff::findOrFail($id);
         $staffsListe = FormationStaffListe::where('formation_staff_id', $formation->id)->get();
         $visiteurStaff = FormationStaffVisiteur::where('formation_staff_id', $formation->id)->get();
-        $themeStaff = FormationStaffTheme::where('formation_staff_id', $formation->id)->get();
-        $dataUser = $dataVisiteur = $dataTheme = $dataEntreprise = array();
+        
+
+        // $themeStaff = FormationStaffModuleTheme::where('formation_staff_id', $formation->id)->get();
+
+        $moduleFormationStaffs  = ModuleFormationStaff::all();
+        $themes  = ThemeFormationStaff::with('ModuleFormationStaff')->get();
+
+
+        $dataUser = $dataVisiteur = $dataEntreprise  = $modules = $themesSelected = array();
+
+        foreach ($formation->formationStaffModuleTheme as $item) {
+            $modules[] = $item->module_formation_staff_id;
+            $themesSelected[] = $item->theme_formation_staff_id;
+        }
+        // dd($themesSelected);
+
         if ($staffsListe->count()) {
             foreach ($staffsListe as $data) {
                 $dataUser[] = $data->user_id;
             }
         }
-
-        if ($themeStaff->count()) {
-            foreach ($themeStaff as $data) {
-                $dataTheme[] = $data->theme_formation_staff_id;
-            }
-        }
-
-
-        return view('manager.formation-staff.edit', compact('pageTitle', 'formation', 'ModuleFormationStaffs', 'themes', 'staffs', 'dataUser', 'visiteurStaff', 'dataTheme', 'entreprises', 'formateurs'));
+        return view('manager.formation-staff.edit', compact('pageTitle', 'formation','themes', 'staffs', 'dataUser', 'visiteurStaff', 'entreprises', 'formateurs','moduleFormationStaffs','themes','themesSelected','modules'));
     }
 
     public function status($id)

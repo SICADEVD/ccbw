@@ -51,7 +51,14 @@
                     <div class="form-group row">
                         <?php echo Form::label(__('Modules de formations'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('module_formation', $ModuleFormationStaffs, $formation->module_formation_staff_id, ['placeholder' => __('Selectionner une option'), 'class' => 'form-control type_formations', 'id' => 'typeformation', 'required' => 'required']); ?>
+                            <select class="form-control select2-multi-select" name="module_formation[]" id="typeformation"
+                                multiple required>
+                                <option value="">@lang('Selectionner une option')</option>
+                                @foreach ($moduleFormationStaffs as $module)
+                                    <option value="{{ $module->id }}" @selected(in_array($module->id, $modules))>
+                                        {{ $module->nom }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
 
@@ -64,7 +71,7 @@
                                 <option value="">@lang('Selectionner une option')</option>
                                 @foreach ($themes as $theme)
                                     <option value="{{ $theme->id }}"
-                                        data-chained="{{ $theme->module_formation_staff_id }}" @selected(in_array($theme->id, $dataTheme))>
+                                        data-chained="{{ $theme->module_formation_staff_id ?? '' }}">
                                         {{ $theme->nom }} </option>
                                 @endforeach
                             </select>
@@ -75,12 +82,10 @@
                     <div class="form-group row">
                         <?php echo Form::label(__('Entreprise du formateur'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <select class="form-control" name="entreprise_id" id="entreprise_formateur"
-                                required>
+                            <select class="form-control" name="entreprise_id" id="entreprise_formateur" required>
                                 <option value="">@lang('Selectionner une option')</option>
                                 @foreach ($entreprises as $entreprise)
-                                    <option value="{{ $entreprise->id }}"
-                                        @selected($entreprise->id == $formation->formateur->entreprise->id)>
+                                    <option value="{{ $entreprise->id }}" @selected($entreprise->id == $formation->formateur->entreprise->id)>
                                         {{ $entreprise->nom_entreprise }}</option>
                                 @endforeach
                             </select>
@@ -90,8 +95,7 @@
                     <div class="form-group row">
                         <?php echo Form::label(__('Formateur'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <select class="form-control" name="formateur" id="formateur"
-                                required>
+                            <select class="form-control" name="formateur" id="formateur" required>
                                 <option value="">@lang('Selectionner une option')</option>
                                 @foreach ($formateurs as $formateur)
                                     <option value="{{ $formateur->id }}" data-chained="{{ $formateur->entreprise_id }}"
@@ -168,7 +172,6 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/css/daterangepicker.css') }}">
     <script src="{{ asset('assets/vendor/jquery/daterangepicker.min.js') }}"></script>
     <script type="text/javascript">
-        $("#theme").chained("#typeformation");
         $("#producteur").chained("#localite");
         $("#formateur").chained("#entreprise_formateur");
         $('#duree_formation').timepicker({
@@ -199,5 +202,47 @@
             $('#multiEndDate').val(endDate);
             $('.date-range-days').html(totalDays + ' Jours sélectionnés');
         })
+
+
+        $(document).ready(function() {
+            var themesSelected = "{{ implode(',', $themesSelected) }}";
+            //idée de ce bloque de code c'est de remplire l'objet optionParTheme avec les themes provenant de la base de données
+            var optionParTheme = new Object();
+            $("#theme option").each(function() {
+                var curreentArray = optionParTheme[($(this).data('chained'))] ? optionParTheme[($(this)
+                    .data('chained'))] : [];
+                curreentArray[$(this).val()] = $(this).text().trim();
+                Object.assign(optionParTheme, {
+                    [$(this).data('chained')]: curreentArray
+                });
+
+                if (themesSelected.split(',').includes($(this).val()) && themesSelected != "") {
+                    $(this).val($(this).data('chained') + "-" + $(this).val());
+                    $(this).attr('selected', 'selected');
+                } else $(this).remove();
+            });
+            console.log(optionParTheme);
+
+            $('#typeformation').change(function() {
+                var typeformation = $(this).val();
+                $("#theme").empty();
+                var optionsHtml2 = "";
+                $(this).find('option:selected').each(function() {
+                    //console.log($(this).val());
+                    optionsHtml2 = updateTheme(optionsHtml2, $(this).val(), optionParTheme);
+                })
+            });
+        });
+
+        function updateTheme(optionsHtml2, id, optionParTheme) {
+            var optionsHtml = optionsHtml2
+            if (id != '') {
+                optionParTheme[id].forEach(function(key, element) {
+                    optionsHtml += '<option value="' + id + '-' + element + '">' + key + '</option>';
+                });
+                $("#theme").html(optionsHtml);
+            }
+            return optionsHtml;
+        }
     </script>
 @endpush
