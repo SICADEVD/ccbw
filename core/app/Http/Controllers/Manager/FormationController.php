@@ -68,10 +68,8 @@ class FormationController extends Controller
             'staff' => 'required|exists:users,id',
             'producteur' => 'required|max:255',
             'lieu_formation'  => 'required|max:255',
-            'type_formation'  => 'required|max:255',
             'formation_type'  => 'required|max:255',
             'duree_formation' => 'required|date_format:H:i',
-            'theme'  => 'required|max:255',
         ];
 
         $request->validate($validationRule);
@@ -100,6 +98,7 @@ class FormationController extends Controller
         $formation->date_debut_formation = $request->multiStartDate;
         $formation->date_fin_formation = $request->multiEndDate;
         $formation->userid = auth()->user()->id;
+
         if ($request->hasFile('photo_formation')) {
             try {
                 $formation->photo_formation = $request->file('photo_formation')->store('public/formations');
@@ -108,6 +107,7 @@ class FormationController extends Controller
                 return back()->withNotify($notify);
             }
         }
+
         if ($request->hasFile('rapport_formation')) {
             try {
                 $formation->rapport_formation = $request->file('rapport_formation')->store('public/formations');
@@ -117,7 +117,10 @@ class FormationController extends Controller
             }
         }
 
+       
+
         $formation->save();
+
         if ($formation != null) {
             $id = $formation->id;
             $datas = $datas2 = [];
@@ -139,7 +142,7 @@ class FormationController extends Controller
             $selectedThemes = $request->theme;
             if ($selectedThemes != null) {
                 TypeFormationTheme::where('suivi_formation_id', $id)->delete();
-               
+
                 foreach ($selectedThemes as $themeId) {
                     list($typeFormationId, $themeItemId) = explode('-', $themeId);
                     $datas3 = [
@@ -182,7 +185,6 @@ class FormationController extends Controller
         $modules = array();
         $themesSelected = array();
         $sousThemesSelected = array();
-        
         foreach ($formation->typeFormationTheme as $item) {
             $modules[] = $item->type_formation_id; 
             $themesSelected[] = $item->theme_formation_id;

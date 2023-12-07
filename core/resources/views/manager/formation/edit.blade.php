@@ -70,7 +70,7 @@
                     <div class="form-group row">
                         <?php echo Form::label(__('Thème de la formation'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <select class="form-control select2-multi-select" name="theme_formation" id="theme" multiple required>
+                            <select class="form-control select2-multi-select" name="theme[]" id="theme" multiple required>
                                 <option value="">@lang('Selectionner une option')</option>
                                 @foreach ($themes as $theme)
                                     <option value="{{ $theme->id }}" data-chained="{{ $theme->type_formation_id ?? '' }}">
@@ -83,7 +83,7 @@
                     <div class="form-group row">
                         <?php echo Form::label(__('Sous-thème de la formation'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <select class="form-control select2-multi-select" name="sous_theme_formation" id="sous_theme" multiple required>
+                            <select class="form-control select2-multi-select" name="sous_theme[]" id="sous_theme" multiple required>
                                 <option value="">@lang('Selectionner une option')</option>
                                 @foreach ($sousthemes as $soustheme)
                                     <option value="{{ $soustheme->id }}" data-chained="{{ $soustheme->theme_formation_id ?? '' }}" >
@@ -219,6 +219,7 @@
                     [$(this).data('chained')]: curreentArray
                 });
                 if(themesSelected.split(',').includes($(this).val()) && themesSelected != ""){
+                    $(this).val($(this).data('chained')+"-"+$(this).val());
                     $(this).attr('selected', 'selected');
                 }else $(this).remove();
             });
@@ -233,6 +234,7 @@
                     [$(this).data('chained')]: curreentArray
                 });
                 if(sousThemesSelected.split(',').includes($(this).val()) && sousThemesSelected != ""){
+                    $(this).val($(this).data('chained')+"-"+$(this).val());
                     $(this).attr('selected', 'selected');
                 }else $(this).remove();
             });
