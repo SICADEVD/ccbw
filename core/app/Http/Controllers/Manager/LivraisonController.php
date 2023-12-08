@@ -278,11 +278,10 @@ class LivraisonController extends Controller
         $livraison->vehicule_id = $request->sender_vehicule;
         $livraison->date_livraison      = $request->estimate_date;
        
-        $livraison->quantity      = array_sum(Arr::pluck($request->items,'quantity'));
         $livraison->save();
 
         $subTotal = $stock = 0;
-        $campagne = Campagne::active()->first();
+         
         $data = $data2 = $data3 = [];
         foreach ($request->items as $item) {
             // $livraisonType = Type::where('id', $item['type'])->first();
