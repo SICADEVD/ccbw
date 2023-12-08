@@ -358,7 +358,7 @@ $('#flocal').change('keyup change blur', function() {
             $('#nombresacs').val(sumsacs);
             $("#nombresacs").attr({
                 "max": sumsacs, // substitute your own
-                "min": 0 // values (or variables) here
+                //"min": 0 // values (or variables) here
             });
         } 
 
