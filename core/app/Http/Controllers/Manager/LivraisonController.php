@@ -6,23 +6,28 @@ use App\Models\User;
 use App\Models\Section;
 use App\Models\Campagne;
 use App\Models\Parcelle;
+use App\Models\Vehicule;
 use App\Constants\Status;
 use App\Models\Producteur;
 use App\Models\Cooperative;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
+use App\Models\Transporteur;
 use Illuminate\Http\Request;
 use App\Models\LivraisonInfo;
 use App\Models\LivraisonPrime;
+
+use App\Models\MagasinCentral;
 use App\Models\MagasinSection;
 use App\Models\LivraisonScelle;
 use App\Models\LivraisonPayment;
-
 use App\Models\LivraisonProduct;
 use App\Exports\ExportLivraisons;
 use App\Models\AdminNotification;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
+use App\Models\StockMagasinCentral;
 use App\Models\StockMagasinSection;
+use App\Http\Controllers\Controller;
 
 class LivraisonController extends Controller
 {
@@ -88,6 +93,26 @@ class LivraisonController extends Controller
         $parcelles  = Parcelle::with('producteur')->get();
         
         return view('manager.livraison.create', compact('pageTitle', 'cooperatives','staffs','magasins','producteurs','parcelles','campagne'));
+    }
+
+    public function stockSectionCreate()
+    {
+        
+        $staff = auth()->user();
+        // $cooperatives = Cooperative::active()->where('id', '!=', auth()->user()->cooperative_id)->orderBy('name')->get();
+        $cooperatives = Cooperative::active()->orderBy('name')->get(); 
+        $magCentraux = MagasinCentral::where([['cooperative_id',$staff->cooperative_id]])->with('user')->orderBy('nom')->get();
+        $magSections = MagasinSection::joinRelationship('section')->where([['cooperative_id',$staff->cooperative_id]])->with('user')->orderBy('nom')->get();
+    
+       $transporteurs = Transporteur::where([['cooperative_id',$staff->cooperative_id]])->get();
+        $vehicules = Vehicule::get();
+        $producteurs  = Producteur::joinRelationship('localite.section')->where('sections.cooperative_id',$staff->cooperative_id)->select('producteurs.*')->orderBy('producteurs.nom')->get();
+
+        $campagne = Campagne::active()->first();
+        $code = $this->generecodeConnais();
+        $parcelles  = Parcelle::with('producteur')->get();
+        $pageTitle = 'Connaissement vers le Magasin Central N° '.$code;
+        return view('manager.livraison.section-create', compact('pageTitle', 'cooperatives','magSections','magCentraux','producteurs','transporteurs','parcelles','campagne','vehicules','code'));
     }
 
     public function store(Request $request)
@@ -360,6 +385,83 @@ class LivraisonController extends Controller
  
         return $contents;
     }
+
+    public function getProducteur(){
+        $input = request()->all();
+         
+        $id = $input['sender_magasin'];
+        $campagne = Campagne::active()->first();
+        $stocks = StockMagasinSection::where([['campagne_id',$campagne->id],['type_produit',request()->type],['magasin_section_id',$id],['stocks_entrant','>',0]])->with('producteur')->groupBy('producteur_id')->get();
+        if ($stocks->count()) {
+            $contents = '';
+
+            foreach ($stocks as $data) {
+                $nom = $data->producteur->nom.' '.$data->producteur->prenoms;
+                $contents .= '<option value="'.$data->producteur_id.'">'. $nom .'('.$data->producteur->codeProdapp.')</option>';
+            }
+        } else {
+            $contents = null;
+        }
+ 
+        return $contents;
+    }
+    private function generecodeConnais()
+    {
+
+        $data = StockMagasinCentral::select('numero_connaissement')->orderby('id','desc')->first();
+
+        if($data !=null){
+            $code = $data->numero_connaissement;
+        $chaine_number = Str::afterLast($code,'-');
+        if($chaine_number<10){$zero="00000";}
+        else if($chaine_number<100){$zero="0000";}
+        else if($chaine_number<1000){$zero="000";}
+        else if($chaine_number<10000){$zero="00";}
+        else if($chaine_number<100000){$zero="0";}
+        else{$zero="";}
+        }else{
+            $zero="00000";
+            $chaine_number=0;
+        }
+        if(!$chaine_number) $chaine_number =0;
+        $sub='CMS-';
+        $lastCode=$chaine_number+1;
+        $codeLiv=$sub.$zero.$lastCode;
+
+        return $codeLiv;
+    }
+    public function getListeProducteurConnaiss(){
+        $input = request()->all();
+          $magasinsection= $input['sender_magasin']; 
+          $producteur = $input['producteur_id'];
+          $type_produit = $input['type'];
+          $results ='';
+          $total = 0;
+          $totalsacs=0;
+          $campagne = Campagne::active()->first();
+        $stock =StockMagasinSection::where([['campagne_id',$campagne->id],['magasin_section_id',$magasinsection],['type_produit',$type_produit],['stocks_entrant','>',0]])->whereIn('producteur_id', $producteur)->with('producteur')->get();
+       
+            if(count($stock)){
+            $v=1;
+            $tv=count($stock);
+       foreach($stock as $data)
+       {
+         if($v==$tv){$read = '';}
+         else{$read='readonly';}
+        $results .= '<tr><td colspan="2"><h5>'.$data->producteur->nom.' '.$data->producteur->prenoms.'('.$data->producteur->codeProdapp.')</h5><input type="hidden" name="producteurs[]" value="'.$data->producteur_id.'"/></td><td style="width: 400px;"> <input type="number" name="quantite[]" value="'.$data->stocks_entrant.'" min="1" max="'.$data->stocks_entrant.'"  class="form-control quantity" '.$read.' style="width: 115px;"/></td><td style="width: 300px;"> <input type="number" name="nbsacs[]" value="'.$data->nb_sacs_entrant.'" min="0" max="'.$data->nb_sacs_entrant.'"  class="form-control nbsacs" '.$read.'/></td></tr>';
+        $total = $total+$data->stocks_entrant;
+        $totalsacs = $totalsacs+$data->nb_sacs_entrant;
+        $v++;
+        }
+  
+  
+            }
+            $contents['results'] = $results;
+            $contents['total'] = $total;
+            $contents['totalsacs'] = $totalsacs;
+  
+        return $contents;
+      }
     
     public function sentInQueue()
     {

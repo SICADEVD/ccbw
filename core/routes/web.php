@@ -467,8 +467,11 @@ Route::middleware('auth')->group(function () {
             Route::get('edit/{id}', 'edit')->name('edit');
             Route::get('list', 'livraisonInfo')->name('index');
             Route::get('stock', 'stockSection')->name('stock.section');
+            Route::post('stock/store', 'sectionStore')->name('section.store');
+            Route::get('stock/create', 'stockSectionCreate')->name('stock.section.create');
             Route::get('parcelle', 'getParcelle')->name('get.parcelle');
             Route::get('producteur', 'getProducteur')->name('get.producteur');
+            Route::get('producteur/liste', 'getListeProducteurConnaiss')->name('get.listeproducteur');
             Route::get('dispatch/list', 'dispatchLivraison')->name('dispatch');
             Route::get('upcoming/list', 'upcoming')->name('upcoming');
             Route::get('sent-queue/list', 'sentInQueue')->name('sentQueue');

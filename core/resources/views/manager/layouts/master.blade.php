@@ -151,7 +151,7 @@
 
     <script>
         $(document).ready(function() {
-            // $('#save-data-form select').select2();
+           // $('#producteurs').select2();
             $(".close-task-detail").click(function() {
                 $(".task-detail-panel").removeClass("in")
                 $(".task-overlay").removeClass("in")

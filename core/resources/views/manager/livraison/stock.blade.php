@@ -103,7 +103,7 @@
 
 @push('breadcrumb-plugins') 
 
-<a href="{{ route('manager.livraison.create') }}" class="btn  btn-outline--primary h-45 addNewCooperative">
+<a href="{{ route('manager.livraison.stock.section.create') }}" class="btn  btn-outline--primary h-45 addNewCooperative">
         <i class="las la-plus"></i>@lang("Enregistrer Livraison vers Magasin Central")
     </a>
 <a href="{{ route('manager.livraison.exportExcel.livraisonAll') }}" class="btn  btn-outline--warning h-45"><i class="las la-cloud-download-alt"></i> Exporter en Excel</a>
