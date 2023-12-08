@@ -298,7 +298,7 @@ class LivraisonController extends Controller
                 'created_at'      => now(),
             ];
             $prod = StockMagasinSection::where([['campagne_id',$campagne->id],['magasin_section_id',$request->magasin_section],['producteur_id',$item],['type_produit',$request->type]])->toSql();
-            dd($prod);
+            dd($campagne->id);
             if($prod !=null){ 
             $prod->stocks_entrant = $prod->stocks_entrant - $quantite[$i];
             $prod->stocks_sortant = $prod->stocks_sortant + $quantite[$i];
