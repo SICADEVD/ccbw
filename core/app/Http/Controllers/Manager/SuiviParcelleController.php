@@ -154,6 +154,7 @@ class SuiviParcelleController extends Controller
         $suivi_parcelle->traiterParcelle    = $request->traiterParcelle;
         $suivi_parcelle->autreInsecte    = $request->autreInsecte;
         $suivi_parcelle->presenceAutreTypeInsecteAmi   = $request->presenceAutreTypeInsecteAmi;
+        $suivi_parcelle->arbresagroforestiers  = $request->arbresagroforestiers;
         $suivi_parcelle->userid   = auth()->user()->id;
         // dd(json_encode($request->all()));
         // dd($request->all());
@@ -331,12 +332,15 @@ class SuiviParcelleController extends Controller
         $campagnes = Campagne::active()->pluck('nom', 'id');
         $parcelles  = Parcelle::with('producteur')->get();
         $suiviparcelle   = SuiviParcelle::findOrFail($id);
+        $pesticidesAnneDerniere = $suiviparcelle->pesticidesAnneDerniere;
+        $intrantsAnneDerniere = $suiviparcelle->intrantsAnneDerniere;
+        $traitements = $suiviparcelle->traitement;
         $arbres = Agroespecesarbre::all();
         $arbreAgroForestiers = SuiviParcellesAgroforesterie::where('suivi_parcelle_id', $id)->get();
         $arbreOmbrages = SuiviParcellesOmbrage::where('suivi_parcelle_id', $id)->pluck('agroespecesarbre_id')->toArray();
         $parasites = SuiviParcellesParasite::where('suivi_parcelle_id', $id)->get();
 
-        return view('manager.suiviparcelle.edit', compact('pageTitle', 'suiviparcelle', 'producteurs', 'localites', 'campagnes', 'parcelles', 'sections', 'arbres', 'arbreOmbrages', 'arbreAgroForestiers', 'parasites'));
+        return view('manager.suiviparcelle.edit', compact('pageTitle', 'suiviparcelle', 'producteurs', 'localites', 'campagnes', 'parcelles', 'sections', 'arbres', 'arbreOmbrages', 'arbreAgroForestiers', 'parasites', 'pesticidesAnneDerniere', 'intrantsAnneDerniere', 'traitements'));
     }
 
     public function statusSuiviParc($id)
