@@ -284,11 +284,8 @@ class LivraisonController extends Controller
         $data = [];
         $quantite = $request->quantite;
         $nbsacs = $request->nbsacs;
-        foreach ($request->producteur_id as $item) {
-            // $livraisonType = Type::where('id', $item['type'])->first();
-            // if (!$livraisonType) {
-            //     continue;
-            // } 
+        foreach ($request->producteur_id as $item) { 
+             
             $data[] = [
                 'stock_magasin_central_id' => $livraison->id,
                 'producteur_id' => $item,
