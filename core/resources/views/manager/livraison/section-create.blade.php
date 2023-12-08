@@ -244,8 +244,8 @@
                                     <div class=" d-flex justify-content-end mt-2">
                                         <div class="col-md-5 d-flex justify-content-between">
                                             <span class="fw-bold">@lang('Nombre de sacs'):</span>
-                                            <div> <input type="number" name="nombresacs" id="nombresacs" min="1"
-                                        class="form-control" required /></div>
+                                            <div> <input type="number" name="nombresacs" id="nombresacs" min="0"
+                                        class="form-control" /></div>
                                         </div>
                                         
                                     </div>
@@ -358,7 +358,7 @@ $('#flocal').change('keyup change blur', function() {
             $('#nombresacs').val(sumsacs);
             $("#nombresacs").attr({
                 "max": sumsacs, // substitute your own
-                "min": 1 // values (or variables) here
+                "min": 0 // values (or variables) here
             });
         } 
 

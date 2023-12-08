@@ -29742,7 +29742,7 @@ table.dataTable
 }
 .settings-box .s-b-mob-sidebar
     {
-    position:absolute;right:24px;top:28px
+    position:absolute;right:24px;top:100px
 }
 .settings-box .s-b-inner
     {
@@ -29763,7 +29763,10 @@ table.dataTable
     {
     flex-wrap:nowrap;overflow:auto;overflow-x:scroll;overflow-y:hidden
 }
-
+.settings-box
+    {
+    width:100%
+}
 #filter-bloc {
     margin-left:0px;
     position: sticky;

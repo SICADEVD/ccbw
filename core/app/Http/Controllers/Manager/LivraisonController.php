@@ -257,15 +257,17 @@ class LivraisonController extends Controller
         $request->validate([
             'magasin_central' => 'required',
             'sender_magasin' =>  'required', 
+            'sender_transporteur' =>  'required', 
+            'sender_vehicule' =>  'required', 
             'producteur_id' => 'required|array',  
 			'type' => 'required', 
             'estimate_date'    => 'required|date|date_format:Y-m-d', 
         ]);
 
-        $sender                      = auth()->user();
+        $manager                      = auth()->user();
         $livraison                     = new StockMagasinCentral(); 
         $campagne = Campagne::active()->first();
-        $livraison->cooperative_id   = $sender->cooperative_id;
+        $livraison->cooperative_id   = $manager->cooperative_id;
         $livraison->campagne_id    = $campagne->id;
         $livraison->magasin_centraux_id        = $request->magasin_central;
         $livraison->magasin_section_id       = $request->sender_magasin;
@@ -275,7 +277,7 @@ class LivraisonController extends Controller
         $livraison->stocks_mag_sacs_entrant     = $request->nombresacs;
         $livraison->stocks_mag_sortant     = 0;
         $livraison->stocks_mag_sacs_sortant   = 0;
-        $livraison->transporteur_id = $sender->sender_transporteur;
+        $livraison->transporteur_id = $request->sender_transporteur;
         $livraison->vehicule_id = $request->sender_vehicule;
         $livraison->date_livraison      = $request->estimate_date;
        
@@ -295,16 +297,15 @@ class LivraisonController extends Controller
                 'nbsacs'     => $nbsacs[$i], 
                 'created_at'      => now(),
             ];
-            $prod = StockMagasinSection::where([['campagne_id',$campagne->id],['magasin_section_id',$request->magasin_section],['producteur_id',$item['producteur']],['type_produit',$item['type']]])->first();
-            if($prod ==null){
-                $prod = new StockMagasinSection();
-            } 
-            $prod->magasin_section_id = $request->magasin_section;
-            $prod->producteur_id = $item['producteur'];
-            $prod->campagne_id = $campagne->id;
-            $prod->stocks_entrant = $prod->stocks_entrant + $item['quantity'];
-            $prod->type_produit = $item['type']; 
+            $prod = StockMagasinSection::where([['campagne_id',$campagne->id],['magasin_section_id',$request->magasin_section],['producteur_id',$item],['type_produit',$request->type]])->first();
+            if($prod !=null){ 
+            $prod->stocks_entrant = $prod->stocks_entrant - $quantite[$i];
+            $prod->stocks_sortant = $prod->stocks_sortant + $quantite[$i];
+            $prod->nb_sacs_sortant = $prod->nb_sacs_sortant + $nbsacs[$i];
+            $prod->nb_sacs_entrant = $prod->nb_sacs_entrant - $nbsacs[$i];
+           
             $prod->save();
+            }
               
 
         }
@@ -312,8 +313,8 @@ class LivraisonController extends Controller
 
         LivraisonMagasinCentralProducteur::insert($data); 
 
-        $notify[] = ['success', 'Livraison added successfully'];
-        return to_route('manager.livraison.invoice', encrypt($livraison->id))->withNotify($notify);
+        $notify[] = ['success', 'Le connaissement vers le magasin central a été ajouté avec succès'];
+        return to_route('manager.livraison.magcentral.index')->withNotify($notify);
     }
     public function update(Request $request, $id)
     {
