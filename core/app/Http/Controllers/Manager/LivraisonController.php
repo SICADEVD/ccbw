@@ -297,9 +297,10 @@ class LivraisonController extends Controller
                 'nbsacs'     => $nbsacs[$i], 
                 'created_at'      => now(),
             ];
-            $prod = StockMagasinSection::where([['campagne_id',$campagne->id],['magasin_section_id',$request->sender_magasin],['producteur_id',$item],['type_produit',$request->type]])->toSql();
+            $prod = StockMagasinSection::where([['campagne_id',$campagne->id],['magasin_section_id',$request->sender_magasin],['producteur_id',$item],['type_produit',$request->type]])->first();
              
             if($prod !=null){ 
+                 
             $prod->stocks_entrant = $prod->stocks_entrant - $quantite[$i];
             $prod->stocks_sortant = $prod->stocks_sortant + $quantite[$i];
             $prod->nb_sacs_sortant = $prod->nb_sacs_sortant + $nbsacs[$i];
