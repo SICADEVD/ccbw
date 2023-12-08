@@ -254,8 +254,8 @@ class LivraisonController extends Controller
         // dd(response()->json($request));
         
         $request->validate([
-            'sender_staff' => 'required|exists:users,id',
-            'magasin_section' =>  'required|exists:magasin_sections,id', 
+            'magasin_central' => 'required',
+            'sender_magasin' =>  'required', 
             'producteur_id' => 'required|array',  
 			'type' => 'required', 
             'estimate_date'    => 'required|date|date_format:Y-m-d', 
