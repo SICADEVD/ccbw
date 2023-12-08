@@ -249,6 +249,101 @@ class LivraisonController extends Controller
         return to_route('manager.livraison.invoice', encrypt($livraison->id))->withNotify($notify);
     }
 
+    public function sectionStore(Request $request)
+    {
+        // dd(response()->json($request));
+        
+        $request->validate([
+            'sender_staff' => 'required|exists:users,id',
+            'magasin_section' =>  'required|exists:magasin_sections,id', 
+            'producteur_id' => 'required|array',  
+			'type' => 'required', 
+            'estimate_date'    => 'required|date|date_format:Y-m-d', 
+        ]);
+
+        $sender                      = auth()->user();
+        $livraison                     = new StockMagasinCentral(); 
+        $campagne = Campagne::active()->first();
+        $livraison->cooperative_id   = $sender->cooperative_id;
+        $livraison->campagne_id    = $campagne->id;
+        $livraison->magasin_centraux_id        = $request->magasin_central;
+        $livraison->magasin_section_id       = $request->sender_magasin;
+        $livraison->numero_connaissement       = $request->code;
+        $livraison->type_produit     = $request->type;
+        $livraison->stocks_mag_entrant      = $request->poidsnet;
+        $livraison->stocks_mag_sacs_entrant     = $request->nombresacs;
+        $livraison->stocks_mag_sortant     = 0;
+        $livraison->stocks_mag_sacs_sortant   = 0;
+        $livraison->transporteur_id = $sender->sender_transporteur;
+        $livraison->vehicule_id = $request->sender_vehicule;
+        $livraison->date_livraison      = $request->estimate_date;
+       
+        $livraison->quantity      = array_sum(Arr::pluck($request->items,'quantity'));
+        $livraison->save();
+
+        $subTotal = $stock = 0;
+        $campagne = Campagne::active()->first();
+        $data = $data2 = $data3 = [];
+        foreach ($request->items as $item) {
+            // $livraisonType = Type::where('id', $item['type'])->first();
+            // if (!$livraisonType) {
+            //     continue;
+            // }
+            $price = $campagne->prix_champ * $item['quantity'];
+            $subTotal += $price;
+           
+            $data[] = [
+                'livraison_info_id' => $livraison->id,
+                'parcelle_id' => $item['parcelle'],
+                'campagne_id' => $campagne->id,
+                'qty'             => $item['quantity'],
+                'type_produit'     => $item['type'],
+                'fee'             => $price,
+                'type_price'      => $campagne->prix_champ,
+                'created_at'      => now(),
+            ];
+            $prod = StockMagasinSection::where([['campagne_id',$campagne->id],['magasin_section_id',$request->magasin_section],['producteur_id',$item['producteur']],['type_produit',$item['type']]])->first();
+            if($prod ==null){
+                $prod = new StockMagasinSection();
+            }
+           
+            $prod->magasin_section_id = $request->magasin_section;
+            $prod->producteur_id = $item['producteur'];
+            $prod->campagne_id = $campagne->id;
+            $prod->stocks_entrant = $prod->stocks_entrant + $item['quantity'];
+            $prod->type_produit = $item['type']; 
+            $prod->save();
+             
+            if($item['type']=='Certifie'){
+                $price_prime = $campagne->prime * $item['quantity'];
+                $data3[] = [
+                    'livraison_info_id' => $livraison->id,
+                    'parcelle_id' => $item['parcelle'],
+                    'campagne_id' => $campagne->id,
+                    'quantite'             => $item['quantity'], 
+                    'montant'             => $price_prime,
+                    'prime_campagne'      => $campagne->prime,
+                    'created_at'      => now(),
+                ];
+            }
+            
+
+        }
+		
+
+        LivraisonProduct::insert($data);
+        LivraisonScelle::insert($data2);
+        LivraisonPrime::insert($data3); 
+        $totalAmount                     = $subTotal; 
+        $adminNotification            = new AdminNotification();
+        $adminNotification->user_id   = $sender->id;
+        $adminNotification->title     = 'New livraison created to' . $sender->username;
+        $adminNotification->click_url = urlPath('admin.livraison.info.details', $livraison->id);
+        $adminNotification->save();
+
+        $notify[] = ['success', 'Livraison added successfully'];
+        return to_route('manager.livraison.invoice', encrypt($livraison->id))->withNotify($notify);
+    }
     public function update(Request $request, $id)
     {
 

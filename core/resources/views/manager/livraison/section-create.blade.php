@@ -92,7 +92,7 @@
                                     <div class="row">
                                         <div class="form-group col-lg-12">
                                             <label>@lang('Selectionner un Magasin Central')</label>
-                                            <select class="form-control" name="magasin_section" id="magasin_section" onchange="getReceiver()" required>
+                                            <select class="form-control" name="magasin_central" id="magasin_central" onchange="getReceiver()" required>
                                                 <option value>@lang('Selectionner une option')</option>
                                                 @foreach($magCentraux as $magasin)
                                                 <option value="{{$magasin->id}}" 
@@ -100,7 +100,7 @@
                                                 data-phone ="{{$magasin->user->mobile}}"
                                                 data-email ="{{$magasin->user->email}}"
                                                 data-adresse ="{{$magasin->user->adresse}}"
-                                                @selected(old('magasin_section')==$magasin->id)>{{__($magasin->nom)}}</option>
+                                                @selected(old('magasin_central')==$magasin->id)>{{__($magasin->nom)}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -278,10 +278,10 @@
     $(".scelleOld").select2({tags: true });
 
     function getReceiver() {
-        let name = $("#magasin_section").find(':selected').data('name'); 
-        let phone = $("#magasin_section").find(':selected').data('phone'); 
-        let email = $("#magasin_section").find(':selected').data('email'); 
-        let adresse = $("#magasin_section").find(':selected').data('adresse'); 
+        let name = $("#magasin_central").find(':selected').data('name'); 
+        let phone = $("#magasin_central").find(':selected').data('phone'); 
+        let email = $("#magasin_central").find(':selected').data('email'); 
+        let adresse = $("#magasin_central").find(':selected').data('adresse'); 
         $('#receiver_name').val(name); 
         $('#receiver_phone').val(phone);
         $('#receiver_email').val(email);
