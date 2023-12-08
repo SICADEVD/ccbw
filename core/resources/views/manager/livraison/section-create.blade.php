@@ -356,10 +356,10 @@ $('#flocal').change('keyup change blur', function() {
             });
             $('#poidsnet').val(sum);
             $('#nombresacs').val(sumsacs);
-            $("#nombresacs").attr({
-                "max": sumsacs, // substitute your own
-                //"min": 0 // values (or variables) here
-            });
+            /*$("#nombresacs").attr({
+                "max": sumsacs, 
+                "min": 0 
+            }); */
         } 
 
     (function ($) {
