@@ -38,73 +38,50 @@
                         <table class="table table--light style--two">
                             <thead>
                                 <tr>
-                                    <th>@lang("Coopérative Expéditeur - Staff")</th>
-                                    <th>@lang('Coopérative Destinataire - Magasin')</th>
-                                    <th>@lang("Montant - Numéro Livraison")</th>
-                                    <th>@lang('Quantite')</th>
-                                    <th>@lang('Date de livraison')</th>
-                                    <th>@lang('Status')</th>
+                                <th>@lang("Campagne")</th> 
+                                    <th>@lang('Magasin Section')</th>
+                                    <th>@lang('Magasin Central')</th>
+                                    <th>@lang('Type Produit')</th> 
+                                    <th>@lang('Stock entrant')</th> 
+                                    <th>@lang('Stock sortant')</th> 
                                     <th>@lang('Action')</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse($livraisonInfos as $livraisonInfo)
+                                @forelse($stocks as $produit)
                                     <tr>
-                                        <td>
-                                            <span>{{ __($livraisonInfo->senderCooperative->name) }}</span><br>
-                                            <a class="text--primary" href="{{ route('manager.staff.edit', encrypt($livraisonInfo->senderStaff->id)) }}">
-                                                <span class="text--primary">@</span>{{ __($livraisonInfo->senderStaff->lastname) }} {{ __($livraisonInfo->senderStaff->firstname) }}
-                                            </a>
-                                        </td>
-                                        <td>
-                                            <span>
-                                                @if (@$livraisonInfo->receiver_cooperative_id)
-                                                    {{ __($livraisonInfo->receiverCooperative->name) }}
-                                                @else
-                                                    @lang('N/A')
-                                                @endif
-                                            </span>
-                                            <br>
-                                            @if(@$livraisonInfo->receiver_magasin_section_id)
-                                                <span class="text--primary">{{ __($livraisonInfo->magasinSection->nom) }}</span>
+                                    <td>
+                                            {{ $produit->campagne->nom }} 
+                                        </td> 
+                                        <td> 
+                                            @if(@$produit->magasin_section_id)
+                                                <span class="text--primary">{{ __($produit->magasinSection->nom) }}</span>
                                             @else
                                                 <span>@lang('N/A')</span>
                                             @endif
                                         </td>
-
                                         <td>
-                                            <span class="fw-bold">{{ showAmount(@$livraisonInfo->paymentInfo->final_amount) }}
-                                                {{ __($general->cur_text) }}</span><br>
-                                            <span>{{ $livraisonInfo->code }}</span>
-                                        </td>
-                                        <td>
-                                            {{ $livraisonInfo->quantity }} 
-                                        </td>
-                                        <td>
-                                            {{ showDateTime($livraisonInfo->estimate_date, 'd M Y') }}<br>
-                                            {{ diffForHumans($livraisonInfo->estimate_date) }}
-                                        </td>
-
-
-                                        <td>
-                                            @if ($livraisonInfo->status == Status::COURIER_QUEUE)
-                                                <span class="badge badge--danger">@lang('Sent In Queue')</span>
-                                            @elseif($livraisonInfo->status == Status::COURIER_DISPATCH)
-                                                @if (auth()->user()->cooperative_id == $livraisonInfo->sender_cooperative_id)
-                                                    <span class="badge badge--warning">@lang("Expédié")</span>
-                                                @else
-                                                    <span class="badge badge--warning">@lang('Upcoming')</span>
-                                                @endif
-                                            @elseif($livraisonInfo->status == Status::COURIER_DELIVERYQUEUE)
-                                                <span class="badge badge--primary">@lang('Confirmation de reception en attente')</span>
-                                            @elseif($livraisonInfo->status == Status::COURIER_DELIVERED)
-                                                <span class="badge badge--success">@lang("Livré")</span>
+                                        @if(@$produit->magasin_centraux_id)
+                                                <span class="text--primary">{{ __($produit->magasinCentral->nom) }}</span>
+                                            @else
+                                                <span>@lang('N/A')</span>
                                             @endif
                                         </td>
                                         <td>
-                                            <a href="{{ route('manager.livraison.invoice', encrypt($livraisonInfo->id)) }}"
+                                            {{ $produit->type_produit }} 
+                                        </td>
+                                         
+                                        <td>
+                                            {{ $produit->stocks_mag_entrant }} 
+                                        </td>
+                                        <td>
+                                            {{ $produit->stocks_mag_sacs_sortant }} 
+                                        </td> 
+ 
+                                        <td>
+                                            <a href="{{ route('manager.livraison.index', ['search'=>'','magasin'=>$produit->magasin_section_id,'produit'=>$produit->type_produit,'date'=>request()->date,'producteur'=>$produit->producteur_id]) }}"
                                                 title="" class="btn btn-sm btn-outline--info">
-                                                <i class="las la-file-invoice"></i> @lang("Facture")
+                                                <i class="las la-file-invoice"></i> @lang("Détails livraisons")
                                             </a>
                                         </td>
                                     </tr>
@@ -118,9 +95,9 @@
                         </table>
                     </div>
                 </div>
-                @if ($livraisonInfos->hasPages())
+                @if ($stocks->hasPages())
                     <div class="card-footer py-4">
-                        {{ paginateLinks($livraisonInfos) }}
+                        {{ paginateLinks($stocks) }}
                     </div>
                 @endif
             </div>
@@ -130,8 +107,8 @@
 
 @push('breadcrumb-plugins') 
 
-<a href="{{ route('manager.livraison.create') }}" class="btn  btn-outline--primary h-45 addNewCooperative">
-        <i class="las la-plus"></i>@lang("Enregistrer une livraison")
+<a href="{{ route('manager.livraison.stock.section.create') }}" class="btn  btn-outline--primary h-45 addNewCooperative">
+        <i class="las la-plus"></i>@lang("Enregistrer Livraison vers Magasin Central")
     </a>
 <a href="{{ route('manager.livraison.exportExcel.livraisonAll') }}" class="btn  btn-outline--warning h-45"><i class="las la-cloud-download-alt"></i> Exporter en Excel</a>
 @endpush

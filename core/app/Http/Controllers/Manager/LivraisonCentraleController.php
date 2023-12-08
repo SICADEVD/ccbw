@@ -14,8 +14,10 @@ use Illuminate\Http\Request;
 use App\Models\LivraisonInfo;
 use App\Models\LivraisonPrime;
 use App\Models\MagasinSection;
+use App\Models\MagasinCentral;
 use App\Models\LivraisonScelle;
 use App\Models\LivraisonPayment;
+use App\Models\StockMagasinCentral;
 
 use App\Models\LivraisonProduct;
 use App\Exports\ExportLivraisons;
@@ -27,22 +29,20 @@ class LivraisonCentraleController extends Controller
 {
 
     public function index()
-    { 
+    {  
+
         $staff = auth()->user(); 
-        $livraisonInfos = LivraisonInfo::dateFilter()->searchable(['code'])->with('senderCooperative', 'receiverCooperative', 'senderStaff', 'receiverStaff', 'paymentInfo')
-        ->where(function ($query) use ($staff) {
-            $query->where('sender_cooperative_id', $staff->cooperative_id)->orWhere('receiver_cooperative_id', $staff->cooperative_id);
-        })
+        $stocks = StockMagasinCentral::dateFilter()->where([['cooperative_id',$staff->cooperative_id]]) 
         ->when(request()->magasin, function ($query, $magasin) {
-            $query->where('receiver_magasin_section_id',$magasin); 
+            $query->where('magasin_section_id',$magasin); 
         })
         ->paginate(getPaginate());
-
-        $total = $livraisonInfos->sum('quantity');
-        $pageTitle    = "Stock des Magasins Centraux ($total)";
-        $magasins  = MagasinSection::joinRelationship('section')->where('cooperative_id',$staff->cooperative_id)->get();
+ 
+        $total = $stocks->sum('stocks_entrant');
+        $pageTitle    = "Stock des Magasins de Section ($total)";
+        $magasins  = MagasinCentral::where('cooperative_id',$staff->cooperative_id)->get();
         $sections = Section::get();
-        return view('manager.livraison-centrale.index', compact('pageTitle', 'livraisonInfos','total','sections','magasins'));
+        return view('manager.livraison-centrale.index', compact('pageTitle', 'stocks','total','sections','magasins'));
     }
 
     public function create()
