@@ -28,6 +28,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\StockMagasinCentral;
 use App\Models\StockMagasinSection;
 use App\Http\Controllers\Controller;
+use App\Models\LivraisonMagasinCentralProducteur;
 
 class LivraisonController extends Controller
 {
@@ -285,7 +286,7 @@ class LivraisonController extends Controller
         $quantite = $request->quantite;
         $nbsacs = $request->nbsacs;
         foreach ($request->producteur_id as $item) { 
-             
+
             $data[] = [
                 'stock_magasin_central_id' => $livraison->id,
                 'producteur_id' => $item,
@@ -297,8 +298,7 @@ class LivraisonController extends Controller
             $prod = StockMagasinSection::where([['campagne_id',$campagne->id],['magasin_section_id',$request->magasin_section],['producteur_id',$item['producteur']],['type_produit',$item['type']]])->first();
             if($prod ==null){
                 $prod = new StockMagasinSection();
-            }
-           
+            } 
             $prod->magasin_section_id = $request->magasin_section;
             $prod->producteur_id = $item['producteur'];
             $prod->campagne_id = $campagne->id;
@@ -310,7 +310,7 @@ class LivraisonController extends Controller
         }
 		
 
-        LivraisonProduct::insert($data); 
+        LivraisonMagasinCentralProducteur::insert($data); 
 
         $notify[] = ['success', 'Livraison added successfully'];
         return to_route('manager.livraison.invoice', encrypt($livraison->id))->withNotify($notify);
