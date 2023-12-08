@@ -517,7 +517,7 @@ class LivraisonController extends Controller
        {
          if($v==$tv){$read = '';}
          else{$read='readonly';}
-        $results .= '<tr><td colspan="2"><h5>'.$data->producteur->nom.' '.$data->producteur->prenoms.'('.$data->producteur->codeProdapp.')</h5><input type="hidden" name="producteurs[]" value="'.$data->producteur_id.'"/></td><td style="width: 400px;"> <input type="number" name="quantite[]" value="'.$data->stocks_entrant.'" min="1" max="'.$data->stocks_entrant.'"  class="form-control quantity" '.$read.' style="width: 115px;"/></td><td style="width: 300px;"> <input type="number" name="nbsacs[]" value="'.$data->nb_sacs_entrant.'" min="0" max="'.$data->nb_sacs_entrant.'"  class="form-control nbsacs" '.$read.'/></td></tr>';
+        $results .= '<tr><td colspan="2"><h5>'.$data->producteur->nom.' '.$data->producteur->prenoms.'('.$data->producteur->codeProdapp.')</h5><input type="hidden" name="producteurs[]" value="'.$data->producteur_id.'"/></td><td style="width: 400px;"> <input type="number" name="quantite[]" value="'.$data->stocks_entrant.'" min="1" max="'.$data->stocks_entrant.'"  class="form-control quantity" '.$read.' style="width: 115px;"/></td><td style="width: 300px;"> <input type="number" name="nbsacs[]" value="'.$data->nb_sacs_entrant.'" min="0" max="'.$data->nb_sacs_entrant.'"  class="form-control nbsacs" /></td></tr>';
         $total = $total+$data->stocks_entrant;
         $totalsacs = $totalsacs+$data->nb_sacs_entrant;
         $v++;
