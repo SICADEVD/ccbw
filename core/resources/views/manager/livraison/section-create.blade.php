@@ -329,11 +329,11 @@ $.ajax({
     success: function(html) {
         $('#listeprod').html(html.results);
         $('#poidsnet').val(html.total);
-        $('#nombresacs').val(html.totalsacs);
+        /* $('#nombresacs').val(html.totalsacs);
         $("#nombresacs").attr({
-            "max": html.totalsacs, // substitute your own
-            //"min": 1 // values (or variables) here
-        });
+            "max": html.totalsacs, 
+            "min": 1  
+        }); */
     }
 });
 });
@@ -355,8 +355,8 @@ $('#flocal').change('keyup change blur', function() {
 
             });
             $('#poidsnet').val(sum);
-            $('#nombresacs').val(sumsacs);
-            /*$("#nombresacs").attr({
+            /*$('#nombresacs').val(sumsacs);
+            $("#nombresacs").attr({
                 "max": sumsacs, 
                 "min": 0 
             }); */
