@@ -10,7 +10,7 @@ use Kirschbaum\PowerJoins\PowerJoins;
 class MagasinCentral extends Model
 {
     use Searchable, GlobalStatus, PowerJoins;
-    protected $table="Magasin_centraux";
+    protected $table="magasin_centraux";
     
     public function user()
     {
