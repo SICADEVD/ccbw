@@ -244,7 +244,7 @@
                                     <div class=" d-flex justify-content-end mt-2">
                                         <div class="col-md-5 d-flex justify-content-between">
                                             <span class="fw-bold">@lang('Nombre de sacs'):</span>
-                                            <div> <input type="number" name="nombresacs" id="nombresacs" min="0"
+                                            <div> <input type="number" name="nombresacs" id="nombresacs"
                                         class="form-control" /></div>
                                         </div>
                                         
