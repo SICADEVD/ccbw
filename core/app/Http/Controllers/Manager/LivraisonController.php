@@ -281,24 +281,19 @@ class LivraisonController extends Controller
         $livraison->save();
 
         $subTotal = $stock = 0;
-         
+        $i=0;
         $data = $data2 = $data3 = [];
-        foreach ($request->items as $item) {
+        foreach ($request->producteur_id as $item) {
             // $livraisonType = Type::where('id', $item['type'])->first();
             // if (!$livraisonType) {
             //     continue;
-            // }
-            $price = $campagne->prix_champ * $item['quantity'];
-            $subTotal += $price;
-           
+            // } 
             $data[] = [
-                'livraison_info_id' => $livraison->id,
-                'parcelle_id' => $item['parcelle'],
+                'stock_magasin_central_id' => $livraison->id,
+                'producteur_id' => $item,
                 'campagne_id' => $campagne->id,
-                'qty'             => $item['quantity'],
-                'type_produit'     => $item['type'],
-                'fee'             => $price,
-                'type_price'      => $campagne->prix_champ,
+                'quantite' => $quantite[$i],
+                'nbsacs'     => $nbsacs[$i], 
                 'created_at'      => now(),
             ];
             $prod = StockMagasinSection::where([['campagne_id',$campagne->id],['magasin_section_id',$request->magasin_section],['producteur_id',$item['producteur']],['type_produit',$item['type']]])->first();
