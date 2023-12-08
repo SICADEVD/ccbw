@@ -332,7 +332,7 @@ $.ajax({
         $('#nombresacs').val(html.totalsacs);
         $("#nombresacs").attr({
             "max": html.totalsacs, // substitute your own
-            "min": 1 // values (or variables) here
+            //"min": 1 // values (or variables) here
         });
     }
 });
