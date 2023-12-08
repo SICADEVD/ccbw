@@ -279,10 +279,9 @@ class LivraisonController extends Controller
         $livraison->date_livraison      = $request->estimate_date;
        
         $livraison->save();
-
-        $subTotal = $stock = 0;
+ 
         $i=0;
-        $data = $data2 = $data3 = [];
+        $data = [];
         $quantite = $request->quantite;
         $nbsacs = $request->nbsacs;
         foreach ($request->producteur_id as $item) {
@@ -309,33 +308,12 @@ class LivraisonController extends Controller
             $prod->stocks_entrant = $prod->stocks_entrant + $item['quantity'];
             $prod->type_produit = $item['type']; 
             $prod->save();
-             
-            if($item['type']=='Certifie'){
-                $price_prime = $campagne->prime * $item['quantity'];
-                $data3[] = [
-                    'livraison_info_id' => $livraison->id,
-                    'parcelle_id' => $item['parcelle'],
-                    'campagne_id' => $campagne->id,
-                    'quantite'             => $item['quantity'], 
-                    'montant'             => $price_prime,
-                    'prime_campagne'      => $campagne->prime,
-                    'created_at'      => now(),
-                ];
-            }
-            
+              
 
         }
 		
 
-        LivraisonProduct::insert($data);
-        LivraisonScelle::insert($data2);
-        LivraisonPrime::insert($data3); 
-        $totalAmount                     = $subTotal; 
-        $adminNotification            = new AdminNotification();
-        $adminNotification->user_id   = $sender->id;
-        $adminNotification->title     = 'New livraison created to' . $sender->username;
-        $adminNotification->click_url = urlPath('admin.livraison.info.details', $livraison->id);
-        $adminNotification->save();
+        LivraisonProduct::insert($data); 
 
         $notify[] = ['success', 'Livraison added successfully'];
         return to_route('manager.livraison.invoice', encrypt($livraison->id))->withNotify($notify);
