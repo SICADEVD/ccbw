@@ -41,6 +41,8 @@
                                 <th>@lang("Campagne")</th> 
                                     <th>@lang('Magasin Section')</th>
                                     <th>@lang('Magasin Central')</th>
+                                    <th>@lang('Transporteur')</th>
+                                    <th>@lang('Vehicule')</th>
                                     <th>@lang('Type Produit')</th> 
                                     <th>@lang('Stock entrant')</th> 
                                     <th>@lang('Stock sortant')</th> 
@@ -66,6 +68,12 @@
                                             @else
                                                 <span>@lang('N/A')</span>
                                             @endif
+                                        </td>
+                                        <td>
+                                            {{ $produit->transporteur->nom }} {{ $produit->transporteur->prenoms }} 
+                                        </td>
+                                        <td>
+                                            {{ $produit->vehicule->marque->nom }}({{ $produit->vehicule->vehicule_immat }} )
                                         </td>
                                         <td>
                                             {{ $produit->type_produit }} 
