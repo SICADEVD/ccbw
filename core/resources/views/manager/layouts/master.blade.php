@@ -31,7 +31,7 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/css/daterangepicker.css') }}">
     <script src="{{ asset('assets/global/js/jquery-3.6.0.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/jquery/modernizr.min.js') }}"></script>
-
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_VVwtAhchqsINCTqin22MG1AzMn7d6gk"></script> 
     @stack('style')
     <style>
         span.select2.select2-container {
@@ -429,6 +429,28 @@
             })
 
         });
+
+        function geoFindMe() {
+  const status = document.querySelector("#status");
+  function success(position) {
+    const latitude = position.coords.latitude;
+    const longitude = position.coords.longitude;
+
+$('#longitude').val(longitude);
+$('#latitude').val(latitude);
+$("#longitude, #latitude").attr({"readonly": 'readonly'})
+  }
+  function error() {
+    status.textContent = "Unable to retrieve your location";
+  }
+  if (!navigator.geolocation) {
+    status.textContent = "Geolocation is not supported by your browser";
+  } else {
+    // status.textContent = "Locating…";
+    navigator.geolocation.getCurrentPosition(success, error);
+  }
+}
+document.querySelector("#find-me").addEventListener("click", geoFindMe);
     </script>
     @stack('script')
 </body>

@@ -19,6 +19,7 @@
                                     <th>@lang('Staff')</th> 
                                     <th>@lang('Nom magasin')</th>
                                     <th>@lang('Code')</th>
+                                    <th>@lang('Coordonnées GPS')</th>
                                     <th>@lang('Status')</th>
                                     <th>@lang('Last Update')</th>
                                     <th>@lang('Action')</th>
@@ -41,6 +42,11 @@
                                             <span>{{ __($magasin->code) }}</span>
                                         </td> 
                                         <td>
+                                            @if($magasin->latitude)
+                                            <span><a href="https://www.openstreetmap.org/#map=18/{{$magasin->latitude}}/{{$magasin->longitude}}" target="_blank">Voir la position</a></span>
+                                            @endif
+                                        </td> 
+                                        <td>
                                             @php
                                                 echo $magasin->statusBadge;
                                             @endphp
@@ -56,6 +62,8 @@
                                                 data-id="{{ $magasin->id }}" 
                                                 data-nom="{{ $magasin->nom }}"
                                                 data-code="{{ $magasin->code }}"
+                                                data-longitude="{{ $magasin->longitude }}"
+                                                data-latitude="{{ $magasin->latitude }}"
                                                 data-user="{{ $magasin->staff_id }}"><i
                                                  class="las la-pen"></i>@lang('Edit')</button>
 
@@ -132,7 +140,25 @@
             {!! Form::text('code', $codemag, array('placeholder' => __('Code du magasin'),'class' => 'form-control','readonly'=>'readonly')) !!}
         </div>
     </div>
- 
+    <div class="form-group row">
+            {{ Form::label(__('Longitude'), null, ['class' => 'control-label col-sm-4']) }}
+            <div class="col-xs-12 col-sm-8 col-md-8">
+            {!! Form::text('longitude', null, array('placeholder' => __('Longitude'),'class' => 'form-control','id'=>'longitude')) !!}
+        </div>
+    </div>
+    <div class="form-group row">
+            {{ Form::label(__('Latitude'), null, ['class' => 'control-label col-sm-4']) }}
+            <div class="col-xs-12 col-sm-8 col-md-8">
+            {!! Form::text('latitude', null, array('placeholder' => __('Latitude'),'class' => 'form-control','id'=>'latitude')) !!}
+        </div>
+    </div>
+    <div class="form-group row">
+            {{ Form::label(__(''), null, ['class' => 'control-label col-sm-4']) }}
+            <div class="col-xs-12 col-sm-8 col-md-8">
+            <p id="status"></p>
+            <a href="javascript:void(0)" id="find-me" class="btn btn--info">Obtenir les coordonnées GPS</a>
+        </div>
+    </div>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn--primary w-100 h-45 ">@lang('Enregistrer')</button>
@@ -162,6 +188,8 @@
                 modal.find('input[name=id]').val($(this).data('id')); 
                 modal.find('input[name=nom]').val($(this).data('nom'));  
                 modal.find('input[name=code]').val($(this).data('code'));  
+                modal.find('input[name=longitude]').val($(this).data('longitude')); 
+                modal.find('input[name=latitude]').val($(this).data('latitude')); 
                 modal.find('select[name=user]').val($(this).data('user'));  
                 modal.modal('show');
             });

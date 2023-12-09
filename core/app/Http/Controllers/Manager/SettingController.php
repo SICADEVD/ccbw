@@ -609,6 +609,8 @@ public function magasinSectionStore(Request $request)
         $magasin->staff_id = trim($request->user); 
         $magasin->section_id = trim($request->section);
         $magasin->nom = trim($request->nom); 
+        $magasin->longitude = trim($request->longitude); 
+        $magasin->latitude = trim($request->latitude); 
         $magasin->code = isset($request->code) ? $request->code : $this->generecodemagasin();
         $magasin->save();
        
@@ -694,6 +696,8 @@ public function magasinCentralStore(Request $request)
         $magasin->cooperative_id = auth()->user()->cooperative_id;
         $magasin->staff_id = trim($request->user); 
         $magasin->nom = trim($request->nom); 
+        $magasin->longitude = trim($request->longitude); 
+        $magasin->latitude = trim($request->latitude); 
         $magasin->code = isset($request->code) ? $request->code : $this->generecodemagasincentral();
         $magasin->save();
        
