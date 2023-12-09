@@ -42,8 +42,8 @@
                                             <span>{{ __($magasin->code) }}</span>
                                         </td> 
                                         <td>
-                                            @if($magasin->latitude)
-                                            <span><a href="https://www.openstreetmap.org/#map=18/{{$magasin->latitude}}/{{$magasin->longitude}}" target="_blank">Voir la position</a></span>
+                                        @if($magasin->latitude)
+                                            <span><a href="https://www.openstreetmap.org/directions?from={{$magasin->latitude}}%2C{{$magasin->longitude}}&to=" target="_blank">Voir la position</a></span>
                                             @endif
                                         </td> 
                                         <td>
