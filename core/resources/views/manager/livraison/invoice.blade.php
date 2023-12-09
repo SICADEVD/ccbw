@@ -5,32 +5,29 @@
             <div id="printFacture">
                 <div class="content-header">
                     <h3>
-                        @lang('Numero Facture'):
-                        <small>#{{ $livraisonInfo->invoice_id }}</small>
-                        <br>
-                        @lang('Date'):
-                        {{ showDateTime($livraisonInfo->created_at) }}
-                        <br>
+                        @lang('N° connaissement brousse'):
+                        <small>{{ $livraisonInfo->code }}</small>
+                        <br> 
                         @lang('Date de livraison: ') {{ showDateTime($livraisonInfo->estimate_date, 'd M Y') }}
                     </h3>
                 </div>
 
                 <div class="invoice">
-                <?php $numeroScelle=''; ?>
-                @foreach ($livraisonInfo->scelles as $scelle)
-                            <?php $numeroScelle .= $scelle->numero_scelle.' | '; ?>
+                <?php $numeroProducteurs=''; ?>
+                @foreach($livraisonInfo->products as $prodc)
+                            <?php $numeroProducteurs .= $prodc->parcelle->producteur->nom.' '.$prodc->parcelle->producteur->prenoms.'('.$prodc->parcelle->producteur->codeProdapp.')'."\n"; ?>
                             @endforeach
                     <div class="d-flex justify-content-between mt-3">
                         <div class="text-center">
                             <?php
-                            $textQR = 'NUMEROS SCELLES :'."\n".$numeroScelle."\n"."\n".'N° COMMANDE: '.$livraisonInfo->code."\n".'N° FACTURE: '.$livraisonInfo->invoice_id;
+                            
+                            $textQR = 'N° CONNAISSEMENT BROUSSE: '.$livraisonInfo->code."\n".'Date de livraison:'.showDateTime($livraisonInfo->estimate_date, 'd/m/Y')."\n".'COOPERATIVE:'.$livraisonInfo->receiverCooperative->name."\n".'PRODUCTEURS :'."\n".$numeroProducteurs;
                             ?>
                         {!! QrCode::size(150)->generate($textQR) !!}
                              
                         </div>
                         <div>
                             <b>@lang('N° Commande') #{{ $livraisonInfo->code }}</b><br> 
-                            <b>@lang('Cooperative d\'envoi'):</b> {{ __($livraisonInfo->senderCooperative->name) }}<br>
                             <b>@lang('Cooperative de reception'):</b> {{ __($livraisonInfo->receiverCooperative->name) }}
                         </div>
                     </div>

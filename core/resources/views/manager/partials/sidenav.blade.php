@@ -205,13 +205,18 @@
                                     <span class="menu-title">@lang('Stock Magasins de Section')</span>
                                 </a>
                             </li> 
-                            <li class="sidebar-menu-item {{ menuActive('manager.livraison.magcentral.index') }}">
+                            <li class="sidebar-menu-item {{ menuActive(['manager.livraison.magcentral.index','manager.livraison.magcentral.stock']) }}">
                                 <a href="{{ route('manager.livraison.magcentral.index') }}" class="nav-link">
+                                    <i class="menu-icon las la-server"></i>
+                                    <span class="menu-title">@lang('Livraison Magasins Centraux')</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-menu-item {{ menuActive(['manager.livraison.magcentral.stock','manager.livraison.magcentral.index']) }}">
+                                <a href="{{ route('manager.livraison.magcentral.stock') }}" class="nav-link">
                                     <i class="menu-icon las la-server"></i>
                                     <span class="menu-title">@lang('Stock Magasins Centraux')</span>
                                 </a>
                             </li>
-
 
                         </ul>
                     </div>

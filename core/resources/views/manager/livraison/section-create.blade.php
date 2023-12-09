@@ -19,9 +19,9 @@
                         </div>
                         
                         <div class="col-lg-6 form-group">
-                            <label for="">@lang("Type de produit")</label>
+                            <label for="">@lang("Types de produit")</label>
                             <div class="input-group">
-                            <select class="form-control selected_type" name="type" required> 
+                            <select class="form-control select-picker" name="type[]" multiple required> 
                                                         <option value="{{ __('Certifie') }}"
                                                         @selected(old('type')=='Certifie')>{{ __('Certifie') }}</option>
                                                         <option value="{{ __('Ordinaire') }}"
@@ -215,8 +215,8 @@
                                         <thead>
                                             <tr>
                                                 <th colspan="2">@lang('Producteur')</th>
-                                                <th>@lang('Quantité')</th>
-                                                <th>@lang('Total sacs')</th>
+                                                <th>@lang('Type')</th>
+                                                <th>@lang('Quantité(KG)')</th>
                                             </tr>
                                         </thead>
                                         <tbody id="listeprod">
@@ -362,133 +362,11 @@ $('#flocal').change('keyup change blur', function() {
             }); */
         } 
 
-    (function ($) {
-
-        $('.addUserData').on('click', function () {
-            
-            let count = $("#addedField select").length;
-            let length=$("#addedField").find('.single-item').length; 
-               
-            let html = `
-            <div class="row single-item gy-2">
-                <div class="col-md-3">
-                    <select class="form-control selected_type producteur" name="items[${length}][producteur]" required id='producteur-${length}' onchange=getParcelle(${length})>
-                    </select>
-                </div>  
-                <div class="col-md-3">
-                    <select class="form-control" name="items[${length}][parcelle]" required id="parcelle-${length}">
-                        
-                    </select>
-                </div>
-                <div class="col-md-2">
-                <select class="form-control" name="items[${length}][type]" required> 
-                            <option value="{{ __('Certifie') }}">{{ __('Certifie') }}</option>
-                            <option value="{{ __('Ordinaire') }}">{{ __('Ordinaire') }}</option>
-                    </select> 
-                </div>
-                <div class="col-md-2">
-                    <div class="input-group mb-3">
-                        <input type="number" class="form-control quantity" placeholder="@lang('Qte')" disabled name="items[${length}][quantity]"  required>
-                        <span class="input-group-text unit">Kg</span>
-                    </div>
-                </div> 
-                <div class="col-md-3">
-                    <div class="input-group">
-                        <input type="text"  class="form-control single-item-amount" placeholder="@lang('Entrer le prix')" name="items[${length}][amount]" required readonly>
-                        <span class="input-group-text">{{__($general->cur_text)}}</span>
-                    </div>
-                </div>
-                <div class="col-md-1">
-                    <button class="btn btn--danger w-100 removeBtn w-100 h-45" type="button">
-                        <i class="fa fa-times"></i>
-                    </button>
-                </div>
-                <br><hr class="panel-wide">
-            </div>`;
-            $('#addedField').append(html)
-        });
-
-        $('#addedField').on('change', '.selected_type', function (e) {
-            let unit = $(this).find('option:selected').data('unit');
-            let parent = $(this).closest('.single-item');
-            $(parent).find('.quantity').attr('disabled', false);
-            $(parent).find('.unit').html(`${unit || '<i class="las la-balance-scale"></i>'}`);
-            calculation();
-        });
-
-        $('#addedField').on('click', '.removeBtn', function (e) {
-            let length=$("#addedField").find('.single-item').length;
-            if(length <= 1){
-                notify('warning',"@lang('Au moins un élément est requis')");
-            }else{
-                $(this).closest('.single-item').remove();
-            }
-            calculation();
-        });
-
-        let discount=0;
-
-        $('.discount').on('input',function (e) {
-            this.value = this.value.replace(/^\.|[^\d\.]/g, '');
-
-             discount=parseFloat($(this).val() || 0);
-             if(discount >=100){
-                discount=100;
-                notify('warning',"@lang('La réduction ne peut être supérieure à 100 %')");
-                $(this).val(discount);
-             }
-            calculation();
-        });
-
-        $('#addedField').on('input', '.quantity', function (e) {
-            this.value = this.value.replace(/^\.|[^\d\.]/g, '');
-
-            let quantity = $(this).val();
-            if (quantity <= 0) {
-                quantity = 0;
-            }
-            quantity=parseFloat(quantity);
-
-            let parent   = $(this).closest('.single-item');
-            let price    = parseFloat($(parent).find('.selected_type option:selected').data('price') || 0);
-            let subTotal = price*quantity;
-
-            $(parent).find('.single-item-amount').val(subTotal.toFixed(0));
-
-            calculation()
-        });
-
-        function calculation ( ) {
-            let items    = $('#addedField').find('.single-item');
-            let subTotal = 0;
-
-            $.each(items, function (i, item) {
-                let price = parseFloat($(item).find('.selected_type option:selected').data('price') || 0);
-                let quantity = parseFloat($(item).find('.quantity').val() || 0);
-                subTotal+=price*quantity;
-            });
-
-            // subTotal=parseFloat(subTotal);
-
-            // let discountAmount = (subTotal/100)*discount;
-            // let total          = subTotal-discountAmount;
-
-            // $('.subtotal').text(subTotal.toFixed(0));
-            // $('.total').text(total.toFixed(0));
-            $('.total').text(subTotal.toFixed(0));
-        };
-
         $('.dates').datepicker({
             language  : 'fr',
             dateFormat: 'yyyy-mm-dd',
-            maxDate   : new Date()
+            minDate   : new Date()
         });
-
-        @if(old('items'))
-            calculation();
-        @endif
-
-    })(jQuery);
     
 </script>
 @endpush

@@ -457,7 +457,10 @@ Route::middleware('auth')->group(function () {
 
         //Manage Livraison
         Route::name('livraison.')->prefix('livraison')->group(function () {
+            Route::get('magcentral/stock', [LivraisonCentraleController::class,'stock'])->name('magcentral.stock');
+            Route::post('magcentral/delivery', [LivraisonCentraleController::class,'deliveryStore'])->name('magcentral.delivery');
             Route::resource('magcentral', LivraisonCentraleController::class);
+            
         });
 
         Route::controller('Manager\LivraisonController')->name('livraison.')->prefix('livraison')->group(function () {

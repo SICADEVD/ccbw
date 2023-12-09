@@ -272,7 +272,7 @@ class LivraisonController extends Controller
         $livraison->magasin_centraux_id        = $request->magasin_central;
         $livraison->magasin_section_id       = $request->sender_magasin;
         $livraison->numero_connaissement       = $request->code;
-        $livraison->type_produit     = $request->type;
+        $livraison->type_produit     = json_encode($request->type);
         $livraison->stocks_mag_entrant      = $request->poidsnet;
         $livraison->stocks_mag_sacs_entrant     = $request->nombresacs;
         $livraison->stocks_mag_sortant     = 0;
@@ -285,31 +285,33 @@ class LivraisonController extends Controller
  
         $i=0;
         $data = [];
-        $quantite = $request->quantite;
-        $nbsacs = $request->nbsacs;
-        foreach ($request->producteur_id as $item) { 
-
+        $quantite = $request->quantite; 
+        $typeproduit = $request->typeproduit; 
+        $producteurs = $request->producteurs;
+        
+        foreach($producteurs as $item) { 
+            
+            if($quantite[$i]>0)
+            {
             $data[] = [
                 'stock_magasin_central_id' => $livraison->id,
                 'producteur_id' => $item,
                 'campagne_id' => $campagne->id,
-                'quantite' => $quantite[$i],
-                'nbsacs'     => $nbsacs[$i], 
+                'quantite' => $quantite[$i], 
+                'type_produit' => $typeproduit[$i],
                 'created_at'      => now(),
             ];
-            $prod = StockMagasinSection::where([['campagne_id',$campagne->id],['magasin_section_id',$request->sender_magasin],['producteur_id',$item],['type_produit',$request->type]])->first();
-             
+            $prod = StockMagasinSection::where([['campagne_id',$campagne->id],['magasin_section_id',$request->sender_magasin],['producteur_id',$item],['type_produit',$typeproduit[$i]]])->first();
+         
             if($prod !=null){ 
                  
             $prod->stocks_entrant = $prod->stocks_entrant - $quantite[$i];
             $prod->stocks_sortant = $prod->stocks_sortant + $quantite[$i];
-            $prod->nb_sacs_sortant = $prod->nb_sacs_sortant + $nbsacs[$i];
-            $prod->nb_sacs_entrant = $prod->nb_sacs_entrant - $nbsacs[$i];
            
             $prod->save();
             }
-              
-
+        }
+            $i++;
         }
 		
 
@@ -460,7 +462,7 @@ class LivraisonController extends Controller
          
         $id = $input['sender_magasin'];
         $campagne = Campagne::active()->first();
-        $stocks = StockMagasinSection::where([['campagne_id',$campagne->id],['type_produit',request()->type],['magasin_section_id',$id],['stocks_entrant','>',0]])->with('producteur')->groupBy('producteur_id')->get();
+        $stocks = StockMagasinSection::where([['campagne_id',$campagne->id],['magasin_section_id',$id],['stocks_entrant','>',0]])->whereIn('type_produit', request()->type)->with('producteur')->groupBy('producteur_id')->get();
         if ($stocks->count()) {
             $contents = '';
 
@@ -508,7 +510,7 @@ class LivraisonController extends Controller
           $total = 0;
           $totalsacs=0;
           $campagne = Campagne::active()->first();
-        $stock =StockMagasinSection::where([['campagne_id',$campagne->id],['magasin_section_id',$magasinsection],['type_produit',$type_produit],['stocks_entrant','>',0]])->whereIn('producteur_id', $producteur)->with('producteur')->get();
+        $stock =StockMagasinSection::where([['campagne_id',$campagne->id],['magasin_section_id',$magasinsection],['stocks_entrant','>',0]])->whereIn('type_produit', $type_produit)->whereIn('producteur_id', $producteur)->with('producteur')->get();
        
             if(count($stock)){
             $v=1;
@@ -517,7 +519,7 @@ class LivraisonController extends Controller
        {
          if($v==$tv){$read = '';}
          else{$read='readonly';}
-        $results .= '<tr><td colspan="2"><h5>'.$data->producteur->nom.' '.$data->producteur->prenoms.'('.$data->producteur->codeProdapp.')</h5><input type="hidden" name="producteurs[]" value="'.$data->producteur_id.'"/></td><td style="width: 400px;"> <input type="number" name="quantite[]" value="'.$data->stocks_entrant.'" min="1" max="'.$data->stocks_entrant.'"  class="form-control quantity" style="width: 115px;"/></td><td style="width: 300px;"> <input type="number" name="nbsacs[]" value="'.$data->nb_sacs_entrant.'" min="0" max="'.$data->nb_sacs_entrant.'"  class="form-control nbsacs" /></td></tr>';
+        $results .= '<tr><td colspan="2"><h5>'.$data->producteur->nom.' '.$data->producteur->prenoms.'('.$data->producteur->codeProdapp.')</h5><input type="hidden" name="producteurs[]" value="'.$data->producteur_id.'"/></td><td style="width: 300px;"><input type="hidden" name="typeproduit[]" value="'.$data->type_produit.'"/>'.$data->type_produit.'</td><td style="width: 400px;"> <input type="number" name="quantite[]" value="'.$data->stocks_entrant.'" min="1" max="'.$data->stocks_entrant.'"  class="form-control quantity" style="width: 115px;"/></td></tr>';
         $total = $total+$data->stocks_entrant;
         $totalsacs = $totalsacs+$data->nb_sacs_entrant;
         $v++;

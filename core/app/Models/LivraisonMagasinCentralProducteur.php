@@ -12,7 +12,10 @@ class LivraisonMagasinCentralProducteur extends Model
 
     use Searchable, GlobalStatus, PowerJoins;
     protected $table="livraison_magasin_central_producteurs";
-
+    public function campagne()
+    {
+        return $this->belongsTo(Campagne::class, 'campagne_id');
+    }
     public function producteur()
     {
         return $this->belongsTo(Producteur::class, 'producteur_id');

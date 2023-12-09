@@ -23,12 +23,40 @@ use App\Models\LivraisonProduct;
 use App\Exports\ExportLivraisons;
 use App\Models\AdminNotification;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller; 
+use App\Http\Controllers\Controller;
+use App\Models\LivraisonMagasinCentralProducteur;
 
 class LivraisonCentraleController extends Controller
 {
 
     public function index()
+    {  
+        $staff = auth()->user(); 
+        $livraisonProd = LivraisonMagasinCentralProducteur::dateFilter()->joinRelationship('stockMagasinCentral')->with('stockMagasinCentral','campagne', 'producteur')
+        ->where('cooperative_id', $staff->cooperative_id) 
+        ->when(request()->code, function ($query, $code) {
+            $query->where('numero_connaissement',$code); 
+        })
+        ->when(request()->magasin, function ($query, $magasin) {
+            $query->where('stock_magasin_central_id',$magasin); 
+        })
+        ->when(request()->produit, function ($query, $produit) {
+            $query->whereIn('livraison_magasin_central_producteurs.type_produit',json_decode($produit)); 
+        })
+        ->when(request()->producteur, function ($query, $producteur) {
+            $query->where('producteur_id',$producteur); 
+        })
+        ->select('livraison_magasin_central_producteurs.*')
+        ->paginate(getPaginate());
+ 
+        $total = $livraisonProd->sum('quantite');
+        $pageTitle    = "Livraison des Magasins de Section ($total)";
+        $magasins  = MagasinCentral::where('cooperative_id',$staff->cooperative_id)->get();
+        $sections = Section::get();
+        return view('manager.livraison-centrale.index', compact('pageTitle', 'livraisonProd','total','sections','magasins'));
+    }
+
+    public function stock()
     {  
 
         $staff = auth()->user(); 
@@ -42,7 +70,7 @@ class LivraisonCentraleController extends Controller
         $pageTitle    = "Stock des Magasins de Section ($total)";
         $magasins  = MagasinCentral::where('cooperative_id',$staff->cooperative_id)->get();
         $sections = Section::get();
-        return view('manager.livraison-centrale.index', compact('pageTitle', 'stocks','total','sections','magasins'));
+        return view('manager.livraison-centrale.stock', compact('pageTitle', 'stocks','total','sections','magasins'));
     }
 
     public function create()
@@ -326,6 +354,19 @@ class LivraisonCentraleController extends Controller
         return $contents;
     }
     
+    public function deliveryStore(Request $request)
+    {
+        $request->validate([
+            'code' => 'required',
+        ]);
+        $user = auth()->user();
+        $livraison = StockMagasinCentral::where('numero_connaissement', $request->code)->where('status', Status::COURIER_DISPATCH)->firstOrFail();
+ 
+        $livraison->status            = Status::COURIER_DELIVERYQUEUE;
+        $livraison->save();
+        $notify[] = ['success', 'Reception terminée'];
+        return back()->withNotify($notify);
+    }
     public function sentInQueue()
     {
         $pageTitle    = "Liste des livraisons en attente";
@@ -354,6 +395,7 @@ class LivraisonCentraleController extends Controller
         $livraisonInfos = $this->livraisons('dispatched');
         return view('manager.livraison.index', compact('pageTitle', 'livraisonInfos'));
     }
+
 
     public function delivered()
     {

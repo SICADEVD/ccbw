@@ -10,6 +10,7 @@
                                 <label>@lang('Recherche par Mot(s) clé(s)')</label>
                                 <input type="text" name="search"  value="{{ request()->search }}" class="form-control">
                             </div>
+                            
                             <div class="flex-grow-1">
                                 <label>@lang('Magasin de Section')</label>
                                 <select name="magasin" class="form-control">
@@ -18,6 +19,16 @@
                                         <option value="{{ $local->id }}" {{ request()->magasin == $local->id ? 'selected' : '' }}>{{ $local->nom }}</option>
                                     @endforeach
                                 </select>
+                            </div>
+                            <div class="flex-grow-1">
+                            <label>@lang('Type de produit')</label>
+                            <select class="form-control" name="produit">
+                                                    <option  value="">@lang('Tous')</option> 
+                                                        <option value="{{ __('Certifie') }}"
+                                                        @selected(request()->produit=='Certifie')>{{ __('Certifie') }}</option>
+                                                        <option value="{{ __('Ordinaire') }}"
+                                                        @selected(request()->produit=='Ordinaire')>{{ __('Ordinaire') }}</option>
+                                                </select> 
                             </div>
                             <div class="flex-grow-1">
                                 <label>@lang('Date')</label>
@@ -38,60 +49,42 @@
                         <table class="table table--light style--two">
                             <thead>
                                 <tr>
-                                <th>@lang("Campagne")</th> 
+                                <th>@lang("Campagne")</th>
+                                    <th>@lang("Magasin Central")</th>
                                     <th>@lang('Magasin Section')</th>
-                                    <th>@lang('Magasin Central')</th>
-                                    <th>@lang('Transporteur')</th>
-                                    <th>@lang('Vehicule')</th>
+                                    <th>@lang('Producteur')</th>
                                     <th>@lang('Type Produit')</th> 
-                                    <th>@lang('Stock entrant')</th> 
-                                    <th>@lang('Stock sortant')</th> 
-                                    <th>@lang('Action')</th>
+                                    <th>@lang('Quantite')</th>
+                                    <th>@lang('Date de livraison')</th>  
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse($stocks as $produit)
+                                @forelse($livraisonProd as $produit)
                                     <tr>
                                     <td>
                                             {{ $produit->campagne->nom }} 
-                                        </td> 
+                                        </td>
+                                        <td>
+                                        <span class="fw-bold">{{ __($produit->stockMagasinCentral->magasinCentral->nom) }}</span> 
+                                        </td>
                                         <td> 
-                                            @if(@$produit->magasin_section_id)
-                                                <span class="text--primary">{{ __($produit->magasinSection->nom) }}</span>
-                                            @else
-                                                <span>@lang('N/A')</span>
-                                            @endif
+                                            <span class="fw-bold">{{ __($produit->stockMagasinCentral->magasinSection->nom) }}</span> 
                                         </td>
                                         <td>
-                                        @if(@$produit->magasin_centraux_id)
-                                                <span class="text--primary">{{ __($produit->magasinCentral->nom) }}</span>
-                                            @else
-                                                <span>@lang('N/A')</span>
-                                            @endif
-                                        </td>
-                                        <td>
-                                            {{ $produit->transporteur->nom }} {{ $produit->transporteur->prenoms }} 
-                                        </td>
-                                        <td>
-                                            {{ $produit->vehicule->marque->nom }}({{ $produit->vehicule->vehicule_immat }} )
+                                            <span class="fw-bold">{{ $produit->producteur->nom }} {{ $produit->producteur->prenoms }}</span>
                                         </td>
                                         <td>
                                             {{ $produit->type_produit }} 
                                         </td>
-                                         
+                                        
                                         <td>
-                                            {{ $produit->stocks_mag_entrant }} 
+                                            {{ $produit->quantite }} 
                                         </td>
                                         <td>
-                                            {{ $produit->stocks_mag_sacs_sortant }} 
-                                        </td> 
- 
-                                        <td>
-                                            <a href="{{ route('manager.livraison.index', ['search'=>'','magasin'=>$produit->magasin_section_id,'produit'=>$produit->type_produit,'date'=>request()->date,'producteur'=>$produit->producteur_id]) }}"
-                                                title="" class="btn btn-sm btn-outline--info">
-                                                <i class="las la-file-invoice"></i> @lang("Détails livraisons")
-                                            </a>
+                                            {{ showDateTime($produit->stockMagasinCentral->estimate_date, 'd M Y') }}<br>
+                                            {{ diffForHumans($produit->stockMagasinCentral->estimate_date) }}
                                         </td>
+  
                                     </tr>
                                 @empty
                                     <tr>
@@ -103,9 +96,9 @@
                         </table>
                     </div>
                 </div>
-                @if ($stocks->hasPages())
+                @if ($livraisonProd->hasPages())
                     <div class="card-footer py-4">
-                        {{ paginateLinks($stocks) }}
+                        {{ paginateLinks($livraisonProd) }}
                     </div>
                 @endif
             </div>
@@ -115,9 +108,6 @@
 
 @push('breadcrumb-plugins') 
 
-<a href="{{ route('manager.livraison.stock.section.create') }}" class="btn  btn-outline--primary h-45 addNewCooperative">
-        <i class="las la-plus"></i>@lang("Enregistrer Connaissement vers Usine")
-    </a>
 <a href="{{ route('manager.livraison.exportExcel.livraisonAll') }}" class="btn  btn-outline--warning h-45"><i class="las la-cloud-download-alt"></i> Exporter en Excel</a>
 @endpush
 

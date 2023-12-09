@@ -10,7 +10,6 @@
                                 <label>@lang('Recherche par Mot(s) clé(s)')</label>
                                 <input type="text" name="search"  value="{{ request()->search }}" class="form-control">
                             </div>
-                            
                             <div class="flex-grow-1">
                                 <label>@lang('Magasin de Section')</label>
                                 <select name="magasin" class="form-control">
@@ -19,16 +18,6 @@
                                         <option value="{{ $local->id }}" {{ request()->magasin == $local->id ? 'selected' : '' }}>{{ $local->nom }}</option>
                                     @endforeach
                                 </select>
-                            </div>
-                            <div class="flex-grow-1">
-                            <label>@lang('Type de produit')</label>
-                            <select class="form-control" name="produit">
-                                                    <option  value="">@lang('Tous')</option> 
-                                                        <option value="{{ __('Certifie') }}"
-                                                        @selected(request()->produit=='Certifie')>{{ __('Certifie') }}</option>
-                                                        <option value="{{ __('Ordinaire') }}"
-                                                        @selected(request()->produit=='Ordinaire')>{{ __('Ordinaire') }}</option>
-                                                </select> 
                             </div>
                             <div class="flex-grow-1">
                                 <label>@lang('Date')</label>
@@ -49,62 +38,78 @@
                         <table class="table table--light style--two">
                             <thead>
                                 <tr>
-                                <th>@lang("Campagne")</th>
-                                    <th>@lang("Staff Expéditeur")</th>
+                                <th>@lang("Livraison")</th> 
+                                <th>@lang("Campagne")</th> 
                                     <th>@lang('Magasin Section')</th>
-                                    <th>@lang('Producteur - Parcelle')</th>
-                                    <th>@lang('Type Produit')</th>
-                                    <th>@lang("Montant - Numéro Livraison")</th>
-                                    <th>@lang('Quantite(KG)')</th>
-                                    <th>@lang('Date de livraison')</th> 
+                                    <th>@lang('Magasin Central')</th>
+                                    <th>@lang('Transporteur')</th>
+                                    <th>@lang('Vehicule')</th>
+                                    <th>@lang('Type Produit')</th> 
+                                    <th>@lang('Stock entrant')</th> 
+                                    <th>@lang('Stock sortant')</th> 
+                                    <th>@lang('Statut')</th>
                                     <th>@lang('Action')</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse($livraisonProd as $produit)
+                                @forelse($stocks as $produit)
                                     <tr>
                                     <td>
+                                            {{ $produit->numero_connaissement }} 
+                                        </td>
+                                    <td>
                                             {{ $produit->campagne->nom }} 
-                                        </td>
-                                        <td>
-                                             
-                                            <a class="text--primary" href="{{ route('manager.staff.edit', encrypt($produit->livraisonInfo->senderStaff->id)) }}">
-                                                <span class="text--primary">@</span>{{ __($produit->livraisonInfo->senderStaff->lastname) }} {{ __($produit->livraisonInfo->senderStaff->firstname) }}
-                                            </a>
-                                        </td>
-                                        <td>
-                                             
-                                            @if(@$produit->livraisonInfo->receiver_magasin_section_id)
-                                            <span class="fw-bold">{{ __($produit->livraisonInfo->magasinSection->nom) }}</span>
+                                        </td> 
+                                        <td> 
+                                            @if(@$produit->magasin_section_id)
+                                                <span class="text--primary">{{ __($produit->magasinSection->nom) }}</span>
                                             @else
                                                 <span>@lang('N/A')</span>
                                             @endif
                                         </td>
                                         <td>
-                                            <span class="fw-bold">{{ $produit->parcelle->producteur->nom }} {{ $produit->parcelle->producteur->prenoms }}</span><br>
-                                            <span>{{ $produit->parcelle->codeParc }}</span>
+                                        @if(@$produit->magasin_centraux_id)
+                                                <span class="text--primary">{{ __($produit->magasinCentral->nom) }}</span>
+                                            @else
+                                                <span>@lang('N/A')</span>
+                                            @endif
                                         </td>
                                         <td>
-                                            {{ $produit->type_produit }} 
+                                            {{ $produit->transporteur->nom }} {{ $produit->transporteur->prenoms }} 
                                         </td>
                                         <td>
-                                            <span class="fw-bold">{{ showAmount(@$produit->fee) }}
-                                                {{ __($general->cur_text) }}</span><br>
-                                            <span>{{ $produit->livraisonInfo->code }}</span>
+                                            {{ $produit->vehicule->marque->nom }}({{ $produit->vehicule->vehicule_immat }} )
                                         </td>
                                         <td>
-                                            {{ $produit->qty }} 
+                                             
+                                            @foreach(json_decode($produit->type_produit) as $data)
+                                                <span class="btn btn-sm btn-outline--success">{{ $data }}</span>
+                                            @endforeach
+                                        </td>
+                                         
+                                        <td>
+                                            {{ $produit->stocks_mag_entrant }} 
                                         </td>
                                         <td>
-                                            {{ showDateTime($produit->livraisonInfo->estimate_date, 'd M Y') }}<br>
-                                            {{ diffForHumans($produit->livraisonInfo->estimate_date) }}
+                                            {{ $produit->stocks_mag_sacs_sortant }} 
+                                        </td> 
+                                        <td> 
+                                            @if($produit->status == Status::COURIER_DISPATCH)
+                                                <span class="badge badge--dark">@lang('En attente de reception')</span>
+                                            @else($produit->status == Status::COURIER_DELIVERYQUEUE)
+                                                <span class="badge badge--success">@lang("Receptionnée")</span>
+                                            @endif
                                         </td>
- 
                                         <td>
-                                            <a href="{{ route('manager.livraison.invoice', encrypt($produit->livraison_info_id)) }}"
+                                            <a href="{{ route('manager.livraison.magcentral.index', ['code'=>$produit->numero_connaissement]) }}"
                                                 title="" class="btn btn-sm btn-outline--info">
-                                                <i class="las la-file-invoice"></i> @lang("Facture")
+                                                <i class="las la-file-invoice"></i> @lang("Détails livraisons")
                                             </a>
+                                            @if ($produit->status == 1)
+                                                <button class="btn btn-sm btn-outline--secondary  delivery"
+                                                    data-code="{{ $produit->numero_connaissement }}"><i class="las la-truck"></i>
+                                                    @lang('Confirmer la reception')</button>
+                                            @endif
                                         </td>
                                     </tr>
                                 @empty
@@ -117,11 +122,37 @@
                         </table>
                     </div>
                 </div>
-                @if ($livraisonProd->hasPages())
+                @if ($stocks->hasPages())
                     <div class="card-footer py-4">
-                        {{ paginateLinks($livraisonProd) }}
+                        {{ paginateLinks($stocks) }}
                     </div>
                 @endif
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deliveryBy" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="" lass="modal-title" id="exampleModalLabel">@lang('Confirmation de reception')</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Fermer">
+                        <span class="fa fa-times"></span>
+                    </button>
+                </div>
+                <form action="{{ route('manager.livraison.magcentral.delivery') }}" method="POST">
+                    @csrf
+                    @method('POST')
+                    <input type="hidden" name="code">
+                    <div class="modal-body">
+                        <p>@lang('Etre-vous sûr de vouloir confirmer la reception de cette livraison?')</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn--dark" data-bs-dismiss="modal">@lang('Fermer')</button>
+                        <button type="submit" class="btn btn--primary">@lang('Confirmer')</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -129,8 +160,8 @@
 
 @push('breadcrumb-plugins') 
 
-<a href="{{ route('manager.livraison.create') }}" class="btn  btn-outline--primary h-45 addNewCooperative">
-        <i class="las la-plus"></i>@lang("Enregistrer une livraison")
+<a href="{{ route('manager.livraison.stock.section.create') }}" class="btn  btn-outline--primary h-45 addNewCooperative">
+        <i class="las la-plus"></i>@lang("Enregistrer Connaissement vers Usine")
     </a>
 <a href="{{ route('manager.livraison.exportExcel.livraisonAll') }}" class="btn  btn-outline--warning h-45"><i class="las la-cloud-download-alt"></i> Exporter en Excel</a>
 @endpush
@@ -143,6 +174,14 @@
     <script src="{{ asset('assets/fcadmin/js/vendor/datepicker.fr.js') }}"></script>
 <script src="{{ asset('assets/fcadmin/js/vendor/datepicker.en.js') }}"></script>
     <script>
+         (function($) { 
+            $('.delivery').on('click', function() {
+                var modal = $('#deliveryBy');
+                modal.find('input[name=code]').val($(this).data('code'))
+                modal.modal('show');
+            });
+        })(jQuery)
+        
         (function($) {
             "use strict";
 
