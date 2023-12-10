@@ -145,18 +145,33 @@
                                 <div class="card-body">
                                     <div class="row">
                                     <div class="form-group col-lg-6">
-                                            <label>@lang('Selectionner un Transporteur')</label>
-                                            <select class="form-control" name="sender_transporteur" id="sender_transporteur" onchange="getDriver()" required>
-                                                <option value>@lang('Selectionner une option')</option>
-                                                @foreach($transporteurs as $transporteur)
-                                                <option value="{{$transporteur->id}}"
-                                                data-name ="{{$transporteur->nom}} {{$transporteur->prenoms}}"
-                                                data-phone ="{{$transporteur->phone1}}"
-                                                data-email ="{{$transporteur->email}}" 
-                                                @selected(old('sender_transporteur')==$transporteur->id)>{{__($transporteur->nom)}} {{__($transporteur->prenoms)}}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
+                        <?php echo Form::label(__('Entreprise'), null, ['class' => 'control-label']); ?>
+                        <div class="input-group mb-3">
+                            <?php echo Form::select('entreprise_id', $entreprises, null, ['placeholder' => __('Selectionner une option'), 'class' => 'form-control', 'id' => 'entreprise', 'required' => 'required']); ?>
+                            <button type="button" class="btn btn-outline-secondary border-grey add-entreprise"
+                                data-toggle="tooltip" data-original-title="Ajouter un transporteur"><i
+                                    class="las la-plus"></i></button>
+                        </div>
+                         
+                    </div>
+
+                    <div class="form-group col-lg-6">
+                        <?php echo Form::label(__('Transporteur'), null, ['class' => 'control-label']); ?>
+                        <div class="input-group mb-3">
+                            <select class="form-control" name="sender_transporteur" id="sender_transporteur" required>
+                                <option value="">@lang('Selectionner une option')</option>
+                                @foreach ($transporteurs as $transporteur)
+                                    <option value="{{ $transporteur->id }}" data-chained="{{ $transporteur->entreprise_id }}"
+                                        @selected(old('transporteur'))>
+                                        {{ $transporteur->nom }} {{ $transporteur->prenoms }}</option>
+                                @endforeach
+                            </select>
+                            <button type="button" class="btn btn-outline-secondary border-grey add-transporteur"
+                                data-toggle="tooltip" data-original-title="Ajouter un transporteur"><i
+                                    class="las la-plus"></i></button>
+                        </div>
+                    </div>
+ 
                                         <div class="form-group col-lg-6">
                                             <label>@lang('Selectionner un Véhicule')</label>
                                             <select class="form-control" name="sender_vehicule" id="sender_vehicule" required>
@@ -167,28 +182,9 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <div class="form-group col-lg-6">
-                                            <label>@lang('Nom')</label>
-                                            <input type="text" class="form-control" name="transporteur_name"
-                                            id="transporteur_name"
-                                                value="{{old('transporteur_name')}}" readonly required>
-                                        </div>
-                                        <div class=" form-group col-lg-6">
-                                            <label>@lang('Contact')</label>
-                                            <input type="text" class="form-control" value="{{old('transporteur_phone')}}"
-                                                name="transporteur_phone"
-                                                id="transporteur_phone" 
-                                                readonly required>
-                                        </div>
+                                         
                                     </div>
-                                    <div class="row">
-                                        <div class="form-group col-lg-12">
-                                            <label>@lang('Email')</label>
-                                            <input type="email" class="form-control" name="transporteur_email"
-                                            id="transporteur_email"
-                                                value="{{old('transporteur_email')}}" readonly>
-                                        </div>
-                                    </div>
+                                   
                                      
                                 </div>
                             </div>
@@ -276,7 +272,7 @@
     "use strict"; 
     $('#producteurs').select2();
     $(".scelleOld").select2({tags: true });
-
+    $("#sender_transporteur").chained("#entreprise");
     function getReceiver() {
         let name = $("#magasin_central").find(':selected').data('name'); 
         let phone = $("#magasin_central").find(':selected').data('phone'); 

@@ -16,5 +16,11 @@ class Transporteur extends Model
     {
         return $this->belongsTo(Cooperative::class,'cooperative_id');
     }
+
+    public function entreprise()
+    {
+        return $this->belongsTo(Entreprise::class,'entreprise_id');
+    }
+ 
  
 }

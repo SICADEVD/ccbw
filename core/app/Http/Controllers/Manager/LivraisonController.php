@@ -8,17 +8,21 @@ use App\Models\Campagne;
 use App\Models\Parcelle;
 use App\Models\Vehicule;
 use App\Constants\Status;
+use App\Models\Programme;
+use App\Models\Entreprise;
 use App\Models\Producteur;
 use App\Models\Cooperative;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use App\Models\Transporteur;
 use Illuminate\Http\Request;
-use App\Models\LivraisonInfo;
-use App\Models\LivraisonPrime;
 
+use App\Models\LivraisonInfo;
+use App\Models\FormateurStaff;
+use App\Models\LivraisonPrime;
 use App\Models\MagasinCentral;
 use App\Models\MagasinSection;
+use App\Models\CampagnePeriode;
 use App\Models\LivraisonScelle;
 use App\Models\LivraisonPayment;
 use App\Models\LivraisonProduct;
@@ -28,9 +32,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\StockMagasinCentral;
 use App\Models\StockMagasinSection;
 use App\Http\Controllers\Controller;
-use App\Models\CampagnePeriode;
 use App\Models\LivraisonMagasinCentralProducteur;
-use App\Models\Programme;
 
 class LivraisonController extends Controller
 {
@@ -109,8 +111,8 @@ class LivraisonController extends Controller
         $magCentraux = MagasinCentral::where([['cooperative_id',$staff->cooperative_id]])->with('user')->orderBy('nom')->get();
         $magSections = MagasinSection::joinRelationship('section')->where([['cooperative_id',$staff->cooperative_id]])->with('user')->orderBy('nom')->get();
     
-       $transporteurs = Transporteur::where([['cooperative_id',$staff->cooperative_id]])->get();
-        $vehicules = Vehicule::get();
+       $transporteurs = Transporteur::where([['cooperative_id',$staff->cooperative_id]])->with('cooperative','entreprise')->get();
+        $vehicules = Vehicule::with('marque')->get();
         $producteurs  = Producteur::joinRelationship('localite.section')->where('sections.cooperative_id',$staff->cooperative_id)->select('producteurs.*')->orderBy('producteurs.nom')->get();
 
         $campagne = Campagne::active()->first();
@@ -118,7 +120,10 @@ class LivraisonController extends Controller
         $code = $this->generecodeConnais();
         $parcelles  = Parcelle::with('producteur')->get();
         $pageTitle = 'Connaissement vers le Magasin Central N° '.$code;
-        return view('manager.livraison.section-create', compact('pageTitle', 'cooperatives','magSections','magCentraux','producteurs','transporteurs','parcelles','campagne','vehicules','code'));
+        $entreprises = Entreprise::all()->pluck('nom_entreprise', 'id');
+        $formateurs = FormateurStaff::with('entreprise')->get();
+        
+        return view('manager.livraison.section-create', compact('pageTitle', 'cooperatives','magSections','magCentraux','producteurs','transporteurs','parcelles','campagne','vehicules','code','entreprises','formateurs'));
     }
 
     public function store(Request $request)
