@@ -761,11 +761,11 @@ public function vehiculeStore(Request $request)
 public function transporteurStore(Request $request)
     {
         $request->validate([ 
+            'entreprise_id' => 'required',
             'nom'  => 'required',
             'prenoms'  => 'required', 
             'sexe'  => 'required',
-            'phone1'  => 'required',
-            'phone2'  => 'required',
+            'phone1'  => 'required', 
         ]);
 
         if ($request->id) {
@@ -776,6 +776,7 @@ public function transporteurStore(Request $request)
         } 
 		$manager = auth()->user();  
         $transporteur->cooperative_id = $manager->cooperative_id;
+        $transporteur->entreprise_id = trim($request->entreprise_id); 
         $transporteur->nom = trim($request->nom); 
         $transporteur->prenoms = trim($request->prenoms);
         $transporteur->sexe = trim($request->sexe);
