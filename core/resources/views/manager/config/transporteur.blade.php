@@ -126,7 +126,17 @@
                     @csrf
                     <div class="modal-body"> 
                     <input type="hidden" name='id'>
-                    
+                    <div class="row">
+                <div class="col-lg-12">
+                    <label for="entreprise_id" class="control-label">@lang('Entreprise')</label>
+                   <select class="form-control" name="entreprise_id" id="entreprise_id" required>
+                        <option value="">@lang('Choisir une entreprise')</option>
+                        @foreach($entreprises as $entreprise)
+                            <option value="{{ $entreprise->id }}">{{ $entreprise->nom_entreprise }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
                     <div class="form-group row">
         <?php echo Form::label(__('Nom du transporteur'), null, ['class' => 'col-sm-4 control-label required']); ?>
         <div class="col-xs-12 col-sm-8">

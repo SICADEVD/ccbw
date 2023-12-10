@@ -221,8 +221,10 @@ Route::middleware('auth')->group(function () {
             Route::post('vehicule/store', [SettingController::class, 'vehiculeStore'])->name('vehicule.store');
             Route::post('vehicule/status/{id}', [SettingController::class, 'vehiculeStatus'])->name('vehicule.status');
 
+            Route::get('transporteur/modal', [SettingController::class, 'transporteurModalIndex'])->name('transporteurModal.index');
             Route::get('transporteur/', [SettingController::class, 'transporteurIndex'])->name('transporteur.index');
             Route::post('transporteur/store', [SettingController::class, 'transporteurStore'])->name('transporteur.store');
+            Route::post('transporteur/modal/store', [SettingController::class, 'transporteurModalStore'])->name('transporteurModal.store');
             Route::post('transporteur/status/{id}', [SettingController::class, 'transporteurStatus'])->name('transporteur.status');
             
             Route::get('entreprise/', [SettingController::class, 'entrepriseIndex'])->name('entreprise.index');

@@ -322,7 +322,7 @@ class LivraisonController extends Controller
         LivraisonMagasinCentralProducteur::insert($data); 
 
         $notify[] = ['success', 'Le connaissement vers le magasin central a été ajouté avec succès'];
-        return to_route('manager.livraison.magcentral.index')->withNotify($notify);
+        return to_route('manager.livraison.magcentral.stock')->withNotify($notify);
     }
     public function update(Request $request, $id)
     {

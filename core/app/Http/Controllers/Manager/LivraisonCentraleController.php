@@ -47,6 +47,7 @@ class LivraisonCentraleController extends Controller
             $query->where('producteur_id',$producteur); 
         })
         ->select('livraison_magasin_central_producteurs.*')
+        ->orderBy('livraison_magasin_central_producteurs.id','desc')
         ->paginate(getPaginate());
  
         $total = $livraisonProd->sum('quantite');
@@ -64,6 +65,7 @@ class LivraisonCentraleController extends Controller
         ->when(request()->magasin, function ($query, $magasin) {
             $query->where('magasin_section_id',$magasin); 
         })
+        ->orderBy('stock_magasin_centraux.id','desc')
         ->paginate(getPaginate());
  
         $total = $stocks->sum('stocks_entrant');

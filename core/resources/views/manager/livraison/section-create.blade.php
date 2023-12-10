@@ -303,6 +303,20 @@
         $('#sender_address').val(adresse); 
 
     }
+    $('body').on('click', '.add-transporteur', function() {
+                var url = "{{ route('manager.settings.transporteurModal.index') }}";
+ 
+                $(MODAL_XL + ' ' + MODAL_HEADING).html('...');
+                $.ajaxModal(MODAL_XL, url);
+                $(MODAL_XL).modal('show');
+            });
+            $('body').on('click', '.add-entreprise', function() {
+                var url = "{{ route('manager.settings.entreprise.index') }}";
+
+                $(MODAL_XL + ' ' + MODAL_HEADING).html('...');
+                $.ajaxModal(MODAL_XL, url);
+                $(MODAL_XL).modal('show');
+            });
     $('#sender_magasin').change(function() { 
 $.ajax({
     type: 'GET',

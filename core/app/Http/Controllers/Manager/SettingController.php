@@ -738,6 +738,14 @@ public function vehiculeStore(Request $request)
         $notify[] = ['success', isset($message) ? $message  : 'Le contenu a été ajouté avec succès.'];
         return back()->withNotify($notify);
     }
+    public function transporteurModalIndex()
+    {
+        $pageTitle = "Ajouter un transporteur";   
+        $entreprises = Entreprise::get();
+        $countries = Countrie::get(); 
+        $niveaux = NiveauxEtude::get();
+        return view('manager.config.create-transporteur-modal',compact('pageTitle','entreprises','countries','niveaux'));
+    }
     public function transporteurIndex()
     {
 
@@ -747,7 +755,8 @@ public function vehiculeStore(Request $request)
         $transporteurs = Transporteur::orderBy('id','desc')->paginate(getPaginate());
         $countries = Countrie::get(); 
         $niveaux = NiveauxEtude::get();
-        return view('manager.config.transporteur', compact('pageTitle', 'transporteurs','activeSettingMenu','countries','niveaux'));
+        $entreprises = Entreprise::get();
+        return view('manager.config.transporteur', compact('pageTitle', 'transporteurs','activeSettingMenu','countries','niveaux','entreprises'));
     }
 public function transporteurStore(Request $request)
     {
@@ -797,6 +806,55 @@ public function transporteurStore(Request $request)
        
         $notify[] = ['success', isset($message) ? $message  : 'Le contenu a été ajouté avec succès.'];
         return back()->withNotify($notify);
+    }
+    public function transporteurModalStore(Request $request)
+    {
+        $request->validate([ 
+            'entreprise_id'=> 'required',
+            'nom'  => 'required',
+            'prenoms'  => 'required', 
+            'sexe'  => 'required',
+            'phone1'  => 'required', 
+        ]);
+
+        if ($request->id) {
+            $transporteur    = Transporteur::findOrFail($request->id);
+            $message = "Le contenu a été mise à jour avec succès.";
+        } else {
+            $transporteur = new Transporteur();
+        } 
+		$manager = auth()->user();  
+        $transporteur->cooperative_id = $manager->cooperative_id;
+        $transporteur->entreprise_id = $request->entreprise_id;
+        $transporteur->nom = trim($request->nom); 
+        $transporteur->prenoms = trim($request->prenoms);
+        $transporteur->sexe = trim($request->sexe);
+        $transporteur->date_naiss = trim($request->date_naiss);
+        $transporteur->phone1 = trim($request->phone1);
+        $transporteur->phone2 = trim($request->phone2);
+        $transporteur->nationalite = trim($request->nationalite);
+        $transporteur->niveau_etude = trim($request->niveau_etude);
+        $transporteur->type_piece = trim($request->type_piece);
+        $transporteur->num_piece = trim($request->num_piece);
+        $transporteur->num_permis = trim($request->num_permis);
+        if($request->hasFile('photo')) { 
+            Files::deleteFile($transporteur->photo, 'transporteur');
+            $transporteur->photo = Files::uploadLocalOrS3($request->photo, 'transporteur', 600);
+        }
+
+        if($request->hasFile('photo_piece_identite')) { 
+            Files::deleteFile($transporteur->photo_piece_identite, 'transporteur');
+            $transporteur->photo_piece_identite = Files::uploadLocalOrS3($request->photo_piece_identite, 'transporteur', 600);
+        }
+
+        if($request->hasFile('photo_permis_conduire')) { 
+            Files::deleteFile($transporteur->photo_permis_conduire, 'transporteur');
+            $transporteur->photo_permis_conduire = Files::uploadLocalOrS3($request->photo_permis_conduire, 'transporteur', 600);
+        }
+         
+        $transporteur->save();
+
+        return Reply::successWithData(__('Transporteur a été ajouté avec succès.'), ['page_reload' => $request->page_reload]);
     }
     public function campagneStatus($id)
     {
