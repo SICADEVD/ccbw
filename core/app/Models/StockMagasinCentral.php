@@ -22,6 +22,10 @@ class StockMagasinCentral extends Model
     {
         return $this->belongsTo(Campagne::class, 'campagne_id');
     }
+    public function campagnePeriode()
+    {
+        return $this->belongsTo(CampagnePeriode::class, 'campagne_periode_id');
+    }
     public function cooperative()
     {
         return $this->belongsTo(Cooperative::class, 'cooperative_id');

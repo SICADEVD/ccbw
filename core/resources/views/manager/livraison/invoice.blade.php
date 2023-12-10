@@ -9,6 +9,9 @@
                         <small>{{ $livraisonInfo->code }}</small>
                         <br> 
                         @lang('Date de livraison: ') {{ showDateTime($livraisonInfo->estimate_date, 'd M Y') }}
+                        <br>
+                            <b>@lang('Cooperative de reception'):</b> {{ __($livraisonInfo->receiverCooperative->name) }}
+                         
                     </h3>
                 </div>
 
@@ -26,10 +29,7 @@
                         {!! QrCode::size(150)->generate($textQR) !!}
                              
                         </div>
-                        <div>
-                            <b>@lang('N° Commande') #{{ $livraisonInfo->code }}</b><br> 
-                            <b>@lang('Cooperative de reception'):</b> {{ __($livraisonInfo->receiverCooperative->name) }}
-                        </div>
+                       
                     </div>
                     <hr>
                     <div class=" invoice-info d-flex justify-content-between">

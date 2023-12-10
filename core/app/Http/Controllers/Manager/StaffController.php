@@ -126,10 +126,11 @@ class StaffController extends Controller
             $message = "Staff updated successfully";
         }
         if (($request->type_compte == 'web') ||  ($request->type_compte == 'mobile-web')) {
-            $hasStaff = User::where('cooperative_id', auth()->user()->cooperative_id)->where(function ($query) {
+            $hasStaff = User::where([['cooperative_id', auth()->user()->cooperative_id],['user_type','!=','manager']])->where(function ($query) {
                 $query->orwhere('type_compte', 'web');
                 $query->orwhere('type_compte', 'mobile-web');
             })->count();
+            
             if ($hasStaff >= auth()->user()->cooperative->web) {
                 $nombre = auth()->user()->cooperative->web;
                 $notify[] = ['error', "Cette coopérative a atteint le nombre de compte Web qui est de : $nombre utilisateurs"];
@@ -137,13 +138,13 @@ class StaffController extends Controller
             }
         }
         if (($request->type_compte == 'mobile') ||  ($request->type_compte == 'mobile-web')) {
-            $hasStaff = User::where('cooperative_id', auth()->user()->cooperative_id)->where(function ($query) {
+            $hasStaff = User::where([['cooperative_id', auth()->user()->cooperative_id],['user_type','!=','manager']])->where(function ($query) {
                 $query->orwhere('type_compte', 'mobile');
                 $query->orwhere('type_compte', 'mobile-web');
             })->count();
             if ($hasStaff >= auth()->user()->cooperative->mobile) {
                 $nombre = auth()->user()->cooperative->mobile;
-                $notify[] = ['error', "Cette coopérative a atteint le nombre de compte Web qui est de : $nombre utilisateurs"];
+                $notify[] = ['error', "Cette coopérative a atteint le nombre de compte Mobile qui est de : $nombre utilisateurs"];
                 return back()->withNotify($notify)->withInput();
             }
         }

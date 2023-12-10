@@ -40,6 +40,7 @@
                                 <tr>
                                 
                                 <th>@lang("Campagne")</th> 
+                                <th>@lang("Periode")</th> 
                                     <th>@lang('Magasin Section')</th>
                                     <th>@lang('Producteur')</th>
                                     <th>@lang('Type Produit')</th> 
@@ -55,6 +56,9 @@
                                     <td>
                                             {{ $produit->campagne->nom }} 
                                         </td> 
+                                        <td>
+                                            {{ $produit->campagnePeriode->nom }} 
+                                        </td>
                                         <td> 
                                             @if(@$produit->magasin_section_id)
                                                 <span class="text--primary">{{ __($produit->magasinSection->nom) }}</span>

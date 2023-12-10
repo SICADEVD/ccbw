@@ -28,7 +28,9 @@ use Illuminate\Support\Facades\DB;
 use App\Models\StockMagasinCentral;
 use App\Models\StockMagasinSection;
 use App\Http\Controllers\Controller;
+use App\Models\CampagnePeriode;
 use App\Models\LivraisonMagasinCentralProducteur;
+use App\Models\Programme;
 
 class LivraisonController extends Controller
 {
@@ -66,7 +68,8 @@ class LivraisonController extends Controller
         ->when(request()->magasin, function ($query, $magasin) {
             $query->where('magasin_section_id',$magasin); 
         })
-        ->paginate(getPaginate());
+        ->with('producteur','campagne','campagnePeriode','magasinSection')
+        ->orderBy('stock_magasin_sections.id','desc')->paginate(getPaginate());
  
         $total = $stocks->sum('stocks_entrant');
         $pageTitle    = "Stock des Magasins de Section ($total)";
@@ -79,7 +82,9 @@ class LivraisonController extends Controller
     {
         $pageTitle = 'Enregistrement de livraison';
         $staff = auth()->user();
-        // $cooperatives = Cooperative::active()->where('id', '!=', auth()->user()->cooperative_id)->orderBy('name')->get();
+        $campagne = Campagne::active()->first(); 
+        $periode = CampagnePeriode::where([['campagne_id',$campagne->id],['periode_debut','<=', gmdate('Y-m-d')],['periode_fin','>=', gmdate('Y-m-d')]])->latest()->first();
+      
         $cooperatives = Cooperative::active()->orderBy('name')->get(); 
         $magasins = MagasinSection::join('users','magasin_sections.staff_id','=','users.id')->where([['cooperative_id',$staff->cooperative_id],['magasin_sections.status',1]])->with('user')->orderBy('nom')->select('magasin_sections.*')->get();
     
@@ -89,11 +94,10 @@ class LivraisonController extends Controller
                 ->get(); 
 
         $producteurs  = Producteur::joinRelationship('localite.section')->where('sections.cooperative_id',$staff->cooperative_id)->select('producteurs.*')->orderBy('producteurs.nom')->get();
-        $campagne = Campagne::active()->first();
       
         $parcelles  = Parcelle::with('producteur')->get();
         
-        return view('manager.livraison.create', compact('pageTitle', 'cooperatives','staffs','magasins','producteurs','parcelles','campagne'));
+        return view('manager.livraison.create', compact('pageTitle', 'cooperatives','staffs','magasins','producteurs','parcelles','campagne','periode'));
     }
 
     public function stockSectionCreate()
@@ -110,6 +114,7 @@ class LivraisonController extends Controller
         $producteurs  = Producteur::joinRelationship('localite.section')->where('sections.cooperative_id',$staff->cooperative_id)->select('producteurs.*')->orderBy('producteurs.nom')->get();
 
         $campagne = Campagne::active()->first();
+        $campagne = CampagnePeriode::where([['campagne_id',$campagne->id],['periode_debut','<=', gmdate('Y-m-d')],['periode_fin','>=', gmdate('Y-m-d')]])->latest()->first();
         $code = $this->generecodeConnais();
         $parcelles  = Parcelle::with('producteur')->get();
         $pageTitle = 'Connaissement vers le Magasin Central N° '.$code;
@@ -155,23 +160,25 @@ class LivraisonController extends Controller
 
         $subTotal = $stock = 0;
         $campagne = Campagne::active()->first();
+        $periode = CampagnePeriode::where([['campagne_id',$campagne->id],['periode_debut','<=', gmdate('Y-m-d')],['periode_fin','>=', gmdate('Y-m-d')]])->latest()->first();
         $data = $data2 = $data3 = [];
         foreach ($request->items as $item) {
             // $livraisonType = Type::where('id', $item['type'])->first();
             // if (!$livraisonType) {
             //     continue;
             // }
-            $price = $campagne->prix_champ * $item['quantity'];
+            $price = $periode->prix_champ * $item['quantity'];
             $subTotal += $price;
            
             $data[] = [
                 'livraison_info_id' => $livraison->id,
                 'parcelle_id' => $item['parcelle'],
                 'campagne_id' => $campagne->id,
+                'campagne_periode_id' => $periode->id,
                 'qty'             => $item['quantity'],
                 'type_produit'     => $item['type'],
                 'fee'             => $price,
-                'type_price'      => $campagne->prix_champ,
+                'type_price'      => $periode->prix_champ,
                 'created_at'      => now(),
             ];
             $prod = StockMagasinSection::where([['campagne_id',$campagne->id],['magasin_section_id',$request->magasin_section],['producteur_id',$item['producteur']],['type_produit',$item['type']]])->first();
@@ -182,34 +189,25 @@ class LivraisonController extends Controller
             $prod->magasin_section_id = $request->magasin_section;
             $prod->producteur_id = $item['producteur'];
             $prod->campagne_id = $campagne->id;
+            $prod->campagne_periode_id = $periode->id;
             $prod->stocks_entrant = $prod->stocks_entrant + $item['quantity'];
             $prod->type_produit = $item['type']; 
             $prod->save();
             
-            // if(count($item['scelle'])){
-            //     $scelles = implode(',', $item['scelle']);
-            //     $scelles = explode(',', $scelles);
-            //     foreach($scelles as $itemscelle){
-            //         $data2[] = [
-            //             'livraison_info_id' => $livraison->id,
-            //             'parcelle_id' => $item['parcelle'],
-            //             'campagne_id' => $campagne->id,
-            //             'type_produit'     => $item['type'],
-            //             'numero_scelle' => $itemscelle,
-            //             'created_at'      => now(),
-            //         ];
-            //     }
-            // }
+            $product = Producteur::where('id',$item['producteur'])->first();
+            if($product !=null){
+                $programme = $product->programme_id;
+                $prime = Programme::where('id',$programme)->first();
 
-            if($item['type']=='Certifie'){
-                $price_prime = $campagne->prime * $item['quantity'];
+                $price_prime = $prime->prime * $item['quantity'];
                 $data3[] = [
                     'livraison_info_id' => $livraison->id,
                     'parcelle_id' => $item['parcelle'],
                     'campagne_id' => $campagne->id,
+                    'campagne_periode_id' => $periode->id,
                     'quantite'             => $item['quantity'], 
                     'montant'             => $price_prime,
-                    'prime_campagne'      => $campagne->prime,
+                    'prime_campagne'      => $prime->prime,
                     'created_at'      => now(),
                 ];
             }
@@ -218,11 +216,8 @@ class LivraisonController extends Controller
         }
 
         LivraisonProduct::insert($data);
-        LivraisonScelle::insert($data2);
         LivraisonPrime::insert($data3);
-
-        // $discount                        = $request->discount ?? 0;
-        // $discountAmount                  = ($subTotal / 100) * $discount;
+ 
         $totalAmount                     = $subTotal;
 
         $livraisonPayment                  = new LivraisonPayment();
@@ -267,19 +262,22 @@ class LivraisonController extends Controller
         $manager                      = auth()->user();
         $livraison                     = new StockMagasinCentral(); 
         $campagne = Campagne::active()->first();
+        $periode = CampagnePeriode::where([['campagne_id',$campagne->id],['periode_debut','<=', gmdate('Y-m-d')],['periode_fin','>=', gmdate('Y-m-d')]])->latest()->first();
+        
         $livraison->cooperative_id   = $manager->cooperative_id;
         $livraison->campagne_id    = $campagne->id;
-        $livraison->magasin_centraux_id        = $request->magasin_central;
-        $livraison->magasin_section_id       = $request->sender_magasin;
-        $livraison->numero_connaissement       = $request->code;
-        $livraison->type_produit     = json_encode($request->type);
-        $livraison->stocks_mag_entrant      = $request->poidsnet;
-        $livraison->stocks_mag_sacs_entrant     = $request->nombresacs;
-        $livraison->stocks_mag_sortant     = 0;
+        $livraison->campagne_periode_id = $periode->id;
+        $livraison->magasin_centraux_id = $request->magasin_central;
+        $livraison->magasin_section_id = $request->sender_magasin;
+        $livraison->numero_connaissement = $request->code;
+        $livraison->type_produit = json_encode($request->type);
+        $livraison->stocks_mag_entrant = $request->poidsnet;
+        $livraison->stocks_mag_sacs_entrant = $request->nombresacs;
+        $livraison->stocks_mag_sortant = 0;
         $livraison->stocks_mag_sacs_sortant   = 0;
         $livraison->transporteur_id = $request->sender_transporteur;
         $livraison->vehicule_id = $request->sender_vehicule;
-        $livraison->date_livraison      = $request->estimate_date;
+        $livraison->date_livraison = $request->estimate_date;
        
         $livraison->save();
  
@@ -297,6 +295,7 @@ class LivraisonController extends Controller
                 'stock_magasin_central_id' => $livraison->id,
                 'producteur_id' => $item,
                 'campagne_id' => $campagne->id,
+                'campagne_periode_id' => $periode->id,
                 'quantite' => $quantite[$i], 
                 'type_produit' => $typeproduit[$i],
                 'created_at'      => now(),
@@ -362,6 +361,7 @@ class LivraisonController extends Controller
         LivraisonPrime::where('livraison_info_id', $id)->delete();
         $subTotal = 0;
         $campagne = Campagne::active()->first();
+        $campagne = CampagnePeriode::where([['campagne_id',$campagne->id],['periode_debut','<=', gmdate('Y-m-d')],['periode_fin','>=', gmdate('Y-m-d')]])->latest()->first();
         $data = $data2 = $data3 = [];
         foreach ($request->items as $item) {
              
@@ -462,6 +462,9 @@ class LivraisonController extends Controller
          
         $id = $input['sender_magasin'];
         $campagne = Campagne::active()->first();
+        $periode = CampagnePeriode::where([['campagne_id',$campagne->id]])->latest()->first();
+     
+         
         $stocks = StockMagasinSection::where([['campagne_id',$campagne->id],['magasin_section_id',$id],['stocks_entrant','>',0]])->whereIn('type_produit', request()->type)->with('producteur')->groupBy('producteur_id')->get();
         if ($stocks->count()) {
             $contents = '';

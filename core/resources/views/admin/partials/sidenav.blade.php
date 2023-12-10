@@ -44,17 +44,22 @@
                                     <i class="menu-icon las la-dot-circle"></i>
                                     <span class="menu-title">@lang('Gestion des Managers')</span>
                                 </a>
-                            </li>
-
-                            <li class="sidebar-menu-item {{ menuActive('admin.cooperative.localite*') }}">
-                                <a href="{{ route('admin.cooperative.localite.index') }}" class="nav-link">
-                                    <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('Gestion des Localites')</span>
-                                </a>
                             </li> 
 
                         </ul>
                     </div>
+                </li>
+                <li class="sidebar-menu-item  {{ menuActive(['admin.config.campagne*']) }}">
+                    <a href="{{ route('admin.config.campagne.index') }}" class="nav-link">
+                        <i class="menu-icon las la-fax"></i>
+                        <span class="menu-title">@lang('Gestion des Campagnes')</span>
+                    </a>
+                </li>
+                <li class="sidebar-menu-item  {{ menuActive(['admin.config.programme*']) }}">
+                    <a href="{{ route('admin.config.programme.index') }}" class="nav-link">
+                        <i class="menu-icon las la-fax"></i>
+                        <span class="menu-title">@lang('Gestion des Programmes')</span>
+                    </a>
                 </li>
                 <li class="sidebar-menu-item  {{ menuActive(['admin.livraison.info*', 'admin.livraison.invoice']) }}">
                     <a href="{{ route('admin.livraison.info.index') }}" class="nav-link">

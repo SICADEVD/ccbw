@@ -50,6 +50,7 @@
                             <thead>
                                 <tr>
                                 <th>@lang("Campagne")</th>
+                                <th>@lang("Periode")</th>
                                     <th>@lang("Magasin Central")</th>
                                     <th>@lang('Magasin Section')</th>
                                     <th>@lang('Producteur')</th>
@@ -64,6 +65,9 @@
                                     <td>
                                             {{ $produit->campagne->nom }} 
                                         </td>
+                                        <td>
+                                            {{ $produit->campagnePeriode->nom }} 
+                                        </td> 
                                         <td>
                                         <span class="fw-bold">{{ __($produit->stockMagasinCentral->magasinCentral->nom) }}</span> 
                                         </td>

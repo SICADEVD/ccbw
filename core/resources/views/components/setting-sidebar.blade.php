@@ -20,8 +20,6 @@
     <!-- SETTINGS MENU START -->
     <ul class="settings-menu" id="settingsMenu">
     <x-setting-menu-item :active="$activeMenu" menu="cooperative_settings" :href="route('manager.settings.cooperative-settings.index')" :text="__('Paramètres de Coopérative')"/>
-    <x-setting-menu-item :active="$activeMenu" menu="campagne_settings" :href="route('manager.settings.campagne.index')" :text="__('Paramètre Campagne')"/>
-    <x-setting-menu-item :active="$activeMenu" menu="durabilite_settings" :href="route('manager.settings.durabilite-settings.index')" :text="__('Paramètre Programme de Durabilité')"/>
     <x-setting-menu-item :active="$activeMenu" menu="section_settings" :href="route('manager.settings.section-settings.index')" :text="__('Paramètre de Section')"/>
     <x-setting-menu-item :active="$activeMenu" menu="localite_settings" :href="route('manager.settings.localite-settings.index')" :text="__('Paramètre de Localite')"/>
     <x-setting-menu-item :active="$activeMenu" menu="departement_settings" :href="route('manager.settings.departements.index')" :text="__('Paramètre Départements')"/> 

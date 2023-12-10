@@ -32,7 +32,7 @@ class LivraisonCentraleController extends Controller
     public function index()
     {  
         $staff = auth()->user(); 
-        $livraisonProd = LivraisonMagasinCentralProducteur::dateFilter()->joinRelationship('stockMagasinCentral')->with('stockMagasinCentral','campagne', 'producteur')
+        $livraisonProd = LivraisonMagasinCentralProducteur::dateFilter()->joinRelationship('stockMagasinCentral')->with('stockMagasinCentral','campagne', 'producteur','campagnePeriode')
         ->where('cooperative_id', $staff->cooperative_id) 
         ->when(request()->code, function ($query, $code) {
             $query->where('numero_connaissement',$code); 

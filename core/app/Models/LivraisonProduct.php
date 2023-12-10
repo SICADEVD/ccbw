@@ -21,6 +21,10 @@ class LivraisonProduct extends Model
     {
         return $this->belongsTo(Campagne::class, 'campagne_id');
     }
+    public function campagnePeriode()
+    {
+        return $this->belongsTo(CampagnePeriode::class, 'campagne_periode_id');
+    }
     public function parcelle()
     {
         return $this->belongsTo(Parcelle::class, 'parcelle_id');

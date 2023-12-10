@@ -50,6 +50,7 @@
                             <thead>
                                 <tr>
                                 <th>@lang("Campagne")</th>
+                                <th>@lang("Periode")</th>
                                     <th>@lang("Staff Expéditeur")</th>
                                     <th>@lang('Magasin Section')</th>
                                     <th>@lang('Producteur - Parcelle')</th>
@@ -65,6 +66,9 @@
                                     <tr>
                                     <td>
                                             {{ $produit->campagne->nom }} 
+                                        </td>
+                                        <td>
+                                            {{ $produit->campagnePeriode->nom }} 
                                         </td>
                                         <td>
                                              

@@ -2,23 +2,25 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Unit;
 use App\Constants\Status;
-use App\Http\Controllers\Controller;
+use App\Models\Campagne; 
+use App\Models\ArretEcole;
 use App\Models\Cooperative;
 use App\Models\CourierInfo;
+use Illuminate\Http\Request;
+use App\Models\Questionnaire;
+use App\Models\TravauxLegers;
+use App\Models\TypeFormation;
 use App\Models\CourierPayment;
 use App\Models\CourierProduct;
-use App\Models\Campagne; 
-use App\Models\TravauxDangereux;
-use App\Models\TravauxLegers;
-use App\Models\ArretEcole;
-use App\Models\CategorieQuestionnaire;
-use App\Models\Questionnaire;
+use App\Models\CampagnePeriode;
 use App\Models\ThemesFormation;
-use App\Models\TypeFormation;
-use App\Models\Unit;
-use Illuminate\Http\Request;
+use App\Models\TravauxDangereux;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use App\Models\CategorieQuestionnaire;
+use App\Models\Programme;
 
 class SettingController extends Controller
 {
@@ -51,18 +53,18 @@ class SettingController extends Controller
     {
         $pageTitle = "Manage Campagne"; 
         $campagnes     = Campagne::orderBy('id','desc')->paginate(getPaginate());
-        return view('admin.config.campagne', compact('pageTitle', 'campagnes'));
+        $cooperatives = Cooperative::orderBy('id','desc')->get();
+        return view('admin.config.campagne', compact('pageTitle', 'campagnes','cooperatives'));
     }
 
     public function campagneStore(Request $request)
     {
         $request->validate([
-            'produit'  => 'required',
+            'cooperative'  => 'required',
             'nom'  => 'required',
             'periode_debut'  => 'required',
-            'periode_fin'  => 'required', 
-            'prix_achat' => 'required|gt:0|numeric',
-            'prime' => 'required|gt:0|numeric',
+            'periode_fin'  => 'required',
+            'prix_achat' => 'required|gt:0|numeric',  
         ]);
 
         if ($request->id) {
@@ -71,14 +73,76 @@ class SettingController extends Controller
         } else {
             $campagne = new Campagne();
         }
-        $campagne->produit    = $request->produit ;
+        $campagne->cooperative_id    = $request->cooperative ;
+        $campagne->produit = 'Cacao';
         $campagne->nom = $request->nom;
         $campagne->periode_debut = $request->periode_debut;
-        $campagne->periode_fin = $request->periode_fin;
+        $campagne->periode_fin = $request->periode_fin; 
         $campagne->prix_achat   = $request->prix_achat;
-        $campagne->prime   = $request->prime;
         $campagne->save();
         $notify[] = ['success', isset($message) ? $message  : 'Campagne a été ajouté avec succès.'];
+        return back()->withNotify($notify);
+    }
+
+    public function periodeIndex()
+    {
+        $pageTitle = "Manage les Périodes de Campagne"; 
+        $periodes     = CampagnePeriode::where('campagne_id',request()->idcamp)->orderBy('id','desc')->paginate(getPaginate());
+        $campagnes = Campagne::active()->orderBy('id','desc')->get();
+        return view('admin.config.campagne-periode', compact('pageTitle', 'periodes','campagnes'));
+    }
+
+    public function periodeStore(Request $request)
+    {
+        $request->validate([
+            'campagne'  => 'required',
+            'nom'  => 'required',
+            'periode_debut'  => 'required',
+            'periode_fin'  => 'required',  
+            'prix_champ' => 'required|gt:0|numeric',
+        ]);
+
+        if ($request->id) {
+            $campagne    = CampagnePeriode::findOrFail($request->id);
+            $message = "La période de Campagne Campagne a été mise à jour avec succès.";
+        } else {
+            $campagne = new CampagnePeriode();
+        }
+        $campagne->campagne_id    = $request->campagne ;
+        $campagne->nom = $request->nom;
+        $campagne->periode_debut = $request->periode_debut;
+        $campagne->periode_fin = $request->periode_fin; 
+        $campagne->prix_champ   = $request->prix_champ;
+        $campagne->save();
+        $notify[] = ['success', isset($message) ? $message  : 'La période de Campagne a été ajouté avec succès.'];
+        return back()->withNotify($notify);
+    }
+
+    public function programmeIndex()
+    {
+        $pageTitle = "Manage des Programmes de Durabilité"; 
+        $programmes     = Programme::orderBy('id','desc')->paginate(getPaginate());
+    
+        return view('admin.config.programme', compact('pageTitle', 'programmes'));
+    }
+
+    public function programmeStore(Request $request)
+    {
+        $request->validate([ 
+            'nom'  => 'required', 
+            'prime' => 'required|gt:0|numeric',  
+        ]);
+
+        if ($request->id) {
+            $programme    = Programme::findOrFail($request->id);
+            $message = "Programme a été mise à jour avec succès.";
+        } else {
+            $programme = new Programme();
+        } 
+        $programme->libelle = $request->nom;
+        $programme->prime = $request->prime; 
+        $programme->save();
+        $notify[] = ['success', isset($message) ? $message  : 'Programme a été ajouté avec succès.'];
         return back()->withNotify($notify);
     }
 
@@ -266,6 +330,10 @@ class SettingController extends Controller
     public function campagneStatus($id)
     {
         return Campagne::changeStatus($id);
+    }
+    public function periodeStatus($id)
+    {
+        return CampagnePeriode::changeStatus($id);
     }
     public function travauxDangereuxStatus($id)
     {

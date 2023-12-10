@@ -22,6 +22,10 @@ class StockMagasinSection extends Model
     {
         return $this->belongsTo(Campagne::class, 'campagne_id');
     }
+    public function campagnePeriode()
+    {
+        return $this->belongsTo(CampagnePeriode::class, 'campagne_periode_id');
+    }
     public function magasinSection()
     {
         return $this->belongsTo(MagasinSection::class, 'magasin_section_id');

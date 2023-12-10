@@ -20,6 +20,10 @@ class LivraisonMagasinCentralProducteur extends Model
     {
         return $this->belongsTo(Producteur::class, 'producteur_id');
     }
+    public function campagnePeriode()
+    {
+        return $this->belongsTo(CampagnePeriode::class, 'campagne_periode_id');
+    }
      
     public function stockMagasinCentral()
     {

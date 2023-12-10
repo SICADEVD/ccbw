@@ -73,7 +73,7 @@
                         </div>
                         <div class="col-lg-6">
                             <div class="card border--primary mt-3">
-                                <h5 class="card-header bg--primary  text-white">@lang('Information Destinataire')</h5>
+                                <h5 class="card-header bg--primary  text-white">@lang('Information Destinataire(Magasin de Section)')</h5>
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="form-group col-lg-12">
@@ -145,7 +145,7 @@
                                                         @foreach($producteurs as $producteur)
                                                             <option value="{{$producteur->id}}" @selected($item['producteur']==$producteur->id)
                                                             data-id="{{$producteur->id}}"
-                                                                 data-price="{{ $campagne->prix_champ}}"  >
+                                                                 data-price="{{ $periode->prix_champ}}"  >
                                                                 {{__($producteur->nom)}} 
                                                                 {{__($producteur->prenom)}}
                                                             </option>
@@ -314,11 +314,11 @@
                     <select class="form-control selected_type " name="items[${length}][producteur]" required id='producteur-${length}' onchange=getParcelle(${length})>
                         <option disabled selected value="">@lang('Producteur')</option>
                         @foreach($producteurs as $producteur)
-                            <option value="{{$producteur->id}}" data-id="{{$producteur->id}}" data-price={{ $campagne->prix_champ}} >{{__($producteur->nom)}} {{__($producteur->prenoms)}}</option>
+                            <option value="{{$producteur->id}}" data-id="{{$producteur->id}}" data-price={{ $periode->prix_champ}} >{{__($producteur->nom)}} {{__($producteur->prenoms)}}</option>
                         @endforeach
                     </select>
                 </div>  
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <select class="form-control" name="items[${length}][parcelle]" required id="parcelle-${length}">
                         
                     </select>
@@ -355,7 +355,7 @@
             let unit = $(this).find('option:selected').data('unit');
             let parent = $(this).closest('.single-item');
             $(parent).find('.quantity').attr('disabled', false);
-            $(parent).find('.unit').html(`${unit || '<i class="las la-balance-scale"></i>'}`);
+            $(parent).find('.unit').html(`${unit || 'Kg'}`);
             calculation();
         });
 

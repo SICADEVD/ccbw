@@ -20,6 +20,10 @@ class LivraisonPrime extends Model
     {
         return $this->belongsTo(Parcelle::class);
     }
+    public function campagnePeriode()
+    {
+        return $this->belongsTo(CampagnePeriode::class, 'campagne_periode_id');
+    }
     
     public function campagne()
     {
