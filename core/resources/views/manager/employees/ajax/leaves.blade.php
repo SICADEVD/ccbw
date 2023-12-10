@@ -236,7 +236,7 @@
             buttonsStyling: false
         }).then((result) => {
             if (result.isConfirmed) {
-                var url = "{{ route('leaves.destroy', ':id') }}";
+                var url = "{{ route('manager.leaves.destroy', ':id') }}";
                 url = url.replace(':id', id);
 
                 var token = "{{ csrf_token() }}";
@@ -270,7 +270,7 @@
             return $(this).val();
         }).get();
 
-        var url = "{{ route('leaves.apply_quick_action') }}?row_ids=" + rowdIds;
+        var url = "{{ route('manager.leaves.apply_quick_action') }}?row_ids=" + rowdIds;
 
         $.easyAjax({
             url: url,
@@ -291,7 +291,7 @@
     $('body').on('click', '.show-leave', function() {
         var leaveId = $(this).data('leave-id');
 
-        var url = '{{ route('leaves.show', ':id') }}';
+        var url = '{{ route('manager.leaves.show', ':id') }}';
         url = url.replace(':id', leaveId);
 
         $(MODAL_LG + ' ' + MODAL_HEADING).html('...');
@@ -301,7 +301,7 @@
     $('body').on('click', '.leave-action', function() {
         var action = $(this).data('leave-action');
         var leaveId = $(this).data('leave-id');
-        var url = '{{ route('leaves.leave_action') }}';
+        var url = '{{ route('manager.leaves.leave_action') }}';
 
         Swal.fire({
             title: "@lang('messages.sweetAlertTitle')",

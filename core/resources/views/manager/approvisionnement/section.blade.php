@@ -34,10 +34,36 @@ use Illuminate\Support\Arr;
                     </form>
                 </div>
             </div>
+
+            <div class="card b-radius--10 mb-3">
+                <div class="card-body">
+                    <div class="row">
+                            <div class="col-md-4">
+                                <div class="alert alert-success text-center">
+                                <div class="fw-bold">{{ $total }}</div>
+                                    TOTAL ARBRES
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="alert alert-info text-center">
+                                <div class="fw-bold">{{ $total_section }}</div>
+                                    TOTAL ARBRES DISTRIBUES
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="alert alert-warning text-center">
+                                <div class="fw-bold">{{ $total-$total_section }}</div>
+                                    TOTAL ARBRES RESTANTS
+                                </div>
+                            </div>
+                    </div>
+                    
+                </div>
+            </div>
             <div class="card b-radius--10 ">
                 <div class="card-body  p-0">
                     <div class="table-responsive--sm table-responsive">
-                        <?php $somme = 0; ?>
+                        
                         <table class="table table--light style--two">
                             <thead>
                                 <tr> 
@@ -77,7 +103,7 @@ use Illuminate\Support\Arr;
                                                     class="las la-pen"></i>@lang('Edit')</a>
                                              
                                         </td>
-                                        <?php $somme = $somme+$approvisionnement->total; ?>
+                                        
                                     </tr>
                                 @empty
                                     <tr>
@@ -86,16 +112,7 @@ use Illuminate\Support\Arr;
                                 @endforelse
 
                             </tbody>
-                            <tfoot>
-                                <tr>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td><span class="fw-bold">{{$somme}}</span></td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                </tr>
-                            </tfoot>
+                             
                         </table>
                     </div>
                 </div>

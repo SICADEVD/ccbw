@@ -704,8 +704,8 @@ class EmployeeController extends AccountBaseController
         $this->leaveTypes = LeaveType::all();
         $this->view = 'manager.employees.ajax.leaves';
 
-        $dataTable = new LeaveDataTable();
-
+      $dataTable = new LeaveDataTable();
+       
         return $dataTable->render('manager.employees.show', $this->data);
     }
 

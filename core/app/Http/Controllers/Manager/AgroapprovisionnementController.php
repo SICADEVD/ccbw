@@ -36,7 +36,7 @@ class AgroapprovisionnementController extends Controller
             if(request()->localite != null){
                 $q->where('localite_id',request()->localite);
             }
-        })->paginate(getPaginate());
+        })->with('cooperative')->paginate(getPaginate());
          
         return view('manager.approvisionnement.index', compact('pageTitle', 'approvisionnements','localites'));
     }
@@ -50,9 +50,11 @@ class AgroapprovisionnementController extends Controller
             if(request()->localite != null){
                 $q->where('localite_id',request()->localite);
             }
-        })->paginate(getPaginate());
-         
-        return view('manager.approvisionnement.section', compact('pageTitle', 'approvisionnements','localites'));
+        })->with('section','section.cooperative')->paginate(getPaginate());
+        $total_section = $approvisionnements->sum('total');
+        $approv = Agroapprovisionnement::where('id',$idapprov)->first();
+        $total = $approv->total;
+        return view('manager.approvisionnement.section', compact('pageTitle', 'approvisionnements','localites','total','total_section'));
     }
     public function create()
     {
@@ -116,13 +118,13 @@ class AgroapprovisionnementController extends Controller
         $manager   = auth()->user();
         $campagne = Campagne::active()->first(); 
 
-        if(!$request->id) {
-            $hasCooperative = Agroapprovisionnement::where([['cooperative_id', $manager->cooperative_id],['campagne_id', $campagne->id]])->exists();
-            if ($hasCooperative) {
-                $notify[] = ['error', 'Cette coopérative a déjà été approvisionnée pour cette campagne.'];
-                return back()->withNotify($notify)->withInput();
-            }
-        } 
+        // if(!$request->id) {
+        //     $hasCooperative = Agroapprovisionnement::where([['cooperative_id', $manager->cooperative_id],['campagne_id', $campagne->id]])->exists();
+        //     if ($hasCooperative) {
+        //         $notify[] = ['error', 'Cette coopérative a déjà été approvisionnée pour cette campagne.'];
+        //         return back()->withNotify($notify)->withInput();
+        //     }
+        // } 
 
         $approvisionnement->campagne_id = $campagne->id;
         $approvisionnement->total = array_sum($request->quantite);

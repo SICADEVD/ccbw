@@ -36,7 +36,7 @@ class AgroevaluationController extends Controller
             if(request()->status != null){
                 $q->where('agroevaluations.status',request()->status);
             }
-        })->with('producteur')->paginate(getPaginate());
+        })->with('producteur','producteur.localite')->paginate(getPaginate());
          
         return view('manager.agroevaluation.index', compact('pageTitle', 'agroevaluations','localites'));
     }
