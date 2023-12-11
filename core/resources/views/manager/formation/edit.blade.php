@@ -57,7 +57,8 @@
                     <div class="form-group row">
                         <?php echo Form::label(__('Module de la formation'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <select class="form-control select2-multi-select" name="type_formation[]" id="typeformation" multiple required>
+                            <select class="form-control select2-multi-select" name="type_formation[]" id="typeformation"
+                                multiple required>
                                 <option value="">@lang('Selectionner une option')</option>
                                 @foreach ($typeformations as $type)
                                     <option value="{{ $type->id }}" @selected(in_array($type->id, $modules))>
@@ -70,10 +71,12 @@
                     <div class="form-group row">
                         <?php echo Form::label(__('Thème de la formation'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <select class="form-control select2-multi-select" name="theme[]" id="theme" multiple required>
+                            <select class="form-control select2-multi-select" name="theme[]" id="theme" multiple
+                                required>
                                 <option value="">@lang('Selectionner une option')</option>
                                 @foreach ($themes as $theme)
-                                    <option value="{{ $theme->id }}" data-chained="{{ $theme->type_formation_id ?? '' }}">
+                                    <option value="{{ $theme->id }}"
+                                        data-chained="{{ $theme->type_formation_id ?? '' }}">
                                         {{ $theme->nom }}</option>
                                 @endforeach
                             </select>
@@ -83,16 +86,18 @@
                     <div class="form-group row">
                         <?php echo Form::label(__('Sous-thème de la formation'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <select class="form-control select2-multi-select" name="sous_theme[]" id="sous_theme" multiple required>
+                            <select class="form-control select2-multi-select" name="sous_theme[]" id="sous_theme" multiple
+                                required>
                                 <option value="">@lang('Selectionner une option')</option>
                                 @foreach ($sousthemes as $soustheme)
-                                    <option value="{{ $soustheme->id }}" data-chained="{{ $soustheme->theme_formation_id ?? '' }}" >
+                                    <option value="{{ $soustheme->id }}"
+                                        data-chained="{{ $soustheme->theme_formation_id ?? '' }}">
                                         {{ $soustheme->nom }}</option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
-                    
+
                     <hr class="panel-wide">
 
                     <div class="form-group row">
@@ -173,7 +178,7 @@
     <script src="{{ asset('assets/vendor/jquery/daterangepicker.min.js') }}"></script>
     <script type="text/javascript">
         //$("#theme").chained("#typeformation");
-        $("#producteur").chained("#localite");
+        //$("#producteur").chained("#localite");
 
 
 
@@ -218,25 +223,26 @@
                 Object.assign(optionParTheme, {
                     [$(this).data('chained')]: curreentArray
                 });
-                if(themesSelected.split(',').includes($(this).val()) && themesSelected != ""){
-                    $(this).val($(this).data('chained')+"-"+$(this).val());
+                if (themesSelected.split(',').includes($(this).val()) && themesSelected != "") {
+                    $(this).val($(this).data('chained') + "-" + $(this).val());
                     $(this).attr('selected', 'selected');
-                }else $(this).remove();
+                } else $(this).remove();
             });
             console.log(optionParTheme);
 
             var optionParSousTheme = new Object();
             $("#sous_theme option").each(function() {
-                var curreentArray = optionParSousTheme[($(this).data('chained'))] ? optionParSousTheme[($(this)
+                var curreentArray = optionParSousTheme[($(this).data('chained'))] ? optionParSousTheme[($(
+                        this)
                     .data('chained'))] : [];
                 curreentArray[$(this).val()] = $(this).text().trim();
                 Object.assign(optionParSousTheme, {
                     [$(this).data('chained')]: curreentArray
                 });
-                if(sousThemesSelected.split(',').includes($(this).val()) && sousThemesSelected != ""){
-                    $(this).val($(this).data('chained')+"-"+$(this).val());
+                if (sousThemesSelected.split(',').includes($(this).val()) && sousThemesSelected != "") {
+                    $(this).val($(this).data('chained') + "-" + $(this).val());
                     $(this).attr('selected', 'selected');
-                }else $(this).remove();
+                } else $(this).remove();
             });
             console.log(optionParSousTheme);
 
@@ -248,7 +254,8 @@
                 window.optionSousTheme = "";
                 $(this).find('option:selected').each(function() {
                     //console.log($(this).val());
-                    optionsHtml2 = updateTheme(optionsHtml2, $(this).val(), optionParTheme, optionParSousTheme);
+                    optionsHtml2 = updateTheme(optionsHtml2, $(this).val(), optionParTheme,
+                        optionParSousTheme);
                 })
             });
 
@@ -257,7 +264,8 @@
                 window.optionSousTheme = "";
                 $(this).find('option:selected').each(function() {
                     //console.log($(this).val());
-                    window.optionSousTheme = updateSousTheme(window.optionSousTheme, $(this).val().split("-")[1], optionParSousTheme);
+                    window.optionSousTheme = updateSousTheme(window.optionSousTheme, $(this).val()
+                        .split("-")[1], optionParSousTheme);
                 })
             });
         });
@@ -266,21 +274,63 @@
             var optionsHtml = optionsHtml2
             if (id != '') {
                 optionParTheme[id].forEach(function(key, element) {
-                    optionsHtml += '<option value="'+id+'-' + element + '">' + key + '</option>';
+                    optionsHtml += '<option value="' + id + '-' + element + '">' + key + '</option>';
                     window.optionSousTheme = updateSousTheme(window.optionSousTheme, element, optionParSousTheme);
                 });
                 $("#theme").html(optionsHtml);
             }
             return optionsHtml;
         }
-        
+
         function updateSousTheme(optionsHtml2, id, optionParSousTheme) {
             var optionsHtml = optionsHtml2
             if (id != '' && optionParSousTheme[id] != undefined) {
                 optionParSousTheme[id].forEach(function(key, element) {
-                    optionsHtml += '<option value="'+id+'-' + element + '">' + key + '</option>';
+                    optionsHtml += '<option value="' + id + '-' + element + '">' + key + '</option>';
                 });
                 $("#sous_theme").html(optionsHtml);
+            }
+            return optionsHtml;
+        }
+
+        $(document).ready(function() {
+            var producteursSelected = "{{ implode(',', $producteursSelected) }}";
+            var optionParProducteur = new Object();
+            var varLocaliteId = $("#localite option:selected").get(0).value;
+            $("#producteur option").each(function() {
+                var currentArray = optionParProducteur[($(this).data('chained'))] ? optionParProducteur[($(this)
+                    .data('chained'))] : [];
+                currentArray[$(this).val()] = $(this).text().trim();
+                Object.assign(optionParProducteur, {
+                    [$(this).data('chained')]: currentArray
+                });
+
+                if(varLocaliteId != $(this).data('chained')) $(this).remove();
+
+                if (producteursSelected.split(',').includes($(this).val()) && producteursSelected != "") {
+                    $(this).val($(this).val());
+                    $(this).attr('selected', 'selected');
+                }
+            });
+            console.log(optionParProducteur);
+
+            $('#localite').change(function() {
+                var localite = $(this).val();
+                $("#producteur").empty();
+                var optionsHtml2 = "";
+                $(this).find('option:selected').each(function() {
+                    optionsHtml2 = updateProducteur(optionsHtml2, $(this).val(), optionParProducteur);
+                })
+            });
+        });
+
+        function updateProducteur(optionsHtml2, id, optionParProducteur) {
+            var optionsHtml = optionsHtml2
+            if (id != '') {
+                optionParProducteur[id].forEach(function(key, element) {
+                    optionsHtml += '<option value="'  + element + '">' + key + '</option>';
+                });
+                $("#producteur").html(optionsHtml);
             }
             return optionsHtml;
         }

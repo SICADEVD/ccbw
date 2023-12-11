@@ -43,8 +43,4 @@ class SuiviFormation extends Model
     {
         return $this->hasMany(TypeFormationTheme::class, 'suivi_formation_id', 'id');
     }
-
-    
-     
-     
 }

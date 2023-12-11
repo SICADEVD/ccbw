@@ -24,6 +24,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use App\Models\SuiviFormationVisiteur;
 use App\Models\SuiviFormationProducteur;
+use Illuminate\Support\Arr;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx\Theme;
 
 class FormationController extends Controller
@@ -124,6 +125,7 @@ class FormationController extends Controller
         if ($formation != null) {
             $id = $formation->id;
             $datas = $datas2 = [];
+
             if (($request->producteur != null)) {
                 SuiviFormationProducteur::where('suivi_formation_id', $id)->delete();
                 $i = 0;
@@ -181,10 +183,15 @@ class FormationController extends Controller
         $localites = Localite::joinRelationship('section')->where([['cooperative_id', $manager->cooperative_id], ['localites.status', 1]])->get();
         $formation   = SuiviFormation::findOrFail($id);
         $typeformations  = TypeFormation::all();
-        
+
         $modules = array();
         $themesSelected = array();
         $sousThemesSelected = array();
+        $producteursSelected = array();
+        
+        foreach ($formation->formationProducteur as $item) {
+            $producteursSelected[] = $item->producteur_id;
+        }
         foreach ($formation->typeFormationTheme as $item) {
             $modules[] = $item->type_formation_id; 
             $themesSelected[] = $item->theme_formation_id;
@@ -200,7 +207,7 @@ class FormationController extends Controller
         
         $dataProducteur = $dataVisiteur = $dataTheme = array();
 
-        return view('manager.formation.edit', compact('pageTitle', 'localites', 'formation', 'producteurs', 'typeformations', 'themes', 'staffs', 'dataProducteur', 'dataTheme', 'modules', 'themesSelected', 'sousthemes', 'sousThemesSelected'));
+        return view('manager.formation.edit', compact('pageTitle', 'localites', 'formation', 'producteurs', 'typeformations', 'themes', 'staffs', 'dataProducteur', 'dataTheme', 'modules', 'themesSelected', 'sousthemes', 'sousThemesSelected', 'producteursSelected'));
     }
 
     public function visiteur($id)
