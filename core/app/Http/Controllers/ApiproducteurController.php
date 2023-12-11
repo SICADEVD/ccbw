@@ -67,8 +67,13 @@ class ApiproducteurController extends Controller
     $roleName = $request->role_name;
     $staffs = User::whereHas(
       'roles',
-      function ($q) use ($roleName) {
-        $q->where('name', $roleName);
+      function ($q) use ($roleName,$request) {
+        if($request->is_different == 'true'){
+          $q->where('name', '!=', $roleName);}
+          else{
+            $q->where('name', $roleName);
+          }
+
       }
     )
       ->where('cooperative_id', $cooperativeId)
