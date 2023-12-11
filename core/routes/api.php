@@ -16,6 +16,7 @@ use App\Http\Controllers\ApiestimationController;
 use App\Http\Controllers\ApissrteclrmsController; 
 use App\Http\Controllers\ApiapplicationController;
 use App\Http\Controllers\ApievaluationController;
+use App\Http\Controllers\ApiFormationStaffController;
 use App\Http\Controllers\ApiProgrammeController;
 use App\Http\Controllers\ApisectionController;
 
@@ -71,6 +72,10 @@ Route::match(['POST'],'apievaluation', [ApievaluationController::class, 'store']
 Route::match(['POST'],'getquestionnaire', [ApievaluationController::class, 'getQuestionnaire']); 
 Route::match(['POST'],'getnotation', [ApievaluationController::class, 'getNotation']); 
 Route::match(['POST'],'getcampagne', [AuthController::class, 'getCampagne']);
+
+//route formation staff
+
+Route::match(['POST'],'apiformationstaff', [ApiFormationStaffController::class, 'store']);  
 
 //route pour la gestion des sections
 

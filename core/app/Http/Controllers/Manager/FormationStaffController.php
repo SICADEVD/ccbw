@@ -105,6 +105,7 @@ class FormationStaffController extends Controller
                 return back()->withNotify($notify);
             }
         }
+        dd(json_encode($request->all()));
         $formation->save();
         if ($formation != null) {
             $id = $formation->id;

@@ -66,8 +66,11 @@ class ApisuiviformationController extends Controller
         ];
 
         $request->validate($validationRule);
-
-        $formation = new SuiviFormation();
+        if ($request->id) {
+            $formation = SuiviFormation::findOrFail($request->id);
+        } else {
+            $formation = new SuiviFormation();
+        }
 
         $campagne = Campagne::active()->first();
         $formation->localite_id  = $request->localite;
@@ -81,14 +84,14 @@ class ApisuiviformationController extends Controller
         $formation->date_fin_formation = $request->multiEndDate;
         $formation->userid = $request->userid;
 
-        if ($request->photo_formations) {
+        if ($request->photo_formation) {
             $image = $request->photo_formations;
             $image = Str::after($image, 'base64,');
             $image = str_replace(' ', '+', $image);
             $imageName = (string) Str::uuid() . '.' . 'jpg';
             File::put(storage_path() . "/app/public/formations/" . $imageName, base64_decode($image));
             $photo_formations = "public/formations/$imageName";
-            $input['photo_formation'] = $photo_formations;
+            $formation->photo_formation = $photo_formations;
         }
 
         if($request->rapport_formation){
@@ -98,9 +101,11 @@ class ApisuiviformationController extends Controller
             $rapportName = (string) Str::uuid() . '.' . 'pdf';
             File::put(storage_path() . "/app/public/formations/" . $rapportName, base64_decode($rapport_formation));
             $rapport_formation = "public/formations/$rapportName";
-            $input['rapport_formation'] = $rapport_formation;
+
+            $formation->rapport_formation = $rapport_formation;
         }
 
+       
         $formation->save();
 
 
