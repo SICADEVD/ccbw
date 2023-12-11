@@ -4,16 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\Campagne;
 use App\Models\Localite;
+use App\Constants\Status;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str; 
 use App\Models\SuiviFormation;
+use App\Models\ThemeSousTheme;
 use App\Models\Suivi_formation;
+use App\Models\TypeFormationTheme;
 use Illuminate\Support\Facades\DB;
 use App\Models\SuiviFormationTheme;
 use Illuminate\Support\Facades\File;
 use App\Models\SuiviFormationVisiteur;
 use App\Models\SuiviFormationProducteur;
-use App\Constants\Status;
 
 class ApisuiviformationController extends Controller
 {
@@ -52,9 +54,6 @@ class ApisuiviformationController extends Controller
         { 
             File::makeDirectory(storage_path(). "/app/public/formations", 0777, true);
         }
-
-       
-        
         $validationRule = [
             'localite'    => 'required|exists:localites,id',
             'staff' => 'required|exists:users,id',
@@ -75,10 +74,8 @@ class ApisuiviformationController extends Controller
         $formation->campagne_id  = $campagne->id;
         $formation->user_id  = $request->staff;
         $formation->lieu_formation  = $request->lieu_formation;
-        $formation->type_formation_id  = $request->type_formation;
         $formation->duree_formation = $request->duree_formation;
         $formation->observation_formation = $request->observation_formation;
-        $formation->formation_type = $request->formation_type;
         $formation->formation_type = $request->formation_type;
         $formation->date_debut_formation = $request->multiStartDate;
         $formation->date_fin_formation = $request->multiEndDate;
@@ -93,13 +90,15 @@ class ApisuiviformationController extends Controller
             $photo_formations = "public/formations/$imageName";
             $input['photo_formation'] = $photo_formations;
         }
-        if ($request->hasFile('rapport_formation')) {
-            try {
-                $formation->rapport_formation = $request->file('rapport_formation')->store('public/formation-staffs');
-            } catch (\Exception $exp) {
-                $notify[] = ['error', 'Impossible de télécharger votre image'];
-                return back()->withNotify($notify);
-            }
+
+        if($request->rapport_formation){
+            $rapport_formation = $request->rapport_formation;
+            $rapport_formation = Str::after($rapport_formation, 'base64,');
+            $rapport_formation = str_replace(' ', '+', $rapport_formation);
+            $rapportName = (string) Str::uuid() . '.' . 'pdf';
+            File::put(storage_path() . "/app/public/formations/" . $rapportName, base64_decode($rapport_formation));
+            $rapport_formation = "public/formations/$rapportName";
+            $input['rapport_formation'] = $rapport_formation;
         }
 
         $formation->save();
@@ -107,7 +106,8 @@ class ApisuiviformationController extends Controller
 
         if ($formation != null) {
             $id = $formation->id;
-            $datas = $datas2 = $datas3 = [];
+            $datas = $datas2 = [];
+
             if (($request->producteur != null)) {
                 SuiviFormationProducteur::where('suivi_formation_id', $id)->delete();
                 $i = 0;
@@ -120,23 +120,38 @@ class ApisuiviformationController extends Controller
                     }
                     $i++;
                 }
+                SuiviFormationProducteur::insert($datas);
             }
 
-            if (($request->theme != null)) {
-                SuiviFormationTheme::where('suivi_formation_id', $id)->delete();
-                $i = 0;
-                foreach ($request->theme as $data) {
-                    if ($data != null) {
-                        $datas3[] = [
-                            'suivi_formation_id' => $id,
-                            'themes_formation_id' => $data,
-                        ];
-                    }
-                    $i++;
+            $selectedThemes = $request->theme;
+            if ($selectedThemes != null) {
+                TypeFormationTheme::where('suivi_formation_id', $id)->delete();
+
+                foreach ($selectedThemes as $themeId) {
+                    list($typeFormationId, $themeItemId) = explode('-', $themeId);
+                    $datas3 = [
+                        'suivi_formation_id' => $id,
+                        'type_formation_id' => $typeFormationId,
+                        'theme_formation_id' => $themeItemId,
+                    ];
+                    TypeFormationTheme::insert($datas3);
+                }
+    
+            }
+            
+            $selectedSousThemes = $request->sous_theme;
+            if ($selectedSousThemes != null) {
+                ThemeSousTheme::where('suivi_formation_id', $id)->delete();
+                foreach ($selectedSousThemes as $sthemeId) {
+                    list($themeFormationId, $sousthemeItemId) = explode('-', $sthemeId);
+                    $datas2 = [
+                        'suivi_formation_id' => $id,
+                        'theme_id' => $themeFormationId,
+                        'sous_theme_id' => $sousthemeItemId,
+                    ];
+                    ThemeSousTheme::insert($datas2);
                 }
             }
-            SuiviFormationProducteur::insert($datas);
-            SuiviFormationTheme::insert($datas3);
         }
 
 
