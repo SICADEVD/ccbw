@@ -165,7 +165,7 @@
 @push('breadcrumb-plugins') 
 
 <a href="{{ route('manager.livraison.magcentral.create') }}" class="btn  btn-outline--primary h-45 addNewCooperative">
-        <i class="las la-plus"></i>@lang("Enregistrer Connaissement vers Usine")
+        <i class="las la-plus"></i>@lang("Enregistrer un Connaissement vers Usine")
     </a>
 <a href="{{ route('manager.livraison.exportExcel.livraisonAll') }}" class="btn  btn-outline--warning h-45"><i class="las la-cloud-download-alt"></i> Exporter en Excel</a>
 @endpush

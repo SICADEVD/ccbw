@@ -11,7 +11,7 @@ class Connaissement extends Model
 {
 
     use Searchable, GlobalStatus, PowerJoins;
-    protected $table="stock_magasin_centraux";
+    
 
     public function producteur()
     {

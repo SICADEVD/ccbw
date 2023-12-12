@@ -5,7 +5,7 @@
 <div class="row mb-none-30">
     <div class="col-lg-12 col-md-12 mb-30">
         <div class="card">
-            <form action="{{route('manager.livraison.section.store')}}" id="flocal" method="POST">
+            <form action="{{route('manager.livraison.magcentral.store')}}" id="flocal" method="POST">
                 <div class="card-body">
                     @csrf
                     <div class="row">
@@ -31,63 +31,10 @@
                         </div>
                         
                     </div>
-                    <div class="row">
-                        <div class="col-lg-6">
+                    <div class="row"> 
+                        <div class="col-lg-12">
                             <div class="card border--primary mt-3">
-                                <h5 class="card-header bg--primary  text-white">@lang('Information Expéditeur(Magasin de Section)')</h5>
-                                <div class="card-body">
-                                    <div class="row">
-                                    <div class="form-group col-lg-12">
-                                            <label>@lang('Selectionner un magasin de section')</label>
-                                            <select class="form-control" name="sender_magasin" id="sender_magasin" onchange="getSender()" required>
-                                                <option value>@lang('Selectionner une option')</option>
-                                                @foreach($magSections as $magasin)
-                                                <option value="{{$magasin->id}}"
-                                                data-id ="{{$magasin->id}}"
-                                                data-name ="{{$magasin->user->lastname}} {{$magasin->user->firstname}}"
-                                                data-phone ="{{$magasin->user->mobile}}"
-                                                data-email ="{{$magasin->user->email}}"
-                                                data-adresse ="{{$magasin->user->adresse}}"
-                                                @selected(old('sender_magasin')==$magasin->id)>{{__($magasin->nom)}}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="form-group col-lg-6">
-                                            <label>@lang('Nom')</label>
-                                            <input type="text" class="form-control" name="sender_name"
-                                            id="sender_name"
-                                                value="{{old('sender_name')}}" readonly required>
-                                        </div>
-                                        <div class=" form-group col-lg-6">
-                                            <label>@lang('Contact')</label>
-                                            <input type="text" class="form-control" value="{{old('sender_phone')}}"
-                                                name="sender_phone"
-                                                id="sender_phone" 
-                                                readonly required>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="form-group col-lg-12">
-                                            <label>@lang('Email')</label>
-                                            <input type="email" class="form-control" name="sender_email"
-                                            id="sender_email"
-                                                value="{{old('sender_email')}}" readonly required>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="form-group col-lg-12">
-                                            <label>@lang('Adresse')</label>
-                                            <input type="text" class="form-control" name="sender_address"
-                                            id="sender_address"
-                                                value="{{old('sender_address')}}" readonly >
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="card border--primary mt-3">
-                                <h5 class="card-header bg--primary  text-white">@lang('Information Destinataire(Magasin Central)')</h5>
+                                <h5 class="card-header bg--primary  text-white">@lang('Information Expéditeur(Magasin Central)')</h5>
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="form-group col-lg-12">
@@ -199,20 +146,20 @@
                                 <div class="card-body">
                                     <div class="row" id="">
                                     <div class="form-group row">
-                                <?php echo Form::label(__('Producteur'), null, ['class' => 'col-sm-4 control-label required']); ?>
-                                <div class="col-xs-12 col-sm-8">
-                                    <?php echo Form::select('producteur_id[]', [], null, ['class' => 'form-control producteurs select2', 'id' => 'producteurs', 'required', 'multiple']); ?>
+                                <?php echo Form::label(__('Numéros de lot'), null, ['class' => 'col-sm-3 control-label required']); ?>
+                                <div class="col-xs-12 col-sm-9">
+                                    <?php echo Form::select('connaissement_id[]', [], null, ['class' => 'form-control producteurs select2', 'id' => 'producteurs', 'required', 'multiple']); ?>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <?php echo Form::label(null, null, ['class' => 'col-sm-4 control-label']); ?>
-                                <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::label(null, null, ['class' => 'col-sm-3 control-label']); ?>
+                                <div class="col-xs-12 col-sm-9">
                                     <table class="table table-striped table-bordered">
                                         <thead>
                                             <tr>
                                                 <th colspan="2">@lang('Producteur')</th>
                                                 <th>@lang('Type')</th>
-                                                <th>@lang('Quantité(KG)')</th>
+                                                <th>@lang('Quantité(Kg)')</th>
                                             </tr>
                                         </thead>
                                         <tbody id="listeprod">
@@ -317,10 +264,10 @@
                 $.ajaxModal(MODAL_XL, url);
                 $(MODAL_XL).modal('show');
             });
-    $('#sender_magasin').change(function() { 
+    $('#magasin_central').change(function() { 
 $.ajax({
     type: 'GET',
-    url: "{{ route('manager.livraison.get.producteur') }}",
+    url: "{{ route('manager.livraison.magcentral.get.producteur') }}",
     data: $('#flocal').serialize(),
     success: function(html) {
          
@@ -334,7 +281,7 @@ $('#producteurs').change(function() {
  
 $.ajax({
     type: 'GET',
-    url: "{{ route('manager.livraison.get.listeproducteur') }}",
+    url: "{{ route('manager.livraison.magcentral.get.listeproducteur') }}",
     data: $('#flocal').serialize(),
     success: function(html) {
         $('#listeprod').html(html.results);

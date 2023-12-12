@@ -12,13 +12,14 @@ use App\Models\Entreprise;
 use App\Models\Producteur;
 use App\Models\Cooperative;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use App\Models\Transporteur;
 use Illuminate\Http\Request;
 use App\Models\Connaissement;
 use App\Models\LivraisonInfo;
 use App\Models\FormateurStaff;
-use App\Models\LivraisonPrime;
 
+use App\Models\LivraisonPrime;
 use App\Models\MagasinCentral;
 use App\Models\MagasinSection;
 use App\Models\CampagnePeriode;
@@ -31,6 +32,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\StockMagasinCentral;
 use App\Models\StockMagasinSection;
 use App\Http\Controllers\Controller;
+use App\Models\ConnaissementProduit;
 use App\Models\LivraisonMagasinCentralProducteur;
 
 class LivraisonCentraleController extends Controller
@@ -107,10 +109,10 @@ class LivraisonCentraleController extends Controller
     private function generecodeConnais()
     {
 
-        $data = Connaissement::select('connaissement_code')->orderby('id','desc')->limit(1)->get();
+        $data = Connaissement::orderby('id','desc')->limit(1)->get();
 
         if(count($data)>0){
-            $code = $data[0]->codeLiv;
+            $code = $data[0]->numeroCU;
         $chaine_number = Str::afterLast($code,'-');
         if($chaine_number<10){$zero="00000";}
         else if($chaine_number<100){$zero="0000";}
@@ -135,16 +137,14 @@ class LivraisonCentraleController extends Controller
         
         $request->validate([
             'magasin_central' => 'required',
-            'sender_magasin' =>  'required', 
             'sender_transporteur' =>  'required', 
-            'sender_vehicule' =>  'required', 
-            'producteur_id' => 'required|array',  
+            'sender_vehicule' =>  'required',   
 			'type' => 'required', 
             'estimate_date'    => 'required|date|date_format:Y-m-d', 
         ]);
 
-        $manager                      = auth()->user();
-        $livraison                     = new StockMagasinCentral(); 
+        $manager = auth()->user();
+        $livraison = new Connaissement(); 
         $campagne = Campagne::active()->first();
         $periode = CampagnePeriode::where([['campagne_id',$campagne->id],['periode_debut','<=', gmdate('Y-m-d')],['periode_fin','>=', gmdate('Y-m-d')]])->latest()->first();
         
@@ -152,13 +152,10 @@ class LivraisonCentraleController extends Controller
         $livraison->campagne_id    = $campagne->id;
         $livraison->campagne_periode_id = $periode->id;
         $livraison->magasin_centraux_id = $request->magasin_central;
-        $livraison->magasin_section_id = $request->sender_magasin;
-        $livraison->numero_connaissement = $request->code;
+        $livraison->numeroCU = $request->code;
         $livraison->type_produit = json_encode($request->type);
-        $livraison->stocks_mag_entrant = $request->poidsnet;
-        $livraison->stocks_mag_sacs_entrant = $request->nombresacs;
-        $livraison->stocks_mag_sortant = 0;
-        $livraison->stocks_mag_sacs_sortant   = 0;
+        $livraison->quantite_livre = $request->poidsnet;
+        $livraison->sacs_livre = $request->nombresacs; 
         $livraison->transporteur_id = $request->sender_transporteur;
         $livraison->vehicule_id = $request->sender_vehicule;
         $livraison->date_livraison = $request->estimate_date;
@@ -170,26 +167,27 @@ class LivraisonCentraleController extends Controller
         $quantite = $request->quantite; 
         $typeproduit = $request->typeproduit; 
         $producteurs = $request->producteurs;
-        
+        $stock_magasin_central = $request->stock_magasin_central;
         foreach($producteurs as $item) { 
             
             if($quantite[$i]>0)
             {
             $data[] = [
-                'stock_magasin_central_id' => $livraison->id,
+                'connaissement_id' => $livraison->id,
                 'producteur_id' => $item,
                 'campagne_id' => $campagne->id,
                 'campagne_periode_id' => $periode->id,
                 'quantite' => $quantite[$i], 
+                'stock_magasin_central_id' => $stock_magasin_central[$i], 
                 'type_produit' => $typeproduit[$i],
                 'created_at'      => now(),
             ];
-            $prod = StockMagasinSection::where([['campagne_id',$campagne->id],['magasin_section_id',$request->sender_magasin],['producteur_id',$item],['type_produit',$typeproduit[$i]]])->first();
+            $prod = LivraisonMagasinCentralProducteur::where([['campagne_id',$campagne->id],['stock_magasin_central_id',$stock_magasin_central[$i]],['producteur_id',$item],['type_produit',$typeproduit[$i]]])->first();
          
             if($prod !=null){ 
                  
-            $prod->stocks_entrant = $prod->stocks_entrant - $quantite[$i];
-            $prod->stocks_sortant = $prod->stocks_sortant + $quantite[$i];
+            $prod->quantite = $prod->quantite - $quantite[$i];
+            $prod->quantite_restant = $prod->quantite_restant + $quantite[$i];
            
             $prod->save();
             }
@@ -198,141 +196,26 @@ class LivraisonCentraleController extends Controller
         }
 		
 
-        LivraisonMagasinCentralProducteur::insert($data); 
+        ConnaissementProduit::insert($data); 
 
-        $notify[] = ['success', 'Le connaissement vers le magasin central a été ajouté avec succès'];
+        $notify[] = ['success', 'Le connaissement vers l\'Usine a été ajouté avec succès'];
         return to_route('manager.livraison.usine.stock')->withNotify($notify);
     }
-
-    public function update(Request $request, $id)
-    {
-
-        $id = decrypt($id);
-        
-        
-        $request->validate([
-            'sender_staff' => 'required|exists:users,id',
-            'magasin_section' =>  'required|exists:magasin_sections,id',  
-            'items'            => 'required|array',
-            'items.*.type'     => 'required',
-            'items.*.producteur'     => 'required|integer',
-            'items.*.parcelle'     => 'required|integer',
-            'items.*.quantity' => 'required|numeric|gt:0',
-            'items.*.amount'   => 'required|numeric|gt:0', 
-            'estimate_date'    => 'required|date|date_format:Y-m-d', 
-        ]);
-
-        $sender                      = auth()->user();
-        $livraison                     = LivraisonInfo::findOrFail($id);
-        $livraison->invoice_id         = getTrx();
-        $livraison->code               = getTrx();
-        $livraison->sender_cooperative_id   = $sender->cooperative_id;
-        $livraison->sender_staff_id    = $request->sender_staff;
-        $livraison->sender_name        = $request->sender_name;
-        $livraison->sender_email       = $request->sender_email;
-        $livraison->sender_phone       = $request->sender_phone;
-        $livraison->sender_address     = $request->sender_address;
-        $livraison->receiver_name      = $request->receiver_name;
-        $livraison->receiver_email     = $request->receiver_email;
-        $livraison->receiver_phone     = $request->receiver_phone;
-        $livraison->receiver_address   = $request->receiver_address;
-        $livraison->receiver_cooperative_id = $sender->cooperative_id;
-        $livraison->receiver_magasin_section_id = $request->magasin_section;
-        $livraison->estimate_date      = $request->estimate_date;
-        $livraison->save();
-
-        LivraisonProduct::where('livraison_info_id', $id)->delete();
-        LivraisonScelle::where('livraison_info_id', $id)->delete();
-        LivraisonPrime::where('livraison_info_id', $id)->delete();
-        $subTotal = 0;
-        $campagne = Campagne::active()->first();
-        $data = $data2 = $data3 = [];
-        foreach ($request->items as $item) {
-             
-            $price     = $campagne->prix_champ * $item['quantity'];
-            $subTotal += $price;
-
-            $data[] = [
-                'livraison_info_id' => $livraison->id,
-                'parcelle_id' => $item['parcelle'],
-                'campagne_id' => $campagne->id,
-                'qty'             => $item['quantity'],
-                'type_produit'     => $item['type'],
-                'fee'             => $price,
-                'type_price'      => $campagne->prix_champ,
-                'created_at'      => now(),
-            ];
-            // if(count($item['scelle'])){
-            //     $scelles = implode(',', $item['scelle']);
-            //     $scelles = explode(',', $scelles);
-            //     foreach($scelles as $itemscelle){
-            //         $data2[] = [
-            //             'livraison_info_id' => $livraison->id,
-            //             'parcelle_id' => $item['parcelle'],
-            //             'campagne_id' => $campagne->id,
-            //             'type_produit'     => $item['type'],
-            //             'numero_scelle' => $itemscelle,
-            //             'created_at'      => now(),
-            //         ];
-            //     }
-            // }
-            if($item['type']=='Certifie'){
-                $price_prime = $campagne->prime * $item['quantity'];
-                $data3[] = [
-                    'livraison_info_id' => $livraison->id,
-                    'parcelle_id' => $item['parcelle'],
-                    'campagne_id' => $campagne->id,
-                    'quantite'             => $item['quantity'], 
-                    'montant'             => $price_prime,
-                    'prime_campagne'      => $campagne->prime,
-                    'created_at'      => now(),
-                ];
-            }
-        }
-        LivraisonProduct::insert($data);
-        LivraisonScelle::insert($data2);
-        LivraisonPrime::insert($data3);
-
-        // $discount = $request->discount ?? 0;
-        // $discountAmount = ($subTotal / 100) * $discount;
-        $totalAmount = $subTotal;
-
-        $user = auth()->user();
-        if ($request->payment_status == Status::PAYE) {
-
-            $livraisonPayment               = LivraisonPayment::where('livraison_info_id', $livraison->id)->first();
-            $livraisonPayment->campagne_id  = $campagne->id;
-            $livraisonPayment->amount       = $subTotal; 
-            $livraisonPayment->final_amount = $totalAmount; 
-            $livraisonPayment->status       = $request->payment_status;
-            $livraisonPayment->save();
-
-            $adminNotification            = new AdminNotification();
-            $adminNotification->user_id   = $sender->id;
-            $adminNotification->title     = $livraison->code . ' Livraison Payment Updated  by ' . $user->username;
-            $adminNotification->click_url = urlPath('admin.livraison.info.details', $livraison->id);
-            $adminNotification->save();
-        }
-
-        $adminNotification            = new AdminNotification();
-        $adminNotification->user_id   = $sender->id;
-        $adminNotification->title     = $livraison->code . ' Livraison update by ' . $user->username;
-        $adminNotification->click_url = urlPath('admin.livraison.info.details', $livraison->id);
-        $adminNotification->save();
-
-        $notify[] = ['success', 'Livraison updated successfully'];
-        return to_route('manager.livraison.invoice', encrypt($livraison->id))->withNotify($notify);
-    }
-
-    public function getParcelle(){
+ 
+    public function getProducteur(){
         $input = request()->all();
-        $id = $input['id'];
-        $parcelles = Parcelle::where('producteur_id',$id)->get();
-        if ($parcelles->count()) {
+         
+        $id = $input['magasin_central'];
+        $campagne = Campagne::active()->first();
+        $periode = CampagnePeriode::where([['campagne_id',$campagne->id]])->latest()->first();
+
+        $stocks = LivraisonMagasinCentralProducteur::joinRelationship('stockMagasinCentral')->where([['livraison_magasin_central_producteurs.campagne_id',$campagne->id],['magasin_centraux_id',$id],['quantite','>',0]])->whereIn('livraison_magasin_central_producteurs.type_produit', request()->type)->select('stock_magasin_centraux.*')->groupBy('numero_connaissement')->get();
+        if ($stocks->count()) {
             $contents = '';
 
-            foreach ($parcelles as $data) {
-                $contents .= '<option value="' . $data->id . '" >Parcelle '. $data->codeParc . '</option>';
+            foreach ($stocks as $data) {
+               
+                $contents .= '<option value="'.$data->id.'">'. $data->numero_connaissement .'</option>';
             }
         } else {
             $contents = null;
@@ -340,6 +223,39 @@ class LivraisonCentraleController extends Controller
  
         return $contents;
     }
+
+    public function getListeProducteurConnaiss(){
+        $input = request()->all();
+          $magasinsection= $input['magasin_central']; 
+          $codes = $input['connaissement_id'];
+          $type_produit = $input['type'];
+          $results ='';
+          $total = 0;
+          $totalsacs=0;
+          $campagne = Campagne::active()->first();
+        $stock =LivraisonMagasinCentralProducteur::joinRelationship('stockMagasinCentral')->where([['livraison_magasin_central_producteurs.campagne_id',$campagne->id],['stock_magasin_centraux.magasin_centraux_id',$magasinsection],['stocks_mag_entrant','>',0]])->whereIn('livraison_magasin_central_producteurs.type_produit', $type_produit)->whereIn('stock_magasin_central_id', $codes)->select('livraison_magasin_central_producteurs.*')->get();
+       
+            if(count($stock)){
+            $v=1;
+            $tv=count($stock);
+       foreach($stock as $data)
+       {
+         if($v==$tv){$read = '';}
+         else{$read='readonly';}
+        $results .= '<tr><td colspan="2"><h5>'.$data->producteur->nom.' '.$data->producteur->prenoms.'('.$data->producteur->codeProdapp.')</h5><input type="hidden" name="producteurs[]" value="'.$data->producteur_id.'"/></td><td style="width: 300px;"><input type="hidden" name="typeproduit[]" value="'.$data->type_produit.'"/>'.$data->type_produit.'<input type="hidden" name="stock_magasin_central[]" value="'.$data->stock_magasin_central_id.'"/></td><td style="width: 400px;"> <input type="number" name="quantite[]" value="'.$data->quantite.'" min="0" max="'.$data->quantite.'"  class="form-control quantity" style="width: 115px;"/></td></tr>';
+        $total = $total+$data->quantite;
+        // $totalsacs = $totalsacs+$data->nb_sacs_entrant;
+        $v++;
+        }
+  
+  
+            }
+            $contents['results'] = $results;
+            $contents['total'] = $total;
+            $contents['totalsacs'] = $totalsacs;
+  
+        return $contents;
+      }
     
     public function deliveryStore(Request $request)
     {
@@ -354,62 +270,7 @@ class LivraisonCentraleController extends Controller
         $notify[] = ['success', 'Reception terminée'];
         return back()->withNotify($notify);
     }
-    public function sentInQueue()
-    {
-        $pageTitle    = "Liste des livraisons en attente";
-        $livraisonInfos = $this->livraisons('queue');
-        return view('manager.livraison.index', compact('pageTitle', 'livraisonInfos'));
-    }
-
-    public function sentLivraison()
-    {
-        $manager      = auth()->user();
-        $pageTitle    = "Liste des livraisons envoyées";
-        $livraisonInfos = LivraisonInfo::where('sender_cooperative_id', $manager->cooperative_id)->where('status', '!=', Status::COURIER_QUEUE)->dateFilter()->searchable(['code'])->with('senderCooperative', 'receiverCooperative', 'senderStaff', 'receiverStaff', 'paymentInfo')->paginate(getPaginate());
-        return view('manager.livraison.index', compact('pageTitle', 'livraisonInfos'));
-    }
-
-    public function deliveryInQueue()
-    {
-        $pageTitle    = "Liste des livraisons en attente de reception";
-        $livraisonInfos = $this->livraisons('deliveryQueue');
-        return view('manager.livraison.index', compact('pageTitle', 'livraisonInfos'));
-    }
-
-    public function dispatchLivraison()
-    {
-        $pageTitle    = "Liste des livraisons expédiées";
-        $livraisonInfos = $this->livraisons('dispatched');
-        return view('manager.livraison.index', compact('pageTitle', 'livraisonInfos'));
-    }
-
-
-    public function delivered()
-    {
-        $pageTitle    = "Liste des livraisons reçues";
-        $livraisonInfos = $this->livraisons('delivered');
-        return view('manager.livraison.index', compact('pageTitle', 'livraisonInfos'));
-    }
-
-    public function upcoming()
-    {
-        $pageTitle    = "Liste des livraisons encours";
-        $livraisonInfos = $this->livraisons('upcoming');
-        return view('manager.livraison.index', compact('pageTitle', 'livraisonInfos'));
-    }
-
-    protected function livraisons($scope = null)
-    {
-        $user     = auth()->user();
-        $livraisons = LivraisonInfo::where(function ($query) use ($user) {
-            $query->where('sender_cooperative_id', $user->cooperative_id)->orWhere('receiver_cooperative_id', $user->cooperative_id);
-        });
-        if ($scope) {
-            $livraisons = $livraisons->$scope();
-        }
-        $livraisons = $livraisons->dateFilter()->searchable(['code'])->with('senderCooperative', 'receiverCooperative', 'senderStaff', 'receiverStaff', 'paymentInfo')->paginate(getPaginate());
-        return $livraisons;
-    }
+    
 
     public function invoice($id)
     {
