@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Campagne;
 use App\Models\Localite;
 use App\Constants\Status;
+use App\Models\SousThemeFormation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str; 
 use App\Models\SuiviFormation;
@@ -165,6 +166,11 @@ class ApisuiviformationController extends Controller
 
 
         return response()->json($formation, 201);
+    }
+    public function getsousthemes(){
+        $sousthemes = SousThemeFormation::get(); 
+         
+        return response()->json($sousthemes , 201);
     }
     
     public function getvisiteurs(Request $request)
