@@ -11,6 +11,10 @@ use Kirschbaum\PowerJoins\PowerJoins;
 class LivraisonInfo extends Model
 {
     use Searchable, GlobalStatus, PowerJoins;
+    public function cooperative()
+    {
+        return $this->belongsTo(Cooperative::class, 'cooperative_id');
+    }
 
     public function senderStaff()
     {

@@ -5,11 +5,12 @@
 <div class="row mb-none-30">
     <div class="col-lg-12 col-md-12 mb-30">
         <div class="card">
-            <form action="{{route('manager.livraison.store')}}" method="POST">
+            <form action="{{route('manager.livraison.section.store')}}" id="flocal" method="POST">
                 <div class="card-body">
                     @csrf
                     <div class="row">
-                        <div class="col-lg-12 form-group">
+                        <input type="hidden" name="code" value="{{ $code }}">
+                        <div class="col-lg-6 form-group">
                             <label for="">@lang("Date de livraison")</label>
                             <div class="input-group">
                                 <input name="estimate_date" value="{{ old('estimate_date') }}" type="text" autocomplete="off"  class="form-control dates" placeholder="Date de livraison" required>
@@ -17,24 +18,37 @@
                             </div>
                         </div>
                         
+                        <div class="col-lg-6 form-group">
+                            <label for="">@lang("Types de produit")</label>
+                            <div class="input-group">
+                            <select class="form-control select-picker" name="type[]" multiple required> 
+                                                        <option value="{{ __('Certifie') }}"
+                                                        @selected(old('type')=='Certifie')>{{ __('Certifie') }}</option>
+                                                        <option value="{{ __('Ordinaire') }}"
+                                                        @selected(old('type')=='Ordinaire')>{{ __('Ordinaire') }}</option>
+                                                </select>
+                            </div>
+                        </div>
+                        
                     </div>
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="card border--primary mt-3">
-                                <h5 class="card-header bg--primary  text-white">@lang('Information Expéditeur(Délégué)')</h5>
+                                <h5 class="card-header bg--primary  text-white">@lang('Information Expéditeur(Magasin de Section)')</h5>
                                 <div class="card-body">
                                     <div class="row">
                                     <div class="form-group col-lg-12">
-                                            <label>@lang('Selectionner un staff')</label>
-                                            <select class="form-control" name="sender_staff" id="sender_staff" onchange="getSender()" required>
+                                            <label>@lang('Selectionner un magasin de section')</label>
+                                            <select class="form-control" name="sender_magasin" id="sender_magasin" onchange="getSender()" required>
                                                 <option value>@lang('Selectionner une option')</option>
-                                                @foreach($staffs as $staff)
-                                                <option value="{{$staff->id}}"
-                                                data-name ="{{$staff->lastname}} {{$staff->firstname}}"
-                                                data-phone ="{{$staff->mobile}}"
-                                                data-email ="{{$staff->email}}"
-                                                data-adresse ="{{$staff->adresse}}"
-                                                @selected(old('sender_staff')==$staff->id)>{{__($staff->lastname)}} {{__($staff->firstname)}}</option>
+                                                @foreach($magSections as $magasin)
+                                                <option value="{{$magasin->id}}"
+                                                data-id ="{{$magasin->id}}"
+                                                data-name ="{{$magasin->user->lastname}} {{$magasin->user->firstname}}"
+                                                data-phone ="{{$magasin->user->mobile}}"
+                                                data-email ="{{$magasin->user->email}}"
+                                                data-adresse ="{{$magasin->user->adresse}}"
+                                                @selected(old('sender_magasin')==$magasin->id)>{{__($magasin->nom)}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -73,20 +87,20 @@
                         </div>
                         <div class="col-lg-6">
                             <div class="card border--primary mt-3">
-                                <h5 class="card-header bg--primary  text-white">@lang('Information Destinataire')</h5>
+                                <h5 class="card-header bg--primary  text-white">@lang('Information Destinataire(Magasin Central)')</h5>
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="form-group col-lg-12">
-                                            <label>@lang('Selectionner un Magasin de section')</label>
-                                            <select class="form-control" name="magasin_section" id="magasin_section" onchange="getReceiver()" required>
+                                            <label>@lang('Selectionner un Magasin Central')</label>
+                                            <select class="form-control" name="magasin_central" id="magasin_central" onchange="getReceiver()" required>
                                                 <option value>@lang('Selectionner une option')</option>
-                                                @foreach($magasins as $magasin)
+                                                @foreach($magCentraux as $magasin)
                                                 <option value="{{$magasin->id}}" 
                                                 data-name ="{{$magasin->user->lastname}} {{$magasin->user->firstname}}"
                                                 data-phone ="{{$magasin->user->mobile}}"
                                                 data-email ="{{$magasin->user->email}}"
                                                 data-adresse ="{{$magasin->user->adresse}}"
-                                                @selected(old('magasin_section')==$magasin->id)>{{__($magasin->nom)}}</option>
+                                                @selected(old('magasin_central')==$magasin->id)>{{__($magasin->nom)}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -123,74 +137,92 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card border--primary mt-3">
+                                <h5 class="card-header bg--primary  text-white">@lang('Information Transporteur')</h5>
+                                <div class="card-body">
+                                    <div class="row">
+                                    <div class="form-group col-lg-6">
+                        <?php echo Form::label(__('Entreprise'), null, ['class' => 'control-label']); ?>
+                        <div class="input-group mb-3">
+                            <?php echo Form::select('entreprise_id', $entreprises, null, ['placeholder' => __('Selectionner une option'), 'class' => 'form-control', 'id' => 'entreprise', 'required' => 'required']); ?>
+                            <button type="button" class="btn btn-outline-secondary border-grey add-entreprise"
+                                data-toggle="tooltip" data-original-title="Ajouter un transporteur"><i
+                                    class="las la-plus"></i></button>
+                        </div>
+                         
+                    </div>
+
+                    <div class="form-group col-lg-6">
+                        <?php echo Form::label(__('Transporteur'), null, ['class' => 'control-label']); ?>
+                        <div class="input-group mb-3">
+                            <select class="form-control" name="sender_transporteur" id="sender_transporteur" required>
+                                <option value="">@lang('Selectionner une option')</option>
+                                @foreach ($transporteurs as $transporteur)
+                                    <option value="{{ $transporteur->id }}" data-chained="{{ $transporteur->entreprise_id }}"
+                                        @selected(old('transporteur'))>
+                                        {{ $transporteur->nom }} {{ $transporteur->prenoms }}</option>
+                                @endforeach
+                            </select>
+                            <button type="button" class="btn btn-outline-secondary border-grey add-transporteur"
+                                data-toggle="tooltip" data-original-title="Ajouter un transporteur"><i
+                                    class="las la-plus"></i></button>
+                        </div>
+                    </div>
+ 
+                                        <div class="form-group col-lg-6">
+                                            <label>@lang('Selectionner un Véhicule')</label>
+                                            <select class="form-control" name="sender_vehicule" id="sender_vehicule" required>
+                                                <option value>@lang('Selectionner une option')</option>
+                                                @foreach($vehicules as $vehicule)
+                                                <option value="{{$vehicule->id}}" 
+                                                @selected(old('sender_vehicule')==$vehicule->id)>{{__($vehicule->marque->nom)}}({{__($vehicule->vehicule_immat)}})</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                         
+                                    </div>
+                                   
+                                     
+                                </div>
+                            </div>
+                        </div>  
+                    </div>
                     
                     <div class="row mb-30">
                         <div class="col-lg-12">
                             <div class="card border--primary mt-3">
-                                <h5 class="card-header bg--primary text-white">@lang('Information de Livraison')
-                                    <button type="button" class="btn btn-sm btn-outline-light float-end addUserData"><i
-                                            class="la la-fw la-plus"></i>@lang('Ajouter un nouveau élément')
-                                    </button>
+                                <h5 class="card-header bg--primary text-white">@lang('Information de Livraison') 
                                 </h5>
                                 <div class="card-body">
-                                    <div class="row" id="addedField">
-                                    <?php $i=0; ?>
-                                        @if(old('items'))
-                                            @foreach (old('items') as $item)
-                                            <div class="row single-item gy-2">
-                                                <div class="col-md-3">
-                                                    <select class="form-control selected_type select2" name="items[{{ $loop->index}}][producteur]"
-                                                    id='producteur-<?php echo $i; ?>' onchange=getParcelle(<?php echo $i; ?>) required>
-                                                        <option disabled selected value="">@lang('Producteurs')</option>
-                                                        @foreach($producteurs as $producteur)
-                                                            <option value="{{$producteur->id}}" @selected($item['producteur']==$producteur->id)
-                                                            data-id="{{$producteur->id}}"
-                                                                 data-price="{{ $campagne->prix_champ}}"  >
-                                                                {{__($producteur->nom)}} 
-                                                                {{__($producteur->prenom)}}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <select class="form-control" name="items[{{ $loop->index}}][parcelle]" id="parcelle-<?php echo $i; ?>" required>
-                                                        <option disabled selected value="">@lang('Parcelles')</option>
-                                                        @foreach($parcelles as $parcelle)
-                                                            <option value="{{$parcelle->id}}" @selected($item['parcelle']==$parcelle->id) >{{ __('Parcelle')}} 
-                                                                {{__($parcelle->codeParc)}}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                             <div class="col-md-2">
-                                            <select class="form-control selected_type" name="items[{{ $loop->index}}][type]" required>
-                                                    <option disabled selected value="">@lang('Type')</option> 
-                                                        <option value="{{ __('Certifie') }}"
-                                                        @selected($item['type']=='Certifie')>{{ __('Certifie') }}</option>
-                                                        <option value="{{ __('Ordinaire') }}"
-                                                        @selected($item['type']=='Ordinaire')>{{ __('Ordinaire') }}</option>
-                                                </select> 
-                                            </div>
-                                                <div class="col-md-2">
-                                                    <div class="input-group mb-3">
-                                                        <input type="number" class="form-control quantity" value="{{$item['quantity']}}"  name="items[{{ $loop->index }}][quantity]"  required>
-                                                        <span class="input-group-text unit">Kg</i></span>
-                                                    </div>
-                                                </div> 
-                                                <div class="col-md-3">
-                                                    <div class="input-group">
-                                                        <input type="text"  class="form-control single-item-amount" value="{{$item['amount']}}"  name="items[{{ $loop->index }}][amount]" required readonly>
-                                                        <span class="input-group-text">{{__($general->cur_text)}}</span>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-1">
-                                                    <button class="btn btn--danger w-100 removeBtn w-100 h-45" type="button">
-                                                        <i class="fa fa-times"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            @endforeach
-                                        @endif
+                                    <div class="row" id="">
+                                    <div class="form-group row">
+                                <?php echo Form::label(__('Producteur'), null, ['class' => 'col-sm-4 control-label required']); ?>
+                                <div class="col-xs-12 col-sm-8">
+                                    <?php echo Form::select('producteur_id[]', [], null, ['class' => 'form-control producteurs select2', 'id' => 'producteurs', 'required', 'multiple']); ?>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <?php echo Form::label(null, null, ['class' => 'col-sm-4 control-label']); ?>
+                                <div class="col-xs-12 col-sm-8">
+                                    <table class="table table-striped table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="2">@lang('Producteur')</th>
+                                                <th>@lang('Type')</th>
+                                                <th>@lang('Quantité(KG)')</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="listeprod">
+
+                                        </tbody>
+
+                                    </table>
+                                </div>
+                            </div>
+
                                     </div>
                                     <div class="border-line-area">
                                         <h6 class="border-line-title">@lang('Resume')</h6>
@@ -198,10 +230,20 @@
                                    
                                     
                                     <div class=" d-flex justify-content-end mt-2">
-                                        <div class="col-md-3  d-flex justify-content-between">
-                                            <span class="fw-bold">@lang('Total'):</span>
-                                            <div> <span class="total">0</span> {{$general->cur_sym}}</div>
+                                        <div class="col-md-5 d-flex justify-content-between">
+                                            <span class="fw-bold">@lang('Poids(Kg)'):</span>
+                                            <div> <input type="number" name="poidsnet" id="poidsnet" class="form-control" readonly
+                                        required /></div>
                                         </div>
+                                        
+                                    </div>
+                                    <div class=" d-flex justify-content-end mt-2">
+                                        <div class="col-md-5 d-flex justify-content-between">
+                                            <span class="fw-bold">@lang('Nombre de sacs'):</span>
+                                            <div> <input type="number" name="nombresacs" id="nombresacs"
+                                        class="form-control" required /></div>
+                                        </div>
+                                        
                                     </div>
 
                                 </div>
@@ -224,214 +266,117 @@
 @push('script')
 <script src="{{asset('assets/fcadmin/js/vendor/datepicker.min.js')}}"></script>
 <script src="{{asset('assets/fcadmin/js/vendor/datepicker.en.js')}}"></script>
+<script src="{{asset('assets/fcadmin/js/vendor/datepicker.fr.js')}}"></script>
 <script src="{{asset('assets/fcadmin/js/tokens.js')}}"></script>
 <script>
     "use strict"; 
+    $('#producteurs').select2();
     $(".scelleOld").select2({tags: true });
-
+    $("#sender_transporteur").chained("#entreprise");
     function getReceiver() {
-        let name = $("#magasin_section").find(':selected').data('name'); 
-        let phone = $("#magasin_section").find(':selected').data('phone'); 
-        let email = $("#magasin_section").find(':selected').data('email'); 
-        let adresse = $("#magasin_section").find(':selected').data('adresse'); 
+        let name = $("#magasin_central").find(':selected').data('name'); 
+        let phone = $("#magasin_central").find(':selected').data('phone'); 
+        let email = $("#magasin_central").find(':selected').data('email'); 
+        let adresse = $("#magasin_central").find(':selected').data('adresse'); 
         $('#receiver_name').val(name); 
         $('#receiver_phone').val(phone);
         $('#receiver_email').val(email);
         $('#receiver_address').val(adresse);
     }
+    function getDriver() { 
+        let name = $("#sender_transporteur").find(':selected').data('name'); 
+        let phone = $("#sender_transporteur").find(':selected').data('phone'); 
+        let email = $("#sender_transporteur").find(':selected').data('email');  
+        $('#transporteur_name').val(name); 
+        $('#transporteur_phone').val(phone);
+        $('#transporteur_email').val(email); 
+    }
     function getSender() { 
-        let name = $("#sender_staff").find(':selected').data('name'); 
-        let phone = $("#sender_staff").find(':selected').data('phone'); 
-        let email = $("#sender_staff").find(':selected').data('email'); 
-        let adresse = $("#sender_staff").find(':selected').data('adresse'); 
+        let idmag = $("#sender_magasin").find(':selected').data('id'); 
+        let name = $("#sender_magasin").find(':selected').data('name'); 
+        let phone = $("#sender_magasin").find(':selected').data('phone'); 
+        let email = $("#sender_magasin").find(':selected').data('email'); 
+        let adresse = $("#sender_magasin").find(':selected').data('adresse'); 
         $('#sender_name').val(name); 
         $('#sender_phone').val(phone);
         $('#sender_email').val(email);
-        $('#sender_address').val(adresse);
-    }
+        $('#sender_address').val(adresse); 
 
-    function getParcelle(id){
-        
-        let prod = $("#producteur-" + id).find(':selected').data('id');  
-        
-        $.ajax({
-                type:'get',
-                url: "{{ route('manager.livraison.get.parcelle') }}",
-                data: {
-                    'id': prod
-                },
-                success:function(html){ 
-                  if(html)
-                  {
-                    
-                //   $("#qty").val(html);
-                  $("#parcelle-"+ id).html(html);
-                  }else{
-                    $("#parcelle-"+ id).html('<option disabled selected value="">Parcelle</option>');
-                  }
-
-                }
-            });
-          
     }
+    $('body').on('click', '.add-transporteur', function() {
+                var url = "{{ route('manager.settings.transporteurModal.index') }}";
  
-    function getProducteur(){
-         
-        let prod = $("#statut").val(); 
-         
-        $.ajax({
-                type:'get',
-                url: "{{ route('manager.livraison.get.producteur') }}",
-                data: {
-                    'id': prod
-                },
-                success:function(html){ 
-                  if(html)
-                  {
-                    
-                //   $("#qty").val(html);
-                  $(".producteur").html(html);
-                  }else{
-                    $(".producteur").html('<option disabled selected value="">Producteur</option>');
-                  }
-
-                }
+                $(MODAL_XL + ' ' + MODAL_HEADING).html('...');
+                $.ajaxModal(MODAL_XL, url);
+                $(MODAL_XL).modal('show');
             });
-          
+            $('body').on('click', '.add-entreprise', function() {
+                var url = "{{ route('manager.settings.entreprise.index') }}";
+
+                $(MODAL_XL + ' ' + MODAL_HEADING).html('...');
+                $.ajaxModal(MODAL_XL, url);
+                $(MODAL_XL).modal('show');
+            });
+    $('#sender_magasin').change(function() { 
+$.ajax({
+    type: 'GET',
+    url: "{{ route('manager.livraison.get.producteur') }}",
+    data: $('#flocal').serialize(),
+    success: function(html) {
+         
+        $('#producteurs').html(html);
+
     }
+});
+});
 
-    (function ($) {
+$('#producteurs').change(function() {
+ 
+$.ajax({
+    type: 'GET',
+    url: "{{ route('manager.livraison.get.listeproducteur') }}",
+    data: $('#flocal').serialize(),
+    success: function(html) {
+        $('#listeprod').html(html.results);
+        $('#poidsnet').val(html.total);
+        /* $('#nombresacs').val(html.totalsacs);
+        $("#nombresacs").attr({
+            "max": html.totalsacs, 
+            "min": 1  
+        }); */
+    }
+});
+});
 
-        
-        $('.addUserData').on('click', function () {
-            
-            let count = $("#addedField select").length;
-            let length=$("#addedField").find('.single-item').length; 
-               
-            let html = `
-            <div class="row single-item gy-2">
-                <div class="col-md-3">
-                    <select class="form-control selected_type " name="items[${length}][producteur]" required id='producteur-${length}' onchange=getParcelle(${length})>
-                        <option disabled selected value="">@lang('Producteur')</option>
-                        @foreach($producteurs as $producteur)
-                            <option value="{{$producteur->id}}" data-id="{{$producteur->id}}" data-price={{ $campagne->prix_champ}} >{{__($producteur->nom)}} {{__($producteur->prenoms)}}</option>
-                        @endforeach
-                    </select>
-                </div>  
-                <div class="col-md-3">
-                    <select class="form-control" name="items[${length}][parcelle]" required id="parcelle-${length}">
-                        
-                    </select>
-                </div>
-                <div class="col-md-2">
-                <select class="form-control" name="items[${length}][type]" required> 
-                            <option value="{{ __('Certifie') }}">{{ __('Certifie') }}</option>
-                            <option value="{{ __('Ordinaire') }}">{{ __('Ordinaire') }}</option>
-                    </select> 
-                </div>
-                <div class="col-md-2">
-                    <div class="input-group mb-3">
-                        <input type="number" class="form-control quantity" placeholder="@lang('Qte')" disabled name="items[${length}][quantity]"  required>
-                        <span class="input-group-text unit">Kg</span>
-                    </div>
-                </div> 
-                <div class="col-md-3">
-                    <div class="input-group">
-                        <input type="text"  class="form-control single-item-amount" placeholder="@lang('Entrer le prix')" name="items[${length}][amount]" required readonly>
-                        <span class="input-group-text">{{__($general->cur_text)}}</span>
-                    </div>
-                </div>
-                <div class="col-md-1">
-                    <button class="btn btn--danger w-100 removeBtn w-100 h-45" type="button">
-                        <i class="fa fa-times"></i>
-                    </button>
-                </div>
-                <br><hr class="panel-wide">
-            </div>`;
-            $('#addedField').append(html,$('.scelle').tokens())
+$('#flocal').change('keyup change blur', function() {
+            update_amounts();
         });
 
-        $('#addedField').on('change', '.selected_type', function (e) {
-            let unit = $(this).find('option:selected').data('unit');
-            let parent = $(this).closest('.single-item');
-            $(parent).find('.quantity').attr('disabled', false);
-            $(parent).find('.unit').html(`${unit || '<i class="las la-balance-scale"></i>'}`);
-            calculation();
-        });
+        function update_amounts() {
+            var sum = 0;
+            var sumsacs = 0;
 
-        $('#addedField').on('click', '.removeBtn', function (e) {
-            let length=$("#addedField").find('.single-item').length;
-            if(length <= 1){
-                notify('warning',"@lang('Au moins un élément est requis')");
-            }else{
-                $(this).closest('.single-item').remove();
-            }
-            calculation();
-        });
+            $('#listeprod > tr').each(function() {
 
-        let discount=0;
+                var qty = $(this).find('.quantity').val();
+                var qtysacs = $(this).find('.nbsacs').val();
+                sum = parseFloat(sum) + parseFloat(qty);
+                sumsacs = parseFloat(sumsacs) + parseFloat(qtysacs);
 
-        $('.discount').on('input',function (e) {
-            this.value = this.value.replace(/^\.|[^\d\.]/g, '');
-
-             discount=parseFloat($(this).val() || 0);
-             if(discount >=100){
-                discount=100;
-                notify('warning',"@lang('La réduction ne peut être supérieure à 100 %')");
-                $(this).val(discount);
-             }
-            calculation();
-        });
-
-        $('#addedField').on('input', '.quantity', function (e) {
-            this.value = this.value.replace(/^\.|[^\d\.]/g, '');
-
-            let quantity = $(this).val();
-            if (quantity <= 0) {
-                quantity = 0;
-            }
-            quantity=parseFloat(quantity);
-
-            let parent   = $(this).closest('.single-item');
-            let price    = parseFloat($(parent).find('.selected_type option:selected').data('price') || 0);
-            let subTotal = price*quantity;
-
-            $(parent).find('.single-item-amount').val(subTotal.toFixed(0));
-
-            calculation()
-        });
-
-        function calculation ( ) {
-            let items    = $('#addedField').find('.single-item');
-            let subTotal = 0;
-
-            $.each(items, function (i, item) {
-                let price = parseFloat($(item).find('.selected_type option:selected').data('price') || 0);
-                let quantity = parseFloat($(item).find('.quantity').val() || 0);
-                subTotal+=price*quantity;
             });
-
-            // subTotal=parseFloat(subTotal);
-
-            // let discountAmount = (subTotal/100)*discount;
-            // let total          = subTotal-discountAmount;
-
-            // $('.subtotal').text(subTotal.toFixed(0));
-            // $('.total').text(total.toFixed(0));
-            $('.total').text(subTotal.toFixed(0));
-        };
+            $('#poidsnet').val(sum);
+            /*$('#nombresacs').val(sumsacs);
+            $("#nombresacs").attr({
+                "max": sumsacs, 
+                "min": 0 
+            }); */
+        } 
 
         $('.dates').datepicker({
-            language  : 'en',
+            language  : 'fr',
             dateFormat: 'yyyy-mm-dd',
-            maxDate   : new Date()
+            minDate   : new Date()
         });
-
-        @if(old('items'))
-            calculation();
-        @endif
-
-    })(jQuery);
     
 </script>
 @endpush

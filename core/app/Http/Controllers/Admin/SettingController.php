@@ -335,6 +335,12 @@ class SettingController extends Controller
     {
         return CampagnePeriode::changeStatus($id);
     }
+
+    public function programmeStatus($id)
+    {
+        return Programme::changeStatus($id);
+    }
+
     public function travauxDangereuxStatus($id)
     {
         return TravauxDangereux::changeStatus($id);
