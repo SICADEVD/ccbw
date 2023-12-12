@@ -66,7 +66,7 @@
                                             {{ $produit->campagne->nom }} 
                                         </td>
                                         <td>
-                                            {{ $produit->campagnePeriode->nom }} 
+                                            {{ @$produit->campagnePeriode->nom }} 
                                         </td> 
                                         <td>
                                         <span class="fw-bold">{{ __($produit->stockMagasinCentral->magasinCentral->nom) }}</span> 
