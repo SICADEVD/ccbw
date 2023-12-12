@@ -79,7 +79,7 @@ Route::match(['POST'],'getcampagne', [AuthController::class, 'getCampagne']);
 Route::match(['POST'],'apiformationstaff', [ApiFormationStaffController::class, 'store']); 
 // route pour gestions des besoins en arbres
 Route::match(['POST'],'apiagroevaluation', [ApiAgroEvaluationContoller::class, 'store']);
-Route::match(['POST'],'getproducteurs', [ApiAgroEvaluationContoller::class, 'getproducteurs']);
+Route::match(['POST'],'getbesoinsproducteurs', [ApiAgroEvaluationContoller::class, 'getproducteurs']);
 
 //route pour la gestion des sections
 
