@@ -67,7 +67,9 @@
                                     <td>
                                             {{ $produit->campagne->nom }} 
                                         </td>
-                                        
+                                        <td>
+                                            {{ $produit->campagnePeriode->nom }} 
+                                        </td>
                                         <td>
                                              
                                             <a class="text--primary" href="{{ route('manager.staff.edit', encrypt($produit->livraisonInfo->senderStaff->id)) }}">
