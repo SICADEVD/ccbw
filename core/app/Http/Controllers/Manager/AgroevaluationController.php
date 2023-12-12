@@ -92,7 +92,6 @@ class AgroevaluationController extends Controller
 
         $agroevaluation->producteur_id  = $request->producteur;
         $agroevaluation->quantite  = array_sum($request->quantite);
-        dd(json_encode($request->all()));
         $agroevaluation->save();
         $k = 0;
         $i = 0;
