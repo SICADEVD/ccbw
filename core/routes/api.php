@@ -1,24 +1,25 @@
 <?php
 
-use App\Http\Controllers\ApiAbreController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController; 
-use App\Http\Controllers\ApiproducteurController; 
+use App\Http\Controllers\ApiAbreController;
 use App\Http\Controllers\ApimenageController; 
-use App\Http\Controllers\ApilivraisonController; 
+use App\Http\Controllers\ApisectionController;
+use App\Http\Controllers\ApilocaliteController; 
 use App\Http\Controllers\ApiparcelleController; 
+use App\Http\Controllers\ApiProgrammeController;
+use App\Http\Controllers\ApievaluationController;
+use App\Http\Controllers\ApilivraisonController; 
+use App\Http\Controllers\ApiapplicationController;
+use App\Http\Controllers\ApiestimationController; 
+use App\Http\Controllers\ApiproducteurController; 
+use App\Http\Controllers\ApissrteclrmsController; 
+use App\Http\Controllers\ApiAgroEvaluationContoller;
+use App\Http\Controllers\ApiFormationStaffController;
+use App\Http\Controllers\ApigetlistedatasController; 
 use App\Http\Controllers\ApisuiviparcelleController; 
 use App\Http\Controllers\ApisuiviformationController; 
-use App\Http\Controllers\ApilocaliteController; 
-use App\Http\Controllers\ApigetlistedatasController; 
-use App\Http\Controllers\ApiestimationController; 
-use App\Http\Controllers\ApissrteclrmsController; 
-use App\Http\Controllers\ApiapplicationController;
-use App\Http\Controllers\ApievaluationController;
-use App\Http\Controllers\ApiFormationStaffController;
-use App\Http\Controllers\ApiProgrammeController;
-use App\Http\Controllers\ApisectionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -75,7 +76,10 @@ Route::match(['POST'],'getcampagne', [AuthController::class, 'getCampagne']);
 
 //route formation staff
 
-Route::match(['POST'],'apiformationstaff', [ApiFormationStaffController::class, 'store']);  
+Route::match(['POST'],'apiformationstaff', [ApiFormationStaffController::class, 'store']); 
+// route pour gestions des besoins en arbres
+Route::match(['POST'],'apiagroevaluation', [ApiAgroEvaluationContoller::class, 'store']);
+Route::match(['POST'],'getproducteurs', [ApiAgroEvaluationContoller::class, 'getproducteurs']);
 
 //route pour la gestion des sections
 
