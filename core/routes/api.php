@@ -49,7 +49,8 @@ Route::match(['POST'],'getstaff', [ApiproducteurController::class, 'getstaff']);
 
 Route::match(['POST'],'apimenage', [ApimenageController::class, 'store']);
 Route::match(['POST'],'getmagasinsection', [ApilivraisonController::class, 'getMagasinsection']);
-Route::match(['POST'],'apilivraison', [ApilivraisonController::class, 'store']);
+Route::match(['POST'],'getlivraison', [ApilivraisonController::class, 'getLivraison']);
+Route::match(['POST'],'getmagasincentraux', [ApilivraisonController::class, 'getMagasincentraux']);
 
 Route::match(['POST'],'apiparcelle', [ApiparcelleController::class, 'store']);
 Route::match(['POST'],'getparcelles', [ApiparcelleController::class, 'index']);
