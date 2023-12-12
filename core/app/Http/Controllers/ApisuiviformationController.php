@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Campagne;
 use App\Models\Localite;
 use App\Constants\Status;
+use App\Models\SousThemeFormation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str; 
 use App\Models\SuiviFormation;
@@ -84,11 +85,15 @@ class ApisuiviformationController extends Controller
         $formation->date_fin_formation = $request->multiEndDate;
         $formation->userid = $request->userid;
 
+        $photo_fileNameExtension = Str::afterLast($request->photo_filename, '.');
+        $rapport_fileNameExtension = Str::afterLast($request->rapport_filename,'.');
+
+
         if ($request->photo_formation) {
             $image = $request->photo_formations;
             $image = Str::after($image, 'base64,');
             $image = str_replace(' ', '+', $image);
-            $imageName = (string) Str::uuid() . '.' . 'jpg';
+            $imageName = (string) Str::uuid() . '.' . $photo_fileNameExtension;
             File::put(storage_path() . "/app/public/formations/" . $imageName, base64_decode($image));
             $photo_formations = "public/formations/$imageName";
             $formation->photo_formation = $photo_formations;
@@ -98,7 +103,7 @@ class ApisuiviformationController extends Controller
             $rapport_formation = $request->rapport_formation;
             $rapport_formation = Str::after($rapport_formation, 'base64,');
             $rapport_formation = str_replace(' ', '+', $rapport_formation);
-            $rapportName = (string) Str::uuid() . '.' . 'pdf';
+            $rapportName = (string) Str::uuid() . '.' . $rapport_fileNameExtension;
             File::put(storage_path() . "/app/public/formations/" . $rapportName, base64_decode($rapport_formation));
             $rapport_formation = "public/formations/$rapportName";
 
@@ -161,6 +166,11 @@ class ApisuiviformationController extends Controller
 
 
         return response()->json($formation, 201);
+    }
+    public function getsousthemes(){
+        $sousthemes = SousThemeFormation::get(); 
+         
+        return response()->json($sousthemes , 201);
     }
     
     public function getvisiteurs(Request $request)

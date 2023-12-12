@@ -49,11 +49,14 @@ class ApiFormationStaffController extends Controller
         $formation->date_debut_formation = $request->multiStartDate;
         $formation->date_fin_formation = $request->multiEndDate;
 
+        $photo_fileNameExtension = Str::afterLast($request->photo_filename, '.');
+        $rapport_fileNameExtension = Str::afterLast($request->rapport_filename,'.');
+
         if ($request->photo_formation) {
             $image = $request->	photo_formation;
             $image = Str::after($image, 'base64,');
             $image = str_replace(' ', '+', $image);
-            $imageName = (string) Str::uuid() . '.' . 'jpg';
+            $imageName = (string) Str::uuid() . '.' . $photo_fileNameExtension;
             File::put(storage_path() . "/app/public/formationsStaff" . $imageName, base64_decode($image));
             $photo_formations = "public/formationsStaff/$imageName";
             $formation->photo_formation = $photo_formations;
@@ -63,7 +66,7 @@ class ApiFormationStaffController extends Controller
             $rapport_formation = $request->rapport_formation;
             $rapport_formation = Str::after($rapport_formation, 'base64,');
             $rapport_formation = str_replace(' ', '+', $rapport_formation);
-            $rapportName = (string) Str::uuid() . '.' . 'pdf';
+            $rapportName = (string) Str::uuid() . '.' . $rapport_fileNameExtension;
             File::put(storage_path() . "public/formationsStaff/" . $rapportName, base64_decode($rapport_formation));
             $rapport_formation = "public/formationsStaffs/$rapportName";
 
