@@ -527,7 +527,7 @@ class LivraisonController extends Controller
        {
          if($v==$tv){$read = '';}
          else{$read='readonly';}
-        $results .= '<tr><td colspan="2"><h5>'.$data->producteur->nom.' '.$data->producteur->prenoms.'('.$data->producteur->codeProdapp.')</h5><input type="hidden" name="producteurs[]" value="'.$data->producteur_id.'"/></td><td style="width: 300px;"><input type="hidden" name="typeproduit[]" value="'.$data->type_produit.'"/>'.$data->type_produit.'</td><td style="width: 400px;"> <input type="number" name="quantite[]" value="'.$data->stocks_entrant.'" min="1" max="'.$data->stocks_entrant.'"  class="form-control quantity" style="width: 115px;"/></td></tr>';
+        $results .= '<tr><td colspan="2"><h5>'.$data->producteur->nom.' '.$data->producteur->prenoms.'('.$data->producteur->codeProdapp.')</h5><input type="hidden" name="producteurs[]" value="'.$data->producteur_id.'"/></td><td style="width: 300px;"><input type="hidden" name="typeproduit[]" value="'.$data->type_produit.'"/>'.$data->type_produit.'</td><td style="width: 400px;"> <input type="number" name="quantite[]" value="'.$data->stocks_entrant.'" min="0" max="'.$data->stocks_entrant.'"  class="form-control quantity" style="width: 115px;"/></td></tr>';
         $total = $total+$data->stocks_entrant;
         $totalsacs = $totalsacs+$data->nb_sacs_entrant;
         $v++;
