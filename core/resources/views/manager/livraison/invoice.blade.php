@@ -3,7 +3,8 @@
     <div class="card">
         <div class="card-body">
             <div id="printFacture">
-                <div class="content-header">
+                <div class="content-header justify-content-between mt-3">
+                <div style="width:60%;">
                     <h3>
                         @lang('N° connaissement brousse'):
                         <small>{{ $livraisonInfo->code }}</small>
@@ -14,14 +15,12 @@
                          
                     </h3>
                 </div>
-
-                <div class="invoice">
-                <?php $numeroProducteurs=''; ?>
+                    <div style="width:30%;">
+                    <div class="text-center">
+                    <?php $numeroProducteurs=''; ?>
                 @foreach($livraisonInfo->products as $prodc)
                             <?php $numeroProducteurs .= $prodc->parcelle->producteur->nom.' '.$prodc->parcelle->producteur->prenoms.'('.$prodc->parcelle->producteur->codeProdapp.')'."\n"; ?>
                             @endforeach
-                    <div class="d-flex justify-content-between mt-3">
-                        <div class="text-center">
                             <?php
                             
                             $textQR = 'N° CONNAISSEMENT BROUSSE: '.$livraisonInfo->code."\n".'Date de livraison:'.showDateTime($livraisonInfo->estimate_date, 'd/m/Y')."\n".'COOPERATIVE:'.$livraisonInfo->receiverCooperative->name."\n".'PRODUCTEURS :'."\n".$numeroProducteurs;
@@ -29,8 +28,10 @@
                         {!! QrCode::size(150)->generate($textQR) !!}
                              
                         </div>
-                       
                     </div>
+                </div>
+
+                <div class="invoice"> 
                     <hr>
                     <div class=" invoice-info d-flex justify-content-between">
                         <div style="width:30%;">
