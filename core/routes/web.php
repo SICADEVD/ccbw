@@ -461,9 +461,14 @@ Route::middleware('auth')->group(function () {
         Route::name('livraison.')->prefix('livraison')->group(function () {
             Route::get('magcentral/stock', [LivraisonCentraleController::class,'stock'])->name('magcentral.stock');
             Route::post('magcentral/delivery', [LivraisonCentraleController::class,'deliveryStore'])->name('magcentral.delivery');
+            Route::get('magcentral/invoice/{id}', [LivraisonCentraleController::class,'invoice'])->name('magcentral.invoice');
             Route::get('magcentral/producteur', [LivraisonCentraleController::class,'getProducteur'])->name('magcentral.get.producteur');
             Route::get('magcentral/producteur/liste', [LivraisonCentraleController::class,'getListeProducteurConnaiss'])->name('magcentral.get.listeproducteur');
-            Route::resource('magcentral', LivraisonCentraleController::class);
+            Route::get('magcentral/connaissement', [LivraisonCentraleController::class,'connaissement'])->name('usine.connaissement');
+            Route::post('magcentral/usine/delivery', [LivraisonCentraleController::class,'deliveryUsineStore'])->name('usine.delivery');
+            Route::get('magcentral/usine/invoice/{id}', [LivraisonCentraleController::class,'usineInvoice'])->name('usine.invoice');
+            Route::get('magcentral/prime', [LivraisonCentraleController::class,'prime'])->name('prime.producteur');
+            Route::resource('magcentral', LivraisonCentraleController::class); 
             
         });
 

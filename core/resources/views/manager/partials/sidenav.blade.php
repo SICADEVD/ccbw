@@ -205,16 +205,28 @@
                                     <span class="menu-title">@lang('Stock Magasins de Section')</span>
                                 </a>
                             </li> 
-                            <li class="sidebar-menu-item {{ menuActive(['manager.livraison.magcentral.*']) }}">
+                            <!-- <li class="sidebar-menu-item {{ menuActive(['manager.livraison.magcentral.*']) }}">
                                 <a href="{{ route('manager.livraison.magcentral.index') }}" class="nav-link">
                                     <i class="menu-icon las la-server"></i>
                                     <span class="menu-title">@lang('Livraison Magasins Centraux')</span>
                                 </a>
-                            </li>
+                            </li> -->
                             <li class="sidebar-menu-item {{ menuActive(['manager.livraison.magcentral.*']) }}">
                                 <a href="{{ route('manager.livraison.magcentral.stock') }}" class="nav-link">
                                     <i class="menu-icon las la-server"></i>
                                     <span class="menu-title">@lang('Stock Magasins Centraux')</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-menu-item {{ menuActive(['manager.livraison.usine.connaissement']) }}">
+                                <a href="{{ route('manager.livraison.usine.connaissement') }}" class="nav-link">
+                                    <i class="menu-icon las la-server"></i>
+                                    <span class="menu-title">@lang('Connaissement Usine')</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-menu-item {{ menuActive(['manager.livraison.prime.producteur']) }}">
+                                <a href="{{ route('manager.livraison.prime.producteur') }}" class="nav-link">
+                                    <i class="menu-icon las la-server"></i>
+                                    <span class="menu-title">@lang('Prime aux Producteurs')</span>
                                 </a>
                             </li>
 

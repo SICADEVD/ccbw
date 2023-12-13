@@ -46,4 +46,9 @@ class Connaissement extends Model
     {
         return $this->belongsTo(Vehicule::class, 'vehicule_id');
     }
+
+    public function products()
+    {
+        return $this->hasMany(ConnaissementProduit::class, 'connaissement_id', 'id');
+    }
 }

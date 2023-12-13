@@ -40,14 +40,13 @@
                                 <tr>
                                 <th>@lang("Livraison")</th> 
                                 <th>@lang("Campagne")</th> 
-                                <th>@lang("Periode")</th>
-                                    <th>@lang('Magasin Section')</th>
+                                <th>@lang("Periode")</th> 
                                     <th>@lang('Magasin Central')</th>
                                     <th>@lang('Transporteur')</th>
                                     <th>@lang('Vehicule')</th>
                                     <th>@lang('Type Produit')</th> 
-                                    <th>@lang('Stock entrant')</th> 
-                                    <th>@lang('Stock sortant')</th> 
+                                    <th>@lang('Quantité')</th> 
+                                    <th>@lang('Nombre Sacs')</th> 
                                     <th>@lang('Statut')</th>
                                     <th>@lang('Action')</th>
                                 </tr>
@@ -56,21 +55,14 @@
                                 @forelse($stocks as $produit)
                                     <tr>
                                     <td>
-                                            {{ $produit->numero_connaissement }} 
+                                            {{ $produit->numeroCU }} 
                                         </td>
                                     <td>
                                             {{ $produit->campagne->nom }} 
                                         </td> 
                                         <td>
                                             {{ $produit->campagnePeriode->nom }} 
-                                        </td> 
-                                        <td> 
-                                            @if(@$produit->magasin_section_id)
-                                                <span class="text--primary">{{ __($produit->magasinSection->nom) }}</span>
-                                            @else
-                                                <span>@lang('N/A')</span>
-                                            @endif
-                                        </td>
+                                        </td>  
                                         <td>
                                         @if(@$produit->magasin_centraux_id)
                                                 <span class="text--primary">{{ __($produit->magasinCentral->nom) }}</span>
@@ -92,10 +84,10 @@
                                         </td>
                                          
                                         <td>
-                                            {{ $produit->stocks_mag_entrant }} 
+                                            {{ $produit->quantite_livre }} 
                                         </td>
                                         <td>
-                                            {{ $produit->stocks_mag_sortant }} 
+                                            {{ $produit->sacs_livre }} 
                                         </td> 
                                         <td> 
                                             @if($produit->status == Status::COURIER_DISPATCH)
@@ -105,13 +97,13 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <a href="{{ route('manager.livraison.magcentral.invoice',encrypt($produit->id)) }}"
-                                                title="" class="btn btn-sm btn-outline--info">
+                                            <a href="{{ route('manager.livraison.usine.invoice',encrypt($produit->id))}}"
+                                                title="" class="btn btn-sm btn-outline--info" target="_blank">
                                                 <i class="las la-file-invoice"></i> @lang("Détails livraisons")
                                             </a>
                                             @if ($produit->status == 1)
                                                 <button class="btn btn-sm btn-outline--secondary  delivery"
-                                                    data-code="{{ $produit->numero_connaissement }}"><i class="las la-truck"></i>
+                                                    data-code="{{ $produit->numeroCU }}"><i class="las la-truck"></i>
                                                     @lang('Confirmer la reception')</button>
                                             @endif
                                         </td>
@@ -145,7 +137,7 @@
                         <span class="fa fa-times"></span>
                     </button>
                 </div>
-                <form action="{{ route('manager.livraison.magcentral.delivery') }}" method="POST">
+                <form action="{{ route('manager.livraison.usine.delivery') }}" method="POST">
                     @csrf
                     @method('POST')
                     <input type="hidden" name="code">
@@ -163,10 +155,7 @@
 @endsection
 
 @push('breadcrumb-plugins') 
-
-<a href="{{ route('manager.livraison.magcentral.create') }}" class="btn  btn-outline--primary h-45 addNewCooperative">
-        <i class="las la-plus"></i>@lang("Enregistrer un Connaissement vers Usine")
-    </a>
+ 
 <a href="{{ route('manager.livraison.exportExcel.livraisonAll') }}" class="btn  btn-outline--warning h-45"><i class="las la-cloud-download-alt"></i> Exporter en Excel</a>
 @endpush
 
