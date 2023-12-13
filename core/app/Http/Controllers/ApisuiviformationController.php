@@ -90,7 +90,7 @@ class ApisuiviformationController extends Controller
 
 
         if ($request->photo_formation) {
-            $image = $request->photo_formations;
+            $image = $request->photo_formation;
             $image = Str::after($image, 'base64,');
             $image = str_replace(' ', '+', $image);
             $imageName = (string) Str::uuid() . '.' . $photo_fileNameExtension;
