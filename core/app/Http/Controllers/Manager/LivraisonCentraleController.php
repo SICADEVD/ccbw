@@ -195,7 +195,7 @@ class LivraisonCentraleController extends Controller
             if($stockCent !=null){ 
                  
             $stockCent->stocks_mag_entrant = $stockCent->stocks_mag_entrant - $quantite[$i];
-            $stockCent->stocks_mag_sacs_entrant = $stockCent->stocks_mag_sacs_entrant + $quantite[$i];
+            $stockCent->stocks_mag_sortant = $stockCent->stocks_mag_sortant + $quantite[$i];
            
             $stockCent->save();
             }
