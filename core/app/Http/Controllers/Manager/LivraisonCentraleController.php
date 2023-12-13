@@ -183,13 +183,21 @@ class LivraisonCentraleController extends Controller
                 'created_at'      => now(),
             ];
             $prod = LivraisonMagasinCentralProducteur::where([['campagne_id',$campagne->id],['stock_magasin_central_id',$stock_magasin_central[$i]],['producteur_id',$item],['type_produit',$typeproduit[$i]]])->first();
-         
             if($prod !=null){ 
                  
             $prod->quantite = $prod->quantite - $quantite[$i];
             $prod->quantite_restant = $prod->quantite_restant + $quantite[$i];
            
             $prod->save();
+            }
+
+            $stockCent = StockMagasinSection::where('id',$stock_magasin_central[$i])->first();
+            if($stockCent !=null){ 
+                 
+            $stockCent->stocks_entrant = $stockCent->stocks_entrant - $quantite[$i];
+            $stockCent->stocks_sortant = $stockCent->stocks_sortant + $quantite[$i];
+           
+            $stockCent->save();
             }
         }
             $i++;
