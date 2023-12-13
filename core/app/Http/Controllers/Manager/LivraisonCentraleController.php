@@ -85,6 +85,48 @@ class LivraisonCentraleController extends Controller
         return view('manager.livraison-centrale.stock', compact('pageTitle', 'stocks','total','sections','magasins'));
     }
 
+    public function connaissement()
+    {  
+
+        $staff = auth()->user(); 
+        $stocks = Connaissement::dateFilter()->where([['cooperative_id',$staff->cooperative_id]]) 
+        ->when(request()->magasin, function ($query, $magasin) {
+            $query->where('magasin_centraux_id',$magasin); 
+        })
+        ->with('cooperative','vehicule','transporteur','campagne','magasinCentral','campagnePeriode','vehicule.marque')
+        ->orderBy('connaissements.id','desc')
+        ->paginate(getPaginate());
+ 
+        $total = $stocks->sum('quantite_livre');
+        $pageTitle    = "Connaissements Usine ($total)";
+        $magasins  = MagasinCentral::where('cooperative_id',$staff->cooperative_id)->with('cooperative')->get();
+        $sections = Section::get();
+        return view('manager.livraison-centrale.connaissement', compact('pageTitle', 'stocks','total','sections','magasins'));
+    }
+
+    public function prime()
+    {  
+
+        $staff = auth()->user(); 
+        $stocks = LivraisonPrime::dateFilter()->joinRelationship('livraisonInfo','parcelle') 
+        ->join('parcelles','livraison_primes.parcelle_id','=','parcelles.id')
+        ->where([['sender_cooperative_id',$staff->cooperative_id]]) 
+        ->when(request()->magasin, function ($query, $magasin) {
+            $query->where('magasin_section_id',$magasin); 
+        })
+        ->with('livraisonInfo','parcelle','campagnePeriode','campagne')  
+        ->groupBy('producteur_id','campagne_id','campagne_periode_id')
+        ->select('livraison_primes.*','parcelles.producteur_id', DB::raw('SUM(quantite) as qty,SUM(montant) as somme'))
+        ->orderBy('livraison_primes.id','desc') 
+        ->paginate(getPaginate());
+  
+        $total = $stocks->sum('montant');
+        $pageTitle    = "Prime des producteurs ($total)";
+        $magasins  = MagasinSection::joinRelationship('section')->where([['cooperative_id',$staff->cooperative_id]])->with('user')->orderBy('nom')->get();
+        $sections = Section::get();
+        return view('manager.livraison-centrale.prime', compact('pageTitle', 'stocks','total','sections','magasins'));
+    }
+
     public function create()
     {
         $staff = auth()->user(); 
@@ -186,7 +228,7 @@ class LivraisonCentraleController extends Controller
             if($prod !=null){ 
                  
             $prod->quantite = $prod->quantite - $quantite[$i];
-            $prod->quantite_restant = $prod->quantite_restant + $quantite[$i];
+            $prod->quantite_sortant = $prod->quantite_sortant + $quantite[$i];
            
             $prod->save();
             }
@@ -207,7 +249,7 @@ class LivraisonCentraleController extends Controller
         ConnaissementProduit::insert($data); 
 
         $notify[] = ['success', 'Le connaissement vers l\'Usine a été ajouté avec succès'];
-        return to_route('manager.livraison.usine.stock')->withNotify($notify);
+        return to_route('manager.livraison.usine.connaissement')->withNotify($notify);
     }
  
     public function getProducteur(){
@@ -278,14 +320,36 @@ class LivraisonCentraleController extends Controller
         $notify[] = ['success', 'Reception terminée'];
         return back()->withNotify($notify);
     }
+
+    public function deliveryUsineStore(Request $request)
+    {
+        $request->validate([
+            'code' => 'required',
+        ]);
+        $user = auth()->user();
+        $livraison = Connaissement::where('numeroCU', $request->code)->where('status', Status::COURIER_DISPATCH)->firstOrFail();
+ 
+        $livraison->status            = Status::COURIER_DELIVERYQUEUE;
+        $livraison->save();
+        $notify[] = ['success', 'Reception terminée'];
+        return back()->withNotify($notify);
+    }
     
 
     public function invoice($id)
     {
         $id                  = decrypt($id);
-        $pageTitle           = "Facture";
-        $livraisonInfo         = LivraisonInfo::with('payment')->findOrFail($id);
-        return view('manager.livraison.invoice', compact('pageTitle', 'livraisonInfo'));
+        $pageTitle           = "Bon de livraison";
+        $livraisonInfo         = StockMagasinCentral::with('cooperative','vehicule','transporteur','campagne','magasinCentral','magasinSection','campagnePeriode','vehicule.marque')->findOrFail($id);
+        return view('manager.livraison-centrale.invoice', compact('pageTitle', 'livraisonInfo'));
+    }
+
+    public function usineInvoice($id)
+    {
+        $id                  = decrypt($id);
+        $pageTitle           = "Bon de livraison";
+        $livraisonInfo         = Connaissement::with('cooperative','vehicule','transporteur','campagne','magasinCentral','campagnePeriode','vehicule.marque')->findOrFail($id);
+        return view('manager.livraison-centrale.invoice-usine', compact('pageTitle', 'livraisonInfo'));
     }
 
     public function exportExcel()

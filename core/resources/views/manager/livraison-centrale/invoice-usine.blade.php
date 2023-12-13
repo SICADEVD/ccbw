@@ -6,8 +6,8 @@
                 <div class="content-header d-flex justify-content-between">
                 <div style="width:60%;">
                     <h3>
-                        @lang('N° Connaissement Magasin Central'):
-                        <small>{{ $livraisonInfo->numero_connaissement }}</small>
+                        @lang('N° Connaissement Usine'):
+                        <small>{{ $livraisonInfo->numeroCU }}</small>
                         <br> 
                         @lang('Date de livraison: ') {{ showDateTime($livraisonInfo->date_livraison, 'd M Y') }}
                         <br>
@@ -23,7 +23,7 @@
                             <?php $numeroProducteurs .= $prodc->producteur->nom.' '.$prodc->producteur->prenoms.'('.$prodc->producteur->codeProdapp.')'."\n"; ?>
                             @endforeach
                             <?php 
-                            $textQR = 'N° CONNAISSEMENT USINE: '.$livraisonInfo->numero_connaissement."\n".'Date de livraison:'.showDateTime($livraisonInfo->date_livraison, 'd/m/Y')."\n".'COOPERATIVE:'.$livraisonInfo->cooperative->name."\n".'MAGASIN CENTRAL:'.$livraisonInfo->magasinCentral->nom."\n".'PRODUCTEURS :'."\n".$numeroProducteurs;
+                            $textQR = 'N° CONNAISSEMENT USINE: '.$livraisonInfo->numeroCU."\n".'Date de livraison:'.showDateTime($livraisonInfo->date_livraison, 'd/m/Y')."\n".'COOPERATIVE:'.$livraisonInfo->cooperative->name."\n".'MAGASIN CENTRAL:'.$livraisonInfo->magasinCentral->nom."\n".'PRODUCTEURS :'."\n".$numeroProducteurs;
                             ?>
                         {!! QrCode::size(150)->generate($textQR) !!}
                              
@@ -37,19 +37,19 @@
                         <div style="width:30%;">
                             @lang('DE')
                             <address>
-                                <strong>{{ __($livraisonInfo->magasinSection->nom) }}</strong><br>
-                                {{ __($livraisonInfo->magasinSection->user->adresse) }}<br>
-                                @lang('Contact'): {{ $livraisonInfo->magasinSection->user->mobile }}<br>
-                                @lang('Email'): {{ $livraisonInfo->magasinSection->user->email }}
-                            </address>
-                        </div> 
-                        <div style="width:30%;">
-                        @lang('A')
-                        <address>
                                 <strong>{{ __($livraisonInfo->magasinCentral->nom) }}</strong><br>
                                 {{ __($livraisonInfo->magasinCentral->user->adresse) }}<br>
                                 @lang('Contact'): {{ $livraisonInfo->magasinCentral->user->mobile }}<br>
                                 @lang('Email'): {{ $livraisonInfo->magasinCentral->user->email }}
+                            </address>
+                        </div> 
+                        <div style="width:30%;">
+                        @lang('A')
+                            <address>
+                                <strong>COMPAGNIE CACAOYERE DU BANDAMA (CCB)</strong><br>
+                                {{ __($livraisonInfo->receiver_address) }}<br>
+                                @lang('Contact'): {{ $livraisonInfo->receiver_phone }}<br>
+                                @lang('Email'): {{ $livraisonInfo->receiver_email }}
                             </address>
                         </div>
 
@@ -73,7 +73,7 @@
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $livraisonProductInfo->producteur->nom }} {{ $livraisonProductInfo->producteur->prenoms }}</td> 
                                             <td>{{ __(@$livraisonProductInfo->type_produit) }}</td> 
-                                            <td>{{ $livraisonProductInfo->quantite+$livraisonProductInfo->quantite_sortant }} </td> 
+                                            <td>{{ $livraisonProductInfo->quantite }} </td> 
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -89,7 +89,7 @@
                                         
                                         <tr>
                                             <th>@lang('Total'):</th>
-                                            <td>{{ showAmount(@$livraisonInfo->products->sum('quantite')+@$livraisonInfo->products->sum('quantite_sortant')) }} Kg
+                                            <td>{{ showAmount(@$livraisonInfo->products->sum('quantite')) }} Kg
                                             </td>
                                         </tr>
                                     </tbody>

@@ -46,4 +46,9 @@ class StockMagasinCentral extends Model
     {
         return $this->belongsTo(Vehicule::class, 'vehicule_id');
     }
+
+    public function products()
+    {
+        return $this->hasMany(LivraisonMagasinCentralProducteur::class, 'stock_magasin_central_id', 'id');
+    }
 }
