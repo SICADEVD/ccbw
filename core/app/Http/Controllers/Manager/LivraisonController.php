@@ -56,7 +56,7 @@ class LivraisonController extends Controller
         ->paginate(getPaginate());
  
         $total = $livraisonProd->sum('qty');
-        $pageTitle    = "Livraison des Magasins de Section ($total)";
+        $pageTitle    = "Livraison des Magasins de Section (".showAmount($total).") Kg";
         $magasins  = MagasinSection::joinRelationship('section')->where('cooperative_id',$staff->cooperative_id)->get();
         $sections = Section::get();
         return view('manager.livraison.index', compact('pageTitle', 'livraisonProd','total','sections','magasins'));
@@ -74,7 +74,7 @@ class LivraisonController extends Controller
         ->orderBy('stock_magasin_sections.id','desc')->paginate(getPaginate());
  
         $total = $stocks->sum('stocks_entrant');
-        $pageTitle    = "Stock des Magasins de Section ($total)";
+        $pageTitle    = "Stock des Magasins de Section (".showAmount($total).") Kg";
         $magasins  = MagasinSection::joinRelationship('section')->where('cooperative_id',$staff->cooperative_id)->get();
         $sections = Section::get();
         return view('manager.livraison.stock', compact('pageTitle', 'stocks','total','sections','magasins'));
