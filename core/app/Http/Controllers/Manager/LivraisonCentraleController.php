@@ -191,11 +191,11 @@ class LivraisonCentraleController extends Controller
             $prod->save();
             }
 
-            $stockCent = StockMagasinSection::where('id',$stock_magasin_central[$i])->first();
+            $stockCent = StockMagasinCentral::where('id',$stock_magasin_central[$i])->first();
             if($stockCent !=null){ 
                  
-            $stockCent->stocks_entrant = $stockCent->stocks_entrant - $quantite[$i];
-            $stockCent->stocks_sortant = $stockCent->stocks_sortant + $quantite[$i];
+            $stockCent->stocks_mag_entrant = $stockCent->stocks_mag_entrant - $quantite[$i];
+            $stockCent->stocks_mag_sacs_entrant = $stockCent->stocks_mag_sacs_entrant + $quantite[$i];
            
             $stockCent->save();
             }
