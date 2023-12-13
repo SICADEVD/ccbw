@@ -16,7 +16,7 @@
                     </h3>
                 </div>
                     <div style="width:30%;">
-                   
+                    <div class="text-center">
                     <?php $numeroProducteurs=''; ?>
                 @foreach($livraisonInfo->products as $prodc)
                             <?php $numeroProducteurs .= $prodc->parcelle->producteur->nom.' '.$prodc->parcelle->producteur->prenoms.'('.$prodc->parcelle->producteur->codeProdapp.')'."\n"; ?>
@@ -27,7 +27,7 @@
                             ?>
                         {!! QrCode::size(150)->generate($textQR) !!}
                              
-                         
+                    </div>
                     </div>
                 </div>
 
