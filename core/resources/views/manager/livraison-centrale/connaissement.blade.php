@@ -98,7 +98,7 @@
                                         </td>
                                         <td>
                                             <a href="{{ route('manager.livraison.usine.invoice',encrypt($produit->id))}}"
-                                                title="" class="btn btn-sm btn-outline--info" target="_blank">
+                                                title="" class="btn btn-sm btn-outline--info">
                                                 <i class="las la-file-invoice"></i> @lang("Détails livraisons")
                                             </a>
                                             @if ($produit->status == 1)
