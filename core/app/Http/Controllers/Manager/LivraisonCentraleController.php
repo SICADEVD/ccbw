@@ -228,7 +228,7 @@ class LivraisonCentraleController extends Controller
             if($prod !=null){ 
                  
             $prod->quantite = $prod->quantite - $quantite[$i];
-            $prod->quantite_restant = $prod->quantite_restant + $quantite[$i];
+            $prod->quantite_sortant = $prod->quantite_sortant + $quantite[$i];
            
             $prod->save();
             }

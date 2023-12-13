@@ -73,7 +73,7 @@
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $livraisonProductInfo->producteur->nom }} {{ $livraisonProductInfo->producteur->prenoms }}</td> 
                                             <td>{{ __(@$livraisonProductInfo->type_produit) }}</td> 
-                                            <td>{{ $livraisonProductInfo->quantite+$livraisonProductInfo->quantite_restant }} </td> 
+                                            <td>{{ $livraisonProductInfo->quantite+$livraisonProductInfo->quantite_sortant }} </td> 
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -89,7 +89,7 @@
                                         
                                         <tr>
                                             <th>@lang('Total'):</th>
-                                            <td>{{ showAmount(@$livraisonInfo->products->sum('quantite')+@$livraisonInfo->products->sum('quantite_restant')) }} Kg
+                                            <td>{{ showAmount(@$livraisonInfo->products->sum('quantite')+@$livraisonInfo->products->sum('quantite_sortant')) }} Kg
                                             </td>
                                         </tr>
                                     </tbody>
