@@ -120,7 +120,7 @@
                     @method('POST')
                     <input type="hidden" name="code">
                     <div class="modal-body">
-                        <p>@lang('Etre-vous sûr de vouloir confirmer la reception de cette livraison?')</p>
+                        <p>@lang('Etre-vous sûr de vouloir confirmer le paiement de ce producteur?')</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn--dark" data-bs-dismiss="modal">@lang('Fermer')</button>

@@ -92,10 +92,10 @@
                                         </td>
                                          
                                         <td>
-                                            {{ $produit->stocks_mag_entrant }} 
+                                            {{ showAmount($produit->stocks_mag_entrant) }} 
                                         </td>
                                         <td>
-                                            {{ $produit->stocks_mag_sortant }} 
+                                            {{ showAmount($produit->stocks_mag_sortant) }} 
                                         </td> 
                                         <td> 
                                             @if($produit->status == Status::COURIER_DISPATCH)

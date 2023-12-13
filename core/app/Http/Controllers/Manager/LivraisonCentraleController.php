@@ -79,7 +79,7 @@ class LivraisonCentraleController extends Controller
         ->paginate(getPaginate());
  
         $total = $stocks->sum('stocks_entrant');
-        $pageTitle    = "Stock des Magasins de Section ($total)";
+        $pageTitle    = "Stock des Magasins de Section (".showAmount($total).") Kg";
         $magasins  = MagasinCentral::where('cooperative_id',$staff->cooperative_id)->with('cooperative')->get();
         $sections = Section::get();
         return view('manager.livraison-centrale.stock', compact('pageTitle', 'stocks','total','sections','magasins'));
@@ -98,7 +98,7 @@ class LivraisonCentraleController extends Controller
         ->paginate(getPaginate());
  
         $total = $stocks->sum('quantite_livre');
-        $pageTitle    = "Connaissements Usine ($total)";
+        $pageTitle    = "Connaissements Usine (".showAmount($total).") Kg";
         $magasins  = MagasinCentral::where('cooperative_id',$staff->cooperative_id)->with('cooperative')->get();
         $sections = Section::get();
         return view('manager.livraison-centrale.connaissement', compact('pageTitle', 'stocks','total','sections','magasins'));
@@ -121,7 +121,7 @@ class LivraisonCentraleController extends Controller
         ->paginate(getPaginate());
   
         $total = $stocks->sum('montant');
-        $pageTitle    = "Prime des producteurs ($total)";
+        $pageTitle    = "Prime des producteurs (".showAmount($total).") FCFA";
         $magasins  = MagasinSection::joinRelationship('section')->where([['cooperative_id',$staff->cooperative_id]])->with('user')->orderBy('nom')->get();
         $sections = Section::get();
         return view('manager.livraison-centrale.prime', compact('pageTitle', 'stocks','total','sections','magasins'));
