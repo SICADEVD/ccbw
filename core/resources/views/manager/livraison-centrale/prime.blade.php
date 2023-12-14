@@ -75,13 +75,16 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <a href="{{ route('manager.livraison.usine.invoice',['campagne=>$produit->campagne_id,periode=>$produit->campagne_periode_id,producteur=>$produit->producteur_id'])}}"
-                                                title="" class="btn btn-sm btn-outline--info" target="_blank">
+                                            <a href="{{ route('manager.livraison.prime.invoice',['campagne'=>$produit->campagne_id,'periode'=>$produit->campagne_periode_id,'producteur'=>$produit->producteur_id])}}"
+                                                title="" class="btn btn-sm btn-outline--info">
                                                 <i class="las la-file-invoice"></i> @lang("Détails livraisons")
                                             </a>
                                             @if ($produit->status == 1)
                                                 <button class="btn btn-sm btn-outline--primary  delivery"
-                                                    data-code="{{ $produit->numeroCU }}"><i class="las la-truck"></i>
+                                                    data-campagne="{{ $produit->campagne_id }}"
+                                                    data-periode ="{{ $produit->campagne_periode_id }}"
+                                                    data-producteur ="{{ $produit->producteur_id }}" 
+                                                    ><i class="las la-truck"></i>
                                                     @lang('Confirmer le paiement')</button>
                                             @endif
                                         </td>
@@ -115,10 +118,12 @@
                         <span class="fa fa-times"></span>
                     </button>
                 </div>
-                <form action="{{ route('manager.livraison.usine.delivery') }}" method="POST">
+                <form action="{{ route('manager.livraison.prime.delivery') }}" method="POST">
                     @csrf
                     @method('POST')
-                    <input type="hidden" name="code">
+                    <input type="hidden" name="campagne">
+                    <input type="hidden" name="periode">
+                    <input type="hidden" name="producteur">
                     <div class="modal-body">
                         <p>@lang('Etre-vous sûr de vouloir confirmer le paiement de ce producteur?')</p>
                     </div>
@@ -148,7 +153,9 @@
          (function($) { 
             $('.delivery').on('click', function() {
                 var modal = $('#deliveryBy');
-                modal.find('input[name=code]').val($(this).data('code'))
+                modal.find('input[name=campagne]').val($(this).data('campagne'))
+                modal.find('input[name=periode]').val($(this).data('periode'))
+                modal.find('input[name=producteur]').val($(this).data('producteur'))
                 modal.modal('show');
             });
         })(jQuery)
