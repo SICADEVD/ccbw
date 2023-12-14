@@ -23,7 +23,7 @@ class SuiviParcelle extends Model
         return $this->belongsTo(Parcelle::class);
     }
 
-    public function parasite()
+    public function parasites()
     {
         return $this->hasMany(SuiviParcellesParasite::class, 'suivi_parcelle_id', 'id');
     }
@@ -42,14 +42,12 @@ class SuiviParcelle extends Model
     public function insectes(){
         return $this->hasMany(SuiviParcellesInsecteAmi::class, 'suivi_parcelle_id', 'id');
     }
-    public function pesticides(){
-        return $this->hasMany(Suivi_parcelle_pesticide::class, 'suivi_parcelle_id', 'id');
-    }
-    public function autreParasite(){
+    
+    public function autreParasites(){
         return $this->hasMany(SuiviParcellesAutreParasite::class, 'suivi_parcelle_id', 'id');
     }
     public function traitements(){
-        return $this->hasMany(SuiviParcellesTraitements::class, 'suivi_parcelle_id', 'id');
+        return $this->hasMany(SuiviParcellesTraitement::class, 'suivi_parcelle_id', 'id');
     }
     public function pesticidesAnneDerniere(){
         return $this->hasMany(SuiviParcellesPesticideAnneDerniere::class, 'suivi_parcelle_id', 'id');

@@ -334,13 +334,16 @@ class SuiviParcelleController extends Controller
         $suiviparcelle   = SuiviParcelle::findOrFail($id);
         $pesticidesAnneDerniere = $suiviparcelle->pesticidesAnneDerniere;
         $intrantsAnneDerniere = $suiviparcelle->intrantsAnneDerniere;
-        $traitements = $suiviparcelle->traitement;
+        $traitements = $suiviparcelle->traitements;
+        $parasites = $suiviparcelle->parasites;
+        $autreParasites = $suiviparcelle->autreParasites;
+        $amis = $suiviparcelle->insectes;
         $arbres = Agroespecesarbre::all();
         $arbreAgroForestiers = SuiviParcellesAgroforesterie::where('suivi_parcelle_id', $id)->get();
         $arbreOmbrages = SuiviParcellesOmbrage::where('suivi_parcelle_id', $id)->pluck('agroespecesarbre_id')->toArray();
         $parasites = SuiviParcellesParasite::where('suivi_parcelle_id', $id)->get();
 
-        return view('manager.suiviparcelle.edit', compact('pageTitle', 'suiviparcelle', 'producteurs', 'localites', 'campagnes', 'parcelles', 'sections', 'arbres', 'arbreOmbrages', 'arbreAgroForestiers', 'parasites', 'pesticidesAnneDerniere', 'intrantsAnneDerniere', 'traitements'));
+        return view('manager.suiviparcelle.edit', compact('pageTitle', 'suiviparcelle', 'producteurs', 'localites', 'campagnes', 'parcelles', 'sections', 'arbres', 'arbreOmbrages', 'arbreAgroForestiers', 'parasites', 'pesticidesAnneDerniere', 'intrantsAnneDerniere', 'traitements','autreParasites','amis'));
     }
 
     public function statusSuiviParc($id)

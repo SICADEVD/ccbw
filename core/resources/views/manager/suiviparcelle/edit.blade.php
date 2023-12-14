@@ -83,7 +83,7 @@
 
                         <div class="form-group row">
                             <label class="col-sm-4 control-label">@lang('Quelle variété d’arbre ombrage souhaiterais-tu avoir
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ?')</label>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ?')</label>
                             <div class="col-xs-12 col-sm-8">
                                 <select class="form-control select2-multi-select" name="arbre[]" id="arbre" multiple
                                     required>
@@ -120,7 +120,7 @@
                             <div class="col-lg-12">
                                 <div class="card border--primary mt-3">
                                     <h5 class="card-header bg--primary text-white">@lang('Quels sont les arbres agro-forestiers
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            obtenus ?')
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            obtenus ?')
                                         <button type="button" class="btn btn-sm btn-outline-light float-end addUserData"><i
                                                 class="la la-fw la-plus"></i>@lang('Ajouter un arbre agro-forestier')
                                         </button>
@@ -208,12 +208,15 @@
                                                                     <option value="Fongicides"
                                                                         {{ $pesticide['nom'] == 'Fongicides' ? 'selected' : '' }}>
                                                                         Fongicides</option>
-                                                                    <option value="Insecticides"
-                                                                        {{ $pesticide['nom'] == 'Insecticides' ? 'selected' : '' }}>
-                                                                        Insecticides</option>
                                                                     <option value="Nematicides"
                                                                         {{ $pesticide['nom'] == 'Nematicides' ? 'selected' : '' }}>
                                                                         Nematicides</option>
+                                                                    <option value="Insecticides"
+                                                                        {{ $pesticide['nom'] == 'Insecticides' ? 'selected' : '' }}>
+                                                                        Insecticides</option>
+                                                                    <option value="Acaricides"
+                                                                        {{ $pesticide['nom'] == 'Acaricides' ? 'selected' : '' }}>
+                                                                        Acaricides</option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -276,7 +279,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="col-xs-12 col-sm-8">
-                                                            <button type="button" id="{{ $index }}"
+                                                            <button type="button" id="{{ $index + 1 }}"
                                                                 class="removeRowPesticidesAnneDerniere btn btn-danger btn-sm"><i
                                                                     class="fa fa-minus"></i></button>
                                                         </div>
@@ -299,7 +302,7 @@
                                                                 <option value="">Selectionner une option</option>
                                                                 <option value="Herbicides">Herbicides</option>
                                                                 <option value="Fongicides">Fongicides</option>
-                                                                <option value="Nematicide">Nematicide</option>
+                                                                <option value="Nematicides">Nematicides</option>
                                                                 <option value="Insecticides">Insecticides</option>
                                                                 <option value="Acaricides">Acaricides</option>
                                                             </select>
@@ -375,78 +378,183 @@
                             <div class="col-xs-12 col-sm-12">
                                 <table class="table table-striped table-bordered">
                                     <tbody id="intrantsAnneDerniere_area">
-                                        <tr>
-                                            <td class="row">
-                                                <div class="col-xs-12 col-sm-12 bg-success">
-                                                    <badge class="btn  btn-outline--warning h-45 btn-sm">
-                                                        @lang('Intrant')
-                                                    </badge>
-                                                </div>
-                                                <div class="col-xs-12 col-sm-4">
-                                                    <div class="form-group row">
-                                                        <label class="control-label">Nom</label>
-                                                        <select name="intrantsAnneDerniere[0][nom]"
-                                                            id="intrantsAnneDerniere-1" class="form-control">
-                                                            <option value="">Selectionner une option</option>
-                                                            <option value="Dechets animaux">Dechets animaux
-                                                            </option>
-                                                            <option value="NPK">NPK</option>
-                                                            <option value="Compost">Compost</option>
-                                                            <option value="Biofertilisant/Bio stimulant">
-                                                                Biofertilisant/Bio stimulant</option>
-                                                            <option value="Engrais organique préfabriqué">Engrais
-                                                                organique préfabriqué</option>
-                                                            <option value="Engrais organique préfabriqué">Engrais
-                                                                foliaire</option>
-                                                        </select>
+                                        @if ($intrantsAnneDerniere)
+                                            @foreach ($intrantsAnneDerniere as $index => $intrant)
+                                                <tr>
+                                                    <td class="row">
+                                                        <div class="col-xs-12 col-sm-12 bg-success">
+                                                            <badge class="btn  btn-outline--warning h-45 btn-sm">
+                                                                @lang('Intrant') {{ $index + 1 }}
+                                                            </badge>
+                                                        </div>
+                                                        <div class="col-xs-12 col-sm-4">
+                                                            <div class="form-group row">
+                                                                <label class="control-label">Nom</label>
+                                                                <select
+                                                                    name="intrantsAnneDerniere[{{ $index }}][nom]"
+                                                                    id="intrantsAnneDerniere-{{ $index }}"
+                                                                    class="form-control">
+                                                                    <option value="">Selectionner une option</option>
+                                                                    <option value="Herbicides"
+                                                                        {{ $intrant['nom'] == 'Dechets animaux' ? 'selected' : '' }}>
+                                                                        Dechets animaux</option>
+                                                                    <option value="NPK"
+                                                                        {{ $intrant['nom'] == 'NPK' ? 'selected' : '' }}>
+                                                                        NPK</option>
+                                                                    <option value="Compost"
+                                                                        {{ $intrant['nom'] == 'Compost' ? 'selected' : '' }}>
+                                                                        Compost</option>
+                                                                    <option value="Biofertilisant/Bio stimulant"
+                                                                        {{ $intrant['nom'] == 'Biofertilisant/Bio stimulant' ? 'selected' : '' }}>
+                                                                        Biofertilisant/Bio stimulant</option>
+                                                                    <option value="Engrais organique préfabriqué"
+                                                                        {{ $intrant['nom'] == 'Engrais organique préfabriqué' ? 'selected' : '' }}>
+                                                                        Engrais organique préfabriqué</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-12 col-sm-2">
+                                                            <div class="form-group row">
+                                                                <label class="control-label">Unité</label>
+                                                                <select class="form-control unite"
+                                                                    name="intrantsAnneDerniere[{{ $index }}][unite]"
+                                                                    id="unite-{{ $index }}">
+                                                                    <option value="">Selectionner une option</option>
+                                                                    <option value="Kg"
+                                                                        {{ $intrant['unite'] == 'Kg' ? 'selected' : '' }}>
+                                                                        Kg</option>
+                                                                    <option value="L"
+                                                                        {{ $intrant['unite'] == 'L' ? 'selected' : '' }}>
+                                                                        L</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-12 col-sm-2">
+                                                            <div class="form-group row">
+                                                                <label class="control-label">Quantité</label>
+                                                                <input type="number"
+                                                                    name="intrantsAnneDerniere[{{ $index }}][quantite]"
+                                                                    id="quantite-{{ $index }}"
+                                                                    class="form-control quantite" placeholder="Quantité"
+                                                                    value="{{ $intrant['quantite'] }}">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-12 col-sm-2">
+                                                            <div class="form-group row">
+                                                                {{ Form::label(__('Type de contenant'), null, ['class' => '']) }}
+                                                                <select class="form-control contenant"
+                                                                    name="intrantsAnneDerniere[{{ $index }}][contenant]"
+                                                                    id="contenant-{{ $index }}">
+                                                                    <option value="">Selectionner une option</option>
+                                                                    <option value="Sac"
+                                                                        {{ $intrant['contenant'] == 'Sac' ? 'selected' : '' }}>
+                                                                        Sac</option>
+                                                                    <option value="Sachet"
+                                                                        {{ $intrant['contenant'] == 'Sachet' ? 'selected' : '' }}>
+                                                                        Sachet</option>
+                                                                    <option value="Boîte"
+                                                                        {{ $intrant['contenant'] == 'Boîte' ? 'selected' : '' }}>
+                                                                        Boîte</option>
+                                                                    <option value="Pot"
+                                                                        {{ $intrant['contenant'] == 'Pot' ? 'selected' : '' }}>
+                                                                        Pot</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-12 col-sm-2">
+                                                            <div class="form-group row">
+                                                                {{ Form::label(__('Fréquence'), null, ['class' => '']) }}
+                                                                <input type="number"
+                                                                    name="intrantsAnneDerniere[{{ $index }}][frequence]"
+                                                                    id="frequence-{{ $index }}"
+                                                                    class="form-control frequence" placeholder="Fréquence"
+                                                                    value="{{ $intrant['frequence'] }}">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-12 col-sm-8">
+                                                            <button type="button" id="{{ $index + 1 }}"
+                                                                class="removeRowIntrantsAnneDerniere btn btn-danger btn-sm"><i
+                                                                    class="fa fa-minus"></i></button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @else
+                                            <tr>
+                                                <td class="row">
+                                                    <div class="col-xs-12 col-sm-12 bg-success">
+                                                        <badge class="btn  btn-outline--warning h-45 btn-sm">
+                                                            @lang('Intrant')
+                                                        </badge>
                                                     </div>
-                                                </div>
+                                                    <div class="col-xs-12 col-sm-4">
+                                                        <div class="form-group row">
+                                                            <label class="control-label">Nom</label>
+                                                            <select name="intrantsAnneDerniere[0][nom]"
+                                                                id="intrantsAnneDerniere-1" class="form-control">
+                                                                <option value="">Selectionner une option</option>
+                                                                <option value="Dechets animaux">Dechets animaux
+                                                                </option>
+                                                                <option value="NPK">NPK</option>
+                                                                <option value="Compost">Compost</option>
+                                                                <option value="Biofertilisant/Bio stimulant">
+                                                                    Biofertilisant/Bio stimulant</option>
+                                                                <option value="Engrais organique préfabriqué">Engrais
+                                                                    organique préfabriqué</option>
+                                                                <option value="Engrais organique préfabriqué">Engrais
+                                                                    foliaire</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
 
-                                                <div class="col-xs-12 col-sm-2">
-                                                    <div class="form-group row">
-                                                        <label class="control-label">Unité</label>
-                                                        <select class="form-control unite"
-                                                            name="intrantsAnneDerniere[0][unite]" id="unite-1">
-                                                            <option value="">Selectionner une option</option>
-                                                            <option value="Kg">Kg</option>
-                                                            <option value="L">L</option>
-                                                        </select>
+                                                    <div class="col-xs-12 col-sm-2">
+                                                        <div class="form-group row">
+                                                            <label class="control-label">Unité</label>
+                                                            <select class="form-control unite"
+                                                                name="intrantsAnneDerniere[0][unite]" id="unite-1">
+                                                                <option value="">Selectionner une option</option>
+                                                                <option value="Kg">Kg</option>
+                                                                <option value="L">L</option>
+                                                            </select>
+                                                        </div>
                                                     </div>
-                                                </div>
 
-                                                <div class="col-xs-12 col-sm-2">
-                                                    <div class="form-group row">
-                                                        <label class="control-label">Quantité</label>
+                                                    <div class="col-xs-12 col-sm-2">
+                                                        <div class="form-group row">
+                                                            <label class="control-label">Quantité</label>
 
-                                                        <input type="number" name="intrantsAnneDerniere[0][quantite]"
-                                                            id="quantite-1" class="form-control quantite"
-                                                            placeholder="Quantité">
+                                                            <input type="number" name="intrantsAnneDerniere[0][quantite]"
+                                                                id="quantite-1" class="form-control quantite"
+                                                                placeholder="Quantité">
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-xs-12 col-sm-2">
-                                                    <div class="form-group row">
-                                                        {{ Form::label(__('Type de contenant'), null, ['class' => '']) }}
-                                                        <select class="form-control contenant"
-                                                            name="intrantsAnneDerniere[0][contenant]" id="contenant-1">
-                                                            <option value="">Selectionner une option</option>
-                                                            <option value="Sac">Sac</option>
-                                                            <option value="Sachet">Sachet</option>
-                                                            <option value="Boîte">Boîte</option>
-                                                            <option value="Pot">Pot</option>
-                                                        </select>
+                                                    <div class="col-xs-12 col-sm-2">
+                                                        <div class="form-group row">
+                                                            {{ Form::label(__('Type de contenant'), null, ['class' => '']) }}
+                                                            <select class="form-control contenant"
+                                                                name="intrantsAnneDerniere[0][contenant]"
+                                                                id="contenant-1">
+                                                                <option value="">Selectionner une option</option>
+                                                                <option value="Sac">Sac</option>
+                                                                <option value="Sachet">Sachet</option>
+                                                                <option value="Boîte">Boîte</option>
+                                                                <option value="Pot">Pot</option>
+                                                            </select>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-xs-12 col-sm-2">
-                                                    <div class="form-group row">
-                                                        {{ Form::label(__('Fréquence'), null, ['class' => '']) }}
-                                                        <input type="number" name="intrantsAnneDerniere[0][frequence]"
-                                                            id="frequence-1" class="form-control frequence"
-                                                            placeholder="Fréquence">
+                                                    <div class="col-xs-12 col-sm-2">
+                                                        <div class="form-group row">
+                                                            {{ Form::label(__('Fréquence'), null, ['class' => '']) }}
+                                                            <input type="number"
+                                                                name="intrantsAnneDerniere[0][frequence]" id="frequence-1"
+                                                                class="form-control frequence" placeholder="Fréquence">
+                                                        </div>
                                                     </div>
-                                                </div>
 
-                                            </td>
-                                        </tr>
+                                                </td>
+                                            </tr>
+                                        @endif
+
                                     </tbody>
                                     <tfoot style="background: #e3e3e3;">
                                         <tr>
@@ -522,244 +630,646 @@
                             </div>
                         </div>
                     </div>
-                    <hr class="panel-wide">
+                    <div class="fieldset-like">
+                        <legend class="legend-center">
+                            <h5 class="font-weight-bold text-decoration-underline">Evaluation des insectes ravageurs ou
+                                parasites du cacaoyer dans la parcelle</h5>
+                        </legend>
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Présence d’insectes parasites ou ravageurs ?'), null, ['class' => 'col-sm-6 control-label']); ?>
+                            <div class="col-xs-12 col-sm-6">
+                                <?php echo Form::select('presenceInsectesParasites', ['' => 'Selectionner une option', 'non' => __('non'), 'oui' => __('oui')], null, ['class' => 'form-control presenceInsectesParasites']); ?>
+                            </div>
+                        </div>
+                        {{-- presence d'insecte  --}}
+                        <div class="form-group row" id="presenceInsectesParasitesRavageurs">
 
-                    <div class="form-group row">
-                        <?php echo Form::label(__('Présence d’insectes parasites ou ravageurs ?'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('presenceInsectesParasites', ['non' => __('non'), 'oui' => __('oui')], null, ['class' => 'form-control presenceInsectesParasites']); ?>
+                            <div class="col-xs-12 col-sm-12">
+                                <table class="table table-striped table-bordered">
+                                    <tbody id="insectesParasites_area">
+                                        @if ($parasites)
+                                            @foreach ($parasites as $index => $parasite)
+                                                <tr>
+                                                    <td class="row">
+                                                        <div class="col-xs-12 col-sm-12 bg-success">
+                                                            <badge class="btn  btn-outline--warning h-45 btn-sm">
+                                                                @lang('Insectes parasites ou ravageurs') {{ $index + 1 }}
+                                                            </badge>
+                                                        </div>
+                                                        <div class="col-xs-12 col-sm-6">
+                                                            <div class="form-group row">
+                                                                {{ Form::label(__('Nom'), null, ['class' => 'control-label']) }}
+                                                                <select name="insectesParasites[{{ $index }}][nom]"
+                                                                    id="insectesParasites-{{ $index }}"
+                                                                    class="form-control">
+                                                                    <option value="">Selectionner une option</option>
+                                                                    <option value="Mirides"
+                                                                        {{ $parasite['parasite'] == 'Mirides' ? 'selected' : '' }}>
+                                                                        Mirides</option>
+                                                                    <option value="Punaises"
+                                                                        {{ $parasite['parasite'] == 'Punaises' ? 'selected' : '' }}>
+                                                                        Punaises</option>
+                                                                    <option value="Foreurs"
+                                                                        {{ $parasite['parasite'] == 'Foreurs' ? 'selected' : '' }}>
+                                                                        Foreurs</option>
+                                                                    <option value="Chenilles"
+                                                                        {{ $parasite['parasite'] == 'Chenilles' ? 'selected' : '' }}>
+                                                                        Chenilles</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-12 col-sm-6">
+                                                            <div class="form-group row">
+                                                                <label>Quantité</label>
+                                                                <select class="form-control nombreinsectesParasites"
+                                                                    name="insectesParasites[{{ $index }}][nombreinsectesParasites]"
+                                                                    id="nombreinsectesParasites-{{ $index }}">
+                                                                    <option value="">Selectionne une option</option>
+                                                                    <option value="Faible"
+                                                                        {{ $parasite['nombre'] == 'Faible' ? 'selected' : '' }}>
+                                                                        Faible</option>
+                                                                    <option value="Moyen"
+                                                                        {{ $parasite['nombre'] == 'Moyen' ? 'selected' : '' }}>
+                                                                        Moyen</option>
+                                                                    <option value="Elevé"
+                                                                        {{ $parasite['nombre'] == 'Elevé' ? 'selected' : '' }}>
+                                                                        Elevé</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-12 col-sm-8">
+                                                            <button type="button" id="{{ $index + 1 }}"
+                                                                class="removeRowinsectesParasites btn btn-danger btn-sm"><i
+                                                                    class="fa fa-minus"></i></button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @else
+                                            <tr>
+                                                <td class="row">
+                                                    <div class="col-xs-12 col-sm-12 bg-success">
+                                                        <badge class="btn  btn-outline--warning h-45 btn-sm">
+                                                            @lang('Insectes parasites ou ravageurs')
+                                                        </badge>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-6">
+                                                        <div class="form-group row">
+                                                            {{ Form::label(__('Nom'), null, ['class' => 'control-label']) }}
+                                                            <select name="insectesParasites[0][nom]"
+                                                                id="insectesParasites-1" class="form-control">
+                                                                <option value="">Selectionner une option</option>
+                                                                <option value="Mirides">Mirides</option>
+                                                                <option value="Punaises">Punaises</option>
+                                                                <option value="Foreurs">Foreurs</option>
+                                                                <option value="Chenilles">Chenilles</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-xs-12 col-sm-6">
+                                                        <div class="form-group row">
+                                                            <label>Quantité</label>
+                                                            <select class="form-control nombreinsectesParasites"
+                                                                name="insectesParasites[0][nombreinsectesParasites]"
+                                                                id="nombreinsectesParasites-1">
+                                                                <option value="">Selectionne une option</option>
+                                                                <option value="Faible">Faible</option>
+                                                                <option value="Moyen">Moyen</option>
+                                                                <option value="Elevé">Elevé</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                </td>
+                                            </tr>
+                                        @endif
+
+                                    </tbody>
+                                    <tfoot style="background: #e3e3e3;">
+                                        <tr>
+
+                                            <td colspan="3">
+                                                <button id="addRowinsectesParasites" type="button"
+                                                    class="btn btn-success btn-sm"><i class="fa fa-plus"></i></button>
+                                            </td>
+                                        <tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                        {{-- fin presence d'insecte --}}
+
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Avez-vous observé d\'autres insectes ou ravageur qui n\'apparaissent pas dans la liste précédente ?'), null, ['class' => 'col-sm-6 control-label']); ?>
+                            <div class="col-xs-12 col-sm-6">
+                                <?php echo Form::select('autreInsecte', ['' => 'Selectionner une option', 'non' => __('non'), 'oui' => __('oui')], null, ['class' => 'form-control autreInsecte', 'id' => 'autreInsecte', 'required']); ?>
+                            </div>
+                        </div>
+
+                        {{-- autre insecte --}}
+                        <div class="form-group row" id="presenceAutreInsecte">
+                            <div class="col-xs-12 col-sm-12">
+                                <table class="table table-striped table-bordered">
+                                    <tbody id="presenceAutreInsecte_area">
+                                        @if ($autreParasites)
+                                            @foreach ($autreParasites as $index => $autreParasite)
+                                                <tr>
+                                                    <td class="row">
+                                                        <div class="col-xs-12 col-sm-12 bg-success">
+                                                            <badge class="btn  btn-outline--warning h-45 btn-sm">
+                                                                @lang('Autres insectes parasites ou ravageurs') {{ $index + 1 }}
+                                                            </badge>
+                                                        </div>
+                                                        <div class="col-xs-12 col-sm-6">
+                                                            <div class="form-group row">
+                                                                {{ Form::label(__('Nom'), null, ['class' => 'control-label']) }}
+                                                                <input type="text"
+                                                                    name="presenceAutreInsecte[{{ $index }}][autreInsecteNom]"
+                                                                    id="autreInsecteNom-{{ $index }}"
+                                                                    class="form-control autreInsecteNom"
+                                                                    placeholder="Nom de l'insecte ou ravageur"
+                                                                    value="{{ $autreParasite['parasite'] }}">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-12 col-sm-6">
+                                                            <div class="form-group row">
+                                                                <label>Quantite</label>
+                                                                <select class="form-control nombreAutreInsectesParasites"
+                                                                    name="presenceAutreInsecte[{{ $index }}][nombreAutreInsectesParasites]"
+                                                                    id="nombreAutreInsectesParasites-{{ $index }}">
+                                                                    <option value="">Selectionne une option</option>
+                                                                    <option value="Faible"
+                                                                        {{ $autreParasite['nombre'] == 'Faible' ? 'selected' : '' }}>
+                                                                        Faible</option>
+                                                                    <option value="Moyen"
+                                                                        {{ $autreParasite['nombre'] == 'Moyen' ? 'selected' : '' }}>
+                                                                        Moyen</option>
+                                                                    <option value="Elevé"
+                                                                        {{ $autreParasite['nombre'] == 'Elevé' ? 'selected' : '' }}>
+                                                                        Elevé</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-12 col-sm-8">
+                                                            <button type="button" id="{{ $index + 1 }}"
+                                                                class="removeRowPresenceAutreInsecte btn btn-danger btn-sm">
+                                                                <i class="fa fa-minus"></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @else
+                                            <tr>
+                                                <td class="row">
+                                                    <div class="col-xs-12 col-sm-12 bg-success">
+                                                        <badge class="btn  btn-outline--warning h-45 btn-sm">
+                                                            @lang('Autres insectes parasites ou ravageurs')
+                                                        </badge>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-6">
+                                                        <div class="form-group row">
+                                                            {{ Form::label(__('Nom'), null, ['class' => 'control-label']) }}
+                                                            <input type="text"
+                                                                name="presenceAutreInsecte[0][autreInsecteNom]"
+                                                                id="autreInsecteNom-1"
+                                                                class="form-control autreInsecteNom"
+                                                                placeholder="Nom de l'insecte ou ravageur">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-xs-12 col-sm-6">
+                                                        <div class="form-group row">
+                                                            <label>Quantite</label>
+                                                            <select class="form-control nombreAutreInsectesParasites"
+                                                                name="presenceAutreInsecte[0][nombreAutreInsectesParasites]"
+                                                                id="nombreAutreInsectesParasites-0">
+                                                                <option value="">Selectionne une option</option>
+                                                                <option value="Faible">Faible</option>
+                                                                <option value="Moyen">Moyen</option>
+                                                                <option value="Elevé">Elevé</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endif
+                                    </tbody>
+                                    <tfoot style="background: #e3e3e3;">
+                                        <tr>
+
+                                            <td colspan="3">
+                                                <button id="addRowPresenceAutreInsecte" type="button"
+                                                    class="btn btn-success btn-sm"><i class="fa fa-plus"></i></button>
+                                            </td>
+                                        <tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                        {{-- fin autre insecte --}}
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Avez-vous traitez votre parcelle ?'), null, ['class' => 'col-sm-6 control-label']); ?>
+                            <div class="col-xs-12 col-sm-6">
+                                <?php echo Form::select('traiterParcelle', ['' => 'Selctionner une option', 'non' => __('non'), 'oui' => __('oui')], null, ['class' => 'form-control traiterParcelle', 'required']); ?>
+                            </div>
+                        </div>
+
+                        <div class="form-group row" id="traite">
+
+                            <div class="col-xs-12 col-sm-12">
+                                <table class="table table-striped table-bordered">
+                                    <tbody id="traitement_area">
+                                        @if ($traitements)
+                                            @foreach ($traitements as $index => $traitement)
+                                                <tr>
+                                                    <td class="row">
+                                                        <div class="col-xs-12 col-sm-12 bg-success">
+                                                            <badge class="btn  btn-outline--warning h-45 btn-sm">
+                                                                @lang('Traitement') {{ $index + 1 }}
+                                                            </badge>
+                                                        </div>
+                                                        <div class="col-xs-12 col-sm-4">
+                                                            <div class="form-group row">
+                                                                <label class="control-label">Nom</label>
+                                                                <select name="traitement[{{ $index }}][nom]"
+                                                                    id="traitement-{{ $index }}"
+                                                                    class="form-control">
+                                                                    <option value="">Selectionner une option
+                                                                    </option>
+                                                                    <option value="Herbicides"
+                                                                        {{ $traitement['nom'] == 'Herbicides' ? 'selected' : '' }}>
+                                                                        Herbicides</option>
+                                                                    <option value="Fongicides"
+                                                                        {{ $traitement['nom'] == 'Fongicides' ? 'selected' : '' }}>
+                                                                        Fongicides</option>
+                                                                    <option value="Compost"
+                                                                        {{ $traitement['nom'] == 'Compost' ? 'selected' : '' }}>
+                                                                        Compost</option>
+                                                                    <option value="Déchets animaux"
+                                                                        {{ $traitement['nom'] == 'Déchets animaux' ? 'selected' : '' }}>
+                                                                        Déchets animaux</option>
+                                                                    <option value="Fiente"
+                                                                        {{ $traitement['nom'] == 'Fiente' ? 'selected' : '' }}>
+                                                                        Fiente</option>
+                                                                    <option value="Nematicides"
+                                                                        {{ $traitement['nom'] == 'Nematicides' ? 'selected' : '' }}>
+                                                                        Nematicides</option>
+                                                                    <option value="Insecticide"
+                                                                        {{ $traitement['nom'] == 'Insecticide' ? 'selected' : '' }}>
+                                                                        Insecticide</option>
+                                                                    <option value="Biofertilisant"
+                                                                        {{ $traitement['nom'] == 'Biofertilisant' ? 'selected' : '' }}>
+                                                                        Biofertilisant</option>
+                                                                    <option value="Engrais chimique"
+                                                                        {{ $traitement['nom'] == 'Engrais chimique' ? 'selected' : '' }}>
+                                                                        Engrais chimique</option>
+                                                                    <option value="Engrais foliaire"
+                                                                        {{ $traitement['nom'] == 'Engrais foliaire' ? 'selected' : '' }}>
+                                                                        Engrais foliaire</option>
+                                                                    <option value="Bouse de vache"
+                                                                        {{ $traitement['nom'] == 'Bouse de vache' ? 'selected' : '' }}>
+                                                                        Bouse de vache</option>
+                                                                    <option value="NPK"
+                                                                        {{ $traitement['nom'] == 'NPK' ? 'selected' : '' }}>
+                                                                        NPK</option>
+                                                                    <option value="Insecticide organique"
+                                                                        {{ $traitement['nom'] == 'Insecticide organique' ? 'selected' : '' }}>
+                                                                        Insecticide organique</option>
+                                                                    <option value="Insecticide chimique"
+                                                                        {{ $traitement['nom'] == 'Insecticide chimique' ? 'selected' : '' }}>
+                                                                        Insecticide chimique</option>
+                                                                    <option value="Pesticides"
+                                                                        {{ $traitement['nom'] == 'Pesticides' ? 'selected' : '' }}>
+                                                                        Pesticides</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-12 col-sm-2">
+                                                            <div class="form-group row">
+                                                                <label class="control-label">Unité</label>
+                                                                <select class="form-control unite"
+                                                                    name="traitement[{{ $index }}][unite]"
+                                                                    id="unite-{{ $index }}">
+                                                                    <option value="">Selectionner une option
+                                                                    </option>
+                                                                    <option value="Kg"
+                                                                        {{ $traitement['unite'] == 'Kg' ? 'selected' : '' }}>
+                                                                        Kg</option>
+                                                                    <option value="L"
+                                                                        {{ $traitement['unite'] == 'L' ? 'selected' : '' }}>
+                                                                        L</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-12 col-sm-2">
+                                                            <div class="form-group row">
+                                                                <label class="control-label">Quantité</label>
+                                                                <input type="number"
+                                                                    name="traitement[{{ $index }}][quantite]"
+                                                                    id="quantite-{{ $index }}"
+                                                                    class="form-control quantite" placeholder="Quantité"
+                                                                    value="{{ $traitement['quantite'] }}">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-12 col-sm-2">
+                                                            <div class="form-group row">
+                                                                {{ Form::label(__('Type de contenant'), null, ['class' => '']) }}
+                                                                <select class="form-control contenant"
+                                                                    name="traitement[{{ $index }}][contenant]"
+                                                                    id="contenant-{{ $index }}">
+                                                                    <option value="">Selectionner une option
+                                                                    </option>
+                                                                    <option value="Sac"
+                                                                        {{ $traitement['contenant'] == 'Sac' ? 'selected' : '' }}>
+                                                                        Sac</option>
+                                                                    <option value="Sachet"
+                                                                        {{ $traitement['contenant'] == 'Sachet' ? 'selected' : '' }}>
+                                                                        Sachet</option>
+                                                                    <option value="Boîte"
+                                                                        {{ $traitement['contenant'] == 'Boîte' ? 'selected' : '' }}>
+                                                                        Boîte</option>
+                                                                    <option value="Pot"
+                                                                        {{ $traitement['contenant'] == 'Pot' ? 'selected' : '' }}>
+                                                                        Pot</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-12 col-sm-2">
+                                                            <div class="form-group row">
+                                                                {{ Form::label(__('Fréquence'), null, ['class' => '']) }}
+                                                                <input type="number"
+                                                                    name="traitement[{{ $index }}][frequence]"
+                                                                    id="frequence-{{ $index }}"
+                                                                    class="form-control frequence" placeholder="Fréquence"
+                                                                    value="{{ $traitement['frequence'] }}">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-12 col-sm-8">
+                                                            <button type="button" id="{{ $index }}"
+                                                                class="removeRowTraitement  btn btn-danger btn-sm"><i
+                                                                    class="fa fa-minus"></i></button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @else
+                                            <tr>
+                                                <td class="row">
+                                                    <div class="col-xs-12 col-sm-12 bg-success">
+                                                        <badge class="btn  btn-outline--warning h-45 btn-sm">
+                                                            @lang('Traitement')
+                                                        </badge>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-4">
+                                                        <div class="form-group row">
+                                                            <label class="control-label">Nom</label>
+                                                            <select name="traitement[0][nom]" id="traitement-1"
+                                                                class="form-control">
+                                                                <option value="">Selectionner une option</option>
+                                                                <option value="Herbicides">Herbicides</option>
+                                                                <option value="Fongicides">Fongicides</option>
+                                                                <option value="Compost">Compost</option>
+                                                                <option value="Déchets animaux">Déchets animaux</option>
+                                                                <option value="Fiente">Fiente</option>
+                                                                <option value="Nematicides">Nematicides</option>
+                                                                <option value="Insecticide">Insecticide</option>
+                                                                <option value="Biofertilisant">Biofertilisant</option>
+                                                                <option value="Engrais chimique">Engrais chimique</option>
+                                                                <option value="Engrais foliaire">Engrais foliaire</option>
+                                                                <option value="Bouse de vache">Bouse de vache</option>
+                                                                <option value="NPK>">NPK</option>
+                                                                <option value="Insecticide organique">Insecticide organique
+                                                                </option>
+                                                                <option value="Insecticide chimique">Insecticide chimique
+                                                                </option>
+                                                                <option value="Pesticides">Pesticides</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-xs-12 col-sm-2">
+                                                        <div class="form-group row">
+                                                            <label class="control-label">Unité</label>
+                                                            <select class="form-control unite" name="traitement[0][unite]"
+                                                                id="unite-1">
+                                                                <option value="">Selectionner une option</option>
+                                                                <option value="Kg">Kg</option>
+                                                                <option value="L">L</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-xs-12 col-sm-2">
+                                                        <div class="form-group row">
+                                                            <label class="control-label">Quantité</label>
+
+                                                            <input type="number" name="traitement[0][quantite]"
+                                                                id="quantite-1" class="form-control quantite"
+                                                                placeholder="Fréquence">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-2">
+                                                        <div class="form-group row">
+                                                            {{ Form::label(__('Type de contenant'), null, ['class' => '']) }}
+                                                            <select class="form-control contenant"
+                                                                name="traitement[0][contenant]" id="contenant-1">
+                                                                <option value="">Selectionner une option</option>
+                                                                <option value="Sac">Sac</option>
+                                                                <option value="Sachet">Sachet</option>
+                                                                <option value="Boîte">Boîte</option>
+                                                                <option value="Pot">Pot</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-2">
+                                                        <div class="form-group row">
+                                                            {{ Form::label(__('Fréquence'), null, ['class' => '']) }}
+                                                            <input type="number" name="traitement[0][frequence]"
+                                                                id="frequence-1" class="form-control frequence"
+                                                                placeholder="Fréquence">
+                                                        </div>
+                                                    </div>
+
+                                                </td>
+                                            </tr>
+                                        @endif
+                                    </tbody>
+                                    <tfoot style="background: #e3e3e3;">
+                                        <tr>
+                                            <td colspan="3">
+                                                <button id="addRowTraitement" type="button"
+                                                    class="btn btn-success btn-sm"><i class="fa fa-plus"></i></button>
+                                            </td>
+                                        <tr>
+                                    </tfoot>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                    <div class="form-group row" id="presenceInsectesParasitesRavageurs">
-                        <?php echo Form::label(__('Parasites ou Ravageurs'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('presenceInsectesParasitesRavageur', ['Mirides' => __('Mirides'), 'Punaise' => __('Punaise'), 'Foreurs' => __('Foreurs'), 'Chenilles' => __('Chenilles'), 'Autre' => __('Autre')], null, ['class' => 'form-control presenceInsectesParasitesRavageur']); ?>
+                    <div class="fieldset-like">
+                        <legend class="legend-center">
+                            <h5 class="font-weight-bold text-decoration-underline"> Evaluation des Insectes amis du
+                                Cacaoyer dans la parcelle</h5>
+                        </legend>
+
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Présence de Fourmis Rouge'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::select('presenceFourmisRouge', ['Faible' => __('Faible'), 'Moyen' => __('Moyen'), 'Elevé' => __('Elevé')], null, ['class' => 'form-control presenceFourmisRouge']); ?>
+                            </div>
                         </div>
-                    </div>
-                    {{-- présence de autre ravageur --}}
-                    <div class="form-group row" id="autrePresenceInsectesParasitesRavageurs">
-                        <?php echo Form::label(__('Autres des insectes parasites ou ravageurs'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <table class="table table-striped table-bordered">
-                                <tbody id="insectesParasites_area">
-                                    <?php
-        if($suiviparcelle->parasite)
+
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Présence d’Araignée'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::select('presenceAraignee', ['Faible' => __('Faible'), 'Moyen' => __('Moyen'), 'Elevé' => __('Elevé')], null, ['class' => 'form-control presenceAraignee']); ?>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Présence de Ver de Terre'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::select('presenceVerTerre', ['Faible' => __('Faible'), 'Moyen' => __('Moyen'), 'Elevé' => __('Elevé')], null, ['class' => 'form-control presenceVerTerre']); ?>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Présence de Mente Religieuse'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::select('presenceMenteReligieuse', ['Faible' => __('Faible'), 'Moyen' => __('Moyen'), 'Elevé' => __('Elevé')], null, ['class' => 'form-control presenceMenteReligieuse']); ?>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Présence d’autres types d’insecte amis ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::select('presenceAutreTypeInsecteAmi', ['' => 'Selectionner une option', 'non' => __('non'), 'oui' => __('oui')], null, ['class' => 'form-control presenceAutreTypeInsecteAmi']); ?>
+                            </div>
+                        </div>
+                        {{-- presenceAutreTypeInsecteAmi --}}
+                        <div class="form-group row" id="autreInsectesAmis">
+
+                            <div class="col-xs-12 col-sm-12">
+                                <table class="table table-striped table-bordered">
+                                    <tbody id="insectesAmis_area">
+                                        <?php
+        if($amis)
         { 
         $i=0;
         $a=1;
-        foreach($suiviparcelle->parasite as $data) {
+        foreach($amis as $data) {
            ?>
-                                    <tr>
-                                        <td class="row">
-                                            <div class="col-xs-12 col-sm-12 bg-success">
-                                                <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Insectes
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                parasites ou ravageurs')
-                                                    <?php echo $a; ?>
-                                                </badge>
-                                            </div>
-                                            <div class="col-xs-12 col-sm-6">
-                                                <div class="form-group row">
-                                                    {{ Form::label(__('Nom'), null, ['class' => '']) }}
-                                                    <input type="text" name="insectesParasites[]" placeholder="..."
-                                                        id="insectesParasites-<?php echo $a; ?>" class="form-control"
-                                                        value="<?php echo $data->parasite; ?>">
+                                        <tr>
+                                            <td class="row">
+                                                <div class="col-xs-12 col-sm-12 bg-success">
+                                                    <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Insectes amis')
+                                                        <?php echo $a; ?>
+                                                    </badge>
                                                 </div>
-                                            </div>
-
-                                            <div class="col-xs-12 col-sm-6">
-                                                <div class="form-group row">
-                                                    {{ Form::label(__('Quantite'), null, ['class' => '']) }}
-                                                    <select name="nombreinsectesParasites[]"
-                                                        id="nombreinsectesParasites-<?php echo $a; ?>"
-                                                        class="form-control nombreinsectesParasites">
-                                                        <option value="Assez" <?php if ('Assez' == $data->nombre) {
-                                                            echo 'selected';
-                                                        } ?>>@lang('Assez')
-                                                        </option>
-                                                        <option value="Moins" <?php if ('Moins' == $data->nombre) {
-                                                            echo 'selected';
-                                                        } ?>>@lang('Moins')
-                                                        </option>
-
-                                                    </select>
+                                                <div class="col-xs-12 col-sm-6">
+                                                    <div class="form-group row">
+                                                        {{ Form::label(__('Nom'), null, ['class' => '']) }}
+                                                        <input type="text" name="insectesAmis[]" placeholder="..."
+                                                            id="insectesAmis-<?php echo $a; ?>" class="form-control"
+                                                            value="<?php echo $data->nom; ?>">
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <?php if($a>1):?>
-                                            <div class="col-xs-12 col-sm-8"><button type="button"
-                                                    id="<?php echo $a; ?>"
-                                                    class="removeRowinsectesParasites btn btn-danger btn-sm"><i
-                                                        class="fa fa-minus"></i></button></div>
-                                            <?php endif; ?>
-                                        </td>
-                                    </tr>
-                                    <?php
+
+                                                <div class="col-xs-12 col-sm-6">
+                                                    <div class="form-group row">
+                                                        {{ Form::label(__('Quantite'), null, ['class' => '']) }}
+                                                        <select name="nombreinsectesAmis[]"
+                                                            id="nombreinsectesAmis-<?php echo $a; ?>"
+                                                            class="form-control nombreinsectesAmis">
+                                                            <option value="Faible" <?php if ('Faible' == $data->nombre) {
+                                                                echo 'selected';
+                                                            } ?>>@lang('Faible')
+                                                            </option>
+                                                            <option value="Moyen" <?php if ('Moyen' == $data->nombre) {
+                                                                echo 'selected';
+                                                            } ?>>@lang('Moyen')
+                                                            </option>
+                                                            <option value="Elevé" <?php if ('Elevé' == $data->nombre) {
+                                                                echo 'selected';
+                                                            } ?>>@lang('Elevé')
+                                                            </option>
+
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <?php if($a>1):?>
+                                                <div class="col-xs-12 col-sm-8"><button type="button"
+                                                        id="<?php echo $a; ?>"
+                                                        class="removeRowinsectesAmis btn btn-danger btn-sm"><i
+                                                            class="fa fa-minus"></i></button></div>
+                                                <?php endif; ?>
+                                            </td>
+                                        </tr>
+                                        <?php
            $a++;
             $i++;
         }
     }else{
         ?>
-                                    <tr>
-                                        <td class="row">
-                                            <div class="col-xs-12 col-sm-12 bg-success">
-                                                <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Insectes
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                parasites ou ravageurs')
-                                                </badge>
-                                            </div>
-                                            <div class="col-xs-12 col-sm-6">
-                                                <div class="form-group row">
-                                                    {{ Form::label(__('Nom'), null, ['class' => '']) }}
-                                                    <input type="text" name="insectesParasites[]" placeholder="..."
-                                                        id="insectesParasites-1" class="form-control">
+                                        <tr>
+                                            <td class="row">
+                                                <div class="col-xs-12 col-sm-12 bg-success">
+                                                    <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Insectes amis')
+                                                    </badge>
                                                 </div>
-                                            </div>
-
-                                            <div class="col-xs-12 col-sm-6">
-                                                <div class="form-group row">
-                                                    {{ Form::label(__('Quantite'), null, ['class' => '']) }}
-                                                    <?php echo Form::select('nombreinsectesParasites[]', ['Assez' => __('Assez'), 'Moins' => __('Moins')], null, ['class' => 'form-control nombreinsectesParasites', 'id' => 'nombreinsectesParasites-1']); ?>
+                                                <div class="col-xs-12 col-sm-6">
+                                                    <div class="form-group row">
+                                                        {{ Form::label(__('Nom'), null, ['class' => '']) }}
+                                                        <input type="text" name="insectesAmis[]"
+                                                            placeholder="Autre Insecte ami" id="insectesAmis-1"
+                                                            class="form-control">
+                                                    </div>
                                                 </div>
-                                            </div>
 
-                                        </td>
-                                    </tr>
-                                    <?php
+                                                <div class="col-xs-12 col-sm-6">
+                                                    <div class="form-group row">
+                                                        {{ Form::label(__('Quantite'), null, ['class' => '']) }}
+                                                        <?php echo Form::select('nombreinsectesAmis[]', ['Faible' => __('Faible'), 'Moyen' => __('Moyen'), 'Elevé' => __('Elevé')], null, ['class' => 'form-control nombreinsectesAmis', 'id' => 'nombreinsectesAmis-1']); ?>
+                                                    </div>
+                                                </div>
+
+                                            </td>
+                                        </tr>
+                                        <?php
         }
         ?>
 
 
-                                </tbody>
-                                <tfoot style="background: #e3e3e3;">
-                                    <tr>
+                                    </tbody>
+                                    <tfoot style="background: #e3e3e3;">
+                                        <tr>
 
-                                        <td colspan="3">
-                                            <button id="addRowinsectesParasites" type="button"
-                                                class="btn btn-success btn-sm"><i class="fa fa-plus"></i></button>
-                                        </td>
-                                    <tr>
-                                </tfoot>
-                            </table>
+                                            <td colspan="3">
+                                                <button id="addRowinsectesAmis" type="button"
+                                                    class="btn btn-success btn-sm"><i class="fa fa-plus"></i></button>
+                                            </td>
+                                        <tr>
+                                    </tfoot>
+                                </table>
+                            </div>
                         </div>
                     </div>
-
-                    {{-- présence de autre ravageur fin --}}
-
-
-                    <div class="form-group row" id="autreInsectesAmis">
-                        <?php echo Form::label(__('Autres insectes amis'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <table class="table table-striped table-bordered">
-                                <tbody id="insectesAmis_area">
-                                    <?php
-        if($suiviparcelle->insectes)
-        { 
-        $i=0;
-        $a=1;
-        foreach($suiviparcelle->insectes as $data) {
-           ?>
-                                    <tr>
-                                        <td class="row">
-                                            <div class="col-xs-12 col-sm-12 bg-success">
-                                                <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Insectes amis')
-                                                    <?php echo $a; ?>
-                                                </badge>
-                                            </div>
-                                            <div class="col-xs-12 col-sm-6">
-                                                <div class="form-group row">
-                                                    {{ Form::label(__('Nom'), null, ['class' => '']) }}
-                                                    <input type="text" name="insectesAmis[]" placeholder="..."
-                                                        id="insectesAmis-<?php echo $a; ?>" class="form-control"
-                                                        value="<?php echo $data->insecte; ?>">
-                                                </div>
-                                            </div>
-
-                                            <div class="col-xs-12 col-sm-6">
-                                                <div class="form-group row">
-                                                    {{ Form::label(__('Quantite'), null, ['class' => '']) }}
-                                                    <select name="nombreinsectesAmis[]"
-                                                        id="nombreinsectesAmis-<?php echo $a; ?>"
-                                                        class="form-control nombreinsectesAmis">
-                                                        <option value="Assez" <?php if ('Assez' == $data->nombre) {
-                                                            echo 'selected';
-                                                        } ?>>@lang('Assez')
-                                                        </option>
-                                                        <option value="Moins" <?php if ('Moins' == $data->nombre) {
-                                                            echo 'selected';
-                                                        } ?>>@lang('Moins')
-                                                        </option>
-
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <?php if($a>1):?>
-                                            <div class="col-xs-12 col-sm-8"><button type="button"
-                                                    id="<?php echo $a; ?>"
-                                                    class="removeRowinsectesAmis btn btn-danger btn-sm"><i
-                                                        class="fa fa-minus"></i></button></div>
-                                            <?php endif; ?>
-                                        </td>
-                                    </tr>
-                                    <?php
-           $a++;
-            $i++;
-        }
-    }else{
-        ?>
-                                    <tr>
-                                        <td class="row">
-                                            <div class="col-xs-12 col-sm-12 bg-success">
-                                                <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Insectes amis')
-                                                </badge>
-                                            </div>
-                                            <div class="col-xs-12 col-sm-6">
-                                                <div class="form-group row">
-                                                    {{ Form::label(__('Nom'), null, ['class' => '']) }}
-                                                    <input type="text" name="insectesAmis[]"
-                                                        placeholder="Autre Insecte ami" id="insectesAmis-1"
-                                                        class="form-control">
-                                                </div>
-                                            </div>
-
-                                            <div class="col-xs-12 col-sm-6">
-                                                <div class="form-group row">
-                                                    {{ Form::label(__('Quantite'), null, ['class' => '']) }}
-                                                    <?php echo Form::select('nombreinsectesAmis[]', ['Assez' => __('Assez'), 'Moins' => __('Moins')], null, ['class' => 'form-control nombreinsectesAmis', 'id' => 'nombreinsectesAmis-1']); ?>
-                                                </div>
-                                            </div>
-
-                                        </td>
-                                    </tr>
-                                    <?php
-        }
-        ?>
-
-
-                                </tbody>
-                                <tfoot style="background: #e3e3e3;">
-                                    <tr>
-
-                                        <td colspan="3">
-                                            <button id="addRowinsectesAmis" type="button"
-                                                class="btn btn-success btn-sm"><i class="fa fa-plus"></i></button>
-                                        </td>
-                                    <tr>
-                                </tfoot>
-                            </table>
-                        </div>
-                    </div>
-
-                    {{-- présence de autre ravageur fin --}}
                     <hr class="panel-wide">
 
 
-                    <hr class="panel-wide">
-                    <div class="form-group row">
-                        {{ Form::label(__('Citez les animaux que vous rencontrez dans les champs'), null, [
-                            'class' => 'col-sm-4 control-label',
-                        ]) }}
-                        <div class="col-xs-12 col-sm-8">
-                            <table class="table table-striped table-bordered">
-                                <tbody id="animauxRencontres_area">
-                                    <?php
+
+                    <div class="fieldset-like">
+                        <legend class="legend-center">
+                            <h5 class="font-weight-bold text-decoration-underline">Evaluation de la faune sauvage dans la
+                                parcelle</h5>
+                        </legend>
+                        <div class="form-group row">
+                            <div class="col-xs-12 col-sm-12">
+                                <table class="table table-striped table-bordered">
+                                    <tbody id="animauxRencontres_area">
+
+                                      <?php
         if($suiviparcelle->animal)
         {
         $i=0;
@@ -816,21 +1326,23 @@
         }
         ?>
 
+                                    </tbody>
+                                    <tfoot style="background: #e3e3e3;">
+                                        <tr>
 
-                                </tbody>
-                                <tfoot style="background: #e3e3e3;">
-                                    <tr>
-
-                                        <td colspan="3">
-                                            <button id="addRowanimauxRencontres" type="button"
-                                                class="btn btn-success btn-sm"><i class="fa fa-plus"></i></button>
-                                        </td>
-                                    <tr>
-                                </tfoot>
-                            </table>
+                                            <td colspan="3">
+                                                <button id="addRowanimauxRencontres" type="button"
+                                                    class="btn btn-success btn-sm"><i class="fa fa-plus"></i></button>
+                                            </td>
+                                        <tr>
+                                    </tfoot>
+                                </table>
+                            </div>
                         </div>
                     </div>
+
                     <hr class="panel-wide">
+
                     <div class="form-group row">
                         {{ Form::label(__('Date de la visite'), null, ['class' => 'col-sm-4 control-label required']) }}
                         <div class="col-xs-12 col-sm-8">
@@ -839,8 +1351,9 @@
                     </div>
 
                     <hr class="panel-wide">
+
                     <div class="form-group row">
-                        <button type="submit" class="btn btn--primary btn-block h-45 w-100">@lang('Envoyer')</button>
+                        <button type="submit" class="btn btn--primary w-100 h-45"> @lang('Envoyer')</button>
                     </div>
                     {!! Form::close() !!}
                 </div>
@@ -892,7 +1405,7 @@
                     insectesAmisCount +
                     '" name="insectesAmis[]" type="text"></div></div><div class="col-xs-12 col-sm-6"><div class="form-group"><label for="nombreinsectesAmis" class="">Quantite</label><select name="nombreinsectesAmis[]" class="form-control nombreinsectesParasites" d="nombreinsectesAmis-' +
                     insectesAmisCount +
-                    '" ><option value="Assez">Assez</option><option value="Moins">Moins</option></select></div></div><div class="col-xs-12 col-sm-8"><button type="button" id="' +
+                    '" ><option value="Faible">Faible</option><option value="Moyen">Moyen</option><option value="Elevé">Elevé</option></select></div></div><div class="col-xs-12 col-sm-8"><button type="button" id="' +
                     insectesAmisCount +
                     '" class="removeRowinsectesAmis btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></div></td>';
 
@@ -981,19 +1494,63 @@
                 }
             });
 
+
+
+            //presenceAutreInsecte
+            var presenceAutreInsecteCount = $("#presenceAutreInsecte_area tr").length + 1;
+
+            $(document).on('click', '#addRowPresenceAutreInsecte', function() {
+
+                //---> Start create table tr'
+
+                var html_table = '<tr>';
+                html_table +=
+
+                    '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm">Autres insectes parasites ou ravageurs ' +
+                    presenceAutreInsecteCount +
+                    '</badge></div><div class="col-xs-12 col-sm-6"><div class="form-group"><label for="autreInsecteNom" class="">Nom</label><input type="text" placeholder="Nom de l\'insecte ou ravageur" class="form-control" id="autreInsecteNom-' +
+                    presenceAutreInsecteCount +
+                    '" name="presenceAutreInsecte[' + presenceAutreInsecteCount +
+                    '][autreInsecteNom]"></div></div><div class="col-xs-12 col-sm-6"><div class="form-group"><label for="nombreAutreInsectesParasites" class="">Quantite</label><select name="presenceAutreInsecte[' +
+                    presenceAutreInsecteCount +
+                    '][nombreAutreInsectesParasites]" class="form-control nombreAutreInsectesParasites" id="nombreAutreInsectesParasites-' +
+                    presenceAutreInsecteCount +
+                    '" ><option value="">Selectionner une option</option><option value="Faible">Faible</option><option value="Moyen">Moyen</option><option value="Elevé">Elevé</option></select></div></div><div class="col-xs-12 col-sm-8"><button type="button" id="' +
+                    presenceAutreInsecteCount +
+                    '" class="removeRowPresenceAutreInsecte btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></div></td>';
+
+                html_table += '</tr>';
+                //---> End create table tr
+
+                presenceAutreInsecteCount = parseInt(presenceAutreInsecteCount) + 1;
+                $('#presenceAutreInsecte_area').append(html_table);
+
+            });
+
+            $(document).on('click', '.removeRowPresenceAutreInsecte', function() {
+                var row_id = $(this).attr('id');
+                if (row_id == $("#presenceAutreInsecte_area tr").length) {
+                    $(this).parents('tr').remove();
+                    presenceAutreInsecteCount = parseInt(presenceAutreInsecteCount) - 1;
+                }
+            });
+            //fin presenceAutreInsecte
+
             var insectesParasitesCount = $("#insectesParasites_area tr").length + 1;
             $(document).on('click', '#addRowinsectesParasites', function() {
 
-                //---> Start create table tr
                 var html_table = '<tr>';
                 html_table +=
                     '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm">Insectes parasites ou ravageurs ' +
                     insectesParasitesCount +
-                    '</badge></div><div class="col-xs-12 col-sm-6"><div class="form-group row"><label for="insectesParasites" class="">Nom</label><input placeholder="Nom..." class="form-control" id="insectesParasites-' +
+                    '</badge></div><div class="col-xs-12 col-sm-6"><div class="form-group"><label for="insectesParasites" class="">Nom</label><select class="form-control" id="insectesParasites-' +
                     insectesParasitesCount +
-                    '" name="insectesParasites[]" type="text"></div></div><div class="col-xs-12 col-sm-6"><div class="form-group row"><label for="nombreinsectesParasites" class="">Quantite</label><select name="nombreinsectesParasites[]" class="form-control nombreinsectesParasites" d="nombreinsectesParasites-' +
+                    '" name="insectesParasites[' + insectesParasitesCount +
+                    '][nom]"><option value="">Selectionner une option</option><option value="Mirides">Mirides</option> <option value="Punaises">Punaises</option> <option value="Foreurs">Foreurs</option><option value="Chenilles">Chenilles</option></select></div></div><div class="col-xs-12 col-sm-6"><div class="form-group"><label for="nombreinsectesParasites" class="">Quantite</label><select name="insectesParasites[' +
                     insectesParasitesCount +
-                    '" ><option value="Assez">Assez</option><option value="Moins">Moins</option></select></div></div><div class="col-xs-12 col-sm-8"><button type="button" id="' +
+                    '][nombreinsectesParasites]" class="form-control nombreinsectesParasites" id="nombreinsectesParasites-' +
+                    insectesParasitesCount +
+                    '" ><option value="">Selectionner une option</option><option value="Faible">Faible</option><option value="Moyen">Moyen</option><option value="Elevé">Elevé</option></select></div></div><div class="col-xs-12 col-sm-8"><button type="button" id="' +
                     insectesParasitesCount +
                     '" class="removeRowinsectesParasites btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></div></td>';
 
@@ -1044,7 +1601,7 @@
             });
 
 
-            var pesticidesCount = $("#pesticidesAnneDerniere_area tr").length;
+            var pesticidesCount = $("#pesticidesAnneDerniere_area tr").length + 1;
             $(document).on('click', '#addRowPesticidesAnneDerniere', function() {
 
                 var html_table = '<tr>';
@@ -1054,7 +1611,7 @@
                     '</badge></div><div class="col-xs-12 col-sm-4 pr-0"><div class="form-group"><label for="" class="">Nom</label><select class="form-control" id="pesticidesAnneDerniere-' +
                     pesticidesCount +
                     '" name="pesticidesAnneDerniere[' + pesticidesCount +
-                    '][nom]"><option value="Herbicides">Herbicides</option><option value="Fongicides">Fongicides</option><option value="Nematicide">Nematicide</option><option value="Insecticide">Insecticide</option><option value="Acaricides">Acaricides</option><option value="Pesticides">Pesticides</option></select></div></div><div class="col-xs-12 col-sm-2"><div class="form-group row"><label>Unité</label><select class="form-control unite" name="pesticidesAnneDerniere[' +
+                    '][nom]"><option value="Herbicides">Herbicides</option><option value="Fongicides">Fongicides</option><option value="Nematicides">Nematicides</option><option value="Insecticide">Insecticide</option><option value="Acaricides">Acaricides</option><option value="Pesticides">Pesticides</option></select></div></div><div class="col-xs-12 col-sm-2"><div class="form-group row"><label>Unité</label><select class="form-control unite" name="pesticidesAnneDerniere[' +
                     pesticidesCount + '][unite]" id="unite-' +
                     pesticidesCount +
                     '"><option value="Kg">Kg</option><option value="L">L</option></select></div></div> <div class="col-xs-12 col-sm-2"><div class="form-group row"><label for="" class="">Quantité</label><input type="number" name ="pesticidesAnneDerniere[' +
@@ -1073,13 +1630,15 @@
                 //---> End create table tr
 
                 pesticidesCount = parseInt(pesticidesCount) + 1;
+                console.log(pesticidesCount);
                 $('#pesticidesAnneDerniere_area').append(html_table);
 
             });
 
             $(document).on('click', '.removeRowPesticidesAnneDerniere', function() {
                 var row_id = $(this).attr('id');
-                if (row_id == $("#pesticidesAnneDerniere_area tr").length - 1) {
+                console.log(row_id);
+                if (row_id == $("#pesticidesAnneDerniere_area tr").length) {
                     $(this).parents('tr').remove();
                     pesticidesCount = parseInt(pesticidesCount) - 1;
                 }
@@ -1087,7 +1646,7 @@
             //fin pesticide lanne derniere
 
             //intrants lannee derniere
-            var intrantsCount = $("#intrantsAnneDerniere_area tr").length;
+            var intrantsCount = $("#intrantsAnneDerniere_area tr").length + 1;
             $(document).on('click', '#addRowIntrantsAnneDerniere', function() {
 
                 var html_table = '<tr>';
@@ -1121,12 +1680,53 @@
 
             $(document).on('click', '.removeRowIntrantsAnneDerniere', function() {
                 var row_id = $(this).attr('id');
-                if (row_id == $("#intrantsAnneDerniere_area tr").length - 1) {
+                if (row_id == $("#intrantsAnneDerniere_area tr").length) {
                     $(this).parents('tr').remove();
                     intrantsCount = parseInt(intrantsCount) - 1;
                 }
             });
             //fin intrants lanne derniere
+        });
+
+        var traitementCount = $("#traitement_area tr").length;
+        $(document).on('click', '#addRowTraitement', function() {
+
+            var html_table = '<tr>';
+            html_table +=
+                '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm">traitement ' +
+                traitementCount +
+                '</badge></div><div class="col-xs-12 col-sm-4 pr-0"><div class="form-group"><label for="" class="">Nom</label><select class="form-control" id="traitement-' +
+                traitementCount +
+                '" name="traitement[' + traitementCount +
+                '][nom]"><option value="">Selectionner une option</option><option value="Herbicides">Herbicides</option><option value="Fongicides">Fongicides</option><option value="Compost">Compost</option><option value="Déchets animaux">Déchets animaux</option><option value="Fiente">Fiente</option><option value="Nematicides">Nematicides</option><option value="Insecticide">Insecticide</option><option value="Biofertilisant">Biofertilisant</option><option value="Engrais chimique">Engrais chimique</option><option value="Engrais foliaire">Engrais foliaire</option><option value="Bouse de vache">Bouse de vache</option><option>NPK</option><option value="Insecticide organique">Insecticide organique</option><option value="Insecticide chimique">Insecticide chimique</option><option value="Pesticides">Pesticides</option></select></div></div><div class="col-xs-12 col-sm-2"><div class="form-group row"><label>Unité</label><select class="form-control unite" name="traitement[' +
+                traitementCount + '][unite]" id="unite-' +
+                traitementCount +
+                '"><option value="">Selectionner une option</option><option value="Kg">Kg</option><option value="L">L</option></select></div></div> <div class="col-xs-12 col-sm-2"><div class="form-group row"><label for="" class="">Quantité</label><input type="number" name ="traitement[' +
+                traitementCount + '][quantite]" id="quantite-' +
+                traitementCount +
+                '" class="form-control quantite" placeholder="Quantité"></div></div><div class="col-xs-12 col-sm-2"><div class="form-group row"><label>Type contenant</label><select class="form-control contenant" name="traitement[' +
+                traitementCount + '][contenant]" id="contenant-' +
+                traitementCount +
+                '"><option value="">Selectionner une option</option><option value="Sac">Sac</option><option value="Sachet">Sachet</option><option value="Boîte">Boîte</option><option value="Pot">Pot</option></select></div></div> <div class="col-xs-12 col-sm-2"><div class="form-group row"><label for="" class="">Fréquence</label><input type="number" name="traitement[' +
+                traitementCount + '][frequence]" id="frequence-' +
+                traitementCount +
+                '" class="form-control frequence" placeholder="Fréquence"></div></div><div class="col-xs-12 col-sm-8"><button type="button" id="' +
+                traitementCount +
+                '" class="removeRowTraitement btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></div></td>';
+            html_table += '</tr>';
+            //---> End create table tr
+
+            traitementCount = parseInt(traitementCount) + 1;
+            $('#traitement_area').append(html_table);
+
+        });
+
+        $(document).on('click', '.removeRowTraitement', function() {
+            var row_id = $(this).attr('id');
+            if (row_id == $("#traitement_area tr").length - 1) {
+                $(this).parents('tr').remove();
+                traitementCount = parseInt(traitementCount) - 1;
+            }
         });
 
         $('#courseaux,#agroforestiersobtenus,#presenceInsectesParasitesRavageurs,#recu,#autrePesticides,#autreInsectesAmis,#autrePresenceInsectesParasitesRavageurs,#traite,#presenceAutreInsecte')
@@ -1163,6 +1763,132 @@
             $('.recuArbreAgroForestier').hide('slow');
             $('.recuArbreAgroForestier').attr('required', false);
             $('.recuArbreAgroForestier').val('');
+        }
+
+        $('#traiterParcelle').change(function() {
+            var traiterParcelle = $('#traiterParcelle').val();
+            if (traiterParcelle == 'oui') {
+                $('#traite').show('slow');
+            } else {
+                $('#traite').hide('slow');
+                $('#traite input').val('');
+                var selectElements = $('select[name^="traitement["]');
+
+                // Faire quelque chose avec chaque élément sélectionné
+                selectElements.each(function() {
+                    // Vous pouvez accéder à chaque élément individuellement avec $(this)
+                    $(this).val($(this).find('option:eq(0)').val());
+                    console.log($(this))
+                });
+                //traitement[0][nom]
+            }
+        });
+        if ($('#traiterParcelle').val() == 'oui') {
+            $('#traite').show('slow');
+        } else {
+            $('#traite').hide('slow');
+            $('#traite input').val('');
+            var selectElements = $('select[name^="traitement["]');
+
+            // Faire quelque chose avec chaque élément sélectionné
+            selectElements.each(function() {
+                // Vous pouvez accéder à chaque élément individuellement avec $(this)
+                $(this).val($(this).find('option:eq(0)').val());
+                console.log($(this))
+            });
+            //traitement[0][nom]
+        }
+
+        $('.presenceInsectesParasites').change(function() {
+            var presenceInsectesParasites = $('.presenceInsectesParasites').val();
+            if (presenceInsectesParasites == 'oui') {
+                $('#presenceInsectesParasitesRavageurs').show('slow');
+                $('.presenceInsectesParasitesRavageur').show('slow');
+            } else {
+                $('#presenceInsectesParasitesRavageurs').hide('slow');
+                $('.presenceInsectesParasitesRavageur').val('');
+                $('#autrePresenceInsectesParasitesRavageurs').hide('slow');
+
+                var selectElements = $('select[name^="insectesParasites["]');
+
+                // Faire quelque chose avec chaque élément sélectionné
+                selectElements.each(function() {
+                    // Vous pouvez accéder à chaque élément individuellement avec $(this)
+                    $(this).val($(this).find('option:eq(0)').val());
+                    console.log($(this))
+                });
+            }
+        });
+        if ($('.presenceInsectesParasites').val() == 'oui') {
+            $('#presenceInsectesParasitesRavageurs').show('slow');
+            $('.presenceInsectesParasitesRavageur').show('slow');
+        } else {
+            $('#presenceInsectesParasitesRavageurs').hide('slow');
+            $('.presenceInsectesParasitesRavageur').val('');
+            $('#autrePresenceInsectesParasitesRavageurs').hide('slow');
+
+            var selectElements = $('select[name^="insectesParasites["]');
+
+            // Faire quelque chose avec chaque élément sélectionné
+            selectElements.each(function() {
+                // Vous pouvez accéder à chaque élément individuellement avec $(this)
+                $(this).val($(this).find('option:eq(0)').val());
+                console.log($(this))
+            });
+        }
+
+        $('.autreInsecte').change(function() {
+            var autreInsecte = $('.autreInsecte').val();
+            if (autreInsecte == 'oui') {
+                $('#presenceAutreInsecte').show('slow');
+            } else {
+                $('#presenceAutreInsecte').hide('slow');
+                $('#presenceAutreInsecte input').val('');
+                var selectElements = $('select[name^="presenceAutreInsecte["]');
+
+                // Faire quelque chose avec chaque élément sélectionné
+                selectElements.each(function() {
+                    // Vous pouvez accéder à chaque élément individuellement avec $(this)
+                    $(this).val($(this).find('option:eq(0)').val());
+                    console.log($(this))
+                });
+
+            }
+        });
+        if ($('.autreInsecte').val() == 'oui') {
+            $('#presenceAutreInsecte').show('slow');
+        } else {
+            $('#presenceAutreInsecte').hide('slow');
+            $('#presenceAutreInsecte input').val('');
+            var selectElements = $('select[name^="presenceAutreInsecte["]');
+
+            // Faire quelque chose avec chaque élément sélectionné
+            selectElements.each(function() {
+                // Vous pouvez accéder à chaque élément individuellement avec $(this)
+                $(this).val($(this).find('option:eq(0)').val());
+                console.log($(this))
+            });
+
+        }
+
+        $('.presenceAutreTypeInsecteAmi').change(function() {
+            var presenceAutreTypeInsecteAmi = $('.presenceAutreTypeInsecteAmi').val();
+            if (presenceAutreTypeInsecteAmi == 'oui') {
+
+                $('#autreInsectesAmis').show('slow');
+
+            } else {
+                $('#autreInsectesAmis').hide('slow');
+                $('#autreInsectesAmis input').val('');
+            }
+        });
+        if ($('.presenceAutreTypeInsecteAmi').val() == 'oui') {
+
+            $('#autreInsectesAmis').show('slow');
+
+        } else {
+            $('#autreInsectesAmis').hide('slow');
+            $('#autreInsectesAmis input').val('');
         }
     </script>
 

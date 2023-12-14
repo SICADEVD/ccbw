@@ -1027,7 +1027,7 @@
                     '</badge></div><div class="col-xs-12 col-sm-4 pr-0"><div class="form-group"><label for="" class="">Nom</label><select class="form-control" id="pesticidesAnneDerniere-' +
                     pesticidesCount +
                     '" name="pesticidesAnneDerniere[' + pesticidesCount +
-                    '][nom]"><option value="Herbicides">Herbicides</option><option value="Fongicides">Fongicides</option><option value="Nematicide">Nematicide</option><option value="Insecticide">Insecticide</option><option value="Acaricides">Acaricides</option><option value="Pesticides">Pesticides</option></select></div></div><div class="col-xs-12 col-sm-2"><div class="form-group row"><label>Unité</label><select class="form-control unite" name="pesticidesAnneDerniere[' +
+                    '][nom]"><option value="Herbicides">Herbicides</option><option value="Fongicides">Fongicides</option><option value="Nematicides">Nematicides</option><option value="Insecticide">Insecticide</option><option value="Acaricides">Acaricides</option><option value="Pesticides">Pesticides</option></select></div></div><div class="col-xs-12 col-sm-2"><div class="form-group row"><label>Unité</label><select class="form-control unite" name="pesticidesAnneDerniere[' +
                     pesticidesCount + '][unite]" id="unite-' +
                     pesticidesCount +
                     '"><option value="Kg">Kg</option><option value="L">L</option></select></div></div> <div class="col-xs-12 col-sm-2"><div class="form-group row"><label for="" class="">Quantité</label><input type="number" name ="pesticidesAnneDerniere[' +
