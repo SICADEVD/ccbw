@@ -1,5 +1,6 @@
 @extends('manager.layouts.app')
 @section('panel')
+<?php use App\Models\LivraisonProduct; ?>
     <div class="card">
         <div class="card-body">
             <div id="printFacture">
@@ -50,7 +51,9 @@
                                         </td>  
                                             <td>{{ $livraisonProductInfo->parcelle->producteur->nom }} {{ $livraisonProductInfo->parcelle->producteur->prenoms }}</td>
                                             <td>{{ $livraisonProductInfo->parcelle->codeParc }}</td>
-                                            <td>{{ __(@$livraisonProductInfo->type_produit) }}</td> 
+                                            <td><?php $produit = LivraisonProduct::where([['campagne_id', $livraisonProductInfo->campagne_id],['campagne_periode_id', $livraisonProductInfo->campagne_periode_id],['parcelle_id', $livraisonProductInfo->parcelle_id],['livraison_info_id',$livraisonProductInfo->livraison_info_id],['qty',$livraisonProductInfo->quantite]])->first();
+                                            echo $produit->type_produit;
+                                            ?></td> 
                                             <td>{{ getAmount($livraisonProductInfo->quantite) }} </td>
                                             <td>
                                                 {{ getAmount($livraisonProductInfo->montant) }} {{ $general->cur_sym }}
