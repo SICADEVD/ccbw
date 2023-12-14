@@ -30,23 +30,24 @@
                                         <th>@lang('Periode')</th>
                                         <th>@lang('Producteur')</th>
                                         <th>@lang('Parcelle')</th>
-                                        <th>@lang('Type produit')</th>
-                                        <th>@lang("Date d'envoi")</th>
-                                        <th>@lang('Qte')</th>
-                                        <th>@lang('Sous-total')</th>
+                                        <th>@lang('Type produit')</th> 
+                                        <th>@lang('Quantite')</th>
+                                        <th>@lang('Montant')</th>
+                                        <th>@lang("Date de livraison")</th>
+                                        
                                     </tr>
                                 </thead>
                                 <tbody>
                                      
                                     @foreach ($livraisonInfo as $livraisonProductInfo)
                                         <tr>
+                                        <td>{{ $loop->iteration }}</td>
                                         <td>
                                             {{ $livraisonProductInfo->campagne->nom }} 
                                         </td> 
                                         <td>
                                             {{ $livraisonProductInfo->campagnePeriode->nom }} 
-                                        </td> 
-                                            <td>{{ $loop->iteration }}</td>
+                                        </td>  
                                             <td>{{ $livraisonProductInfo->parcelle->producteur->nom }} {{ $livraisonProductInfo->parcelle->producteur->prenoms }}</td>
                                             <td>{{ $livraisonProductInfo->parcelle->codeParc }}</td>
                                             <td>{{ __(@$livraisonProductInfo->type_produit) }}</td> 
