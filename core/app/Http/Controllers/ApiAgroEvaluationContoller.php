@@ -23,7 +23,6 @@ class ApiAgroEvaluationContoller extends Controller
             'quantite'            => 'required|array',
         ];
 
-
         $request->validate($validationRule);
 
         $localite = Localite::where('id', $request->localite)->first();
@@ -32,14 +31,22 @@ class ApiAgroEvaluationContoller extends Controller
             $notify[] = ['error', 'Cette localité est désactivée'];
             return back()->withNotify($notify)->withInput();
         }
+
         if ($request->id) {
             $agroevaluation = Agroevaluation::findOrFail($request->id);
             $message = "Le contenu a été mise à jour avec succès";
         } else {
             $agroevaluation = new Agroevaluation();
         }
+        if ($agroevaluation->producteur_id != $request->producteur) {
+            $hasEvalution = Agroevaluation::where('producteur_id', $request->producteur)->exists();
+            if ($hasEvalution) {
+                return response()->json("Ce producteur a déjà une évaluation de besoin enregistré", 501);
+            }
+        }
 
         $agroevaluation->producteur_id  = $request->producteur;
+        $agroevaluation->userid  = $request->userid;
         $agroevaluation->quantite  = array_sum($request->quantite);
         $agroevaluation->save();
         $k = 0;
