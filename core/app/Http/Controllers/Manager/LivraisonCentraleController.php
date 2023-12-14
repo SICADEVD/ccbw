@@ -79,7 +79,7 @@ class LivraisonCentraleController extends Controller
         ->paginate(getPaginate());
  
         $total = $stocks->sum('stocks_entrant');
-        $pageTitle    = "Stock des Magasins de Section ($total)";
+        $pageTitle    = "Stock des Magasins de Section (".showAmount($total).") Kg";
         $magasins  = MagasinCentral::where('cooperative_id',$staff->cooperative_id)->with('cooperative')->get();
         $sections = Section::get();
         return view('manager.livraison-centrale.stock', compact('pageTitle', 'stocks','total','sections','magasins'));
@@ -98,7 +98,7 @@ class LivraisonCentraleController extends Controller
         ->paginate(getPaginate());
  
         $total = $stocks->sum('quantite_livre');
-        $pageTitle    = "Connaissements Usine ($total)";
+        $pageTitle    = "Connaissements Usine (".showAmount($total).") Kg";
         $magasins  = MagasinCentral::where('cooperative_id',$staff->cooperative_id)->with('cooperative')->get();
         $sections = Section::get();
         return view('manager.livraison-centrale.connaissement', compact('pageTitle', 'stocks','total','sections','magasins'));
@@ -114,14 +114,14 @@ class LivraisonCentraleController extends Controller
         ->when(request()->magasin, function ($query, $magasin) {
             $query->where('magasin_section_id',$magasin); 
         })
-        ->with('livraisonInfo','parcelle','campagnePeriode','campagne')  
+        ->with('livraisonInfo','parcelle','campagnePeriode','campagne','parcelle.producteur')  
         ->groupBy('producteur_id','campagne_id','campagne_periode_id')
         ->select('livraison_primes.*','parcelles.producteur_id', DB::raw('SUM(quantite) as qty,SUM(montant) as somme'))
         ->orderBy('livraison_primes.id','desc') 
         ->paginate(getPaginate());
   
         $total = $stocks->sum('montant');
-        $pageTitle    = "Prime des producteurs ($total)";
+        $pageTitle    = "Prime des producteurs (".showAmount($total).") FCFA";
         $magasins  = MagasinSection::joinRelationship('section')->where([['cooperative_id',$staff->cooperative_id]])->with('user')->orderBy('nom')->get();
         $sections = Section::get();
         return view('manager.livraison-centrale.prime', compact('pageTitle', 'stocks','total','sections','magasins'));
@@ -335,6 +335,23 @@ class LivraisonCentraleController extends Controller
         return back()->withNotify($notify);
     }
     
+    public function deliveryPrimeStore(Request $request)
+    {
+        $request->validate([
+            'campagne' => 'required',
+            'periode' => 'required',
+            'producteur' => 'required',
+        ]);
+       
+        $livraison = LivraisonPrime::join('parcelles','livraison_primes.parcelle_id','=','parcelles.id')->where([['campagne_id', $request->campagne],['campagne_periode_id', $request->periode],['producteur_id', $request->producteur]])->where('livraison_primes.status', Status::COURIER_DISPATCH)->select('livraison_primes.id')->get();
+        
+        $keys = Arr::whereNotNull(Arr::pluck($livraison,'id')); 
+        LivraisonPrime::whereIn('id', $keys)->update(array('status'=>Status::COURIER_DELIVERYQUEUE));
+       
+        
+        $notify[] = ['success', 'Paiement effectué'];
+        return back()->withNotify($notify);
+    }
 
     public function invoice($id)
     {
@@ -351,7 +368,14 @@ class LivraisonCentraleController extends Controller
         $livraisonInfo         = Connaissement::with('cooperative','vehicule','transporteur','campagne','magasinCentral','campagnePeriode','vehicule.marque')->findOrFail($id);
         return view('manager.livraison-centrale.invoice-usine', compact('pageTitle', 'livraisonInfo'));
     }
-
+    public function primeInvoice(Request $request)
+    {
+        
+        $pageTitle = "Facture";
+        $livraisonInfo = LivraisonPrime::join('parcelles','livraison_primes.parcelle_id','=','parcelles.id')->where([['campagne_id', $request->campagne],['campagne_periode_id', $request->periode],['producteur_id', $request->producteur]])->select('livraison_primes.*')->get();
+ 
+        return view('manager.livraison-centrale.invoice-prime', compact('pageTitle', 'livraisonInfo'));
+    }
     public function exportExcel()
     {
         return (new ExportLivraisons())->download('livraisons.xlsx');

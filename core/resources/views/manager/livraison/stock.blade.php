@@ -74,10 +74,10 @@
                                         </td>
                                          
                                         <td>
-                                            {{ $produit->stocks_entrant }} 
+                                            {{ showAmount($produit->stocks_entrant) }} 
                                         </td>
                                         <td>
-                                            {{ $produit->stocks_sortant }} 
+                                            {{ showAmount($produit->stocks_sortant) }} 
                                         </td> 
  
                                         <td>
