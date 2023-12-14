@@ -64,7 +64,7 @@ Route::middleware('auth')->group(function () {
         //Home Controller
         Route::controller('Manager\ManagerController')->group(function () {
             Route::get('dashboard', 'dashboard')->name('dashboard');
-
+            Route::get('/change/{lang?}', 'changeLanguage')->name('lang');
             //Manage Profile
             Route::get('password', 'password')->name('password');
             Route::get('profile', 'profile')->name('profile');

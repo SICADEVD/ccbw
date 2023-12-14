@@ -23,7 +23,8 @@
 
                     <div class="row">
                         <div class="col-12">
-                            <table class="table table-striped table-responsive">
+                         
+                            <table class="table table-striped">
                                 <thead>
                                     <tr>
                                         <th>#</th>

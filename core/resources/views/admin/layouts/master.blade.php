@@ -18,15 +18,15 @@
     <link rel="stylesheet" href="{{asset('assets/fcadmin/css/vendor/select2.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/fcadmin/css/app.css')}}">
 <link rel="stylesheet" href="{{asset('assets/templates/basic/css/custom.css')}}">
-
+<style>
+.navbar__action-list li label { 
+    display: none;
+}
+</style>
     @stack('style')
 </head>
 <body>
 @yield('content')
-
-
-
-
 <script src="{{asset('assets/global/js/jquery-3.6.0.min.js')}}"></script>
 <script src="{{asset('assets/global/js/bootstrap.bundle.min.js')}}"></script>
 <script src="{{asset('assets/fcadmin/js/vendor/bootstrap-toggle.min.js')}}"></script>
@@ -61,11 +61,11 @@
 @stack('script')
 <script>
         (function ($) {
-            "use strict";
-
-            @if ($general->ln)
+            "use strict"; 
+            
+            @if($general->ln) 
                 $(".langChanage").on("change", function () {
-                    window.location.href = "{{ route('admin.lang') }}/" + $(this).val();
+                    window.location.href = "{{ route('admin.lang') }}/" + $('#lang').val();
                 });
             @endif 
         })(jQuery);

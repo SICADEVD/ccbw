@@ -50,14 +50,16 @@
                 </div>
             </li>
             <li>
-            @if($general->ln)
-                        <select class="lang-select ms-auto langChanage">
+            @if($general->ln) 
+            <x-forms.select fieldName="lang" fieldId="lang" class="lang-select ms-auto langChanage">
                             @foreach ($language as $item)
-                            <option value="{{ $item->code }}" @if (session('lang') == $item->code) selected @endif>
-                                {{ __($item->name) }}</option>
-                                @endforeach
-                            </select>
-                        @endif
+                                <option  data-content="<span class='flag-icon flag-icon-{{ strtolower($item->code) }} flag-icon-squared'></span> {{ $item->name }}"
+                                    value="{{ $item->code }}"
+                                    @if(session('lang') == $item->code) selected @endif
+                                    >{{ $item->name }}</option>
+                            @endforeach
+             </x-forms.select>
+            @endif
             </li>
 
             <li class="dropdown">

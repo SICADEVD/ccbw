@@ -28,7 +28,7 @@ class LanguageController extends Controller
 
 
 
-        $data = file_get_contents(resource_path('lang/') . 'en.json');
+        $data = file_get_contents(resource_path('lang/') . 'fr.json');
         $json_file = strtolower($request->code) . '.json';
         $path = resource_path('lang/') . $json_file;
 

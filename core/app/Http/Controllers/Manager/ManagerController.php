@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers\Manager;
 
-use App\Constants\Status;
-use App\Http\Controllers\Controller;
-use App\Models\Cooperative;
-use App\Models\LivraisonInfo;
-use App\Models\LivraisonPayment;
-use App\Models\SupportMessage;
 use App\Models\User;
-use App\Rules\FileTypeValidate;
+use App\Models\Language;
+use App\Constants\Status;
+use App\Models\Cooperative;
 use Illuminate\Http\Request;
+use App\Models\LivraisonInfo;
+use App\Models\SupportMessage;
+use App\Rules\FileTypeValidate;
+use App\Models\LivraisonPayment;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 
 class ManagerController extends Controller
@@ -36,6 +37,17 @@ class ManagerController extends Controller
         return view('manager.dashboard', compact('pageTitle', 'cooperativeCount', 'livraisonShipCount', 'livraisonQueueCount', 'upcomingCount', 'deliveryQueueCount', 'totalStaffCount', 'totalSentCount', 'cooperativeIncome', 'livraisonInfoCount', 'livraisonDelivered'));
     }
 
+    public function changeLanguage($lang = null)
+    {
+        $language = Language::where('code', $lang)->first();
+        if (!$language) {
+            $lang = 'fr';
+        } 
+
+        session()->put('lang', $lang);
+     
+        return back();
+    }
     protected function livraisons($scope = null)
     {
         $user     = auth()->user();

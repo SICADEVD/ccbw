@@ -108,6 +108,9 @@
             margin-bottom: 20px;
             border-top: 1px solid #ddd;
         }
+        .navbar__action-list li label { 
+    display: none;
+}
     </style>
 </head>
 
@@ -148,7 +151,19 @@
 
     @include('sections.modals')
     {{-- LOAD NIC EDIT --}}
-
+    <script>
+        
+        (function ($) {
+            "use strict"; 
+            @if($general->ln) 
+             
+                $(".langChanage").on("change", function () {
+                    // alert("{{ route('manager.lang') }}/" + $('#lang').val())
+                  window.location.href = "{{ route('manager.lang') }}/" + $('#lang').val();
+                });
+            @endif 
+        })(jQuery);
+    </script>
     <script>
         $(document).ready(function() {
            // $('#producteurs').select2();
@@ -452,6 +467,7 @@ $("#longitude, #latitude").attr({"readonly": 'readonly'})
 }
 document.querySelector("#find-me").addEventListener("click", geoFindMe);
     </script>
+    
     @stack('script')
 </body>
 
