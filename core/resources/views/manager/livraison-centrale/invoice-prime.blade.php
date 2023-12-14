@@ -76,7 +76,7 @@
                                     <tbody>
                                         
                                         <tr>
-                                            <th>@lang('Total'):</th>
+                                            <td>@lang('Total'):</td>
                                             <td>{{ showAmount(@$livraisonInfo->sum('montant')) }} {{ $general->cur_sym }}
                                             </td>
                                         </tr>
