@@ -17,17 +17,22 @@
 
     <link rel="stylesheet" href="{{asset('assets/fcadmin/css/vendor/select2.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/fcadmin/css/app.css')}}">
-<link rel="stylesheet" href="{{asset('assets/templates/basic/css/custom.css')}}">
+<link rel="stylesheet" href="{{asset('assets/templates/basic/css/custom.css')}}"> 
+<script src="{{asset('assets/global/js/jquery-3.6.0.min.js')}}"></script>
+<script src="{{ asset('assets/vendor/jquery/modernizr.min.js') }}"></script>
 <style>
 .navbar__action-list li label { 
     display: none;
 }
+
+
+ 
 </style>
     @stack('style')
 </head>
 <body>
 @yield('content')
-<script src="{{asset('assets/global/js/jquery-3.6.0.min.js')}}"></script>
+
 <script src="{{asset('assets/global/js/bootstrap.bundle.min.js')}}"></script>
 <script src="{{asset('assets/fcadmin/js/vendor/bootstrap-toggle.min.js')}}"></script>
 <script src="{{asset('assets/fcadmin/js/vendor/jquery.slimscroll.min.js')}}"></script>
@@ -40,11 +45,11 @@
 <script src="{{ asset('assets/fcadmin/js/printThis.js') }}"></script>
 
 <script src="{{asset('assets/fcadmin/js/vendor/select2.min.js')}}"></script>
-<script src="{{asset('assets/fcadmin/js/app.js')}}"></script>
-
+<script src="{{asset('assets/fcadmin/js/app.js')}}"></script> 
 {{-- LOAD NIC EDIT --}}
 <script>
     "use strict";
+    $('.select-picker').selectpicker('refresh');
     bkLib.onDomLoaded(function() {
         $( ".nicEdit" ).each(function( index ) {
             $(this).attr("id","nicEditor"+index);
