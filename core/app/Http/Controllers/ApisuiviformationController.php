@@ -241,6 +241,22 @@ class ApisuiviformationController extends Controller
          
         return response()->json($themes , 201);
     }
+
+     /**
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+
+    public function getformations(Request $request){  
+
+        $userid = $request->userid;
+        $formations = DB::table('suivi_formations')->where('userid',$userid)->first(); 
+
+    //    $formations = DB::table('suivi_formations')->where('status',1)->get();
+
+        return response()->json($formations, 201);
+    }
     /**
      * Display the specified resource.
      *

@@ -63,6 +63,7 @@ Route::match(['POST'],'getvisiteurs', [ApisuiviformationController::class, 'getv
 Route::match(['POST'],'apitypethemeformation', [ApisuiviformationController::class, 'getTypethemeformation']); 
 Route::match(['POST'],'gettypeformation', [ApisuiviformationController::class, 'getTypeformation']); 
 Route::match(['POST'],'getthemes', [ApisuiviformationController::class, 'getThemes']); 
+Route::match(['POST'],'getformations', [ApisuiviformationController::class, 'getformations']);
 Route::match(['POST'],'getlocalite', [ApilocaliteController::class, 'index']); 
 Route::match(['POST'],'apilocalite', [ApilocaliteController::class, 'store']); 
 Route::match(['POST'],'getlistedatas', [ApigetlistedatasController::class, 'index']);
