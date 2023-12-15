@@ -251,7 +251,7 @@ class ApisuiviformationController extends Controller
     public function getformations(Request $request){  
 
         $userid = $request->userid;
-        $formations = DB::table('suivi_formations')->where('userid',$userid)->first(); 
+        $formations = DB::table('suivi_formations')->where('userid',$userid)->get(); 
 
     //    $formations = DB::table('suivi_formations')->where('status',1)->get();
 
