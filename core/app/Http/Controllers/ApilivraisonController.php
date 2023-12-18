@@ -64,7 +64,6 @@ class ApilivraisonController extends Controller
             'items.*.producteur'     => 'required|integer',
             'items.*.parcelle'     => 'required|integer',
             'items.*.quantity' => 'required|numeric|gt:0',
-            'items.*.amount'   => 'required|numeric|gt:0',
             'estimate_date'    => 'required|date|date_format:Y-m-d',
         ]);
         $sender                      = User::where('id', $request->userid)->first();
