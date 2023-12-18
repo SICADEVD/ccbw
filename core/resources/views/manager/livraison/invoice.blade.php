@@ -9,7 +9,7 @@
                         @lang('N° connaissement brousse'):
                         <small>{{ $livraisonInfo->code }}</small>
                         <br> 
-                        @lang('Date de livraison: ') {{ showDateTime($livraisonInfo->estimate_date, 'd M Y') }}
+                        @lang('Date de livraison: ') {{ showDateTime($livraisonInfo->estimate_date, 'd/m/Y') }}
                         <br>
                             <b>@lang('Cooperative de reception'):</b> {{ __($livraisonInfo->receiverCooperative->name) }}
                          
@@ -61,12 +61,13 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
+                                        <th>@lang('Programme')</th>
                                         <th>@lang('Producteur')</th>
                                         <th>@lang('Parcelle')</th>
-                                        <th>@lang('Type produit')</th>
-                                        <th>@lang("Date d'envoi")</th>
+                                        <th>@lang('Certificat')</th>
+                                        <th>@lang('Type produit')</th> 
                                         <th>@lang('Qte')</th>
-                                        <th>@lang('Sous-total')</th>
+                                        <th>@lang('Sous-total')</th> 
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -74,11 +75,11 @@
                                     @foreach ($livraisonInfo->products as $livraisonProductInfo)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $livraisonProductInfo->parcelle->producteur->programme->libelle }}</td>
                                             <td>{{ $livraisonProductInfo->parcelle->producteur->nom }} {{ $livraisonProductInfo->parcelle->producteur->prenoms }}</td>
                                             <td>{{ $livraisonProductInfo->parcelle->codeParc }}</td>
-                                            <td>{{ __(@$livraisonProductInfo->type_produit) }}</td>
-                                            <td>
-                                                {{ showDateTime($livraisonProductInfo->created_at, 'd M Y') }}</td>
+                                            <td>{{ __(@$livraisonProductInfo->certificat) }}</td>
+                                            <td>{{ __(@$livraisonProductInfo->type_produit) }}</td> 
                                             <td>{{ $livraisonProductInfo->qty }} </td>
                                             <td>
                                                 {{ getAmount($livraisonProductInfo->fee) }} {{ $general->cur_sym }}</td>

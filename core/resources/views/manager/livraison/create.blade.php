@@ -249,7 +249,16 @@
         $('#sender_email').val(email);
         $('#sender_address').val(adresse);
     }
-
+    function getCertificat(id){
+        let type = $("#type-" + id).find(':selected').val();  
+        if(type=='Ordinaire'){
+            $("#certificat-" + id).attr('hidden', 'hidden'); 
+        }else{
+            $("#certificat-" + id).removeAttr('hidden');
+           
+        }
+        
+    }
     function getParcelle(id){
         
         let prod = $("#producteur-" + id).find(':selected').data('id');  
@@ -263,11 +272,28 @@
                 success:function(html){ 
                   if(html)
                   {
-                    
-                //   $("#qty").val(html);
                   $("#parcelle-"+ id).html(html);
                   }else{
                     $("#parcelle-"+ id).html('<option disabled selected value="">Parcelle</option>');
+                  }
+
+                }
+            });
+
+            $.ajax({
+                type:'get',
+                url: "{{ route('manager.livraison.get.certificat') }}",
+                data: {
+                    'id': prod
+                },
+                success:function(html){ 
+                  if(html)
+                  { 
+                  $("#certificat-"+ id).html(html);
+                  $("#type-"+ id).html('<option value="Certifie">Certifie</option><option value="Ordinaire">Ordinaire</option>');
+                  }else{
+                    $("#certificat-"+ id).html('<option disabled selected value="">Certificat</option>');
+                    $("#type-"+ id).html('<option value="Ordinaire">Ordinaire</option>');
                   }
 
                 }
@@ -287,9 +313,7 @@
                 },
                 success:function(html){ 
                   if(html)
-                  {
-                    
-                //   $("#qty").val(html);
+                  { 
                   $(".producteur").html(html);
                   }else{
                     $(".producteur").html('<option disabled selected value="">Producteur</option>');
@@ -324,10 +348,14 @@
                     </select>
                 </div>
                 <div class="col-md-2">
-                <select class="form-control" name="items[${length}][type]" required> 
-                            <option value="{{ __('Certifie') }}">{{ __('Certifie') }}</option>
-                            <option value="{{ __('Ordinaire') }}">{{ __('Ordinaire') }}</option>
+                <select class="form-control" name="items[${length}][type]" id="type-${length}" required  onchange=getCertificat(${length})> 
+                            
                     </select> 
+                </div>
+                <div class="col-md-2">
+                    <select class="form-control" name="items[${length}][certificat]" id="certificat-${length}">
+                        
+                    </select>
                 </div>
                 <div class="col-md-2">
                     <div class="input-group mb-3">

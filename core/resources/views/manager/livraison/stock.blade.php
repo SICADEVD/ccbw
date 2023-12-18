@@ -81,7 +81,8 @@
                                         </td> 
  
                                         <td>
-                                            <a href="{{ route('manager.livraison.index', ['search'=>'','magasin'=>$produit->magasin_section_id,'produit'=>$produit->type_produit,'date'=>request()->date,'producteur'=>$produit->producteur_id]) }}"
+                                            
+                                            <a href="{{ route('manager.livraison.invoice', encrypt($produit->livraison_info_id)) }}"
                                                 title="" class="btn btn-sm btn-outline--info">
                                                 <i class="las la-file-invoice"></i> @lang("Détails livraisons")
                                             </a>

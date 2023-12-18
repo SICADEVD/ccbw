@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Unit;
 use App\Constants\Status;
 use App\Models\Campagne; 
+use App\Models\Programme;
 use App\Models\ArretEcole;
 use App\Models\Cooperative;
 use App\Models\CourierInfo;
@@ -14,13 +15,13 @@ use App\Models\TravauxLegers;
 use App\Models\TypeFormation;
 use App\Models\CourierPayment;
 use App\Models\CourierProduct;
+use App\Models\ProgrammePrime;
 use App\Models\CampagnePeriode;
 use App\Models\ThemesFormation;
 use App\Models\TravauxDangereux;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\CategorieQuestionnaire;
-use App\Models\Programme;
 
 class SettingController extends Controller
 {
@@ -129,8 +130,7 @@ class SettingController extends Controller
     public function programmeStore(Request $request)
     {
         $request->validate([ 
-            'nom'  => 'required', 
-            'prime' => 'required|gt:0|numeric',  
+            'nom'  => 'required',    
         ]);
 
         if ($request->id) {
@@ -139,10 +139,37 @@ class SettingController extends Controller
         } else {
             $programme = new Programme();
         } 
-        $programme->libelle = $request->nom;
-        $programme->prime = $request->prime; 
+        $programme->libelle = $request->nom; 
         $programme->save();
         $notify[] = ['success', isset($message) ? $message  : 'Programme a été ajouté avec succès.'];
+        return back()->withNotify($notify);
+    }
+
+    public function primeIndex()
+    {
+        $pageTitle = "Manage les Primes de Programme"; 
+        $primes     = ProgrammePrime::where('programme_id',request()->idcamp)->orderBy('id','desc')->paginate(getPaginate());
+        $programmes = Programme::active()->orderBy('id','desc')->get();
+        return view('admin.config.programme-prime', compact('pageTitle', 'primes','programmes'));
+    }
+
+    public function primeStore(Request $request)
+    {
+        $request->validate([
+            'programme'  => 'required', 
+            'prime' => 'required|gt:0|numeric',
+        ]);
+
+        if ($request->id) {
+            $programme    = ProgrammePrime::findOrFail($request->id);
+            $message = "La prime a été mise à jour avec succès.";
+        } else {
+            $programme = new ProgrammePrime();
+        }
+        $programme->programme_id    = $request->programme; 
+        $programme->prime   = $request->prime;
+        $programme->save();
+        $notify[] = ['success', isset($message) ? $message  : 'La prime a été ajouté avec succès.'];
         return back()->withNotify($notify);
     }
 

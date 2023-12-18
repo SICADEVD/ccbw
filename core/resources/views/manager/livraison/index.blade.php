@@ -57,8 +57,7 @@
                                     <th>@lang('Type Produit')</th>
                                     <th>@lang("Montant - Numéro Livraison")</th>
                                     <th>@lang('Quantite(KG)')</th>
-                                    <th>@lang('Date de livraison')</th> 
-                                    <th>@lang('Action')</th>
+                                    <th>@lang('Date de livraison')</th>  
                                 </tr>
                             </thead>
                             <tbody>
@@ -89,7 +88,8 @@
                                             <span>{{ $produit->parcelle->codeParc }}</span>
                                         </td>
                                         <td>
-                                            {{ $produit->type_produit }} 
+                                        <span class="fw-bold">{{ @$produit->type_produit }}</span><br>
+                                            {{ $produit->certificat }}  
                                         </td>
                                         <td>
                                             <span class="fw-bold">{{ showAmount(@$produit->fee) }}
@@ -103,13 +103,7 @@
                                             {{ showDateTime($produit->livraisonInfo->estimate_date, 'd M Y') }}<br>
                                             {{ diffForHumans($produit->livraisonInfo->estimate_date) }}
                                         </td>
- 
-                                        <td>
-                                            <a href="{{ route('manager.livraison.invoice', encrypt($produit->livraison_info_id)) }}"
-                                                title="" class="btn btn-sm btn-outline--info">
-                                                <i class="las la-file-invoice"></i> @lang("Facture")
-                                            </a>
-                                        </td>
+  
                                     </tr>
                                 @empty
                                     <tr>

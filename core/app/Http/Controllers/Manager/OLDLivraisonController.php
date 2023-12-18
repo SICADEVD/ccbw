@@ -144,9 +144,6 @@ class LivraisonController extends Controller
             'estimate_date'    => 'required|date|date_format:Y-m-d', 
         ]);
 
-        $campagne = Campagne::active()->first();
-        $periode = CampagnePeriode::where([['campagne_id',$campagne->id],['periode_debut','<=', gmdate('Y-m-d')],['periode_fin','>=', gmdate('Y-m-d')]])->latest()->first();
-
         $sender                      = auth()->user();
         $livraison                     = new LivraisonInfo();
         $livraison->invoice_id         = getTrx();
@@ -167,16 +164,9 @@ class LivraisonController extends Controller
         $livraison->quantity      = array_sum(Arr::pluck($request->items,'quantity'));
         $livraison->save();
 
-        $prod = new StockMagasinSection(); 
-            $prod->livraison_info_id = $livraison->id;
-            $prod->magasin_section_id = $request->magasin_section; 
-            $prod->campagne_id = $campagne->id;
-            $prod->campagne_periode_id = $periode->id;
-            $prod->stocks_entrant = array_sum(Arr::pluck($request->items,'quantity'));  
-            $prod->save();
-
         $subTotal = $stock = 0;
-        
+        $campagne = Campagne::active()->first();
+        $periode = CampagnePeriode::where([['campagne_id',$campagne->id],['periode_debut','<=', gmdate('Y-m-d')],['periode_fin','>=', gmdate('Y-m-d')]])->latest()->first();
         $data = $data2 = $data3 = [];
         foreach ($request->items as $item) { 
 
@@ -195,6 +185,18 @@ class LivraisonController extends Controller
                 'type_price'      => $periode->prix_champ,
                 'created_at'      => now(),
             ];
+            $prod = StockMagasinSection::where([['campagne_id',$campagne->id],['magasin_section_id',$request->magasin_section],['producteur_id',$item['producteur']],['type_produit',$item['type']]])->first();
+            if($prod ==null){
+                $prod = new StockMagasinSection();
+            }
+            $prod->livraison_info_id = $livraison->id;
+            $prod->magasin_section_id = $request->magasin_section;
+            $prod->producteur_id = $item['producteur'];
+            $prod->campagne_id = $campagne->id;
+            $prod->campagne_periode_id = $periode->id;
+            $prod->stocks_entrant = $prod->stocks_entrant + $item['quantity'];
+            $prod->type_produit = $item['type']; 
+            $prod->save();
             
             $product = Producteur::where('id',$item['producteur'])->first();
             if($product !=null){
@@ -244,7 +246,7 @@ class LivraisonController extends Controller
         $adminNotification->save();
 
         $notify[] = ['success', 'Livraison added successfully'];
-        return to_route('manager.livraison.stock.section', encrypt($livraison->id))->withNotify($notify);
+        return to_route('manager.livraison.invoice', encrypt($livraison->id))->withNotify($notify);
     }
 
     public function sectionStore(Request $request)

@@ -105,7 +105,9 @@ Route::middleware('admin')->group(function () {
             Route::get('programme/', 'programmeIndex')->name('programme.index');
             Route::post('programme/store', 'programmeStore')->name('programme.store');
             Route::post('programme/status/{id}', 'programmeStatus')->name('programme.status'); 
-
+            Route::get('programme/prime', 'primeIndex')->name('programme.primeIndex');
+            Route::post('programme/prime/store', 'primeStore')->name('programme.primeStore');
+            Route::post('programme/prime/status/{id}', 'primeStatus')->name('programme.primeStatus');  
 
             Route::get('travaux-dangereux/', 'travauxDangereuxIndex')->name('travauxDangereux.index');
             Route::post('travaux-dangereux/store', 'travauxDangereuxStore')->name('travauxDangereux.store');

@@ -485,6 +485,7 @@ Route::middleware('auth')->group(function () {
             Route::get('stock/create', 'stockSectionCreate')->name('stock.section.create');
             Route::get('parcelle', 'getParcelle')->name('get.parcelle');
             Route::get('producteur', 'getProducteur')->name('get.producteur');
+            Route::get('certificat', 'getCertificat')->name('get.certificat');
             Route::get('producteur/liste', 'getListeProducteurConnaiss')->name('get.listeproducteur');
             Route::get('dispatch/list', 'dispatchLivraison')->name('dispatch');
             Route::get('upcoming/list', 'upcoming')->name('upcoming');
