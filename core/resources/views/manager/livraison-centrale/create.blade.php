@@ -10,7 +10,15 @@
                     @csrf
                     <div class="row">
                         <input type="hidden" name="code" value="{{ $code }}">
-                        <div class="col-lg-6 form-group">
+                        <div class="col-lg-4 form-group">
+                            <label for="">@lang("N° Connaissement USINE")</label>
+                            <div class="input-group">
+                            <span class="input-group-text">{{ $code }}</span>
+                                <input name="lastcode" value="" type="number" autocomplete="off"  class="form-control dates" placeholder="2" required>
+                                 
+                            </div>
+                        </div>
+                        <div class="col-lg-4 form-group">
                             <label for="">@lang("Date de livraison")</label>
                             <div class="input-group">
                                 <input name="estimate_date" value="{{ old('estimate_date') }}" type="text" autocomplete="off"  class="form-control dates" placeholder="Date de livraison" required>
@@ -18,10 +26,10 @@
                             </div>
                         </div>
                         
-                        <div class="col-lg-6 form-group">
+                        <div class="col-lg-4 form-group">
                             <label for="">@lang("Types de produit")</label>
                             <div class="input-group">
-                            <select class="form-control select-picker" name="type[]" multiple required> 
+                            <select class="form-control select-picker" name="type[]" id="type" multiple required> 
                                                         <option value="{{ __('Certifie') }}"
                                                         @selected(old('type')=='Certifie')>{{ __('Certifie') }}</option>
                                                         <option value="{{ __('Ordinaire') }}"
@@ -146,18 +154,19 @@
                                 <div class="card-body">
                                     <div class="row" id="">
                                     <div class="form-group row">
-                                <?php echo Form::label(__('Numéros de lot'), null, ['class' => 'col-sm-3 control-label required']); ?>
-                                <div class="col-xs-12 col-sm-9">
+                                <?php echo Form::label(__('Numéros de lot'), null, ['class' => 'col-sm-2 control-label required']); ?>
+                                <div class="col-xs-12 col-sm-10">
                                     <?php echo Form::select('connaissement_id[]', [], null, ['class' => 'form-control producteurs select2', 'id' => 'producteurs', 'required', 'multiple']); ?>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <?php echo Form::label(null, null, ['class' => 'col-sm-3 control-label']); ?>
-                                <div class="col-xs-12 col-sm-9">
+                                <?php echo Form::label(null, null, ['class' => 'col-sm-2 control-label']); ?>
+                                <div class="col-xs-12 col-sm-10">
                                     <table class="table table-striped table-bordered">
                                         <thead>
                                             <tr>
                                                 <th colspan="2">@lang('Producteur')</th>
+                                                <th>@lang('Certificat')</th>
                                                 <th>@lang('Type')</th>
                                                 <th>@lang('Quantité(Kg)')</th>
                                             </tr>
@@ -264,7 +273,7 @@
                 $.ajaxModal(MODAL_XL, url);
                 $(MODAL_XL).modal('show');
             });
-    $('#magasin_central').change(function() { 
+    $('#magasin_central,#type').change('keyup change blur',function() { 
 $.ajax({
     type: 'GET',
     url: "{{ route('manager.livraison.magcentral.get.producteur') }}",
@@ -272,6 +281,7 @@ $.ajax({
     success: function(html) {
          
         $('#producteurs').html(html);
+        getproducteur();
 
     }
 });
@@ -285,16 +295,23 @@ $.ajax({
     data: $('#flocal').serialize(),
     success: function(html) {
         $('#listeprod').html(html.results);
-        $('#poidsnet').val(html.total);
-        /* $('#nombresacs').val(html.totalsacs);
-        $("#nombresacs").attr({
-            "max": html.totalsacs, 
-            "min": 1  
-        }); */
+        $('#poidsnet').val(html.total); 
     }
 });
 });
 
+function getproducteur(){
+
+    $.ajax({
+    type: 'GET',
+    url: "{{ route('manager.livraison.magcentral.get.listeproducteur') }}",
+    data: $('#flocal').serialize(),
+    success: function(html) {
+        $('#listeprod').html(html.results);
+        $('#poidsnet').val(html.total); 
+    }
+});
+}
 $('#flocal').change('keyup change blur', function() {
             update_amounts();
         });

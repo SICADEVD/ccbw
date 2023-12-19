@@ -10,7 +10,7 @@
                                 <tr>
                                     <th>@lang('Campagne')</th>
                                     <th>@lang('Période')</th>
-                                    <th>@lang('Prix Bord Champ')</th>
+                                    <th>@lang('Prix Bord Champ(FCFA/Kg)')</th>
                                     <th>@lang('Date début')</th>
                                     <th>@lang('Date fin')</th>
                                     <th>@lang('Status')</th>

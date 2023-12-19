@@ -9,7 +9,7 @@
                             <thead>
                                 <tr>
                                     <th>@lang('Programme')</th> 
-                                    <th>@lang('Prime')</th> 
+                                    <th>@lang('Prime(FCFA/Kg)')</th> 
                                     <th>@lang('Status')</th>
                                     <th>@lang('Last Update')</th>
                                     <th>@lang('Action')</th>

@@ -129,5 +129,5 @@
     </script>
 @endpush
 @push('breadcrumb-plugins')
-    <x-back route="{{ route('manager.livraison.index') }}" />
+    <x-back route="{{ route('manager.livraison.stock.section') }}" />
 @endpush

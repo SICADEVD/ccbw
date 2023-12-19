@@ -61,8 +61,11 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
+                                        <th>@lang('Programme')</th>
                                         <th>@lang('Producteur')</th> 
-                                        <th>@lang('Type produit')</th> 
+                                        <th>@lang('Parcelle')</th>
+                                        <th>@lang('Certificat')</th> 
+                                        <th>@lang('Type produit')</th>  
                                         <th>@lang('Sous-total')</th>
                                     </tr>
                                 </thead>
@@ -71,7 +74,10 @@
                                     @foreach ($livraisonInfo->products as $livraisonProductInfo)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $livraisonProductInfo->producteur->programme->libelle }}</td>
                                             <td>{{ $livraisonProductInfo->producteur->nom }} {{ $livraisonProductInfo->producteur->prenoms }}</td> 
+                                            <td>{{ $livraisonProductInfo->parcelle->codeParc }}</td>
+                                            <td>{{ __(@$livraisonProductInfo->certificat) }}</td>
                                             <td>{{ __(@$livraisonProductInfo->type_produit) }}</td> 
                                             <td>{{ $livraisonProductInfo->quantite+$livraisonProductInfo->quantite_sortant }} </td> 
                                         </tr>

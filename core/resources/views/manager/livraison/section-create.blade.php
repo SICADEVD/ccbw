@@ -21,7 +21,7 @@
                         <div class="col-lg-6 form-group">
                             <label for="">@lang("Types de produit")</label>
                             <div class="input-group">
-                            <select class="form-control select-picker" name="type[]" multiple required> 
+                            <select class="form-control select-picker" name="type[]" id="type" multiple required> 
                                                         <option value="{{ __('Certifie') }}"
                                                         @selected(old('type')=='Certifie')>{{ __('Certifie') }}</option>
                                                         <option value="{{ __('Ordinaire') }}"
@@ -199,18 +199,19 @@
                                 <div class="card-body">
                                     <div class="row" id="">
                                     <div class="form-group row">
-                                <?php echo Form::label(__('Producteur'), null, ['class' => 'col-sm-4 control-label required']); ?>
-                                <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::label(__('Producteur'), null, ['class' => 'col-sm-2 control-label required']); ?>
+                                <div class="col-xs-12 col-sm-10">
                                     <?php echo Form::select('producteur_id[]', [], null, ['class' => 'form-control producteurs select2', 'id' => 'producteurs', 'required', 'multiple']); ?>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <?php echo Form::label(null, null, ['class' => 'col-sm-4 control-label']); ?>
-                                <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::label(null, null, ['class' => 'col-sm-2 control-label']); ?>
+                                <div class="col-xs-12 col-sm-10">
                                     <table class="table table-striped table-bordered">
                                         <thead>
                                             <tr>
                                                 <th colspan="2">@lang('Producteur')</th>
+                                                <th>@lang('Certificat')</th>
                                                 <th>@lang('Type')</th>
                                                 <th>@lang('Quantité(KG)')</th>
                                             </tr>
@@ -317,15 +318,14 @@
                 $.ajaxModal(MODAL_XL, url);
                 $(MODAL_XL).modal('show');
             });
-    $('#sender_magasin').change(function() { 
+    $('#sender_magasin, #type').change(function() { 
+       
 $.ajax({
     type: 'GET',
     url: "{{ route('manager.livraison.get.producteur') }}",
     data: $('#flocal').serialize(),
     success: function(html) {
-         
         $('#producteurs').html(html);
-
     }
 });
 });

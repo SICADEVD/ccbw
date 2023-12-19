@@ -466,6 +466,7 @@ Route::middleware('auth')->group(function () {
             Route::get('magcentral/producteur/liste', [LivraisonCentraleController::class,'getListeProducteurConnaiss'])->name('magcentral.get.listeproducteur');
             Route::get('magcentral/connaissement', [LivraisonCentraleController::class,'connaissement'])->name('usine.connaissement');
             Route::post('magcentral/usine/delivery', [LivraisonCentraleController::class,'deliveryUsineStore'])->name('usine.delivery');
+            Route::post('magcentral/usine/refoule', [LivraisonCentraleController::class,'refouleUsineStore'])->name('usine.refoule');
             Route::get('magcentral/usine/invoice/{id}', [LivraisonCentraleController::class,'usineInvoice'])->name('usine.invoice');
             Route::get('magcentral/prime', [LivraisonCentraleController::class,'prime'])->name('prime.producteur');
             Route::post('magcentral/prime', [LivraisonCentraleController::class,'deliveryPrimeStore'])->name('prime.delivery');
