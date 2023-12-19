@@ -319,13 +319,14 @@
                 $(MODAL_XL).modal('show');
             });
     $('#sender_magasin, #type').change(function() { 
-       
+        $('#producteurs').html('');
 $.ajax({
     type: 'GET',
     url: "{{ route('manager.livraison.get.producteur') }}",
     data: $('#flocal').serialize(),
     success: function(html) {
         $('#producteurs').html(html);
+        $('#listeprod').html('');
     }
 });
 });
