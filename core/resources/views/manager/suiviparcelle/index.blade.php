@@ -66,7 +66,8 @@
                                             <span class="d-block">{{ showDateTime($suiviparcelle->dateVisite) }}</span>
                                             <span>{{ diffForHumans($suiviparcelle->dateVisite) }}</span>
                                         </td>
-                                        <td> @php echo $suiviparcelle->statusSuiviParc; @endphp </td>
+                                        <td> @php echo $suiviparcelle->statusBadge; @endphp </td>
+
                                         <td>
                                          
                                             <button type="button" class="btn btn-sm btn-outline--primary" data-bs-toggle="dropdown" aria-expanded="false"><i

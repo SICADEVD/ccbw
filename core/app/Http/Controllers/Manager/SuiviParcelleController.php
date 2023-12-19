@@ -346,10 +346,12 @@ class SuiviParcelleController extends Controller
         return view('manager.suiviparcelle.edit', compact('pageTitle', 'suiviparcelle', 'producteurs', 'localites', 'campagnes', 'parcelles', 'sections', 'arbres', 'arbreOmbrages', 'arbreAgroForestiers', 'parasites', 'pesticidesAnneDerniere', 'intrantsAnneDerniere', 'traitements','autreParasites','amis'));
     }
 
-    public function statusSuiviParc($id)
+    public function status($id)
     {
         return SuiviParcelle::changeStatus($id);
     }
+
+   
 
     public function exportExcel()
     {
