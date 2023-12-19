@@ -156,7 +156,7 @@ class SuiviParcelleController extends Controller
         $suivi_parcelle->presenceAutreTypeInsecteAmi   = $request->presenceAutreTypeInsecteAmi;
         $suivi_parcelle->arbresagroforestiers  = $request->arbresagroforestiers;
         $suivi_parcelle->userid   = auth()->user()->id;
-       dd(json_encode($request->all()));
+    //    dd(json_encode($request->all()));
         // dd($request->all());
         $suivi_parcelle->save();
         if ($suivi_parcelle != null) {
