@@ -17,6 +17,10 @@ class FormationStaffFormateur extends Model
     {
         return $this->belongsTo(FormationStaff::class, 'formation_staff_id');
     }
+    public function entreprise()
+    {
+        return $this->belongsTo(Entreprise::class, 'entreprise_id');
+    }
 
     public function formateurStaff()
     {

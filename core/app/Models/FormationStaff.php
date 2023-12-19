@@ -11,7 +11,7 @@ class FormationStaff extends Model
 {
     use Searchable, GlobalStatus, PowerJoins;
 
-    protected $table="formation_staffs";
+    protected $table = "formation_staffs";
 
     public function cooperative()
     {
@@ -26,22 +26,23 @@ class FormationStaff extends Model
         return $this->belongsTo(Campagne::class);
     }
 
-    public function formateur(){
-        return $this->belongsTo(FormateurStaff::class,'formateur_staff_id');
-    }
-
     public function user()
     {
-        return $this->belongsTo(User::class,'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
-
-    public function formationStaffUser()
-    {
-        return $this->hasMany(FormationStaffUser::class, 'formation_staff_id', 'id');
-    }
-
     public function formationStaffModuleTheme()
     {
         return $this->hasMany(FormationStaffModuleTheme::class, 'formation_staff_id', 'id');
     }
+
+    public function formateurs()
+    {
+        return $this->belongsToMany(FormateurStaff::class, 'formation_staff_formateurs', 'formation_staff_id', 'formateur_staff_id');
+    }
+
+    public function formationStaffEntrepriseFormateur()
+    {
+        return $this->hasMany(FormationStaffFormateur::class, 'formation_staff_id', 'id');
+    }
+   
 }

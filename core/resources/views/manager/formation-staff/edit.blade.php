@@ -82,10 +82,11 @@
                     <div class="form-group row">
                         <?php echo Form::label(__('Entreprise du formateur'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <select class="form-control" name="entreprise_id" id="entreprise_formateur" required>
+                            <select class="form-control select2-multi-select" name="entreprise_formateur[]"
+                                id="entreprise_formateur" required multiple>
                                 <option value="">@lang('Selectionner une option')</option>
                                 @foreach ($entreprises as $entreprise)
-                                    <option value="{{ $entreprise->id }}" @selected($entreprise->id == $formation->formateur->entreprise->id)>
+                                    <option value="{{ $entreprise->id }}" @selected(in_array($entreprise->id, $entreprisess))>
                                         {{ $entreprise->nom_entreprise }}</option>
                                 @endforeach
                             </select>
@@ -95,11 +96,12 @@
                     <div class="form-group row">
                         <?php echo Form::label(__('Formateur'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <select class="form-control" name="formateur" id="formateur" required>
+                            <select class="form-control select2-multi-select" name="formateur[]" id="formateur" required
+                                multiple>
                                 <option value="">@lang('Selectionner une option')</option>
                                 @foreach ($formateurs as $formateur)
-                                    <option value="{{ $formateur->id }}" data-chained="{{ $formateur->entreprise_id }}"
-                                        @selected($formateur->id == $formation->formateur->id)>
+                                    <option value="{{ $formateur->id }}"
+                                        data-chained="{{ $formateur->entreprise_id ?? '' }}">
                                         {{ $formateur->nom_formateur }} {{ $formateur->prenom_formateur }}</option>
                                 @endforeach
                             </select>
@@ -173,7 +175,7 @@
     <script src="{{ asset('assets/vendor/jquery/daterangepicker.min.js') }}"></script>
     <script type="text/javascript">
         $("#producteur").chained("#localite");
-        $("#formateur").chained("#entreprise_formateur");
+        
         $('#duree_formation').timepicker({
             showMeridian: (false)
         });
@@ -232,6 +234,37 @@
                     optionsHtml2 = updateTheme(optionsHtml2, $(this).val(), optionParTheme);
                 })
             });
+
+
+            var formateurSelected = "{{ implode(',', $formateurSelected) }}";
+            //idée de ce bloque de code c'est de remplire l'objet optionParTheme avec les themes provenant de la base de données
+            var optionParFormateur = new Object();
+            $("#formateur option").each(function() {
+                var curreentArray = optionParFormateur[($(this).data('chained'))] ? optionParFormateur[($(
+                        this)
+                    .data('chained'))] : [];
+                curreentArray[$(this).val()] = $(this).text().trim();
+                Object.assign(optionParFormateur, {
+                    [$(this).data('chained')]: curreentArray
+                });
+                console.log($(this).val()+" option");
+
+                if (formateurSelected.split(',').includes($(this).val()) && formateurSelected != "") {
+                    $(this).val($(this).data('chained') + "-" + $(this).val());
+                    $(this).attr('selected', 'selected');
+                } else $(this).remove();
+            });
+
+            console.log(optionParFormateur);
+            $('#entreprise_formateur').change(function() {
+                var typeformation = $(this).val();
+                $("#formateur").empty();
+                var optionsHtml2 = "";
+                $(this).find('option:selected').each(function() {
+                    //console.log($(this).val());
+                    optionsHtml2 = updateFormateur(optionsHtml2, $(this).val(), optionParFormateur);
+                })
+            });
         });
 
         function updateTheme(optionsHtml2, id, optionParTheme) {
@@ -241,6 +274,17 @@
                     optionsHtml += '<option value="' + id + '-' + element + '">' + key + '</option>';
                 });
                 $("#theme").html(optionsHtml);
+            }
+            return optionsHtml;
+        }
+
+        function updateFormateur(optionsHtml2, id, optionParFormateur) {
+            var optionsHtml = optionsHtml2
+            if (id != '') {
+                optionParFormateur[id].forEach(function(key, element) {
+                    optionsHtml += '<option value="' + id + '-' + element + '">' + key + '</option>';
+                });
+                $("#formateur").html(optionsHtml);
             }
             return optionsHtml;
         }
