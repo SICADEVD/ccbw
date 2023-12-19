@@ -53,6 +53,7 @@ class User extends Authenticatable
     {
         $query->where('user_type', '!=', 'manager');
     }
+   
 
     
     public function getImageUrlAttribute()

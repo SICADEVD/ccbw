@@ -58,21 +58,18 @@ class ApplicationController extends Controller
         $campagnes = Campagne::active()->pluck('nom', 'id');
         $parcelles = Parcelle::with('producteur')->get();
 
-        $staffs  = User::staff()->get();
+        $staffs = User::whereHas('roles', function($q){ $q->whereIn('name', ['Applicateur']); })
+        ->where('cooperative_id', $manager->cooperative_id)
+        ->select('users.*')
+        ->get(); 
+       
         return view('manager.application.create', compact('pageTitle', 'producteurs', 'localites', 'parcelles', 'staffs', 'sections', 'campagnes'));
     }
 
     public function store(Request $request)
     {
         $validationRule = [
-            'parcelle_id'    => 'required|exists:parcelles,id',
-            'applicateur'    => 'required|exists:users,id',
-            'superficiePulverisee'  => 'required|max:255',
-            'marqueProduitPulverise'  => 'required|max:255',
-            'raisonApplication'  => 'required|max:255',
-            'delaisReentree'  => 'required|max:255',
-            'date_application'  => 'required|max:255',
-            'heure_application'  => 'required|max:255',
+            
         ];
 
 
@@ -93,18 +90,7 @@ class ApplicationController extends Controller
             $application = new Application();
         }
         $campagne = Campagne::active()->first();
-        $application->parcelle_id  = $request->parcelle_id;
-        $application->campagne_id  = $campagne->id;
-        $application->applicateur_id  = $request->applicateur;
-        $application->superficiePulverisee  = $request->superficiePulverisee;
-        $application->marqueProduitPulverise  = $request->marqueProduitPulverise;
-        $application->degreDangerosite  = $request->degreDangerosite;
-        $application->raisonApplication  = $request->raisonApplication;
-        $application->delaisReentree  = $request->delaisReentree;
-        $application->zoneTampons  = $request->zoneTampons;
-        $application->presenceDouche  = $request->presenceDouche;
-        $application->date_application  = $request->date_application;
-        $application->heure_application = $request->heure_application;
+       
         if ($request->hasFile('photoZoneTampons')) {
             try {
                 $application->photoZoneTampons = $request->file('photoZoneTampons')->store('public/applications');
@@ -114,47 +100,12 @@ class ApplicationController extends Controller
             }
         }
 
-        if ($request->hasFile('photoDouche')) {
-            try {
-                $application->photoDouche = $request->file('photoDouche')->store('public/applications');
-            } catch (\Exception $exp) {
-                $notify[] = ['error', 'Impossible de télécharger votre image'];
-                return back()->withNotify($notify);
-            }
-        }
+        dd($request->all());
 
         $application->save();
 
-
         if ($application != null) {
             $id = $application->id;
-            $datas = [];
-            $datas2 = [];
-
-            if (count($request->matieresActives)) {
-                ApplicationMatieresactive::where('application_id', $id)->delete();
-                $i = 0;
-                foreach ($request->matieresActives as $data) {
-
-                    $datas[] = [
-                        'application_id' => $id,
-                        'matiereactive' => $data,
-                    ];
-                }
-            }
-            if (count($request->nomInsectesCibles)) {
-                ApplicationInsecte::where('application_id', $id)->delete();
-                $i = 0;
-                foreach ($request->nomInsectesCibles as $data) {
-
-                    $datas2[] = [
-                        'application_id' => $id,
-                        'insecte' => $data,
-                    ];
-                }
-            }
-            ApplicationMatieresactive::insert($datas);
-            ApplicationInsecte::insert($datas2);
         }
         $notify[] = ['success', isset($message) ? $message : "L'application a été crée avec succès."];
         return back()->withNotify($notify);

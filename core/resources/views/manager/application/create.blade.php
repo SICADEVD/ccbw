@@ -141,14 +141,16 @@
                                     <tr>
                                         <td class="row">
                                             <div class="col-xs-12 col-sm-12 bg-success">
-                                                <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Pesticide 1')
+                                                <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Pesticide')
                                                 </badge>
                                             </div>
                                             <div class="row">
                                                 <div class="col-xs-12 col-sm-4">
                                                     <div class="form-group row">
                                                         <label class="control-label">Pesticides</label>
-                                                        <select name="pesticides[]" id="pesticides-1" class="form-control">
+                                                        <select name="pesticides[0][nom]" id="pesticides-1"
+                                                            class="form-control">
+                                                            <option value="">Selectionner une option</option>
                                                             <option value="Herbicides">Herbicides</option>
                                                             <option value="Fongicides">Fongicides</option>
                                                             <option value="Nematicide">Nematicide</option>
@@ -162,7 +164,7 @@
                                                 <div class="col-xs-12 col-sm-4">
                                                     <div class="form-group row">
                                                         {{ Form::label(__('Nom commercial'), null, ['class' => 'control-label']) }}
-                                                        <input name="nomCommercial[]" id="nomCommercial-1"
+                                                        <input name="pesticides[0][nomCommercial]" id="nomCommercial-1"
                                                             class="form-control" placeholder="Nom commercial">
                                                     </div>
                                                 </div>
@@ -170,8 +172,8 @@
                                                 <div class="col-xs-12 col-sm-4">
                                                     <div class="form-group row">
                                                         <label>Matières actives</label>
-                                                        <input type="text" name="matiereActive[]" id="matiereActive-1"
-                                                            class="form-control"
+                                                        <input type="text" name="pesticides[0][matiereActive[]]"
+                                                            id="matiereActive-1" class="form-control"
                                                             placeholder="matière active 1, matière active 2 ....">
                                                     </div>
                                                 </div>
@@ -181,8 +183,9 @@
                                                 <div class="col-xs-12 col-sm-4">
                                                     <div class="form-group row">
                                                         <label class="control-label">Toxicicologie</label>
-                                                        <select name="toxicicologie[]" id="toxicicologie-1"
+                                                        <select name="pesticides[0][toxicicologie]" id="toxicicologie-1"
                                                             class="form-control">
+                                                            <option value="">Selectionner une option</option>
                                                             <option value="I">I</option>
                                                             <option value="IA">IA</option>
                                                             <option value="IB">IB</option>
@@ -195,15 +198,15 @@
                                                 <div class="col-xs-12 col-sm-4">
                                                     <div class="form-group row">
                                                         <label>Dose</label>
-                                                        <input name="dose[]" id="dose-1" class="form-control"
-                                                            placeholder="L/Ha">
+                                                        <input name="pesticides[0][dose]" id="dose-1"
+                                                            class="form-control" placeholder="L/Ha">
                                                     </div>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-4">
                                                     <div class="form-group row">
                                                         <label>Fréquence</label>
-                                                        <input name="frequence[]" id="frequence-1" class="form-control"
-                                                            placeholder="Fréquence">
+                                                        <input name="pesticides[0][frequence]" id="frequence-1"
+                                                            class="form-control" placeholder="Fréquence">
                                                     </div>
                                                 </div>
                                             </div>
@@ -227,7 +230,8 @@
                     <div class="form-group row mt-3">
                         <label class="col-sm-4 control-label">@lang('Maladies observées dans la parcelle')</label>
                         <div class="col-xs-12 col-sm-8">
-                            <select class="form-control select2-multi-select protections" name="maladies[]" multiple required>
+                            <select class="form-control select2-multi-select protections" name="maladies[]" multiple
+                                required>
                                 <option value="">@lang('Selectionner les protections')</option>
                                 <option value="">Maladie1</option>
                                 <option value="">Maladie2</option>
@@ -283,7 +287,7 @@
 
         $(document).ready(function() {
 
-            var pesticideCount = $("#pesticide_area tr").length + 1;
+            var pesticideCount = $("#pesticide_area tr").length;
             $(document).on('click', '#addRowPesticide', function() {
 
                 //---> Start create table tr
@@ -293,15 +297,21 @@
                     pesticideCount +
                     '</badge></div><div class="col-xs-12 col-sm-4"><div class="form-group row"><label for="" class="">Pesticides</label><select class="form-control" id="pesticides-' +
                     pesticideCount +
-                    '" name="pesticides[]"><option value="Herbicides">Herbicides</option><option value="Fongicides">Fongicides</option><option value="Nematicide">Nematicide</option><option value="Insecticide">Insecticide</option><option value="Acaricides">Acaricides</option><option value="Pesticides">Pesticides</option></select></div></div><div class="col-xs-12 col-sm-4"><div class="form-group row"><label> Nom commercial</label><input type="text" name="nomCommercial[]" id="nomCommercial' +
+                    '" name="pesticides[' + pesticideCount +
+                    '][nom]"><option value="">Selectionner une option</option><option value="Herbicides">Herbicides</option><option value="Fongicides">Fongicides</option><option value="Nematicide">Nematicide</option><option value="Insecticide">Insecticide</option><option value="Acaricides">Acaricides</option><option value="Pesticides">Pesticides</option></select></div></div><div class="col-xs-12 col-sm-4"><div class="form-group row"><label> Nom commercial</label><input type="text" name="pesticides[' + pesticideCount +
+                    '][nomCommercial]" id="nomCommercial' +
                     pesticideCount +
-                    '" class="form-control" placeholder="Nom commercial"></div></div><div class="col-xs-12 col-sm-4"><div class="form-group"><label for="" class="">Matières actives</label><input type="text" name="matiereActive[]" id="matiereActive' +
+                    '" class="form-control" placeholder="Nom commercial"></div></div><div class="col-xs-12 col-sm-4"><div class="form-group"><label for="" class="">Matières actives</label><input type="text" name="pesticides[' + pesticideCount +
+                    '][matiereActive[]]" id="matiereActive' +
                     pesticideCount +
                     '" class="form-control" placeholder="matière active 1, matière active 2 ...."></div></div><di class="row mt-3"><div class="col-xs-12 col-sm-4"><div class="form-group row"><label class="control-label">Toxicicologie</label><select class="form-control" id="toxicicologie-' +
                     pesticideCount +
-                    '" name="toxicicologie[]"><option value="I">I</option><option value="IA">IA</option><option value="IB">IB</option><option value="II">II</option><option value="III">III</option><option value="IV">IV</option></select></div></div><div class="col-xs-12 col-sm-4"><div class="form-group row"><label>Dose</label><input type="text" name="dose[]" id="dose' +
+                    '" name="pesticides[' + pesticideCount +
+                    '][toxicicologie]"> <option value="">Selectionner une option</option><option value="I">I</option><option value="IA">IA</option><option value="IB">IB</option><option value="II">II</option><option value="III">III</option><option value="IV">IV</option></select></div></div><div class="col-xs-12 col-sm-4"><div class="form-group row"><label>Dose</label><input type="text" name="pesticides[' + pesticideCount +
+                    '][dose]" id="dose' +
                     pesticideCount +
-                    '" class="form-control" placeholder="L/Ha"></div></div><div class="col-xs-12 col-sm-4"><div class="form-group row"><label>Fréquence</label><input type="text" name="frequence[]" id="frequence' +
+                    '" class="form-control" placeholder="L/Ha"></div></div><div class="col-xs-12 col-sm-4"><div class="form-group row"><label>Fréquence</label><input type="text" name="pesticides[' + pesticideCount +
+                    '][frequence]" id="frequence' +
                     pesticideCount +
                     '" class="form-control" placeholder="Fréquence"></div></div></di><div class="col-xs-12 col-sm-8"><button type="button" id="' +
                     pesticideCount +
@@ -314,13 +324,12 @@
                 $('#pesticide_area').append(html_table);
 
             });
-
             $(document).on('click', '.removeRowPesticide', function() {
 
                 var row_id = $(this).attr('id');
 
                 // delete only last row id
-                if (row_id == $("#pesticide_area tr").length) {
+                if (row_id == $("#pesticide_area tr").length - 1) {
 
                     $(this).parents('tr').remove();
 
@@ -328,49 +337,7 @@
                 }
             });
 
-
-
-            var productCountInsect = $("#product_area_insect tr").length + 1;
-            $(document).on('click', '#addRowInsect', function() {
-
-                //---> Start create table tr
-                var html_table = '<tr>';
-                html_table +=
-                    '<td class="row"> <div class="col-xs-12 col-sm-12"><div class="form-group"><label for="nomInsectesCibles" class="">Nom ' +
-                    productCountInsect +
-                    '</label><input placeholder="Nom..." class="form-control" id="nomInsectesCibles-' +
-                    productCountInsect +
-                    '" name="nomInsectesCibles[]" type="text"></div></div><div class="col-xs-12 col-sm-8"><button type="button" id="' +
-                    productCountInsect +
-                    '" class="removeRowInsect btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></div></td>';
-
-                html_table += '</tr>';
-                //---> End create table tr
-
-                productCountInsect = parseInt(productCountInsect) + 1;
-                $('#product_area_insect').append(html_table);
-
-            });
-
-            $(document).on('click', '.removeRowInsect', function() {
-
-                var row_id = $(this).attr('id');
-
-                // delete only last row id
-                if (row_id == $("#product_area_insect tr").length) {
-
-                    $(this).parents('tr').remove();
-
-                    productCountInsect = parseInt(productCountInsect) - 1;
-
-                    //    console.log($("#product_area_insect tr").length);
-
-                    //  productCountInsect--;
-
-                }
-            });
-
-            $('#photoDouche,#photoZoneTampons,#applicateurs,#infosIndependant,#etatEpis').hide();
+            $('#applicateurs,#infosIndependant,#etatEpis').hide();
 
             $('.personneApplication').change(function() {
                 var personneApplication = $('.personneApplication').val();
@@ -401,28 +368,6 @@
                 } else {
                     $('#etatEpis').hide('slow');
                     $('.etatEpi').attr('required', false);
-                }
-            });
-
-            $('.zoneTampons').change(function() {
-                var zoneTampons = $('.zoneTampons').val();
-                if (zoneTampons == 'oui') {
-                    $('#photoZoneTampons').show('slow');
-                    $('.photoZoneTampons').css('display', 'block');
-                } else {
-                    $('#photoZoneTampons').hide('slow');
-                    $('.photoZoneTampons').val('');
-                }
-            });
-
-            $('.presenceDouche').change(function() {
-                var presenceDouche = $('.presenceDouche').val();
-                if (presenceDouche == 'oui') {
-                    $('#photoDouche').show('slow');
-                    $('.photoDouche').css('display', 'block');
-                } else {
-                    $('#photoDouche').hide('slow');
-                    $('.photoDouche').val('');
                 }
             });
         });

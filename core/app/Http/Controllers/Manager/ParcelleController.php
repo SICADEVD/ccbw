@@ -304,6 +304,7 @@ class ParcelleController extends Controller
         $arbres = Agroespecesarbre::all();
         $agroespeceabreParcelle = agroespeceabre_parcelle::where('parcelle_id', $id)->get();
 
+
         return view('manager.parcelle.edit', compact('pageTitle', 'localites', 'parcelle', 'producteurs', 'sections', 'protections', 'arbres', 'agroespeceabreParcelle'));
 
         // $protections = Parcelle_type_protection::where('parcelle_id',$id)->get();
