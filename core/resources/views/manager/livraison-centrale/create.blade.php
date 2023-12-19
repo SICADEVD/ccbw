@@ -21,7 +21,7 @@
                         <div class="col-lg-4 form-group">
                             <label for="">@lang("Date de livraison")</label>
                             <div class="input-group">
-                                <input name="estimate_date" value="{{ old('estimate_date') }}" type="text" autocomplete="off"  class="form-control dates" placeholder="Date de livraison" required>
+                                <input name="estimate_date" value="{{ old('estimate_date') }}" type="date" autocomplete="off"  class="form-control dates" placeholder="Date de livraison" required>
                                 <span class="input-group-text"><i class="las la-calendar"></i></span>
                             </div>
                         </div>
