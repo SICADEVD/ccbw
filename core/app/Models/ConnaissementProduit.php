@@ -16,6 +16,10 @@ class ConnaissementProduit extends Model
     {
         return $this->belongsTo(Campagne::class, 'campagne_id');
     }
+    public function parcelle()
+    {
+        return $this->belongsTo(Parcelle::class, 'parcelle_id');
+    }
     public function producteur()
     {
         return $this->belongsTo(Producteur::class, 'producteur_id');

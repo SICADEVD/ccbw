@@ -41,11 +41,10 @@
                                 
                                 <th>@lang("Campagne")</th> 
                                 <th>@lang("Periode")</th> 
-                                    <th>@lang('Magasin Section')</th>
-                                    <th>@lang('Producteur')</th>
-                                    <th>@lang('Type Produit')</th> 
+                                    <th>@lang('Magasin Section')</th> 
                                     <th>@lang('Stock entrant')</th> 
                                     <th>@lang('Stock sortant')</th> 
+                                    <th>@lang('Date de livraison')</th>  
                                     <th>@lang('Action')</th>
                                 </tr>
                             </thead>
@@ -66,12 +65,6 @@
                                                 <span>@lang('N/A')</span>
                                             @endif
                                         </td>
-                                        <td>
-                                            <span class="fw-bold">{{ $produit->producteur->nom }} {{ $produit->producteur->prenoms }}</span>
-                                        </td>
-                                        <td>
-                                            {{ $produit->type_produit }} 
-                                        </td>
                                          
                                         <td>
                                             {{ showAmount($produit->stocks_entrant) }} 
@@ -79,7 +72,10 @@
                                         <td>
                                             {{ showAmount($produit->stocks_sortant) }} 
                                         </td> 
- 
+                                        <td>
+                                            {{ showDateTime($produit->livraisonInfo->estimate_date, 'd/m/Y') }}<br>
+                                            {{ diffForHumans($produit->livraisonInfo->estimate_date) }}
+                                        </td>
                                         <td>
                                             
                                             <a href="{{ route('manager.livraison.invoice', encrypt($produit->livraison_info_id)) }}"
@@ -109,7 +105,9 @@
 @endsection
 
 @push('breadcrumb-plugins') 
-
+<a href="{{ route('manager.livraison.create') }}" class="btn  btn-outline--primary h-45 addNewCooperative">
+        <i class="las la-plus"></i>@lang("Enregistrer une livraison brousse")
+    </a>
 <a href="{{ route('manager.livraison.stock.section.create') }}" class="btn  btn-outline--primary h-45 addNewCooperative">
         <i class="las la-plus"></i>@lang("Enregistrer Connaissement vers Magasin Central")
     </a>

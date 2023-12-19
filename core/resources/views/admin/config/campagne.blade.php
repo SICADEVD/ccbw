@@ -10,7 +10,7 @@
                                 <tr>
                                     <th>@lang('Cooperative')</th>
                                     <th>@lang('Campagne')</th>
-                                    <th>@lang('Prix d\'achat')</th>
+                                    <th>@lang('Prix annuel(FCFA/Kg)')</th>
                                     <th>@lang('Date début')</th>
                                     <th>@lang('Date fin')</th>
                                     <th>@lang('Status')</th>

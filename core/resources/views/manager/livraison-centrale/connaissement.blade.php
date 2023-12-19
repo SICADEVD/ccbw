@@ -92,8 +92,12 @@
                                         <td> 
                                             @if($produit->status == Status::COURIER_DISPATCH)
                                                 <span class="badge badge--dark">@lang('En attente de reception')</span>
-                                            @else($produit->status == Status::COURIER_DELIVERYQUEUE)
+                                            @endif
+                                            @if($produit->status == Status::COURIER_DELIVERYQUEUE)
                                                 <span class="badge badge--success">@lang("Receptionnée")</span>
+                                            @endif
+                                            @if($produit->status == Status::COURIER_DELIVERED)
+                                                <span class="badge badge--danger">@lang("Refoulée")</span>
                                             @endif
                                         </td>
                                         <td>
@@ -101,7 +105,12 @@
                                                 title="" class="btn btn-sm btn-outline--info">
                                                 <i class="las la-file-invoice"></i> @lang("Détails livraisons")
                                             </a>
-                                            @if ($produit->status == 1)
+                                           
+                                            @if($produit->status == 1)
+                                            <button class="btn btn-sm btn-outline--danger  refoule"
+                                                    data-code="{{ $produit->numeroCU }}"><i class="las la-truck"></i>
+                                                    @lang('Refouler cette livraison')</button>
+
                                                 <button class="btn btn-sm btn-outline--secondary  delivery"
                                                     data-code="{{ $produit->numeroCU }}"><i class="las la-truck"></i>
                                                     @lang('Confirmer la reception')</button>
@@ -152,6 +161,31 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="refouleBy" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="" lass="modal-title" id="exampleModalLabel">@lang('Confirmation de refoulement')</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Fermer">
+                        <span class="fa fa-times"></span>
+                    </button>
+                </div>
+                <form action="{{ route('manager.livraison.usine.refoule') }}" method="POST">
+                    @csrf
+                    @method('POST')
+                    <input type="hidden" name="code">
+                    <div class="modal-body">
+                        <p>@lang('Etre-vous sûr de vouloir confirmer le refoulement de cette livraison?')</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn--dark" data-bs-dismiss="modal">@lang('Fermer')</button>
+                        <button type="submit" class="btn btn--primary">@lang('Confirmer')</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('breadcrumb-plugins') 
@@ -170,6 +204,11 @@
          (function($) { 
             $('.delivery').on('click', function() {
                 var modal = $('#deliveryBy');
+                modal.find('input[name=code]').val($(this).data('code'))
+                modal.modal('show');
+            });
+            $('.refoule').on('click', function() {
+                var modal = $('#refouleBy');
                 modal.find('input[name=code]').val($(this).data('code'))
                 modal.modal('show');
             });

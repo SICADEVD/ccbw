@@ -78,8 +78,8 @@ class LivraisonCentraleController extends Controller
         ->with('cooperative','vehicule','transporteur','campagne','magasinCentral','magasinSection','campagnePeriode','vehicule.marque')
         ->paginate(getPaginate());
  
-        $total = $stocks->sum('stocks_entrant');
-        $pageTitle    = "Stock des Magasins de Section (".showAmount($total).") Kg";
+        $total = $stocks->sum('stocks_mag_entrant');
+        $pageTitle    = "Stock des Magasins Centraux (".showAmount($total).") Kg";
         $magasins  = MagasinCentral::where('cooperative_id',$staff->cooperative_id)->with('cooperative')->get();
         $sections = Section::get();
         return view('manager.livraison-centrale.stock', compact('pageTitle', 'stocks','total','sections','magasins'));
@@ -139,17 +139,23 @@ class LivraisonCentraleController extends Controller
         $producteurs  = Producteur::joinRelationship('localite.section')->where('sections.cooperative_id',$staff->cooperative_id)->select('producteurs.*')->orderBy('producteurs.nom')->get();
 
         $campagne = Campagne::active()->first();
+        $nomCamp = $campagne->nom;
         $campagne = CampagnePeriode::where([['campagne_id',$campagne->id],['periode_debut','<=', gmdate('Y-m-d')],['periode_fin','>=', gmdate('Y-m-d')]])->latest()->first();
-        $code = $this->generecodeConnais();
+        
+        $codeCoop = cooperative()->codeCoop;
+        $code = $codeCoop.'-'.Str::before(Str::after($nomCamp,'Campagne '),'-').'-2-';
+  
         $parcelles  = Parcelle::with('producteur')->get();
         $pageTitle = 'Connaissement vers Usine N° '.$code;
         $entreprises = Entreprise::all()->pluck('nom_entreprise', 'id');
         $formateurs = FormateurStaff::with('entreprise')->get();
         
+        
         return view('manager.livraison-centrale.create', compact('pageTitle', 'cooperatives','magSections','magCentraux','producteurs','transporteurs','parcelles','campagne','vehicules','code','entreprises','formateurs'));
     }
     private function generecodeConnais()
     {
+      
 
         $data = Connaissement::orderby('id','desc')->limit(1)->get();
 
@@ -194,12 +200,13 @@ class LivraisonCentraleController extends Controller
         $livraison->campagne_id    = $campagne->id;
         $livraison->campagne_periode_id = $periode->id;
         $livraison->magasin_centraux_id = $request->magasin_central;
-        $livraison->numeroCU = $request->code;
+        $livraison->numeroCU = $request->code.$request->lastcode;
         $livraison->type_produit = json_encode($request->type);
         $livraison->quantite_livre = $request->poidsnet;
         $livraison->sacs_livre = $request->nombresacs; 
         $livraison->transporteur_id = $request->sender_transporteur;
         $livraison->vehicule_id = $request->sender_vehicule;
+        $livraison->numeroCMC = json_encode($request->connaissement_id);
         $livraison->date_livraison = $request->estimate_date;
        
         $livraison->save();
@@ -209,6 +216,8 @@ class LivraisonCentraleController extends Controller
         $quantite = $request->quantite; 
         $typeproduit = $request->typeproduit; 
         $producteurs = $request->producteurs;
+        $certificat = $request->certificat;
+        $parcelle = $request->parcelle;
         $stock_magasin_central = $request->stock_magasin_central;
         foreach($producteurs as $item) { 
             
@@ -222,6 +231,8 @@ class LivraisonCentraleController extends Controller
                 'quantite' => $quantite[$i], 
                 'stock_magasin_central_id' => $stock_magasin_central[$i], 
                 'type_produit' => $typeproduit[$i],
+                'certificat' => $certificat[$i],
+                'parcelle_id' => $parcelle[$i],
                 'created_at'      => now(),
             ];
             $prod = LivraisonMagasinCentralProducteur::where([['campagne_id',$campagne->id],['stock_magasin_central_id',$stock_magasin_central[$i]],['producteur_id',$item],['type_produit',$typeproduit[$i]]])->first();
@@ -259,7 +270,7 @@ class LivraisonCentraleController extends Controller
         $campagne = Campagne::active()->first();
         $periode = CampagnePeriode::where([['campagne_id',$campagne->id]])->latest()->first();
 
-        $stocks = LivraisonMagasinCentralProducteur::joinRelationship('stockMagasinCentral')->where([['livraison_magasin_central_producteurs.campagne_id',$campagne->id],['magasin_centraux_id',$id],['quantite','>',0]])->whereIn('livraison_magasin_central_producteurs.type_produit', request()->type)->select('stock_magasin_centraux.*')->groupBy('numero_connaissement')->get();
+        $stocks = LivraisonMagasinCentralProducteur::joinRelationship('stockMagasinCentral')->where([['livraison_magasin_central_producteurs.campagne_id',$campagne->id],['magasin_centraux_id',$id],['stocks_mag_entrant','>',0]])->whereIn('livraison_magasin_central_producteurs.type_produit', request()->type)->select('stock_magasin_centraux.*')->groupBy('numero_connaissement')->get();
         if ($stocks->count()) {
             $contents = '';
 
@@ -277,12 +288,14 @@ class LivraisonCentraleController extends Controller
     public function getListeProducteurConnaiss(){
         $input = request()->all();
           $magasinsection= $input['magasin_central']; 
-          $codes = $input['connaissement_id'];
+          $codes = request()->connaissement_id;
           $type_produit = $input['type'];
           $results ='';
           $total = 0;
           $totalsacs=0;
           $campagne = Campagne::active()->first();
+        if(request()->connaissement_id !=null)
+        {
         $stock =LivraisonMagasinCentralProducteur::joinRelationship('stockMagasinCentral')->where([['livraison_magasin_central_producteurs.campagne_id',$campagne->id],['stock_magasin_centraux.magasin_centraux_id',$magasinsection],['stocks_mag_entrant','>',0]])->whereIn('livraison_magasin_central_producteurs.type_produit', $type_produit)->whereIn('stock_magasin_central_id', $codes)->select('livraison_magasin_central_producteurs.*')->get();
        
             if(count($stock)){
@@ -292,7 +305,10 @@ class LivraisonCentraleController extends Controller
        {
          if($v==$tv){$read = '';}
          else{$read='readonly';}
-        $results .= '<tr><td colspan="2"><h5>'.$data->producteur->nom.' '.$data->producteur->prenoms.'('.$data->producteur->codeProdapp.')</h5><input type="hidden" name="producteurs[]" value="'.$data->producteur_id.'"/></td><td style="width: 300px;"><input type="hidden" name="typeproduit[]" value="'.$data->type_produit.'"/>'.$data->type_produit.'<input type="hidden" name="stock_magasin_central[]" value="'.$data->stock_magasin_central_id.'"/></td><td style="width: 400px;"> <input type="number" name="quantite[]" value="'.$data->quantite.'" min="0" max="'.$data->quantite.'"  class="form-control quantity" style="width: 115px;"/></td></tr>';
+        $results .= '<tr><td colspan="2"><h5>'.$data->producteur->nom.' '.$data->producteur->prenoms.'('.$data->producteur->codeProdapp.')</h5><input type="hidden" name="producteurs[]" value="'.$data->producteur_id.'"/></td>
+        <td style="width: 300px;"><input type="hidden" name="parcelle[]" value="'.$data->parcelle_id.'"/><input type="hidden" name="certificat[]" value="'.$data->certificat.'"/>'.$data->certificat.'</td>
+        <td style="width: 300px;"><input type="hidden" name="typeproduit[]" value="'.$data->type_produit.'"/>'.$data->type_produit.'<input type="hidden" name="stock_magasin_central[]" value="'.$data->stock_magasin_central_id.'"/></td>
+        <td style="width: 400px;"> <input type="number" name="quantite[]" value="'.$data->quantite.'" min="0" max="'.$data->quantite.'"  class="form-control quantity" style="width: 115px;"/></td></tr>';
         $total = $total+$data->quantite;
         // $totalsacs = $totalsacs+$data->nb_sacs_entrant;
         $v++;
@@ -300,6 +316,7 @@ class LivraisonCentraleController extends Controller
   
   
             }
+        }
             $contents['results'] = $results;
             $contents['total'] = $total;
             $contents['totalsacs'] = $totalsacs;
@@ -334,7 +351,35 @@ class LivraisonCentraleController extends Controller
         $notify[] = ['success', 'Reception terminée'];
         return back()->withNotify($notify);
     }
-    
+    public function refouleUsineStore(Request $request)
+    {
+        $request->validate([
+            'code' => 'required',
+        ]);
+        $user = auth()->user();
+        $livraison = Connaissement::where('numeroCU', $request->code)->where('status', Status::COURIER_DISPATCH)->firstOrFail();
+        $idconnaissement =$livraison->id;
+        $numeroCMC =$livraison->numeroCMC;
+        
+        $livraison->status            = Status::COURIER_DELIVERED;
+        $livraison->save();
+
+        $productSend = ConnaissementProduit::where('connaissement_id',$idconnaissement)->get();
+        $tableNumeroCMC = json_decode($numeroCMC);
+        foreach($productSend as $data){
+            $check = LivraisonMagasinCentralProducteur::where([['stock_magasin_central_id',$data->stock_magasin_central_id],['campagne_id',$data->campagne_id],['stock_magasin_central_id',$data->stock_magasin_central_id],['parcelle_id',$data->parcelle_id],['certificat',$data->certificat],['type_produit',$data->type_produit]])->first();
+
+          
+            if($check !=null){
+                $check->quantite = $check->quantite+$data->quantite;
+                $check->quantite_sortant = $check->quantite_sortant-$data->quantite;
+                $check->save();
+
+            }
+        }
+        $notify[] = ['error', 'Livraison refoulée'];
+        return back()->withNotify($notify);
+    }
     public function deliveryPrimeStore(Request $request)
     {
         $request->validate([

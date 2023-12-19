@@ -190,16 +190,16 @@
                     <div
                         class="sidebar-submenu {{ menuActive(['manager.livraison.*', 'manager.livraison.magcentral.*'], 2) }} ">
                         <ul>
-                            <li
+                            <!-- <li
                                 class="sidebar-menu-item {{ menuActive(['manager.livraison.index']) }}">
                                 <a href="{{ route('manager.livraison.index') }}" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>
                                     <span class="menu-title">@lang('Livraison Magasins de Section')</span>
                                 </a>
 
-                            </li>
+                            </li> -->
                             <li
-                                class="sidebar-menu-item {{ menuActive(['manager.livraison.stock.section']) }}">
+                                class="sidebar-menu-item {{ menuActive(['manager.livraison.stock.*']) }}">
                                 <a href="{{ route('manager.livraison.stock.section') }}" class="nav-link">
                                     <i class="menu-icon las la-server"></i>
                                     <span class="menu-title">@lang('Stock Magasins de Section')</span>
@@ -211,7 +211,7 @@
                                     <span class="menu-title">@lang('Livraison Magasins Centraux')</span>
                                 </a>
                             </li> -->
-                            <li class="sidebar-menu-item {{ menuActive(['manager.livraison.magcentral.*']) }}">
+                            <li class="sidebar-menu-item {{ menuActive(['manager.livraison.magcentral*']) }}">
                                 <a href="{{ route('manager.livraison.magcentral.stock') }}" class="nav-link">
                                     <i class="menu-icon las la-server"></i>
                                     <span class="menu-title">@lang('Stock Magasins Centraux')</span>

@@ -22,6 +22,7 @@ use App\Models\FormateurStaff;
 use App\Models\LivraisonPrime;
 use App\Models\MagasinCentral;
 use App\Models\MagasinSection;
+use App\Models\ProgrammePrime;
 use App\Models\CampagnePeriode;
 use App\Models\LivraisonScelle;
 use App\Models\LivraisonPayment;
@@ -32,9 +33,9 @@ use Illuminate\Support\Facades\DB;
 use App\Models\StockMagasinCentral;
 use App\Models\StockMagasinSection;
 use App\Http\Controllers\Controller;
-use App\Models\LivraisonMagasinCentralProducteur;
+use App\Models\LivraisonProductDetail;
 use App\Models\Producteur_certification;
-use App\Models\ProgrammePrime;
+use App\Models\LivraisonMagasinCentralProducteur;
 
 class LivraisonController extends Controller
 {
@@ -67,12 +68,12 @@ class LivraisonController extends Controller
     public function stockSection()
     { 
         $staff = auth()->user(); 
-        $stocks = StockMagasinSection::dateFilter()->joinRelationship('producteur.localite.section')
-        ->where([['cooperative_id',$staff->cooperative_id]]) 
+        $stocks = StockMagasinSection::dateFilter()->joinRelationship('livraisonInfo')
+        ->where([['sender_cooperative_id',$staff->cooperative_id]]) 
         ->when(request()->magasin, function ($query, $magasin) {
             $query->where('magasin_section_id',$magasin); 
         })
-        ->with('producteur','campagne','campagnePeriode','magasinSection')
+        ->with('campagne','campagnePeriode','magasinSection')
         ->orderBy('stock_magasin_sections.id','desc')->paginate(getPaginate());
  
         $total = $stocks->sum('stocks_entrant');
@@ -183,18 +184,32 @@ class LivraisonController extends Controller
             $price = $periode->prix_champ * $item['quantity'];
             $subTotal += $price;
            if($item['type']=='Ordinaire') {$item['certificat']=null;} 
-            $data[] = [
-                'livraison_info_id' => $livraison->id,
-                'parcelle_id' => $item['parcelle'],
-                'campagne_id' => $campagne->id,
-                'campagne_periode_id' => $periode->id,
-                'qty'             => $item['quantity'],
-                'type_produit'     => $item['type'],
-                'certificat' => isset($item['certificat']) ? $item['certificat'] : null,
-                'fee'             => $price,
-                'type_price'      => $periode->prix_champ,
-                'created_at'      => now(),
-            ];
+           $productExists = LivraisonProduct::where([['campagne_id',$campagne->id],['parcelle_id',$item['parcelle']],['certificat',$item['certificat']],['type_produit',$item['type']]])->first();
+           if($productExists ==null){ 
+               $productExists = new LivraisonProduct();
+           }
+$productExists->livraison_info_id= $livraison->id;
+$productExists->parcelle_id= $item['parcelle'];
+$productExists->campagne_id= $campagne->id;
+$productExists->campagne_periode_id= $periode->id;
+$productExists->qty=$item['quantity']+$productExists->qty;
+$productExists->type_produit=$item['type'];
+$productExists->certificat= isset($item['certificat']) ? $item['certificat'] : null;
+$productExists->fee=$price+$productExists->fee;
+$productExists->type_price=$periode->prix_champ;
+$productExists->save();
+             $data[] = [
+                 'livraison_info_id' => $livraison->id,
+                 'parcelle_id' => $item['parcelle'],
+                 'campagne_id' => $campagne->id,
+                 'campagne_periode_id' => $periode->id,
+                 'qty'             => $item['quantity'],
+                 'type_produit'     => $item['type'],
+                 'certificat' => isset($item['certificat']) ? $item['certificat'] : null,
+                 'fee'             => $price,
+                 'type_price'      => $periode->prix_champ,
+                 'created_at'      => now(),
+             ];
             
             $product = Producteur::where('id',$item['producteur'])->first();
             if($product !=null){
@@ -217,7 +232,7 @@ class LivraisonController extends Controller
 
         }
 
-        LivraisonProduct::insert($data);
+        LivraisonProductDetail::insert($data);
         LivraisonPrime::insert($data3);
  
         $totalAmount                     = $subTotal;
@@ -288,6 +303,8 @@ class LivraisonController extends Controller
         $quantite = $request->quantite; 
         $typeproduit = $request->typeproduit; 
         $producteurs = $request->producteurs;
+        $parcelle = $request->parcelle;
+        $certificat = $request->certificat;
         
         foreach($producteurs as $item) { 
             
@@ -300,11 +317,18 @@ class LivraisonController extends Controller
                 'campagne_periode_id' => $periode->id,
                 'quantite' => $quantite[$i], 
                 'type_produit' => $typeproduit[$i],
+                'parcelle_id' => $parcelle[$i],
+                'certificat' => $certificat[$i],
                 'created_at'      => now(),
             ];
-            $prod = StockMagasinSection::where([['campagne_id',$campagne->id],['magasin_section_id',$request->sender_magasin],['producteur_id',$item],['type_produit',$typeproduit[$i]]])->first();
-            if($prod !=null){ 
-                 
+            $product = LivraisonProduct::where([['campagne_id',$campagne->id],['parcelle_id',$parcelle[$i]],['certificat',$certificat[$i]],['type_produit',$typeproduit[$i]]])->first();
+            if($product !=null){ 
+                $productinfo = $product->livraison_info_id;
+                $product->qty = $product->qty - $quantite[$i];
+                $product->qty_sortant = $product->qty_sortant + $quantite[$i];
+                $product->save();
+                
+            $prod = StockMagasinSection::where('livraison_info_id',$productinfo)->first();
             $prod->stocks_entrant = $prod->stocks_entrant - $quantite[$i];
             $prod->stocks_sortant = $prod->stocks_sortant + $quantite[$i];
            
@@ -364,13 +388,15 @@ class LivraisonController extends Controller
         $periode = CampagnePeriode::where([['campagne_id',$campagne->id]])->latest()->first();
      
          
-        $stocks = StockMagasinSection::where([['campagne_id',$campagne->id],['magasin_section_id',$id],['stocks_entrant','>',0]])->whereIn('type_produit', request()->type)->with('producteur')->groupBy('producteur_id')->get();
+        $stocks = LivraisonProduct::joinRelationship('livraisonInfo') 
+        ->joinRelationship('parcelle') 
+        ->where([['campagne_id',$campagne->id],['receiver_magasin_section_id',$id],['qty','>',0]])->whereIn('type_produit', request()->type)->with('parcelle','parcelle.producteur')->groupBy('producteur_id')->get();
         if ($stocks->count()) {
             $contents = '';
 
             foreach ($stocks as $data) {
-                $nom = $data->producteur->nom.' '.$data->producteur->prenoms;
-                $contents .= '<option value="'.$data->producteur_id.'">'. $nom .'('.$data->producteur->codeProdapp.')</option>';
+                $nom = $data->parcelle->producteur->nom.' '.$data->parcelle->producteur->prenoms;
+                $contents .= '<option value="'.$data->parcelle->producteur_id.'">'. $nom .'('.$data->parcelle->producteur->codeProdapp.')</option>';
             }
         } else {
             $contents = null;
@@ -412,8 +438,11 @@ class LivraisonController extends Controller
           $total = 0;
           $totalsacs=0;
           $campagne = Campagne::active()->first();
-        $stock =StockMagasinSection::where([['campagne_id',$campagne->id],['magasin_section_id',$magasinsection],['stocks_entrant','>',0]])->whereIn('type_produit', $type_produit)->whereIn('producteur_id', $producteur)->with('producteur')->get();
-       
+        // $stock =StockMagasinSection::where([['campagne_id',$campagne->id],['magasin_section_id',$magasinsection],['stocks_entrant','>',0]])->whereIn('type_produit', $type_produit)->whereIn('producteur_id', $producteur)->with('producteur')->get();
+       $stock = LivraisonProduct::joinRelationship('livraisonInfo') 
+       ->joinRelationship('parcelle') 
+       ->where([['campagne_id',$campagne->id],['receiver_magasin_section_id',$magasinsection],['qty','>',0]])->whereIn('type_produit', request()->type)->whereIn('producteur_id', $producteur)->with('parcelle','parcelle.producteur')->get();
+ 
             if(count($stock)){
             $v=1;
             $tv=count($stock);
@@ -421,8 +450,14 @@ class LivraisonController extends Controller
        {
          if($v==$tv){$read = '';}
          else{$read='readonly';}
-        $results .= '<tr><td colspan="2"><h5>'.$data->producteur->nom.' '.$data->producteur->prenoms.'('.$data->producteur->codeProdapp.')</h5><input type="hidden" name="producteurs[]" value="'.$data->producteur_id.'"/></td><td style="width: 300px;"><input type="hidden" name="typeproduit[]" value="'.$data->type_produit.'"/>'.$data->type_produit.'</td><td style="width: 400px;"> <input type="number" name="quantite[]" value="'.$data->stocks_entrant.'" min="0" max="'.$data->stocks_entrant.'"  class="form-control quantity" style="width: 115px;"/></td></tr>';
-        $total = $total+$data->stocks_entrant;
+        $results .= '<tr>
+        <td colspan="2"><h5>'.$data->parcelle->producteur->nom.' '.$data->parcelle->producteur->prenoms.'('.$data->parcelle->producteur->codeProdapp.')</h5>
+        <input type="hidden" name="producteurs[]" value="'.$data->parcelle->producteur_id.'"/></td>
+        <td style="width: 300px;"><input type="hidden" name="parcelle[]" value="'.$data->parcelle_id.'"/><input type="hidden" name="certificat[]" value="'.$data->certificat.'"/>'.$data->certificat.'</td>
+        <td style="width: 300px;"><input type="hidden" name="typeproduit[]" value="'.$data->type_produit.'"/>'.$data->type_produit.'</td>
+        <td style="width: 400px;"> <input type="number" name="quantite[]" value="'.$data->qty.'" min="0" max="'.$data->qty.'"  class="form-control quantity" style="width: 115px;"/></td>
+        </tr>';
+        $total = $total+$data->qty;
         $totalsacs = $totalsacs+$data->nb_sacs_entrant;
         $v++;
         }
