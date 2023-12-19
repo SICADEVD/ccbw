@@ -146,7 +146,7 @@ class LivraisonCentraleController extends Controller
         $code = $codeCoop.'-'.Str::before(Str::after($nomCamp,'Campagne '),'-').'-2-';
   
         $parcelles  = Parcelle::with('producteur')->get();
-        $pageTitle = 'Connaissement vers Usine N° '.$code;
+        $pageTitle = 'Connaissement vers Usine';
         $entreprises = Entreprise::all()->pluck('nom_entreprise', 'id');
         $formateurs = FormateurStaff::with('entreprise')->get();
         
@@ -368,12 +368,18 @@ class LivraisonCentraleController extends Controller
         $tableNumeroCMC = json_decode($numeroCMC);
         foreach($productSend as $data){
             $check = LivraisonMagasinCentralProducteur::where([['stock_magasin_central_id',$data->stock_magasin_central_id],['campagne_id',$data->campagne_id],['stock_magasin_central_id',$data->stock_magasin_central_id],['parcelle_id',$data->parcelle_id],['certificat',$data->certificat],['type_produit',$data->type_produit]])->first();
-
           
             if($check !=null){
                 $check->quantite = $check->quantite+$data->quantite;
                 $check->quantite_sortant = $check->quantite_sortant-$data->quantite;
                 $check->save();
+
+                $stockreduc = StockMagasinCentral::where('id',$check->stock_magasin_central_id)->first();
+                if($stockreduc !=null){
+                $stockreduc->stocks_mag_entrant = $stockreduc->stocks_mag_entrant+$data->quantite;
+                $stockreduc->stocks_mag_sortant = $stockreduc->stocks_mag_sortant-$data->quantite;
+                $stockreduc->save();
+                }
 
             }
         }
