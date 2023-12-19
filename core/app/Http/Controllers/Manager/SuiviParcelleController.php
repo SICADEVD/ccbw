@@ -157,7 +157,7 @@ class SuiviParcelleController extends Controller
         $suivi_parcelle->arbresagroforestiers  = $request->arbresagroforestiers;
         $suivi_parcelle->userid   = auth()->user()->id;
     //    dd(json_encode($request->all()));
-        // dd($request->all());
+        
         $suivi_parcelle->save();
         if ($suivi_parcelle != null) {
             $datas2=$datas3=$datas4=$datas5=$datas6=$datas7=$datas8=$datas9=[];
@@ -309,7 +309,7 @@ class SuiviParcelleController extends Controller
             SuiviParcellesAutreParasite::insert($datas6);
             SuiviParcellesInsecteAmi::insert($datas7);
             SuiviParcellesOmbrage::insert($datas);
-            SuiviParcellesAgroforesterie::insert($datas8);
+            SuiviParcellesAgroforesterie::insert($data8);
             SuiviParcellesAnimal::insert($datas9);
         }
 
