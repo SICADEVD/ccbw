@@ -69,7 +69,11 @@ class ApplicationController extends Controller
     public function store(Request $request)
     {
         $validationRule = [
-            
+            'pesticides.*.nom' => 'required|string',
+            'pesticides.*.nomCommercial' => 'required|string',
+            'pesticides.*.dosage' => 'required|integer',
+            'pesticides.*.toxicicologie' => 'required|string',
+            'pesticides.*.frequence' => 'required|integer',
         ];
 
 
@@ -90,15 +94,16 @@ class ApplicationController extends Controller
             $application = new Application();
         }
         $campagne = Campagne::active()->first();
-       
-        if ($request->hasFile('photoZoneTampons')) {
-            try {
-                $application->photoZoneTampons = $request->file('photoZoneTampons')->store('public/applications');
-            } catch (\Exception $exp) {
-                $notify[] = ['error', 'Impossible de télécharger votre image'];
-                return back()->withNotify($notify);
-            }
-        }
+        $application->campagne_id  = $campagne->id;
+        $application->applicateur_id  = $request->applicateur;
+        $application->suiviFormation = $request->suiviFormation;
+        $application->attestion = $request->attestion;
+        $application->bilanSante = $request->bilanSante;
+        $application->independantEpi = $request->independantEpi;
+        $application->etatEpi = $request->etatEpi;
+        $application->superficiePulverisee = $request->superficiePulverisee;
+        $application->delaisReentree = $request->delaisReentree;
+        $application->date_application = $request->date_application;
 
         dd($request->all());
 

@@ -80,7 +80,13 @@
                     <div class="form-group row">
                         <?php echo Form::label(__('Qui a réalisé l\'application ?'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('personneApplication', ['Producteur' => __('Producteur'), 'Applicateur coop' => __('Applicateur coop'), 'Independant' => __('Independant')], null, ['class' => 'form-control personneApplication', 'required']); ?>
+                            <select class="form-control personneApplication" name="personneApplication" id="application"
+                                required>
+                                <option value="">@lang('Selectionner une option')</option>
+                                <option value="Producteur">@lang('Producteur')</option>
+                                <option value="Applicateur coop">@lang('Applicateur coop')</option>
+                                <option value="Independant">@lang('Independant')</option>
+                            </select>
                         </div>
                     </div>
 
@@ -256,6 +262,15 @@
                     <hr class="panel-wide">
 
                     <div class="form-group row">
+                        <?php echo Form::label(__('Heure d\'application'), null, ['class' => 'col-sm-4 control-label required']); ?>
+                        <div class="col-xs-12 col-sm-8 bootstrap-timepicker timepicker">
+                            <?php echo Form::text('heure_application', null, ['class' => 'form-control', 'required' => 'required', 'placeholder' => 'Ex : 04:10']); ?>
+                        </div>
+                    </div>
+
+                    <hr class="panel-wide">
+
+                    <div class="form-group row">
                         {{ Form::label(__("Date d'application"), null, ['class' => 'col-sm-4 control-label required']) }}
                         <div class="col-xs-12 col-sm-8">
                             <?php echo Form::date('date_application', null, ['class' => 'form-control dateactivite required', 'required' => 'required']); ?>
@@ -279,11 +294,16 @@
 @endpush
 
 @push('script')
+    <link rel="stylesheet" href="{{ asset('assets/vendor/css/daterangepicker.css') }}">
+    <script src="{{ asset('assets/vendor/jquery/daterangepicker.min.js') }}"></script>
     <script type="text/javascript">
         function getSuperficie() {
             let superficie = $("#parcelle").find(':selected').data('superficie');
             $('#superficie').val(superficie);
         }
+        $('#heure_application').timepicker({
+            showMeridian: (false)
+        });
 
         $(document).ready(function() {
 
@@ -298,19 +318,23 @@
                     '</badge></div><div class="col-xs-12 col-sm-4"><div class="form-group row"><label for="" class="">Pesticides</label><select class="form-control" id="pesticides-' +
                     pesticideCount +
                     '" name="pesticides[' + pesticideCount +
-                    '][nom]"><option value="">Selectionner une option</option><option value="Herbicides">Herbicides</option><option value="Fongicides">Fongicides</option><option value="Nematicide">Nematicide</option><option value="Insecticide">Insecticide</option><option value="Acaricides">Acaricides</option><option value="Pesticides">Pesticides</option></select></div></div><div class="col-xs-12 col-sm-4"><div class="form-group row"><label> Nom commercial</label><input type="text" name="pesticides[' + pesticideCount +
+                    '][nom]"><option value="">Selectionner une option</option><option value="Herbicides">Herbicides</option><option value="Fongicides">Fongicides</option><option value="Nematicide">Nematicide</option><option value="Insecticide">Insecticide</option><option value="Acaricides">Acaricides</option><option value="Pesticides">Pesticides</option></select></div></div><div class="col-xs-12 col-sm-4"><div class="form-group row"><label> Nom commercial</label><input type="text" name="pesticides[' +
+                    pesticideCount +
                     '][nomCommercial]" id="nomCommercial' +
                     pesticideCount +
-                    '" class="form-control" placeholder="Nom commercial"></div></div><div class="col-xs-12 col-sm-4"><div class="form-group"><label for="" class="">Matières actives</label><input type="text" name="pesticides[' + pesticideCount +
+                    '" class="form-control" placeholder="Nom commercial"></div></div><div class="col-xs-12 col-sm-4"><div class="form-group"><label for="" class="">Matières actives</label><input type="text" name="pesticides[' +
+                    pesticideCount +
                     '][matiereActive[]]" id="matiereActive' +
                     pesticideCount +
                     '" class="form-control" placeholder="matière active 1, matière active 2 ...."></div></div><di class="row mt-3"><div class="col-xs-12 col-sm-4"><div class="form-group row"><label class="control-label">Toxicicologie</label><select class="form-control" id="toxicicologie-' +
                     pesticideCount +
                     '" name="pesticides[' + pesticideCount +
-                    '][toxicicologie]"> <option value="">Selectionner une option</option><option value="I">I</option><option value="IA">IA</option><option value="IB">IB</option><option value="II">II</option><option value="III">III</option><option value="IV">IV</option></select></div></div><div class="col-xs-12 col-sm-4"><div class="form-group row"><label>Dose</label><input type="text" name="pesticides[' + pesticideCount +
+                    '][toxicicologie]"> <option value="">Selectionner une option</option><option value="I">I</option><option value="IA">IA</option><option value="IB">IB</option><option value="II">II</option><option value="III">III</option><option value="IV">IV</option></select></div></div><div class="col-xs-12 col-sm-4"><div class="form-group row"><label>Dose</label><input type="text" name="pesticides[' +
+                    pesticideCount +
                     '][dose]" id="dose' +
                     pesticideCount +
-                    '" class="form-control" placeholder="L/Ha"></div></div><div class="col-xs-12 col-sm-4"><div class="form-group row"><label>Fréquence</label><input type="text" name="pesticides[' + pesticideCount +
+                    '" class="form-control" placeholder="L/Ha"></div></div><div class="col-xs-12 col-sm-4"><div class="form-group row"><label>Fréquence</label><input type="text" name="pesticides[' +
+                    pesticideCount +
                     '][frequence]" id="frequence' +
                     pesticideCount +
                     '" class="form-control" placeholder="Fréquence"></div></div></di><div class="col-xs-12 col-sm-8"><button type="button" id="' +
