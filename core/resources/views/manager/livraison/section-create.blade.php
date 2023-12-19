@@ -339,12 +339,7 @@ $.ajax({
     data: $('#flocal').serialize(),
     success: function(html) {
         $('#listeprod').html(html.results);
-        $('#poidsnet').val(html.total);
-        /* $('#nombresacs').val(html.totalsacs);
-        $("#nombresacs").attr({
-            "max": html.totalsacs, 
-            "min": 1  
-        }); */
+        $('#poidsnet').val(html.total); 
     }
 });
 });

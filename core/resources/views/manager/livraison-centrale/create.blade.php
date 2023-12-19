@@ -274,6 +274,7 @@
                 $(MODAL_XL).modal('show');
             });
     $('#magasin_central,#type').change('keyup change blur',function() { 
+         $('#producteurs').html('');
 $.ajax({
     type: 'GET',
     url: "{{ route('manager.livraison.magcentral.get.producteur') }}",
@@ -281,7 +282,7 @@ $.ajax({
     success: function(html) {
          
         $('#producteurs').html(html);
-        getproducteur();
+        $('#listeprod').html('');
 
     }
 });
