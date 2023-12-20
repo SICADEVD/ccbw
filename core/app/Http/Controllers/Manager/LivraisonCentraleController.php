@@ -34,6 +34,7 @@ use App\Models\StockMagasinSection;
 use App\Http\Controllers\Controller;
 use App\Models\ConnaissementProduit;
 use App\Models\LivraisonMagasinCentralProducteur;
+use App\Models\SuiviConnaissementUsine;
 
 class LivraisonCentraleController extends Controller
 {
@@ -108,7 +109,9 @@ class LivraisonCentraleController extends Controller
         $staff = auth()->user(); 
         $livraison = Connaissement::where('id',decrypt($id))->first();
         $pageTitle    = "Suivi de la livraison à l'Usine";
-        return view('manager.livraison-centrale.suivi', compact('pageTitle', 'livraison'));
+        $id = decrypt($id);
+        $suivi = SuiviConnaissementUsine::where('connaissement_id',$id)->first();
+        return view('manager.livraison-centrale.suivi', compact('pageTitle', 'livraison','id','suivi'));
     }
     public function prime()
     {  
@@ -359,6 +362,26 @@ class LivraisonCentraleController extends Controller
         $livraison->save();
         $notify[] = ['success', 'Reception terminée'];
         return back()->withNotify($notify);
+    }
+    public function suiviStore(Request $request)
+    {
+        $request->validate([
+            'id' => 'required',
+        ]);
+        $user = auth()->user();
+        $suivi = SuiviConnaissementUsine::where('connaissement_id', $request->id)->first();
+        if($suivi ==null){
+            $suivi = new SuiviConnaissementUsine();
+        }
+        $suivi->connaissement_id = $request->id;
+        $suivi->step1 = $request->step1;
+        $suivi->step2 = $request->step2;
+        $suivi->step3 = $request->step3;
+        $suivi->step4 = $request->step4;
+        $suivi->step5 = $request->step5;
+        $suivi->save();
+         
+        return $suivi;
     }
     public function refouleUsineStore(Request $request)
     {

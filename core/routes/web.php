@@ -472,6 +472,7 @@ Route::middleware('auth')->group(function () {
             Route::post('magcentral/prime', [LivraisonCentraleController::class,'deliveryPrimeStore'])->name('prime.delivery');
             Route::get('magcentral/prime/invoice', [LivraisonCentraleController::class,'primeInvoice'])->name('prime.invoice');
             Route::get('magcentral/usine/suivi/{id}', [LivraisonCentraleController::class,'suiviLivraison'])->name('usine.suivi');
+            Route::post('magcentral/suivi/store', [LivraisonCentraleController::class,'suiviStore'])->name('magcentral.suivi.store');
             Route::resource('magcentral', LivraisonCentraleController::class); 
             
         });

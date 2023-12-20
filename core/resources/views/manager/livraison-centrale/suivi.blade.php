@@ -168,6 +168,9 @@
         <h3> <span class="site-color">Suivi du Connaissement N° {{ $livraison->numeroCU }}</span></h3>
     </div>
         <!-- ============ step 1 =========== -->
+        <form  id="flocal" method="POST">
+        @csrf
+            <input type="hidden" name="id" value="{{ $id }}">
         <div class="row">
             <div class="col-md-5">
                 <div class="process-box process-left" data-aos="fade-right" data-aos-duration="1000">
@@ -180,7 +183,9 @@
                         </div>
                         <div class="col-md-7">
                             <h5>What is Lorem Ipsum?</h5>
-                            <p><small>Lorem Ipsum is simply dummy text of the printing and typesetting industry. </small></p>
+                            <p><small>. 
+                            <?php echo  Form::textarea('step1', @$suivi->step1, ['id' => 'resume','placeholder'=>"Lorem Ipsum is simply dummy text of the printing and typesetting industry", 'rows' => 4, 'cols' => 54, 'style' => 'resize:none','required'=>'required','id'=>'step1','class' => 'form-control resume','maxlength' => 500]); ?>
+                            </small></p>
                         </div>
                     </div>
                     <div class="process-line-l"></div>
@@ -209,7 +214,7 @@
                         </div>
                         <div class="col-md-7">
                             <h5>What is Lorem Ipsum?</h5>
-                            <p><small>Lorem Ipsum is simply dummy text of the printing and typesetting industry. </small></p>
+                            <p><small><?php echo  Form::textarea('step2', @$suivi->step2, ['id' => 'resume','placeholder'=>"Lorem Ipsum is simply dummy text of the printing and typesetting industry", 'rows' => 4, 'cols' => 54,'id'=>'step2', 'style' => 'resize:none','class' => 'form-control resume','maxlength' => 500]); ?> </small></p>
                         </div>
                     </div>
                     <div class="process-line-r"></div>
@@ -230,7 +235,7 @@
                         </div>
                         <div class="col-md-7">
                             <h5>What is Lorem Ipsum?</h5>
-                            <p><small>Lorem Ipsum is simply dummy text of the printing and typesetting industry. </small></p>
+                            <p><small><?php echo  Form::textarea('step3', @$suivi->step3, ['id' => 'resume','placeholder'=>"Lorem Ipsum is simply dummy text of the printing and typesetting industry", 'rows' => 4,'id'=>'step3', 'cols' => 54, 'style' => 'resize:none','class' => 'form-control resume','maxlength' => 500]); ?>  </small></p>
                         </div>
                     </div>
                     <div class="process-line-l"></div>
@@ -258,7 +263,7 @@
                         </div>
                         <div class="col-md-7">
                             <h5>What is Lorem Ipsum?</h5>
-                            <p><small>Lorem Ipsum is simply dummy text of the printing and typesetting industry. </small></p>
+                            <p><small><?php echo  Form::textarea('step4', @$suivi->step4, ['id' => 'resume','placeholder'=>"Lorem Ipsum is simply dummy text of the printing and typesetting industry", 'rows' => 4,'id'=>'step4', 'cols' => 54, 'style' => 'resize:none','class' => 'form-control resume','maxlength' => 500]); ?> </small></p>
                         </div>
                     </div>
                     <div class="process-line-r"></div>
@@ -280,7 +285,7 @@
                         </div>
                         <div class="col-md-7">
                             <h5>What is Lorem Ipsum?</h5>
-                            <p><small>Lorem Ipsum is simply dummy text of the printing and typesetting industry. </small></p>
+                            <p><small><?php echo  Form::textarea('step5', @$suivi->step5, ['id' => 'resume','placeholder'=>"Lorem Ipsum is simply dummy text of the printing and typesetting industry", 'rows' => 4,'id'=>'step5', 'cols' => 54, 'style' => 'resize:none','class' => 'form-control resume','maxlength' => 500]); ?> </small></p>
                         </div>
                     </div>
                     <div class="process-line-l"></div>
@@ -292,6 +297,7 @@
             </div>
         </div>
         <!-- ============ -->
+        </form>
     </div>
 </section>
 
@@ -313,5 +319,18 @@
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>
   AOS.init();
+  $('#step1,#step2,#step3,#step4,#step5').change('keyup change blur',function() {
+    
+ $.ajax({
+              type:'POST',
+              url: "{{ route('manager.livraison.magcentral.suivi.store')}}",
+              data: $('#flocal').serialize(),
+              success:function(html){
+                console.log(html);
+                $('input[name=lastname]').val(html.lastname).attr("readonly",'readonly'); 
+              }
+          });
+});
+ 
 </script>
 @endpush
