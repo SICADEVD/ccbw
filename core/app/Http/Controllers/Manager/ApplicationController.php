@@ -17,8 +17,11 @@ use App\Models\ApplicationInsecte;
 use Illuminate\Support\Facades\DB;
 use App\Exports\ExportApplications;
 use App\Http\Controllers\Controller;
+use App\Models\ApplicationMaladie;
 use Illuminate\Support\Facades\Hash;
 use App\Models\ApplicationMatieresactive;
+use App\Models\ApplicationPesticide;
+use App\Models\MatiereActive;
 
 class ApplicationController extends Controller
 {
@@ -28,7 +31,7 @@ class ApplicationController extends Controller
         $pageTitle      = "Gestion des applications";
         $manager   = auth()->user();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id', $manager->cooperative_id], ['localites.status', 1]])->get();
-        $applications = Application::dateFilter()->searchable(["superficiePulverisee", "marqueProduitPulverise", "matieresActives", "degreDangerosite", "raisonApplication", "nomInsectesCibles", "delaisReentree", "zoneTampons", "presenceDouche"])->latest('id')->joinRelationship('parcelle.producteur.localite.section')->where('cooperative_id', $manager->cooperative_id)->where(function ($q) {
+        $applications = Application::dateFilter()->searchable(["superficiePulverisee"])->latest('id')->joinRelationship('parcelle.producteur.localite.section')->where('cooperative_id', $manager->cooperative_id)->where(function ($q) {
             if (request()->localite != null) {
                 $q->where('localite_id', request()->localite);
             }
@@ -71,7 +74,7 @@ class ApplicationController extends Controller
         $validationRule = [
             'pesticides.*.nom' => 'required|string',
             'pesticides.*.nomCommercial' => 'required|string',
-            'pesticides.*.dosage' => 'required|integer',
+            'pesticides.*.dose' => 'required|integer',
             'pesticides.*.toxicicologie' => 'required|string',
             'pesticides.*.frequence' => 'required|integer',
         ];
@@ -96,6 +99,7 @@ class ApplicationController extends Controller
         $campagne = Campagne::active()->first();
         $application->campagne_id  = $campagne->id;
         $application->applicateur_id  = $request->applicateur;
+        $application->parcelle_id  = $request->parcelle_id;
         $application->suiviFormation = $request->suiviFormation;
         $application->attestion = $request->attestion;
         $application->bilanSante = $request->bilanSante;
@@ -103,14 +107,55 @@ class ApplicationController extends Controller
         $application->etatEpi = $request->etatEpi;
         $application->superficiePulverisee = $request->superficiePulverisee;
         $application->delaisReentree = $request->delaisReentree;
+        $application->personneApplication = $request->personneApplication;
         $application->date_application = $request->date_application;
+        $application->userid = auth()->user()->id;
 
-        dd($request->all());
+        
 
         $application->save();
 
+       
+
         if ($application != null) {
             $id = $application->id;
+            if ($request->maladies != null) {
+                ApplicationMaladie::where('application_id', $id)->delete();
+                $data = [];
+                foreach ($request->maladies as $maladie) {
+                    $data[] = [
+                        'application_id' => $id,
+                        'nom' => $maladie,
+                    ];
+                }
+                ApplicationMaladie::insert($data);
+            }
+            if($request->pesticides[0]['nom'] != null && $request->pesticides[0]['nomCommercial'] != null && $request->pesticides[0]['dose'] != null && $request->pesticides[0]['toxicicologie'] != null && $request->pesticides[0]['frequence'] != null && $request->pesticides[0]['matiereActive'] != null){
+                ApplicationPesticide::where('application_id', $id)->delete();
+                foreach ($request->pesticides as $pesticide) {
+                    $applicationPesticide = new ApplicationPesticide();
+                    $applicationPesticide->application_id = $id;
+                    $applicationPesticide->nom = $pesticide['nom'];
+                    $applicationPesticide->nomCommercial = $pesticide['nomCommercial'];
+                    $applicationPesticide->dose = $pesticide['dose'];
+                    $applicationPesticide->toxicicologie = $pesticide['toxicicologie'];
+                    $applicationPesticide->frequence = $pesticide['frequence'];
+                    $applicationPesticide->save();
+
+                    if($applicationPesticide != null){
+                        MatiereActive::where('application_pesticide_id', $applicationPesticide->id)->delete();
+                        $idApplicationPesticide = $applicationPesticide->id;
+                        $matiereActive = explode(',',$pesticide['matiereActive']);
+                        foreach ($matiereActive as $matiere) {
+                            $applicationMatieresactive = new MatiereActive();
+                            $applicationMatieresactive->application_pesticide_id = $idApplicationPesticide;
+                            $applicationMatieresactive->nom = $matiere;
+                            $applicationMatieresactive->save();
+                        }
+                    }
+                }
+            }
+           
         }
         $notify[] = ['success', isset($message) ? $message : "L'application a été crée avec succès."];
         return back()->withNotify($notify);

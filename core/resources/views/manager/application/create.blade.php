@@ -107,35 +107,55 @@
                         <div class="form-group row">
                             <?php echo Form::label(__('A-t-il suivi une formation ?'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::select('suiviFormation', ['non' => __('non'), 'oui' => __('oui')], null, ['class' => 'form-control suiviFormation']); ?>
+                                <select class="form-control suiviFormation" name="suiviFormation" id="suiviFormation">
+                                    <option value="">@lang('Selectionner une option')</option>
+                                    <option value="non">@lang('non')</option>
+                                    <option value="oui">@lang('oui')</option>
+                                </select>
                             </div>
                         </div>
 
                         <div class="form-group row">
                             <?php echo Form::label(__('A-t-il une attestation ?'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::select('attestion', ['non' => __('non'), 'oui' => __('oui')], null, ['class' => 'form-control attestion']); ?>
+                                <select class="form-control attestion" name="attestion" id="attestion">
+                                    <option value="">@lang('Selectionner une option')</option>
+                                    <option value="non">@lang('non')</option>
+                                    <option value="oui">@lang('oui')</option>
+                                </select>
                             </div>
                         </div>
 
                         <div class="form-group row">
                             <?php echo Form::label(__('A-t-il fait un bilan de santé ?'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::select('bilanSante', ['non' => __('non'), 'oui' => __('oui')], null, ['class' => 'form-control bilanSante']); ?>
+                                <select class="form-control bilanSante" name="bilanSante" id="bilanSante">
+                                    <option value="">@lang('Selectionner une option')</option>
+                                    <option value="non">@lang('non')</option>
+                                    <option value="oui">@lang('oui')</option>
+                                </select>
                             </div>
                         </div>
 
                         <div class="form-group row">
                             <?php echo Form::label(__('possede t-il un EPI ?'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::select('independantEpi', ['non' => __('non'), 'oui' => __('oui')], null, ['class' => 'form-control independantEpi']); ?>
+                                <select class="form-control independantEpi" name="independantEpi" id="independantEpi">
+                                    <option value="">@lang('Selectionner une option')</option>
+                                    <option value="non">@lang('non')</option>
+                                    <option value="oui">@lang('oui')</option>
+                                </select>
                             </div>
                         </div>
 
                         <div class="form-group row" id="etatEpis">
                             <?php echo Form::label(__('Est-il en bon état ?'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::select('etatEpi', ['non' => __('non'), 'oui' => __('oui')], null, ['class' => 'form-control etatEpi']); ?>
+                                <select class="form-control etatEpi" name="etatEpi" id="etatEpi">
+                                    <option value="">@lang('Selectionner une option')</option>
+                                    <option value="non">@lang('non')</option>
+                                    <option value="oui">@lang('oui')</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -178,7 +198,7 @@
                                                 <div class="col-xs-12 col-sm-4">
                                                     <div class="form-group row">
                                                         <label>Matières actives</label>
-                                                        <input type="text" name="pesticides[0][matiereActive[]]"
+                                                        <input type="text" name="pesticides[0][matiereActive]"
                                                             id="matiereActive-1" class="form-control"
                                                             placeholder="matière active 1, matière active 2 ....">
                                                     </div>
@@ -239,8 +259,10 @@
                             <select class="form-control select2-multi-select protections" name="maladies[]" multiple
                                 required>
                                 <option value="">@lang('Selectionner les protections')</option>
-                                <option value="">Maladie1</option>
-                                <option value="">Maladie2</option>
+                                <option value="Mirides">Mirides</option>
+                                <option value="Punaises">Punaises</option>
+                                <option value="Foreurs">Foreurs</option>
+                                <option value="Chenilles">Chenilles</option>
                             </select>
                         </div>
                     </div>
@@ -324,7 +346,7 @@
                     pesticideCount +
                     '" class="form-control" placeholder="Nom commercial"></div></div><div class="col-xs-12 col-sm-4"><div class="form-group"><label for="" class="">Matières actives</label><input type="text" name="pesticides[' +
                     pesticideCount +
-                    '][matiereActive[]]" id="matiereActive' +
+                    '][matiereActive]" id="matiereActive' +
                     pesticideCount +
                     '" class="form-control" placeholder="matière active 1, matière active 2 ...."></div></div><di class="row mt-3"><div class="col-xs-12 col-sm-4"><div class="form-group row"><label class="control-label">Toxicicologie</label><select class="form-control" id="toxicicologie-' +
                     pesticideCount +

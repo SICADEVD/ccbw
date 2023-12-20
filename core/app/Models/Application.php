@@ -25,14 +25,12 @@ class Application extends Model
     {
         return $this->belongsTo(User::class,'applicateur_id');
     }
-     
-    public function insectes()
+    public function applicationPesticides()
     {
-        return $this->hasMany(ApplicationInsecte::class, 'application_id', 'id');
+        return $this->hasMany(ApplicationPesticide::class,'application_id');
     }
-     
-    public function matiereactives()
+    public function applicationMaladies()
     {
-        return $this->hasMany(ApplicationMatieresactive::class, 'application_id', 'id');
+        return $this->hasMany(ApplicationMaladie::class,'application_id');
     }
 }
