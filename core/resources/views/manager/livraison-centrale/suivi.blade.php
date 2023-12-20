@@ -40,7 +40,7 @@
     z-index: 1;
 }
 .process-step{
-    background: #00BCD4;
+    background: var(--main-color-hover);
     text-align: center;
     width: 80%;
     margin: 0 auto;
@@ -57,7 +57,7 @@
     width: 25px;
     height: 25px;
     border-radius: 50%;
-    border: 8px solid #00bcd4;
+    border: 8px solid var(--main-color-hover);
     box-shadow: 0 0 0px 4px #5c5c5c;
     margin: auto 0;
     position: absolute;
@@ -80,7 +80,7 @@
     width: 25px;
     height: 25px;
     border-radius: 50%;
-    border: 8px solid #00bcd4;
+    border: 8px solid var(--main-color-hover);
     box-shadow: 0 0 0px 4px #5c5c5c;
     margin: auto 0;
     position: absolute;
@@ -105,6 +105,7 @@
 }
 .process-box p{
     z-index: 9;
+    text-wrap: wrap;
 }
 .process-step p{
     font-size: 20px;
@@ -115,9 +116,9 @@
 .process-step:after{
     content: "";
     border-top: 8px solid #04889800;
-    border-bottom: 8px solid #048898;
+    border-bottom: 8px solid var(--main-color-hover);
     border-left: 8px solid #04889800;
-    border-right: 8px solid #048898;
+    border-right: 8px solid var(--main-color-hover);
     display: inline-grid;
     position: absolute;
     left: -16px;
@@ -126,8 +127,8 @@
 .process-step:before{
     content: "";
     border-top: 8px solid #ff000000;
-    border-bottom: 8px solid #048898;
-    border-left: 8px solid #048898;
+    border-bottom: 8px solid var(--main-color-hover);
+    border-left: 8px solid var(--main-color-hover);
     border-right: 8px solid #ff000000;
     display: inline-grid;
     position: absolute;
@@ -135,7 +136,7 @@
     top: 0;
 }
 .process-line-l{
-    background: white;
+    background: var(--main-color-hover);
     height: 4px;
     position: absolute;
     width: 136px;
@@ -144,7 +145,7 @@
     z-index: 9;
 }
 .process-line-r{
-    background: white;
+    background: var(--main-color-hover);
     height: 4px;
     position: absolute;
     width: 136px;
@@ -173,7 +174,7 @@
                     <div class="row">
                         <div class="col-md-5">
                             <div class="process-step">
-                                <p class="m-0 p-0">Step</p>
+                                <p class="m-0 p-0">Etape</p>
                                 <h2 class="m-0 p-0">01</h2>
                             </div>
                         </div>
@@ -202,7 +203,7 @@
                     <div class="row">
                         <div class="col-md-5">
                             <div class="process-step">
-                                <p class="m-0 p-0">Step</p>
+                                <p class="m-0 p-0">Etape</p>
                                 <h2 class="m-0 p-0">02</h2>
                             </div>
                         </div>
@@ -223,7 +224,7 @@
                     <div class="row">
                         <div class="col-md-5">
                             <div class="process-step">
-                                <p class="m-0 p-0">Step</p>
+                                <p class="m-0 p-0">Etape</p>
                                 <h2 class="m-0 p-0">03</h2>
                             </div>
                         </div>
@@ -251,7 +252,7 @@
                     <div class="row">
                         <div class="col-md-5">
                             <div class="process-step">
-                                <p class="m-0 p-0">Step</p>
+                                <p class="m-0 p-0">Etape</p>
                                 <h2 class="m-0 p-0">04</h2>
                             </div>
                         </div>
@@ -273,7 +274,7 @@
                     <div class="row">
                         <div class="col-md-5">
                             <div class="process-step">
-                                <p class="m-0 p-0">Step</p>
+                                <p class="m-0 p-0">Etape</p>
                                 <h2 class="m-0 p-0">05</h2>
                             </div>
                         </div>
