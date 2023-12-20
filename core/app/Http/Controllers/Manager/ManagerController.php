@@ -5,15 +5,19 @@ namespace App\Http\Controllers\Manager;
 use App\Models\User;
 use App\Models\Language;
 use App\Constants\Status;
+use App\Models\Producteur;
 use App\Models\Cooperative;
+use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use App\Models\LivraisonInfo;
 use App\Models\SupportMessage;
+use App\Charts\ProducteurChart;
 use App\Rules\FileTypeValidate;
 use App\Models\LivraisonPayment;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use LaravelDaily\LaravelCharts\Classes\LaravelChart;
 
 class ManagerController extends Controller
 {
@@ -21,20 +25,53 @@ class ManagerController extends Controller
     public function dashboard()
     {
         $manager            = auth()->user();
-        $pageTitle          = "Manager Dashboard";
-        $cooperativeCount        = Cooperative::active()->count();
-        $livraisonShipCount   = LivraisonInfo::dispatched()->count();
-        $upcomingCount      = LivraisonInfo::upcoming()->count();
-        $livraisonInfoCount   = $this->livraisons()->count();
-        $livraisonQueueCount  = LivraisonInfo::queue()->count();
-        $deliveryQueueCount = LivraisonInfo::deliveryQueue()->count();
-        $totalSentCount     = LivraisonInfo::where('sender_cooperative_id', $manager->cooperative_id)->where('status', '!=', Status::COURIER_QUEUE)->count();
+        $pageTitle          = "Manager Dashboard"; 
+        
+        $chart_options = [
+            'chart_title' => 'Producteurs par Localite',
+            'report_type' => 'group_by_relationship',
+            'model' => 'App\Models\Producteur', 
+            'relationship_name'=>'localite', 
+            'group_by_field' => 'nom',
+            'chart_type' => 'bar', 
+            'chart_color'=>'120,169,2', 
+        ];
+        $chart1 = new LaravelChart($chart_options);
 
-        $livraisonDelivered = LivraisonInfo::delivered()->count();
-        $totalStaffCount  = User::staff()->where('cooperative_id', $manager->cooperative_id)->count();
-        $cooperativeIncome     = LivraisonPayment::where('cooperative_id', $manager->cooperative_id)->where('status', Status::PAYE)->sum('final_amount');
-  
-        return view('manager.dashboard', compact('pageTitle', 'cooperativeCount', 'livraisonShipCount', 'livraisonQueueCount', 'upcomingCount', 'deliveryQueueCount', 'totalStaffCount', 'totalSentCount', 'cooperativeIncome', 'livraisonInfoCount', 'livraisonDelivered'));
+        $chart_options = [
+            'chart_title' => 'Producteurs par Programme',
+            'report_type' => 'group_by_relationship',
+            'model' => 'App\Models\Producteur', 
+            'relationship_name'=>'programme', 
+            'group_by_field' => 'libelle',
+            'chart_type' => 'pie',  
+            
+        ]; 
+        $chart2 = new LaravelChart($chart_options);
+
+        $chart_options  = [
+            'chart_title' => 'Livraison par Date',
+            'report_type' => 'group_by_date',
+            'model' => 'App\Models\LivraisonInfo',   
+            'group_by_field'=>'estimate_date',
+            'chart_type' => 'line',  
+            'group_by_period' => 'day',  
+            
+        ]; 
+        $chart3 = new LaravelChart($chart_options);
+        $chart_options = [
+            'chart_title' => 'Produits par Livraison',
+            'report_type' => 'group_by_date',
+            'model' => 'App\Models\LivraisonProduct',   
+            'group_by_field'=>'created_at',
+            'filter_field' => 'created_at',
+            'group_by_field_format' => 'Y-m-d',
+            'chart_type' => 'bar',  
+            'group_by_period' => 'day',  
+        ];  
+        $chart4 = new LaravelChart($chart_options);
+        $totalproducteur = Producteur::count();
+        return view('manager.dashboard', compact('pageTitle', 'chart1', 'chart2','chart3','chart4','totalproducteur'));
     }
 
     public function changeLanguage($lang = null)

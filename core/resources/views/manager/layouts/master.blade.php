@@ -32,6 +32,7 @@
     <script src="{{ asset('assets/global/js/jquery-3.6.0.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/jquery/modernizr.min.js') }}"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_VVwtAhchqsINCTqin22MG1AzMn7d6gk"></script> 
+
     @stack('style')
     <style>
         span.select2.select2-container {
