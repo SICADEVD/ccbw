@@ -169,7 +169,7 @@
 <section class="our-blog p-0 m-0 bg-silver">
     <div class="container work-process  pb-5 pt-5">
         <div class="title mb-5 text-center">
-        <h3> <span class="site-color">Suivi du Connaissement N° {{ $livraison->numeroCU }}</span></h3>
+        <h3> <span class="site-color" style="font-size: 44px;">Suivi du Connaissement N° {{ $livraison->numeroCU }}</span></h3>
     </div>
         <!-- ============ step 1 =========== -->
         <form  id="flocal" method="POST">
