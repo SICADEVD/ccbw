@@ -14,6 +14,7 @@ use App\Models\SupportMessage;
 use App\Charts\ProducteurChart;
 use App\Rules\FileTypeValidate;
 use App\Models\LivraisonPayment;
+use App\Charts\MonthlyUsersChart;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
@@ -22,7 +23,7 @@ use LaravelDaily\LaravelCharts\Classes\LaravelChart;
 class ManagerController extends Controller
 {
 
-    public function dashboard()
+    public function dashboard(MonthlyUsersChart $chart)
     {
         $manager            = auth()->user();
         $pageTitle          = "Manager Dashboard"; 
@@ -70,8 +71,9 @@ class ManagerController extends Controller
             'group_by_period' => 'day',  
         ];  
         $chart4 = new LaravelChart($chart_options);
-        $totalproducteur = Producteur::count();
-        return view('manager.dashboard', compact('pageTitle', 'chart1', 'chart2','chart3','chart4','totalproducteur'));
+        $totalproducteur = Producteur::count(); 
+        $chart = $chart->build();
+        return view('manager.dashboard', compact('pageTitle','chart', 'chart1', 'chart2','chart3','chart4','totalproducteur'));
     }
 
     public function changeLanguage($lang = null)
