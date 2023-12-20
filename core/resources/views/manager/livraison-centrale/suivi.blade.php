@@ -3,7 +3,10 @@
 <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 <style>
 /*process-box*/
- 
+#flocal .form-control {
+    background-color: #fff;
+    border: 1px solid #ffffff;
+}
 .process-box{
     background: #fff;
     padding: 10px;
@@ -63,10 +66,11 @@
     position: absolute;
     bottom: 40px;
     left: -63px;
+    top: 40px;
 }
 .process-point-right:before{
     content: "";
-    height: 144px;
+    height: 175px;
     width: 11px;
     background: #5c5c5c;
     display: inline-grid;
@@ -139,18 +143,18 @@
     background: var(--main-color-hover);
     height: 4px;
     position: absolute;
-    width: 136px;
+    width: 130px;
     right: -153px;
-    top: 64px;
+    top: 68px;
     z-index: 9;
 }
 .process-line-r{
     background: var(--main-color-hover);
     height: 4px;
     position: absolute;
-    width: 136px;
+    width: 130px;
     left: -153px;
-    top: 63px;
+    top: 68px;
     z-index: 9;
 }
     </style>
