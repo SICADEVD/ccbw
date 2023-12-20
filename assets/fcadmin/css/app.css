@@ -5435,6 +5435,7 @@ th.w-85 {
 @media (max-width: 575px) {
     .navbar-search {
         width: 155px;
+        display: none;
     }
 }
 

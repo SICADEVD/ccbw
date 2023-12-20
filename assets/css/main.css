@@ -29743,6 +29743,10 @@ table.dataTable
     {
     position:absolute;right:24px;top:140px
 }
+.navbar-search {
+    width: 155px;
+    display: none;
+}
 
 }
 .settings-box .s-b-mob-sidebar
@@ -29771,6 +29775,10 @@ table.dataTable
 .settings-box .s-b-mob-sidebar
     {
     position:absolute;right:24px;top:140px
+}
+.navbar-search {
+    width: 155px;
+    display: none;
 }
 .settings-box
     {
