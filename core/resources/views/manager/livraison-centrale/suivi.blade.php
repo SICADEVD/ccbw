@@ -326,8 +326,13 @@
               url: "{{ route('manager.livraison.magcentral.suivi.store')}}",
               data: $('#flocal').serialize(),
               success:function(html){
-                console.log(html);
-                $('input[name=lastname]').val(html.lastname).attr("readonly",'readonly'); 
+                 
+                $('#step1').val(html.step1);
+                $('#step2').val(html.step2);
+                $('#step3').val(html.step3);
+                $('#step4').val(html.step4);
+                $('#step5').val(html.step5);
+                //$('input[name=lastname]').val(html.lastname).attr("readonly",'readonly'); 
               }
           });
 });
