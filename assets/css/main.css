@@ -29739,7 +29739,10 @@ table.dataTable
     margin-left:0;padding:0 25px 25px;
     width: 100% !important;
 }
-
+.settings-box .s-b-mob-sidebar
+    {
+    position:absolute;right:24px;top:140px
+}
 
 }
 .settings-box .s-b-mob-sidebar
@@ -29764,6 +29767,10 @@ table.dataTable
     .settings-box .s-b-inner .s-b-n-header .nav
     {
     flex-wrap:nowrap;overflow:auto;overflow-x:scroll;overflow-y:hidden
+}
+.settings-box .s-b-mob-sidebar
+    {
+    position:absolute;right:24px;top:140px
 }
 .settings-box
     {
