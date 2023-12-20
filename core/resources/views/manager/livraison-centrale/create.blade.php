@@ -14,7 +14,7 @@
                             <label for="">@lang("N° Connaissement USINE")</label>
                             <div class="input-group">
                             <span class="input-group-text">{{ $code }}</span>
-                                <input name="lastcode" value="" type="number" autocomplete="off"  class="form-control dates" placeholder="2" required>
+                                <input name="lastcode" value="" type="number" min="{{ $lastnumber }}" autocomplete="off"  class="form-control" placeholder="{{ $lastnumber }}" required>
                                  
                             </div>
                         </div>
@@ -274,6 +274,7 @@
                 $(MODAL_XL).modal('show');
             });
     $('#magasin_central,#type').change('keyup change blur',function() { 
+         $('#producteurs').html('');
 $.ajax({
     type: 'GET',
     url: "{{ route('manager.livraison.magcentral.get.producteur') }}",
@@ -281,7 +282,7 @@ $.ajax({
     success: function(html) {
          
         $('#producteurs').html(html);
-        getproducteur();
+        $('#listeprod').html('');
 
     }
 });

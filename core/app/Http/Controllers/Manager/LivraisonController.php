@@ -388,10 +388,11 @@ $productExists->save();
         $periode = CampagnePeriode::where([['campagne_id',$campagne->id]])->latest()->first();
      
          
-        $stocks = LivraisonProduct::joinRelationship('livraisonInfo') 
-        ->joinRelationship('parcelle') 
-        ->where([['campagne_id',$campagne->id],['receiver_magasin_section_id',$id],['qty','>',0]])->whereIn('type_produit', request()->type)->with('parcelle','parcelle.producteur')->groupBy('producteur_id')->get();
-        if ($stocks->count()) {
+       
+        if (request()->type && request()->sender_magasin) {
+            $stocks = LivraisonProduct::joinRelationship('livraisonInfo') 
+            ->joinRelationship('parcelle') 
+            ->where([['campagne_id',$campagne->id],['receiver_magasin_section_id',$id],['qty','>',0]])->whereIn('type_produit', request()->type)->with('parcelle','parcelle.producteur')->groupBy('producteur_id')->get();
             $contents = '';
 
             foreach ($stocks as $data) {
@@ -432,16 +433,16 @@ $productExists->save();
     public function getListeProducteurConnaiss(){
         $input = request()->all();
           $magasinsection= $input['sender_magasin']; 
-          $producteur = $input['producteur_id'];
-          $type_produit = $input['type'];
+          
           $results ='';
           $total = 0;
           $totalsacs=0;
           $campagne = Campagne::active()->first();
-        // $stock =StockMagasinSection::where([['campagne_id',$campagne->id],['magasin_section_id',$magasinsection],['stocks_entrant','>',0]])->whereIn('type_produit', $type_produit)->whereIn('producteur_id', $producteur)->with('producteur')->get();
+       if(request()->type && request()->producteur_id)
+       {
        $stock = LivraisonProduct::joinRelationship('livraisonInfo') 
        ->joinRelationship('parcelle') 
-       ->where([['campagne_id',$campagne->id],['receiver_magasin_section_id',$magasinsection],['qty','>',0]])->whereIn('type_produit', request()->type)->whereIn('producteur_id', $producteur)->with('parcelle','parcelle.producteur')->get();
+       ->where([['campagne_id',$campagne->id],['receiver_magasin_section_id',$magasinsection],['qty','>',0]])->whereIn('type_produit', request()->type)->whereIn('producteur_id', request()->producteur_id)->with('parcelle','parcelle.producteur')->get();
  
             if(count($stock)){
             $v=1;
@@ -461,7 +462,7 @@ $productExists->save();
         $totalsacs = $totalsacs+$data->nb_sacs_entrant;
         $v++;
         }
-  
+    }
   
             }
             $contents['results'] = $results;
