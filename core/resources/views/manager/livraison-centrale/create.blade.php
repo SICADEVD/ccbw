@@ -14,14 +14,14 @@
                             <label for="">@lang("N° Connaissement USINE")</label>
                             <div class="input-group">
                             <span class="input-group-text">{{ $code }}</span>
-                                <input name="lastcode" value="" type="number" autocomplete="off"  class="form-control dates" placeholder="2" required>
+                                <input name="lastcode" value="" type="number" min="{{ $lastnumber }}" autocomplete="off"  class="form-control" placeholder="{{ $lastnumber }}" required>
                                  
                             </div>
                         </div>
                         <div class="col-lg-4 form-group">
                             <label for="">@lang("Date de livraison")</label>
                             <div class="input-group">
-                                <input name="estimate_date" value="{{ old('estimate_date') }}" type="date" autocomplete="off"  class="form-control dates" placeholder="Date de livraison" required>
+                                <input name="estimate_date" value="{{ old('estimate_date') }}" type="text" autocomplete="off"  class="form-control dates" placeholder="Date de livraison" required>
                                 <span class="input-group-text"><i class="las la-calendar"></i></span>
                             </div>
                         </div>

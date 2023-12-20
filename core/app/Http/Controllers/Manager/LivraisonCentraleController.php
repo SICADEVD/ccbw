@@ -144,14 +144,21 @@ class LivraisonCentraleController extends Controller
         
         $codeCoop = cooperative()->codeCoop;
         $code = $codeCoop.'-'.Str::before(Str::after($nomCamp,'Campagne '),'-').'-2-';
-  
+        $lastnumber = Connaissement::latest()->first();
+        if($lastnumber !=null)
+        {
+            $lastnumber = Str::afterLast($lastnumber->numeroCU,'-');
+             $lastnumber=$lastnumber+1;
+        }else{
+            $lastnumber=1;
+        }
         $parcelles  = Parcelle::with('producteur')->get();
         $pageTitle = 'Connaissement vers Usine';
         $entreprises = Entreprise::all()->pluck('nom_entreprise', 'id');
         $formateurs = FormateurStaff::with('entreprise')->get();
         
         
-        return view('manager.livraison-centrale.create', compact('pageTitle', 'cooperatives','magSections','magCentraux','producteurs','transporteurs','parcelles','campagne','vehicules','code','entreprises','formateurs'));
+        return view('manager.livraison-centrale.create', compact('pageTitle', 'cooperatives','magSections','magCentraux','producteurs','transporteurs','parcelles','campagne','vehicules','code','entreprises','formateurs','lastnumber'));
     }
     private function generecodeConnais()
     {
@@ -266,37 +273,33 @@ class LivraisonCentraleController extends Controller
     public function getProducteur(){
         $input = request()->all();
          
-        $id = $input['magasin_central'];
+       
         $campagne = Campagne::active()->first();
         $periode = CampagnePeriode::where([['campagne_id',$campagne->id]])->latest()->first();
-
-        $stocks = LivraisonMagasinCentralProducteur::joinRelationship('stockMagasinCentral')->where([['livraison_magasin_central_producteurs.campagne_id',$campagne->id],['magasin_centraux_id',$id],['stocks_mag_entrant','>',0]])->whereIn('livraison_magasin_central_producteurs.type_produit', request()->type)->select('stock_magasin_centraux.*')->groupBy('numero_connaissement')->get();
-        if ($stocks->count()) {
-            $contents = '';
-
+        $contents = '';
+        if(request()->type && request()->magasin_central)
+        {
+        $stocks = LivraisonMagasinCentralProducteur::joinRelationship('stockMagasinCentral')->where([['livraison_magasin_central_producteurs.campagne_id',$campagne->id],['magasin_centraux_id',request()->magasin_central],['stocks_mag_entrant','>',0]])->whereIn('livraison_magasin_central_producteurs.type_produit', request()->type)->select('stock_magasin_centraux.*')->groupBy('numero_connaissement')->get();
+        if ($stocks->count()) { 
             foreach ($stocks as $data) {
                
                 $contents .= '<option value="'.$data->id.'">'. $data->numero_connaissement .'</option>';
             }
-        } else {
-            $contents = null;
+        } 
         }
  
         return $contents;
     }
 
     public function getListeProducteurConnaiss(){
-        $input = request()->all();
-          $magasinsection= $input['magasin_central']; 
-          $codes = request()->connaissement_id;
-          $type_produit = $input['type'];
+         
           $results ='';
           $total = 0;
           $totalsacs=0;
           $campagne = Campagne::active()->first();
         if(request()->connaissement_id !=null)
         {
-        $stock =LivraisonMagasinCentralProducteur::joinRelationship('stockMagasinCentral')->where([['livraison_magasin_central_producteurs.campagne_id',$campagne->id],['stock_magasin_centraux.magasin_centraux_id',$magasinsection],['stocks_mag_entrant','>',0]])->whereIn('livraison_magasin_central_producteurs.type_produit', $type_produit)->whereIn('stock_magasin_central_id', $codes)->select('livraison_magasin_central_producteurs.*')->get();
+        $stock =LivraisonMagasinCentralProducteur::joinRelationship('stockMagasinCentral')->where([['livraison_magasin_central_producteurs.campagne_id',$campagne->id],['stock_magasin_centraux.magasin_centraux_id',request()->magasin_central],['stocks_mag_entrant','>',0],['quantite','>',0]])->whereIn('livraison_magasin_central_producteurs.type_produit', request()->type)->whereIn('stock_magasin_central_id', request()->connaissement_id)->select('livraison_magasin_central_producteurs.*')->get();
        
             if(count($stock)){
             $v=1;
