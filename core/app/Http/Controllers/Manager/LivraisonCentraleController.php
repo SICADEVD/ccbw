@@ -103,7 +103,13 @@ class LivraisonCentraleController extends Controller
         $sections = Section::get();
         return view('manager.livraison-centrale.connaissement', compact('pageTitle', 'stocks','total','sections','magasins'));
     }
-
+    public function suiviLivraison($id)
+    {  
+        $staff = auth()->user(); 
+        $livraison = Connaissement::where('id',decrypt($id))->first();
+        $pageTitle    = "Suivi de la livraison à l'Usine";
+        return view('manager.livraison-centrale.suivi', compact('pageTitle', 'livraison'));
+    }
     public function prime()
     {  
 
