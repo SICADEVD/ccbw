@@ -109,7 +109,7 @@
         <i class="las la-plus"></i>@lang("Enregistrer une livraison brousse")
     </a>
 <a href="{{ route('manager.livraison.stock.section.create') }}" class="btn  btn-outline--primary h-45 addNewCooperative">
-        <i class="las la-plus"></i>@lang("Enregistrer Connaissement vers Magasin Central")
+        <i class="las la-plus"></i>@lang("Enregistrer Connaissement brousse vers Magasin Central")
     </a>
 <a href="{{ route('manager.livraison.exportExcel.livraisonAll') }}" class="btn  btn-outline--warning h-45"><i class="las la-cloud-download-alt"></i> Exporter en Excel</a>
 @endpush
