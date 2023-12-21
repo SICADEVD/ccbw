@@ -298,7 +298,7 @@
                         <?php echo Form::label(__('Quelle est sa superficie ?'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
                             <input type="number" min="0.1" name="nombreHectareConjoint" placeholder="Ex: 2 ha"
-                                class="form-control nombreHectareConjoint" value="{{ old('nombreHectareConjoint') }}">
+                                class="form-control nombreHectareConjoint" value="{{ old('nombreHectareConjoint', $menage->nombreHectareConjoint) }}">
                         </div>
                     </div>
 
