@@ -196,6 +196,7 @@ class ApimenageController extends Controller
         $menage->formation = $request->formation;
         $menage->dureeActivite = $request->dureeActivite;
         $menage->autreCapital = $request->autreCapital;
+        $menage->nombreHectareConjoint = $request->nombreHectareConjoint;
         $menage->entite = $request->entite;
         //dd(json_encode($request->all()));
 
@@ -217,13 +218,14 @@ class ApimenageController extends Controller
                     $i++;
                 }
             }
-            if (($request->ordureMenageres != null)) {
+            if (($request->ordureMenagere != null)) {
                 Menage_ordure::where('menage_id', $id)->delete();
-                foreach ($request->ordureMenageres as $ordureMenagere) {
+                foreach ($request->ordureMenagere as $data) {
+                    //dd($ordureMenagere);
 
                     $data2[] = [
                         'menage_id' => $id,
-                        'ordure_menagere' => $ordureMenagere,
+                        'ordure_menagere' => $data,
                     ];
                 }
             }

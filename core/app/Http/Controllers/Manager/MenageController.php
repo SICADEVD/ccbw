@@ -221,8 +221,9 @@ class MenageController extends Controller
         $menage->dureeActivite = $request->dureeActivite;
         $menage->autreCapital = $request->autreCapital;
         $menage->entite = $request->entite;
+        $menage->nombreHectareConjoint = $request->nombreHectareConjoint;
         // dd(json_encode($request->all()));
-        // dd($request->all());
+        //dd($request->all());
         $menage->save();
         if ($menage != null) {
             $id = $menage->id;
@@ -241,13 +242,14 @@ class MenageController extends Controller
                     $i++;
                 }
             }
-            if (($request->ordureMenageres != null)) {
+            if (($request->ordureMenagere != null)) {
                 Menage_ordure::where('menage_id', $id)->delete();
-                foreach ($request->ordureMenageres as $ordureMenagere) {
+                foreach ($request->ordureMenagere as $data) {
+                    //dd($ordureMenagere);
 
                     $data2[] = [
                         'menage_id' => $id,
-                        'ordure_menagere' => $ordureMenagere,
+                        'ordure_menagere' => $data,
                     ];
                 }
             }
