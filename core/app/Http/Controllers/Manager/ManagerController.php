@@ -10,26 +10,71 @@ use App\Models\Cooperative;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use App\Models\LivraisonInfo;
-use App\Models\SupportMessage;
-use App\Charts\ProducteurChart;
+use App\Models\SupportMessage; 
 use App\Rules\FileTypeValidate;
-use App\Models\LivraisonPayment;
-use App\Charts\MonthlyUsersChart;
+use App\Models\LivraisonPayment; 
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
-use LaravelDaily\LaravelCharts\Classes\LaravelChart;
-
+use App\Models\FormationStaff;
+use App\Models\Parcelle;
+use App\Models\SuiviFormation;
+use App\Models\TypeFormationTheme;
+use ArielMejiaDev\LarapexCharts\Facades\LarapexChart;
+use Illuminate\Support\Facades\Hash;   
+use ArielMejiaDev\LarapexCharts\PieChart;
 class ManagerController extends Controller
 {
 
-    public function dashboard(MonthlyUsersChart $chart)
+    public function dashboard()
     {
         $manager = auth()->user();
         $pageTitle = "Manager Dashboard";  
+        $nbcoop = Cooperative::count();
+        $nbparcelle = Parcelle::count();
+        $genre = Producteur::select('sexe',DB::raw('count(id) as nombre'))->groupBy('sexe')->get();
+        $parcelle = Parcelle::select('typedeclaration',DB::raw('count(id) as nombre'))->groupBy('typedeclaration')->get();
+     
 
-        $chart = $chart->build();
-        return view('manager.dashboard', compact('pageTitle','chart'));
+        $prodbysexe= LarapexChart::setType('donut')
+                            ->setTitle('Producteurs par Genre')
+                            ->setDataset(Arr::pluck($genre,'nombre'))
+                            ->setLabels(Arr::pluck($genre,'sexe'))
+                            ->setDatalabels();
+       
+       $mapping= LarapexChart::setType('pie')
+                            ->setTitle('Mapping des parcelles')
+                            ->setDataset(Arr::pluck($parcelle,'nombre'))
+                            ->setLabels(Arr::pluck($parcelle,'typedeclaration'))
+                            ->setDatalabels();
+
+        $producteurbydays = Producteur::select(DB::raw('DATE_FORMAT(created_at,"%Y-%m-%d") as date'),DB::raw('count(id) as nombre'))->groupBy('date')->get(); 
+        $producteurbydays = LarapexChart::setType('area')
+                    ->setTitle('Producteurs par Date') 
+                    ->setDataset([
+                        [
+                        'name'=>'Nombre de producteurs', 
+                        'data'=> Arr::pluck($producteurbydays,'nombre')
+                        ]
+                        ]) 
+                    ->setXAxis(Arr::pluck($producteurbydays,'date'))
+                    ->setDatalabels();
+        
+        $formation = TypeFormationTheme::joinRelationship('typeFormation')->select('type_formations.nom',DB::raw('count(type_formation_themes.id) as nombre'))->groupBy('type_formation_id')->get();
+        $formationbymodule = LarapexChart::setType('bar')
+                    ->setTitle('Formations par Modules') 
+                    ->setDataset([
+                        [
+                        'name'=>'Nombre de producteurs', 
+                        'data'=> Arr::pluck($formation,'nombre')
+                        ]
+                        ])  
+                    ->setXAxis(Arr::pluck($formation,'nom'))
+                    ->setDatalabels();
+
+        $parcelle = Parcelle::select('typedeclaration',DB::raw('count(id) as nombre'))->groupBy('typedeclaration')->get();
+
+        
+        return view('manager.dashboard', compact('pageTitle','nbcoop','nbparcelle','prodbysexe','mapping','producteurbydays','formationbymodule'));
     }
 
     public function changeLanguage($lang = null)

@@ -112,6 +112,11 @@
         .navbar__action-list li label { 
     display: none;
 }
+.grid-item {
+  margin-bottom: 10px;
+  width: 30%; 
+  min-height: 200px;
+}
     </style>
 </head>
 
@@ -145,11 +150,18 @@
     <script src="{{ asset('assets/vendor/jquery/daterangepicker.min.js') }}" defer=""></script>
     <script src="{{ asset('assets/vendor/jquery/datepicker.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/jquery/bootstrap-select.js') }}"></script>
-
+    <script src="{{ asset('assets/global/js/masonry.pkgd.js') }}"></script>
     <script src="{{ asset('assets/js/main.js') }}"></script>
     <script src="{{ asset('assets/fcadmin/js/app.js') }}"></script>
 
-
+ 
+<script>
+$('.grid').masonry({   
+    itemSelector: '.grid-item',  
+    gutter: 10, 
+    columnWidth: 20
+     });
+</script>
     @include('sections.modals')
     {{-- LOAD NIC EDIT --}}
     <script>

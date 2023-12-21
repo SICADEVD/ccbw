@@ -1,21 +1,56 @@
 @extends('manager.layouts.app')
 @section('panel')
-    <div class="row gy-4">
-    <div class="col-md-4 col-sm-6">
-            <div class="card bg--white has-link box--shadow2">
-                 
-                <div class="card-body">
-                    <div class="row align-items-center"> 
-                        <div class="col-12 text-end"> 
-                        {!! $chart->container() !!}
+ 
+    <div class="grid gy-4"> 
+    <div class="grid-item">  
+                        <div class="card box--shadow2 bg--white"> 
+                        <div class="card-body text-center">
+                        <h5 class="card-title">Nombre de Coopérative</h5>
+                        <h1 class="text--black" style="font-size: 56px;">{{$nbcoop}}</h1>
+                        </div> 
                         </div>
-                    </div>
-                </div>
-            </div>
         </div>
 
+    <div class="grid-item"> 
+                    <div class="card box--shadow2 bg--white">  
+                    <div class="card-body text-center">
+                        {!! $prodbysexe->container() !!} 
+                    </div> 
+                    </div>
+        </div>
+
+        <div class="grid-item">  
+                        <div class="card box--shadow2 bg--white"> 
+                        <div class="card-body text-center">
+                        <h5 class="card-title">Nombre de Parcelles</h5>
+                        <h1 class="text--black" style="font-size: 56px;">{{$nbparcelle}}</h1>
+                        </div> 
+                        </div>
+        </div>
+
+        <div class="grid-item"> 
+        <div class="card box--shadow2 bg--white"> 
+        <div class="card-body text-center"> 
+                        {!! $mapping->container() !!}
+                    </div> 
+        </div>
+        </div>
   
+        <div class="grid-item"> 
+                    <div class="card box--shadow2 bg--white">  
+                    <div class="card-body text-center">
+                        {!! $producteurbydays->container() !!}
+                    </div> 
+                    </div>
+        </div>
          
+        <div class="grid-item"> 
+                    <div class="card box--shadow2 bg--white">  
+                    <div class="card-body text-center">
+                        {!! $formationbymodule->container() !!} 
+                    </div> 
+                    </div>
+        </div>
 
     </div><!-- row end-->
 
@@ -29,7 +64,13 @@
     </div>
 @endpush
 @push('script') 
-<script src="{{ $chart->cdn() }}"></script>
 
-{{ $chart->script() }}
+<script src="{{ $prodbysexe->cdn() }}"></script>
+
+{{ $prodbysexe->script() }}
+{{ $mapping->script() }}
+{{ $producteurbydays->script() }}
+{{ $formationbymodule->script() }}
+
+ 
 @endpush
