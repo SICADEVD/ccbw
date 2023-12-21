@@ -184,8 +184,8 @@
                                                                         @if ($applicationPesticide->nom == 'Fongicides') selected @endif>
                                                                         Fongicides</option>
                                                                     <option value="Nematicide"
-                                                                        @if ($applicationPesticide->nom == 'Nematicide') selected @endif>
-                                                                        Nematicide</option>
+                                                                        @if ($applicationPesticide->nom == 'Nematicides') selected @endif>
+                                                                        Nematicides</option>
                                                                     <option value="Insecticides"
                                                                         @if ($applicationPesticide->nom == 'Insecticides') selected @endif>
                                                                         Insecticides</option>
@@ -443,7 +443,7 @@
                     '</badge></div><div class="col-xs-12 col-sm-4"><div class="form-group row"><label for="" class="">Pesticides</label><select class="form-control" id="pesticides-' +
                     pesticideCount +
                     '" name="pesticides[' + pesticideCount +
-                    '][nom]"><option value="">Selectionner une option</option><option value="Herbicides">Herbicides</option><option value="Fongicides">Fongicides</option><option value="Nematicide">Nematicide</option><option value="Insecticide">Insecticide</option><option value="Acaricides">Acaricides</option><option value="Pesticides">Pesticides</option></select></div></div><div class="col-xs-12 col-sm-4"><div class="form-group row"><label> Nom commercial</label><input type="text" name="pesticides[' +
+                    '][nom]"><option value="">Selectionner une option</option><option value="Herbicides">Herbicides</option><option value="Fongicides">Fongicides</option><option value="Nematicides">Nematicides</option><option value="Insecticides">Insecticides</option><option value="Acaricides">Acaricides</option><option value="Pesticides">Pesticides</option></select></div></div><div class="col-xs-12 col-sm-4"><div class="form-group row"><label> Nom commercial</label><input type="text" name="pesticides[' +
                     pesticideCount +
                     '][nomCommercial]" id="nomCommercial' +
                     pesticideCount +
