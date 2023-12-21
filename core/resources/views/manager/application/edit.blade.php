@@ -26,7 +26,7 @@
                             <select class="form-control" name="section" id="section" required>
                                 <option value="">@lang('Selectionner une option')</option>
                                 @foreach ($sections as $section)
-                                    <option value="{{ $section->id }}" @selected($section->id == $suiviparcelle->parcelle->producteur->localite->section->id)>
+                                    <option value="{{ $section->id }}" @selected($section->id == $application->parcelle->producteur->localite->section->id)>
                                         {{ $section->libelle }}</option>
                                 @endforeach
                             </select>
@@ -39,8 +39,8 @@
                             <select class="form-control" name="localite" id="localite" required>
                                 <option value="">@lang('Selectionner une option')</option>
                                 @foreach ($localites as $localite)
-                                    <option value="{{ $localite->id }}" data-chained="{{ $localite->section->id }}"
-                                        @selected($localite->id == $suiviparcelle->parcelle->producteur->localite->id)>
+                                    <option value="{{ $localite->id }}" @selected($localite->id == $application->parcelle->producteur->localite->id)
+                                        data-chained="{{ $localite->section->id }}">
                                         {{ $localite->nom }}</option>
                                 @endforeach
                             </select>
@@ -53,8 +53,8 @@
                             <select class="form-control" name="producteur" id="producteur" required>
                                 <option value="">@lang('Selectionner une option')</option>
                                 @foreach ($producteurs as $producteur)
-                                    <option value="{{ $producteur->id }}" data-chained="{{ $producteur->localite->id }}"
-                                        @selected($producteur->id == $suiviparcelle->parcelle->producteur->id)>
+                                    <option value="{{ $producteur->id }}" @selected($producteur->id == $application->parcelle->producteur->id)
+                                        data-chained="{{ $producteur->localite->id }}">
                                         {{ $producteur->nom }} {{ $producteur->prenoms }}</option>
                                 @endforeach
                             </select>
@@ -67,26 +67,313 @@
                                 required>
                                 <option value="">@lang('Selectionner une option')</option>
                                 @foreach ($parcelles as $parcelle)
-                                    <option value="{{ $parcelle->id }}" data-chained="{{ $parcelle->producteur->id }}"
-                                        @selected($parcelle->id == $suiviparcelle->parcelle->id)>
+                                    <option value="{{ $parcelle->id }}" @selected($parcelle->id == $application->parcelle->id)
+                                        data-chained="{{ $parcelle->producteur->id }}">
                                         {{ __('Parcelle') }} {{ $parcelle->codeParc }}</option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
+
                     <div class="form-group row">
-                        <label class="col-sm-4 control-label">@lang('Applicateur')</label>
+                        <?php echo Form::label(__('Qui a réalisé l\'application ?'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <select class="form-control" name="applicateur" id="applicateur" required>
+                            <select class="form-control personneApplication" name="personneApplication" id="application"
+                                required>
                                 <option value="">@lang('Selectionner une option')</option>
-                                @foreach ($staffs as $staff)
-                                    <option value="{{ $staff->id }}" @selected($staff->id == $application->applicateur_id)>
-                                        {{ $staff->lastname }} {{ $staff->firstname }}</option>
-                                @endforeach
+                                <option value="Producteur" @if ($application->personneApplication == 'Producteur') selected @endif>
+                                    @lang('Producteur')</option>
+                                <option value="Applicateur coop" @if ($application->personneApplication == 'Applicateur coop') selected @endif>
+                                    @lang('Applicateur coop')</option>
+                                <option value="Independant" @if ($application->personneApplication == 'Independant') selected @endif>
+                                    @lang('Independant')</option>
                             </select>
                         </div>
                     </div>
+                    <div id="infosIndependant">
+                        <div class="form-group row">
+                            <?php echo Form::label(__('A-t-il suivi une formation ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <select class="form-control suiviFormation" name="suiviFormation" id="suiviFormation"
+                                    required>
+                                    <option value="">@lang('Selectionner une option')</option>
+                                    <option value="oui" @if ($application->suiviFormation == 'oui') selected @endif>
+                                        @lang('Oui')</option>
+                                    <option value="non" @if ($application->suiviFormation == 'non') selected @endif>
+                                        @lang('Non')</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <?php echo Form::label(__('A-t-il une attestation ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <select class="form-control attestion" name="attestion" id="attestion">
+                                    <option value="">@lang('Selectionner une option')</option>
+                                    <option value="oui" @if ($application->attestion == 'oui') selected @endif>
+                                        @lang('Oui')</option>
+                                    <option value="non" @if ($application->attestion == 'non') selected @endif>
+                                        @lang('Non')</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <?php echo Form::label(__('A-t-il fait un bilan de santé ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <select class="form-control bilanSante" name="bilanSante" id="bilanSante">
+                                    <option value="">@lang('Selectionner une option')</option>
+                                    <option value="oui" @if ($application->bilanSante == 'oui') selected @endif>
+                                        @lang('Oui')</option>
+                                    <option value="non" @if ($application->bilanSante == 'non') selected @endif>
+                                        @lang('Non')</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <?php echo Form::label(__('possede t-il un EPI ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <select class="form-control independantEpi" name="independantEpi" id="independantEpi">
+                                    <option value="">@lang('Selectionner une option')</option>
+                                    <option value="oui" @if ($application->independantEpi == 'oui') selected @endif>
+                                        @lang('Oui')</option>
+                                    <option value="non" @if ($application->independantEpi == 'non') selected @endif>
+                                        @lang('Non')</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row" id="etatEpis">
+                            <?php echo Form::label(__('Est-il en bon état ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <select class="form-control etatEpi" name="etatEpi" id="etatEpi">
+                                    <option value="">@lang('Selectionner une option')</option>
+                                    <option value="oui" @if ($application->etatEpi == 'oui') selected @endif>
+                                        @lang('Oui')</option>
+                                    <option value="non" @if ($application->etatEpi == 'non') selected @endif>
+                                        @lang('Non')</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
                     <hr class="panel-wide">
+                    <div class="form-group row">
+                        <div class="col-xs-12 col-sm-12">
+                            <table class="table table-striped table-bordered">
+                                <tbody id="pesticide_area">
+                                    @if ($applicationPesticides)
+                                        @foreach ($applicationPesticides as $index => $applicationPesticide)
+                                            <tr>
+                                                <td class="row">
+                                                    <div class="col-xs-12 col-sm-12 bg-success">
+                                                        <badge class="btn  btn-outline--warning h-45 btn-sm">
+                                                            @lang('Pesticide')
+                                                            {{ $index + 1 }}
+                                                        </badge>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-xs-12 col-sm-4">
+                                                            <div class="form-group row">
+                                                                <label class="control-label">Pesticides</label>
+                                                                <select name="pesticides[{{ $index }}][nom]"
+                                                                    id="pesticides-{{ $index + 1 }}"
+                                                                    class="form-control">
+                                                                    <option value="">Selectionner une option</option>
+                                                                    <option value="Herbicides"
+                                                                        @if ($applicationPesticide->nom == 'Herbicides') selected @endif>
+                                                                        Herbicides</option>
+                                                                    <option value="Fongicides"
+                                                                        @if ($applicationPesticide->nom == 'Fongicides') selected @endif>
+                                                                        Fongicides</option>
+                                                                    <option value="Nematicide"
+                                                                        @if ($applicationPesticide->nom == 'Nematicide') selected @endif>
+                                                                        Nematicide</option>
+                                                                    <option value="Insecticides"
+                                                                        @if ($applicationPesticide->nom == 'Insecticides') selected @endif>
+                                                                        Insecticides</option>
+                                                                    <option value="Acaricides"
+                                                                        @if ($applicationPesticide->nom == 'Acaricides') selected @endif>
+                                                                        Acaricides</option>
+                                                                    <option value="Pesticides"
+                                                                        @if ($applicationPesticide->nom == 'Pesticides') selected @endif>
+                                                                        Pesticides</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-12 col-sm-4">
+                                                            <div class="form-group row">
+                                                                {{ Form::label(__('Nom commercial'), null, ['class' => 'control-label']) }}
+                                                                <input
+                                                                    name="pesticides[{{ $index }}][nomCommercial]"
+                                                                    id="nomCommercial-{{ $index + 1 }}"
+                                                                    class="form-control" placeholder="Nom commercial"
+                                                                    value="{{ $applicationPesticide->nomCommercial }}">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-12 col-sm-4">
+                                                            <div class="form-group row">
+                                                                <label>Matières actives</label>
+                                                                <input type="text" name="pesticides[0][matiereActive]"
+                                                                    id="matiereActive-1" class="form-control"
+                                                                    placeholder="matière active 1, matière active 2 ....">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mt-3">
+                                                        <div class="col-xs-12 col-sm-4">
+                                                            <div class="form-group row">
+                                                                <label class="control-label">Toxicicologie</label>
+                                                                <select
+                                                                    name="pesticides[{{ $index }}][toxicicologie]"
+                                                                    id="toxicicologie-{{ $index + 1 }}"
+                                                                    class="form-control">
+                                                                    <option value="">Selectionner une option</option>
+                                                                    <option value="I"
+                                                                        @if ($applicationPesticide->toxicicologie == 'I') selected @endif>
+                                                                        I</option>
+                                                                    <option value="IA"
+                                                                        @if ($applicationPesticide->toxicicologie == 'IA') selected @endif>
+                                                                        IA</option>
+                                                                    <option value="IB"
+                                                                        @if ($applicationPesticide->toxicicologie == 'IB') selected @endif>
+                                                                        IB</option>
+                                                                    <option value="II"
+                                                                        @if ($applicationPesticide->toxicicologie == 'II') selected @endif>
+                                                                        II</option>
+                                                                    <option value="III"
+                                                                        @if ($applicationPesticide->toxicicologie == 'III') selected @endif>
+                                                                        III</option>
+                                                                    <option value="IV"
+                                                                        @if ($applicationPesticide->toxicicologie == 'IV') selected @endif>
+                                                                        IV</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-12 col-sm-4">
+                                                            <div class="form-group row">
+                                                                <label>Dose</label>
+                                                                <input name="pesticides[{{ $index }}][dose]"
+                                                                    id="dose-{{ $index + 1 }}" class="form-control"
+                                                                    placeholder="L/Ha"
+                                                                    value="{{ $applicationPesticide->dose }}">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-12 col-sm-4">
+                                                            <div class="form-group row">
+                                                                <label>Fréquence</label>
+                                                                <input name="pesticides[{{ $index }}][frequence]"
+                                                                    id="frequence-{{ $index + 1 }}"
+                                                                    class="form-control" placeholder="Fréquence"
+                                                                    value="{{ $applicationPesticide->frequence }}">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @else
+                                        <tr>
+                                            <td class="row">
+                                                <div class="col-xs-12 col-sm-12 bg-success">
+                                                    <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Pesticide')
+                                                    </badge>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xs-12 col-sm-4">
+                                                        <div class="form-group row">
+                                                            <label class="control-label">Pesticides</label>
+                                                            <select name="pesticides[0][nom]" id="pesticides-1"
+                                                                class="form-control">
+                                                                <option value="">Selectionner une option</option>
+                                                                <option value="Herbicides">Herbicides</option>
+                                                                <option value="Fongicides">Fongicides</option>
+                                                                <option value="Nematicide">Nematicide</option>
+                                                                <option value="Insecticides">Insecticides</option>
+                                                                <option value="Acaricides">Acaricides</option>
+                                                                <option value="Pesticides">Pesticides</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-xs-12 col-sm-4">
+                                                        <div class="form-group row">
+                                                            {{ Form::label(__('Nom commercial'), null, ['class' => 'control-label']) }}
+                                                            <input name="pesticides[0][nomCommercial]"
+                                                                id="nomCommercial-1" class="form-control"
+                                                                placeholder="Nom commercial">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-xs-12 col-sm-4">
+                                                        <div class="form-group row">
+                                                            <label>Matières actives</label>
+                                                            <input type="text" name="pesticides[0][matiereActive]"
+                                                                id="matiereActive-1" class="form-control"
+                                                                placeholder="matière active 1, matière active 2 ....">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <div class="col-xs-12 col-sm-4">
+                                                        <div class="form-group row">
+                                                            <label class="control-label">Toxicicologie</label>
+                                                            <select name="pesticides[0][toxicicologie]"
+                                                                id="toxicicologie-1" class="form-control">
+                                                                <option value="">Selectionner une option</option>
+                                                                <option value="I">I</option>
+                                                                <option value="IA">IA</option>
+                                                                <option value="IB">IB</option>
+                                                                <option value="II">II</option>
+                                                                <option value="III">III</option>
+                                                                <option value="IV">IV</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-4">
+                                                        <div class="form-group row">
+                                                            <label>Dose</label>
+                                                            <input name="pesticides[0][dose]" id="dose-1"
+                                                                class="form-control" placeholder="L/Ha">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-4">
+                                                        <div class="form-group row">
+                                                            <label>Fréquence</label>
+                                                            <input name="pesticides[0][frequence]" id="frequence-1"
+                                                                class="form-control" placeholder="Fréquence">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                                <tfoot style="background: #e3e3e3;">
+                                    <tr>
+
+                                        <td colspan="3">
+                                            <button id="addRowPesticide" type="button" class="btn btn-success btn-sm"><i
+                                                    class="fa fa-plus"></i></button>
+                                        </td>
+                                    <tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="form-group row mt-3">
+                        <label class="col-sm-4 control-label">@lang('Maladies observées dans la parcelle')</label>
+                        <div class="col-xs-12 col-sm-8">
+                            <select class="form-control select2-multi-select protections" name="maladies[]" multiple
+                                required>
+                                <option value="">@lang('Selectionner les protections')</option>
+                                <option value="Mirides" {{ in_array('Mirides',$applicationMaladies) ? 'selected' : ''}}>Mirides</option>
+                                <option value="Punaises" {{ in_array('Punaises',$applicationMaladies)? 'selected' : ''}}>Punaises</option>
+                                <option value="Foreurs" {{ in_array('Foreurs',$applicationMaladies)? 'selected' : ''}} >Foreurs</option>
+                                <option value="Chenilles" {{ in_array('Chenilles',$applicationMaladies)? 'selected' : ''}}>Chenilles</option>
+                            </select>
+                        </div>
+                    </div>
+
                     <div class="form-group row">
                         <?php echo Form::label(__('Superficie Pulvérisée'), null, ['class' => 'col-sm-4 control-label required']); ?>
                         <div class="col-xs-12 col-sm-8">
@@ -94,159 +381,6 @@
                         </div>
                     </div>
 
-                    <div class="form-group row">
-                        <?php echo Form::label(__('Marque du Produit Pulvérisé'), null, ['class' => 'col-sm-4 control-label required']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::text('marqueProduitPulverise', null, ['placeholder' => __('Marque du Produit Pulvérisé'), 'class' => 'form-control marqueProduitPulverise', 'required']); ?>
-                        </div>
-                    </div>
-
-
-                    <hr class="panel-wide">
-
-                    <div class="form-group row">
-                        <?php echo Form::label(__('Matières actives'), null, ['class' => 'col-sm-4 control-label required']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <table class="table table-striped table-bordered">
-                                <tbody id="product_area">
-                                    <?php
-        if($application->matiereactives)
-        {  
-        $i=0;
-        $a=1;
-        foreach($application->matiereactives as $data) {
-           ?>
-                                    <tr>
-                                        <td class="row">
-                                            <div class="col-xs-12 col-sm-12">
-                                                <div class="form-group">
-                                                    <?php echo Form::label(__('Nom matière Active') . $a, null, ['class' => '']); ?>
-                                                    <input type="text" name="matieresActives[]" placeholder="..."
-                                                        id="matieresActives-<?php echo $a; ?>"
-                                                        value="<?php echo $data->matiereactive; ?>" class="form-control">
-                                                </div>
-                                            </div>
-                                            <?php if($a>1):?>
-                                            <div class="col-xs-12 col-sm-12 col-md-12"><button type="button"
-                                                    id="<?php echo $a; ?>" class="removeRow btn btn-danger btn-sm"><i
-                                                        class="fa fa-minus"></i></button></div>
-                                            <?php endif; ?>
-                                        </td>
-                                    </tr>
-                                    <?php
-           $a++;
-            $i++;
-        }
-    }else{
-        ?>
-                                    <tr>
-                                        <td class="row">
-                                            <div class="col-xs-12 col-sm-12">
-                                                <div class="form-group row">
-                                                    {{ Form::label(__('Nom matière Active'), null, ['class' => '']) }}
-                                                    <input type="text" name="matieresActives[]" placeholder="..."
-                                                        id="matieresActives-1" class="form-control" required>
-                                                </div>
-                                            </div>
-
-                                        </td>
-                                    </tr>
-                                    <?php
-        }
-        ?>
-                                </tbody>
-                                <tfoot style="background: #e3e3e3;">
-                                    <tr>
-
-                                        <td colspan="3">
-                                            <button id="addRow" type="button" class="btn btn-success btn-sm"><i
-                                                    class="fa fa-plus"></i></button>
-                                        </td>
-                                    <tr>
-                                </tfoot>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <?php echo Form::label(__('Degré de dangerosité'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('degreDangerosite', ['Faible' => __('Faible'), 'Moyen' => __('Moyen'), 'Eleve' => __('Eleve')], null, ['class' => 'form-control degreDangerosite']); ?>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <?php echo Form::label(__("Raison de l'application"), null, ['class' => 'col-sm-4 control-label required']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::textarea('raisonApplication', null, ['id' => 'raisonApplication', 'rows' => 4, 'cols' => 54, 'style' => 'resize:none', 'class' => 'form-control', 'required']); ?>
-                        </div>
-                    </div>
-                    <hr class="panel-wide">
-
-                    <div class="form-group row">
-                        <?php echo Form::label(__('Nom de(s) insecte(s) cible(s) ou parasite(s) cible(s)'), null, ['class' => 'col-sm-4 control-label required']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <table class="table table-striped table-bordered">
-                                <tbody id="product_area_insect">
-                                    <?php
-        if($application->insectes)
-        {
-        $i=0;
-        $a=1;
-        foreach($application->insectes as $data) {
-           ?>
-                                    <tr>
-                                        <td class="row">
-                                            <div class="col-xs-12 col-sm-12">
-                                                <div class="form-group">
-                                                    <?php echo Form::label(__('Nom') . $a, null, ['class' => '']); ?>
-                                                    <input type="text" name="nomInsectesCibles[]" placeholder="..."
-                                                        id="nomInsectesCibles-<?php echo $a; ?>"
-                                                        value="<?php echo $data->insecte; ?>" class="form-control">
-                                                </div>
-                                            </div>
-                                            <?php if($a>1):?>
-                                            <div class="col-xs-12 col-sm-12 col-md-12"><button type="button"
-                                                    id="<?php echo $a; ?>"
-                                                    class="removeRowInsect btn btn-danger btn-sm"><i
-                                                        class="fa fa-minus"></i></button></div>
-                                            <?php endif; ?>
-                                        </td>
-                                    </tr>
-                                    <?php
-           $a++;
-            $i++;
-        }
-    }else{
-        ?>
-                                    <tr>
-                                        <td class="row">
-                                            <div class="col-xs-12 col-sm-12">
-                                                <div class="form-group row">
-                                                    {{ Form::label(__('Nom'), null, ['class' => '']) }}
-                                                    <input type="text" name="nomInsectesCibles[]" placeholder="..."
-                                                        id="nomInsectesCibles-1" class="form-control" required>
-                                                </div>
-                                            </div>
-
-                                        </td>
-                                    </tr>
-                                    <?php
-        }
-        ?>
-                                </tbody>
-                                <tfoot style="background: #e3e3e3;">
-                                    <tr>
-
-                                        <td colspan="3">
-                                            <button id="addRowInsect" type="button" class="btn btn-success btn-sm"><i
-                                                    class="fa fa-plus"></i></button>
-                                        </td>
-                                    <tr>
-                                </tfoot>
-                            </table>
-                        </div>
-                    </div>
 
                     <div class="form-group row">
                         <?php echo Form::label(__('Délais de Réentrée du produit en jours'), null, ['class' => 'col-sm-4 control-label required']); ?>
@@ -258,50 +392,22 @@
                     <hr class="panel-wide">
 
                     <div class="form-group row">
-                        <?php echo Form::label(__('Existe-il une zone tampons ?'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('zoneTampons', ['non' => __('non'), 'oui' => __('oui')], null, ['class' => 'form-control zoneTampons']); ?>
-                        </div>
-                    </div>
-
-                    <div class="form-group row" id="photoZoneTampons">
-                        <?php echo Form::label(__('Photo de la zone tampon'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <input type="file" name="photoZoneTampons" class="form-control photoZoneTampons">
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <?php echo Form::label(__("Présence de douche pour l'applicateur ?"), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('presenceDouche', ['non' => __('non'), 'oui' => __('oui')], null, ['class' => 'form-control presenceDouche']); ?>
-                        </div>
-                    </div>
-
-                    <div class="form-group row" id="photoDouche">
-                        <?php echo Form::label(__('Photo de la douche'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <input type="file" name="photoDouche" class="form-control photoDouche">
-
+                        <?php echo Form::label(__('Heure d\'application'), null, ['class' => 'col-sm-4 control-label required']); ?>
+                        <div class="col-xs-12 col-sm-8 bootstrap-timepicker timepicker">
+                            <?php echo Form::text('heure_application', null, ['class' => 'form-control', 'required' => 'required', 'placeholder' => 'Ex : 04:10']); ?>
                         </div>
                     </div>
 
                     <hr class="panel-wide">
+
                     <div class="form-group row">
                         {{ Form::label(__("Date d'application"), null, ['class' => 'col-sm-4 control-label required']) }}
                         <div class="col-xs-12 col-sm-8">
                             <?php echo Form::date('date_application', null, ['class' => 'form-control dateactivite required', 'required' => 'required']); ?>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        {{ Form::label(__("Heure d'application"), null, ['class' => 'col-sm-4 control-label required']) }}
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::time('heure_application', null, ['class' => 'form-control dateactivite required', 'required' => 'required']); ?>
-                        </div>
-                    </div>
 
                     <hr class="panel-wide">
-
 
                     <div class="form-group">
                         <button type="submit" class="btn btn--primary btn-block h-45 w-100">@lang('Envoyer')</button>
@@ -318,139 +424,120 @@
 @endpush
 
 @push('script')
+    <link rel="stylesheet" href="{{ asset('assets/vendor/css/daterangepicker.css') }}">
+    <script src="{{ asset('assets/vendor/jquery/daterangepicker.min.js') }}"></script>
     <script type="text/javascript">
+        $('#heure_application').timepicker({
+            showMeridian: (false)
+        });
         $(document).ready(function() {
 
-            var productCount = $("#product_area tr").length + 1;
-            $(document).on('click', '#addRow', function() {
+            var pesticideCount = $("#pesticide_area tr").length + 1;
+            $(document).on('click', '#addRowPesticide', function() {
 
                 //---> Start create table tr
                 var html_table = '<tr>';
                 html_table +=
-                    '<td class="row"> <div class="col-xs-12 col-sm-12"><div class="form-group"><label for="matieresActives" class="">Nom matière Active ' +
-                    productCount +
-                    '</label><input placeholder="Nom matière Active..." class="form-control" id="matieresActives-' +
-                    productCount +
-                    '" name="matieresActives[]" type="text"></div></div><div class="col-xs-12 col-sm-8"><button type="button" id="' +
-                    productCount +
-                    '" class="removeRow btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></div></td>';
+                    '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm">Pesticide ' +
+                    pesticideCount +
+                    '</badge></div><div class="col-xs-12 col-sm-4"><div class="form-group row"><label for="" class="">Pesticides</label><select class="form-control" id="pesticides-' +
+                    pesticideCount +
+                    '" name="pesticides[' + pesticideCount +
+                    '][nom]"><option value="">Selectionner une option</option><option value="Herbicides">Herbicides</option><option value="Fongicides">Fongicides</option><option value="Nematicide">Nematicide</option><option value="Insecticide">Insecticide</option><option value="Acaricides">Acaricides</option><option value="Pesticides">Pesticides</option></select></div></div><div class="col-xs-12 col-sm-4"><div class="form-group row"><label> Nom commercial</label><input type="text" name="pesticides[' +
+                    pesticideCount +
+                    '][nomCommercial]" id="nomCommercial' +
+                    pesticideCount +
+                    '" class="form-control" placeholder="Nom commercial"></div></div><div class="col-xs-12 col-sm-4"><div class="form-group"><label for="" class="">Matières actives</label><input type="text" name="pesticides[' +
+                    pesticideCount +
+                    '][matiereActive]" id="matiereActive' +
+                    pesticideCount +
+                    '" class="form-control" placeholder="matière active 1, matière active 2 ...."></div></div><di class="row mt-3"><div class="col-xs-12 col-sm-4"><div class="form-group row"><label class="control-label">Toxicicologie</label><select class="form-control" id="toxicicologie-' +
+                    pesticideCount +
+                    '" name="pesticides[' + pesticideCount +
+                    '][toxicicologie]"> <option value="">Selectionner une option</option><option value="I">I</option><option value="IA">IA</option><option value="IB">IB</option><option value="II">II</option><option value="III">III</option><option value="IV">IV</option></select></div></div><div class="col-xs-12 col-sm-4"><div class="form-group row"><label>Dose</label><input type="text" name="pesticides[' +
+                    pesticideCount +
+                    '][dose]" id="dose' +
+                    pesticideCount +
+                    '" class="form-control" placeholder="L/Ha"></div></div><div class="col-xs-12 col-sm-4"><div class="form-group row"><label>Fréquence</label><input type="text" name="pesticides[' +
+                    pesticideCount +
+                    '][frequence]" id="frequence' +
+                    pesticideCount +
+                    '" class="form-control" placeholder="Fréquence"></div></div></di><div class="col-xs-12 col-sm-8"><button type="button" id="' +
+                    pesticideCount +
+                    '" class="removeRowPesticide btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></div></td>';
 
                 html_table += '</tr>';
                 //---> End create table tr
 
-                productCount = parseInt(productCount) + 1;
-                $('#product_area').append(html_table);
+                pesticideCount = parseInt(pesticideCount) + 1;
+                $('#pesticide_area').append(html_table);
 
             });
-
-            $(document).on('click', '.removeRow', function() {
+            $(document).on('click', '.removeRowPesticide', function() {
 
                 var row_id = $(this).attr('id');
 
                 // delete only last row id
-                if (row_id == $("#product_area tr").length) {
+                if (row_id == $("#pesticide_area tr").length) {
 
                     $(this).parents('tr').remove();
 
-                    productCount = parseInt(productCount) - 1;
-
-                    //    console.log($("#product_area tr").length);
-
-                    //  productCount--;
-
+                    pesticideCount = parseInt(pesticideCount) - 1;
                 }
             });
 
 
 
-            var productCountInsect = $("#product_area_insect tr").length + 1;
-            $(document).on('click', '#addRowInsect', function() {
+            $('.personneApplication').change(function() {
+                var personneApplication = $('.personneApplication').val();
+                if (personneApplication == 'Independant') {
+                    $('#infosIndependant').show('slow');
+                    $('.suiviFormation').attr('required', true);
+                    $('.attestion').attr('required', true);
+                    $('.bilanSante').attr('required', true);
 
-                //---> Start create table tr
-                var html_table = '<tr>';
-                html_table +=
-                    '<td class="row"> <div class="col-xs-12 col-sm-12"><div class="form-group"><label for="nomInsectesCibles" class="">Nom ' +
-                    productCountInsect +
-                    '</label><input placeholder="Nom..." class="form-control" id="nomInsectesCibles-' +
-                    productCountInsect +
-                    '" name="nomInsectesCibles[]" type="text"></div></div><div class="col-xs-12 col-sm-8"><button type="button" id="' +
-                    productCountInsect +
-                    '" class="removeRowInsect btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></div></td>';
-
-                html_table += '</tr>';
-                //---> End create table tr
-
-                productCountInsect = parseInt(productCountInsect) + 1;
-                $('#product_area_insect').append(html_table);
-
-            });
-
-            $(document).on('click', '.removeRowInsect', function() {
-
-                var row_id = $(this).attr('id');
-
-                // delete only last row id
-                if (row_id == $("#product_area_insect tr").length) {
-
-                    $(this).parents('tr').remove();
-
-                    productCountInsect = parseInt(productCountInsect) - 1;
-
-                    //    console.log($("#product_area_insect tr").length);
-
-                    //  productCountInsect--;
-
-                }
-            });
-
-            if ($('.presenceDouche').val() != 'oui') {
-                $('#photoDouche').hide('slow');
-            }
-            if ($('.zoneTampons').val() != 'oui') {
-                $('#photoZoneTampons').hide('slow');
-            }
-
-
-            $('.zoneTampons').change(function() {
-                var zoneTampons = $('.zoneTampons').val();
-                if (zoneTampons == 'oui') {
-                    $('#photoZoneTampons').show('slow');
                 } else {
-                    $('#photoZoneTampons').hide('slow');
-                    $('.photoZoneTampons').val('');
+                    $('#infosIndependant').hide('slow');
+                    $('.suiviFormation').attr('required', false);
+                    $('.attestion').attr('required', false);
+                    $('.bilanSante').attr('required', false);
                 }
-            });
 
-            $('.applicationProducteur').change(function() {
-                var applicationProducteur = $('.applicationProducteur').val();
-                if (applicationProducteur == 'oui') {
-                    $('#applicateurs').hide('slow');
-                    $('#applicateur').prop('required', false);
-                    $('.applicateur').val('');
-                } else {
+                if (personneApplication == 'Applicateur coop') {
                     $('#applicateurs').show('slow');
-                    $('#applicateur').prop('required', true);
-                }
-            });
-
-            if($('.applicationProducteur').val() == 'oui'){
-                $('#applicateurs').hide('slow');
-                $('#applicateur').prop('required', false);
-                $('.applicateur').val('');
-            }else{
-                $('#applicateurs').show('slow');
-                $('#applicateur').prop('required', true);
-            }
-
-            $('.presenceDouche').change(function() {
-                var presenceDouche = $('.presenceDouche').val();
-                if (presenceDouche == 'oui') {
-                    $('#photoDouche').show('slow');
                 } else {
-                    $('#photoDouche').hide('slow');
-                    $('.photoDouche').val('');
+                    $('#applicateurs').hide('slow');
                 }
             });
+            if ($('.personneApplication').val() == 'Independant') {
+                $('#infosIndependant').show('slow');
+                $('.suiviFormation').attr('required', true);
+                $('.attestion').attr('required', true);
+                $('.bilanSante').attr('required', true);
+
+            } else {
+                $('#infosIndependant').hide('slow');
+                $('.suiviFormation').attr('required', false);
+                $('.attestion').attr('required', false);
+                $('.bilanSante').attr('required', false);
+            }
+            $('.independantEpi').change(function() {
+                var independantEpi = $('.independantEpi').val();
+                if (independantEpi == 'oui') {
+                    $('#etatEpis').show('slow');
+                    $('.etatEpi').attr('required', true);
+                } else {
+                    $('#etatEpis').hide('slow');
+                    $('.etatEpi').attr('required', false);
+                }
+            });
+            if ($('.independantEpi').val() == 'oui') {
+                $('#etatEpis').show('slow');
+                $('.etatEpi').attr('required', true);
+            } else {
+                $('#etatEpis').hide('slow');
+                $('.etatEpi').attr('required', false);
+            }
         });
         $('#localite').chained("#section")
         $("#producteur").chained("#localite");

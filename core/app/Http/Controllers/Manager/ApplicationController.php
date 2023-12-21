@@ -168,11 +168,23 @@ class ApplicationController extends Controller
         $pageTitle = "Mise à jour de la application";
         $manager   = auth()->user();
         $producteurs  = Producteur::with('localite')->get();
-        $localites  = Localite::active()->where('cooperative_id', auth()->user()->cooperative_id)->orderBy('nom')->get();
-        $parcelles  = Parcelle::with('producteur')->get();
-        $staffs  = User::staff()->get();
+        $parcelles = Parcelle::with('producteur')->get();
+        $staffs = User::whereHas('roles', function($q){ $q->whereIn('name', ['Applicateur']); });
+        $campagnes = Campagne::active()->pluck('nom', 'id');
+        $cooperative = Cooperative::with('sections.localites', 'sections.localites.section')->find($manager->cooperative_id);
+        $sections = $cooperative->sections;
+        $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
+            return $localite->active();
+        });
         $application   = Application::findOrFail($id);
-        return view('manager.application.edit', compact('pageTitle', 'application', 'producteurs', 'localites', 'parcelles', 'staffs'));
+
+        $applicationPesticides = $application->applicationPesticides;
+        $applicationMaladies = $application->applicationMaladies->pluck('nom')->all();
+        
+        
+
+       
+        return view('manager.application.edit', compact('pageTitle', 'application', 'producteurs', 'localites', 'parcelles', 'staffs', 'sections', 'campagnes', 'applicationPesticides', 'applicationMaladies'));
     }
 
     public function status($id)

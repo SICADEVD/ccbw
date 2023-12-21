@@ -3,13 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Campagne;
+use App\Models\Localite;
 use App\Models\Application;
 use Illuminate\Http\Request;
+use App\Models\MatiereActive;
 use Illuminate\Support\Str;  
-use App\Models\ApplicationInsecte;
+use App\Models\ApplicationMaladie;
 use Illuminate\Support\Facades\DB;
+use App\Models\ApplicationPesticide;
 use Illuminate\Support\Facades\File;
-use App\Models\ApplicationMatieresactive;
+use App\Constants\Status;
 
 class ApiapplicationController extends Controller
 {
@@ -43,92 +46,88 @@ class ApiapplicationController extends Controller
      */
     public function store(Request $request)
     {
-	
-        //$input = $request->all();   
-
         $validationRule = [
-            'parcelle'    => 'required|exists:parcelles,id',
-            'applicateur'    => 'required|exists:users,id',
-            'superficiePulverisee'  => 'required|max:255',
-            'marqueProduitPulverise'  => 'required|max:255',
-            'raisonApplication'  => 'required|max:255', 
-            'delaisReentree'  => 'required|max:255',
-            'date_application'  => 'required|max:255',
-            'heure_application'  => 'required|max:255', 
+            'pesticides.*.nom' => 'required|string',
+            'pesticides.*.nomCommercial' => 'required|string',
+            'pesticides.*.dose' => 'required|integer',
+            'pesticides.*.toxicicologie' => 'required|string',
+            'pesticides.*.frequence' => 'required|integer',
         ];
- 
+
 
         $request->validate($validationRule);
-        $application = new Application();  
+        //dd(response()->json($request));
+
+        $localite = Localite::where('id', $request->localite)->first();
+
+        if ($localite->status == Status::NO) {
+            $notify[] = ['error', 'Cette localité est désactivée'];
+            return back()->withNotify($notify)->withInput();
+        }
+
+        if ($request->id) {
+            $application = Application::findOrFail($request->id);
+            $message = "L'application a été mise à jour avec succès";
+        } else {
+            $application = new Application();
+        }
         $campagne = Campagne::active()->first();
-      
-        if($request->photoZoneTampons){ 
-           
-          $image = $request->photoZoneTampons;  
-          $image = Str::after($image,'base64,');
-          $image = str_replace(' ', '+', $image);
-          $imageName = (string) Str::uuid().'.'.'jpg';
-           File::put(storage_path(). "/app/public/applications/" . $imageName, base64_decode($image)); 
-           $photoZoneTampons = "public/applications/$imageName"; 
-          $application->zoneTampons  = $photoZoneTampons;
-        }
-        if($request->photoDouche){  
-          $image = $request->photoDouche;  
-          $image = Str::after($image,'base64,');
-          $image = str_replace(' ', '+', $image);
-          $imageName = (string) Str::uuid().'.'.'jpg';
-           File::put(storage_path(). "/app/public/applications/" . $imageName, base64_decode($image)); 
-          $photoDouche = "public/applications/$imageName"; 
-          $application->presenceDouche  = $photoDouche;
-          
-        }
-        //$application = Application::create($input); 
-        
-        $application->parcelle_id  = $request->parcelle;  
         $application->campagne_id  = $campagne->id;
         $application->applicateur_id  = $request->applicateur;
-        $application->superficiePulverisee  = $request->superficiePulverisee;
-        $application->marqueProduitPulverise  = $request->marqueProduitPulverise;
-        $application->degreDangerosite  = $request->degreDangerosite;
-        $application->raisonApplication  = $request->raisonApplication;
-        $application->delaisReentree  = $request->delaisReentree;
-        
-        
-        $application->date_application  = $request->date_application;
-        $application->heure_application = $request->heure_application;
-        $application->save(); 
-        
+        $application->parcelle_id  = $request->parcelle_id;
+        $application->suiviFormation = $request->suiviFormation;
+        $application->attestion = $request->attestion;
+        $application->bilanSante = $request->bilanSante;
+        $application->independantEpi = $request->independantEpi;
+        $application->etatEpi = $request->etatEpi;
+        $application->superficiePulverisee = $request->superficiePulverisee;
+        $application->delaisReentree = $request->delaisReentree;
+        $application->personneApplication = $request->personneApplication;
+        $application->date_application = $request->date_application;
+        $application->userid = $request->userid;
 
-        if($application !=null ){
-          $id = $application->id;
-          $datas = $datas2 = []; 
-         
-          if(count($request->matieresActives)) { 
-              ApplicationMatieresactive::where('application_id',$id)->delete();
-              $i=0; 
-              foreach($request->matieresActives as $data){
-                   
-                      $datas[] = [
-                      'application_id' => $id,  
-                      'matiereactive' => $data, 
-                  ];  
-              } 
-          }
-          if(count($request->nomInsectesCibles)) { 
-              ApplicationInsecte::where('application_id',$id)->delete();
-              $i=0; 
-              foreach($request->nomInsectesCibles as $data){
-                   
-                      $datas2[] = [
-                      'application_id' => $id,  
-                      'insecte' => $data, 
-                  ];  
-              } 
-          }
-          ApplicationMatieresactive::insert($datas);
-          ApplicationInsecte::insert($datas2);
-          
-      }
+        $application->save();
+
+        if ($application != null) {
+            $id = $application->id;
+            if ($request->maladies != null) {
+                ApplicationMaladie::where('application_id', $id)->delete();
+                $data = [];
+                foreach ($request->maladies as $maladie) {
+                    $data[] = [
+                        'application_id' => $id,
+                        'nom' => $maladie,
+                    ];
+                }
+                ApplicationMaladie::insert($data);
+            }
+            if($request->pesticides[0]['nom'] != null && $request->pesticides[0]['nomCommercial'] != null && $request->pesticides[0]['dose'] != null && $request->pesticides[0]['toxicicologie'] != null && $request->pesticides[0]['frequence'] != null && $request->pesticides[0]['matiereActive'] != null){
+                ApplicationPesticide::where('application_id', $id)->delete();
+                foreach ($request->pesticides as $pesticide) {
+                    $applicationPesticide = new ApplicationPesticide();
+                    $applicationPesticide->application_id = $id;
+                    $applicationPesticide->nom = $pesticide['nom'];
+                    $applicationPesticide->nomCommercial = $pesticide['nomCommercial'];
+                    $applicationPesticide->dose = $pesticide['dose'];
+                    $applicationPesticide->toxicicologie = $pesticide['toxicicologie'];
+                    $applicationPesticide->frequence = $pesticide['frequence'];
+                    $applicationPesticide->save();
+
+                    if($applicationPesticide != null){
+                        MatiereActive::where('application_pesticide_id', $applicationPesticide->id)->delete();
+                        $idApplicationPesticide = $applicationPesticide->id;
+                        $matiereActive = explode(',',$pesticide['matiereActive']);
+                        foreach ($matiereActive as $matiere) {
+                            $applicationMatieresactive = new MatiereActive();
+                            $applicationMatieresactive->application_pesticide_id = $idApplicationPesticide;
+                            $applicationMatieresactive->nom = $matiere;
+                            $applicationMatieresactive->save();
+                        }
+                    }
+                }
+            }
+           
+        }
         return response()->json($application, 201);
     }
 
