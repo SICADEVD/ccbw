@@ -269,7 +269,13 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                                
+                                                        @if (($index +1) > 1)
+                                                            <div class="col-xs-12 col-sm-8">
+                                                                <button type="button" id="{{ $index + 1 }}"
+                                                                    class="removeRowPesticide btn btn-danger btn-sm"><i
+                                                                        class="fa fa-minus"></i></button>
+                                                            </div>  
+                                                        @endif       
                                                 </td>
                                             </tr>
                                         @endforeach
