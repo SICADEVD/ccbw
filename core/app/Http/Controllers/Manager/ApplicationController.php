@@ -131,6 +131,7 @@ class ApplicationController extends Controller
             }
             if($request->pesticides != null){
                 ApplicationPesticide::where('application_id', $id)->delete();
+                MatiereActive::where('application_id', $id)->delete();
                 foreach ($request->pesticides as $pesticide) {
                     $applicationPesticide = new ApplicationPesticide();
                     $applicationPesticide->application_id = $id;
