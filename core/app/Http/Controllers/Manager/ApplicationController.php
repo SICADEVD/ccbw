@@ -111,7 +111,7 @@ class ApplicationController extends Controller
         $application->date_application = $request->date_application;
         $application->userid = auth()->user()->id;
 
-        dd($request->all());
+
         $application->save();
 
        
