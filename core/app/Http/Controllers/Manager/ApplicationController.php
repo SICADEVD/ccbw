@@ -111,7 +111,7 @@ class ApplicationController extends Controller
         $application->date_application = $request->date_application;
         $application->userid = auth()->user()->id;
 
-        
+        dd($request->all());
         $application->save();
 
        
@@ -129,7 +129,7 @@ class ApplicationController extends Controller
                 }
                 ApplicationMaladie::insert($data);
             }
-            if($request->pesticides[0]['nom'] != null && $request->pesticides[0]['nomCommercial'] != null && $request->pesticides[0]['dose'] != null && $request->pesticides[0]['toxicicologie'] != null && $request->pesticides[0]['frequence'] != null && $request->pesticides[0]['matiereActive'] != null){
+            if($request->pesticides != null){
                 ApplicationPesticide::where('application_id', $id)->delete();
                 foreach ($request->pesticides as $pesticide) {
                     $applicationPesticide = new ApplicationPesticide();
