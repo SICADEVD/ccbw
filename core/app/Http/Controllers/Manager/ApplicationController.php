@@ -112,7 +112,6 @@ class ApplicationController extends Controller
         $application->userid = auth()->user()->id;
 
         
-
         $application->save();
 
        
@@ -148,6 +147,7 @@ class ApplicationController extends Controller
                         $matiereActive = explode(',',$pesticide['matiereActive']);
                         foreach ($matiereActive as $matiere) {
                             $applicationMatieresactive = new MatiereActive();
+                            $applicationMatieresactive->application_id = $id;
                             $applicationMatieresactive->application_pesticide_id = $idApplicationPesticide;
                             $applicationMatieresactive->nom = $matiere;
                             $applicationMatieresactive->save();
@@ -179,6 +179,11 @@ class ApplicationController extends Controller
         $application   = Application::findOrFail($id);
 
         $applicationPesticides = $application->applicationPesticides;
+        $matieresActives = MatiereActive::where('application_id', $id)->get();
+
+        $applicationPesticides->map(function ($applicationPesticide) use ($matieresActives) {
+            return $applicationPesticide->matieresActives = $matieresActives->where('application_pesticide_id', $applicationPesticide->id)->pluck('nom');
+        })->all();
         $applicationMaladies = $application->applicationMaladies->pluck('nom')->all();
         
         

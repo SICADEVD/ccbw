@@ -211,9 +211,12 @@
                                                         <div class="col-xs-12 col-sm-4">
                                                             <div class="form-group row">
                                                                 <label>Matières actives</label>
-                                                                <input type="text" name="pesticides[0][matiereActive]"
-                                                                    id="matiereActive-1" class="form-control"
-                                                                    placeholder="matière active 1, matière active 2 ....">
+                                                                <input type="text"
+                                                                    name="pesticides[{{ $index }}][matiereActive]"
+                                                                    id="matiereActive-{{ $index + 1 }}"
+                                                                    class="form-control"
+                                                                    placeholder="matière active 1, matière active 2 ...."
+                                                                    value="{{  implode(",", $applicationPesticide->matieresActives->toArray()) }}">
                                                             </div>
                                                         </div>
                                                     </div>

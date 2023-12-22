@@ -33,4 +33,8 @@ class Application extends Model
     {
         return $this->hasMany(ApplicationMaladie::class,'application_id');
     }
+    public function matiereActives()
+    {
+        return $this->hasMany(MatiereActive::class,'application_id');
+    }
 }
