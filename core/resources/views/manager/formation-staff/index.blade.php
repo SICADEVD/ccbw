@@ -40,6 +40,7 @@
                             <thead>
                                 <tr>
                                     <th>@lang('Cooperative')</th>
+                                    <th>@lang('Entreprises')</th>
                                     <th>@lang('Formateurs')</th>
                                     <th>@lang('Lieu')</th>
                                     <th>@lang('Date formation')</th>
@@ -56,13 +57,22 @@
                                         </td>
                                         <td>
                                             <span>
+                                                @foreach ($formation->entreprises as $entreprise)
+                                                    {{ $entreprise->nom_entreprise }}
+                                                    @if (!$loop->last)
+                                                        ,
+                                                    @endif
+                                                @endforeach
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span>
                                                 <a href="{{ route('manager.formation-staff.edit', $formation->id) }}">
 
                                                     <span>@</span>
                                                     @foreach ($formation->formateurs as $formateur)
-
-                                                    {{ $formateur->nom_formateur }}
-                                                    {{ $formateur->prenom_formateur }}
+                                                        {{ $formateur->nom_formateur }}
+                                                        {{ $formateur->prenom_formateur }}
 
                                                         @if (!$loop->last)
                                                             ,

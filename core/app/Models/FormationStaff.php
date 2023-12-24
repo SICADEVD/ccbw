@@ -44,5 +44,10 @@ class FormationStaff extends Model
     {
         return $this->hasMany(FormationStaffFormateur::class, 'formation_staff_id', 'id');
     }
+
+    public function entreprises()
+    {
+        return $this->belongsToMany(Entreprise::class, 'formation_staff_formateurs', 'formation_staff_id', 'entreprise_id');
+    }
    
 }
