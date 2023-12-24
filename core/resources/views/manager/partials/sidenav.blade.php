@@ -129,7 +129,7 @@
                             <li class="sidebar-menu-item {{ menuActive('manager.traca.parcelle.index') }}">
                                 <a href="{{ route('manager.traca.parcelle.index') }}" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('Parcelles')</span>
+                                    <span class="menu-title">@lang('Identifications Parcelles')</span>
                                 </a>
                             </li>
 
@@ -155,7 +155,7 @@
                             <li class="sidebar-menu-item {{ menuActive('manager.suivi.parcelles.index') }}">
                                 <a href="{{ route('manager.suivi.parcelles.index') }}" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('Parcelles')</span>
+                                    <span class="menu-title">@lang('Suivis Parcelles')</span>
                                 </a>
                             </li>
 
