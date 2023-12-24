@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Section;
 use App\Models\Campagne;
 use App\Models\Parcelle;
+use App\Models\Remorque;
 use App\Models\Vehicule;
 use App\Constants\Status;
 use App\Models\Programme;
@@ -15,8 +16,8 @@ use App\Models\Cooperative;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use App\Models\Transporteur;
-use Illuminate\Http\Request;
 
+use Illuminate\Http\Request;
 use App\Models\LivraisonInfo;
 use App\Models\FormateurStaff;
 use App\Models\LivraisonPrime;
@@ -125,8 +126,9 @@ class LivraisonController extends Controller
         $pageTitle = 'Connaissement vers le Magasin Central N° '.$code;
         $entreprises = Entreprise::all()->pluck('nom_entreprise', 'id');
         $formateurs = FormateurStaff::with('entreprise')->get();
+        $remorques = Remorque::all();
         
-        return view('manager.livraison.section-create', compact('pageTitle', 'cooperatives','magSections','magCentraux','producteurs','transporteurs','parcelles','campagne','vehicules','code','entreprises','formateurs'));
+        return view('manager.livraison.section-create', compact('pageTitle', 'cooperatives','magSections','magCentraux','producteurs','transporteurs','parcelles','campagne','vehicules','code','entreprises','formateurs','remorques'));
     }
 
     public function store(Request $request)
@@ -294,6 +296,7 @@ $productExists->save();
         $livraison->stocks_mag_sacs_sortant   = 0;
         $livraison->transporteur_id = $request->sender_transporteur;
         $livraison->vehicule_id = $request->sender_vehicule;
+        $livraison->remorque_id = $request->sender_remorque;
         $livraison->date_livraison = $request->estimate_date;
        
         $livraison->save();
