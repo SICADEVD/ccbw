@@ -95,6 +95,7 @@ class ParcelleController extends Controller
             'items.*.nombre'     => 'required|integer',
             'longitude' => 'numeric|nullable',
             'latitude' => 'numeric|nullable',
+            'typedeclaration' => 'required',
         ];
         $messages = [
             'section.required' => 'Le champ section est obligatoire',
@@ -168,6 +169,7 @@ class ParcelleController extends Controller
             $parcelle->codeParc  =  $this->generecodeparc($request->producteur_id, $codeProd);
         }
         $parcelle->producteur_id  = $request->producteur_id;
+        $parcelle->typedeclaration  = $request->typedeclaration;
         $parcelle->niveauPente  = $request->niveauPente;
         $parcelle->anneeCreation  = $request->anneeCreation;
         $parcelle->ageMoyenCacao  = $request->ageMoyenCacao;

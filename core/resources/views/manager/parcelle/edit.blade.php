@@ -54,6 +54,13 @@
                     </div>
 
                     <div class="form-group row">
+                        <?php echo Form::label(__('Type de déclaration superficie'), null, ['class' => 'col-sm-4 control-label required']); ?>
+                        <div class="col-xs-12 col-sm-8">
+                            <?php echo Form::select('typedeclaration', [''=>'Selectionner une option','Verbale' => __('Verbale'), 'GPS' => __('GPS')], null, ['class' => 'form-control typedeclaration', 'id' => 'typedeclaration', 'required']); ?>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
                         {{ Form::label(__('Quelle est l\'année de création de la parcelle'), null, ['class' => 'col-sm-4 control-label']) }}
                         <div class="col-xs-12 col-sm-8">
                             <?php echo Form::number('anneeCreation', null, ['placeholder' => 'Année de création', 'class' => 'form-control', 'id' => 'anneeCreation', 'required', 'min' => 1990]); ?>

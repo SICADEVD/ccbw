@@ -51,6 +51,12 @@
                             </select>
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <?php echo Form::label(__('Type de déclaration superficie'), null, ['class' => 'col-sm-4 control-label required']); ?>
+                        <div class="col-xs-12 col-sm-8">
+                            <?php echo Form::select('typedeclaration', [''=>'Selectionner une option','Verbale' => __('Verbale'), 'GPS' => __('GPS')], null, ['class' => 'form-control typedeclaration', 'id' => 'typedeclaration', 'required']); ?>
+                        </div>
+                    </div>
 
                     <div class="form-group row">
                         {{ Form::label(__('Quelle est l\'année de création de la parcelle'), null, ['class' => 'col-sm-4 control-label']) }}
@@ -113,7 +119,7 @@
                     <div class="form-group row" id="autreCourDeaus">
                         <?php echo Form::label(__('Autre cour ou plan d\'eau '), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::text('autreCourDeau', null, ['class' => 'form-control autreCourDeau','placeholder'=>'Autre Cour ou Plan d\'eau']); ?>
+                            <?php echo Form::text('autreCourDeau', null, ['class' => 'form-control autreCourDeau', 'placeholder' => 'Autre Cour ou Plan d\'eau']); ?>
                         </div>
                     </div>
 
@@ -139,7 +145,7 @@
                     <div class="form-group row" id="autreProtections">
                         <?php echo Form::label(__('Autre Protection'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::text('autreProtection', null, ['class' => 'form-control autreProtection','placeholder'=>'Autre Protection','id'=>'autreProtection']); ?>
+                            <?php echo Form::text('autreProtection', null, ['class' => 'form-control autreProtection', 'placeholder' => 'Autre Protection', 'id' => 'autreProtection']); ?>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -171,35 +177,43 @@
                                 </h5>
                                 <div class="card-body">
                                     <div class="row" id="addedField">
-                                    <?php $i=0; ?>
-                                        @if(old('items'))
+                                        <?php $i = 0; ?>
+                                        @if (old('items'))
                                             @foreach (old('items') as $item)
-                                            <div class="row single-item gy-2">
-                                                <div class="col-md-8">
-                                                    <select class="form-control selected_type" name="items[{{ $loop->index}}][arbre]"
-                                                    id='producteur-<?php echo $i; ?>' onchange=getParcelle(<?php echo $i; ?>) required>
-                                                        <option disabled selected value="">@lang('Abres d\'ombrages')</option>
-                                                        @foreach($arbres as $arbre)
-                                                            <option value="{{$arbre->id}}" @selected($item['arbre']==$arbre->id) >
-                                                                {{__($arbre->nom)}} 
+                                                <div class="row single-item gy-2">
+                                                    <div class="col-md-8">
+                                                        <select class="form-control selected_type"
+                                                            name="items[{{ $loop->index }}][arbre]"
+                                                            id='producteur-<?php echo $i; ?>'
+                                                            onchange=getParcelle(<?php echo $i; ?>) required>
+                                                            <option disabled selected value="">@lang('Abres d\'ombrages')
                                                             </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                               
-                                                <div class="col-md-3">
-                                                    <div class="input-group mb-3">
-                                                        <input type="number" class="form-control nombre" value="{{$item['nombre']}}"  name="items[{{ $loop->index }}][nombre]"  required>
-                                                        <span class="input-group-text unit"><i class="las la-balance-scale"></i></span>
+                                                            @foreach ($arbres as $arbre)
+                                                                <option value="{{ $arbre->id }}"
+                                                                    @selected($item['arbre'] == $arbre->id)>
+                                                                    {{ __($arbre->nom) }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="col-md-3">
+                                                        <div class="input-group mb-3">
+                                                            <input type="number" class="form-control nombre"
+                                                                value="{{ $item['nombre'] }}"
+                                                                name="items[{{ $loop->index }}][nombre]" required>
+                                                            <span class="input-group-text unit"><i
+                                                                    class="las la-balance-scale"></i></span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-1">
+                                                        <button class="btn btn--danger w-100 removeBtn w-100 h-45"
+                                                            type="button">
+                                                            <i class="fa fa-times"></i>
+                                                        </button>
                                                     </div>
                                                 </div>
-                                                
-                                                <div class="col-md-1">
-                                                    <button class="btn btn--danger w-100 removeBtn w-100 h-45" type="button">
-                                                        <i class="fa fa-times"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
                                             @endforeach
                                         @endif
                                     </div>
@@ -394,26 +408,25 @@
                 $('#autreProtection').prop('required', false);
             }
         });
-
     </script>
     <script>
-    "use strict"; 
-    
-    (function ($) {
+        "use strict";
 
-        
-        $('.addUserData').on('click', function () {
-            
-            let count = $("#addedField select").length;
-            let length=$("#addedField").find('.single-item').length; 
-               
-            let html = `
+        (function($) {
+
+
+            $('.addUserData').on('click', function() {
+
+                let count = $("#addedField select").length;
+                let length = $("#addedField").find('.single-item').length;
+
+                let html = `
             <div class="row single-item gy-2">
                 <div class="col-md-8">
                     <select class="form-control selected_type" name="items[${length}][arbre]" required id='arbre-${length}')>
                         <option disabled selected value="">@lang('Arbres d\'ombrages')</option>
-                        @foreach($arbres as $arbre)
-                            <option value="{{$arbre->id}}"  >{{__($arbre->nom)}} </option>
+                        @foreach ($arbres as $arbre)
+                            <option value="{{ $arbre->id }}"  >{{ __($arbre->nom) }} </option>
                         @endforeach
                     </select>
                 </div>
@@ -431,27 +444,25 @@
                 </div>
                 <br><hr class="panel-wide">
             </div>`;
-            $('#addedField').append(html)
-        });
+                $('#addedField').append(html)
+            });
 
-        $('#addedField').on('change', '.selected_type', function (e) {
-            let unit = $(this).find('option:selected').data('unit');
-            let parent = $(this).closest('.single-item');
-            $(parent).find('.quantity').attr('disabled', false);
-            $(parent).find('.unit').html(`${unit || '<i class="las la-balance-scale"></i>'}`);
-        });
+            $('#addedField').on('change', '.selected_type', function(e) {
+                let unit = $(this).find('option:selected').data('unit');
+                let parent = $(this).closest('.single-item');
+                $(parent).find('.quantity').attr('disabled', false);
+                $(parent).find('.unit').html(`${unit || '<i class="las la-balance-scale"></i>'}`);
+            });
 
-        $('#addedField').on('click', '.removeBtn', function (e) {
-            let length=$("#addedField").find('.single-item').length;
-            if(length <= 1){
-                notify('warning',"@lang('Au moins un élément est requis')");
-            }else{
-                $(this).closest('.single-item').remove();
-            }
-        });
+            $('#addedField').on('click', '.removeBtn', function(e) {
+                let length = $("#addedField").find('.single-item').length;
+                if (length <= 1) {
+                    notify('warning', "@lang('Au moins un élément est requis')");
+                } else {
+                    $(this).closest('.single-item').remove();
+                }
+            });
 
-    })(jQuery);
-    
-</script>
+        })(jQuery);
+    </script>
 @endpush
-

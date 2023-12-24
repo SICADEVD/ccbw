@@ -53,6 +53,7 @@ class ApiparcelleController extends Controller
       'parcelleRegenerer' => 'required',
       'anneeRegenerer' => 'required_if:parcelleRegenerer,==,oui',
       'superficieConcerne' => 'required_if:parcelleRegenerer,==,oui',
+      'typedeclaration' => 'required',
       'typeDoc' => 'required',
       'presenceCourDeau' => 'required',
       'courDeau' => 'required_if:presenceCourDeau,==,oui',
@@ -139,6 +140,7 @@ class ApiparcelleController extends Controller
     $parcelle->courDeau  = $request->courDeau;
     $parcelle->existeMesureProtection  = $request->existeMesureProtection;
     $parcelle->existePente  = $request->existePente;
+    $parcelle->typedeclaration  = $request->typedeclaration;
     $parcelle->superficie  = $request->superficie;
     $parcelle->latitude  = $request->latitude;
     $parcelle->longitude  = $request->longitude;
