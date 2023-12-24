@@ -40,7 +40,7 @@ class FormationStaffController extends Controller
             if (request()->module != null) {
                 $q->where('module_formation_staff_id', request()->module);
             }
-        })->with('cooperative', 'campagne', 'ModuleFormationStaff','formateurs')->paginate(getPaginate());
+        })->with('cooperative', 'campagne', 'ModuleFormationStaff','formateurs','entreprises')->paginate(getPaginate());
         return view('manager.formation-staff.index', compact('pageTitle', 'formations', 'modules'));
     }
 
