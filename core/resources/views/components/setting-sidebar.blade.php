@@ -27,7 +27,8 @@
     <x-setting-menu-item :active="$activeMenu" menu="magasinSection_settings" :href="route('manager.settings.magasinSection.index')" :text="__('Paramètre Magasins Sections')"/> 
     <x-setting-menu-item :active="$activeMenu" menu="magasinCentral_settings" :href="route('manager.settings.magasinCentral.index')" :text="__('Paramètre Magasins Centraux')"/>
     <x-setting-menu-item :active="$activeMenu" menu="transporteur_settings" :href="route('manager.settings.transporteur.index')" :text="__('Paramètre des Transporteurs')"/> 
-    <x-setting-menu-item :active="$activeMenu" menu="vehicule_settings" :href="route('manager.settings.vehicule.index')" :text="__('Paramètre des Véhicules')"/>  
+    <x-setting-menu-item :active="$activeMenu" menu="vehicule_settings" :href="route('manager.settings.vehicule.index')" :text="__('Paramètre des Véhicules')"/>
+    <x-setting-menu-item :active="$activeMenu" menu="remorque_settings" :href="route('manager.settings.remorque.index')" :text="__('Paramètre des Remorques')"/>  
     <x-setting-menu-item :active="$activeMenu" menu="attendance_settings" :href="route('manager.settings.attendance-settings.index')" :text="__('app.menu.attendanceSettings')"/>
     <x-setting-menu-item :active="$activeMenu" menu="leave_settings" :href="route('manager.settings.leaves-settings.index')" :text="__('app.menu.leaveSettings')"/>
     <x-setting-menu-item :active="$activeMenu" menu="travauxDangereux_settings" :href="route('manager.settings.travauxDangereux.index')" :text="__('Paramètre Travaux Dangereux')"/>

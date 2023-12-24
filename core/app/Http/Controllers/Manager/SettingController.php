@@ -10,7 +10,7 @@ use App\Models\Countrie;
 use App\Models\Instance;
 use App\Models\Vehicule;
 use App\Constants\Status;
-use App\Models\Campagne; 
+use App\Models\Campagne;
 use App\Models\ArretEcole;
 use App\Models\Department;
 use App\Models\Entreprise;
@@ -44,18 +44,19 @@ use App\Http\Controllers\Controller;
 use App\Models\ModuleFormationStaff;
 use App\Models\DocumentAdministratif;
 use App\Models\CategorieQuestionnaire;
+use App\Models\Remorque;
 use Google\Service\Blogger\UserLocale;
 
 class SettingController extends Controller
 {
- 
+
 
     public function campagneIndex()
     {
-        $pageTitle = "Manage Campagne"; 
+        $pageTitle = "Manage Campagne";
         $activeSettingMenu = 'campagne_settings';
-        $campagnes     = Campagne::orderBy('id','desc')->paginate(getPaginate());
-        return view('manager.config.campagne', compact('pageTitle', 'campagnes','activeSettingMenu'));
+        $campagnes     = Campagne::orderBy('id', 'desc')->paginate(getPaginate());
+        return view('manager.config.campagne', compact('pageTitle', 'campagnes', 'activeSettingMenu'));
     }
 
     public function campagneStore(Request $request)
@@ -64,7 +65,7 @@ class SettingController extends Controller
             'produit'  => 'required',
             'nom'  => 'required',
             'periode_debut'  => 'required',
-            'periode_fin'  => 'required', 
+            'periode_fin'  => 'required',
             'prix_achat' => 'required|gt:0|numeric',
             'prix_champ' => 'required|gt:0|numeric',
             'prime' => 'required|gt:0|numeric',
@@ -78,7 +79,7 @@ class SettingController extends Controller
         }
         $manager = auth()->user();
         $campagne->cooperative_id = $manager->cooperative_id;
-        $campagne->produit    = $request->produit ;
+        $campagne->produit    = $request->produit;
         $campagne->nom = $request->nom;
         $campagne->periode_debut = $request->periode_debut;
         $campagne->periode_fin = $request->periode_fin;
@@ -92,16 +93,16 @@ class SettingController extends Controller
 
     public function travauxDangereuxIndex()
     {
-        $pageTitle = "Manage Travaux Dangereux"; 
+        $pageTitle = "Manage Travaux Dangereux";
         $activeSettingMenu = 'travauxDangereux_settings';
-        $travauxDangereux     = TravauxDangereux::orderBy('id','desc')->paginate(getPaginate());
-        return view('manager.config.travauxDangereux', compact('pageTitle', 'travauxDangereux','activeSettingMenu'));
+        $travauxDangereux     = TravauxDangereux::orderBy('id', 'desc')->paginate(getPaginate());
+        return view('manager.config.travauxDangereux', compact('pageTitle', 'travauxDangereux', 'activeSettingMenu'));
     }
 
     public function travauxDangereuxStore(Request $request)
     {
-        $request->validate([ 
-            'nom'  => 'required', 
+        $request->validate([
+            'nom'  => 'required',
         ]);
 
         if ($request->id) {
@@ -109,8 +110,8 @@ class SettingController extends Controller
             $message = "Travaux Dangereux a été mise à jour avec succès.";
         } else {
             $travauxDangereux = new TravauxDangereux();
-        } 
-        $travauxDangereux->nom = trim($request->nom); 
+        }
+        $travauxDangereux->nom = trim($request->nom);
         $travauxDangereux->save();
         $notify[] = ['success', isset($message) ? $message  : 'Travaux Dangereux a été ajouté avec succès.'];
         return back()->withNotify($notify);
@@ -118,16 +119,16 @@ class SettingController extends Controller
 
     public function travauxLegersIndex()
     {
-        $pageTitle = "Manage Travaux Legers"; 
+        $pageTitle = "Manage Travaux Legers";
         $activeSettingMenu = 'travauxLegers_settings';
-        $travauxLegers     = TravauxLegers::orderBy('id','desc')->paginate(getPaginate());
-        return view('manager.config.travauxLegers', compact('pageTitle', 'travauxLegers','activeSettingMenu'));
+        $travauxLegers     = TravauxLegers::orderBy('id', 'desc')->paginate(getPaginate());
+        return view('manager.config.travauxLegers', compact('pageTitle', 'travauxLegers', 'activeSettingMenu'));
     }
 
     public function travauxLegersStore(Request $request)
     {
-        $request->validate([ 
-            'nom'  => 'required', 
+        $request->validate([
+            'nom'  => 'required',
         ]);
 
         if ($request->id) {
@@ -135,8 +136,8 @@ class SettingController extends Controller
             $message = "Travaux Legers a été mise à jour avec succès.";
         } else {
             $travauxLegers = new TravauxLegers();
-        } 
-        $travauxLegers->nom = trim($request->nom); 
+        }
+        $travauxLegers->nom = trim($request->nom);
         $travauxLegers->save();
         $notify[] = ['success', isset($message) ? $message  : 'Travaux Legers a été ajouté avec succès.'];
         return back()->withNotify($notify);
@@ -144,16 +145,16 @@ class SettingController extends Controller
 
     public function arretEcoleIndex()
     {
-        $pageTitle = "Manage Arret Ecole"; 
+        $pageTitle = "Manage Arret Ecole";
         $activeSettingMenu = 'arretEcole_settings';
-        $arretEcole     = ArretEcole::orderBy('id','desc')->paginate(getPaginate());
-        return view('manager.config.arretEcole', compact('pageTitle', 'arretEcole','activeSettingMenu'));
+        $arretEcole     = ArretEcole::orderBy('id', 'desc')->paginate(getPaginate());
+        return view('manager.config.arretEcole', compact('pageTitle', 'arretEcole', 'activeSettingMenu'));
     }
 
     public function arretEcoleStore(Request $request)
     {
-        $request->validate([ 
-            'nom'  => 'required', 
+        $request->validate([
+            'nom'  => 'required',
         ]);
 
         if ($request->id) {
@@ -161,8 +162,8 @@ class SettingController extends Controller
             $message = "Arret Ecole a été mise à jour avec succès.";
         } else {
             $arretEcole = new ArretEcole();
-        } 
-        $arretEcole->nom = trim($request->nom); 
+        }
+        $arretEcole->nom = trim($request->nom);
         $arretEcole->save();
         $notify[] = ['success', isset($message) ? $message  : 'Arret Ecole a été ajouté avec succès.'];
         return back()->withNotify($notify);
@@ -170,16 +171,16 @@ class SettingController extends Controller
 
     public function typeFormationIndex()
     {
-        $pageTitle = "Manage Type Formation"; 
+        $pageTitle = "Manage Type Formation";
         $activeSettingMenu = 'typeFormation_settings';
-        $typeFormation     = TypeFormation::orderBy('id','desc')->paginate(getPaginate());
-        return view('manager.config.typeFormation', compact('pageTitle', 'typeFormation','activeSettingMenu'));
+        $typeFormation     = TypeFormation::orderBy('id', 'desc')->paginate(getPaginate());
+        return view('manager.config.typeFormation', compact('pageTitle', 'typeFormation', 'activeSettingMenu'));
     }
 
     public function typeFormationStore(Request $request)
     {
-        $request->validate([ 
-            'nom'  => 'required', 
+        $request->validate([
+            'nom'  => 'required',
         ]);
 
         if ($request->id) {
@@ -187,35 +188,35 @@ class SettingController extends Controller
             $message = "Type Formation a été mise à jour avec succès.";
         } else {
             $typeFormation = new TypeFormation();
-        } 
-        $typeFormation->nom = trim($request->nom); 
+        }
+        $typeFormation->nom = trim($request->nom);
         $typeFormation->save();
         $notify[] = ['success', isset($message) ? $message  : 'Type Formation a été ajouté avec succès.'];
         return back()->withNotify($notify);
     }
     public function themeFormationIndex()
     {
-        $pageTitle = "Manage theme de Formation"; 
+        $pageTitle = "Manage theme de Formation";
         $activeSettingMenu = 'themeFormation_settings';
-        $themeFormation     = ThemesFormation::with('typeFormation')->orderBy('id','desc')->paginate(getPaginate());
+        $themeFormation     = ThemesFormation::with('typeFormation')->orderBy('id', 'desc')->paginate(getPaginate());
         $typeFormation = TypeFormation::get();
-        return view('manager.config.themeFormation', compact('pageTitle', 'themeFormation','typeFormation','activeSettingMenu'));
+        return view('manager.config.themeFormation', compact('pageTitle', 'themeFormation', 'typeFormation', 'activeSettingMenu'));
     }
     public function sousThemeFormationIndex()
     {
-        $pageTitle = "Manage Sous theme de Formation"; 
+        $pageTitle = "Manage Sous theme de Formation";
         $activeSettingMenu = 'sousThemeFormation_settings';
-        $sousThemeFormation     = SousThemeFormation::with('themeFormation')->orderBy('id','desc')->paginate(getPaginate());
+        $sousThemeFormation     = SousThemeFormation::with('themeFormation')->orderBy('id', 'desc')->paginate(getPaginate());
         $themeFormation = ThemesFormation::with('typeFormation')->get();
         $typeFormation = TypeFormation::get();
-        return view('manager.config.sousThemeFormation', compact('pageTitle', 'sousThemeFormation','themeFormation','activeSettingMenu','typeFormation'));
+        return view('manager.config.sousThemeFormation', compact('pageTitle', 'sousThemeFormation', 'themeFormation', 'activeSettingMenu', 'typeFormation'));
     }
 
     public function sousThemeFormationStore(Request $request)
     {
-        $request->validate([ 
+        $request->validate([
             'nom'  => 'required',
-            'themeFormation'=>'required',
+            'themeFormation' => 'required',
         ]);
 
         if ($request->id) {
@@ -223,8 +224,8 @@ class SettingController extends Controller
             $message = "Sous theme de Formation a été mise à jour avec succès.";
         } else {
             $sousThemeFormation = new SousThemeFormation();
-        } 
-        $sousThemeFormation->nom = trim($request->nom); 
+        }
+        $sousThemeFormation->nom = trim($request->nom);
         $sousThemeFormation->theme_formation_id = $request->themeFormation;
         $sousThemeFormation->save();
         $notify[] = ['success', isset($message) ? $message  : 'Sous theme de Formation a été ajouté avec succès.'];
@@ -233,9 +234,9 @@ class SettingController extends Controller
 
     public function themeFormationStore(Request $request)
     {
-        $request->validate([ 
+        $request->validate([
             'nom'  => 'required',
-            'typeformation'=>'required',
+            'typeformation' => 'required',
         ]);
 
         if ($request->id) {
@@ -243,26 +244,26 @@ class SettingController extends Controller
             $message = "theme de Formation a été mise à jour avec succès.";
         } else {
             $themeFormation = new ThemesFormation();
-        } 
-        $themeFormation->nom = trim($request->nom); 
+        }
+        $themeFormation->nom = trim($request->nom);
         $themeFormation->type_formation_id = $request->typeformation;
         $themeFormation->save();
         $notify[] = ['success', isset($message) ? $message  : 'theme de Formation a été ajouté avec succès.'];
         return back()->withNotify($notify);
     }
-    
+
     public function moduleFormationStaffIndex()
     {
-        $pageTitle = "Manage Module de Formation Staff"; 
+        $pageTitle = "Manage Module de Formation Staff";
         $activeSettingMenu = 'moduleFormationStaff_settings';
-        $moduleFormations     = ModuleFormationStaff::orderBy('id','desc')->paginate(getPaginate());
-        return view('manager.config.moduleFormationStaff', compact('pageTitle', 'moduleFormations','activeSettingMenu'));
+        $moduleFormations     = ModuleFormationStaff::orderBy('id', 'desc')->paginate(getPaginate());
+        return view('manager.config.moduleFormationStaff', compact('pageTitle', 'moduleFormations', 'activeSettingMenu'));
     }
 
     public function moduleFormationStaffStore(Request $request)
     {
-        $request->validate([ 
-            'nom'  => 'required', 
+        $request->validate([
+            'nom'  => 'required',
         ]);
 
         if ($request->id) {
@@ -270,8 +271,8 @@ class SettingController extends Controller
             $message = "Module de Formation Staff a été mise à jour avec succès.";
         } else {
             $moduleFormationStaff = new ModuleFormationStaff();
-        } 
-        $moduleFormationStaff->nom = trim($request->nom); 
+        }
+        $moduleFormationStaff->nom = trim($request->nom);
         $moduleFormationStaff->save();
         $notify[] = ['success', isset($message) ? $message  : 'Module de Formation Staff a été ajouté avec succès.'];
         return back()->withNotify($notify);
@@ -279,18 +280,18 @@ class SettingController extends Controller
 
     public function themeFormationStaffIndex()
     {
-        $pageTitle = "Manage theme de Formation Staff"; 
+        $pageTitle = "Manage theme de Formation Staff";
         $activeSettingMenu = 'themeFormationStaff_settings';
-        $themeFormationStaff     = ThemeFormationStaff::with('moduleFormationStaff')->orderBy('id','desc')->paginate(getPaginate());
+        $themeFormationStaff     = ThemeFormationStaff::with('moduleFormationStaff')->orderBy('id', 'desc')->paginate(getPaginate());
         $moduleFormationStaffs = ModuleFormationStaff::get();
-        return view('manager.config.themeFormationStaff', compact('pageTitle', 'themeFormationStaff','moduleFormationStaffs','activeSettingMenu'));
+        return view('manager.config.themeFormationStaff', compact('pageTitle', 'themeFormationStaff', 'moduleFormationStaffs', 'activeSettingMenu'));
     }
 
     public function themeFormationStaffStore(Request $request)
     {
-        $request->validate([ 
+        $request->validate([
             'nom'  => 'required',
-            'moduleFormationStaff'=>'required',
+            'moduleFormationStaff' => 'required',
         ]);
 
         if ($request->id) {
@@ -298,8 +299,8 @@ class SettingController extends Controller
             $message = "theme de Formation Staff a été mise à jour avec succès.";
         } else {
             $themeFormationStaff = new ThemeFormationStaff();
-        } 
-        $themeFormationStaff->nom = trim($request->nom); 
+        }
+        $themeFormationStaff->nom = trim($request->nom);
         $themeFormationStaff->module_formation_staff_id = $request->moduleFormationStaff;
         $themeFormationStaff->save();
         $notify[] = ['success', isset($message) ? $message  : 'theme de Formation Staff a été ajouté avec succès.'];
@@ -308,16 +309,16 @@ class SettingController extends Controller
 
     public function categorieQuestionnaireIndex()
     {
-        $pageTitle = "Manage Categorie Questionnaire"; 
+        $pageTitle = "Manage Categorie Questionnaire";
         $activeSettingMenu = 'categorieQuestionnaire_settings';
-        $categorieQuestionnaire     = CategorieQuestionnaire::orderBy('id','desc')->paginate(getPaginate());
-        return view('manager.config.categorieQuestionnaire', compact('pageTitle', 'categorieQuestionnaire','activeSettingMenu'));
+        $categorieQuestionnaire     = CategorieQuestionnaire::orderBy('id', 'desc')->paginate(getPaginate());
+        return view('manager.config.categorieQuestionnaire', compact('pageTitle', 'categorieQuestionnaire', 'activeSettingMenu'));
     }
 
     public function categorieQuestionnaireStore(Request $request)
     {
-        $request->validate([ 
-            'titre'  => 'required', 
+        $request->validate([
+            'titre'  => 'required',
         ]);
 
         if ($request->id) {
@@ -325,8 +326,8 @@ class SettingController extends Controller
             $message = "Categorie Questionnaire a été mise à jour avec succès.";
         } else {
             $categorieQuestionnaire = new CategorieQuestionnaire();
-        } 
-        $categorieQuestionnaire->titre = trim($request->titre); 
+        }
+        $categorieQuestionnaire->titre = trim($request->titre);
         $categorieQuestionnaire->save();
         $notify[] = ['success', isset($message) ? $message  : 'Categorie Questionnaire a été ajouté avec succès.'];
         return back()->withNotify($notify);
@@ -334,18 +335,18 @@ class SettingController extends Controller
 
     public function questionnaireIndex()
     {
-        $pageTitle = "Manage Questionnaire"; 
+        $pageTitle = "Manage Questionnaire";
         $activeSettingMenu = 'questionnaire_settings';
-        $questionnaire     = Questionnaire::with('categorieQuestion')->orderBy('id','desc')->paginate(getPaginate());
+        $questionnaire     = Questionnaire::with('categorieQuestion')->orderBy('id', 'desc')->paginate(getPaginate());
         $categorieQuestion = CategorieQuestionnaire::get();
-        return view('manager.config.questionnaire', compact('pageTitle', 'questionnaire','categorieQuestion','activeSettingMenu'));
+        return view('manager.config.questionnaire', compact('pageTitle', 'questionnaire', 'categorieQuestion', 'activeSettingMenu'));
     }
 
     public function questionnaireStore(Request $request)
     {
-        $request->validate([ 
+        $request->validate([
             'nom'  => 'required',
-            'categoriequestionnaire'=>'required',
+            'categoriequestionnaire' => 'required',
         ]);
 
         if ($request->id) {
@@ -353,8 +354,8 @@ class SettingController extends Controller
             $message = "Questionnaire a été mise à jour avec succès.";
         } else {
             $questionnaire = new Questionnaire();
-        } 
-        $questionnaire->nom = trim($request->nom); 
+        }
+        $questionnaire->nom = trim($request->nom);
         $questionnaire->categorie_questionnaire_id = $request->categoriequestionnaire;
         $questionnaire->save();
         $notify[] = ['success', isset($message) ? $message  : 'Questionnaire a été ajouté avec succès.'];
@@ -362,15 +363,15 @@ class SettingController extends Controller
     }
     public function especeArbreIndex()
     {
-        $pageTitle = "Manage Espaces Arbres"; 
+        $pageTitle = "Manage Espaces Arbres";
         $activeSettingMenu = 'especeArbre_settings';
-        $especeArbre     = Agroespecesarbre::orderBy('id','desc')->paginate(getPaginate());
-        return view('manager.config.especeArbre', compact('pageTitle', 'especeArbre','activeSettingMenu'));
+        $especeArbre     = Agroespecesarbre::orderBy('id', 'desc')->paginate(getPaginate());
+        return view('manager.config.especeArbre', compact('pageTitle', 'especeArbre', 'activeSettingMenu'));
     }
     public function especeArbreStore(Request $request)
     {
-        $request->validate([ 
-            'nom'  => 'required', 
+        $request->validate([
+            'nom'  => 'required',
         ]);
 
         if ($request->id) {
@@ -378,10 +379,10 @@ class SettingController extends Controller
             $message = "Espece Arbre a été mise à jour avec succès.";
         } else {
             $especeArbre = new Agroespecesarbre();
-        } 
-        $especeArbre->nom = trim($request->nom); 
-        $especeArbre->strate = trim($request->strate); 
-        $especeArbre->nom_scientifique = trim($request->nom_scientifique); 
+        }
+        $especeArbre->nom = trim($request->nom);
+        $especeArbre->strate = trim($request->strate);
+        $especeArbre->nom_scientifique = trim($request->nom_scientifique);
         $especeArbre->save();
         $notify[] = ['success', isset($message) ? $message  : 'Espece Arbre a été ajouté avec succès.'];
         return back()->withNotify($notify);
@@ -389,15 +390,15 @@ class SettingController extends Controller
 
     public function typeArchiveIndex()
     {
-        $pageTitle = "Manage Type Archives"; 
+        $pageTitle = "Manage Type Archives";
         $activeSettingMenu = 'typeArchive_settings';
-        $typeArchive     = TypeArchive::orderBy('id','desc')->paginate(getPaginate());
-        return view('manager.config.typeArchive', compact('pageTitle', 'typeArchive','activeSettingMenu'));
+        $typeArchive     = TypeArchive::orderBy('id', 'desc')->paginate(getPaginate());
+        return view('manager.config.typeArchive', compact('pageTitle', 'typeArchive', 'activeSettingMenu'));
     }
     public function typeArchiveStore(Request $request)
     {
-        $request->validate([ 
-            'nom'  => 'required', 
+        $request->validate([
+            'nom'  => 'required',
         ]);
 
         if ($request->id) {
@@ -405,21 +406,21 @@ class SettingController extends Controller
             $message = "Espece Arbre a été mise à jour avec succès.";
         } else {
             $typeArchive = new TypeArchive();
-        } 
-        $typeArchive->nom = trim($request->nom); 
+        }
+        $typeArchive->nom = trim($request->nom);
         $typeArchive->save();
         $notify[] = ['success', isset($message) ? $message  : 'Le contenu a été ajouté avec succès.'];
         return back()->withNotify($notify);
     }
     public function instanceIndex()
     {
-        $this->pageTitle = "Ajouter une instance";   
+        $this->pageTitle = "Ajouter une instance";
         return view('manager.config.create-instance-modal', $this->data);
     }
     public function instanceStore(Request $request)
     {
-        $request->validate([ 
-            'nom'  => 'required', 
+        $request->validate([
+            'nom'  => 'required',
         ]);
 
         if ($request->id) {
@@ -427,48 +428,48 @@ class SettingController extends Controller
             $message = "Espece Arbre a été mise à jour avec succès.";
         } else {
             $instance = new Instance();
-        } 
-        $instance->nom = trim($request->nom); 
+        }
+        $instance->nom = trim($request->nom);
         $instance->save();
-       
+
         return Reply::successWithData(__('Le contenu a été ajouté avec succès.'), ['page_reload' => $request->page_reload]);
     }
     public function documentadIndex()
     {
-        $this->pageTitle = "Ajouter un document administratif";   
+        $this->pageTitle = "Ajouter un document administratif";
         return view('manager.config.create-document-modal', $this->data);
     }
     public function documentadStore(Request $request)
     {
-        $request->validate([ 
-            'nom'  => 'required', 
+        $request->validate([
+            'nom'  => 'required',
         ]);
 
         if ($request->id) {
-            $documentad    = Instance::findOrFail($request->id); 
+            $documentad    = Instance::findOrFail($request->id);
         } else {
             $documentad = new DocumentAdministratif();
-        } 
-        $documentad->nom = trim($request->nom); 
+        }
+        $documentad->nom = trim($request->nom);
         $documentad->save();
-       
+
         return Reply::successWithData(__('Le contenu a été ajouté avec succès.'), ['page_reload' => $request->page_reload]);
     }
     public function entrepriseIndex()
     {
-        $pageTitle = "Ajouter une entreprise"; 
+        $pageTitle = "Ajouter une entreprise";
         return view('manager.config.create-entreprise-modal', compact('pageTitle'));
     }
     public function entrepriseStore(Request $request)
     {
-        $request->validate([ 
+        $request->validate([
             'nom_entreprise'  => 'required',
             'telephone_entreprise'  => 'required',
             'adresse_entreprise'  => 'required',
             'mail_entreprise'  => 'required|email|unique:entreprises,mail_entreprise',
         ]);
         $entreprise = new Entreprise();
-        $entreprise->nom_entreprise = trim($request->nom_entreprise); 
+        $entreprise->nom_entreprise = trim($request->nom_entreprise);
         $entreprise->mail_entreprise = trim($request->mail_entreprise);
         $entreprise->telephone_entreprise = trim($request->telephone_entreprise);
         $entreprise->adresse_entreprise = trim($request->adresse_entreprise);
@@ -478,15 +479,15 @@ class SettingController extends Controller
 
     public function formateurStaffIndex()
     {
-        $pageTitle = "Ajouter un formateur staff";   
+        $pageTitle = "Ajouter un formateur staff";
         $entreprises = Entreprise::get();
-        return view('manager.config.create-formateur-modal',compact('pageTitle','entreprises'));
+        return view('manager.config.create-formateur-modal', compact('pageTitle', 'entreprises'));
     }
     public function formateurStaffStore(Request $request)
     {
-        $request->validate([ 
+        $request->validate([
             'nom_formateur'  => 'required',
-            'entreprise_id'=>'required',
+            'entreprise_id' => 'required',
             'prenom_formateur'  => 'required',
             'telephone_formateur'  => 'required',
             'poste_formateur'  => 'required',
@@ -497,13 +498,13 @@ class SettingController extends Controller
             $message = "Formateur Staff a été mise à jour avec succès.";
         } else {
             $formateurStaff = new FormateurStaff();
-        } 
+        }
         $formateurStaff->entreprise_id = $request->entreprise_id;
-        $formateurStaff->nom_formateur = trim($request->nom_formateur); 
+        $formateurStaff->nom_formateur = trim($request->nom_formateur);
         $formateurStaff->prenom_formateur = trim($request->prenom_formateur);
         $formateurStaff->telephone_formateur = trim($request->telephone_formateur);
         $formateurStaff->poste_formateur = trim($request->poste_formateur);
-        
+
         $formateurStaff->save();
         return Reply::successWithData(__('Formateur Staff a été ajouté avec succès.'), ['page_reload' => $request->page_reload]);
         // $notify[] = ['success', isset($message) ? $message  : 'Formateur Staff a été ajouté avec succès.'];
@@ -512,15 +513,15 @@ class SettingController extends Controller
 
     public function departementIndex()
     {
-       $pageTitle = "Manage Départements"; 
+        $pageTitle = "Manage Départements";
         $activeSettingMenu = 'departement_settings';
-        $departements     = Department::orderBy('id','desc')->paginate(getPaginate());
-        return view('manager.config.departement', compact('pageTitle', 'departements','activeSettingMenu'));
+        $departements     = Department::orderBy('id', 'desc')->paginate(getPaginate());
+        return view('manager.config.departement', compact('pageTitle', 'departements', 'activeSettingMenu'));
     }
     public function departementStore(Request $request)
     {
-        $request->validate([ 
-            'nom'  => 'required', 
+        $request->validate([
+            'nom'  => 'required',
         ]);
 
         if ($request->id) {
@@ -528,27 +529,27 @@ class SettingController extends Controller
             $message = "Le contenu a été mise à jour avec succès.";
         } else {
             $department = new Department();
-        } 
+        }
         $department->cooperative_id = auth()->user()->cooperative_id;
-        $department->department = trim($request->nom); 
+        $department->department = trim($request->nom);
         $department->save();
-       
+
         $notify[] = ['success', isset($message) ? $message  : 'Le contenu a été ajouté avec succès.'];
         return back()->withNotify($notify);
     }
     public function designationIndex()
     {
-       $pageTitle = "Manage Désignations"; 
+        $pageTitle = "Manage Désignations";
         $activeSettingMenu = 'designation_settings';
         $departements = Department::get();
-        $designations     = Designation::orderBy('id','desc')->paginate(getPaginate());
-        return view('manager.config.designation', compact('pageTitle', 'departements','designations','activeSettingMenu'));
+        $designations     = Designation::orderBy('id', 'desc')->paginate(getPaginate());
+        return view('manager.config.designation', compact('pageTitle', 'departements', 'designations', 'activeSettingMenu'));
     }
     public function designationStore(Request $request)
     {
-        $request->validate([ 
-            'nom'  => 'required', 
-			'departement_id'  => 'required',
+        $request->validate([
+            'nom'  => 'required',
+            'departement_id'  => 'required',
         ]);
 
         if ($request->id) {
@@ -556,23 +557,21 @@ class SettingController extends Controller
             $message = "Le contenu a été mise à jour avec succès.";
         } else {
             $designation = new Designation();
-            
-        } 
-        $designation->cooperative_id = auth()->user()->cooperative_id;
-        $designation->name = trim($request->nom); 
-		$designation->parent_id = trim($request->departement_id); 
-        $designation->save();
-       if($designation !=null){
-        if($request->id){
-            $role = Role::where('name',$request->nom)->first();
-             if($role ==null){
-                $role = Role::create(['name' => trim($request->nom)]);
-             } 
-        }else{
-            $role = Role::create(['name' => trim($request->nom)]);
         }
-        
-       }
+        $designation->cooperative_id = auth()->user()->cooperative_id;
+        $designation->name = trim($request->nom);
+        $designation->parent_id = trim($request->departement_id);
+        $designation->save();
+        if ($designation != null) {
+            if ($request->id) {
+                $role = Role::where('name', $request->nom)->first();
+                if ($role == null) {
+                    $role = Role::create(['name' => trim($request->nom)]);
+                }
+            } else {
+                $role = Role::create(['name' => trim($request->nom)]);
+            }
+        }
         $notify[] = ['success', isset($message) ? $message  : 'Le contenu a été ajouté avec succès.'];
         return back()->withNotify($notify);
     }
@@ -580,24 +579,26 @@ class SettingController extends Controller
     public function magasinSectionIndex()
     {
 
-       $pageTitle = "Manage des Magasins de Section"; 
-       $manager = auth()->user();
+        $pageTitle = "Manage des Magasins de Section";
+        $manager = auth()->user();
         $activeSettingMenu = 'magasinSection_settings';
         $sections = UserLocalite::get();
-        $users = User::whereHas('roles', function($q){ $q->where('name', 'Magasinier'); })
-                ->where('cooperative_id', $manager->cooperative_id)
-                ->select('id',DB::raw("CONCAT(lastname,' ', firstname) as nom"))
-                ->get(); 
-        $magasinSections     = MagasinSection::orderBy('id','desc')->paginate(getPaginate());
-        $codemag=$this->generecodemagasin();
-        return view('manager.config.magasinSection', compact('pageTitle', 'magasinSections','activeSettingMenu','users','sections','codemag'));
+        $users = User::whereHas('roles', function ($q) {
+            $q->where('name', 'Magasinier');
+        })
+            ->where('cooperative_id', $manager->cooperative_id)
+            ->select('id', DB::raw("CONCAT(lastname,' ', firstname) as nom"))
+            ->get();
+        $magasinSections     = MagasinSection::orderBy('id', 'desc')->paginate(getPaginate());
+        $codemag = $this->generecodemagasin();
+        return view('manager.config.magasinSection', compact('pageTitle', 'magasinSections', 'activeSettingMenu', 'users', 'sections', 'codemag'));
     }
-public function magasinSectionStore(Request $request)
+    public function magasinSectionStore(Request $request)
     {
-        $request->validate([ 
+        $request->validate([
             'nom'  => 'required',
             'user'  => 'required',
-            'section'  => 'required', 
+            'section'  => 'required',
         ]);
 
         if ($request->id) {
@@ -605,85 +606,101 @@ public function magasinSectionStore(Request $request)
             $message = "Le contenu a été mise à jour avec succès.";
         } else {
             $magasin = new MagasinSection();
-        } 
-        $magasin->staff_id = trim($request->user); 
+        }
+        $magasin->staff_id = trim($request->user);
         $magasin->section_id = trim($request->section);
-        $magasin->nom = trim($request->nom); 
-        $magasin->longitude = trim($request->longitude); 
-        $magasin->latitude = trim($request->latitude); 
+        $magasin->nom = trim($request->nom);
+        $magasin->longitude = trim($request->longitude);
+        $magasin->latitude = trim($request->latitude);
         $magasin->code = isset($request->code) ? $request->code : $this->generecodemagasin();
         $magasin->save();
-       
+
         $notify[] = ['success', isset($message) ? $message  : 'Le contenu a été ajouté avec succès.'];
         return back()->withNotify($notify);
     }
     private function generecodemagasin()
     {
 
-        $data = MagasinSection::select('code')->orderby('id','desc')->first();
+        $data = MagasinSection::select('code')->orderby('id', 'desc')->first();
 
-        if($data !=null){
+        if ($data != null) {
             $code = $data->code;
-        $chaine_number = Str::afterLast($code,'-');
-        if($chaine_number<10){$zero="00000";}
-        else if($chaine_number<100){$zero="0000";}
-        else if($chaine_number<1000){$zero="000";}
-        else if($chaine_number<10000){$zero="00";}
-        else if($chaine_number<100000){$zero="0";}
-        else{$zero="";}
-        }else{
-            $zero="00000";
-            $chaine_number=0;
+            $chaine_number = Str::afterLast($code, '-');
+            if ($chaine_number < 10) {
+                $zero = "00000";
+            } else if ($chaine_number < 100) {
+                $zero = "0000";
+            } else if ($chaine_number < 1000) {
+                $zero = "000";
+            } else if ($chaine_number < 10000) {
+                $zero = "00";
+            } else if ($chaine_number < 100000) {
+                $zero = "0";
+            } else {
+                $zero = "";
+            }
+        } else {
+            $zero = "00000";
+            $chaine_number = 0;
         }
-        if(!$chaine_number) $chaine_number = 0;
-        $sub='MAG-';
-        $lastCode=$chaine_number+1;
-        $code=$sub.$zero.$lastCode;
+        if (!$chaine_number) $chaine_number = 0;
+        $sub = 'MAG-';
+        $lastCode = $chaine_number + 1;
+        $code = $sub . $zero . $lastCode;
 
         return $code;
     }
     private function generecodemagasincentral()
     {
 
-        $data = MagasinCentral::select('code')->orderby('id','desc')->first();
+        $data = MagasinCentral::select('code')->orderby('id', 'desc')->first();
 
-        if($data !=null){
+        if ($data != null) {
             $code = $data->code;
-        $chaine_number = Str::afterLast($code,'-');
-        if($chaine_number<10){$zero="00000";}
-        else if($chaine_number<100){$zero="0000";}
-        else if($chaine_number<1000){$zero="000";}
-        else if($chaine_number<10000){$zero="00";}
-        else if($chaine_number<100000){$zero="0";}
-        else{$zero="";}
-        }else{
-            $zero="00000";
-            $chaine_number=0;
+            $chaine_number = Str::afterLast($code, '-');
+            if ($chaine_number < 10) {
+                $zero = "00000";
+            } else if ($chaine_number < 100) {
+                $zero = "0000";
+            } else if ($chaine_number < 1000) {
+                $zero = "000";
+            } else if ($chaine_number < 10000) {
+                $zero = "00";
+            } else if ($chaine_number < 100000) {
+                $zero = "0";
+            } else {
+                $zero = "";
+            }
+        } else {
+            $zero = "00000";
+            $chaine_number = 0;
         }
-        if(!$chaine_number) $chaine_number = 0;
-        $sub='MAG-CENTRAL-';
-        $lastCode=$chaine_number+1;
-        $code=$sub.$zero.$lastCode;
+        if (!$chaine_number) $chaine_number = 0;
+        $sub = 'MAG-CENTRAL-';
+        $lastCode = $chaine_number + 1;
+        $code = $sub . $zero . $lastCode;
 
         return $code;
     }
     public function magasinCentralIndex()
     {
-       $pageTitle = "Manage des Magasins Centraux"; 
-       $manager = auth()->user();
+        $pageTitle = "Manage des Magasins Centraux";
+        $manager = auth()->user();
         $activeSettingMenu = 'magasinCentral_settings';
-        $users = User::whereHas('roles', function($q){ $q->where('name', 'Magasinier'); })
-        ->where('cooperative_id', $manager->cooperative_id)
-        ->select('id',DB::raw("CONCAT(lastname,' ', firstname) as nom"))
-        ->get(); 
-        $magasinCentraux     = MagasinCentral::orderBy('id','desc')->paginate(getPaginate());
-        $codemag=$this->generecodemagasincentral();
-        return view('manager.config.magasinCentral', compact('pageTitle', 'magasinCentraux','activeSettingMenu','users','codemag'));
+        $users = User::whereHas('roles', function ($q) {
+            $q->where('name', 'Magasinier');
+        })
+            ->where('cooperative_id', $manager->cooperative_id)
+            ->select('id', DB::raw("CONCAT(lastname,' ', firstname) as nom"))
+            ->get();
+        $magasinCentraux     = MagasinCentral::orderBy('id', 'desc')->paginate(getPaginate());
+        $codemag = $this->generecodemagasincentral();
+        return view('manager.config.magasinCentral', compact('pageTitle', 'magasinCentraux', 'activeSettingMenu', 'users', 'codemag'));
     }
-public function magasinCentralStore(Request $request)
+    public function magasinCentralStore(Request $request)
     {
-        $request->validate([ 
-            'nom'  => 'required', 
+        $request->validate([
+            'nom'  => 'required',
             'user'  => 'required',
         ]);
 
@@ -692,35 +709,35 @@ public function magasinCentralStore(Request $request)
             $message = "Le contenu a été mise à jour avec succès.";
         } else {
             $magasin = new MagasinCentral();
-        } 
+        }
         $magasin->cooperative_id = auth()->user()->cooperative_id;
-        $magasin->staff_id = trim($request->user); 
-        $magasin->nom = trim($request->nom); 
-        $magasin->longitude = trim($request->longitude); 
-        $magasin->latitude = trim($request->latitude); 
+        $magasin->staff_id = trim($request->user);
+        $magasin->nom = trim($request->nom);
+        $magasin->longitude = trim($request->longitude);
+        $magasin->latitude = trim($request->latitude);
         $magasin->code = isset($request->code) ? $request->code : $this->generecodemagasincentral();
         $magasin->save();
-       
+
         $notify[] = ['success', isset($message) ? $message  : 'Le contenu a été ajouté avec succès.'];
         return back()->withNotify($notify);
     }
-    
+
     public function vehiculeIndex()
     {
 
-       $pageTitle = "Manage des Véhicules"; 
-       $manager = auth()->user();
+        $pageTitle = "Manage des Véhicules";
+        $manager = auth()->user();
         $activeSettingMenu = 'vehicule_settings';
-        $marques = Marque::get();  
-        $vehicules = Vehicule::orderBy('id','desc')->paginate(getPaginate());
-         
-        return view('manager.config.vehicule', compact('pageTitle', 'vehicules','activeSettingMenu','marques'));
+        $marques = Marque::get();
+        $vehicules = Vehicule::orderBy('id', 'desc')->paginate(getPaginate());
+
+        return view('manager.config.vehicule', compact('pageTitle', 'vehicules', 'activeSettingMenu', 'marques'));
     }
-public function vehiculeStore(Request $request)
+    public function vehiculeStore(Request $request)
     {
-        $request->validate([ 
+        $request->validate([
             'matricule'  => 'required',
-            'marque'  => 'required', 
+            'marque'  => 'required',
         ]);
 
         if ($request->id) {
@@ -728,44 +745,78 @@ public function vehiculeStore(Request $request)
             $message = "Le contenu a été mise à jour avec succès.";
         } else {
             $vehicule = new Vehicule();
-        } 
-		$manager = auth()->user();  
+        }
+        $manager = auth()->user();
         $vehicule->cooperative_id = $manager->cooperative_id;
-        $vehicule->vehicule_immat = trim($request->matricule); 
+        $vehicule->vehicule_immat = trim($request->matricule);
+        //$vehicule->remorque_immat = trim($request->remorque);
         $vehicule->marque_id = $request->marque;
         $vehicule->save();
-       
+
         $notify[] = ['success', isset($message) ? $message  : 'Le contenu a été ajouté avec succès.'];
         return back()->withNotify($notify);
     }
+
+
+    public function remorqueIndex()
+    {
+
+        $pageTitle = "Manage des Remorques";
+        $manager = auth()->user();
+        $activeSettingMenu = 'remorque_settings';
+        $remorques = Remorque::orderBy('id', 'desc')->paginate(getPaginate());
+
+        return view('manager.config.remorque', compact('pageTitle', 'remorques', 'activeSettingMenu'));
+    }
+    public function remorqueStore(Request $request)
+    {
+        $request->validate([
+            'matricule'  => 'required',
+        ]);
+
+        if ($request->id) {
+            $remorque    = Remorque::findOrFail($request->id);
+            $message = "Le contenu a été mise à jour avec succès.";
+        } else {
+            $remorque = new Remorque();
+        }
+        $manager = auth()->user();
+        $remorque->cooperative_id = $manager->cooperative_id;
+        $remorque->remorque_immat = trim($request->matricule);
+        $remorque->save();
+        
+        $notify[] = ['success', isset($message) ? $message  : 'Le contenu a été ajouté avec succès.'];
+        return back()->withNotify($notify);
+    }
+    
     public function transporteurModalIndex()
     {
-        $pageTitle = "Ajouter un transporteur";   
+        $pageTitle = "Ajouter un transporteur";
         $entreprises = Entreprise::get();
-        $countries = Countrie::get(); 
+        $countries = Countrie::get();
         $niveaux = NiveauxEtude::get();
-        return view('manager.config.create-transporteur-modal',compact('pageTitle','entreprises','countries','niveaux'));
+        return view('manager.config.create-transporteur-modal', compact('pageTitle', 'entreprises', 'countries', 'niveaux'));
     }
     public function transporteurIndex()
     {
 
-       $pageTitle = "Manage des Transporteurs"; 
-       $manager = auth()->user();
-        $activeSettingMenu = 'transporteur_settings';  
-        $transporteurs = Transporteur::orderBy('id','desc')->paginate(getPaginate());
-        $countries = Countrie::get(); 
+        $pageTitle = "Manage des Transporteurs";
+        $manager = auth()->user();
+        $activeSettingMenu = 'transporteur_settings';
+        $transporteurs = Transporteur::orderBy('id', 'desc')->paginate(getPaginate());
+        $countries = Countrie::get();
         $niveaux = NiveauxEtude::get();
         $entreprises = Entreprise::get();
-        return view('manager.config.transporteur', compact('pageTitle', 'transporteurs','activeSettingMenu','countries','niveaux','entreprises'));
+        return view('manager.config.transporteur', compact('pageTitle', 'transporteurs', 'activeSettingMenu', 'countries', 'niveaux', 'entreprises'));
     }
-public function transporteurStore(Request $request)
+    public function transporteurStore(Request $request)
     {
-        $request->validate([ 
+        $request->validate([
             'entreprise_id' => 'required',
             'nom'  => 'required',
-            'prenoms'  => 'required', 
+            'prenoms'  => 'required',
             'sexe'  => 'required',
-            'phone1'  => 'required', 
+            'phone1'  => 'required',
         ]);
 
         if ($request->id) {
@@ -773,11 +824,11 @@ public function transporteurStore(Request $request)
             $message = "Le contenu a été mise à jour avec succès.";
         } else {
             $transporteur = new Transporteur();
-        } 
-		$manager = auth()->user();  
+        }
+        $manager = auth()->user();
         $transporteur->cooperative_id = $manager->cooperative_id;
-        $transporteur->entreprise_id = trim($request->entreprise_id); 
-        $transporteur->nom = trim($request->nom); 
+        $transporteur->entreprise_id = trim($request->entreprise_id);
+        $transporteur->nom = trim($request->nom);
         $transporteur->prenoms = trim($request->prenoms);
         $transporteur->sexe = trim($request->sexe);
         $transporteur->date_naiss = trim($request->date_naiss);
@@ -788,34 +839,34 @@ public function transporteurStore(Request $request)
         $transporteur->type_piece = trim($request->type_piece);
         $transporteur->num_piece = trim($request->num_piece);
         $transporteur->num_permis = trim($request->num_permis);
-        if($request->hasFile('photo')) { 
+        if ($request->hasFile('photo')) {
             Files::deleteFile($transporteur->photo, 'transporteur');
             $transporteur->photo = Files::uploadLocalOrS3($request->photo, 'transporteur', 600);
         }
 
-        if($request->hasFile('photo_piece_identite')) { 
+        if ($request->hasFile('photo_piece_identite')) {
             Files::deleteFile($transporteur->photo_piece_identite, 'transporteur');
             $transporteur->photo_piece_identite = Files::uploadLocalOrS3($request->photo_piece_identite, 'transporteur', 600);
         }
 
-        if($request->hasFile('photo_permis_conduire')) { 
+        if ($request->hasFile('photo_permis_conduire')) {
             Files::deleteFile($transporteur->photo_permis_conduire, 'transporteur');
             $transporteur->photo_permis_conduire = Files::uploadLocalOrS3($request->photo_permis_conduire, 'transporteur', 600);
         }
-         
+
         $transporteur->save();
-       
+
         $notify[] = ['success', isset($message) ? $message  : 'Le contenu a été ajouté avec succès.'];
         return back()->withNotify($notify);
     }
     public function transporteurModalStore(Request $request)
     {
-        $request->validate([ 
-            'entreprise_id'=> 'required',
+        $request->validate([
+            'entreprise_id' => 'required',
             'nom'  => 'required',
-            'prenoms'  => 'required', 
+            'prenoms'  => 'required',
             'sexe'  => 'required',
-            'phone1'  => 'required', 
+            'phone1'  => 'required',
         ]);
 
         if ($request->id) {
@@ -823,11 +874,11 @@ public function transporteurStore(Request $request)
             $message = "Le contenu a été mise à jour avec succès.";
         } else {
             $transporteur = new Transporteur();
-        } 
-		$manager = auth()->user();  
+        }
+        $manager = auth()->user();
         $transporteur->cooperative_id = $manager->cooperative_id;
         $transporteur->entreprise_id = $request->entreprise_id;
-        $transporteur->nom = trim($request->nom); 
+        $transporteur->nom = trim($request->nom);
         $transporteur->prenoms = trim($request->prenoms);
         $transporteur->sexe = trim($request->sexe);
         $transporteur->date_naiss = trim($request->date_naiss);
@@ -838,21 +889,21 @@ public function transporteurStore(Request $request)
         $transporteur->type_piece = trim($request->type_piece);
         $transporteur->num_piece = trim($request->num_piece);
         $transporteur->num_permis = trim($request->num_permis);
-        if($request->hasFile('photo')) { 
+        if ($request->hasFile('photo')) {
             Files::deleteFile($transporteur->photo, 'transporteur');
             $transporteur->photo = Files::uploadLocalOrS3($request->photo, 'transporteur', 600);
         }
 
-        if($request->hasFile('photo_piece_identite')) { 
+        if ($request->hasFile('photo_piece_identite')) {
             Files::deleteFile($transporteur->photo_piece_identite, 'transporteur');
             $transporteur->photo_piece_identite = Files::uploadLocalOrS3($request->photo_piece_identite, 'transporteur', 600);
         }
 
-        if($request->hasFile('photo_permis_conduire')) { 
+        if ($request->hasFile('photo_permis_conduire')) {
             Files::deleteFile($transporteur->photo_permis_conduire, 'transporteur');
             $transporteur->photo_permis_conduire = Files::uploadLocalOrS3($request->photo_permis_conduire, 'transporteur', 600);
         }
-         
+
         $transporteur->save();
 
         return Reply::successWithData(__('Transporteur a été ajouté avec succès.'), ['page_reload' => $request->page_reload]);
@@ -928,5 +979,9 @@ public function transporteurStore(Request $request)
     public function transporteurStatus($id)
     {
         return Transporteur::changeStatus($id);
+    }
+    public function remorqueStatus($id)
+    {
+        return Remorque::changeStatus($id);
     }
 }
