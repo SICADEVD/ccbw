@@ -99,7 +99,7 @@
                     <div class="form-group row">
                         {{ Form::label(__('Quel type de documents  possèdes-tu ?'), null, ['class' => 'col-sm-4 control-label']) }}
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('typeDoc', ['Attestation de plantation' => 'Attestation de plantation', 'Attestation coutumières' => 'Attestation coutumières', 'Cadastre' => 'Cadastre', 'Certificat foncier' => 'Certificat foncier', 'Contrat agraire' => 'Contrat agraire', 'Aucun document' => 'Aucun document'], null, ['class' => 'form-control', 'required']); ?>
+                            <?php echo Form::select('typeDoc', [''=>'Selectionner une option','Attestation de plantation' => 'Attestation de plantation', 'Attestation coutumières' => 'Attestation coutumières', 'Cadastre' => 'Cadastre', 'Certificat foncier' => 'Certificat foncier', 'Contrat agraire' => 'Contrat agraire', 'Aucun document' => 'Aucun document'], null, ['class' => 'form-control', 'required']); ?>
                         </div>
                     </div>
 
