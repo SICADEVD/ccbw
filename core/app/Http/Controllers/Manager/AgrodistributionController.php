@@ -118,7 +118,6 @@ class AgrodistributionController extends Controller
                             $agroapprov = AgroapprovisionnementSectionEspece::joinRelationship('agroapprovisionnementSection')->where([['agroapprovisionnement_section_id', $request->agroapprovisionnementsection], ['agroapprovisionnement_section_especes.agroespecesarbre_id', $agroespecesarbresid]])->first();
                             if ($agroapprov != null) {
                                 $agroapprov->total_restant = $agroapprov->total_restant + $total;
-                                dd(json_encode($request->all()));
                                 $agroapprov->save();
                             }
                             $i++;
