@@ -97,7 +97,7 @@
     <div class="form-group row">
             {{ Form::label(__("Date d'évaluation"), null, ['class' => 'col-sm-4 control-label']) }}
             <div class="col-xs-12 col-sm-8">
-            {!! Form::date('date_evaluation', null, array('placeholder' => __("Date d'évaluation"),'class' => 'form-control text4','id'=>'anneeCreation-1' ,'required')) !!}
+            {!! Form::date('date_evaluation', null, array('placeholder' => __("Date d'évaluation"),'class' => 'form-control','id'=>'anneeCreation-1' ,'required')) !!}
         </div>
     </div>
 
