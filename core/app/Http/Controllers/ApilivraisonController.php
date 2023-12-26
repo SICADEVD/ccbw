@@ -20,10 +20,12 @@ use App\Models\LivraisonPayment;
 use App\Models\LivraisonProduct;
 use App\Models\AdminNotification;
 use Illuminate\Support\Facades\DB;
+use App\Models\StockMagasinCentral;
 use App\Models\StockMagasinSection;
 use Illuminate\Support\Facades\File;
 use App\Models\Livraisons_temporaire;
 use App\Models\LivraisonProductDetail;
+use App\Models\LivraisonMagasinCentralProducteur;
 
 class ApilivraisonController extends Controller
 {
@@ -66,7 +68,6 @@ class ApilivraisonController extends Controller
             'items.*.producteur'     => 'required|integer',
             'items.*.parcelle'     => 'required|integer',
             'items.*.quantity' => 'required|numeric|gt:0',
-            'items.*.amount'   => 'required|numeric|gt:0',
             'estimate_date'    => 'required|date|date_format:Y-m-d',
         ]);
 
@@ -185,6 +186,87 @@ class ApilivraisonController extends Controller
         $adminNotification->save();
 
 
+        return response()->json($livraison, 201);
+    }
+
+    public function store_livraison_magasincentral(Request $request)
+    {
+
+        // dd(response()->json($request));
+
+        $request->validate([
+            'magasin_central' => 'required',
+            'sender_magasin' =>  'required',
+            'sender_transporteur' =>  'required',
+            'sender_vehicule' =>  'required',
+            'producteur_id' => 'required|array',
+            'type' => 'required',
+            'estimate_date'    => 'required|date|date_format:Y-m-d',
+        ]);
+
+        $manager = User::where('id', $request->userid)->first();
+        $livraison = new StockMagasinCentral();
+        $campagne = Campagne::active()->first();
+        $periode = CampagnePeriode::where([['campagne_id', $campagne->id], ['periode_debut', '<=', gmdate('Y-m-d')], ['periode_fin', '>=', gmdate('Y-m-d')]])->latest()->first();
+
+        $livraison->cooperative_id   = $manager->cooperative_id;
+        $livraison->campagne_id    = $campagne->id;
+        $livraison->campagne_periode_id = $periode->id;
+        $livraison->magasin_centraux_id = $request->magasin_central;
+        $livraison->magasin_section_id = $request->sender_magasin;
+        $livraison->numero_connaissement = $request->code;
+        $livraison->type_produit = json_encode($request->type);
+        $livraison->stocks_mag_entrant = $request->poidsnet;
+        $livraison->stocks_mag_sacs_entrant = $request->nombresacs;
+        $livraison->stocks_mag_sortant = 0;
+        $livraison->stocks_mag_sacs_sortant   = 0;
+        $livraison->transporteur_id = $request->sender_transporteur;
+        $livraison->vehicule_id = $request->sender_vehicule;
+        $livraison->remorque_id = $request->sender_remorque;
+        $livraison->date_livraison = $request->estimate_date;
+        $livraison->save();
+
+        $i = 0;
+        $data = [];
+        $quantite = $request->quantite;
+        $typeproduit = $request->typeproduit;
+        $producteurs = $request->producteurs;
+        $parcelle = $request->parcelle;
+        $certificat = $request->certificat;
+
+        foreach ($producteurs as $item) {
+
+            if ($quantite[$i] > 0) {
+                $data[] = [
+                    'stock_magasin_central_id' => $livraison->id,
+                    'producteur_id' => $item,
+                    'campagne_id' => $campagne->id,
+                    'campagne_periode_id' => $periode->id,
+                    'quantite' => $quantite[$i],
+                    'type_produit' => $typeproduit[$i],
+                    'parcelle_id' => $parcelle[$i],
+                    'certificat' => $certificat[$i],
+                    'created_at'      => now(),
+                ];
+                $product = LivraisonProduct::where([['campagne_id', $campagne->id], ['parcelle_id', $parcelle[$i]], ['certificat', $certificat[$i]], ['type_produit', $typeproduit[$i]]])->first();
+                if ($product != null) {
+                    $productinfo = $product->livraison_info_id;
+                    $product->qty = $product->qty - $quantite[$i];
+                    $product->qty_sortant = $product->qty_sortant + $quantite[$i];
+                    $product->save();
+
+                    $prod = StockMagasinSection::where('livraison_info_id', $productinfo)->first();
+                    $prod->stocks_entrant = $prod->stocks_entrant - $quantite[$i];
+                    $prod->stocks_sortant = $prod->stocks_sortant + $quantite[$i];
+
+                    $prod->save();
+                }
+            }
+            $i++;
+        }
+
+
+        LivraisonMagasinCentralProducteur::insert($data);
         return response()->json($livraison, 201);
     }
 

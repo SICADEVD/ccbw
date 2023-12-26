@@ -300,7 +300,7 @@ class LivraisonController extends Controller
         $livraison->vehicule_id = $request->sender_vehicule;
         $livraison->remorque_id = $request->sender_remorque;
         $livraison->date_livraison = $request->estimate_date;
-
+        dd(json_encode($request->all()));
         $livraison->save();
 
         $i = 0;

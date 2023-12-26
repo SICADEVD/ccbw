@@ -52,6 +52,8 @@ Route::match(['POST'],'getmagasinsection', [ApilivraisonController::class, 'getM
 Route::match(['POST'],'getlivraison', [ApilivraisonController::class, 'getLivraison']);
 Route::match(['POST'],'getmagasincentraux', [ApilivraisonController::class, 'getMagasincentraux']);
 Route::match(['POST'],'apilivraisonmagasinsection', [ApilivraisonController::class,'store']);
+Route::match(['POST'],'apilivraisonmagasincentral', [ApilivraisonController::class,'storeMagasincentral']);
+Route::match(['POST'],'apilivraisonmagasincentral', [ApilivraisonController::class,'store_livraison_magasincentral']);
 Route::match(['POST'],'apiparcelle', [ApiparcelleController::class, 'store']);
 Route::match(['POST'],'getparcelles', [ApiparcelleController::class, 'index']);
 Route::match(['POST'],'getparcelleupdate', [ApiparcelleController::class, 'getparcelleUpdate']);
