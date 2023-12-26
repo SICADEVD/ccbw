@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Campagne;
 use App\Models\Localite;
 use App\Constants\Status;
 use App\Models\Producteur;
 use Illuminate\Http\Request;
 use App\Models\Agroevaluation;
+use App\Models\Agrodistribution;
 use App\Models\Agroespecesarbre;
 use App\Models\AgroevaluationEspece;
-use App\Models\User;
+use App\Models\AgrodistributionEspece;
+use App\Models\AgroapprovisionnementSectionEspece;
 
 class ApiAgroEvaluationContoller extends Controller
 {
@@ -95,5 +98,72 @@ class ApiAgroEvaluationContoller extends Controller
             'producteurs' => $producteurs,
         ], 201);
 
+    }
+    public function store_distribution( Request $request){
+        $validationRule = [
+            'quantite' => 'required|array',
+        ];
+
+        $request->validate($validationRule);
+
+        if ($request->id) {
+            $distribution = Agrodistribution::findOrFail($request->id);
+            $message = "La distribution a été mise à jour avec succès";
+        } else {
+            $distribution = new Agrodistribution();
+        }
+        $manager   = User::where('id', $request->userid)->get()->first();
+        $k = 0;
+        $i = 0;
+        $nb = 0;
+        if ($request->quantite) {
+            foreach ($request->quantite as $producteurid => $agroespeces) {
+
+                $existe = Agrodistribution::where('producteur_id', $producteurid)->first();
+
+                if ($existe != null) {
+                    $distributionID = $existe->id;
+                } else {
+                    $distribution = new Agrodistribution();
+                    $distribution->cooperative_id = $manager->cooperative_id;
+                    $distribution->producteur_id = $producteurid;
+                    $distribution->quantite = $request->qtelivre;
+                    $distribution->save();
+                    $distributionID = $distribution->id;
+                    $nb++;
+                }
+                $agroespeces = array_filter($agroespeces);
+                foreach ($agroespeces as $agroespecesarbresid => $total) {
+
+                    $find = AgrodistributionEspece::where([
+                        ['agrodistribution_id', $distributionID],
+                        ['agroespecesarbre_id', $agroespecesarbresid]
+                    ])->first();
+                    if ($find == null) {
+
+                        if ($total != null) {
+                            AgrodistributionEspece::insert([
+                                'agrodistribution_id' => $distributionID,
+                                'agroespecesarbre_id' => $agroespecesarbresid,
+                                'total' => $total,
+                                'created_at' => NOW()
+                            ]);
+
+                            $agroapprov = AgroapprovisionnementSectionEspece::joinRelationship('agroapprovisionnementSection')->where([['agroapprovisionnement_section_id', $request->agroapprovisionnementsection], ['agroapprovisionnement_section_especes.agroespecesarbre_id', $agroespecesarbresid]])->first();
+                            if ($agroapprov != null) {
+                                $agroapprov->total_restant = $agroapprov->total_restant + $total;
+                                $agroapprov->save();
+                            }
+                            $i++;
+                        } else {
+                            $k++;
+                        }
+                    } else {
+                        $k++;
+                    }
+                }
+            }
+        }
+        return response()->json($distribution, 201); 
     }
 }
