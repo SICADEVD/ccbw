@@ -20,6 +20,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreInfoRequest;
 use App\Http\Requests\StoreProducteurRequest;
 use App\Http\Requests\UpdateProducteurRequest;
+use App\Models\Product;
 use App\Models\Producteur_certification;
 use App\Models\Producteur_infos_autresactivite;
 use Illuminate\Support\Facades\Hash;
@@ -257,24 +258,31 @@ class ProducteurController extends Controller
 
         if ($producteur != null) {
             $id = $producteur->id;
-            $datas  = $data2 = [];
+            $datas  =  [];
             if (($request->certificats != null)) {
                 Producteur_certification::where('producteur_id', $id)->delete();
                 $i = 0;
                 foreach ($request->certificats as $certificat) {
                     if (!empty($certificat)) {
+
+                        if ($certificat == 'Autre') {
+                            // $certificat = $request->autreCertificats;
+                            $datas[] = [
+                                'producteur_id' => $id,
+                                'certification' => $request->autreCertificats,
+                            ];
+                        }
                         $datas[] = [
                             'producteur_id' => $id,
                             'certification' => $certificat,
                         ];
+
+                        Producteur_certification::insert($datas);
                     }
 
                     $i++;
                 }
             }
-           
-            Producteur_certification::insert($datas);
-            
         }
 
         $notify[] = ['success', isset($message) ? $message : 'Le producteur a été crée avec succès.'];
@@ -352,9 +360,8 @@ class ProducteurController extends Controller
                     $i++;
                 }
             }
-           
+
             Producteur_certification::insert($datas);
-            
         }
         $notify[] = ['success', isset($message) ? $message : 'Le producteur a été mise à jour avec succès.'];
         return back()->withNotify($notify);
@@ -362,7 +369,7 @@ class ProducteurController extends Controller
 
 
 
-    
+
 
     public function edit($id)
     {
