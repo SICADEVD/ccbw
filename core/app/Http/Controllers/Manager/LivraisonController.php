@@ -42,113 +42,115 @@ class LivraisonController extends Controller
 {
 
     public function livraisonInfo()
-    { 
-        $staff = auth()->user(); 
-        $livraisonProd = LivraisonProduct::dateFilter()->searchable(['code'])->joinRelationship('livraisonInfo')->joinRelationship('parcelle')->with('livraisonInfo','campagne', 'parcelle')
-        ->where(function ($query) use ($staff) {
-            $query->where('sender_cooperative_id', $staff->cooperative_id)->orWhere('receiver_cooperative_id', $staff->cooperative_id);
-        })
-        ->when(request()->magasin, function ($query, $magasin) {
-            $query->where('receiver_magasin_section_id',$magasin); 
-        })
-        ->when(request()->produit, function ($query, $produit) {
-            $query->where('type_produit',$produit); 
-        })
-        ->when(request()->producteur, function ($query, $producteur) {
-            $query->where('producteur_id',$producteur); 
-        })
-        ->paginate(getPaginate());
- 
+    {
+        $staff = auth()->user();
+        $livraisonProd = LivraisonProduct::dateFilter()->searchable(['code'])->joinRelationship('livraisonInfo')->joinRelationship('parcelle')->with('livraisonInfo', 'campagne', 'parcelle')
+            ->where(function ($query) use ($staff) {
+                $query->where('sender_cooperative_id', $staff->cooperative_id)->orWhere('receiver_cooperative_id', $staff->cooperative_id);
+            })
+            ->when(request()->magasin, function ($query, $magasin) {
+                $query->where('receiver_magasin_section_id', $magasin);
+            })
+            ->when(request()->produit, function ($query, $produit) {
+                $query->where('type_produit', $produit);
+            })
+            ->when(request()->producteur, function ($query, $producteur) {
+                $query->where('producteur_id', $producteur);
+            })
+            ->paginate(getPaginate());
+
         $total = $livraisonProd->sum('qty');
-        $pageTitle    = "Livraison des Magasins de Section (".showAmount($total).") Kg";
-        $magasins  = MagasinSection::joinRelationship('section')->where('cooperative_id',$staff->cooperative_id)->get();
+        $pageTitle    = "Livraison des Magasins de Section (" . showAmount($total) . ") Kg";
+        $magasins  = MagasinSection::joinRelationship('section')->where('cooperative_id', $staff->cooperative_id)->get();
         $sections = Section::get();
-        return view('manager.livraison.index', compact('pageTitle', 'livraisonProd','total','sections','magasins'));
+        return view('manager.livraison.index', compact('pageTitle', 'livraisonProd', 'total', 'sections', 'magasins'));
     }
 
     public function stockSection()
-    { 
-        $staff = auth()->user(); 
+    {
+        $staff = auth()->user();
         $stocks = StockMagasinSection::dateFilter()->joinRelationship('livraisonInfo')
-        ->where([['sender_cooperative_id',$staff->cooperative_id]]) 
-        ->when(request()->magasin, function ($query, $magasin) {
-            $query->where('magasin_section_id',$magasin); 
-        })
-        ->with('campagne','campagnePeriode','magasinSection')
-        ->orderBy('stock_magasin_sections.id','desc')->paginate(getPaginate());
- 
+            ->where([['sender_cooperative_id', $staff->cooperative_id]])
+            ->when(request()->magasin, function ($query, $magasin) {
+                $query->where('magasin_section_id', $magasin);
+            })
+            ->with('campagne', 'campagnePeriode', 'magasinSection')
+            ->orderBy('stock_magasin_sections.id', 'desc')->paginate(getPaginate());
+
         $total = $stocks->sum('stocks_entrant');
-        $pageTitle    = "Stock des Magasins de Section (".showAmount($total).") Kg";
-        $magasins  = MagasinSection::joinRelationship('section')->where('cooperative_id',$staff->cooperative_id)->get();
+        $pageTitle    = "Stock des Magasins de Section (" . showAmount($total) . ") Kg";
+        $magasins  = MagasinSection::joinRelationship('section')->where('cooperative_id', $staff->cooperative_id)->get();
         $sections = Section::get();
-        return view('manager.livraison.stock', compact('pageTitle', 'stocks','total','sections','magasins'));
+        return view('manager.livraison.stock', compact('pageTitle', 'stocks', 'total', 'sections', 'magasins'));
     }
 
     public function create()
     {
         $pageTitle = 'Enregistrement de livraison';
         $staff = auth()->user();
-        $campagne = Campagne::active()->first(); 
-        $periode = CampagnePeriode::where([['campagne_id',$campagne->id],['periode_debut','<=', gmdate('Y-m-d')],['periode_fin','>=', gmdate('Y-m-d')]])->latest()->first();
-      
-        $cooperatives = Cooperative::active()->orderBy('name')->get(); 
-        $magasins = MagasinSection::join('users','magasin_sections.staff_id','=','users.id')->where([['cooperative_id',$staff->cooperative_id],['magasin_sections.status',1]])->with('user')->orderBy('nom')->select('magasin_sections.*')->get();
-    
-        $staffs = User::whereHas('roles', function($q){ $q->whereIn('name', ['Delegue']); })
-                ->where('cooperative_id', $staff->cooperative_id)
-                ->select('users.*')
-                ->get(); 
+        $campagne = Campagne::active()->first();
+        $periode = CampagnePeriode::where([['campagne_id', $campagne->id], ['periode_debut', '<=', gmdate('Y-m-d')], ['periode_fin', '>=', gmdate('Y-m-d')]])->latest()->first();
 
-        $producteurs  = Producteur::joinRelationship('localite.section')->where('sections.cooperative_id',$staff->cooperative_id)->select('producteurs.*')->orderBy('producteurs.nom')->get();
-      
+        $cooperatives = Cooperative::active()->orderBy('name')->get();
+        $magasins = MagasinSection::join('users', 'magasin_sections.staff_id', '=', 'users.id')->where([['cooperative_id', $staff->cooperative_id], ['magasin_sections.status', 1]])->with('user')->orderBy('nom')->select('magasin_sections.*')->get();
+
+        $staffs = User::whereHas('roles', function ($q) {
+            $q->whereIn('name', ['Delegue']);
+        })
+            ->where('cooperative_id', $staff->cooperative_id)
+            ->select('users.*')
+            ->get();
+
+        $producteurs  = Producteur::joinRelationship('localite.section')->where('sections.cooperative_id', $staff->cooperative_id)->select('producteurs.*')->orderBy('producteurs.nom')->get();
+
         $parcelles  = Parcelle::with('producteur')->get();
-        
-        return view('manager.livraison.create', compact('pageTitle', 'cooperatives','staffs','magasins','producteurs','parcelles','campagne','periode'));
+
+        return view('manager.livraison.create', compact('pageTitle', 'cooperatives', 'staffs', 'magasins', 'producteurs', 'parcelles', 'campagne', 'periode'));
     }
 
     public function stockSectionCreate()
     {
-        
+
         $staff = auth()->user();
         // $cooperatives = Cooperative::active()->where('id', '!=', auth()->user()->cooperative_id)->orderBy('name')->get();
-        $cooperatives = Cooperative::active()->orderBy('name')->get(); 
-        $magCentraux = MagasinCentral::where([['cooperative_id',$staff->cooperative_id]])->with('user')->orderBy('nom')->get();
-        $magSections = MagasinSection::joinRelationship('section')->where([['cooperative_id',$staff->cooperative_id]])->with('user')->orderBy('nom')->get();
-    
-       $transporteurs = Transporteur::where([['cooperative_id',$staff->cooperative_id]])->with('cooperative','entreprise')->get();
+        $cooperatives = Cooperative::active()->orderBy('name')->get();
+        $magCentraux = MagasinCentral::where([['cooperative_id', $staff->cooperative_id]])->with('user')->orderBy('nom')->get();
+        $magSections = MagasinSection::joinRelationship('section')->where([['cooperative_id', $staff->cooperative_id]])->with('user')->orderBy('nom')->get();
+
+        $transporteurs = Transporteur::where([['cooperative_id', $staff->cooperative_id]])->with('cooperative', 'entreprise')->get();
         $vehicules = Vehicule::with('marque')->get();
-        $producteurs  = Producteur::joinRelationship('localite.section')->where('sections.cooperative_id',$staff->cooperative_id)->select('producteurs.*')->orderBy('producteurs.nom')->get();
+        $producteurs  = Producteur::joinRelationship('localite.section')->where('sections.cooperative_id', $staff->cooperative_id)->select('producteurs.*')->orderBy('producteurs.nom')->get();
 
         $campagne = Campagne::active()->first();
-        $campagne = CampagnePeriode::where([['campagne_id',$campagne->id],['periode_debut','<=', gmdate('Y-m-d')],['periode_fin','>=', gmdate('Y-m-d')]])->latest()->first();
+        $campagne = CampagnePeriode::where([['campagne_id', $campagne->id], ['periode_debut', '<=', gmdate('Y-m-d')], ['periode_fin', '>=', gmdate('Y-m-d')]])->latest()->first();
         $code = $this->generecodeConnais();
         $parcelles  = Parcelle::with('producteur')->get();
-        $pageTitle = 'Connaissement vers le Magasin Central N° '.$code;
+        $pageTitle = 'Connaissement vers le Magasin Central N° ' . $code;
         $entreprises = Entreprise::all()->pluck('nom_entreprise', 'id');
         $formateurs = FormateurStaff::with('entreprise')->get();
         $remorques = Remorque::all();
-        
-        return view('manager.livraison.section-create', compact('pageTitle', 'cooperatives','magSections','magCentraux','producteurs','transporteurs','parcelles','campagne','vehicules','code','entreprises','formateurs','remorques'));
+
+        return view('manager.livraison.section-create', compact('pageTitle', 'cooperatives', 'magSections', 'magCentraux', 'producteurs', 'transporteurs', 'parcelles', 'campagne', 'vehicules', 'code', 'entreprises', 'formateurs', 'remorques'));
     }
 
     public function store(Request $request)
     {
-        // dd(response()->json($request));
-        
+
         $request->validate([
             'sender_staff' => 'required|exists:users,id',
-            'magasin_section' =>  'required|exists:magasin_sections,id', 
+            'magasin_section' =>  'required|exists:magasin_sections,id',
             'items'            => 'required|array',
             'items.*.type'     => 'required',
             'items.*.producteur'     => 'required|integer',
             'items.*.parcelle'     => 'required|integer',
             'items.*.quantity' => 'required|numeric|gt:0',
-            'items.*.amount'   => 'required|numeric|gt:0', 
-            'estimate_date'    => 'required|date|date_format:Y-m-d', 
+            'items.*.amount'   => 'required|numeric|gt:0',
+            'estimate_date'    => 'required|date|date_format:Y-m-d',
         ]);
+        
 
         $campagne = Campagne::active()->first();
-        $periode = CampagnePeriode::where([['campagne_id',$campagne->id],['periode_debut','<=', gmdate('Y-m-d')],['periode_fin','>=', gmdate('Y-m-d')]])->latest()->first();
+        $periode = CampagnePeriode::where([['campagne_id', $campagne->id], ['periode_debut', '<=', gmdate('Y-m-d')], ['periode_fin', '>=', gmdate('Y-m-d')]])->latest()->first();
 
         $sender                      = auth()->user();
         $livraison                     = new LivraisonInfo();
@@ -166,84 +168,84 @@ class LivraisonController extends Controller
         $livraison->receiver_address   = $request->receiver_address;
         $livraison->receiver_cooperative_id = $sender->cooperative_id;
         $livraison->receiver_magasin_section_id = $request->magasin_section;
-        $livraison->estimate_date      = $request->estimate_date; 
-        $livraison->quantity      = array_sum(Arr::pluck($request->items,'quantity'));
+        $livraison->estimate_date      = $request->estimate_date;
+        $livraison->quantity      = array_sum(Arr::pluck($request->items, 'quantity'));
         $livraison->save();
 
-        $prod = new StockMagasinSection(); 
-            $prod->livraison_info_id = $livraison->id;
-            $prod->magasin_section_id = $request->magasin_section; 
-            $prod->campagne_id = $campagne->id;
-            $prod->campagne_periode_id = $periode->id;
-            $prod->stocks_entrant = array_sum(Arr::pluck($request->items,'quantity'));  
-            $prod->save();
+        $prod = new StockMagasinSection();
+        $prod->livraison_info_id = $livraison->id;
+        $prod->magasin_section_id = $request->magasin_section;
+        $prod->campagne_id = $campagne->id;
+        $prod->campagne_periode_id = $periode->id;
+        $prod->stocks_entrant = array_sum(Arr::pluck($request->items, 'quantity'));
+        $prod->save();
 
         $subTotal = $stock = 0;
-        
+
         $data = $data2 = $data3 = [];
-        foreach ($request->items as $item) { 
+        foreach ($request->items as $item) {
 
             $price = $periode->prix_champ * $item['quantity'];
             $subTotal += $price;
-           if($item['type']=='Ordinaire') {$item['certificat']=null;} 
-           $productExists = LivraisonProduct::where([['campagne_id',$campagne->id],['parcelle_id',$item['parcelle']],['certificat',$item['certificat']],['type_produit',$item['type']]])->first();
-           if($productExists ==null){ 
-               $productExists = new LivraisonProduct();
-           }
-$productExists->livraison_info_id= $livraison->id;
-$productExists->parcelle_id= $item['parcelle'];
-$productExists->campagne_id= $campagne->id;
-$productExists->campagne_periode_id= $periode->id;
-$productExists->qty=$item['quantity']+$productExists->qty;
-$productExists->type_produit=$item['type'];
-$productExists->certificat= isset($item['certificat']) ? $item['certificat'] : null;
-$productExists->fee=$price+$productExists->fee;
-$productExists->type_price=$periode->prix_champ;
-$productExists->save();
-             $data[] = [
-                 'livraison_info_id' => $livraison->id,
-                 'parcelle_id' => $item['parcelle'],
-                 'campagne_id' => $campagne->id,
-                 'campagne_periode_id' => $periode->id,
-                 'qty'             => $item['quantity'],
-                 'type_produit'     => $item['type'],
-                 'certificat' => isset($item['certificat']) ? $item['certificat'] : null,
-                 'fee'             => $price,
-                 'type_price'      => $periode->prix_champ,
-                 'created_at'      => now(),
-             ];
-            
-            $product = Producteur::where('id',$item['producteur'])->first();
-            if($product !=null){
+            if ($item['type'] == 'Ordinaire') {
+                $item['certificat'] = null;
+            }
+            $productExists = LivraisonProduct::where([['campagne_id', $campagne->id], ['parcelle_id', $item['parcelle']], ['certificat', $item['certificat']], ['type_produit', $item['type']]])->first();
+            if ($productExists == null) {
+                $productExists = new LivraisonProduct();
+            }
+            $productExists->livraison_info_id = $livraison->id;
+            $productExists->parcelle_id = $item['parcelle'];
+            $productExists->campagne_id = $campagne->id;
+            $productExists->campagne_periode_id = $periode->id;
+            $productExists->qty = $item['quantity'] + $productExists->qty;
+            $productExists->type_produit = $item['type'];
+            $productExists->certificat = isset($item['certificat']) ? $item['certificat'] : null;
+            $productExists->fee = $price + $productExists->fee;
+            $productExists->type_price = $periode->prix_champ;
+            $productExists->save();
+            $data[] = [
+                'livraison_info_id' => $livraison->id,
+                'parcelle_id' => $item['parcelle'],
+                'campagne_id' => $campagne->id,
+                'campagne_periode_id' => $periode->id,
+                'qty'             => $item['quantity'],
+                'type_produit'     => $item['type'],
+                'certificat' => isset($item['certificat']) ? $item['certificat'] : null,
+                'fee'             => $price,
+                'type_price'      => $periode->prix_champ,
+                'created_at'      => now(),
+            ];
+
+            $product = Producteur::where('id', $item['producteur'])->first();
+            if ($product != null) {
                 $programme = $product->programme_id;
-                
-                $prime = ProgrammePrime::where('programme_id',$programme)->latest()->first();
+
+                $prime = ProgrammePrime::where('programme_id', $programme)->latest()->first();
                 $price_prime = $prime->prime * $item['quantity'];
                 $data3[] = [
                     'livraison_info_id' => $livraison->id,
                     'parcelle_id' => $item['parcelle'],
                     'campagne_id' => $campagne->id,
                     'campagne_periode_id' => $periode->id,
-                    'quantite'             => $item['quantity'], 
+                    'quantite'             => $item['quantity'],
                     'montant'             => $price_prime,
                     'prime_campagne'      => $prime->prime,
                     'created_at'      => now(),
                 ];
             }
-            
-
         }
 
         LivraisonProductDetail::insert($data);
         LivraisonPrime::insert($data3);
- 
+
         $totalAmount                     = $subTotal;
 
         $livraisonPayment                  = new LivraisonPayment();
         $livraisonPayment->livraison_info_id = $livraison->id;
         $livraisonPayment->campagne_id  = $campagne->id;
-        $livraisonPayment->amount          = $subTotal; 
-        $livraisonPayment->final_amount    = $totalAmount;  
+        $livraisonPayment->amount          = $subTotal;
+        $livraisonPayment->final_amount    = $totalAmount;
         $livraisonPayment->save();
 
         if ($livraisonPayment->status == Status::PAYE) {
@@ -267,22 +269,22 @@ $productExists->save();
     public function sectionStore(Request $request)
     {
         // dd(response()->json($request));
-        
+
         $request->validate([
             'magasin_central' => 'required',
-            'sender_magasin' =>  'required', 
-            'sender_transporteur' =>  'required', 
-            'sender_vehicule' =>  'required', 
-            'producteur_id' => 'required|array',  
-			'type' => 'required', 
-            'estimate_date'    => 'required|date|date_format:Y-m-d', 
+            'sender_magasin' =>  'required',
+            'sender_transporteur' =>  'required',
+            'sender_vehicule' =>  'required',
+            'producteur_id' => 'required|array',
+            'type' => 'required',
+            'estimate_date'    => 'required|date|date_format:Y-m-d',
         ]);
 
         $manager                      = auth()->user();
-        $livraison                     = new StockMagasinCentral(); 
+        $livraison                     = new StockMagasinCentral();
         $campagne = Campagne::active()->first();
-        $periode = CampagnePeriode::where([['campagne_id',$campagne->id],['periode_debut','<=', gmdate('Y-m-d')],['periode_fin','>=', gmdate('Y-m-d')]])->latest()->first();
-        
+        $periode = CampagnePeriode::where([['campagne_id', $campagne->id], ['periode_debut', '<=', gmdate('Y-m-d')], ['periode_fin', '>=', gmdate('Y-m-d')]])->latest()->first();
+
         $livraison->cooperative_id   = $manager->cooperative_id;
         $livraison->campagne_id    = $campagne->id;
         $livraison->campagne_periode_id = $periode->id;
@@ -298,183 +300,193 @@ $productExists->save();
         $livraison->vehicule_id = $request->sender_vehicule;
         $livraison->remorque_id = $request->sender_remorque;
         $livraison->date_livraison = $request->estimate_date;
-       
+
         $livraison->save();
- 
-        $i=0;
+
+        $i = 0;
         $data = [];
-        $quantite = $request->quantite; 
-        $typeproduit = $request->typeproduit; 
+        $quantite = $request->quantite;
+        $typeproduit = $request->typeproduit;
         $producteurs = $request->producteurs;
         $parcelle = $request->parcelle;
         $certificat = $request->certificat;
-        
-        foreach($producteurs as $item) { 
-            
-            if($quantite[$i]>0)
-            {
-            $data[] = [
-                'stock_magasin_central_id' => $livraison->id,
-                'producteur_id' => $item,
-                'campagne_id' => $campagne->id,
-                'campagne_periode_id' => $periode->id,
-                'quantite' => $quantite[$i], 
-                'type_produit' => $typeproduit[$i],
-                'parcelle_id' => $parcelle[$i],
-                'certificat' => $certificat[$i],
-                'created_at'      => now(),
-            ];
-            $product = LivraisonProduct::where([['campagne_id',$campagne->id],['parcelle_id',$parcelle[$i]],['certificat',$certificat[$i]],['type_produit',$typeproduit[$i]]])->first();
-            if($product !=null){ 
-                $productinfo = $product->livraison_info_id;
-                $product->qty = $product->qty - $quantite[$i];
-                $product->qty_sortant = $product->qty_sortant + $quantite[$i];
-                $product->save();
-                
-            $prod = StockMagasinSection::where('livraison_info_id',$productinfo)->first();
-            $prod->stocks_entrant = $prod->stocks_entrant - $quantite[$i];
-            $prod->stocks_sortant = $prod->stocks_sortant + $quantite[$i];
-           
-            $prod->save();
+
+        foreach ($producteurs as $item) {
+
+            if ($quantite[$i] > 0) {
+                $data[] = [
+                    'stock_magasin_central_id' => $livraison->id,
+                    'producteur_id' => $item,
+                    'campagne_id' => $campagne->id,
+                    'campagne_periode_id' => $periode->id,
+                    'quantite' => $quantite[$i],
+                    'type_produit' => $typeproduit[$i],
+                    'parcelle_id' => $parcelle[$i],
+                    'certificat' => $certificat[$i],
+                    'created_at'      => now(),
+                ];
+                $product = LivraisonProduct::where([['campagne_id', $campagne->id], ['parcelle_id', $parcelle[$i]], ['certificat', $certificat[$i]], ['type_produit', $typeproduit[$i]]])->first();
+                if ($product != null) {
+                    $productinfo = $product->livraison_info_id;
+                    $product->qty = $product->qty - $quantite[$i];
+                    $product->qty_sortant = $product->qty_sortant + $quantite[$i];
+                    $product->save();
+
+                    $prod = StockMagasinSection::where('livraison_info_id', $productinfo)->first();
+                    $prod->stocks_entrant = $prod->stocks_entrant - $quantite[$i];
+                    $prod->stocks_sortant = $prod->stocks_sortant + $quantite[$i];
+
+                    $prod->save();
+                }
             }
-        }
             $i++;
         }
-		
 
-        LivraisonMagasinCentralProducteur::insert($data); 
+
+        LivraisonMagasinCentralProducteur::insert($data);
 
         $notify[] = ['success', 'Le connaissement vers le magasin central a été ajouté avec succès'];
         return to_route('manager.livraison.magcentral.stock')->withNotify($notify);
     }
-    
 
-    public function getParcelle(){
+
+    public function getParcelle()
+    {
         $input = request()->all();
         $id = $input['id'];
-        $parcelles = Parcelle::where('producteur_id',$id)->get();
+        $parcelles = Parcelle::where('producteur_id', $id)->get();
         if ($parcelles->count()) {
             $contents = '';
 
             foreach ($parcelles as $data) {
-                $contents .= '<option value="' . $data->id . '" >Parcelle '. $data->codeParc . '</option>';
+                $contents .= '<option value="' . $data->id . '" >Parcelle ' . $data->codeParc . '</option>';
             }
         } else {
             $contents = null;
         }
- 
+
         return $contents;
     }
 
-    
-    public function getCertificat(){
+
+    public function getCertificat()
+    {
         $input = request()->all();
         $id = $input['id'];
-        $certificats = Producteur_certification::where('producteur_id',$id)->get();
+        $certificats = Producteur_certification::where('producteur_id', $id)->get();
         if ($certificats->count()) {
             $contents = '';
 
             foreach ($certificats as $data) {
-                $contents .= '<option value="' . $data->certification . '" >'. $data->certification. '</option>';
+                $contents .= '<option value="' . $data->certification . '" >' . $data->certification . '</option>';
             }
         } else {
             $contents = null;
         }
- 
+
         return $contents;
     }
-    public function getProducteur(){
+    public function getProducteur()
+    {
         $input = request()->all();
-         
+
         $id = $input['sender_magasin'];
         $campagne = Campagne::active()->first();
-        $periode = CampagnePeriode::where([['campagne_id',$campagne->id]])->latest()->first();
-     
-         
-       
+        $periode = CampagnePeriode::where([['campagne_id', $campagne->id]])->latest()->first();
+
+
+
         if (request()->type && request()->sender_magasin) {
-            $stocks = LivraisonProduct::joinRelationship('livraisonInfo') 
-            ->joinRelationship('parcelle') 
-            ->where([['campagne_id',$campagne->id],['receiver_magasin_section_id',$id],['qty','>',0]])->whereIn('type_produit', request()->type)->with('parcelle','parcelle.producteur')->groupBy('producteur_id')->get();
+            $stocks = LivraisonProduct::joinRelationship('livraisonInfo')
+                ->joinRelationship('parcelle')
+                ->where([['campagne_id', $campagne->id], ['receiver_magasin_section_id', $id], ['qty', '>', 0]])->whereIn('type_produit', request()->type)->with('parcelle', 'parcelle.producteur')->groupBy('producteur_id')->get();
             $contents = '';
 
             foreach ($stocks as $data) {
-                $nom = $data->parcelle->producteur->nom.' '.$data->parcelle->producteur->prenoms;
-                $contents .= '<option value="'.$data->parcelle->producteur_id.'">'. $nom .'('.$data->parcelle->producteur->codeProdapp.')</option>';
+                $nom = $data->parcelle->producteur->nom . ' ' . $data->parcelle->producteur->prenoms;
+                $contents .= '<option value="' . $data->parcelle->producteur_id . '">' . $nom . '(' . $data->parcelle->producteur->codeProdapp . ')</option>';
             }
         } else {
             $contents = null;
         }
- 
+
         return $contents;
     }
     private function generecodeConnais()
     {
 
-        $data = StockMagasinCentral::select('numero_connaissement')->orderby('id','desc')->first();
+        $data = StockMagasinCentral::select('numero_connaissement')->orderby('id', 'desc')->first();
 
-        if($data !=null){
+        if ($data != null) {
             $code = $data->numero_connaissement;
-        $chaine_number = Str::afterLast($code,'-');
-        if($chaine_number<10){$zero="00000";}
-        else if($chaine_number<100){$zero="0000";}
-        else if($chaine_number<1000){$zero="000";}
-        else if($chaine_number<10000){$zero="00";}
-        else if($chaine_number<100000){$zero="0";}
-        else{$zero="";}
-        }else{
-            $zero="00000";
-            $chaine_number=0;
+            $chaine_number = Str::afterLast($code, '-');
+            if ($chaine_number < 10) {
+                $zero = "00000";
+            } else if ($chaine_number < 100) {
+                $zero = "0000";
+            } else if ($chaine_number < 1000) {
+                $zero = "000";
+            } else if ($chaine_number < 10000) {
+                $zero = "00";
+            } else if ($chaine_number < 100000) {
+                $zero = "0";
+            } else {
+                $zero = "";
+            }
+        } else {
+            $zero = "00000";
+            $chaine_number = 0;
         }
-        if(!$chaine_number) $chaine_number =0;
-        $sub='CMS-';
-        $lastCode=$chaine_number+1;
-        $codeLiv=$sub.$zero.$lastCode;
+        if (!$chaine_number) $chaine_number = 0;
+        $sub = 'CMS-';
+        $lastCode = $chaine_number + 1;
+        $codeLiv = $sub . $zero . $lastCode;
 
         return $codeLiv;
     }
-    public function getListeProducteurConnaiss(){
+    public function getListeProducteurConnaiss()
+    {
         $input = request()->all();
-          $magasinsection= $input['sender_magasin']; 
-          
-          $results ='';
-          $total = 0;
-          $totalsacs=0;
-          $campagne = Campagne::active()->first();
-       if(request()->type && request()->producteur_id)
-       {
-       $stock = LivraisonProduct::joinRelationship('livraisonInfo') 
-       ->joinRelationship('parcelle') 
-       ->where([['campagne_id',$campagne->id],['receiver_magasin_section_id',$magasinsection],['qty','>',0]])->whereIn('type_produit', request()->type)->whereIn('producteur_id', request()->producteur_id)->with('parcelle','parcelle.producteur')->get();
- 
-            if(count($stock)){
-            $v=1;
-            $tv=count($stock);
-       foreach($stock as $data)
-       {
-         if($v==$tv){$read = '';}
-         else{$read='readonly';}
-        $results .= '<tr>
-        <td colspan="2"><h5>'.$data->parcelle->producteur->nom.' '.$data->parcelle->producteur->prenoms.'('.$data->parcelle->producteur->codeProdapp.')</h5>
-        <input type="hidden" name="producteurs[]" value="'.$data->parcelle->producteur_id.'"/></td>
-        <td style="width: 300px;"><input type="hidden" name="parcelle[]" value="'.$data->parcelle_id.'"/><input type="hidden" name="certificat[]" value="'.$data->certificat.'"/>'.$data->certificat.'</td>
-        <td style="width: 300px;"><input type="hidden" name="typeproduit[]" value="'.$data->type_produit.'"/>'.$data->type_produit.'</td>
-        <td style="width: 400px;"> <input type="number" name="quantite[]" value="'.$data->qty.'" min="0" max="'.$data->qty.'"  class="form-control quantity" style="width: 115px;"/></td>
+        $magasinsection = $input['sender_magasin'];
+
+        $results = '';
+        $total = 0;
+        $totalsacs = 0;
+        $campagne = Campagne::active()->first();
+        if (request()->type && request()->producteur_id) {
+            $stock = LivraisonProduct::joinRelationship('livraisonInfo')
+                ->joinRelationship('parcelle')
+                ->where([['campagne_id', $campagne->id], ['receiver_magasin_section_id', $magasinsection], ['qty', '>', 0]])->whereIn('type_produit', request()->type)->whereIn('producteur_id', request()->producteur_id)->with('parcelle', 'parcelle.producteur')->get();
+
+            if (count($stock)) {
+                $v = 1;
+                $tv = count($stock);
+                foreach ($stock as $data) {
+                    if ($v == $tv) {
+                        $read = '';
+                    } else {
+                        $read = 'readonly';
+                    }
+                    $results .= '<tr>
+        <td colspan="2"><h5>' . $data->parcelle->producteur->nom . ' ' . $data->parcelle->producteur->prenoms . '(' . $data->parcelle->producteur->codeProdapp . ')</h5>
+        <input type="hidden" name="producteurs[]" value="' . $data->parcelle->producteur_id . '"/></td>
+        <td style="width: 300px;"><input type="hidden" name="parcelle[]" value="' . $data->parcelle_id . '"/><input type="hidden" name="certificat[]" value="' . $data->certificat . '"/>' . $data->certificat . '</td>
+        <td style="width: 300px;"><input type="hidden" name="typeproduit[]" value="' . $data->type_produit . '"/>' . $data->type_produit . '</td>
+        <td style="width: 400px;"> <input type="number" name="quantite[]" value="' . $data->qty . '" min="0" max="' . $data->qty . '"  class="form-control quantity" style="width: 115px;"/></td>
         </tr>';
-        $total = $total+$data->qty;
-        $totalsacs = $totalsacs+$data->nb_sacs_entrant;
-        $v++;
-        }
-    }
-  
+                    $total = $total + $data->qty;
+                    $totalsacs = $totalsacs + $data->nb_sacs_entrant;
+                    $v++;
+                }
             }
-            $contents['results'] = $results;
-            $contents['total'] = $total;
-            $contents['totalsacs'] = $totalsacs;
-  
+        }
+        $contents['results'] = $results;
+        $contents['total'] = $total;
+        $contents['totalsacs'] = $totalsacs;
+
         return $contents;
-      }
-    
+    }
+
     public function sentInQueue()
     {
         $pageTitle    = "Liste des livraisons en attente";
@@ -543,5 +555,4 @@ $productExists->save();
     {
         return (new ExportLivraisons())->download('livraisons.xlsx');
     }
-
 }
