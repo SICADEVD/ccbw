@@ -12,9 +12,7 @@
                                     <th>@lang('Producteur')</th>
                                     <th>@lang('Forets & jachere')</th>
                                     <th>@lang('Autres Cultures')</th>
-                                    <th>@lang('Papiers Champs')</th>
                                     <th>@lang('Numéro Mobile Money')</th>
-                                    <th>@lang('Paiement Mobile')</th>
                                     <th>@lang('Compte Banque')</th>
                                     <th>@lang('Ajouté le')</th>
                                     <th>@lang('Action')</th>
@@ -23,29 +21,19 @@
                             <tbody>
                                 @forelse($infosproducteurs as $info)
                                     <tr>
-
                                         <td>
                                             <span class="fw-bold">{{ $info->producteur->nom }}
                                                 {{ $info->producteur->prenoms }}</span>
                                         </td>
-
                                         <td>
-
                                             <span class="fw-bold">{{ $info->foretsjachere }}</span>
                                         </td>
 
                                         <td>
                                             <span class="fw-bold">{{ $info->autresCultures }}</span>
                                         </td>
-
-                                        <td>
-                                            <span class="fw-bold">{{ $info->typeDocuments }}</span>
-                                        </td>
                                         <td>
                                             <span class="fw-bold">{{ $info->mobileMoney }}</span>
-                                        </td>
-                                        <td>
-                                            <span class="fw-bold">{{ $info->numeroCompteMM }}</span>
                                         </td>
                                         <td>
                                             <span class="fw-bold">{{ $info->compteBanque }}</span>
@@ -214,7 +202,7 @@
                         </div>
 
                         <div class="form-group row" id="travailleurFamilial">
-                            <?php echo Form::label(__('Combien de personnes (de la famille travaillent)'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <?php echo Form::label(__('Combien de personnes de la famille travaillent'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
                                 <?php echo Form::number('travailleurFamilial', null, ['placeholder' => 'Nombre', 'class' => 'form-control travailleurFamilial', 'min' => '0']); ?>
                             </div>
@@ -249,7 +237,7 @@
                         <div class="form-group row" id="societe">
                             <?php echo Form::label(__('Nombre de Personne'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::number('nombrePersonne', null, ['placeholder' => 'Nombre','id'=>'nombrePersonne', 'class' => 'form-control nombrePersonne', 'min' => '0']); ?>
+                                <?php echo Form::number('nombrePersonne', null, ['placeholder' => 'Nombre', 'id' => 'nombrePersonne', 'class' => 'form-control nombrePersonne', 'min' => '0']); ?>
                             </div>
                         </div>
 
@@ -425,7 +413,7 @@
                 });
 
             });
-            
+
             $(document).ready(function() {
 
                 var productCount = $("#activity_area tr").length + 1;
@@ -475,7 +463,7 @@
 
             });
 
-             $(document).ready(function() {
+            $(document).ready(function() {
 
                 var productCount = $("#compagny_area tr").length + 1;
                 $(document).on('click', '#addRowOperateur', function() {
@@ -521,7 +509,8 @@
             });
 
         });
-        $('#listecultures,#gardePapiersChamps,#numeroCompteMM,#listeactivites,#nomBanque,#autreBanque,#travailleurFamilial,#societe').hide();
+        $('#listecultures,#gardePapiersChamps,#numeroCompteMM,#listeactivites,#nomBanque,#autreBanque,#travailleurFamilial,#societe')
+            .hide();
 
         $('.autresCultures').change(function() {
             var autresCultures = $('.autresCultures').val();
@@ -542,7 +531,7 @@
                 $('.travailleurFamilial').val('');
             }
         });
-       $('.societeTravail').change(function() {
+        $('.societeTravail').change(function() {
             var societeTravail = $('.societeTravail').val();
             if (societeTravail == 'oui') {
                 $('#societe').show('slow');
