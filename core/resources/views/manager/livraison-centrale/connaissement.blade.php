@@ -45,8 +45,9 @@
                                     <th>@lang('Transporteur')</th>
                                     <th>@lang('Vehicule')</th>
                                     <th>@lang('Type Produit')</th> 
-                                    <th>@lang('Quantité')</th> 
+                                    <th>@lang('Quantité chargée')</th> 
                                     <th>@lang('Nombre Sacs')</th> 
+                                    <th>@lang('Quantité receptionnée')</th> 
                                     <th>@lang('Statut')</th>
                                     <th>@lang('Action')</th>
                                 </tr>
@@ -76,19 +77,21 @@
                                         <td>
                                             {{ $produit->vehicule->marque->nom }}({{ $produit->vehicule->vehicule_immat }} )
                                         </td>
-                                        <td>
+                                        <td> 
+                                                <span class="btn btn-sm btn-outline--success">{{ $produit->type_produit }}</span>
                                              
-                                            @foreach(json_decode($produit->type_produit) as $data)
-                                                <span class="btn btn-sm btn-outline--success">{{ $data }}</span>
-                                            @endforeach
                                         </td>
                                          
                                         <td>
                                             {{ $produit->quantite_livre }} 
                                         </td>
+
                                         <td>
                                             {{ $produit->sacs_livre }} 
                                         </td> 
+                                        <td>
+                                            {{ $produit->quantite_confirme }} 
+                                        </td>
                                         <td> 
                                             @if($produit->status == Status::COURIER_DISPATCH)
                                                 <span class="badge badge--dark">@lang('En attente de reception')</span>
@@ -119,7 +122,9 @@
                                                     @lang('Refouler cette livraison')</button>
 
                                                 <button class="btn btn-sm btn-outline--secondary  delivery"
-                                                    data-code="{{ $produit->numeroCU }}"><i class="las la-truck"></i>
+                                                    data-code="{{ $produit->numeroCU }}"
+                                                    data-qterecept="{{ $produit->quantite_livre }}"
+                                                    ><i class="las la-truck"></i>
                                                     @lang('Confirmer la reception')</button>
                                             @endif
                                         </td>
@@ -159,6 +164,12 @@
                     <input type="hidden" name="code">
                     <div class="modal-body">
                         <p>@lang('Etre-vous sûr de vouloir confirmer la reception de cette livraison?')</p>
+                        <div class="form-group row">
+            <?php echo Form::label(__('Quelle est la quantité receptionnée?'), null, ['class' => 'col-sm-12 control-label']); ?>
+            <div class="col-xs-12 col-sm-12">
+            <?php echo  Form::number('quantite_confirme', null, ['required'=>'required','class' => 'form-control']); ?> 
+        </div>
+    </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn--dark" data-bs-dismiss="modal">@lang('Fermer')</button>
@@ -231,6 +242,7 @@
             $('.delivery').on('click', function() {
                 var modal = $('#deliveryBy');
                 modal.find('input[name=code]').val($(this).data('code'))
+                modal.find('input[name=quantite_confirme]').val($(this).data('qterecept')) 
                 modal.modal('show');
             });
             $('.refoule').on('click', function() {

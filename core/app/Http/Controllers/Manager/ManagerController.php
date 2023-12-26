@@ -4,24 +4,28 @@ namespace App\Http\Controllers\Manager;
 
 use App\Models\User;
 use App\Models\Language;
+use App\Models\Parcelle;
 use App\Constants\Status;
 use App\Models\Producteur;
 use App\Models\Cooperative;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\LivraisonInfo;
+use App\Models\TypeFormation;
+use App\Models\FormationStaff;
+use App\Models\SuiviFormation;
 use App\Models\SupportMessage; 
 use App\Rules\FileTypeValidate;
 use App\Models\LivraisonPayment; 
+use App\Models\TypeFormationTheme;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\FormationStaff;
-use App\Models\Parcelle;
-use App\Models\SuiviFormation;
-use App\Models\TypeFormationTheme;
-use ArielMejiaDev\LarapexCharts\Facades\LarapexChart;
 use Illuminate\Support\Facades\Hash;   
+use App\Models\SuiviFormationProducteur;
 use ArielMejiaDev\LarapexCharts\PieChart;
+use ArielMejiaDev\LarapexCharts\Facades\LarapexChart;
+
 class ManagerController extends Controller
 {
 
@@ -35,7 +39,7 @@ class ManagerController extends Controller
         $parcelle = Parcelle::select('typedeclaration',DB::raw('count(id) as nombre'))->groupBy('typedeclaration')->get();
      
 
-        $prodbysexe= LarapexChart::setType('donut')
+        $prodbysexe= LarapexChart::setType('pie')
                             ->setTitle('Producteurs par Genre')
                             ->setDataset(Arr::pluck($genre,'nombre'))
                             ->setLabels(Arr::pluck($genre,'sexe'))
@@ -49,7 +53,7 @@ class ManagerController extends Controller
 
         $producteurbydays = Producteur::select(DB::raw('DATE_FORMAT(created_at,"%Y-%m-%d") as date'),DB::raw('count(id) as nombre'))->groupBy('date')->get(); 
         $producteurbydays = LarapexChart::setType('area')
-                    ->setTitle('Producteurs par Date') 
+                    ->setTitle('Producteurs inscrits par Date') 
                     ->setDataset([
                         [
                         'name'=>'Nombre de producteurs', 
@@ -60,21 +64,50 @@ class ManagerController extends Controller
                     ->setDatalabels();
         
         $formation = TypeFormationTheme::joinRelationship('typeFormation')->select('type_formations.nom',DB::raw('count(type_formation_themes.id) as nombre'))->groupBy('type_formation_id')->get();
-        $formationbymodule = LarapexChart::setType('bar')
+        $formationbymodule = LarapexChart::setType('bar') 
                     ->setTitle('Formations par Modules') 
                     ->setDataset([
                         [
-                        'name'=>'Nombre de producteurs', 
+                        'name'=>'Nombre de modules', 
                         'data'=> Arr::pluck($formation,'nombre')
                         ]
                         ])  
                     ->setXAxis(Arr::pluck($formation,'nom'))
                     ->setDatalabels();
+ 
 
-        $parcelle = Parcelle::select('typedeclaration',DB::raw('count(id) as nombre'))->groupBy('typedeclaration')->get();
+        $modules = DB::select('SELECT 
+        tf.type_formation_id AS module_id,
+        COUNT(sf.producteur_id) AS nombre_producteurs
+    FROM 
+        suivi_formation_producteurs sf
+    INNER JOIN 
+        suivi_formations s
+        ON sf.suivi_formation_id = s.id
+    INNER JOIN 
+        type_formation_themes tf
+        ON s.id = tf.suivi_formation_id
+    GROUP BY 
+        tf.type_formation_id');
+if(count($modules)){
+    $modulenom = TypeFormation::whereIn('id',Arr::pluck($modules,'module_id'))->select('nom')->get();
+    
+}
+ 
+        $producteurbymodule = LarapexChart::setType('bar')
+        ->setTitle('Producteurs formés par Module') 
+        ->setHorizontal(true)
+        ->setDataset([
+            [
+            'name'=>'Nombre de producteurs', 
+            'data'=> Arr::pluck($modules,'nombre_producteurs')
+            ]
+            ])  
+        ->setXAxis(Arr::pluck($modulenom,'nom'))
+        ->setDatalabels();
 
-        
-        return view('manager.dashboard', compact('pageTitle','nbcoop','nbparcelle','prodbysexe','mapping','producteurbydays','formationbymodule'));
+
+        return view('manager.dashboard', compact('pageTitle','nbcoop','nbparcelle','prodbysexe','mapping','producteurbydays','formationbymodule','producteurbymodule'));
     }
 
     public function changeLanguage($lang = null)
