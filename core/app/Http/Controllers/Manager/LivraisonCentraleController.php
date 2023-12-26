@@ -225,7 +225,7 @@ class LivraisonCentraleController extends Controller
         $livraison->campagne_periode_id = $periode->id;
         $livraison->magasin_centraux_id = $request->magasin_central;
         $livraison->numeroCU = $request->code . $request->lastcode;
-        $livraison->type_produit = json_encode($request->type);
+        $livraison->type_produit = $request->type;
         $livraison->quantite_livre = $request->poidsnet;
         $livraison->sacs_livre = $request->nombresacs;
         $livraison->transporteur_id = $request->sender_transporteur;
@@ -254,12 +254,12 @@ class LivraisonCentraleController extends Controller
                     'campagne_periode_id' => $periode->id,
                     'quantite' => $quantite[$i],
                     'stock_magasin_central_id' => $stock_magasin_central[$i],
-                    'type_produit' => $typeproduit[$i],
-                    'certificat' => $certificat[$i],
+                    'type_produit' => $typeproduit,
+                    'certificat' => $certificat,
                     'parcelle_id' => $parcelle[$i],
                     'created_at'      => now(),
                 ];
-                $prod = LivraisonMagasinCentralProducteur::where([['campagne_id', $campagne->id], ['stock_magasin_central_id', $stock_magasin_central[$i]], ['producteur_id', $item], ['type_produit', $typeproduit[$i]]])->first();
+                $prod = LivraisonMagasinCentralProducteur::where([['campagne_id', $campagne->id], ['stock_magasin_central_id', $stock_magasin_central[$i]], ['producteur_id', $item], ['type_produit', $typeproduit]])->first();
                 if ($prod != null) {
 
                     $prod->quantite = $prod->quantite - $quantite[$i];
@@ -295,8 +295,19 @@ class LivraisonCentraleController extends Controller
         $campagne = Campagne::active()->first();
         $periode = CampagnePeriode::where([['campagne_id', $campagne->id]])->latest()->first();
         $contents = '';
-        if (request()->type && request()->magasin_central) {
-            $stocks = LivraisonMagasinCentralProducteur::joinRelationship('stockMagasinCentral')->where([['livraison_magasin_central_producteurs.campagne_id', $campagne->id], ['magasin_centraux_id', request()->magasin_central], ['stocks_mag_entrant', '>', 0]])->whereIn('livraison_magasin_central_producteurs.type_produit', request()->type)->select('stock_magasin_centraux.*')->groupBy('numero_connaissement')->get();
+        if (request()->type || request()->magasin_central || request()->certificat) {
+            $stocks = LivraisonMagasinCentralProducteur::joinRelationship('stockMagasinCentral')->where([['livraison_magasin_central_producteurs.campagne_id', $campagne->id], ['stocks_mag_entrant', '>', 0], ['quantite', '>', 0]])
+            ->when(request()->magasin_central, function ($query, $magasin_central) {
+                $query->where('stock_magasin_centraux.magasin_centraux_id', $magasin_central);
+            })
+            ->when(request()->type, function ($query, $type) {
+                $query->where('livraison_magasin_central_producteurs.type_produit', $type);
+            })
+            ->when(request()->certificat, function ($query, $certificat) {
+                $query->where('livraison_magasin_central_producteurs.certificat', $certificat);
+            })
+            ->select('stock_magasin_centraux.*')
+            ->groupBy('numero_connaissement')->get();
             if ($stocks->count()) {
                 foreach ($stocks as $data) {
 
@@ -315,28 +326,41 @@ class LivraisonCentraleController extends Controller
         $total = 0;
         $totalsacs = 0;
         $campagne = Campagne::active()->first();
-        if (request()->connaissement_id != null) {
-            $stock = LivraisonMagasinCentralProducteur::joinRelationship('stockMagasinCentral')->where([['livraison_magasin_central_producteurs.campagne_id', $campagne->id], ['stock_magasin_centraux.magasin_centraux_id', request()->magasin_central], ['stocks_mag_entrant', '>', 0], ['quantite', '>', 0]])->whereIn('livraison_magasin_central_producteurs.type_produit', request()->type)->whereIn('stock_magasin_central_id', request()->connaissement_id)->select('livraison_magasin_central_producteurs.*')->get();
-
-            if (count($stock)) {
+        if(request()->connaissement_id) {
+            $stock = LivraisonMagasinCentralProducteur::joinRelationship('stockMagasinCentral')->where([['livraison_magasin_central_producteurs.campagne_id', $campagne->id], ['stocks_mag_entrant', '>', 0], ['quantite', '>', 0]])
+            ->when(request()->magasin_central, function ($query, $magasin_central) {
+                $query->where('stock_magasin_centraux.magasin_centraux_id', $magasin_central);
+            })
+            ->when(request()->type, function ($query, $type) {
+                $query->where('livraison_magasin_central_producteurs.type_produit', $type);
+            })
+            ->when(request()->certificat, function ($query, $certificat) {
+                $query->where('livraison_magasin_central_producteurs.certificat', $certificat);
+            })
+            ->whereIn('stock_magasin_central_id', request()->connaissement_id)
+            ->select('livraison_magasin_central_producteurs.*')
+            ->get();
+ 
+            if($stock->count()) {
+                 
                 $v = 1;
                 $tv = count($stock);
                 foreach ($stock as $data) {
-                    if ($v == $tv) {
-                        $read = '';
-                    } else {
-                        $read = 'readonly';
-                    }
-                    $results .= '<tr><td colspan="2"><h5>' . $data->producteur->nom . ' ' . $data->producteur->prenoms . '(' . $data->producteur->codeProdapp . ')</h5><input type="hidden" name="producteurs[]" value="' . $data->producteur_id . '"/></td>
-        <td style="width: 300px;"><input type="hidden" name="parcelle[]" value="' . $data->parcelle_id . '"/><input type="hidden" name="certificat[]" value="' . $data->certificat . '"/>' . $data->certificat . '</td>
-        <td style="width: 300px;"><input type="hidden" name="typeproduit[]" value="' . $data->type_produit . '"/>' . $data->type_produit . '<input type="hidden" name="stock_magasin_central[]" value="' . $data->stock_magasin_central_id . '"/></td>
-        <td style="width: 400px;"> <input type="number" name="quantite[]" value="' . $data->quantite . '" min="0" max="' . $data->quantite . '"  class="form-control quantity" style="width: 115px;"/></td></tr>';
+                    
+                    $results .= '<tr><td colspan="2"><h5>' . $data->producteur->nom . ' ' . $data->producteur->prenoms . '(' . $data->producteur->codeProdapp . ')</h5><input type="hidden" name="producteurs[]" value="' . $data->producteur_id . '"/><input type="hidden" name="parcelle[]" value="' . $data->parcelle_id . '"/></td> 
+                    <td style="width: 300px;"><input type="hidden" name="typeproduit[]" value="' . $data->type_produit . '"/>' . $data->type_produit . '<input type="hidden" name="stock_magasin_central[]" value="' . $data->stock_magasin_central_id . '"/></td>
+                    <td style="width: 400px;"> <input type="number" name="quantite[]" value="' . $data->quantite . '" min="0" max="' . $data->quantite . '"  class="form-control quantity" style="width: 115px;"/></td></tr>';
+         
                     $total = $total + $data->quantite;
                     // $totalsacs = $totalsacs+$data->nb_sacs_entrant;
                     $v++;
                 }
+               
+            }else{
+                $results = '<span style="text-align:center;color:#FF0000;">Aucune donnée</span>';
             }
         }
+        
         $contents['results'] = $results;
         $contents['total'] = $total;
         $contents['totalsacs'] = $totalsacs;

@@ -10,7 +10,7 @@
                         @csrf
                         <div class="row">
                             <input type="hidden" name="code" value="{{ $code }}">
-                            <div class="col-lg-4 form-group">
+                            <div class="col-lg-3 form-group">
                                 <label for="">@lang('N° Connaissement USINE')</label>
                                 <div class="input-group">
                                     <span class="input-group-text">{{ $code }}</span>
@@ -19,7 +19,7 @@
 
                                 </div>
                             </div>
-                            <div class="col-lg-4 form-group">
+                            <div class="col-lg-3 form-group">
                                 <label for="">@lang('Date de livraison')</label>
                                 <div class="input-group">
                                     <input name="estimate_date" value="{{ old('estimate_date') }}" type="text"
@@ -29,11 +29,12 @@
                                 </div>
                             </div>
 
-                            <div class="col-lg-4 form-group">
+                            <div class="col-lg-3 form-group">
                                 <label for="">@lang('Types de produit')</label>
                                 <div class="input-group">
-                                    <select class="form-control select-picker" name="type[]" id="type" multiple
+                                    <select class="form-control select-picker" name="type" id="type"
                                         required>
+                                        <option value>@lang('Selectionner une option')</option>
                                         <option value="{{ __('Certifie') }}" @selected(old('type') == 'Certifie')>
                                             {{ __('Certifie') }}</option>
                                         <option value="{{ __('Ordinaire') }}" @selected(old('type') == 'Ordinaire')>
@@ -41,6 +42,29 @@
                                     </select>
                                 </div>
                             </div>
+
+                            <div class="col-lg-3 form-group certif">
+                                <label for="">@lang('Certificat')</label>
+                                <div class="input-group">
+                                <select class="form-control" name="certificat" id="certificat"
+                                required>
+                                <option value="">@lang('Selectionner un certificat')</option>
+                                <option value="Rainforest"
+                                    {{ in_array('Rainforest', old('certificat', [])) ? 'selected' : '' }}>Rainforest
+                                </option>
+                                <option value="Fairtrade"
+                                    {{ in_array('Fairtrade', old('certificat', [])) ? 'selected' : '' }}>Fairtrade
+                                </option>
+                                <option value="BIO" {{ in_array('BIO', old('certificat', [])) ? 'selected' : '' }}>
+                                    BIO
+                                </option>
+                                <option value="Autre" {{ in_array('Autre', old('certificat', [])) ? 'selected' : '' }}>
+                                    Autre
+                                </option>
+                            </select>
+                                </div>
+                            </div>
+
 
                         </div>
                         <div class="row">
@@ -190,8 +214,7 @@
                                                     <table class="table table-striped table-bordered">
                                                         <thead>
                                                             <tr>
-                                                                <th colspan="2">@lang('Producteur')</th>
-                                                                <th>@lang('Certificat')</th>
+                                                                <th colspan="2">@lang('Producteur')</th> 
                                                                 <th>@lang('Type')</th>
                                                                 <th>@lang('Quantité(Kg)')</th>
                                                             </tr>
@@ -304,8 +327,16 @@
             $.ajaxModal(MODAL_XL, url);
             $(MODAL_XL).modal('show');
         });
-        $('#magasin_central,#type').change('keyup change blur', function() {
+        $('#magasin_central,#type,#certificat').change('keyup change blur', function() {
             $('#producteurs').html('');
+            var typecert = $('#type').val();
+            if(typecert=='Ordinaire'){
+            $("#certificat").attr('hidden', 'hidden');
+            $(".certif").attr('hidden', 'hidden'); 
+        }else{
+            $("#certificat").removeAttr('hidden');
+            $(".certif").removeAttr('hidden');
+        }
             $.ajax({
                 type: 'GET',
                 url: "{{ route('manager.livraison.magcentral.get.producteur') }}",
@@ -328,6 +359,7 @@
                 success: function(html) {
                     $('#listeprod').html(html.results);
                     $('#poidsnet').val(html.total);
+                     
                 }
             });
         });
