@@ -95,8 +95,7 @@ if(count($modules)){
 }
  
         $producteurbymodule = LarapexChart::setType('bar')
-        ->setTitle('Producteurs formés par Module') 
-        ->setHorizontal(true)
+        ->setTitle('Producteurs formés par Module')  
         ->setDataset([
             [
             'name'=>'Nombre de producteurs', 
