@@ -283,6 +283,11 @@ class ApilivraisonController extends Controller
         $magasins = DB::table('magasin_centraux')->get();
         return response()->json($magasins, 201);
     }
+    public function gettransporteurs()
+    {
+        $transporteurs = DB::table('transporteurs')->get();
+        return response()->json($transporteurs, 201);
+    }
     public function generecodeliv()
     {
 
