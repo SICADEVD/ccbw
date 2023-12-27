@@ -41,7 +41,8 @@ class UpdateProducteurRequest extends FormRequest
             // 'phone1'  => ['required', 'regex:/^\d{10}$/', Rule::unique('producteurs', 'phone1')->ignore($this->route('id'))],
             'niveau_etude'  => 'required|max:255',
             'type_piece'  => 'required|max:255',
-            'num_ccc' => 'nullable|min:11|max:11', // Champ "num_ccc" peut être vide
+            // 'num_ccc' => 'nullable|min:11|max:11',
+            'num_ccc' => 'nullable|regex:/^[0-9]{11}$/', // Champ "num_ccc" peut être vide
             'anneeDemarrage' =>'required_if:proprietaires,==,Garantie',
             'anneeFin' =>'required_if:proprietaires,==,Garantie',
             'plantePartage'=>'required_if:proprietaires,==,Planté-partager',
