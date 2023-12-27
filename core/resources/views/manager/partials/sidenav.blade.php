@@ -79,26 +79,25 @@
                     </div>
                 </li>
                 <li class="sidebar-menu-item sidebar-dropdown">
-                    <a href="javascript:void(0)" class="{{ menuActive(['manager.suivi.menage.*','manager.suivi.ssrteclmrs.*'], 3) }}">
+                    <a href="javascript:void(0)"
+                        class="{{ menuActive(['manager.suivi.menage.*', 'manager.suivi.ssrteclmrs.*'], 3) }}">
                         <i class=" menu-icon las la-universal-access"></i>
                         <span class="menu-title">@lang('SSRTE') </span>
                     </a>
                     <div class="sidebar-submenu {{ menuActive(['manager.suivi.menage.*'], 2) }} ">
                         <ul>
-                            <li class="sidebar-menu-item {{ menuActive('manager.suivi.menage.index') }}">
-                                <a href="{{ route('manager.suivi.menage.index') }}" class="nav-link">
-                                    <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('Menages')</span>
-                                </a>
-                            </li>
-
                             <li class="sidebar-menu-item {{ menuActive('manager.suivi.ssrteclmrs.index') }}">
                                 <a href="{{ route('manager.suivi.ssrteclmrs.index') }}" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>
                                     <span class="menu-title">@lang('SSRTE-CLMRS')</span>
                                 </a>
                             </li>
-
+                            <li class="sidebar-menu-item {{ menuActive('manager.suivi.menage.index') }}">
+                                <a href="{{ route('manager.suivi.menage.index') }}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('Enquête Ménage')</span>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </li>
@@ -147,7 +146,7 @@
                     <a href="javascript:void(0)" class="{{ menuActive('manager.suivi*', 3) }}">
                         <i class="menu-icon las la-users"></i>
                         <span class="menu-title">@lang('Gestion Suivi
-                                                                        Productivité') </span>
+                                                                                                Productivité') </span>
                     </a>
                     <div class="sidebar-submenu {{ menuActive('manager.suivi*', 2) }} ">
                         <ul>
@@ -198,13 +197,12 @@
                                 </a>
 
                             </li> -->
-                            <li
-                                class="sidebar-menu-item {{ menuActive(['manager.livraison.stock.*']) }}">
+                            <li class="sidebar-menu-item {{ menuActive(['manager.livraison.stock.*']) }}">
                                 <a href="{{ route('manager.livraison.stock.section') }}" class="nav-link">
                                     <i class="menu-icon las la-server"></i>
                                     <span class="menu-title">@lang('Stock Magasins de Section')</span>
                                 </a>
-                            </li> 
+                            </li>
                             <!-- <li class="sidebar-menu-item {{ menuActive(['manager.livraison.magcentral.*']) }}">
                                 <a href="{{ route('manager.livraison.magcentral.index') }}" class="nav-link">
                                     <i class="menu-icon las la-server"></i>
