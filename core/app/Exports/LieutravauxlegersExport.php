@@ -22,7 +22,7 @@ class LieutravauxlegersExport implements FromView, WithTitle
         // TODO: Implement view() method.
         
         return view('manager.ssrteclmrs.LieutravauxlegersExcel',[
-            'lieutravaux' => SsrteclmrsLieutravauxleger::joinRelationship('ssrteclmrs.producteur.localite')->where('cooperative_id',auth()->user()->cooperative_id)->get()
+            'lieutravaux' => SsrteclmrsLieutravauxleger::joinRelationship('ssrteclmrs.producteur.localite.section')->where('cooperative_id',auth()->user()->cooperative_id)->get()
         ]);
     }
 

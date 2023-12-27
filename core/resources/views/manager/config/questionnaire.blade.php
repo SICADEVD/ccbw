@@ -97,7 +97,7 @@
                     <div class="modal-body"> 
                     <input type="hidden" name='id'>
                     <div class="form-group row">
-                                <label class="col-sm-4 control-label">@lang('Type de Formation')</label>
+                                <label class="col-sm-4 control-label">@lang('Catégorie de question')</label>
                                 <div class="col-xs-12 col-sm-8">
                                 <select class="form-control" name="categoriequestionnaire" required>
                                     <option value="">@lang('Selectionner une option')</option>
@@ -110,9 +110,9 @@
                             </div> 
 
         <div class="form-group row">
-            {{ Form::label(__('Nom de la question'), null, ['class' => 'control-label col-sm-4']) }}
+            {{ Form::label(__('Titre de la question'), null, ['class' => 'control-label col-sm-4']) }}
             <div class="col-xs-12 col-sm-8 col-md-8">
-            {!! Form::text('nom', null, array('placeholder' => __('Nom du type de formation'),'class' => 'form-control','required')) !!}
+            {!! Form::text('nom', null, array('placeholder' => __('Titre de la question'),'class' => 'form-control','required')) !!}
         </div>
     </div>
     

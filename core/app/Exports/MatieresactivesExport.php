@@ -22,7 +22,7 @@ class MatieresactivesExport implements FromView, WithTitle
         // TODO: Implement view() method.
         
         return view('manager.application.MatieresactiveExcel',[
-            'matieresactives' => ApplicationMatieresactive::joinRelationship('application.parcelle.producteur.localite')->where('cooperative_id',auth()->user()->cooperative_id)->get()
+            'matieresactives' => ApplicationMatieresactive::joinRelationship('application.parcelle.producteur.localite.section')->where('cooperative_id',auth()->user()->cooperative_id)->get()
         ]);
     }
 

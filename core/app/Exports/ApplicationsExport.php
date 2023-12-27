@@ -18,7 +18,7 @@ class ApplicationsExport implements FromView
     {
         // TODO: Implement view() method.
         return view('manager.application.ApplicationsAllExcel',[
-            'applications' => Application::joinRelationship('parcelle.producteur.localite')->where('cooperative_id',auth()->user()->cooperative_id)->get()
+            'applications' => Application::joinRelationship('parcelle.producteur.localite.section')->where('cooperative_id',auth()->user()->cooperative_id)->get()
         ]);
     } 
 }
