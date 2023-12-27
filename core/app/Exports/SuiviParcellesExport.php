@@ -20,7 +20,7 @@ class SuiviParcellesExport implements FromView, WithTitle
         // TODO: Implement view() method.
         
         return view('manager.suiviparcelle.SuiviParcellesAllExcel',[
-            'suiviparcelles' => SuiviParcelle::joinRelationship('parcelle.producteur.localite')->where('cooperative_id',auth()->user()->cooperative_id)->get()
+            'suiviparcelles' => SuiviParcelle::joinRelationship('parcelle.producteur.localite.section')->where('cooperative_id',auth()->user()->cooperative_id)->get()
         ]);
     }
 

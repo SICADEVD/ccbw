@@ -43,7 +43,7 @@
             <td><?php echo $c->id; ?></td>
             <td><?php echo $c->localite->nom; ?></td>
             <td><?php echo $c->campagne->nom; ?></td>
-            <td><?php echo $c->typeFormation->nom; ?></td>
+            <td><?php echo @$c->typeFormation->nom; ?></td>
             <td><?php echo $c->lieu_formation; ?></td> 
             <td><?php echo date('d-m-Y', strtotime($c->date_formation)); ?></td>
         </tr>

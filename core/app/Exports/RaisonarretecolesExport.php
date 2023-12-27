@@ -21,7 +21,7 @@ class RaisonarretecolesExport implements FromView, WithTitle
         // TODO: Implement view() method.
         
         return view('manager.ssrteclmrs.RaisonarretecolesExcel',[
-            'raisons' => SsrteclmrsRaisonarretecole::joinRelationship('ssrteclmrs.producteur.localite')->where('cooperative_id',auth()->user()->cooperative_id)->get()
+            'raisons' => SsrteclmrsRaisonarretecole::joinRelationship('ssrteclmrs.producteur.localite.section')->where('cooperative_id',auth()->user()->cooperative_id)->get()
         ]);
     }
 

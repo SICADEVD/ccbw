@@ -22,7 +22,7 @@ class OmbragesExport implements FromView, WithTitle
         // TODO: Implement view() method.
         
         return view('manager.suiviparcelle.SuiviOmbragesExcel',[
-            'ombrages' => SuiviParcellesOmbrage::joinRelationship('suiviParcelle.parcelle.producteur.localite')->where('cooperative_id',auth()->user()->cooperative_id)->get()
+            'ombrages' => SuiviParcellesOmbrage::joinRelationship('suiviParcelle.parcelle.producteur.localite.section')->where('cooperative_id',auth()->user()->cooperative_id)->get()
         ]);
     }
 

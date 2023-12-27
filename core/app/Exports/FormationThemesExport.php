@@ -20,7 +20,7 @@ class FormationThemesExport implements FromView, WithTitle
         // TODO: Implement view() method.
         
         return view('manager.formation.FormationsThemeExcel',[
-            'themes' => SuiviFormationTheme::joinRelationship('suiviFormation.localite')->where('cooperative_id',auth()->user()->cooperative_id)->get()
+            'themes' => SuiviFormationTheme::joinRelationship('suiviFormation.localite.section')->where('cooperative_id',auth()->user()->cooperative_id)->get()
         ]);
     }
 

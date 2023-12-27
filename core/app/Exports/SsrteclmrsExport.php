@@ -18,7 +18,7 @@ class SsrteclmrsExport implements FromView
     {
         // TODO: Implement view() method.
         return view('manager.ssrteclmrs.SsrteclmrsAllExcel',[
-            'ssrteclmrs' => Ssrteclmrs::joinRelationship('producteur.localite')->where('cooperative_id',auth()->user()->cooperative_id)->get()
+            'ssrteclmrs' => Ssrteclmrs::joinRelationship('producteur.localite.section')->where('cooperative_id',auth()->user()->cooperative_id)->get()
         ]);
     } 
 }

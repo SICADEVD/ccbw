@@ -21,7 +21,7 @@ class InsectesExport implements FromView, WithTitle
         // TODO: Implement view() method.
         
         return view('manager.application.InsectesExcel',[
-            'insectes' => ApplicationInsecte::joinRelationship('application.parcelle.producteur.localite')->where('cooperative_id',auth()->user()->cooperative_id)->get()
+            'insectes' => ApplicationInsecte::joinRelationship('application.parcelle.producteur.localite.section')->where('cooperative_id',auth()->user()->cooperative_id)->get()
         ]);
     }
 

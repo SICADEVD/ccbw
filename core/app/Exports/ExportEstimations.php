@@ -18,7 +18,7 @@ class ExportEstimations implements FromView
     {
         // TODO: Implement view() method.
         return view('manager.estimation.EstimationsAllExcel',[
-            'estimations' => Estimation::joinRelationship('parcelle.producteur.localite')->where('cooperative_id',auth()->user()->cooperative_id)->get()
+            'estimations' => Estimation::joinRelationship('parcelle.producteur.localite.section')->where('cooperative_id',auth()->user()->cooperative_id)->get()
         ]);
     } 
 }

@@ -18,7 +18,7 @@ class ExportMenages implements FromView
     {
         // TODO: Implement view() method.
         return view('manager.menage.MenagesAllExcel',[
-            'menages' => Menage::joinRelationship('producteur.localite')->where('cooperative_id',auth()->user()->cooperative_id)->get()
+            'menages' => Menage::joinRelationship('producteur.localite.section')->where('cooperative_id',auth()->user()->cooperative_id)->get()
         ]);
     } 
 }

@@ -22,7 +22,7 @@ class LieutravauxdangereuxExport implements FromView, WithTitle
         // TODO: Implement view() method.
         
         return view('manager.ssrteclmrs.LieutravauxdangereuxExcel',[
-            'lieutravaux' => SsrteclmrsLieutravauxdangereux::joinRelationship('ssrteclmrs.producteur.localite')->where('cooperative_id',auth()->user()->cooperative_id)->get()
+            'lieutravaux' => SsrteclmrsLieutravauxdangereux::joinRelationship('ssrteclmrs.producteur.localite.section')->where('cooperative_id',auth()->user()->cooperative_id)->get()
         ]);
     }
 
