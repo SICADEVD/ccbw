@@ -464,9 +464,9 @@ $('.grid').masonry({
     const latitude = position.coords.latitude;
     const longitude = position.coords.longitude;
 
-$('#longitude').val(longitude);
-$('#latitude').val(latitude);
-$("#longitude, #latitude").attr({"readonly": 'readonly'})
+$('input[name=longitude]').val(longitude);
+$('input[name=latitude]').val(latitude);
+$("input[name=longitude], input[name=latitude]").attr({"readonly": 'readonly'})
   }
   function error() {
     status.textContent = "Unable to retrieve your location";

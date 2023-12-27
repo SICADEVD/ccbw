@@ -137,7 +137,7 @@
     <div class="form-group row">
             {{ Form::label(__('Code du magasin'), null, ['class' => 'control-label col-sm-4']) }}
             <div class="col-xs-12 col-sm-8 col-md-8">
-            {!! Form::text('code', $codemag, array('placeholder' => __('Code du magasin'),'class' => 'form-control','readonly'=>'readonly')) !!}
+            {!! Form::text('code', null, array('placeholder' => __('Code du magasin'),'class' => 'form-control')) !!}
         </div>
     </div>
     <div class="form-group row">

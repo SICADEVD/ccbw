@@ -267,6 +267,13 @@
                                                     ]) !!}
                                                 </div>
                                             </div>
+                                            <div class="form-group row">
+            {{ Form::label(__(''), null, ['class' => 'control-label col-sm-4']) }}
+            <div class="col-xs-12 col-sm-8 col-md-8">
+            <p id="status"></p>
+            <a href="javascript:void(0)" id="find-me" class="btn btn--info">Obtenir les coordonnées GPS</a>
+        </div>
+    </div>
                                             <div class="col-xs-12 col-sm-12">
                                                 <div class="form-group row">
                                                     {{ Form::label(__('Nombre de Cacao moyen / parcelle'), null, ['class' => 'col-sm-4 control-label']) }}
