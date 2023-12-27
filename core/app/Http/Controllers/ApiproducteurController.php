@@ -52,8 +52,9 @@ class ApiproducteurController extends Controller
     // }
 
     $producteurs = Producteur::join('localites', 'producteurs.localite_id', '=', 'localites.id')
+    ->join('producteur_certifications', 'producteurs.id', '=', 'producteur_certifications.producteur_id')
       ->where('producteurs.userid', $userid)
-      ->select('producteurs.nom', 'producteurs.prenoms', 'localites.section_id as section_id', 'localites.id as localite_id', 'producteurs.id as id', 'producteurs.codeProd as codeProd')
+      ->select('producteurs.nom', 'producteurs.prenoms', 'localites.section_id as section_id', 'localites.id as localite_id', 'producteurs.id as id', 'producteurs.codeProd as codeProd','producteurs.statut','producteur_certifications.certification as certification')
       ->get();
 
 
@@ -118,7 +119,7 @@ class ApiproducteurController extends Controller
         'phone1'  => ['required', 'regex:/^\d{10}$/', 'unique:producteurs,phone1,' . $request->id],
         'niveau_etude'  => 'required|max:255',
         'type_piece'  => 'required|max:255',
-        'num_ccc' => 'nullable|regex:/^[0-9]{11}$/', // Champ "num_ccc" peut être vide
+        'num_ccc' => 'nullable|regex:/^[0-9]{11}$/' . $request->id, // Champ "num_ccc" peut être vide
         'anneeDemarrage' => 'required_if:proprietaires,==,Garantie',
         'anneeFin' => 'required_if:proprietaires,==,Garantie',
         'plantePartage' => 'required_if:proprietaires,==,Planté-partager',
