@@ -394,6 +394,8 @@ Route::middleware('auth')->group(function () {
             Route::post('store', 'store')->name('store');
             Route::get('edit/{id}', 'edit')->name('edit');
             Route::post('status/{id}', 'status')->name('status');
+            Route::get('certificat', 'getCertificat')->name('getcertificat');
+            Route::get('questionnaire', 'getQuestionnaire')->name('getquestionnaire');
             Route::get('/exportInspectionsExcel', 'exportExcel')->name('exportExcel.inspectionAll');
         });
         //Manage Suivi Application

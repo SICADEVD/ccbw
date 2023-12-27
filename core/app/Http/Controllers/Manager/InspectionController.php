@@ -12,6 +12,7 @@ use App\Models\Producteur;
 use App\Models\Inspection;
 use App\Models\InspectionQuestionnaire;
 use App\Models\Notation;
+use App\Models\Producteur_certification;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -126,6 +127,54 @@ class InspectionController extends Controller
         return view('manager.inspection.edit', compact('pageTitle', 'localites', 'inspection','producteurs','staffs','categoriequestionnaire','notations'));
     } 
 
+    public function getCertificat(Request $request){
+        $content='<option value="">Selectionner un certificat</option>';
+        $certificats = Producteur_certification::where('producteur_id', $request->producteur)->get();
+        if($certificats->count()){
+            foreach($certificats as $data){
+                $content .= '<option value="' . $data->certification . '" >' . $data->certification . '</option>';
+            }
+        }else{
+            $content .= '<option value="Rainforest" >Rainforest</option>';
+        }
+        return $content;
+    }
+    public function getQuestionnaire(Request $request){
+        $contents='';
+        $categoriequestionnaire = CategorieQuestionnaire::where('certificat',$request->certificat)->with('questions')->get();
+        $notations = Notation::get();
+ 
+        if($categoriequestionnaire->count()){ 
+
+            $note = 0;
+            $total=0;
+            foreach($categoriequestionnaire as $catquest){ 
+$contents .='<tr><td colspan="2"><strong>'. $catquest->titre.'</strong></td></tr>';
+           
+            foreach($catquest->questions as $q) { 
+
+                $contents .= '<tr>
+                 <td>'. $q->nom.'
+            </td>
+            <td><select class="form-control" class="notation" id="reponse-'. $q->id.'" name="reponse['. $q->id.']" required>
+                    <option value="0"> </option>';
+                                       
+                        foreach($notations as $not)
+                        { 
+                            $contents .= '<option value="'. $not->point.'">'. $not->nom.'</option>';
+                           
+                        } 
+                        $contents .='</select>
+                 </td>
+                 </tr>';
+ 
+                } 
+            } 
+        }else{
+            $contents ="<div class='text-center'><span style='color:red;text-align:center'>Aucun questionnaire n'est disponible pour ce certificat.</span></div>";
+        } 
+        return $contents;
+    }
     public function status($id)
     {
         return Inspection::changeStatus($id);

@@ -32,6 +32,32 @@
                                 </div>
                             </div>
                             <div class="form-group row">
+                                <label for="" class="col-sm-4 control-label">@lang('Certificat')</label>
+                                <div class="col-xs-12 col-sm-8">
+                                <select class="form-control" name="certificat" id="certificat"
+                                required>
+                                <option value="">@lang('Selectionner un certificat')</option>
+                                
+                            </select>
+                                </div>
+                            </div>
+                          
+    <hr class="panel-wide">
+    <div class="form-group row">
+    <table class="table-bordered table-striped"  id="myTable">
+<tbody id="myListe">
+               
+              </tbody>
+         </table>
+    </div>
+    <hr class="panel-wide">
+    <div class="form-group row">
+        <?php echo Form::label(__("Note"), null, ['class' => 'col-sm-4 control-label']); ?>
+        <div class="col-xs-12 col-sm-8" >
+        <?php echo Form::number('note', null, array('placeholder' => __('00'),'class' => 'form-control note', 'id'=>'note', 'readonly'=>'readonly')); ?>
+        </div>
+    </div>
+    <div class="form-group row">
                                 <label class="col-sm-4 control-label">@lang('Encadreur')</label>
                                 <div class="col-xs-12 col-sm-8">
                                 <select class="form-control" name="encadreur" id="encadreur" required>
@@ -43,57 +69,6 @@
                                 </select>
                                 </div>
                             </div>
-    <hr class="panel-wide">
-    <div class="form-group row">
-    <table class="table-bordered table-striped"  id="myTable">
-<tbody>
-              <?php
-
-              $note = 0;
-              $total=0;
-              foreach($categoriequestionnaire as $catquest){
-                ?>
-<tr><td colspan="2"><strong><?php echo $catquest->titre; ?></strong></td></tr>
-              <?php 
-              foreach($catquest->questions as $q) {
-                
-                   ?>
-
-
-                   <tr>
-                   <td><?php echo $q->nom; ?>
-              </td>
-              <td>
-
-                      <select class="form-control" class="notation" id="reponse-<?php echo $q->id; ?>" name="reponse[<?php echo $q->id; ?>]" required>
-                      <option value="0"> </option>
-                                          <?php
-                          foreach($notations as $not)
-                          {
-                               ?>
-                             <option value="<?php echo $not->point; ?>"><?php echo $not->nom; ?></option>
-                                            <?php
-                          }
-                         ?>
-                      </select>
-                   </td>
-                   </tr>
-
-
-                   <?php 
-                  } 
-              }
-              ?>
-              </tbody>
-         </table>
-    </div>
-    <hr class="panel-wide">
-    <div class="form-group row">
-        <?php echo Form::label(__("Note"), null, ['class' => 'col-sm-4 control-label']); ?>
-        <div class="col-xs-12 col-sm-8" >
-        <?php echo Form::number('note', null, array('placeholder' => __('00'),'class' => 'form-control note', 'id'=>'note', 'readonly'=>'readonly')); ?>
-        </div>
-    </div>
     <div class="form-group row">
             {{ Form::label(__("Date d'évaluation"), null, ['class' => 'col-sm-4 control-label']) }}
             <div class="col-xs-12 col-sm-8">
@@ -128,6 +103,30 @@ $('#flocal').change(function() {
     update_amounts();
 });
 
+});
+
+$('#producteur').change(function() {
+
+$.ajax({
+    type: 'GET',
+    url: "{{ route('manager.suivi.inspection.getcertificat') }}",
+    data: $('#flocal').serialize(),
+    success: function(html) {
+        $('#certificat').html(html);  
+    }
+});
+});
+
+$('#certificat').change(function() {
+
+$.ajax({
+    type: 'GET',
+    url: "{{ route('manager.suivi.inspection.getquestionnaire') }}",
+    data: $('#flocal').serialize(),
+    success: function(html) {
+        $('#myListe').html(html);  
+    }
+});
 });
 
 function update_amounts()

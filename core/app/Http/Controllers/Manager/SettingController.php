@@ -319,6 +319,7 @@ class SettingController extends Controller
     {
         $request->validate([
             'titre'  => 'required',
+            'certificat'  => 'required',
         ]);
 
         if ($request->id) {
@@ -328,6 +329,7 @@ class SettingController extends Controller
             $categorieQuestionnaire = new CategorieQuestionnaire();
         }
         $categorieQuestionnaire->titre = trim($request->titre);
+        $categorieQuestionnaire->certificat = trim($request->certificat);
         $categorieQuestionnaire->save();
         $notify[] = ['success', isset($message) ? $message  : 'Categorie Questionnaire a été ajouté avec succès.'];
         return back()->withNotify($notify);
