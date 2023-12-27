@@ -135,6 +135,7 @@ if(count($modules)){
         ->setHeight('230')
         ->setDatalabels();
         
+        // Nombre de parcelles
         $parcelles = Parcelle::select(DB::raw('DATE_FORMAT(created_at,"%Y-%m-%d") as date'),DB::raw('count(id) as nombre'))->groupBy('date')->get();
         $parcellesbydays = LarapexChart::setType('area')
                     ->setTitle($nbparcelle)  

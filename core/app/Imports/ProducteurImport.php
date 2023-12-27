@@ -131,44 +131,42 @@ if($verification ==null)
 
     private function generecodeProdApp($nom,$prenoms,$codeApp)
     {
-        $action = 'non'; 
+      $action = 'non';
 
-        $data = Producteur::select('codeProdapp')->join('localites as l','producteurs.localite_id','=','l.id')->join('cooperatives as c','l.cooperative_id','=','c.id')->where([
-          ['codeProdapp','!=',null],['codeApp',$codeApp]])->orderby('producteurs.id','desc')->first();
-       
-        if($data !=null){
-           
-            $code = $data->codeProdapp; 
-            if($code !=null)
-            {
-              $chaine_number = Str::afterLast($code,'-');  
-              
-            }else{ 
-            $chaine_number=0;
-            }
-          }else{ 
-            $chaine_number=0;
-        }
- 
-       $lastCode=$chaine_number+1; 
-       $codeP= $codeApp.'-'.gmdate('Y').'-'.$lastCode;
+      $data = Producteur::select('codeProdapp')->join('localites as l', 'producteurs.localite_id', '=', 'l.id')->join('sections as s', 'l.section_id', '=', 's.id')->join('cooperatives as c', 's.cooperative_id', '=', 'c.id')->where([
+          ['codeProdapp', '!=', null], ['codeApp', $codeApp]
+      ])->orderby('producteurs.id', 'desc')->first();
 
-       do{
+      if ($data != null) {
 
-       $verif = Producteur::select('codeProdapp')->where('codeProdapp',$codeP)->orderby('id','desc')->first(); 
-        if($verif ==null){
-            $action = 'non';
-        }else{
-            $action = 'oui';
-            $code = $codeP;
-            $chaine_number = Str::afterLast($code,'-');  
-              $lastCode=$chaine_number+1; 
-             $codeP= $codeApp.'-'.gmdate('Y').'-'.$lastCode;
-        }
+          $code = $data->codeProdapp;
+          if ($code != null) {
+              $chaine_number = Str::afterLast($code, '-');
+          } else {
+              $chaine_number = 0;
+          }
+      } else {
+          $chaine_number = 0;
+      }
 
-    }while($action !='non');
+      $lastCode = $chaine_number + 1;
+      $codeP = $codeApp . '-' . gmdate('Y') . '-' . $lastCode;
 
-       return $codeP;
+      do {
+
+          $verif = Producteur::select('codeProdapp')->where('codeProdapp', $codeP)->orderby('id', 'desc')->first();
+          if ($verif == null) {
+              $action = 'non';
+          } else {
+              $action = 'oui';
+              $code = $codeP;
+              $chaine_number = Str::afterLast($code, '-');
+              $lastCode = $chaine_number + 1;
+              $codeP = $codeApp . '-' . gmdate('Y') . '-' . $lastCode;
+          }
+      } while ($action != 'non');
+
+      return $codeP;
     }
     
 }

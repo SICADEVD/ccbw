@@ -183,18 +183,7 @@
                                     ou COACHS, DELEGUES,...</li>
                             </ul>
                         </div>
-                        <div class="form-group row">
-                            <label class="col-sm-4 control-label">@lang('Type de Formation')</label>
-                            <div class="col-xs-12 col-sm-8">
-                                <select class="form-control" name="coop_id" required>
-                                    <option value="">@lang('Selectionner une option')</option>
-                                    {{-- @foreach ($cooperatives as $coop)
-                                        <option value="{{ $coop->id }}" @selected(old('cooperative'))>
-                                            {{ __($coop->name) }}</option>
-                                    @endforeach --}}
-                                </select>
-                            </div>
-                        </div>
+                       
 
                         <div class="form-group row">
                             {{ Form::label(__('Fichier(.xls, .xlsx)'), null, ['class' => 'control-label col-sm-4']) }}

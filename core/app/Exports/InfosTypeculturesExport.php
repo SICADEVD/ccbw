@@ -22,7 +22,7 @@ class InfosTypeculturesExport implements FromView, WithTitle
         // TODO: Implement view() method.
         
         return view('manager.producteur.InfosTypecultureExcel',[
-            'typecultures' => Producteur_infos_typeculture::joinRelationship('producteurInfo.producteur.localite')->where('cooperative_id',auth()->user()->cooperative_id)->get()
+            'typecultures' => Producteur_infos_typeculture::joinRelationship('producteurInfo.producteur.localite.section')->where('cooperative_id',auth()->user()->cooperative_id)->get()
         ]);
     }
 

@@ -17,8 +17,11 @@ class ProducteursExport implements FromView
     public function view(): View
     {
         // TODO: Implement view() method.
-        return view('manager.producteur.ProducteursAllExcel',[
-            'producteurs' => Producteur::joinRelationship('localite')->where('cooperative_id',auth()->user()->cooperative_id)->get()
-        ]);
+        $manager = auth()->user();
+        $producteurs = Producteur::joinRelationship('localite.section')
+            ->with('localite.section')
+            ->where('cooperative_id', $manager->cooperative_id)->get();
+     
+        return view('manager.producteur.ProducteursAllExcel',compact('producteurs'));
     }
 }

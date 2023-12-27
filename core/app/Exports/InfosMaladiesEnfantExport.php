@@ -21,7 +21,7 @@ class InfosMaladiesEnfantExport implements FromView, WithTitle
         // TODO: Implement view() method.
         
         return view('manager.producteur.InfosMaladiesEnfantExcel',[
-            'maladies' => Producteur_infos_maladieenfant::joinRelationship('producteurInfo.producteur.localite')->where('cooperative_id',auth()->user()->cooperative_id)->get()
+            'maladies' => Producteur_infos_maladieenfant::joinRelationship('producteurInfo.producteur.localite.section')->where('cooperative_id',auth()->user()->cooperative_id)->get()
         ]);
     }
 
