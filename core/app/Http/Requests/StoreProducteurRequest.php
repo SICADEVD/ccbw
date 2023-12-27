@@ -37,7 +37,7 @@ class StoreProducteurRequest extends FormRequest
             'sexe'  => 'required|max:255',
             'nationalite'  => 'required|max:255',
             'dateNaiss'  => 'required|max:255',
-            'phone1'  => 'required|max:10',
+            'phone1'  => 'required|min:10|max:10',
             'niveau_etude'  => 'required|max:255',
             'type_piece'  => 'required|max:255',
             'num_ccc' => 'nullable|min:11|max:11', // Champ "num_ccc" peut être vide
@@ -87,7 +87,7 @@ class StoreProducteurRequest extends FormRequest
             'phone2.regex' => 'Le numéro de téléphone doit contenir exactement 10 chiffres.',
             'phone2.unique' => 'Ce numéro de téléphone est déjà utilisé.',
             'autrePhone.required_if' => 'Le champ membre de famille est obligatoire',
-            'num_ccc.regex'=>'numéro du conseil café cacao doit contenir 10 chiffres',
+            'num_ccc.regex'=>'numéro du conseil café cacao doit contenir 11 chiffres',
         ];
     }
     public function attributes()
@@ -120,7 +120,6 @@ class StoreProducteurRequest extends FormRequest
             'autrePhone'=>'membre de famille',
             'numCMU'=>'numéro de CMU',
             'num_ccc'=>'numéro du conseil café cacao',
-            'num_ccc.regex:/^[0-9]{10}$/'=>'numéro du conseil café cacao doit contenir 10 chiffres',
         ];
     }
 }
