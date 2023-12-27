@@ -28,7 +28,7 @@ class ProducteurImport implements ToCollection, WithHeadingRow, WithValidation
     }
     public function collection(Collection $collection)
     {
-        $cooperatives_id = request()->coop_id;
+        $cooperatives_id = auth()->user()->cooperative_id;
         $j=0;
         $k='';
         if(count($collection)){
