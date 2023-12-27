@@ -114,7 +114,7 @@
                 <li class="sidebar-menu-item sidebar-dropdown">
                     <a href="javascript:void(0)" class="{{ menuActive('manager.traca.*', 3) }}">
                         <i class="menu-icon las la-users"></i>
-                        <span class="menu-title">@lang('Gestion de la Traçabilites') </span>
+                        <span class="menu-title">@lang('Gestion de la Traçabilité') </span>
                     </a>
                     <div class="sidebar-submenu {{ menuActive('manager.traca.*', 2) }} ">
                         <ul>

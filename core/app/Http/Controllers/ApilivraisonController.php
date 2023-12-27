@@ -27,6 +27,7 @@ use App\Models\Livraisons_temporaire;
 use App\Models\LivraisonProductDetail;
 use App\Models\LivraisonMagasinCentralProducteur;
 use App\Models\MagasinSection;
+use App\Models\Transporteur;
 use Illuminate\Database\Query\JoinClause;
 
 class ApilivraisonController extends Controller
@@ -296,7 +297,10 @@ class ApilivraisonController extends Controller
     }
     public function gettransporteurs()
     {
-        $transporteurs = DB::table('transporteurs')->get();
+        $transporteurs = Transporteur::join('entreprises', 'entreprises.id', '=', 'transporteurs.entreprise_id')
+            ->select('transporteurs.*','entreprises.nom_entreprise as entreprise')
+            ->get();
+
         return response()->json($transporteurs, 201);
     }
 
@@ -304,6 +308,11 @@ class ApilivraisonController extends Controller
     {
         $vehicules = DB::table('vehicules')->get();
         return response()->json($vehicules, 201);
+    }
+    public function getremorques()
+    {
+        $remorques = DB::table('remorques')->get();
+        return response()->json($remorques, 201);
     }
     public function generecodeliv()
     {
