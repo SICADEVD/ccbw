@@ -56,6 +56,7 @@
                             <thead>
                                 <tr> 
                                     <th>@lang('Localite')</th> 
+                                    <th>@lang('Certificat')</th>
                                     <th>@lang('Producteur')</th>
                                     <th>@lang('Formateur')</th>
                                     <th>@lang('Note')</th>
@@ -71,6 +72,9 @@
                                         <td>
                                             <span class="fw-bold">{{ $inspection->producteur->localite->nom }}</span>
                                         </td> 
+                                        <td>
+                                            <span>{{ $inspection->certificat }}</span>
+                                        </td>
                                         <td> 
                                             <span class="small">
                                             {{ $inspection->producteur->nom }} {{ $inspection->producteur->prenoms }}

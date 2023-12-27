@@ -87,6 +87,7 @@ class InspectionController extends Controller
         $inspection->producteur_id  = $request->producteur;  
         $inspection->campagne_id  = $campagne->id;
         $inspection->formateur_id  = $request->encadreur;
+        $inspection->certificat  = $request->certificat;
         $inspection->note  = $request->note;
         $inspection->date_evaluation     = $request->date_evaluation; 
 
