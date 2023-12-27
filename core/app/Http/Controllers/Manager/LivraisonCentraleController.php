@@ -239,7 +239,7 @@ class LivraisonCentraleController extends Controller
         $i = 0;
         $data = [];
         $quantite = $request->quantite;
-        $typeproduit = $request->typeproduit;
+        $typeproduit = $request->type;
         $producteurs = $request->producteurs;
         $certificat = $request->certificat;
         $parcelle = $request->parcelle;
@@ -386,11 +386,13 @@ class LivraisonCentraleController extends Controller
     {
         $request->validate([
             'code' => 'required',
+            'quantite_confirme' => 'required'
         ]);
         $user = auth()->user();
         $livraison = Connaissement::where('numeroCU', $request->code)->where('status', Status::COURIER_DISPATCH)->firstOrFail();
 
-        $livraison->status            = Status::COURIER_DELIVERYQUEUE;
+        $livraison->status = Status::COURIER_DELIVERYQUEUE;
+        $livraison->quantite_confirme = $request->quantite_confirme;
         $livraison->save();
         $notify[] = ['success', 'Reception terminée'];
         return back()->withNotify($notify);
