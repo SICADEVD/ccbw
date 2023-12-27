@@ -269,8 +269,6 @@ class LivraisonController extends Controller
 
     public function sectionStore(Request $request)
     {
-        // dd(response()->json($request));
-
         $request->validate([
             'magasin_central' => 'required',
             'sender_magasin' =>  'required',
