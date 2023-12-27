@@ -109,9 +109,8 @@ class ApplicationController extends Controller
         $application->delaisReentree = $request->delaisReentree;
         $application->personneApplication = $request->personneApplication;
         $application->date_application = $request->date_application;
+        $application->heure_application = $request->heure_application;
         $application->userid = auth()->user()->id;
-
-        dd(json_encode($request->all()));
         $application->save();
 
        
