@@ -22,8 +22,7 @@
         <div class="col-xxl-4 col-sm-4">  
                         <div class="card box--shadow2 bg--white" style="min-height:230px;"> 
                         <div class="card-body text-center">
-                        <h5 class="card-title">Nombre de Parcelles</h5>
-                        <h1 class="text--black" style="font-size: 56px;">{{$nbparcelle}}</h1>
+                        {!! $parcellesbydays->container() !!}
                         </div> 
                         </div>
         </div>
@@ -80,5 +79,6 @@
 {{ $producteurbydays->script() }}
 {{ $formationbymodule->script() }}
 {{ $producteurbymodule->script() }}
- 
+{{ $parcellesbydays->script() }}
+
 @endpush

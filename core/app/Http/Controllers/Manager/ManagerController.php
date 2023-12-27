@@ -104,9 +104,22 @@ if(count($modules)){
             ])  
         ->setXAxis(Arr::pluck($modulenom,'nom'))
         ->setDatalabels();
-
-
-        return view('manager.dashboard', compact('pageTitle','nbcoop','nbparcelle','prodbysexe','mapping','producteurbydays','formationbymodule','producteurbymodule'));
+        
+        $parcelles = Parcelle::select(DB::raw('DATE_FORMAT(created_at,"%Y-%m-%d") as date'),DB::raw('count(id) as nombre'))->groupBy('date')->get();
+        $parcellesbydays = LarapexChart::setType('area')
+                    ->setTitle($nbparcelle)  
+                    ->setSubtitle("Parcelles")  
+                    ->setHeight('160') 
+                    ->setDataset([
+                        [
+                        'name'=>'Nombre de parcelles', 
+                        'data'=> Arr::pluck($parcelles,'nombre')
+                        ]
+                        ]) 
+                    ->setXAxis(Arr::pluck($parcelles,'date'))
+                    ->setSparkline()
+                    ->setDatalabels();
+        return view('manager.dashboard', compact('pageTitle','nbcoop','nbparcelle','prodbysexe','mapping','producteurbydays','formationbymodule','producteurbymodule','parcellesbydays'));
     }
 
     public function changeLanguage($lang = null)
