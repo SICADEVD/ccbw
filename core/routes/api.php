@@ -48,12 +48,13 @@ Route::match(['POST'],'getproducteurupdate', [ApiproducteurController::class, 'g
 Route::match(['POST'],'getstaff', [ApiproducteurController::class, 'getstaff']);
 
 Route::match(['POST'],'apimenage', [ApimenageController::class, 'store']);
+// gestion des livraisons
 Route::match(['POST'],'getmagasinsection', [ApilivraisonController::class, 'getMagasinsection']);
-Route::match(['POST'],'getlivraison', [ApilivraisonController::class, 'getLivraison']);
 Route::match(['POST'],'getmagasincentraux', [ApilivraisonController::class, 'getMagasincentraux']);
 Route::match(['POST'],'apilivraisonmagasinsection', [ApilivraisonController::class,'store']);
-Route::match(['POST'],'apilivraisonmagasincentral', [ApilivraisonController::class,'storeMagasincentral']);
 Route::match(['POST'],'apilivraisonmagasincentral', [ApilivraisonController::class,'store_livraison_magasincentral']);
+Route::match(['POST'],'gettransporteurs', [ApilivraisonController::class, 'gettransporteurs']);
+//fin gestion des livraisons
 Route::match(['POST'],'apiparcelle', [ApiparcelleController::class, 'store']);
 Route::match(['POST'],'getparcelles', [ApiparcelleController::class, 'index']);
 Route::match(['POST'],'getparcelleupdate', [ApiparcelleController::class, 'getparcelleUpdate']);
