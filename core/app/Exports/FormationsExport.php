@@ -18,7 +18,7 @@ class FormationsExport implements FromView
     {
         // TODO: Implement view() method.
         return view('manager.formation.FormationsAllExcel',[
-            'formations' => SuiviFormation::joinRelationship('localite')->where('cooperative_id',auth()->user()->cooperative_id)->get()
+            'formations' => SuiviFormation::joinRelationship('localite.section')->where('cooperative_id',auth()->user()->cooperative_id)->get()
         ]);
     } 
 }
