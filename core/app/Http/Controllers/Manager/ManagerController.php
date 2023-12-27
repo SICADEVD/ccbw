@@ -35,8 +35,8 @@ class ManagerController extends Controller
         $pageTitle = "Manager Dashboard";  
         $nbcoop = Cooperative::count();
         $nbparcelle = Parcelle::count();
-        $genre = Producteur::select('sexe',DB::raw('count(id) as nombre'))->groupBy('sexe')->get();
-        $parcelle = Parcelle::select('typedeclaration',DB::raw('count(id) as nombre'))->groupBy('typedeclaration')->get();
+        
+        
         $borderColors = [
             "rgba(255, 99, 132, 1.0)",
             "rgba(22,160,133, 1.0)",
@@ -63,20 +63,28 @@ class ManagerController extends Controller
 
         ];
 
+        //Producteurs par Genre
+        $genre = Producteur::select('sexe',DB::raw('count(id) as nombre'))->groupBy('sexe')->get();
         $prodbysexe= LarapexChart::setType('pie')
                             ->setTitle('Producteurs par Genre')
                             ->setDataset(Arr::pluck($genre,'nombre'))
                             ->setLabels(Arr::pluck($genre,'sexe'))
                             ->setHeight('230')
                             ->setDatalabels();
-       
+    
+//Mapping des parcelles
+    $parcelle = Parcelle::select('typedeclaration',DB::raw('count(id) as nombre'))->groupBy('typedeclaration')->get();
+ 
        $mapping= LarapexChart::setType('pie')
                             ->setTitle('Mapping des parcelles')
-                            ->setDataset(Arr::pluck($parcelle,'nombre'))
-                            ->setLabels(Arr::pluck($parcelle,'typedeclaration'))
+                            ->setDataset(Arr::whereNotNull(Arr::pluck($parcelle,'nombre')))
+                            ->setLabels(array_map(function ($value) {
+                                return $value == null ? 'Aucune' : $value;
+                            }, Arr::pluck($parcelle,'typedeclaration')))
                             ->setHeight('230')
                             ->setDatalabels();
 
+//Producteurs inscrits par Date
         $producteurbydays = Producteur::select(DB::raw('DATE_FORMAT(created_at,"%Y-%m-%d") as date'),DB::raw('count(id) as nombre'))->groupBy('date')->get(); 
         $producteurbydays = LarapexChart::setType('area')
                     ->setTitle('Producteurs inscrits par Date') 
@@ -89,7 +97,8 @@ class ManagerController extends Controller
                     ->setXAxis(Arr::pluck($producteurbydays,'date'))
                     ->setHeight('230')
                     ->setDatalabels();
-        
+
+        // Formations par Modules
         $formation = TypeFormationTheme::joinRelationship('typeFormation')->select('type_formations.nom',DB::raw('count(type_formation_themes.id) as nombre'))->groupBy('type_formation_id')->get();
         $formationbymodule = LarapexChart::setType('bar') 
                     ->setTitle('Formations par Modules') 
@@ -103,7 +112,7 @@ class ManagerController extends Controller
                     ->setXAxis(Arr::pluck($formation,'nom'))
                     ->setDatalabels();
  
-
+//Producteurs formés par Module
         $modules = DB::select('SELECT 
         tf.type_formation_id AS module_id,
         COUNT(sf.producteur_id) AS nombre_producteurs
@@ -121,7 +130,6 @@ if(count($modules)){
     $modulenom = TypeFormation::whereIn('id',Arr::pluck($modules,'module_id'))->select('nom')->get();
     
 }
- 
         $producteurbymodule = LarapexChart::setType('bar')
         ->setTitle('Producteurs formés par Module')  
         ->setDataset([

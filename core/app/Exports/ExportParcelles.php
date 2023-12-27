@@ -18,7 +18,7 @@ class ExportParcelles implements FromView
     {
         // TODO: Implement view() method.
         return view('manager.parcelle.ParcellesAllExcel',[
-            'parcelles' => Parcelle::joinRelationship('producteur.localite')->where('cooperative_id',auth()->user()->cooperative_id)->get()
+            'parcelles' => Parcelle::joinRelationship('producteur.localite.section')->where('cooperative_id',auth()->user()->cooperative_id)->get()
         ]);
     }
         
