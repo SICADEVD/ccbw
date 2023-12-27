@@ -276,12 +276,9 @@ class ProducteurController extends Controller
                             'producteur_id' => $id,
                             'certification' => $certificat,
                         ];
-
-                        Producteur_certification::insert($datas);
                     }
-
-                    $i++;
                 }
+                Producteur_certification::insert($datas);
             }
         }
 
@@ -345,23 +342,28 @@ class ProducteurController extends Controller
         $producteur->save();
         if ($producteur != null) {
             $id = $producteur->id;
-            $datas  = $data2 = [];
+            $datas  = [];
             if (($request->certificats != null)) {
                 Producteur_certification::where('producteur_id', $id)->delete();
                 $i = 0;
                 foreach ($request->certificats as $certificat) {
                     if (!empty($certificat)) {
+
+                        if ($certificat == 'Autre') {
+                            // $certificat = $request->autreCertificats;
+                            $datas[] = [
+                                'producteur_id' => $id,
+                                'certification' => $request->autreCertificats,
+                            ];
+                        }
                         $datas[] = [
                             'producteur_id' => $id,
                             'certification' => $certificat,
                         ];
                     }
-
-                    $i++;
                 }
+                Producteur_certification::insert($datas);
             }
-
-            Producteur_certification::insert($datas);
         }
         $notify[] = ['success', isset($message) ? $message : 'Le producteur a été mise à jour avec succès.'];
         return back()->withNotify($notify);
