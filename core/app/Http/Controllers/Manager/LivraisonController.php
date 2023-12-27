@@ -170,7 +170,7 @@ class LivraisonController extends Controller
         $livraison->receiver_magasin_section_id = $request->magasin_section;
         $livraison->estimate_date      = $request->estimate_date;
         $livraison->quantity      = array_sum(Arr::pluck($request->items, 'quantity'));
-        dd(json_encode($request->all()));
+        // dd(json_encode($request->all()));
         $livraison->save();
 
         $prod = new StockMagasinSection();
