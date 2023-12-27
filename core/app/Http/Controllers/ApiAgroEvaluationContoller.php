@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Models\Agroevaluation;
 use App\Models\Agrodistribution;
 use App\Models\Agroespecesarbre;
+use Illuminate\Support\Facades\DB;
 use App\Models\AgroevaluationEspece;
 use App\Models\AgrodistributionEspece;
 use App\Models\AgroapprovisionnementSectionEspece;
@@ -98,6 +99,15 @@ class ApiAgroEvaluationContoller extends Controller
             'producteurs' => $producteurs,
         ], 201);
 
+    }
+    public function besoinproducteur(){
+       $evaluations = DB::table('agroevaluation_especes')
+       ->join('agroevaluations', 'agroevaluations.id', '=', 'agroevaluation_especes.agroevaluation_id')
+       ->select('agroevaluation_especes.agroespecesarbre_id', 'agroevaluations.producteur_id','agroevaluation_especes.total')
+       ->get();
+       return response()->json([
+           'evaluations' => $evaluations,
+       ], 201);
     }
     public function store_distribution( Request $request){
         $validationRule = [
