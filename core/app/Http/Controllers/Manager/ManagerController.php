@@ -67,12 +67,14 @@ class ManagerController extends Controller
                             ->setTitle('Producteurs par Genre')
                             ->setDataset(Arr::pluck($genre,'nombre'))
                             ->setLabels(Arr::pluck($genre,'sexe'))
+                            ->setHeight('230')
                             ->setDatalabels();
        
        $mapping= LarapexChart::setType('pie')
                             ->setTitle('Mapping des parcelles')
                             ->setDataset(Arr::pluck($parcelle,'nombre'))
                             ->setLabels(Arr::pluck($parcelle,'typedeclaration'))
+                            ->setHeight('230')
                             ->setDatalabels();
 
         $producteurbydays = Producteur::select(DB::raw('DATE_FORMAT(created_at,"%Y-%m-%d") as date'),DB::raw('count(id) as nombre'))->groupBy('date')->get(); 
@@ -85,6 +87,7 @@ class ManagerController extends Controller
                         ]
                         ]) 
                     ->setXAxis(Arr::pluck($producteurbydays,'date'))
+                    ->setHeight('230')
                     ->setDatalabels();
         
         $formation = TypeFormationTheme::joinRelationship('typeFormation')->select('type_formations.nom',DB::raw('count(type_formation_themes.id) as nombre'))->groupBy('type_formation_id')->get();
@@ -96,6 +99,7 @@ class ManagerController extends Controller
                         'data'=> Arr::pluck($formation,'nombre')
                         ]
                         ])  
+                    ->setHeight('230')
                     ->setXAxis(Arr::pluck($formation,'nom'))
                     ->setDatalabels();
  
@@ -128,6 +132,7 @@ if(count($modules)){
             ])  
         ->setXAxis(Arr::pluck($modulenom,'nom'))
         ->setColors($borderColors) 
+        ->setHeight('230')
         ->setDatalabels();
         
         $parcelles = Parcelle::select(DB::raw('DATE_FORMAT(created_at,"%Y-%m-%d") as date'),DB::raw('count(id) as nombre'))->groupBy('date')->get();
