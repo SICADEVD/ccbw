@@ -20,7 +20,7 @@ class FormationVisiteursExport implements FromView, WithTitle
         // TODO: Implement view() method.
         
         return view('manager.formation.FormationsVisiteurExcel',[
-            'visiteurs' => SuiviFormationVisiteur::joinRelationship('suiviFormation.localite')->where('cooperative_id',auth()->user()->cooperative_id)->get()
+            'visiteurs' => SuiviFormationVisiteur::joinRelationship('suiviFormation.localite.section')->where('cooperative_id',auth()->user()->cooperative_id)->get()
         ]);
     }
 

@@ -18,7 +18,7 @@ class ExportInspections implements FromView
     {
         // TODO: Implement view() method.
         return view('manager.inspection.InspectionsAllExcel',[
-            'inspections' => Inspection::joinRelationship('producteur.localite')->where('cooperative_id',auth()->user()->cooperative_id)->get()
+            'inspections' => Inspection::joinRelationship('producteur.localite.section')->where('cooperative_id',auth()->user()->cooperative_id)->get()
         ]);
     }
          
