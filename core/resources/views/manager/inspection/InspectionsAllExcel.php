@@ -53,6 +53,7 @@
             <td><?php echo $c->producteur->codeProd; ?></td>
             <td><?php echo $c->user->lastname; ?> <?php echo $c->user->firstname; ?></td>
             <td><?php echo $c->note; ?></td> 
+            <td><?php echo $c->date_evaluation; ?></td>
         </tr>
         </tbody>
         <?php

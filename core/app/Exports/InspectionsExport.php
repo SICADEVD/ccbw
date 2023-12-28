@@ -20,7 +20,7 @@ class InspectionsExport implements FromView, WithTitle
         // TODO: Implement view() method.
         return view('manager.inspection.InspectionsAllExcel',[
             'inspections' => Inspection::joinRelationship('producteur.localite.section')->where('cooperative_id',auth()->user()->cooperative_id)
-            ->when(request()->id, function ($query, $id) {
+            ->when(request()->id, function($query, $id) {
                 $query->where('inspections.id',decrypt($id)); 
            })
             ->get()
