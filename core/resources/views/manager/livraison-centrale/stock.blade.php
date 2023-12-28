@@ -79,10 +79,10 @@
                                             @endif
                                         </td>
                                         <td>
-                                            {{ $produit->transporteur->nom }} {{ $produit->transporteur->prenoms }} 
+                                            {{ @$produit->transporteur->nom }} {{ @$produit->transporteur->prenoms }} 
                                         </td>
                                         <td>
-                                            {{ $produit->vehicule->marque->nom }}({{ $produit->vehicule->vehicule_immat }} )
+                                            {{ @$produit->vehicule->marque->nom }}({{ @$produit->vehicule->vehicule_immat }} )
                                         </td>
                                         <td>
                                              
