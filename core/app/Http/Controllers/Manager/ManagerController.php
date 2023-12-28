@@ -127,7 +127,7 @@ $producteurbymodule = array();
         ON s.id = tf.suivi_formation_id
     GROUP BY 
         tf.type_formation_id');
-if(count($modules)){
+ 
     $modulenom = TypeFormation::whereIn('id',Arr::pluck($modules,'module_id'))->select('nom')->get();
     $producteurbymodule = LarapexChart::setType('bar')
     ->setTitle('Producteurs formés par Module')  
@@ -141,8 +141,7 @@ if(count($modules)){
     ->setColors($borderColors) 
     ->setHeight('230')
     ->setDatalabels();
-}
-       
+
         
         // Nombre de parcelles
         $parcelles = Parcelle::select(DB::raw('DATE_FORMAT(created_at,"%Y-%m-%d") as date'),DB::raw('count(id) as nombre'))->groupBy('date')->get();
