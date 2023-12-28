@@ -106,7 +106,7 @@
 
 @push('breadcrumb-plugins') 
 <a href="{{ route('manager.livraison.create') }}" class="btn  btn-outline--primary h-45 addNewCooperative">
-        <i class="las la-plus"></i>@lang("Enregistrer Achat Cacao brousse")
+        <i class="las la-plus"></i>@lang("Enregistrement Achat Cacao brousse")
     </a>
 <a href="{{ route('manager.livraison.stock.section.create') }}" class="btn  btn-outline--primary h-45 addNewCooperative">
         <i class="las la-plus"></i>@lang("Enregistrer Connaissement brousse vers Magasin Central")
