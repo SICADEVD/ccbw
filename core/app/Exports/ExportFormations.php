@@ -1,8 +1,7 @@
 <?php
 
 namespace App\Exports;
-
-use App\Models\SuiviFormationVisiteur;
+ 
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;  
 
 class ExportFormations implements WithMultipleSheets

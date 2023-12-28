@@ -26,21 +26,22 @@
 <table id="categories" width="100%">
     <thead>
     <tr>
-        <td>ID</td>
-        <td>Module</td> 
-        <td>Theme</td> 
+        <td>ID</td>  
+        <td>Categorie</td>
+        <td>Question</td>
+        <td>Point</td>
     </tr>
     </thead> 
     <?php
-     
-    foreach($themes as $c)
+    foreach($questions as $c)
     {
     ?>
         <tbody>
         <tr>
-            <td><?php echo $c->suivi_formation_id; ?></td> 
-            <td><?php echo $c->typeFormation->nom; ?></td> 
-            <td><?php echo $c->themeFormation->nom; ?></td>   
+            <td><?php echo $c->inspection_id; ?></td>
+            <td><?php echo $c->questionnaire->categorieQuestion->titre; ?></td>
+            <td><?php echo $c->questionnaire->nom; ?></td>
+            <td><?php echo $c->notation; ?></td>
         </tr>
         </tbody>
         <?php

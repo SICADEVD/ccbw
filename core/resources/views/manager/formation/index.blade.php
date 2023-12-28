@@ -85,14 +85,17 @@
                                         <td>
                                             <a href="{{ route('manager.suivi.formation.visiteurs',$formation->id) }}"
                                                 class="icon-btn btn--info ml-1">@lang('Visiteurs')</a>
-
+                                                <a href="{{ route('manager.suivi.formation.exportExcel.formationAll',['id'=>encrypt($formation->id)]) }}" class="btn  btn-outline--success ml-1"><i
+            class="las la-cloud-download-alt"></i> Exporter</a>
                                             <button type="button" class="btn btn-sm btn-outline--primary"
                                                 data-bs-toggle="dropdown" aria-expanded="false"><i
                                                     class="las la-ellipsis-v"></i>@lang('Action')
                                             </button>
+                                            
                                             <div class="dropdown-menu p-0">
                                                 <a href="{{ route('manager.suivi.formation.edit', $formation->id) }}"
                                                     class="dropdown-item"><i class="la la-pen"></i>@lang('Edit')</a>
+                                                    
                                                 @if ($formation->status == Status::DISABLE)
                                                     <button type="button" class="confirmationBtn  dropdown-item"
                                                         data-action="{{ route('manager.suivi.formation.status', $formation->id) }}"

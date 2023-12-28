@@ -1,25 +1,22 @@
 <?php
 
 namespace App\Exports;
+ 
+use Maatwebsite\Excel\Concerns\WithMultipleSheets;  
 
-use App\Models\Inspection;
-use Illuminate\Contracts\View\View;
-use Maatwebsite\Excel\Concerns\Exportable;
-use Maatwebsite\Excel\Concerns\FromView;
-
-class ExportInspections implements FromView
+class ExportInspections implements WithMultipleSheets
 {
-    /**
-    * @return \Illuminate\Support\Collection
-    */
-    use Exportable;
+     
+  public function sheets(): array 
+    {    
+      $feuilles=array();  
+      $feuilles[] = new InspectionQuestionnairesExport(); 
 
-    public function view(): View
-    {
-        // TODO: Implement view() method.
-        return view('manager.inspection.InspectionsAllExcel',[
-            'inspections' => Inspection::joinRelationship('producteur.localite.section')->where('cooperative_id',auth()->user()->cooperative_id)->get()
-        ]);
+    $sheets = [ new InspectionsExport(), ];
+    $sheets = array_merge($sheets, $feuilles);
+   
+
+    return $sheets; 
     }
-         
+  
 }

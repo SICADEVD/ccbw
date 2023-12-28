@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\SuiviFormationTheme;
+use App\Models\TypeFormationTheme;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromView;
@@ -20,7 +21,11 @@ class FormationThemesExport implements FromView, WithTitle
         // TODO: Implement view() method.
         
         return view('manager.formation.FormationsThemeExcel',[
-            'themes' => SuiviFormationTheme::joinRelationship('suiviFormation.localite.section')->where('cooperative_id',auth()->user()->cooperative_id)->get()
+            'themes' => TypeFormationTheme::joinRelationship('suiviFormation.localite.section')->where('cooperative_id',auth()->user()->cooperative_id)
+            ->when(request()->id, function ($query, $id) {
+                $query->where('suivi_formation_id',decrypt($id)); 
+           })
+            ->get()
         ]);
     }
 
