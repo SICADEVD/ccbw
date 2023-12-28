@@ -114,7 +114,7 @@
                 <li class="sidebar-menu-item sidebar-dropdown">
                     <a href="javascript:void(0)" class="{{ menuActive('manager.traca.*', 3) }}">
                         <i class="menu-icon las la-users"></i>
-                        <span class="menu-title">@lang('Gestion de la Traçabilité') </span>
+                        <span class="menu-title">@lang('Gestion des Exploitations') </span>
                     </a>
                     <div class="sidebar-submenu {{ menuActive('manager.traca.*', 2) }} ">
                         <ul>
@@ -145,8 +145,7 @@
                 <li class="sidebar-menu-item sidebar-dropdown">
                     <a href="javascript:void(0)" class="{{ menuActive('manager.suivi*', 3) }}">
                         <i class="menu-icon las la-users"></i>
-                        <span class="menu-title">@lang('Gestion Suivi
-                                                                                                Productivité') </span>
+                        <span class="menu-title">@lang('Gestion Suivi Productivité') </span>
                     </a>
                     <div class="sidebar-submenu {{ menuActive('manager.suivi*', 2) }} ">
                         <ul>
@@ -184,7 +183,7 @@
                     <a href="javascript:void(0)"
                         class="{{ menuActive(['manager.livraison.*', 'manager.livraison.magcentral.*'], 3) }}">
                         <i class="menu-icon las la-university"></i>
-                        <span class="menu-title">@lang('Gestion des livraisons') </span>
+                        <span class="menu-title">@lang('Gestion de la Traçabilité') </span>
                     </a>
                     <div
                         class="sidebar-submenu {{ menuActive(['manager.livraison.*', 'manager.livraison.magcentral.*'], 2) }} ">
