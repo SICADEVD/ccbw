@@ -10,6 +10,7 @@ use App\Models\ArretEcole;
 use App\Models\Cooperative;
 use App\Models\CourierInfo;
 use Illuminate\Http\Request;
+use App\Models\Certification;
 use App\Models\Questionnaire;
 use App\Models\TravauxLegers;
 use App\Models\TypeFormation;
@@ -170,6 +171,31 @@ class SettingController extends Controller
         $programme->prime   = $request->prime;
         $programme->save();
         $notify[] = ['success', isset($message) ? $message  : 'La prime a été ajouté avec succès.'];
+        return back()->withNotify($notify);
+    }
+
+    public function certificationIndex()
+    {
+        $pageTitle = "Manage Certification"; 
+        $certifications     = Certification::orderBy('id','desc')->paginate(getPaginate()); 
+        return view('admin.config.certification', compact('pageTitle', 'certifications'));
+    }
+
+    public function certificationStore(Request $request)
+    {
+        $request->validate([ 
+            'nom'  => 'required',   
+        ]);
+
+        if ($request->id) {
+            $certification    = Certification::findOrFail($request->id);
+            $message = "Certification a été mise à jour avec succès.";
+        } else {
+            $certification = new Certification();
+        } 
+        $certification->nom = $request->nom; 
+        $certification->save();
+        $notify[] = ['success', isset($message) ? $message  : 'Certification a été ajouté avec succès.'];
         return back()->withNotify($notify);
     }
 
@@ -398,5 +424,9 @@ class SettingController extends Controller
     public function questionnaireStatus($id)
     {
         return Questionnaire::changeStatus($id);
+    }
+    public function certificationStatus($id)
+    {
+        return Certification::changeStatus($id);
     }
 }

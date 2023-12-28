@@ -61,6 +61,12 @@
                         <span class="menu-title">@lang('Gestion des Programmes')</span>
                     </a>
                 </li>
+                <li class="sidebar-menu-item  {{ menuActive(['admin.config.certification*']) }}">
+                    <a href="{{ route('admin.config.certification.index') }}" class="nav-link">
+                        <i class="menu-icon las la-file"></i>
+                        <span class="menu-title">@lang('Gestion des Certifications')</span>
+                    </a>
+                </li>
                 <li class="sidebar-menu-item  {{ menuActive(['admin.livraison.info*', 'admin.livraison.invoice']) }}">
                     <a href="{{ route('admin.livraison.info.index') }}" class="nav-link">
                         <i class="menu-icon las la-fax"></i>

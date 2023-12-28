@@ -98,6 +98,7 @@ Route::middleware('admin')->group(function () {
             Route::get('campagne/', 'campagneIndex')->name('campagne.index');
             Route::post('campagne/store', 'campagneStore')->name('campagne.store');
             Route::post('campagne/status/{id}', 'campagneStatus')->name('campagne.status'); 
+
             Route::get('campagne/periode', 'periodeIndex')->name('campagne.periodeIndex');
             Route::post('campagne/periode/store', 'periodeStore')->name('campagne.periodeStore');
             Route::post('campagne/periode/status/{id}', 'periodeStatus')->name('campagne.periodeStatus'); 
@@ -109,6 +110,10 @@ Route::middleware('admin')->group(function () {
             Route::post('programme/prime/store', 'primeStore')->name('programme.primeStore');
             Route::post('programme/prime/status/{id}', 'primeStatus')->name('programme.primeStatus');  
 
+            Route::get('certification/', 'certificationIndex')->name('certification.index');
+            Route::post('certification/store', 'certificationStore')->name('certification.store');
+            Route::post('certification/status/{id}', 'certificationStatus')->name('certification.status'); 
+            
             Route::get('travaux-dangereux/', 'travauxDangereuxIndex')->name('travauxDangereux.index');
             Route::post('travaux-dangereux/store', 'travauxDangereuxStore')->name('travauxDangereux.store');
             Route::post('travaux-dangereux/status/{id}', 'travauxDangereuxStatus')->name('travauxDangereux.status'); 
