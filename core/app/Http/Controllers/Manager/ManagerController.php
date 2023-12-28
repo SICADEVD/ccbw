@@ -113,6 +113,7 @@ class ManagerController extends Controller
                     ->setDatalabels();
  
 //Producteurs formés par Module
+$producteurbymodule = array();
         $modules = DB::select('SELECT 
         tf.type_formation_id AS module_id,
         COUNT(sf.producteur_id) AS nombre_producteurs
@@ -126,22 +127,21 @@ class ManagerController extends Controller
         ON s.id = tf.suivi_formation_id
     GROUP BY 
         tf.type_formation_id');
-if(count($modules)){
+ 
     $modulenom = TypeFormation::whereIn('id',Arr::pluck($modules,'module_id'))->select('nom')->get();
-    
-}
-        $producteurbymodule = LarapexChart::setType('bar')
-        ->setTitle('Producteurs formés par Module')  
-        ->setDataset([
-            [
-            'name'=>'Nombre de producteurs', 
-            'data'=> Arr::pluck($modules,'nombre_producteurs')
-            ]
-            ])  
-        ->setXAxis(Arr::pluck($modulenom,'nom'))
-        ->setColors($borderColors) 
-        ->setHeight('230')
-        ->setDatalabels();
+    $producteurbymodule = LarapexChart::setType('bar')
+    ->setTitle('Producteurs formés par Module')  
+    ->setDataset([
+        [
+        'name'=>'Nombre de producteurs', 
+        'data'=> Arr::pluck($modules,'nombre_producteurs')
+        ]
+        ])  
+    ->setXAxis(Arr::pluck($modulenom,'nom'))
+    ->setColors($borderColors) 
+    ->setHeight('230')
+    ->setDatalabels();
+
         
         // Nombre de parcelles
         $parcelles = Parcelle::select(DB::raw('DATE_FORMAT(created_at,"%Y-%m-%d") as date'),DB::raw('count(id) as nombre'))->groupBy('date')->get();

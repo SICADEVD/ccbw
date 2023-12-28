@@ -2,22 +2,23 @@
 
 namespace App\Http\Controllers\Manager;
 
-use App\Constants\Status;
-use App\Exports\ExportInspections;
-use App\Http\Controllers\Controller;
-use App\Models\Campagne;
-use App\Models\CategorieQuestionnaire;
-use App\Models\Localite; 
-use App\Models\Producteur; 
-use App\Models\Inspection;
-use App\Models\InspectionQuestionnaire;
-use App\Models\Notation;
-use App\Models\Producteur_certification;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
+use App\Models\Campagne;
+use App\Models\Notation;
+use App\Constants\Status;
+use App\Models\Localite; 
+use App\Models\Inspection;
+use App\Models\Producteur; 
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Exports\ExportInspections;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Models\CategorieQuestionnaire;
+use App\Models\InspectionQuestionnaire;
+use App\Models\Producteur_certification;
 
 class InspectionController extends Controller
 {
@@ -180,10 +181,10 @@ $contents .='<tr><td colspan="2"><strong>'. $catquest->titre.'</strong></td></tr
     {
         return Inspection::changeStatus($id);
     }
-
+ 
     public function exportExcel()
     {
-        return (new ExportInspections())->download('inspections.xlsx');
+        $filename = 'inspections-' . gmdate('dmYhms') . '.xlsx';
+        return Excel::download(new ExportInspections, $filename);
     }
-    
 }

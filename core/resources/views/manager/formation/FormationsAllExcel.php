@@ -30,8 +30,10 @@
         <td>Localite</td>
         <td>Campagne</td>
         <td>Type formation</td>
-        <td>lieu_formation</td>
-        <td>date_formation</td> 
+        <td>Lieu</td>
+        <td>Date de debut</td> 
+        <td>Date de fin</td> 
+        <td>Observation</td>
     </tr>
     </thead> 
     <?php
@@ -43,9 +45,11 @@
             <td><?php echo $c->id; ?></td>
             <td><?php echo $c->localite->nom; ?></td>
             <td><?php echo $c->campagne->nom; ?></td>
-            <td><?php echo @$c->typeFormation->nom; ?></td>
+            <td><?php echo $c->formation_type; ?></td>
             <td><?php echo $c->lieu_formation; ?></td> 
-            <td><?php echo date('d-m-Y', strtotime($c->date_formation)); ?></td>
+            <td><?php echo date('d-m-Y', strtotime($c->date_debut_formation)); ?></td>
+            <td><?php echo date('d-m-Y', strtotime($c->date_fin_formation)); ?></td> 
+            <td><?php echo $c->observation_formation; ?></td>
         </tr>
         </tbody>
         <?php

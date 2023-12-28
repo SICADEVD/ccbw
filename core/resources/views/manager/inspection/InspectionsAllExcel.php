@@ -27,6 +27,7 @@
     <thead>
     <tr>
         <td>ID</td>
+        <td>Type inspection</td>
         <td>Localite</td>
         <td>Campagne</td>
         <td>Nom</td>
@@ -44,14 +45,15 @@
         <tbody>
         <tr>
             <td><?php echo $c->id; ?></td>
+            <td><?php echo $c->certificat; ?></td>
             <td><?php echo $c->producteur->localite->nom; ?></td>
             <td><?php echo $c->campagne->nom; ?></td>
             <td><?php echo $c->producteur->nom; ?></td>
             <td><?php echo $c->producteur->prenoms; ?></td>
             <td><?php echo $c->producteur->codeProd; ?></td>
             <td><?php echo $c->user->lastname; ?> <?php echo $c->user->firstname; ?></td>
-            <td><?php echo $c->note; ?></td>
-            <td><?php echo date('d-m-Y', strtotime($c->date_evaluation)); ?></td> 
+            <td><?php echo $c->note; ?></td> 
+            <td><?php echo $c->date_evaluation; ?></td>
         </tr>
         </tbody>
         <?php

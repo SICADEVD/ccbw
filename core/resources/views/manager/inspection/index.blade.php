@@ -55,8 +55,8 @@
                         <table class="table table--light style--two">
                             <thead>
                                 <tr> 
-                                    <th>@lang('Localite')</th> 
-                                    <th>@lang('Certificat')</th>
+                                <th>@lang('Type inspection')</th>
+                                    <th>@lang('Localite')</th>  
                                     <th>@lang('Producteur')</th>
                                     <th>@lang('Formateur')</th>
                                     <th>@lang('Note')</th>
@@ -69,12 +69,13 @@
                             <tbody>
                                 @forelse($inspections as $inspection)
                                     <tr>
+                                    <td>
+                                            <span>{{ $inspection->certificat }}</span>
+                                        </td>
                                         <td>
                                             <span class="fw-bold">{{ $inspection->producteur->localite->nom }}</span>
                                         </td> 
-                                        <td>
-                                            <span>{{ $inspection->certificat }}</span>
-                                        </td>
+                                        
                                         <td> 
                                             <span class="small">
                                             {{ $inspection->producteur->nom }} {{ $inspection->producteur->prenoms }}
@@ -96,7 +97,8 @@
                                         </td>
                                         <td> @php echo $inspection->statusBadge; @endphp </td>
                                         <td>
-                                         
+                                        <a href="{{ route('manager.suivi.inspection.exportExcel.inspectionAll',['id'=>encrypt($inspection->id)]) }}" class="btn  btn-outline--info ml-1"><i class="las la-cloud-download-alt"></i> Exporter</a>
+
                                             <button type="button" class="btn btn-sm btn-outline--primary" data-bs-toggle="dropdown" aria-expanded="false"><i
                                                     class="las la-ellipsis-v"></i>@lang('Action')
                                              </button>
