@@ -5,9 +5,10 @@ namespace App\Exports;
 use App\Models\Inspection; 
 use Illuminate\Contracts\View\View; 
 use Maatwebsite\Excel\Concerns\FromView;
+use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Concerns\Exportable;
 
-class InspectionsExport implements FromView
+class InspectionsExport implements FromView, WithTitle
 {
     /**
     * @return \Illuminate\Support\Collection
@@ -25,4 +26,8 @@ class InspectionsExport implements FromView
             ->get()
         ]);
     } 
+    public function title(): string
+    {
+        Return "Inspections";
+    }
 }
