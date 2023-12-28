@@ -285,10 +285,71 @@ class ProducteurController extends Controller
         $notify[] = ['success', isset($message) ? $message : 'Le producteur a été crée avec succès.'];
         return back()->withNotify($notify);
     }
-    public function update(UpdateProducteurRequest $request, $id)
+    public function update(Request $request, $id)
     {
         $producteur = Producteur::findOrFail($id);
-        $request->validated();
+        $validationRule = [
+            'programme_id' => ['required', 'exists:programmes,id'],
+            'proprietaires' => 'required',
+            'certificats' => 'required',
+            'habitationProducteur' => 'required',
+            'statut' => 'required',
+            'statutMatrimonial' => 'required',
+            'localite_id'    => 'required|exists:localites,id',
+            'nom' => 'required|max:255',
+            'prenoms'  => 'required|max:255',
+            'sexe'  => 'required|max:255',
+            'nationalite'  => 'required|max:255',
+            'dateNaiss'  => 'required|max:255',
+            'phone1'  => ['required', 'regex:/^\d{10}$/', 'unique:producteurs,phone1,' . $request->id],
+            'niveau_etude'  => 'required|max:255',
+            'type_piece'  => 'required|max:255',
+            'num_ccc' => ['nullable', 'regex:/^\d{11}$/', 'unique:producteurs,num_ccc,' . $request->id],
+            'anneeDemarrage' => 'required_if:proprietaires,==,Garantie',
+            'anneeFin' => 'required_if:proprietaires,==,Garantie',
+            'plantePartage' => 'required_if:proprietaires,==,Planté-partager',
+            'typeCarteSecuriteSociale' => 'required',
+            'autreCertificats' => 'required_if:certificats,==,Autre',
+            'codeProd' => 'required_if:statut,==,Certifie',
+            'certificat' => 'required_if:statut,==,Certifie',
+            'autrePhone' => 'required_if:autreMembre,==,oui',
+            'numCMU' => 'required_if:carteCMU,==,oui',
+            //'phone2' => 'required_if:autreMembre,oui|regex:/^\d{10}$/|unique:producteurs,phone2,' . $request->id,
+        ];
+        $messages = [
+            'programme_id.required' => 'Le programme est obligatoire',
+            'proprietaires.required' => 'Le type de propriétaire est obligatoire',
+            'certificats.required' => 'Le type de certificat est obligatoire',
+            'habitationProducteur.required' => 'Le type d\'habitation est obligatoire',
+            'statut.required' => 'Le statut est obligatoire',
+            'statutMatrimonial.required' => 'Le statut matrimonial est obligatoire',
+            'localite_id.required' => 'La localité est obligatoire',
+            'nom.required' => 'Le nom est obligatoire',
+            'prenoms.required' => 'Le prénom est obligatoire',
+            'sexe.required' => 'Le sexe est obligatoire',
+            'nationalite.required' => 'La nationalité est obligatoire',
+            'dateNaiss.required' => 'La date de naissance est obligatoire',
+            'phone1.required' => 'Le numéro de téléphone est obligatoire',
+            'phone1.regex' => 'Le numéro de téléphone doit contenir exactement 10 chiffres.',
+            'phone1.unique' => 'Ce numéro de téléphone est déjà utilisé.',
+            'niveau_etude.required' => 'Le niveau d\'étude est obligatoire',
+            'type_piece.required' => 'Le type de pièce est obligatoire',
+            'numPiece.required' => 'Le numéro de pièce est obligatoire',
+            'anneeDemarrage.required_if' => 'L\'année de démarrage est obligatoire',
+            'anneeFin.required_if' => 'L\'année de fin est obligatoire',
+            'plantePartage.required_if' => 'Le type de plante est obligatoire',
+            'typeCarteSecuriteSociale.required' => 'Le type de carte de sécurité sociale est obligatoire',
+            'autreCertificats.required_if' => 'Le type de certificat est obligatoire',
+            'codeProdapp.required_if' => 'Le code Prodapp est obligatoire',
+            'certificat.required_if' => 'Le certificat est obligatoire',
+            'phone2.required_if' => 'Le numéro de téléphone est obligatoire',
+            'phone2.regex' => 'Le numéro de téléphone doit contenir exactement 10 chiffres.',
+            'phone2.unique' => 'Ce numéro de téléphone est déjà utilisé.',
+            'autrePhone.required_if' => 'Le champ membre de famille est obligatoire',
+            'num_ccc.regex' => 'numéro du conseil café cacao doit contenir 11 chiffres',
+        ];
+        $request->validate($validationRule, $messages);
+        
         $producteur->proprietaires = $request->proprietaires;
         $producteur->statutMatrimonial = $request->statutMatrimonial;
         $producteur->programme_id = $request->programme_id;

@@ -446,7 +446,7 @@
                     <div class="form-group row">
                         <?php echo Form::label(__('N° de carte CCC'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::text('num_ccc', null, ['placeholder' => __('N° de carte CCC'), 'class' => 'form-control phone']); ?>
+                          <?php echo Form::text('num_ccc', null, ['placeholder' => __('N° de carte CCC'), 'class' => 'form-control']); ?>
                         </div>
                     </div>
                     {{-- Avez-vous une carte CMU ? --}}
