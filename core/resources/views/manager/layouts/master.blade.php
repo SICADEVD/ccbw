@@ -205,6 +205,9 @@ $('.grid').masonry({
             $('.text2').mask('00', {
                 placeholder: "__"
             });
+            $('.text11').mask('00000000000', {
+                placeholder: "__ __ __ __ __ __ __ __ __ __ __"
+            });
             $('.text4').mask('0000', {
                 placeholder: "____"
             });

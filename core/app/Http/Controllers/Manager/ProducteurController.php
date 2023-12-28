@@ -20,6 +20,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreInfoRequest;
 use App\Http\Requests\StoreProducteurRequest;
 use App\Http\Requests\UpdateProducteurRequest;
+use App\Models\Certification;
 use App\Models\Product;
 use App\Models\Producteur_certification;
 use App\Models\Producteur_infos_autresactivite;
@@ -193,7 +194,8 @@ class ProducteurController extends Controller
         $sections = Section::where('cooperative_id', $manager->cooperative_id)->get();
         $localites = Localite::active()->with('section')->get();
         $programmes = Programme::all();
-        return view('manager.producteur.create', compact('pageTitle', 'localites', 'sections', 'programmes'));
+        $certifications = Certification::all();
+        return view('manager.producteur.create', compact('pageTitle', 'localites', 'sections', 'programmes','certifications'));
     }
 
     public function store(StoreProducteurRequest $request)
@@ -264,19 +266,19 @@ class ProducteurController extends Controller
                 if (($request->certificats != null)) {
                     Producteur_certification::where('producteur_id', $id)->delete();
                     foreach ($request->certificats as $certificat) {
-    
+                        if($certificat=='Autre'){
+                            $autre = new Certification();
+                            $autre->nom = $request->autreCertificats;
+                            $autre->save();
+                            $certificat = $request->autreCertificats;
+                        }
                         $datas[] = [
                             'producteur_id' => $id,
                             'certification' => $certificat,
                         ];
                         
                     }
-                    if (in_array('Autre', $request->certificats)) {
-                        $datas[] = [
-                            'producteur_id' => $id,
-                            'certification' => $request->autreCertificats,
-                        ];
-                    }
+                    
                 }
                 Producteur_certification::insert($datas);
             }
@@ -407,19 +409,19 @@ class ProducteurController extends Controller
             if (($request->certificats != null)) {
                 Producteur_certification::where('producteur_id', $id)->delete();
                 foreach ($request->certificats as $certificat) {
-
+                    if($certificat=='Autre'){
+                        $autre = new Certification();
+                        $autre->nom = $request->autreCertificats;
+                        $autre->save();
+                        $certificat = $request->autreCertificats;
+                    }
                     $datas[] = [
                         'producteur_id' => $id,
                         'certification' => $certificat,
                     ];
                     
                 }
-                if (in_array('Autre', $request->certificats)) {
-                    $datas[] = [
-                        'producteur_id' => $id,
-                        'certification' => $request->autreCertificats,
-                    ];
-                }
+                 
             }
             Producteur_certification::insert($datas);
         }
@@ -439,8 +441,9 @@ class ProducteurController extends Controller
         $localites = Localite::active()->with('section')->get();
         $programmes = Programme::all();
         $producteur   = Producteur::findOrFail($id);
+        $certificationAll = Certification::all();
         $certifications = $producteur->certifications->pluck('certification')->all();
-        return view('manager.producteur.edit', compact('pageTitle', 'localites', 'producteur', 'programmes', 'sections', 'certifications'));
+        return view('manager.producteur.edit', compact('pageTitle', 'localites', 'producteur', 'programmes', 'sections', 'certifications','certificationAll'));
     }
 
     private function generecodeProdApp($nom, $prenoms, $codeApp)

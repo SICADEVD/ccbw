@@ -57,10 +57,11 @@
                             <select class="form-control select2-multi-select certificats" name="certificats[]" multiple
                                 required>
                                 <option value="">@lang('Selectionner les protections')</option>
-                                <option value="Rainforest"{{ in_array('Rainforest', $certifications) ? 'selected' : '' }}>
-                                    Rainforest</option>
-                                <option value="Fairtrade"{{ in_array('Fairtrade', $certifications) ? 'selected' : '' }}>
-                                    Fairtrade</option>
+                                 
+                                    @foreach ($certificationAll as $certification)
+                                    <option value="{{ $certification->nom }}"  {{ in_array($certification->nom, old('certificats', $certifications)) ? 'selected' : '' }}>
+                                        {{ __($certification->nom) }}</option>
+                                @endforeach
                                 <option value="Autre"{{ in_array('Autre', $certifications) ? 'selected' : '' }}>Autre
                                 </option>
                             </select>
@@ -440,7 +441,7 @@
                     <div class="form-group row">
                         <?php echo Form::label(__('N° de carte CCC'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::text('num_ccc', null, ['placeholder' => __('N° de carte CCC'), 'class' => 'form-control']); ?>
+                            <?php echo Form::text('num_ccc', null, ['placeholder' => __('N° de carte CCC'), 'class' => 'form-control text11']); ?>
                         </div>
                     </div>
                     {{-- Avez-vous une carte CMU ? --}}
