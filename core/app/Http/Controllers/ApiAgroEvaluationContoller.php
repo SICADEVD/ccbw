@@ -115,6 +115,7 @@ class ApiAgroEvaluationContoller extends Controller
         ];
 
         $request->validate($validationRule);
+        $distribution = null;
 
         if ($request->id) {
             $distribution = Agrodistribution::findOrFail($request->id);
@@ -163,6 +164,7 @@ class ApiAgroEvaluationContoller extends Controller
                             if ($agroapprov != null) {
                                 $agroapprov->total_restant = $agroapprov->total_restant + $total;
                                 $agroapprov->save();
+                                return response()->json($distribution, 201);
                             }
                             $i++;
                         } else {
@@ -174,6 +176,6 @@ class ApiAgroEvaluationContoller extends Controller
                 }
             }
         }
-        return response()->json($distribution, 201); 
+        
     }
 }
