@@ -306,7 +306,10 @@ class ApilivraisonController extends Controller
 
     public function getvehicules()
     {
-        $vehicules = DB::table('vehicules')->get();
+        $vehicules = DB::table('vehicules')
+            ->join('marques', 'marques.id', '=', 'vehicules.marque_id')
+            ->select('vehicules.id','vehicules.vehicule_immat','vehicules.cooperative_id', 'vehicules.marque_id','vehicules.status','marques.nom as marque')
+            ->get();
         return response()->json($vehicules, 201);
     }
     public function getremorques()
