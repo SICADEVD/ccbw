@@ -22,96 +22,6 @@
                     </a>
                 </li>
                 <li class="sidebar-menu-item sidebar-dropdown">
-                    <a href="javascript:void(0)"
-                        class="{{ menuActive(['manager.hr.*', 'manager.employees.index', 'manager.holidays.*', 'manager.departments.*', 'manager.designations.*', 'manager.holidays.*', 'manager.leaves.*', 'manager.archivages.*', 'manager.formation-staff.*', 'presentation-coop.*'], 3) }}">
-                        <i class="menu-icon las la-users"></i>
-                        <span class="menu-title">@lang('Gouvernance Ameliorée') </span>
-                    </a>
-                    <div
-                        class="sidebar-submenu {{ menuActive(['manager.hr.*', 'manager.employees.*', 'manager.holidays.*', 'manager.departments.*', 'manager.designations.*', 'manager.holidays.*', 'manager.leaves.*', 'manager.archivages.*', 'manager.formation-staff.*', 'presentation-coop.*'], 2) }} ">
-                        <ul>
-
-                            <li class="sidebar-menu-item {{ menuActive('presentation-coop.index') }}">
-                                <a href="{{ route('presentation-coop.index') }}" class="nav-link">
-                                    <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('Présentation de la coopérative')</span>
-                                </a>
-                            </li>
-
-                            <li class="sidebar-menu-item {{ menuActive('manager.employees.index') }}">
-                                <a href="{{ route('manager.employees.index') }}" class="nav-link">
-                                    <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('Tous les employés')</span>
-                                </a>
-                            </li>
-                            <li class="sidebar-menu-item {{ menuActive('manager.hr.attendances.index') }}">
-                                <a href="{{ route('manager.hr.attendances.index') }}" class="nav-link">
-                                    <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('Présences')</span>
-                                </a>
-                            </li>
-                            <li class="sidebar-menu-item {{ menuActive('manager.leaves.index') }}">
-                                <a href="{{ route('manager.leaves.index') }}" class="nav-link">
-                                    <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('Congés')</span>
-                                </a>
-                            </li>
-                            <li class="sidebar-menu-item {{ menuActive('manager.holidays.index') }}">
-                                <a href="{{ route('manager.holidays.index') }}" class="nav-link">
-                                    <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('Jours Fériés')</span>
-                                </a>
-                            </li>
-                            <li class="sidebar-menu-item {{ menuActive('manager.formation-staff.*') }}">
-                                <a href="{{ route('manager.formation-staff.index') }}" class="nav-link">
-                                    <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('Formations Staff')</span>
-                                </a>
-                            </li>
-                            <li class="sidebar-menu-item {{ menuActive('manager.archivages.*') }}">
-                                <a href="{{ route('manager.archivages.index') }}" class="nav-link">
-                                    <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('Archivages')</span>
-                                </a>
-                            </li>
-
-                        </ul>
-                    </div>
-                </li>
-                <li class="sidebar-menu-item sidebar-dropdown">
-                    <a href="javascript:void(0)"
-                        class="{{ menuActive(['manager.suivi.menage.*', 'manager.suivi.ssrteclmrs.*'], 3) }}">
-                        <i class=" menu-icon las la-universal-access"></i>
-                        <span class="menu-title">@lang('SSRTE') </span>
-                    </a>
-                    <div class="sidebar-submenu {{ menuActive(['manager.suivi.menage.*'], 2) }} ">
-                        <ul>
-                            <li class="sidebar-menu-item {{ menuActive('manager.suivi.ssrteclmrs.index') }}">
-                                <a href="{{ route('manager.suivi.ssrteclmrs.index') }}" class="nav-link">
-                                    <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('SSRTE-CLMRS')</span>
-                                </a>
-                            </li>
-                            <li class="sidebar-menu-item {{ menuActive('manager.suivi.menage.index') }}">
-                                <a href="{{ route('manager.suivi.menage.index') }}" class="nav-link">
-                                    <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('Enquête Ménage')</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="sidebar-menu-item sidebar-dropdown">
-                    <a href="javascript:void(0)" class="{{ menuActive([], 3) }}">
-                        <i class=" menu-icon las la-universal-access"></i>
-                        <span class="menu-title">@lang('Communauté résiliente') </span>
-                    </a>
-                    <div class="sidebar-submenu {{ menuActive([], 2) }} ">
-                        <ul>
-                        </ul>
-                    </div>
-                </li>
-                <li class="sidebar-menu-item sidebar-dropdown">
                     <a href="javascript:void(0)" class="{{ menuActive('manager.traca.*', 3) }}">
                         <i class="menu-icon las la-users"></i>
                         <span class="menu-title">@lang('Gestion des Exploitations') </span>
@@ -230,6 +140,30 @@
                         </ul>
                     </div>
                 </li>
+                <li class="sidebar-menu-item sidebar-dropdown">
+                    <a href="javascript:void(0)"
+                        class="{{ menuActive(['manager.suivi.menage.*', 'manager.suivi.ssrteclmrs.*'], 3) }}">
+                        <i class=" menu-icon las la-universal-access"></i>
+                        <span class="menu-title">@lang('SSRTE') </span>
+                    </a>
+                    <div class="sidebar-submenu {{ menuActive(['manager.suivi.menage.*'], 2) }} ">
+                        <ul>
+                            <li class="sidebar-menu-item {{ menuActive('manager.suivi.ssrteclmrs.index') }}">
+                                <a href="{{ route('manager.suivi.ssrteclmrs.index') }}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('SSRTE-CLMRS')</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-menu-item {{ menuActive('manager.suivi.menage.index') }}">
+                                <a href="{{ route('manager.suivi.menage.index') }}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('Enquête Ménage')</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                
 
                 <li class="sidebar-menu-item sidebar-dropdown">
                     <a href="javascript:void(0)" class="{{ menuActive('manager.agro*', 3) }}">
@@ -270,6 +204,75 @@
                         </ul>
                     </div>
                 </li>
+                <li class="sidebar-menu-item sidebar-dropdown">
+                    <a href="javascript:void(0)"
+                        class="{{ menuActive(['manager.hr.*', 'manager.employees.index', 'manager.holidays.*', 'manager.departments.*', 'manager.designations.*', 'manager.holidays.*', 'manager.leaves.*', 'manager.archivages.*', 'manager.formation-staff.*', 'presentation-coop.*'], 3) }}">
+                        <i class="menu-icon las la-users"></i>
+                        <span class="menu-title">@lang('Gouvernance Ameliorée') </span>
+                    </a>
+                    <div
+                        class="sidebar-submenu {{ menuActive(['manager.hr.*', 'manager.employees.*', 'manager.holidays.*', 'manager.departments.*', 'manager.designations.*', 'manager.holidays.*', 'manager.leaves.*', 'manager.archivages.*', 'manager.formation-staff.*', 'presentation-coop.*'], 2) }} ">
+                        <ul>
+
+                            <li class="sidebar-menu-item {{ menuActive('presentation-coop.index') }}">
+                                <a href="{{ route('presentation-coop.index') }}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('Présentation de la coopérative')</span>
+                                </a>
+                            </li>
+
+                            <li class="sidebar-menu-item {{ menuActive('manager.employees.index') }}">
+                                <a href="{{ route('manager.employees.index') }}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('Tous les employés')</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-menu-item {{ menuActive('manager.hr.attendances.index') }}">
+                                <a href="{{ route('manager.hr.attendances.index') }}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('Présences')</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-menu-item {{ menuActive('manager.leaves.index') }}">
+                                <a href="{{ route('manager.leaves.index') }}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('Congés')</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-menu-item {{ menuActive('manager.holidays.index') }}">
+                                <a href="{{ route('manager.holidays.index') }}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('Jours Fériés')</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-menu-item {{ menuActive('manager.formation-staff.*') }}">
+                                <a href="{{ route('manager.formation-staff.index') }}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('Formations Staff')</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-menu-item {{ menuActive('manager.archivages.*') }}">
+                                <a href="{{ route('manager.archivages.index') }}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('Archivages')</span>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </li>
+                
+                <li class="sidebar-menu-item sidebar-dropdown">
+                    <a href="javascript:void(0)" class="{{ menuActive([], 3) }}">
+                        <i class=" menu-icon las la-universal-access"></i>
+                        <span class="menu-title">@lang('Communauté résiliente') </span>
+                    </a>
+                    <div class="sidebar-submenu {{ menuActive([], 2) }} ">
+                        <ul>
+                        </ul>
+                    </div>
+                </li>
+
                 <li class="sidebar-menu-item  {{ menuActive('ticket*') }}">
                     <a href="{{ route('manager.ticket.index') }}" class="nav-link">
                         <i class="menu-icon las la-ticket-alt"></i>

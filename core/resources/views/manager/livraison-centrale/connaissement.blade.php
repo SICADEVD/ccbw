@@ -45,9 +45,9 @@
                                     <th>@lang('Transporteur')</th>
                                     <th>@lang('Vehicule')</th>
                                     <th>@lang('Type Produit')</th> 
-                                    <th>@lang('Quantité chargée')</th> 
+                                    <th>@lang('Quantité chargée(Kg)')</th> 
                                     <th>@lang('Nombre Sacs')</th> 
-                                    <th>@lang('Quantité receptionnée')</th> 
+                                    <th>@lang('Quantité receptionnée(Kg)')</th> 
                                     <th>@lang('Statut')</th>
                                     <th>@lang('Action')</th>
                                 </tr>

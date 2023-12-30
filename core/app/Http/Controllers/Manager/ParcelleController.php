@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Manager;
 
 use Excel;
+use App\Models\Section;
 use App\Models\Campagne;
 use App\Models\Localite;
 use App\Models\Parcelle;
@@ -36,11 +37,13 @@ class ParcelleController extends Controller
         $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
             return $localite->active();
         });
-        // $parcelles = Parcelle::dateFilter()->searchable(['codeParc'])->latest('id')->joinRelationship('producteur.localite.section')->where('cooperative_id',$manager->cooperative_id)->where(function ($q) {
-        //     if(request()->localite != null){
-        //         $q->where('localite_id',request()->localite);
-        //     }
-        // })->with('producteur')->paginate(getPaginate());
+        $sections = Section::where('cooperative_id', $manager->cooperative_id)->get();
+     
+        $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
+            return $localite->active();
+        });
+        $producteurs = Producteur::joinRelationship('localite.section')->where('cooperative_id', $manager->cooperative_id)->get();
+
         $parcelles = Parcelle::dateFilter()->searchable(['codeParc'])
             ->latest('id')
             ->joinRelationship('producteur.localite.section')
@@ -54,7 +57,39 @@ class ParcelleController extends Controller
             ->paginate(getPaginate());
 
 
-        return view('manager.parcelle.index', compact('pageTitle', 'parcelles', 'localites'));
+        return view('manager.parcelle.index', compact('pageTitle','sections', 'parcelles', 'localites','producteurs'));
+    }
+
+    public function mapping()
+    {
+        $pageTitle      = "Gestion de mapping des parcelles";
+        $manager   = auth()->user();
+ 
+        $cooperative = Cooperative::with('sections.localites')->find($manager->cooperative_id);
+
+        $sections = Section::where('cooperative_id', $manager->cooperative_id)->get();
+     
+        $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
+            return $localite->active();
+        });
+        $producteurs = Producteur::joinRelationship('localite.section')->where('cooperative_id', $manager->cooperative_id)->get();
+
+        $parcelles = Parcelle::dateFilter()->latest('id')
+            ->joinRelationship('producteur.localite.section')
+            ->where('cooperative_id', $manager->cooperative_id)
+            ->when(request()->section, function ($query, $section) {
+                $query->where('section_id', $section);
+            })
+            ->when(request()->localite, function ($query, $localite) {
+                $query->where('localite_id', $localite);
+            })
+            ->when(request()->producteur, function ($query, $producteur) {
+                $query->where('producteur_id', $producteur);
+            })
+            ->with(['producteur.localite.section']) // Charger les relations nécessaires
+            ->get();
+ 
+        return view('manager.parcelle.mapping', compact('pageTitle','sections', 'parcelles', 'localites','producteurs'));
     }
 
     public function create()

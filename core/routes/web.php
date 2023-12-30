@@ -334,6 +334,7 @@ Route::middleware('auth')->group(function () {
             Route::get('edit/{id}', 'edit')->name('edit');
             Route::post('status/{id}', 'status')->name('status');
             Route::get('/exportParcellesExcel', 'exportExcel')->name('exportExcel.parcelleAll');
+            Route::get('mapping', 'mapping')->name('mapping');
             Route::post('/uploadcontent', 'uploadContent')->name('uploadcontent');
         });
 

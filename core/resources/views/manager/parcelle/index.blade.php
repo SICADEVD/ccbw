@@ -12,11 +12,29 @@
                                 <input type="text" name="search" value="{{ request()->search }}" class="form-control">
                             </div>
                             <div class="flex-grow-1">
+                                <label>@lang('Section')</label>
+                                <select name="section" class="form-control" id="section">
+                                    <option value="">@lang('Toutes')</option>
+                                    @foreach ($sections as $local)
+                                        <option value="{{ $local->id }}" {{ request()->section == $local->id ? 'selected' : '' }}>{{ $local->libelle }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="flex-grow-1">
                                 <label>@lang('Localité')</label>
-                                <select name="localite" class="form-control">
+                                <select name="localite" class="form-control" id="localite">
                                     <option value="">@lang('Toutes')</option>
                                     @foreach ($localites as $local)
-                                        <option value="{{ $local->id }}">{{ $local->nom }}</option>
+                                        <option value="{{ $local->id }}" data-chained="{{ $local->section_id }}" {{ request()->localite == $local->id ? 'selected' : '' }}>{{ $local->nom }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="flex-grow-1">
+                                <label>@lang('Producteur')</label>
+                                <select name="producteur" class="form-control" id="producteur">
+                                    <option value="">@lang('Tous')</option>
+                                    @foreach ($producteurs as $local)
+                                        <option value="{{ $local->id }}" data-chained="{{ $local->localite_id }}" {{ request()->producteur == $local->id ? 'selected' : '' }}>{{ $local->nom }} {{ $local->prenoms }} ({{ $local->codeProd }})</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -172,6 +190,7 @@
     <a class="btn  btn-outline--info h-45 addType"><i class="las la-cloud-upload-alt"></i> Importer des Parcelles</a>
     <a href="{{ route('manager.traca.parcelle.exportExcel.parcelleAll') }}" class="btn  btn-outline--warning h-45"><i
             class="las la-cloud-download-alt"></i> Exporter en Excel</a>
+<a href="{{ route('manager.traca.parcelle.mapping') }}"  class="btn  btn-outline--primary h-45 "><i class="las la-map-marker"></i> Voir mapping des parcelles</a>
 @endpush
 @push('style')
     <style>
@@ -190,6 +209,8 @@
 @endpush
 @push('script')
     <script>
+        $("#localite").chained("#section");
+        $("#producteur").chained("#localite");
         (function($) {
             "use strict";
 
