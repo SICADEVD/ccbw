@@ -394,6 +394,7 @@ Route::middleware('auth')->group(function () {
             Route::get('create', 'create')->name('create');
             Route::post('store', 'store')->name('store');
             Route::get('edit/{id}', 'edit')->name('edit');
+            Route::get('show/{id}', 'show')->name('show');
             Route::post('status/{id}', 'status')->name('status');
             Route::get('certificat', 'getCertificat')->name('getcertificat');
             Route::get('questionnaire', 'getQuestionnaire')->name('getquestionnaire');

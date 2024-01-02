@@ -15,6 +15,7 @@
                         <table class="table table--light style--two">
                             <thead>
                                 <tr>
+                                    <th>@lang('Certificat')</th>
                                     <th>@lang('Categorie')</th>
                                     <th>@lang('Nom')</th>
                                     <th>@lang('Status')</th>
@@ -25,6 +26,9 @@
                             <tbody>
                                 @forelse($questionnaire as $question)
                                     <tr>
+                                    <td style="text-align:left;">
+                                            <span>{{ __($question->certificat) }}</span>
+                                    </td> 
                                     <td>
                                             <span>{{ __($question->categorieQuestion->titre) }}</span>
                                         </td> 
@@ -46,6 +50,7 @@
                                             <button type="button" class="btn btn-sm btn-outline--primary  updateType"
                                                 data-id="{{ $question->id }}" 
                                                 data-nom="{{ $question->nom }}"
+                                                data-certificat="{{ $question->certificat }}"
                                                 data-categoriequestionnaire="{{ $question->categorie_questionnaire_id }}"><i
                                                  class="las la-pen"></i>@lang('Edit')</button>
 
@@ -108,7 +113,19 @@
                                 </select>
                                 </div>
                             </div> 
-
+                            <div class="form-group row">
+                        <?php echo Form::label(__('Certificat'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-12 col-sm-8">
+                            <select class="form-control" name="certificat" id="certificat"
+                                required>
+                                <option value="">@lang('Selectionner les certificats')</option> 
+                                @foreach ($certifications as $certification)
+                                    <option value="{{ $certification->nom }}"  @selected(old('certificat'))>
+                                        {{ __($certification->nom) }}</option>
+                                @endforeach 
+                            </select>
+                        </div>
+                    </div>
         <div class="form-group row">
             {{ Form::label(__('Titre de la question'), null, ['class' => 'control-label col-sm-4']) }}
             <div class="col-xs-12 col-sm-8 col-md-8">
@@ -145,6 +162,7 @@
                 var modal = $('#typeModel'); 
                 modal.find('input[name=id]').val($(this).data('id')); 
                 modal.find('input[name=nom]').val($(this).data('nom')); 
+                modal.find('select[name=certificat]').val($(this).data('certificat')); 
                 modal.find('select[name=categoriequestionnaire]').val($(this).data('categoriequestionnaire')); 
                 modal.modal('show');
             });

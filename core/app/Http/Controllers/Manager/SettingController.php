@@ -44,6 +44,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ModuleFormationStaff;
 use App\Models\DocumentAdministratif;
 use App\Models\CategorieQuestionnaire;
+use App\Models\Certification;
 use App\Models\Remorque;
 use Google\Service\Blogger\UserLocale;
 
@@ -318,8 +319,7 @@ class SettingController extends Controller
     public function categorieQuestionnaireStore(Request $request)
     {
         $request->validate([
-            'titre'  => 'required',
-            'certificat'  => 'required',
+            'titre'  => 'required', 
         ]);
 
         if ($request->id) {
@@ -328,8 +328,7 @@ class SettingController extends Controller
         } else {
             $categorieQuestionnaire = new CategorieQuestionnaire();
         }
-        $categorieQuestionnaire->titre = trim($request->titre);
-        $categorieQuestionnaire->certificat = trim($request->certificat);
+        $categorieQuestionnaire->titre = trim($request->titre);  
         $categorieQuestionnaire->save();
         $notify[] = ['success', isset($message) ? $message  : 'Categorie Questionnaire a été ajouté avec succès.'];
         return back()->withNotify($notify);
@@ -341,7 +340,8 @@ class SettingController extends Controller
         $activeSettingMenu = 'questionnaire_settings';
         $questionnaire     = Questionnaire::with('categorieQuestion')->orderBy('id', 'desc')->paginate(getPaginate());
         $categorieQuestion = CategorieQuestionnaire::get();
-        return view('manager.config.questionnaire', compact('pageTitle', 'questionnaire', 'categorieQuestion', 'activeSettingMenu'));
+        $certifications = Certification::get();
+        return view('manager.config.questionnaire', compact('pageTitle', 'questionnaire', 'categorieQuestion', 'activeSettingMenu','certifications'));
     }
 
     public function questionnaireStore(Request $request)
@@ -349,6 +349,7 @@ class SettingController extends Controller
         $request->validate([
             'nom'  => 'required',
             'categoriequestionnaire' => 'required',
+            'certificat'  => 'required',
         ]);
 
         if ($request->id) {
@@ -359,6 +360,7 @@ class SettingController extends Controller
         }
         $questionnaire->nom = trim($request->nom);
         $questionnaire->categorie_questionnaire_id = $request->categoriequestionnaire;
+        $questionnaire->certificat = trim($request->certificat);
         $questionnaire->save();
         $notify[] = ['success', isset($message) ? $message  : 'Questionnaire a été ajouté avec succès.'];
         return back()->withNotify($notify);

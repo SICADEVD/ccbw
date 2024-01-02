@@ -1,5 +1,16 @@
 @extends('manager.layouts.app')
 @section('panel')
+<style type="text/css">
+.colorSelect_1{ 
+    background-color: #FF0000;
+}
+.colorSelect_2{
+    background-color: #9E9E9E;
+}
+.colorSelect_3{
+    background-color: #00BF00;
+}
+</style>
     <div class="row mb-none-30">
         <div class="col-lg-12 mb-30">
             <div class="card">
@@ -34,8 +45,8 @@
                             <div class="form-group row">
                                 <label for="" class="col-sm-4 control-label">@lang('Certificat')</label>
                                 <div class="col-xs-12 col-sm-8">
-                                <select class="form-control" name="certificat" id="certificat"
-                                required>
+                                <select class="form-control select2-multi-select" name="certificat[]" id="certificat"
+                                required multiple>
                                 <option value="">@lang('Selectionner un certificat')</option>
                                 
                             </select>
@@ -52,9 +63,33 @@
     </div>
     <hr class="panel-wide">
     <div class="form-group row">
-        <?php echo Form::label(__("Note"), null, ['class' => 'col-sm-4 control-label']); ?>
+        <?php echo Form::label(__("Taux de Conformité (%)"), null, ['class' => 'col-sm-4 control-label']); ?>
         <div class="col-xs-12 col-sm-8" >
-        <?php echo Form::number('note', null, array('placeholder' => __('00'),'class' => 'form-control note', 'id'=>'note', 'readonly'=>'readonly')); ?>
+        <?php echo Form::number('note', null, array('placeholder' => __('00'),'class' => 'form-control', 'id'=>'note', 'readonly'=>'readonly')); ?>
+        </div>
+    </div>
+    <div class="form-group row">
+        <?php echo Form::label(__("Total question"), null, ['class' => 'col-sm-4 control-label']); ?>
+        <div class="col-xs-12 col-sm-8" >
+        <?php echo Form::number('total_question', null, array('placeholder' => __('00'),'class' => 'form-control', 'id'=>'totalquestion', 'readonly'=>'readonly')); ?>
+        </div>
+    </div>
+    <div class="form-group row">
+        <?php echo Form::label(__("Total question Conforme"), null, ['class' => 'col-sm-4 control-label']); ?>
+        <div class="col-xs-12 col-sm-8" >
+        <?php echo Form::number('total_question_conforme', null, array('placeholder' => __('00'),'class' => 'form-control', 'id'=>'totalquestionconforme', 'readonly'=>'readonly')); ?>
+        </div>
+    </div>
+    <div class="form-group row">
+        <?php echo Form::label(__("Total question Non Conforme"), null, ['class' => 'col-sm-4 control-label']); ?>
+        <div class="col-xs-12 col-sm-8" >
+        <?php echo Form::number('total_question_non_conforme', null, array('placeholder' => __('00'),'class' => 'form-control', 'id'=>'totalquestionnonconforme', 'readonly'=>'readonly')); ?>
+        </div>
+    </div>
+    <div class="form-group row">
+        <?php echo Form::label(__("Total question Non Applicable"), null, ['class' => 'col-sm-4 control-label']); ?>
+        <div class="col-xs-12 col-sm-8" >
+        <?php echo Form::number('total_question_non_applicable', null, array('placeholder' => __('00'),'class' => 'form-control', 'id'=>'totalquestionnonapplicable', 'readonly'=>'readonly')); ?>
         </div>
     </div>
     <div class="form-group row">
@@ -112,7 +147,8 @@ $.ajax({
     url: "{{ route('manager.suivi.inspection.getcertificat') }}",
     data: $('#flocal').serialize(),
     success: function(html) {
-        $('#certificat').html(html);  
+        init_question();
+        $('#certificat').html(html);    
     }
 });
 });
@@ -124,14 +160,22 @@ $.ajax({
     url: "{{ route('manager.suivi.inspection.getquestionnaire') }}",
     data: $('#flocal').serialize(),
     success: function(html) {
-        $('#myListe').html(html);  
+        init_question();
+        $('#myListe').html(html.contents);  
+        $('#totalquestion').val(html.total); 
     }
 });
 });
-
+function init_question(){
+    $('#note').val(0);
+    $('#totalquestion').val(0); 
+    $('#totalquestionnonconforme').val(0);
+    $('#totalquestionnonapplicable').val(0);
+    $('#totalquestionconforme').val(0);
+}
 function update_amounts()
 {
-    var sum = 0;
+    var sum = conforme = nonconforme = nonapplicable = tauxconformite =  0;
 
     $('#myTable > tbody  > tr').each(function() {
         var qty = $(this).find('option:selected').val();
@@ -140,9 +184,26 @@ function update_amounts()
          {
             sum = parseFloat(sum)+parseFloat(qty);
          }
+         if(qty =="-1")
+         {
+            nonconforme = parseFloat(nonconforme)+1;
+         }
+         if(qty =="0")
+         {
+            nonapplicable = parseFloat(nonapplicable)+1;
+         }
+         if(qty =="1")
+         {
+            conforme = parseFloat(conforme)+1;
+         }
 
     });
-    $('#note').val(sum);
+    //$('#note').val(sum);
+    $('#totalquestionnonconforme').val(nonconforme);
+    $('#totalquestionnonapplicable').val(nonapplicable);
+    $('#totalquestionconforme').val(conforme); 
+    tauxconformite = (100*conforme)/$('#totalquestion').val()-nonapplicable;
+    $('#note').val(Math.round(tauxconformite));
     //just update the total to sum
 }
 

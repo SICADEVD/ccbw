@@ -52,10 +52,8 @@ class InspectionController extends Controller
         $producteurs  = Producteur::with('localite')->get();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->get();
         $staffs  = User::staff()->get();
-        $categoriequestionnaire = CategorieQuestionnaire::with('questions')->get();
-        $notations = Notation::get();
-
-        return view('manager.inspection.create', compact('pageTitle', 'producteurs','localites','staffs','categoriequestionnaire','notations'));
+     
+        return view('manager.inspection.create', compact('pageTitle', 'producteurs','localites','staffs'));
     }
 
     public function store(Request $request)
@@ -88,8 +86,13 @@ class InspectionController extends Controller
         $inspection->producteur_id  = $request->producteur;  
         $inspection->campagne_id  = $campagne->id;
         $inspection->formateur_id  = $request->encadreur;
-        $inspection->certificat  = $request->certificat;
-        $inspection->note  = $request->note;
+        $inspection->certificat  = json_encode($request->certificat);
+        $inspection->note  = $request->note; 
+        $inspection->total_question  = $request->total_question;
+        $inspection->total_question_conforme  = $request->total_question_conforme;
+        $inspection->total_question_non_conforme  = $request->total_question_non_conforme;
+        $inspection->total_question_non_applicable  = $request->total_question_non_applicable;
+        
         $inspection->date_evaluation     = $request->date_evaluation; 
 
         $inspection->save(); 
@@ -98,6 +101,7 @@ class InspectionController extends Controller
             $datas = []; 
            
             if(count($request->reponse)) { 
+                $certificat = $request->certificat;
                 InspectionQuestionnaire::where('inspection_id',$id)->delete();
                 $i=0; 
                 foreach($request->reponse as $key=>$value){
@@ -105,6 +109,7 @@ class InspectionController extends Controller
                         $datas[] = [
                         'inspection_id' => $id, 
                         'questionnaire_id' => $key, 
+                        'certificat' => $certificat[$key],
                         'notation' => $value, 
                     ];  
                 } 
@@ -113,7 +118,7 @@ class InspectionController extends Controller
         }
 
         $notify[] = ['success', isset($message) ? $message : 'L\'inspection a été crée avec succès.'];
-        return back()->withNotify($notify);
+       return back()->withNotify($notify);
     }
  
     public function edit($id)
@@ -128,6 +133,19 @@ class InspectionController extends Controller
         $inspection   = Inspection::findOrFail($id); 
         return view('manager.inspection.edit', compact('pageTitle', 'localites', 'inspection','producteurs','staffs','categoriequestionnaire','notations'));
     } 
+    public function show($id)
+    {
+        $pageTitle = "Détails de l'inspection";
+        $manager   = auth()->user();
+        $producteurs  = Producteur::with('localite')->get();
+        $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->get();
+        $staffs  = User::staff()->get();
+        $categoriequestionnaire = CategorieQuestionnaire::with('questions')->get();
+        $notations = Notation::get();
+        $inspection   = Inspection::findOrFail($id); 
+        return view('manager.inspection.show', compact('pageTitle', 'localites', 'inspection','producteurs','staffs','categoriequestionnaire','notations'));
+    } 
+
 
     public function getCertificat(Request $request){
         $content='<option value="">Selectionner un certificat</option>';
@@ -143,28 +161,37 @@ class InspectionController extends Controller
     }
     public function getQuestionnaire(Request $request){
         $contents='';
-        $categoriequestionnaire = CategorieQuestionnaire::where('certificat',$request->certificat)->with('questions')->get();
+        
         $notations = Notation::get();
- 
+        $total=0;
+        $datas = array();
+        if($request->certificat !=null)
+        {
+        $categoriequestionnaire = CategorieQuestionnaire::joinRelationship('questions')->whereIn('certificat',$request->certificat)->with('questions')->groupBy('categorie_questionnaires.id')->get();
         if($categoriequestionnaire->count()){ 
 
             $note = 0;
-            $total=0;
+           
             foreach($categoriequestionnaire as $catquest){ 
-$contents .='<tr><td colspan="2"><strong>'. $catquest->titre.'</strong></td></tr>';
+$contents .='<tr><td colspan="3"><strong>'. $catquest->titre.'</strong></td></tr>';
            
             foreach($catquest->questions as $q) { 
-
+                if(!in_array($q->certificat, $request->certificat)){
+                    continue;
+                }
+                $total = $total + 1;
                 $contents .= '<tr>
                  <td>'. $q->nom.'
             </td>
+            <td><input type="hidden" name="certificat['. $q->id.']" value="'. $q->certificat.'"/>'. $q->certificat.'
+            </td>
             <td><select class="form-control" class="notation" id="reponse-'. $q->id.'" name="reponse['. $q->id.']" required>
                     <option value="0"> </option>';
-                                       
+                          $a = 1;             
                         foreach($notations as $not)
                         { 
-                            $contents .= '<option value="'. $not->point.'">'. $not->nom.'</option>';
-                           
+                            $contents .= '<option value="'. $not->point.'" class="colorSelect_'.$a.'">'. $not->nom.'</option>';
+                           $a++;
                         } 
                         $contents .='</select>
                  </td>
@@ -175,7 +202,10 @@ $contents .='<tr><td colspan="2"><strong>'. $catquest->titre.'</strong></td></tr
         }else{
             $contents ="<div class='text-center'><span style='color:red;text-align:center'>Aucun questionnaire n'est disponible pour ce certificat.</span></div>";
         } 
-        return $contents;
+    }
+         $datas['total'] = $total;
+         $datas['contents'] = $contents;
+        return $datas;
     }
     public function status($id)
     {

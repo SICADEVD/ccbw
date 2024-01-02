@@ -69,8 +69,10 @@
                             <tbody>
                                 @forelse($inspections as $inspection)
                                     <tr>
-                                    <td>
-                                            <span>{{ $inspection->certificat }}</span>
+                                    <td> 
+                                            @foreach(json_decode($inspection->certificat) as $data)
+                                                <span class="btn btn-sm btn-outline--success">{{ $data }}</span>
+                                            @endforeach
                                         </td>
                                         <td>
                                             <span class="fw-bold">{{ $inspection->producteur->localite->nom }}</span>
@@ -103,8 +105,8 @@
                                                     class="las la-ellipsis-v"></i>@lang('Action')
                                              </button>
                                             <div class="dropdown-menu p-0">
-                                                <a href="{{ route('manager.suivi.inspection.edit', $inspection->id) }}"
-                                                    class="dropdown-item"><i class="la la-pen"></i>@lang('Edit')</a> 
+                                                <a href="{{ route('manager.suivi.inspection.show', $inspection->id) }}"
+                                                    class="dropdown-item"><i class="la la-file"></i>@lang('Details')</a> 
                                                 @if ($inspection->status == Status::DISABLE)
                                                     <button type="button" class="confirmationBtn  dropdown-item"
                                                         data-action="{{ route('manager.suivi.inspection.status', $inspection->id) }}"
