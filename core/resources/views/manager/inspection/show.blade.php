@@ -51,7 +51,7 @@
                    <tr>
                    <td><?php echo $q->nom; ?>
               </td> 
-              <td><?php echo $q->pivot->certificat; ?>
+              <td><?php echo $q->certificat; ?>
               </td> 
               <td>
               <?php

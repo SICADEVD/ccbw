@@ -101,7 +101,6 @@ class InspectionController extends Controller
             $datas = []; 
            
             if(count($request->reponse)) { 
-                $certificat = $request->certificat;
                 InspectionQuestionnaire::where('inspection_id',$id)->delete();
                 $i=0; 
                 foreach($request->reponse as $key=>$value){
@@ -109,7 +108,6 @@ class InspectionController extends Controller
                         $datas[] = [
                         'inspection_id' => $id, 
                         'questionnaire_id' => $key, 
-                        'certificat' => $certificat[$key],
                         'notation' => $value, 
                     ];  
                 } 
@@ -183,7 +181,7 @@ $contents .='<tr><td colspan="3"><strong>'. $catquest->titre.'</strong></td></tr
                 $contents .= '<tr>
                  <td>'. $q->nom.'
             </td>
-            <td><input type="hidden" name="certificat['. $q->id.']" value="'. $q->certificat.'"/>'. $q->certificat.'
+            <td>'. $q->certificat.'
             </td>
             <td><select class="form-control" class="notation" id="reponse-'. $q->id.'" name="reponse['. $q->id.']" required>
                     <option value="0"> </option>';
