@@ -51,11 +51,18 @@ class ApiproducteurController extends Controller
 
     // }
 
+    // $producteurs = Producteur::join('localites', 'producteurs.localite_id', '=', 'localites.id')
+    // ->join('producteur_certifications', 'producteurs.id', '=', 'producteur_certifications.producteur_id')
+    //   ->where('producteurs.userid', $userid)
+    //   ->select('producteurs.nom', 'producteurs.prenoms', 'localites.section_id as section_id', 'localites.id as localite_id', 'producteurs.id as id', 'producteurs.codeProd as codeProd','producteurs.statut','producteur_certifications.certification as certification')
+    //   ->get();
     $producteurs = Producteur::join('localites', 'producteurs.localite_id', '=', 'localites.id')
     ->join('producteur_certifications', 'producteurs.id', '=', 'producteur_certifications.producteur_id')
-      ->where('producteurs.userid', $userid)
-      ->select('producteurs.nom', 'producteurs.prenoms', 'localites.section_id as section_id', 'localites.id as localite_id', 'producteurs.id as id', 'producteurs.codeProd as codeProd','producteurs.statut','producteur_certifications.certification as certification')
-      ->get();
+    ->where('producteurs.userid', $userid)
+    ->select('producteurs.nom', 'producteurs.prenoms', 'localites.section_id as section_id', 'localites.id as localite_id', 'producteurs.id as id', 'producteurs.codeProd as codeProd','producteurs.statut')
+    ->selectRaw('GROUP_CONCAT(producteur_certifications.certification) as certification')
+    ->groupBy('producteurs.nom', 'producteurs.prenoms', 'localites.section_id', 'localites.id', 'producteurs.id', 'producteurs.codeProd','producteurs.statut')
+    ->get();
 
 
     return response()->json($producteurs, 201);
