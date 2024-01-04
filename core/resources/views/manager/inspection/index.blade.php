@@ -70,7 +70,7 @@
                                 @forelse($inspections as $inspection)
                                     <tr>
                                     <td> 
-                                            @foreach(json_decode($inspection->certificat) as $data)
+                                            @foreach(json_decode($inspection->certificat) ?? [] as $data)
                                                 <span class="btn btn-sm btn-outline--success">{{ $data }}</span>
                                             @endforeach
                                         </td>
