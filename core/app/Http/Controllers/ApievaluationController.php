@@ -66,12 +66,17 @@ class ApievaluationController extends Controller
             $inspection = new Inspection();  
         } 
         $campagne = Campagne::active()->first();
-        $inspection->producteur_id  = $request->producteur;  
+        $inspection->producteur_id  = $request->producteur;
         $inspection->campagne_id  = $campagne->id;
         $inspection->formateur_id  = $request->encadreur;
+        $inspection->certificat  = json_encode($request->certificat);
         $inspection->note  = $request->note;
+        $inspection->total_question  = $request->total_question;
+        $inspection->total_question_conforme  = $request->total_question_conforme;
+        $inspection->total_question_non_conforme  = $request->total_question_non_conforme;
+        $inspection->total_question_non_applicable  = $request->total_question_non_applicable;
         $inspection->date_evaluation     = $request->date_evaluation; 
-        $inspection->save(); 
+        $inspection->save();
         if($inspection !=null ){
             $id = $inspection->id;
             $datas = []; 
