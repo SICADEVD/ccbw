@@ -103,7 +103,7 @@ class ApievaluationController extends Controller
  
             foreach($donnees as $data){
                 if($data->categorie_questionnaire_id==$categquest->id){
-                    $gestlist[] = array('id'=>$data->id, 'libelle'=>$data->nom);
+                    $gestlist[] = array('id'=>$data->id, 'libelle'=>$data->nom,'certificat'=>$data->certificat);
                     
                 }
             }
