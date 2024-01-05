@@ -48,31 +48,57 @@
                             </div>
                         </div>
                     </div>
-                    {{-- Selectionner le Certificat --}}
-
                     <div class="form-group row">
-                        <?php echo Form::label(__('Certificat'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <?php echo Form::label(__('Statut'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <select class="form-control select2-multi-select certificats" name="certificats[]" multiple
-                                required>
-                                <option value="">@lang('Selectionner les certificats')</option> 
-                                @foreach ($certifications as $certification)
-                                    <option value="{{ $certification->nom }}"  {{ in_array($certification->nom, old('certificats', [])) ? 'selected' : '' }}>
-                                        {{ __($certification->nom) }}</option>
-                                @endforeach
-                                <option value="Autre" {{ in_array('Autre', old('certificats', [])) ? 'selected' : '' }}>
-                                    Autre</option>
-                            </select>
+                            <?php echo Form::select('statut', ['' => 'Selectionner une option', 'Candidat' => 'Candidat', 'Certifie' => 'Certifie'], null, ['class' => 'form-control statut', 'required']); ?>
                         </div>
                     </div>
+                    <div id="statutCertifie">
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Année de certification'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::number('certificat', null, ['id' => 'certificat', 'class' => 'form-control certificat', 'min' => '1990']); ?>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Code producteur'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::text('codeProd', null, ['id' => 'codeProd', 'placeholder' => __('Code producteur'), 'class' => 'form-control codeProd']); ?>
+                            </div>
+                        </div>
+                        {{-- Selectionner le Certificat --}}
 
-
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Certificat'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <select class="form-control select2-multi-select certificats" id="certificats"
+                                    name="certificats[]" multiple>
+                                    <option value="">@lang('Selectionner les certificats')</option>
+                                    @foreach ($certifications as $certification)
+                                        <option value="{{ $certification->nom }}"
+                                            {{ in_array($certification->nom, old('certificats', [])) ? 'selected' : '' }}>
+                                            {{ __($certification->nom) }}</option>
+                                    @endforeach
+                                    <option value="Autre"
+                                        {{ in_array('Autre', old('certificats', [])) ? 'selected' : '' }}>
+                                        Autre</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                     <div id="autreCertificat">
                         <div class="form-group row">
                             <?php echo Form::label(__('Autre Certificat'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
                                 <?php echo Form::text('autreCertificats', null, ['id' => 'autreCertificats', 'placeholder' => __('Autre certificat'), 'class' => 'form-control autreCertificats']); ?>
                             </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <?php echo Form::label(__('Habitez-vous dans un campement ou village ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-12 col-sm-8">
+                            <?php echo Form::select('habitationProducteur', ['Village' => 'Village', 'Campement' => 'Campement'], null, ['class' => 'form-control habitationProducteur', 'id' => 'habitationProducteur', 'required']); ?>
                         </div>
                     </div>
                     {{-- selection sections --}}
@@ -88,7 +114,6 @@
                             </select>
                         </div>
                     </div>
-
                     {{-- selection localite --}}
                     <div class="form-group row">
                         <label class="col-sm-4 control-label">@lang('Localite')</label>
@@ -119,36 +144,9 @@
                         </div>
                     </div>
 
-                  
+
 
                     {{-- saisie où le producteur habite --}}
-                    <div class="form-group row">
-                        <?php echo Form::label(__('Habitez-vous dans un campement ou village ?'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('habitationProducteur', ['Village' => 'Village', 'Campement' => 'Campement'], null, ['class' => 'form-control habitationProducteur', 'id' => 'habitationProducteur', 'required']); ?>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <?php echo Form::label(__('Statut'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('statut', ['Candidat' => 'Candidat', 'Certifie' => 'Certifie'], null, ['class' => 'form-control statut', 'required']); ?>
-                        </div>
-                    </div>
-                    <div id="statutCertifie">
-                        <div class="form-group row">
-                            <?php echo Form::label(__('Année de certification'), null, ['class' => 'col-sm-4 control-label']); ?>
-                            <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::number('certificat', null, ['id' => 'certificat', 'class' => 'form-control certificat', 'min' => '1990']); ?>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <?php echo Form::label(__('Code producteur'), null, ['class' => 'col-sm-4 control-label']); ?>
-                            <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::text('codeProd', null, ['id' => 'codeProd', 'placeholder' => __('Code producteur'), 'class' => 'form-control codeProd']); ?>
-                            </div>
-                        </div>
-                    </div>
 
                     <div class="form-group row">
                         <?php echo Form::label(__('Nom du producteur'), null, ['class' => 'col-sm-4 control-label']); ?>
@@ -430,7 +428,7 @@
                     <div class="form-group row">
                         <?php echo Form::label(__('Type de pièces'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('type_piece', ['CNI' => 'CNI', 'Carte Consulaire' => 'Carte Consulaire', 'Passeport' => 'Passeport', 'Attestation' => 'Attestation', 'Extrait de naissance' => 'Extrait de naissance', 'Permis de conduire' => 'Permis de conduire', 'CMU' => 'CMU','Pas Disponible' => 'Pas Disponible'], null, ['placeholder' => __('Selectionner une option'), 'class' => 'form-control', 'required']); ?>
+                            <?php echo Form::select('type_piece', ['CNI' => 'CNI', 'Carte Consulaire' => 'Carte Consulaire', 'Passeport' => 'Passeport', 'Attestation' => 'Attestation', 'Extrait de naissance' => 'Extrait de naissance', 'Permis de conduire' => 'Permis de conduire', 'CMU' => 'CMU', 'Pas Disponible' => 'Pas Disponible'], null, ['placeholder' => __('Selectionner une option'), 'class' => 'form-control', 'required']); ?>
                         </div>
                     </div>
 
@@ -445,7 +443,7 @@
                     <div class="form-group row">
                         <?php echo Form::label(__('N° de carte CCC'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                          <?php echo Form::text('num_ccc', null, ['placeholder' => __('N° de carte CCC'), 'class' => 'form-control text11']); ?>
+                            <?php echo Form::text('num_ccc', null, ['placeholder' => __('N° de carte CCC'), 'class' => 'form-control text11']); ?>
                         </div>
                     </div>
                     {{-- Avez-vous une carte CMU ? --}}
@@ -528,8 +526,6 @@
             }
         });
 
-    
-
         $('.statut').change(function() {
             var statut = $('.statut').val();
             if (statut == 'Certifie') {
@@ -538,6 +534,8 @@
                 $('.codeProd').show('slow');
                 $('#certificat').prop('required', true);
                 $('#codeProd').prop('required', true);
+                $('.certificats').show('slow');
+                $('.certificats').prop('required', true);
 
             } else {
                 $('#statutCertifie').hide('slow');
@@ -545,10 +543,18 @@
                 $('#codeProd').val('');
                 $('#certificat').prop('required', false);
                 $('#codeProd').prop('required', false);
-
+                $('.certificats').prop('required', false);
+                $('.certificats').hide('slow');
+                var select2Element = $('#certificats');
+                // Unselect all currently selected options
+                select2Element.val(null).trigger('change');
+                // Select the first option
+                var firstOption = select2Element.find('option:first');
+                firstOption.prop('selected', true);
+                select2Element.trigger('change');
             }
         });
-       
+
 
         //afficher le champ autre certificat
 

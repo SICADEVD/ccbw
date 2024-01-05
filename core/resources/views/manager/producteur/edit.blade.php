@@ -49,22 +49,42 @@
                             </div>
                         </div>
                     </div>
-                    {{-- Selectionner le Certificat --}}
                     <div class="form-group row">
-                        <?php echo Form::label(__('Certificat'), null, ['class' => 'col-sm-4 control-label']); ?>
-
+                        <?php echo Form::label(__('Statut'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <select class="form-control select2-multi-select certificats" name="certificats[]" multiple
-                                required>
-                                <option value="">@lang('Selectionner les protections')</option>
-                                 
+                            <?php echo Form::select('statut', ['Candidat' => 'Candidat', 'Certifie' => 'Certifie'], null, ['class' => 'form-control statut', 'required']); ?>
+                        </div>
+                    </div>
+                    <div id="statutCertifie">
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Année de certification'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::number('certificat', null, ['id' => 'certificat', 'class' => 'form-control certificat', 'min' => '1990']); ?>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Code producteur'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::text('codeProd', null, ['id' => 'codeProd', 'placeholder' => __('Code producteur'), 'class' => 'form-control codeProd']); ?>
+                            </div>
+                        </div>
+                        {{-- Selectionner le Certificat --}}
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Certificat'), null, ['class' => 'col-sm-4 control-label']); ?>
+
+                            <div class="col-xs-12 col-sm-8">
+                                <select class="form-control select2-multi-select certificats" name="certificats[]" multiple
+                                    required>
+                                    <option value="">@lang('Selectionner les options')</option>
                                     @foreach ($certificationAll as $certification)
-                                    <option value="{{ $certification->nom }}"  {{ in_array($certification->nom, old('certificats', $certifications)) ? 'selected' : '' }}>
-                                        {{ __($certification->nom) }}</option>
-                                @endforeach
-                                <option value="Autre"{{ in_array('Autre', $certifications) ? 'selected' : '' }}>Autre
-                                </option>
-                            </select>
+                                        <option value="{{ $certification->nom }}"
+                                            {{ in_array($certification->nom, old('certificats', $certifications)) ? 'selected' : '' }}>
+                                            {{ __($certification->nom) }}</option>
+                                    @endforeach
+                                    <option value="Autre"{{ in_array('Autre', $certifications) ? 'selected' : '' }}>Autre
+                                    </option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                     <div id="autreCertificat">
@@ -125,26 +145,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group row">
-                        <?php echo Form::label(__('Statut'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('statut', ['Candidat' => 'Candidat', 'Certifie' => 'Certifie'], null, ['class' => 'form-control statut', 'required']); ?>
-                        </div>
-                    </div>
-                    <div id="statutCertifie">
-                        <div class="form-group row">
-                            <?php echo Form::label(__('Année de certification'), null, ['class' => 'col-sm-4 control-label']); ?>
-                            <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::number('certificat', null, ['id' => 'certificat', 'class' => 'form-control certificat', 'min' => '1990']); ?>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <?php echo Form::label(__('Code producteur'), null, ['class' => 'col-sm-4 control-label']); ?>
-                            <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::text('codeProd', null, ['id' => 'codeProd', 'placeholder' => __('Code producteur'), 'class' => 'form-control codeProd']); ?>
-                            </div>
-                        </div>
-                    </div>
+
 
                     <div class="form-group row">
                         <?php echo Form::label(__('Nom du producteur'), null, ['class' => 'col-sm-4 control-label']); ?>
@@ -426,7 +427,7 @@
                     <div class="form-group row">
                         <?php echo Form::label(__('Type de pièces'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('type_piece', ['CNI' => 'CNI', 'Carte Consulaire' => 'Carte Consulaire', 'Passeport' => 'Passeport', 'Attestation' => 'Attestation', 'Extrait de naissance' => 'Extrait de naissance', 'Permis de conduire' => 'Permis de conduire', 'CMU' => 'CMU','Pas Disponible' => 'Pas Disponible'], null, ['placeholder' => __('Selectionner une option'), 'class' => 'form-control', 'required']); ?>
+                            <?php echo Form::select('type_piece', ['CNI' => 'CNI', 'Carte Consulaire' => 'Carte Consulaire', 'Passeport' => 'Passeport', 'Attestation' => 'Attestation', 'Extrait de naissance' => 'Extrait de naissance', 'Permis de conduire' => 'Permis de conduire', 'CMU' => 'CMU', 'Pas Disponible' => 'Pas Disponible'], null, ['placeholder' => __('Selectionner une option'), 'class' => 'form-control', 'required']); ?>
                         </div>
                     </div>
 
@@ -509,6 +510,33 @@
     <script type="text/javascript">
         $('#listecultures,#gardePapiersChamps,#numeroCompteMM,#typeCarteSecuriteSociales,#garantie,#autrePhones,#autreCertificat,#plantePartager,#statutCertifie')
             .hide();
+        $(document).ready(function() {
+            function handleStatutChange() {
+                var statut = $('.statut').val();
+                if (statut == 'Certifie') {
+                    $('#statutCertifie').show('slow');
+                    $('.certificat').show('slow');
+                    $('.codeProd').show('slow');
+                    $('#certificat').prop('required', true);
+                    $('#codeProd').prop('required', true);
+                    $('.certificats').show('slow');
+                    $('.select2-multi-select.certificats').prop('required', true);
+                } else {
+                    $('#statutCertifie').hide('slow');
+                    $('#certificat').val('');
+                    $('#codeProd').val('');
+                    $('#certificat').prop('required', false);
+                    $('#codeProd').prop('required', false);
+                    $('.certificats').hide('slow');
+                    var select2Element = $('.select2-multi-select.certificats');
+                    select2Element.val(null).trigger('change');
+                    select2Element.prop('required', false);
+                }
+            }
+
+            $('.statut').change(handleStatutChange);
+            handleStatutChange();
+        });
         //afficher le champ de saisie du numero de la piece de sécurité sociale
         $('.typeCarteSecuriteSociale').change(function() {
             var typeCarteSecuriteSociale = $('.typeCarteSecuriteSociale').val();
@@ -531,40 +559,6 @@
             $('#typeCarteSecuriteSociales').show('slow');
             $('.numSecuriteSociale').show('slow');
             $("#numSecuriteSociale").prop("required", true);
-        }
-
-        $('.statut').change(function() {
-            var statut = $('.statut').val();
-            if (statut == 'Certifie') {
-                $('#statutCertifie').show('slow');
-                $('.certificat').show('slow');
-                $('.codeProd').show('slow');
-                $('#certificat').prop('required', true);
-                $('#codeProd').prop('required', true);
-
-            } else {
-                $('#statutCertifie').hide('slow');
-                $('#certificat').val('');
-                $('#codeProd').val('');
-                $('#certificat').prop('required', false);
-                $('#codeProd').prop('required', false);
-
-            }
-        });
-        if ($('.statut').val() == 'Certifie') {
-            $('#statutCertifie').show('slow');
-            $('.certificat').show('slow');
-            $('.codeProd').show('slow');
-            $('#certificat').prop('required', true);
-            $('#codeProd').prop('required', true);
-
-        } else {
-            $('#statutCertifie').hide('slow');
-            $('#certificat').val('');
-            $('#codeProd').val('');
-            $('#certificat').prop('required', false);
-            $('#codeProd').prop('required', false);
-
         }
 
         //afficher le champ autre certificat
