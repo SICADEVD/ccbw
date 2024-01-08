@@ -107,7 +107,6 @@ class ApiproducteurController extends Controller
   {
     if ($request->id) {
       $producteur = Producteur::findOrFail($request->id);
-      $id = $request->id;
       $validationRule = [
         'programme_id' => ['required', 'exists:programmes,id'],
         'proprietaires' => 'required',
@@ -134,9 +133,7 @@ class ApiproducteurController extends Controller
         'certificat' => 'required_if:statut,==,Certifie',
         'autrePhone' => 'required_if:autreMembre,==,oui',
         'numCMU' => 'required_if:carteCMU,==,oui',
-        'phone2' => Rule::when($request->autreMembre == 'oui', function ($rule) use ($id) {
-          return $rule->required()->regex('/^\d{10}$/')->unique('producteurs', 'phone2')->ignore($id);
-        }),
+        'phone2' => 'required_if:autreMembre,oui|regex:/^\d{10}$/|unique:producteurs,phone2,' . $request->id,
       ];
       $messages = [
         'programme_id.required' => 'Le programme est obligatoire',
@@ -231,53 +228,30 @@ class ApiproducteurController extends Controller
           $producteur->codeProdapp = null;
         }
       }
-      $producteur->save();
+      $data = $request->all();
+      unset($data['certificats']);
+      $producteur->update($data);
       if ($producteur != null) {
         $id = $producteur->id;
-        $datas  = [];
-        if ($request->certificats != null) {
-          $certificats = array_filter($request->certificats);
-          if (!empty($certificats)) {
-            Producteur_certification::where('producteur_id', $id)->delete();
-            foreach ($certificats as $certificat) {
-              if ($certificat == 'Autre') {
-                $autre = new Certification();
-                $autre->nom = $request->autreCertificats;
-                $autre->save();
-                $certificat = $request->autreCertificats;
-              }
+        $datas  = $data2 = [];
+        if (($request->certificats != null)) {
+          Producteur_certification::where('producteur_id', $id)->delete();
+          $i = 0;
+          foreach ($request->certificats as $certificat) {
+            if (!empty($certificat)) {
               $datas[] = [
                 'producteur_id' => $id,
                 'certification' => $certificat,
               ];
             }
-            Producteur_certification::insert($datas);
+
+            $i++;
           }
         }
+
+        Producteur_certification::insert($datas);
       }
-      // $data = $request->all();
-      // unset($data['certificats']);
-      // $producteur->update($data);
-      // if ($producteur != null) {
-      //   $id = $producteur->id;
-      //   $datas = [];
-      //   if (($request->certificats != null)) {
-      //     Producteur_certification::where('producteur_id', $id)->delete();
-      //     $i = 0;
-      //     foreach ($request->certificats as $certificat) {
-      //       if (!empty($certificat)) {
-      //         $datas[] = [
-      //           'producteur_id' => $id,
-      //           'certification' => $certificat,
-      //         ];
-      //       }
 
-      //       $i++;
-      //     }
-      //   }
-
-      //   Producteur_certification::insert($datas);
-      // }
       $message = "Le producteur a été mis à jour avec succès";
     } else {
       $validationRule = [
@@ -306,7 +280,6 @@ class ApiproducteurController extends Controller
         'certificat' => 'required_if:statut,==,Certifie',
         'autrePhone' => 'required_if:autreMembre,==,oui',
         'numCMU' => 'required_if:carteCMU,==,oui',
-        // 'phone2' => 'required_if:autreMembre,oui|regex:/^\d{10}$/|unique:producteurs,phone2'
         'phone2' => Rule::when($request->autreMembre == 'oui', function ($rule) {
           return $rule->required()->regex('/^\d{10}$/')->unique('producteurs', 'phone2');
         }),
@@ -408,54 +381,28 @@ class ApiproducteurController extends Controller
       }
       $producteur->save();
 
-      // if ($producteur != null) {
-      //   $id = $producteur->id;
-      //   $datas  =  [];
-      //   if (($request->certificats != null)) {
-      //     Producteur_certification::where('producteur_id', $id)->delete();
-      //     $i = 0;
-      //     foreach ($request->certificats as $certificat) {
-      //       if (!empty($certificat)) {
-
-      //         if ($certificat == 'Autre') {
-      //           // $certificat = $request->autreCertificats;
-      //           $datas[] = [
-      //             'producteur_id' => $id,
-      //             'certification' => $request->autreCertificats,
-      //           ];
-      //         }
-      //         $datas[] = [
-      //           'producteur_id' => $id,
-      //           'certification' => $certificat,
-      //         ];
-
-      //         Producteur_certification::insert($datas);
-      //       }
-
-      //       $i++;
-      //     }
-      //   }
-      // }
       if ($producteur != null) {
         $id = $producteur->id;
-        $datas  = [];
-        if ($request->certificats != null) {
-          $certificats = array_filter($request->certificats);
-          if (!empty($certificats)) {
-            Producteur_certification::where('producteur_id', $id)->delete();
-            foreach ($certificats as $certificat) {
-              if ($certificat == 'Autre') {
-                $autre = new Certification();
-                $autre->nom = $request->autreCertificats;
-                $autre->save();
-                $certificat = $request->autreCertificats;
+        if ($producteur != null) {
+          $id = $producteur->id;
+          $datas  = [];
+          if ($request->certificats != null) {
+            if (!empty($request->certificats)) {
+              Producteur_certification::where('producteur_id', $id)->delete();
+              foreach ($request->certificats as $certificat) {
+                if ($certificat == 'Autre') {
+                  $autre = new Certification();
+                  $autre->nom = $request->autreCertificats;
+                  $autre->save();
+                  $certificat = $request->autreCertificats;
+                }
+                $datas[] = [
+                  'producteur_id' => $id,
+                  'certification' => $certificat,
+                ];
               }
-              $datas[] = [
-                'producteur_id' => $id,
-                'certification' => $certificat,
-              ];
+              Producteur_certification::insert($datas);
             }
-            Producteur_certification::insert($datas);
           }
         }
       }
@@ -463,6 +410,7 @@ class ApiproducteurController extends Controller
     }
     return response()->json($producteur, 201);
   }
+
 
   public function apiinfosproducteur(StoreInfoRequest $request)
   {
