@@ -280,8 +280,8 @@ class ApiproducteurController extends Controller
         'certificat' => 'required_if:statut,==,Certifie',
         'autrePhone' => 'required_if:autreMembre,==,oui',
         'numCMU' => 'required_if:carteCMU,==,oui',
-        'phone2' => Rule::when($request->autreMembre == 'oui', function ($rule) {
-          return $rule->required()->regex('/^\d{10}$/')->unique('producteurs', 'phone2');
+        'phone2' => Rule::when($request->autreMembre == 'oui', function () {
+          return ['required', 'regex:/^\d{10}$/', Rule::unique('producteurs', 'phone2')];
         }),
       ];
       $message = [
@@ -316,7 +316,9 @@ class ApiproducteurController extends Controller
         'autrePhone.required_if' => 'Le champ membre de famille est obligatoire',
         'num_ccc.regex' => 'numéro du conseil café cacao doit contenir 10 chiffres',
       ];
+
       $request->validate($validationRule, $message);
+
       $producteur = new Producteur();
       $producteur->proprietaires = $request->proprietaires;
       $producteur->statutMatrimonial = $request->statutMatrimonial;
@@ -350,6 +352,7 @@ class ApiproducteurController extends Controller
       $producteur->userid = $request->userid;
       $producteur->codeProd = $request->codeProd;
       $producteur->plantePartage = $request->plantePartage;
+      // dd($producteur);
       if (!file_exists(storage_path() . "/app/public/producteurs/pieces")) {
         File::makeDirectory(storage_path() . "/app/public/producteurs/pieces", 0777, true);
       }
@@ -387,9 +390,10 @@ class ApiproducteurController extends Controller
           $id = $producteur->id;
           $datas  = [];
           if ($request->certificats != null) {
-            if (!empty($request->certificats)) {
+            $certificats = array_filter($request->certificats);
+            if (!empty($certificats)) {
               Producteur_certification::where('producteur_id', $id)->delete();
-              foreach ($request->certificats as $certificat) {
+              foreach ($certificats as $certificat) {
                 if ($certificat == 'Autre') {
                   $autre = new Certification();
                   $autre->nom = $request->autreCertificats;
