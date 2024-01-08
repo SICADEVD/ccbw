@@ -106,6 +106,7 @@ class ApiproducteurController extends Controller
   public function store(Request $request)
   {
     if ($request->id) {
+      $id=$request->id;
       $producteur = Producteur::findOrFail($request->id);
       $validationRule = [
         'programme_id' => ['required', 'exists:programmes,id'],
@@ -134,6 +135,9 @@ class ApiproducteurController extends Controller
         'autrePhone' => 'required_if:autreMembre,==,oui',
         'numCMU' => 'required_if:carteCMU,==,oui',
         'phone2' => 'required_if:autreMembre,oui|regex:/^\d{10}$/|unique:producteurs,phone2,' . $request->id,
+        'phone2' => Rule::when($request->autreMembre == 'oui', function () use ($id) {
+          return ['required', 'regex:/^\d{10}$/', Rule::unique('producteurs', 'phone2')->ignore($id)];
+      }),
       ];
       $messages = [
         'programme_id.required' => 'Le programme est obligatoire',

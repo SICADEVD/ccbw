@@ -255,6 +255,7 @@ class ProducteurController extends Controller
         } else {
             $producteur->codeProdapp = null;
         }
+        // dd(json_encode($request->all()));
         $producteur->save();
 
         if ($producteur != null) {
@@ -316,6 +317,9 @@ class ProducteurController extends Controller
             'certificat' => 'required_if:statut,==,Certifie',
             'autrePhone' => 'required_if:autreMembre,==,oui',
             'numCMU' => 'required_if:carteCMU,==,oui',
+            'phone2' => Rule::when($request->autreMembre == 'oui', function () use ($id) {
+                return ['required', 'regex:/^\d{10}$/', Rule::unique('producteurs', 'phone2')->ignore($id)];
+            }),
             //'phone2' => 'required_if:autreMembre,oui|regex:/^\d{10}$/|unique:producteurs,phone2,' . $request->id,
         ];
         $messages = [
