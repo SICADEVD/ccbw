@@ -33,5 +33,9 @@ class Producteur extends Model
     {
         return $this->hasMany(Agroevaluation::class, 'producteur_id');
     }
+    public function parcelles()
+    {
+        return $this->hasMany(Parcelle::class, 'producteur_id');
+    }
     
 }

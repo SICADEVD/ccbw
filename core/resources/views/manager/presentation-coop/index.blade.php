@@ -124,7 +124,7 @@
                     <tbody>
                         <tr>
                             <td>Superficie(Ha)</td>
-                            <td>Insertion des données ici</td>
+                            <td> {{ $sumSuperficie}} </td>
                         </tr>
                         <tr>
                             <td colspan="2">Production (Kg)</td>

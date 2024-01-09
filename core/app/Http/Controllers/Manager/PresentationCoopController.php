@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Manager;
 
-use App\Http\Controllers\Controller;
+use App\Models\Parcelle;
 use App\Models\Producteur;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 
 class PresentationCoopController extends Controller
 {
@@ -88,7 +90,11 @@ class PresentationCoopController extends Controller
             $query->where('libelle', 'Aucun programme');
         })->count();
 
-        return view('manager.presentation-coop.index', compact('nombreProducteur', 'hommes', 'femmes', 'countProducteursRainforest', 'countProducteursFairtrade', 'countProducteursBio', 'countProducteursRainforestHomme', 'countProducteursRainforestFemme', 'countProducteursFairtradeHomme', 'countProducteursFairtradeFemme', 'countProducteursBioHomme', 'countProducteursBioFemme', 'nombreProducteurAutreProgramme', 'hommesAutrePragramme', 'femmesAutreProgramme'));
+        //parcelle des producteurs
+        $sumSuperficie = Parcelle::join('producteurs', 'parcelles.producteur_id', '=', 'producteurs.id')
+        ->sum('parcelles.superficie');
+    
+        return view('manager.presentation-coop.index', compact('nombreProducteur', 'hommes', 'femmes', 'countProducteursRainforest', 'countProducteursFairtrade', 'countProducteursBio', 'countProducteursRainforestHomme', 'countProducteursRainforestFemme', 'countProducteursFairtradeHomme', 'countProducteursFairtradeFemme', 'countProducteursBioHomme', 'countProducteursBioFemme', 'nombreProducteurAutreProgramme', 'hommesAutrePragramme', 'femmesAutreProgramme', 'sumSuperficie'));
     }
 
     public function create()
