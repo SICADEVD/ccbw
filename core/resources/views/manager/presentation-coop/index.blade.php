@@ -84,30 +84,30 @@
                         </tr>
                         <tr>
                             <td>Homme</td>
-                            <td>Insertion des données ici</td>
+                            <td> {{$hommesAutrePragramme}} </td>
                         </tr>
                         <tr>
                             <td>Femme</td>
-                            <td>Insertion des données ici</td>
+                            <td> {{ $hommesAutrePragramme }} </td>
                         </tr>
                         <tr>
                             <td>Total</td>
-                            <td>Insertion des données ici</td>
+                            <td>  {{ $nombreProducteurAutreProgramme}} </td>
                         </tr>
                         <tr>
                             <td class="text-center" colspan="2">Membres Ordinaire</td>
                         </tr>
                          <tr>
                             <td>Homme</td>
-                            <td>Insertion des données ici</td>
+                            <td>0</td>
                         </tr>
                         <tr>
                             <td>Femme</td>
-                            <td>Insertion des données ici</td>
+                            <td>0</td>
                         </tr>
                         <tr>
                             <td>Total</td>
-                            <td>Insertion des données ici</td>
+                            <td>0</td>
                         </tr>
                     </tbody>
                 </table>

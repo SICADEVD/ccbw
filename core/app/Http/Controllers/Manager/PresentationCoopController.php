@@ -10,48 +10,85 @@ class PresentationCoopController extends Controller
 {
     public function index()
     {
-        $nombreProducteur = Producteur::count();
-        $hommes = Producteur::where('sexe', 'Homme')->count();
-        $femmes = Producteur::where('sexe', 'Femme')->count();
+        $nombreProducteur = Producteur::whereHas('programme', function ($query) {
+            $query->where('libelle', 'Bandama');
+        })->count();
+        $hommes = Producteur::where('sexe', 'Homme')->whereHas('programme', function ($query) {
+            $query->where('libelle', 'Bandama');
+        })->count();
+
+        $femmes = Producteur::where('sexe', 'Femme')->whereHas('programme', function ($query) {
+            $query->where('libelle', 'Bandama');
+        })->count();
 
         $countProducteursRainforest = Producteur::whereHas('certifications', function ($query) {
             $query->where('certification', 'RAINFOREST');
+        })->whereHas('programme', function ($query) {
+            $query->where('libelle', 'Bandama');
         })->count();
 
         $countProducteursRainforestHomme = Producteur::where('sexe', 'Homme')->whereHas('certifications', function ($query) {
             $query->where('certification', 'RAINFOREST');
+        })->whereHas('programme', function ($query) {
+            $query->where('libelle', 'Bandama');
         })->count();
 
         $countProducteursRainforestFemme = Producteur::where('sexe', 'Femme')->whereHas('certifications', function ($query) {
             $query->where('certification', 'RAINFOREST');
+        })->whereHas('programme', function ($query) {
+            $query->where('libelle', 'Bandama');
         })->count();
 
         $countProducteursFairtrade = Producteur::whereHas('certifications', function ($query) {
             $query->where('certification', 'FAIRTRADE');
+        })->whereHas('programme', function ($query) {
+            $query->where('libelle', 'Bandama');
         })->count();
 
         $countProducteursFairtradeHomme = Producteur::where('sexe', 'Homme')->whereHas('certifications', function ($query) {
             $query->where('certification', 'FAIRTRADE');
+        })->whereHas('programme', function ($query) {
+            $query->where('libelle', 'Bandama');
         })->count();
 
         $countProducteursFairtradeFemme = Producteur::where('sexe', 'Femme')->whereHas('certifications', function ($query) {
             $query->where('certification', 'FAIRTRADE');
+        })->whereHas('programme', function ($query) {
+            $query->where('libelle', 'Bandama');
         })->count();
 
         $countProducteursBio = Producteur::whereHas('certifications', function ($query) {
             $query->where('certification', 'BIO');
+        })->whereHas('programme', function ($query) {
+            $query->where('libelle', 'Bandama');
         })->count();
 
         $countProducteursBioHomme = Producteur::where('sexe', 'Homme')->whereHas('certifications', function ($query) {
             $query->where('certification', 'BIO');
+        })->whereHas('programme', function ($query) {
+            $query->where('libelle', 'Bandama');
         })->count();
 
         $countProducteursBioFemme = Producteur::where('sexe', 'Femme')->whereHas('certifications', function ($query) {
             $query->where('certification', 'BIO');
+        })->whereHas('programme', function ($query) {
+            $query->where('libelle', 'Bandama');
         })->count();
-        
 
-        return view('manager.presentation-coop.index', compact('nombreProducteur', 'hommes', 'femmes', 'countProducteursRainforest', 'countProducteursFairtrade', 'countProducteursBio', 'countProducteursRainforestHomme', 'countProducteursRainforestFemme', 'countProducteursFairtradeHomme', 'countProducteursFairtradeFemme', 'countProducteursBioHomme', 'countProducteursBioFemme'));
+        //producteurs programme bandama
+
+        $nombreProducteurAutreProgramme = Producteur::whereHas('programme', function ($query) {
+            $query->where('libelle', 'Aucun programme');
+        })->count();
+        $hommesAutrePragramme = Producteur::where('sexe', 'Homme')->whereHas('programme', function ($query) {
+            $query->where('libelle', 'Aucun programme');
+        })->count();
+
+        $femmesAutreProgramme = Producteur::where('sexe', 'Femme')->whereHas('programme', function ($query) {
+            $query->where('libelle', 'Aucun programme');
+        })->count();
+
+        return view('manager.presentation-coop.index', compact('nombreProducteur', 'hommes', 'femmes', 'countProducteursRainforest', 'countProducteursFairtrade', 'countProducteursBio', 'countProducteursRainforestHomme', 'countProducteursRainforestFemme', 'countProducteursFairtradeHomme', 'countProducteursFairtradeFemme', 'countProducteursBioHomme', 'countProducteursBioFemme', 'nombreProducteurAutreProgramme', 'hommesAutrePragramme', 'femmesAutreProgramme'));
     }
 
     public function create()
