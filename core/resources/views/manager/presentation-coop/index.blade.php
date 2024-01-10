@@ -17,7 +17,7 @@
                         </tr>
                         <tr>
                             <td>Homme</td>
-                            <td>{{$hommes}}</td>
+                            <td>{{ $hommes }}</td>
                         </tr>
                         <tr>
                             <td>Femmes</td>
@@ -25,30 +25,30 @@
                         </tr>
                         <tr>
                             <td>Total</td>
-                            <td>{{ $nombreProducteur}}</td>
+                            <td>{{ $nombreProducteur }}</td>
                         </tr>
                         <tr>
                             <td class="text-center" colspan="2">Répartition des membres par programme </td>
                         </tr>
                         <tr>
                             <td>Membres Certifié RA </td>
-                            <td> {{$countProducteursRainforest}} </td>
+                            <td> {{ $countProducteursRainforest }} </td>
                         </tr>
                         <tr>
                             <td>Homme</td>
-                            <td> {{$countProducteursRainforestHomme}} </td>
+                            <td> {{ $countProducteursRainforestHomme }} </td>
                         </tr>
                         <tr>
                             <td>Femmes</td>
-                            <td> {{$countProducteursRainforestFemme}} </td>
+                            <td> {{ $countProducteursRainforestFemme }} </td>
                         </tr>
                         <tr>
                             <td>Total</td>
-                            <td> {{$countProducteursRainforest}} </td>
+                            <td> {{ $countProducteursRainforest }} </td>
                         </tr>
                         <tr>
                             <td>Membres Certifié FT </td>
-                            <td> {{$countProducteursFairtrade}} </td>
+                            <td> {{ $countProducteursFairtrade }} </td>
                         </tr>
                         <tr>
                             <td>Homme</td>
@@ -57,11 +57,11 @@
                         </tr>
                         <tr>
                             <td>Femmes</td>
-                            <td> {{$countProducteursFairtradeFemme}} </td>
+                            <td> {{ $countProducteursFairtradeFemme }} </td>
                         </tr>
                         <tr>
                             <td>Total</td>
-                            <td> {{$countProducteursFairtrade}} </td>
+                            <td> {{ $countProducteursFairtrade }} </td>
                         </tr>
                         <tr>
                             <td>Membres Certifié BIO </td>
@@ -69,7 +69,7 @@
                         </tr>
                         <tr>
                             <td>Homme</td>
-                            <td>  {{ $countProducteursBioHomme }} </td>
+                            <td> {{ $countProducteursBioHomme }} </td>
                         </tr>
                         <tr>
                             <td>Femme</td>
@@ -84,7 +84,7 @@
                         </tr>
                         <tr>
                             <td>Homme</td>
-                            <td> {{$hommesAutrePragramme}} </td>
+                            <td> {{ $hommesAutrePragramme }} </td>
                         </tr>
                         <tr>
                             <td>Femme</td>
@@ -92,12 +92,12 @@
                         </tr>
                         <tr>
                             <td>Total</td>
-                            <td>  {{ $nombreProducteurAutreProgramme}} </td>
+                            <td> {{ $nombreProducteurAutreProgramme }} </td>
                         </tr>
                         <tr>
                             <td class="text-center" colspan="2">Membres Ordinaire</td>
                         </tr>
-                         <tr>
+                        <tr>
                             <td>Homme</td>
                             <td>0</td>
                         </tr>
@@ -124,7 +124,7 @@
                     <tbody>
                         <tr>
                             <td>Superficie(Ha)</td>
-                            <td> {{ $sumSuperficie}} </td>
+                            <td> {{ $sumSuperficie }} </td>
                         </tr>
                         <tr>
                             <td colspan="2">Production (Kg)</td>
@@ -172,13 +172,60 @@
                             <td>Conventionnel/Ordinaire</td>
                             <td>Insertion des données ici</td>
                         </tr>
+                        <tr>
+                            <td>Chiffre d'affaire </td>
+                            <td>Insertion des données ici</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table>
+                    <h3>Evolution de la production des membres</h3>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th colspan="3">2023</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Chiffre d'affaire(FCFA)</td>
+                            <td class="noretourligne">Cacao</td>
+                            <td>Insertion des données ici</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>Marge brute d'exploitation (FCFA)</td>
+                            <td class="noretourligne">Cacao</td>
+                            <td>Insertion des données ici</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>Résultat de l'exercice avant impôt (FCFA)</td>
+                            <td class="noretourligne">Cacao</td>
+                            <td>Insertion des données ici</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>Nombre de client</td>
+                            <td>Insertion des données ici</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-        <div class="row mt-4">
+        {{-- <div class="row mt-4">
             <div class="col-md-6">
-                {{-- <table>
+                <table>
                     <caption>Statistiques des Membres</caption>
                     <thead>
                         <tr>
@@ -215,43 +262,12 @@
                             <td>Insertion des données ici</td>
                         </tr>
                     </tbody>
-                </table> --}}
+                </table>
             </div>
             <div class="col-md-6">
-                {{-- <table>
-                    <caption>Statistiques des Membres</caption>
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>2023</th>
-                            <th>2024</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Membres-Adhérent</td>
-                            <td>Insertion des données ici</td>
-                            <td>Insertion des données ici</td>
-                        </tr>
-                        <tr>
-                            <td>Homme</td>
-                            <td>Insertion des données ici</td>
-                            <td>Insertion des données ici</td>
-                        </tr>
-                        <tr>
-                            <td>Femme</td>
-                            <td>Insertion des données ici</td>
-                            <td>Insertion des données ici</td>
-                        </tr>
-                        <tr>
-                            <td>Total</td>
-                            <td>Insertion des données ici</td>
-                            <td>Insertion des données ici</td>
-                        </tr>
-                    </tbody>
-                </table> --}}
+
             </div>
-        </div>
+        </div> --}}
         <x-confirmation-modal />
     </div>
 @endsection
@@ -277,10 +293,8 @@
             color: #fff;
         }
 
-        caption {
-            font-size: 1.5em;
-            font-weight: bold;
-            margin-bottom: 10px;
+        .noretourligne {
+            white-space: nowrap;
         }
     </style>
 @endpush
