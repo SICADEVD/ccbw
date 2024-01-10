@@ -88,7 +88,7 @@ use Illuminate\Support\Str;
       name: '',
       type: 'pie',
       label: {
-        formatter: '{d}',
+        formatter: '{d}%',
         position: 'outside'
       },
       radius: '50%',
@@ -130,7 +130,7 @@ series: [
 name: '',
 type: 'pie',
 label: {
-  formatter: '{d}',
+  formatter: '{d}%',
   position: 'outside'
 },
 radius: '50%',
