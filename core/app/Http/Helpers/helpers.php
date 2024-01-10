@@ -1,18 +1,26 @@
 <?php
 
-use App\Constants\Status;
-use App\Lib\GoogleAuthenticator;
-use App\Models\Extension;
-use App\Models\Frontend;
-use App\Models\GeneralSetting;
 use Carbon\Carbon;
 use App\Lib\Captcha;
+use App\Notify\Notify;
 use App\Lib\ClientInfo;
 use App\Lib\CurlRequest;
 use App\Lib\FileManager;
-use App\Notify\Notify;
-use Illuminate\Support\Facades\Cache;
+use App\Models\Frontend;
+use App\Models\Parcelle;
+use App\Constants\Status;
+use App\Models\Extension;
+use App\Models\Producteur;
 use Illuminate\Support\Str;
+use App\Models\LivraisonInfo;
+use App\Models\GeneralSetting;
+use App\Lib\GoogleAuthenticator;
+use App\Models\Connaissement;
+use App\Models\ConnaissementProduit;
+use App\Models\LivraisonProduct;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
+use App\Models\Producteur_certification;
 
 function systemDetails()
 {
@@ -424,6 +432,216 @@ function dateSorting($arr)
     return $arr;
 }
 
+function getproducteur($date=null)
+{
+    $date = explode('-', $date);
+   
+    $startDate = Carbon::parse(trim($date[0]))->format('Y-m-d'); 
+    $endDate = @$date[1] ? Carbon::parse(trim(@$date[1]))->format('Y-m-d') : $startDate;
+    
+    $producteur = Producteur::joinRelationship('programme')
+                                ->joinRelationship('localite.section')
+                                ->where('cooperative_id', auth()->user()->cooperative_id)
+                                ->select('producteurs.*','localites.nom as nomLocalite','programmes.libelle as nomProgramme')
+                                ->whereDate('producteurs.created_at', '>=', $startDate)
+                                ->whereDate('producteurs.created_at', '<=', $endDate)
+                                ->get();
+
+    return $producteur;
+}
+
+function getProducteurProgramme($date, $certif,$programme)
+{
+    $date = explode('-', $date);
+   
+    $startDate = Carbon::parse(trim($date[0]))->format('Y-m-d'); 
+    $endDate = @$date[1] ? Carbon::parse(trim(@$date[1]))->format('Y-m-d') : $startDate;
+    
+    $producteur = Producteur_certification::joinRelationship('producteur.programme')
+                                ->joinRelationship('producteur.localite.section')
+                                ->where('cooperative_id', auth()->user()->cooperative_id)
+                                ->where('producteur_certifications.certification', $certif)
+                                ->where('programme_id', $programme)
+                                ->select('producteurs.*','localites.nom as nomLocalite','programmes.libelle as nomProgramme','producteur_certifications.certification')
+                                ->whereDate('producteurs.created_at', '>=', $startDate)
+                                ->whereDate('producteurs.created_at', '<=', $endDate)
+                                ->get();
+
+    return $producteur;
+}
+function getproducteurOrdinaire($date=null)
+{
+    $date = explode('-', $date);
+   
+    $startDate = Carbon::parse(trim($date[0]))->format('Y-m-d'); 
+    $endDate = @$date[1] ? Carbon::parse(trim(@$date[1]))->format('Y-m-d') : $startDate;
+    
+    $producteur = Producteur::joinRelationship('programme')
+                                ->joinRelationship('localite.section')
+                                ->where('cooperative_id', auth()->user()->cooperative_id)
+                                ->where('Statut', 'Candidat')
+                                ->select('producteurs.*','localites.nom as nomLocalite','programmes.libelle as nomProgramme')
+                                ->whereDate('producteurs.created_at', '>=', $startDate)
+                                ->whereDate('producteurs.created_at', '<=', $endDate)
+                                ->get();
+
+    return $producteur;
+}
+
+function getparcelle($date=null)
+{
+    $date = explode('-', $date);
+   
+    $startDate = Carbon::parse(trim($date[0]))->format('Y-m-d'); 
+    $endDate = @$date[1] ? Carbon::parse(trim(@$date[1]))->format('Y-m-d') : $startDate;
+    
+    $parcelle = Parcelle::joinRelationship('producteur.localite.section')
+                                ->where('cooperative_id', auth()->user()->cooperative_id)
+                                ->select('parcelles.*')
+                                ->whereDate('parcelles.created_at', '>=', $startDate)
+                                ->whereDate('parcelles.created_at', '<=', $endDate)
+                                ->sum('superficie');
+
+    return $parcelle;
+}
+
+function getproduction($date=null)
+{
+    $date = explode('-', $date);
+   
+    $startDate = Carbon::parse(trim($date[0]))->format('Y-m-d'); 
+    $endDate = @$date[1] ? Carbon::parse(trim(@$date[1]))->format('Y-m-d') : $startDate;
+    
+    $quantite = LivraisonProduct::joinRelationship('livraisonInfo')->where('sender_cooperative_id', auth()->user()->cooperative_id) 
+                                ->whereDate('livraison_products.created_at', '>=', $startDate)
+                                ->whereDate('livraison_products.created_at', '<=', $endDate)
+                                ->sum('qty');
+
+    return $quantite;
+}
+function getproductionCertifie($date, $certif)
+{
+    $date = explode('-', $date);
+   
+    $startDate = Carbon::parse(trim($date[0]))->format('Y-m-d'); 
+    $endDate = @$date[1] ? Carbon::parse(trim(@$date[1]))->format('Y-m-d') : $startDate;
+    
+    $quantite = LivraisonProduct::joinRelationship('livraisonInfo')
+                                ->where('sender_cooperative_id', auth()->user()->cooperative_id) 
+                                ->where('type_produit', 'Certifie') 
+                                ->where('certificat', $certif) 
+                                ->whereDate('livraison_products.created_at', '>=', $startDate)
+                                ->whereDate('livraison_products.created_at', '<=', $endDate); 
+    $total = $quantite->sum('qty_sortant') + $quantite->sum('qty');
+
+    return $total;
+}
+
+function getproductionOrdinaire($date)
+{
+    $date = explode('-', $date);
+   
+    $startDate = Carbon::parse(trim($date[0]))->format('Y-m-d'); 
+    $endDate = @$date[1] ? Carbon::parse(trim(@$date[1]))->format('Y-m-d') : $startDate;
+    
+    $quantite = LivraisonProduct::joinRelationship('livraisonInfo')
+                                ->where('sender_cooperative_id', auth()->user()->cooperative_id) 
+                                ->where('type_produit', 'Ordinaire')  
+                                ->whereDate('livraison_products.created_at', '>=', $startDate)
+                                ->whereDate('livraison_products.created_at', '<=', $endDate); 
+    $total = $quantite->sum('qty_sortant') + $quantite->sum('qty');
+    
+    return $total;
+}
+
+function getproductionProgramme($date)
+{
+    $date = explode('-', $date);
+   
+    $startDate = Carbon::parse(trim($date[0]))->format('Y-m-d'); 
+    $endDate = @$date[1] ? Carbon::parse(trim(@$date[1]))->format('Y-m-d') : $startDate;
+    
+    $quantite = LivraisonProduct::joinRelationship('livraisonInfo')
+                                ->joinRelationship('parcelle.producteur.programme')
+                                ->where('sender_cooperative_id', auth()->user()->cooperative_id) 
+                                ->where('programmes.libelle', 'Bandama')  
+                                ->whereDate('livraison_products.created_at', '>=', $startDate)
+                                ->whereDate('livraison_products.created_at', '<=', $endDate); 
+    $total = $quantite->sum('qty_sortant') + $quantite->sum('qty');
+    
+    return $total;
+}
+
+function getvente($date=null)
+{
+    $date = explode('-', $date);
+   
+    $startDate = Carbon::parse(trim($date[0]))->format('Y-m-d'); 
+    $endDate = @$date[1] ? Carbon::parse(trim(@$date[1]))->format('Y-m-d') : $startDate;
+    
+    $quantite = Connaissement::where('cooperative_id', auth()->user()->cooperative_id) 
+                                ->where('status', 2) 
+                                ->whereDate('created_at', '>=', $startDate)
+                                ->whereDate('created_at', '<=', $endDate)
+                                ->sum('quantite_confirme');
+
+    return $quantite;
+}
+
+function getventeCertifie($date, $certif)
+{
+    $date = explode('-', $date);
+   
+    $startDate = Carbon::parse(trim($date[0]))->format('Y-m-d'); 
+    $endDate = @$date[1] ? Carbon::parse(trim(@$date[1]))->format('Y-m-d') : $startDate;
+    
+    $quantite = ConnaissementProduit::joinRelationship('connaissement')
+                                ->where('cooperative_id', auth()->user()->cooperative_id)  
+                                ->where('connaissement_produits.certificat', $certif)
+                                ->where('connaissement_produits.type_produit', 'Certifie')
+                                ->where('connaissements.status', 2) 
+                                ->whereDate('connaissements.created_at', '>=', $startDate)
+                                ->whereDate('connaissements.created_at', '<=', $endDate)
+                                ->sum('quantite');
+
+    return $quantite;
+}
+
+function getventeOrdinaire($date)
+{
+    $date = explode('-', $date);
+   
+    $startDate = Carbon::parse(trim($date[0]))->format('Y-m-d'); 
+    $endDate = @$date[1] ? Carbon::parse(trim(@$date[1]))->format('Y-m-d') : $startDate;
+    
+    $quantite = ConnaissementProduit::joinRelationship('connaissement')
+                                ->where('cooperative_id', auth()->user()->cooperative_id)  
+                                ->where('connaissement_produits.type_produit', 'Ordinaire')
+                                ->where('status', 2) 
+                                ->whereDate('connaissement_produits.created_at', '>=', $startDate)
+                                ->whereDate('connaissement_produits.created_at', '<=', $endDate)
+                                ->sum('quantite');
+
+    return $quantite;
+}
+function getventeProgramme($date)
+{
+    $date = explode('-', $date);
+   
+    $startDate = Carbon::parse(trim($date[0]))->format('Y-m-d'); 
+    $endDate = @$date[1] ? Carbon::parse(trim(@$date[1]))->format('Y-m-d') : $startDate;
+    
+    $quantite = ConnaissementProduit::joinRelationship('connaissement')
+                                ->joinRelationship('producteur.programme')
+                                ->where('cooperative_id', auth()->user()->cooperative_id) 
+                                ->where('programmes.libelle', 'Bandama') 
+                                ->where('connaissements.status', 2) 
+                                ->whereDate('connaissement_produits.created_at', '>=', $startDate)
+                                ->whereDate('connaissement_produits.created_at', '<=', $endDate)
+                                ->sum('quantite');
+
+    return $quantite;
+}
 function gs()
 {
     $general = Cache::get('GeneralSetting');
