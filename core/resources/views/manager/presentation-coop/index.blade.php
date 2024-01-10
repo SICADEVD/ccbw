@@ -171,11 +171,11 @@ use App\Models\Programme;
                           
                         <tr>
                             <td>Programme Durabilité </td>
-                            <td>{{ @$productionVenteOrdinaire ? @$productionVenteOrdinaire : 0 }}</td>
+                            <td>{{ @$productionVenteProgramme  ? @$productionVenteProgramme : 0 }}</td>
                         </tr>
                         <tr>
                             <td>Conventionnel/Ordinaire</td>
-                            <td>{{ @$productionVenteProgramme ? @$productionVenteProgramme : 0 }}</td>
+                            <td>{{ @$productionVenteOrdinaire ? @$productionVenteOrdinaire : 0 }}</td>
                         </tr>
                     </tbody>
                 </table>
