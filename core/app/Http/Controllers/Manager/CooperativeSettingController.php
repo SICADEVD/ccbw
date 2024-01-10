@@ -19,36 +19,36 @@ use App\Models\DocumentAdministratif;
 
 class CooperativeSettingController extends Controller
 {
-    
+
 
     public function index()
     {
-        
+
         $pageTitle = "Paramètre de la coopérative";
         $cooperative  = Cooperative::where('id', auth()->user()->cooperative_id)->first();
-        $documents = DocumentAdministratif::get();
-        $instances = Instance::get();
-        $dataDocument = $dataInstance= array();
-        $documentListe = CooperativeDocument::where('cooperative_id',auth()->user()->cooperative_id)->get();
-        if($documentListe->count()){
-            foreach($documentListe as $data){
+        // $documents = DocumentAdministratif::get();
+        // $instances = Instance::get();
+        $dataDocument = $dataInstance = array();
+        $documentListe = CooperativeDocument::where('cooperative_id', auth()->user()->cooperative_id)->get();
+        if ($documentListe->count()) {
+            foreach ($documentListe as $data) {
                 $dataDocument[] = $data->document_administratif_id;
             }
-        } 
-        $instanceListe = CooperativeInstance::where('cooperative_id',auth()->user()->cooperative_id)->get();
-        if($instanceListe->count()){
-            foreach($instanceListe as $data){
+        }
+        $instanceListe = CooperativeInstance::where('cooperative_id', auth()->user()->cooperative_id)->get();
+        if ($instanceListe->count()) {
+            foreach ($instanceListe as $data) {
                 $dataInstance[] = $data->instance_id;
             }
-        } 
+        }
         $activeSettingMenu = 'cooperative_settings';
 
-        return view('manager.cooperative-settings.index', compact('pageTitle', 'cooperative','activeSettingMenu','documents','dataDocument','instances','dataInstance'));
+        return view('manager.cooperative-settings.index', compact('pageTitle', 'cooperative', 'activeSettingMenu', 'dataDocument', 'dataInstance'));
     }
 
     public function update(Request $request)
     {
-        
+
         $request->validate([
             'name'    => 'required|max:40',
             'email'   => 'required|email|max:40',
@@ -57,90 +57,100 @@ class CooperativeSettingController extends Controller
             'web' => 'required|max:255',
             'mobile' => 'required|max:255',
         ]);
-        
+
         if ($request->id) {
             $cooperative  = Cooperative::find($request->id);
             $message = "La coopérative a été mise à jour avec succès";
 
-        $cooperative->codeCoop    = $request->codeCoop;
-        $cooperative->name    = $request->name;
-        $cooperative->email   = $request->email;
-        $cooperative->phone   = $request->phone;
-        $cooperative->address = $request->address;
-        $cooperative->web = $request->web;
-        $cooperative->mobile = $request->mobile;
-        $cooperative->statut_juridique = isset($request->statut_juridique) ? $request->statut_juridique : '';
-        $cooperative->annee_creation = isset($request->annee_creation) ? $request->annee_creation : '';
-        $cooperative->code_ccc = isset($request->code_ccc) ? $request->code_ccc : '';
-        $cooperative->nb_membres_creation = isset($request->nb_membres_creation) ? $request->nb_membres_creation : '';
-        $cooperative->nb_sections_creation = isset($request->nb_sections_creation) ? $request->nb_sections_creation : '';
-        $cooperative->nb_membres_actuel = isset($request->nb_membres_actuel) ? $request->nb_membres_actuel : '';
-        $cooperative->nb_sections_actuel = isset($request->nb_sections_actuel) ? $request->nb_sections_actuel : '';
-        $cooperative->nb_pca_creation = isset($request->nb_pca_creation) ? $request->nb_pca_creation : '';
-        $cooperative->codeApp   = isset($request->codeApp) ? $request->codeApp : $this->generecodeapp($request->name); 
-        $cooperative->save();
-        if($cooperative !=null ){
-            $id = $cooperative->id;
-        if(($request->document !=null)) { 
-            CooperativeDocument::where('cooperative_id',$id)->delete();
-            $i=0; 
-            foreach($request->document as $data){
-                if($data !=null)
-                {
-                    $datas[] = [
-                    'cooperative_id' => $id, 
-                    'document_administratif_id' => $data,  
-                ];
-                } 
-              $i++;
-            } 
-            CooperativeDocument::insert($datas);
-        }
-        if(($request->instance !=null)) { 
-            CooperativeInstance::where('cooperative_id',$id)->delete();
-            $i=0; 
-            foreach($request->instance as $data){
-                if($data !=null)
-                {
-                    $datas2[] = [
-                    'cooperative_id' => $id, 
-                    'instance_id' => $data,  
-                ];
-                } 
-              $i++;
-            } 
-            CooperativeInstance::insert($datas2);
-        }
-    }
-        return Reply::success(__('messages.updateSuccess'));
-        }else{
-        return Reply::success(__('messages.updateError'));
+            $cooperative->codeCoop    = $request->codeCoop;
+            $cooperative->name    = $request->name;
+            $cooperative->email   = $request->email;
+            $cooperative->phone   = $request->phone;
+            $cooperative->address = $request->address;
+            $cooperative->web = $request->web;
+            $cooperative->mobile = $request->mobile;
+            $cooperative->statut_juridique = isset($request->statut_juridique) ? $request->statut_juridique : '';
+            $cooperative->annee_creation = isset($request->annee_creation) ? $request->annee_creation : '';
+            $cooperative->code_ccc = isset($request->code_ccc) ? $request->code_ccc : '';
+            $cooperative->nb_membres_creation = isset($request->nb_membres_creation) ? $request->nb_membres_creation : '';
+            $cooperative->nb_sections_creation = isset($request->nb_sections_creation) ? $request->nb_sections_creation : '';
+            $cooperative->nb_membres_actuel = isset($request->nb_membres_actuel) ? $request->nb_membres_actuel : '';
+            $cooperative->nb_sections_actuel = isset($request->nb_sections_actuel) ? $request->nb_sections_actuel : '';
+            $cooperative->nb_pca_creation = isset($request->nb_pca_creation) ? $request->nb_pca_creation : '';
+            $cooperative->codeApp   = isset($request->codeApp) ? $request->codeApp : $this->generecodeapp($request->name);
+            $cooperative->region  = isset($request->region) ? $request->region : '';
+            $cooperative->departement  = isset($request->departement) ? $request->departement : '';
+            $cooperative->ville  = isset($request->ville) ? $request->ville : '';
+            $cooperative->dateOHADA  = isset($request->dateOHADA) ? $request->dateOHADA : '';
+            $cooperative->postal = isset($request->postal) ? $request->postal : '';
+            $cooperative->numCompteContribuable = isset($request->numCompteContribuable) ? $request->numCompteContribuable : '';
+            $cooperative->numRSC = isset($request->numRSC) ? $request->numRSC : '';
+            $cooperative->secteurActivite = isset($request->secteurActivite) ? $request->secteurActivite : '';
+            $cooperative->save();
+            // if ($cooperative != null) {
+            //     $id = $cooperative->id;
+            //     if (($request->document != null)) {
+            //         CooperativeDocument::where('cooperative_id', $id)->delete();
+            //         $i = 0;
+            //         foreach ($request->document as $data) {
+            //             if ($data != null) {
+            //                 $datas[] = [
+            //                     'cooperative_id' => $id,
+            //                     'document_administratif_id' => $data,
+            //                 ];
+            //             }
+            //             $i++;
+            //         }
+            //         CooperativeDocument::insert($datas);
+            //     }
+            //     if (($request->instance != null)) {
+            //         CooperativeInstance::where('cooperative_id', $id)->delete();
+            //         $i = 0;
+            //         foreach ($request->instance as $data) {
+            //             if ($data != null) {
+            //                 $datas2[] = [
+            //                     'cooperative_id' => $id,
+            //                     'instance_id' => $data,
+            //                 ];
+            //             }
+            //             $i++;
+            //         }
+            //         CooperativeInstance::insert($datas2);
+            //     }
+            // }
+            return Reply::success(__('messages.updateSuccess'));
+        } else {
+            return Reply::success(__('messages.updateError'));
         }
     }
 
     private function generecodeapp($name)
     {
 
-        $data = Cooperative::select('codeApp')->orderby('id','desc')->limit(1)->get();
+        $data = Cooperative::select('codeApp')->orderby('id', 'desc')->limit(1)->get();
 
-        if(count($data)>0){
+        if (count($data) > 0) {
             $code = $data[0]->codeApp;
 
-        $chaine_number = Str::afterLast($code,'-');
+            $chaine_number = Str::afterLast($code, '-');
 
-        if($chaine_number<10){$zero="00";}
-        else if($chaine_number<100){$zero="0";}
-        else{$zero="";}
-        }else{
-            $zero="00";
-            $chaine_number=0;
+            if ($chaine_number < 10) {
+                $zero = "00";
+            } else if ($chaine_number < 100) {
+                $zero = "0";
+            } else {
+                $zero = "";
+            }
+        } else {
+            $zero = "00";
+            $chaine_number = 0;
         }
 
 
-        $abrege=Str::upper(Str::substr($name,0,3));
-        $sub=$abrege.'-';
-        $lastCode=$chaine_number+1;
-        $codeP=$sub.$zero.$lastCode;
+        $abrege = Str::upper(Str::substr($name, 0, 3));
+        $sub = $abrege . '-';
+        $lastCode = $chaine_number + 1;
+        $codeP = $sub . $zero . $lastCode;
 
         return $codeP;
     }
@@ -159,7 +169,6 @@ class CooperativeSettingController extends Controller
         });
 
         CustomFieldGroup::insert($fields);
-
     }
     public function cooperativeAddress($cooperative)
     {
@@ -223,8 +232,8 @@ class CooperativeSettingController extends Controller
 
     public function leaveType($cooperative)
     {
-        $gender = ['Homme','Femme'];
-        $maritalstatus = ['marie','celibataire'];
+        $gender = ['Homme', 'Femme'];
+        $maritalstatus = ['marie', 'celibataire'];
 
         $status = [
             ['type_name' => 'Payes', 'color' => '#16813D', 'cooperative_id' => $cooperative->id, 'gender' => json_encode($gender), 'marital_status' => json_encode($maritalstatus), 'role' => ''],
@@ -238,7 +247,5 @@ class CooperativeSettingController extends Controller
         ];
 
         LeaveType::insert($status);
-
     }
-
 }

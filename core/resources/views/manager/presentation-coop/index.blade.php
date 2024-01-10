@@ -35,7 +35,7 @@ use App\Models\Programme;
                         </tr>
                         <tr>
                             <td>Homme</td>
-                            <td  class="text-center">{{$sexe['Homme']}}</td>
+                            <td>{{$hommes}}</td>
                         </tr>
                         <tr>
                             <td>Femmes</td>
@@ -43,24 +43,31 @@ use App\Models\Programme;
                         </tr>
                         <tr>
                             <td>Total</td>
-                            <td  class="text-center">{{ array_sum(array_values($sexe))}}</td>
+                            <td>{{ $nombreProducteur}}</td>
                         </tr>
                         <tr>
                             <td class="text-center" colspan="2">Répartition des membres par programme </td>
                         </tr> 
                         @foreach($programmes as $res)
                         <tr>
-                            <td class="text-center bg--danger" colspan="2">{{ $res->libelle}}</td>
+                            <td>Membres Certifié RA </td>
+                            <td> {{$countProducteursRainforest}} </td>
                         </tr>
-                        @foreach($certifications as $data)
-                        <?php
-                        $programmecert = getProducteurProgramme($date, $data->nom, $res->id); 
-                        ?>
-                        @if($programmecert->count())
-                        <?php $sexe = array_count_values(Arr::pluck($programmecert,'sexe')); ?>
                         <tr>
-                            <td><span class="badge badge-info">Certifiés {{ $data->nom}}</span></td>
-                            <td> </td>
+                            <td>Homme</td>
+                            <td> {{$countProducteursRainforestHomme}} </td>
+                        </tr>
+                        <tr>
+                            <td>Femmes</td>
+                            <td> {{$countProducteursRainforestFemme}} </td>
+                        </tr>
+                        <tr>
+                            <td>Total</td>
+                            <td> {{$countProducteursRainforest}} </td>
+                        </tr>
+                        <tr>
+                            <td>Membres Certifié FT </td>
+                            <td> {{$countProducteursFairtrade}} </td>
                         </tr>
                         <tr>
                             <td>Homme</td>
@@ -68,23 +75,46 @@ use App\Models\Programme;
                         </tr>
                         <tr>
                             <td>Femmes</td>
-                            <td class="text-center"> {{ @$sexe['Femme'] ? @$sexe['Femme'] : 0 }} </td>
-                        </tr> 
+                            <td> {{$countProducteursFairtradeFemme}} </td>
+                        </tr>
                         <tr>
                             <td>Total</td>
-                            <td class="text-center"> {{ array_sum(array_values($sexe))}} </td>
+                            <td> {{$countProducteursFairtrade}} </td>
                         </tr>
-                        @endif
-                        @endforeach
-                        @endforeach
-                         
+                        <tr>
+                            <td>Membres Certifié BIO </td>
+                            <td> {{ $countProducteursBio }} </td>
+                        </tr>
+                        <tr>
+                            <td>Homme</td>
+                            <td>  {{ $countProducteursBioHomme }} </td>
+                        </tr>
+                        <tr>
+                            <td>Femme</td>
+                            <td> {{ $countProducteursBioFemme }} </td>
+                        </tr>
+                        <tr>
+                            <td>Total</td>
+                            <td>{{ $countProducteursBio }}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-center" colspan="2">Membres Autres Programmes Durabilité </td>
+                        </tr>
+                        <tr>
+                            <td>Homme</td>
+                            <td> {{$hommesAutrePragramme}} </td>
+                        </tr>
+                        <tr>
+                            <td>Femme</td>
+                            <td> {{ $hommesAutrePragramme }} </td>
+                        </tr>
+                        <tr>
+                            <td>Total</td>
+                            <td>  {{ $nombreProducteurAutreProgramme}} </td>
+                        </tr>
                         <tr>
                             <td class="text-center" colspan="2">Membres Ordinaire</td>
                         </tr>
-                        <?php 
-                         $producteursOrdinaires =  getproducteurOrdinaire($date);
-                         $sexe = array_count_values(Arr::pluck($producteursOrdinaires,'sexe'));
-                        ?>
                          <tr>
                             <td>Homme</td>
                             <td>{{ @$sexe['Homme'] ? @$sexe['Homme'] : 0 }} </td>
@@ -127,7 +157,7 @@ use App\Models\Programme;
                     <tbody>
                         <tr>
                             <td>Superficie(Ha)</td>
-                            <td> {{ @$parcelle ? @$parcelle : 0 }} </td>
+                            <td> {{ $sumSuperficie}} </td>
                         </tr>
                         <tr>
                             <td>Production (Kg)</td>
@@ -177,15 +207,62 @@ use App\Models\Programme;
                             <td>Conventionnel/Ordinaire</td>
                             <td>{{ @$productionVenteProgramme ? @$productionVenteProgramme : 0 }}</td>
                         </tr>
+                        <tr>
+                            <td>Chiffre d'affaire </td>
+                            <td>Insertion des données ici</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table>
+                    <h3>Evolution de la production des membres</h3>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th colspan="3">2023</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Chiffre d'affaire(FCFA)</td>
+                            <td class="noretourligne">Cacao</td>
+                            <td>Insertion des données ici</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>Marge brute d'exploitation (FCFA)</td>
+                            <td class="noretourligne">Cacao</td>
+                            <td>Insertion des données ici</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>Résultat de l'exercice avant impôt (FCFA)</td>
+                            <td class="noretourligne">Cacao</td>
+                            <td>Insertion des données ici</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>Nombre de client</td>
+                            <td>Insertion des données ici</td>
+                        </tr>
                     </tbody>
                 </table>
                 @endfor
             </div>
             
         </div>
-        <div class="row mt-4">
+        {{-- <div class="row mt-4">
             <div class="col-md-6">
-                {{-- <table>
+                <table>
                     <caption>Statistiques des Membres</caption>
                     <thead>
                         <tr>
@@ -222,43 +299,12 @@ use App\Models\Programme;
                             <td>Insertion des données ici</td>
                         </tr>
                     </tbody>
-                </table> --}}
+                </table>
             </div>
             <div class="col-md-6">
-                {{-- <table>
-                    <caption>Statistiques des Membres</caption>
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>2023</th>
-                            <th>2024</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Membres-Adhérent</td>
-                            <td>Insertion des données ici</td>
-                            <td>Insertion des données ici</td>
-                        </tr>
-                        <tr>
-                            <td>Homme</td>
-                            <td>Insertion des données ici</td>
-                            <td>Insertion des données ici</td>
-                        </tr>
-                        <tr>
-                            <td>Femme</td>
-                            <td>Insertion des données ici</td>
-                            <td>Insertion des données ici</td>
-                        </tr>
-                        <tr>
-                            <td>Total</td>
-                            <td>Insertion des données ici</td>
-                            <td>Insertion des données ici</td>
-                        </tr>
-                    </tbody>
-                </table> --}}
+
             </div>
-        </div>
+        </div> --}}
         <x-confirmation-modal />
     </div>
 @endsection
@@ -284,10 +330,8 @@ use App\Models\Programme;
             color: #fff;
         }
 
-        caption {
-            font-size: 1.5em;
-            font-weight: bold;
-            margin-bottom: 10px;
+        .noretourligne {
+            white-space: nowrap;
         }
     </style>
 @endpush
