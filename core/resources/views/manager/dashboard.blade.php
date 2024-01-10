@@ -74,7 +74,12 @@ use Illuminate\Support\Str;
   title: {
     text: 'Producteur par Genre',
     subtext: '',
-    left: 'center'
+    left: 'center',
+    textStyle:{
+    fontSize: 16,
+    fontWeight: 'normal',
+    fontStyle: 'normal'
+    }
   },
   tooltip: {
     trigger: 'item'
@@ -116,7 +121,12 @@ var option2 = {
 title: {
 text: 'Mapping par Parcelle',
 subtext: '',
-left: 'center'
+left: 'center',
+textStyle:{
+    fontSize: 16,
+    fontWeight: 'normal',
+    fontStyle: 'normal'
+    }
 },
 tooltip: {
 trigger: 'item'
@@ -156,7 +166,12 @@ var myChart3 = echarts.init(document.getElementById('formationmodule'));
         var option3 = {
             title: { 
                 show: true,
-                text: 'Formations par Module'
+                text: 'Formations par Module',
+                textStyle:{
+                fontSize: 16,
+                fontWeight: 'normal',
+                fontStyle: 'normal'
+                }
             },
             tooltip: {}, 
             legend: {
@@ -189,7 +204,12 @@ var myChart4 = echarts.init(document.getElementById('producteurmodule'));
         var option4 = {
             title: { 
                 show: true,
-                text: 'Producteurs formés par Module'
+                text: 'Producteurs formés par Module',
+                textStyle:{
+                fontSize: 16,
+                fontWeight: 'normal',
+                fontStyle: 'normal'
+                }
             },
             tooltip: {}, 
             legend: {
