@@ -212,7 +212,7 @@ use App\Models\Programme;
                         ?>
                         @if($ventecert)
                         <tr>
-                            <td class="text-right">Certifié {{$data->nom}}</td>
+                            <td>Certifié {{$data->nom}}</td>
                             <td>{{$ventecert}}</td>
                         </tr>
                         @endif
