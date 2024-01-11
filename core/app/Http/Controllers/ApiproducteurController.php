@@ -53,6 +53,12 @@ class ApiproducteurController extends Controller
 
     // }
 
+    /**
+     * Retrieve producteurs with their associated localites and certifications.
+     *
+     * @param int $userid The user ID to filter the producteurs.
+     * @return Illuminate\Database\Eloquent\Collection The collection of producteurs.
+     */
     $producteurs = Producteur::join('localites', 'producteurs.localite_id', '=', 'localites.id')
       ->join('producteur_certifications', 'producteurs.id', '=', 'producteur_certifications.producteur_id')
       ->where('producteurs.userid', $userid)

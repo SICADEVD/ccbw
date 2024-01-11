@@ -85,7 +85,7 @@ class ApiAgroEvaluationContoller extends Controller
 
     }
 
-    public function getproducteurs(Request $request){
+    public function getproducteursBesoin(Request $request){
         $manager = User::where('id',$request->userid)->get()->first();
         $listeprod = Agroevaluation::select('producteur_id')->get();
         $dataProd = array();
