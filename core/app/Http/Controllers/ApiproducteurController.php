@@ -53,6 +53,7 @@ class ApiproducteurController extends Controller
 
     // }
 
+    
     /**
      * Retrieve producteurs with their associated localites and certifications.
      *
@@ -60,7 +61,7 @@ class ApiproducteurController extends Controller
      * @return Illuminate\Database\Eloquent\Collection The collection of producteurs.
      */
     $producteurs = Producteur::join('localites', 'producteurs.localite_id', '=', 'localites.id')
-      ->join('producteur_certifications', 'producteurs.id', '=', 'producteur_certifications.producteur_id')
+      ->leftJoin('producteur_certifications', 'producteurs.id', '=', 'producteur_certifications.producteur_id')
       ->where('producteurs.userid', $userid)
       ->select('producteurs.nom', 'producteurs.prenoms', 'localites.section_id as section_id', 'localites.id as localite_id', 'producteurs.id as id', 'producteurs.codeProd as codeProd', 'producteurs.statut')
       ->selectRaw('GROUP_CONCAT(producteur_certifications.certification) as certification')
@@ -112,7 +113,7 @@ class ApiproducteurController extends Controller
   public function store(Request $request)
   {
     if ($request->id) {
-      $id=$request->id;
+      $id = $request->id;
       $producteur = Producteur::findOrFail($request->id);
       $validationRule = [
         'programme_id' => ['required', 'exists:programmes,id'],
@@ -143,7 +144,7 @@ class ApiproducteurController extends Controller
         'phone2' => 'required_if:autreMembre,oui|regex:/^\d{10}$/|unique:producteurs,phone2,' . $request->id,
         'phone2' => Rule::when($request->autreMembre == 'oui', function () use ($id) {
           return ['required', 'regex:/^\d{10}$/', Rule::unique('producteurs', 'phone2')->ignore($id)];
-      }),
+        }),
       ];
       $messages = [
         'programme_id.required' => 'Le programme est obligatoire',
