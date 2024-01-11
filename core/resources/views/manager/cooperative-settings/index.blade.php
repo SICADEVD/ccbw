@@ -124,21 +124,21 @@
                             </div>
                             <hr class="panel-wide">
                             <div class="form-group">
-                                <label>@lang('Date de creation')</label>
+                                <label>@lang('Année de creation')</label>
                                 <input type="number" class="form-control years" min="1960"
                                     max="{{ gmdate('Y') }}" name="annee_creation"
                                     value="{{ $cooperative->annee_creation }}">
                             </div>
                             <div class="form-group">
-                                <label>@lang('Date d’uniformisation OHADA')</label>
+                                <label>@lang("Date d'uniformisation OHADA")</label>
                                 <input type="date" class="form-control" name="dateOHADA"
                                     value="{{ $cooperative->dateOHADA }}">
                             </div>
 
                             <div class="form-group">
                                 <label>@lang('Code CCC')</label>
-                                <input type="text" class="form-control phone" name="code_ccc"
-                                    value="{{ $cooperative->code_ccc }}">
+                                <input type="text" class="form-control phone " name="code_ccc"
+                                    value="{{ $cooperative->code_ccc }}" required>
                             </div>
                             <div class="form-group">
                                 <label>@lang('Nombre de membres à la creation')</label>
