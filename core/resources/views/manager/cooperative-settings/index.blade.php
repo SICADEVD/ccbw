@@ -69,17 +69,17 @@
                             </div>
                             <div class="form-group">
                                 <label>@lang('Historique de la coopérative')</label>
-                                <textarea type="text" class="form-control" value="{{ $cooperative->historique }}"
+                                <textarea type="text" class="form-control editor" value="{{ $cooperative->historique }}"
                                     name="historique" required>{{ $cooperative->historique }}</textarea>
                             </div>
                             <div class="form-group">
                                 <label>@lang('Mission')</label>
-                                <textarea type="text" class="form-control" value="{{ $cooperative->mission }}"
+                                <textarea type="text" class="form-control editor" value="{{ $cooperative->mission }}"
                                     name="mission" required>{{ $cooperative->mission }}</textarea>
                             </div>
                             <div class="form-group">
                                 <label>@lang('Vision')</label>
-                                <textarea type="text" class="form-control" value="{{ $cooperative->vision }}"
+                                <textarea type="text" class="form-control editor" value="{{ $cooperative->vision }}"
                                     name="vision" required>{{ $cooperative->vision }}</textarea>
                             </div>
 
@@ -201,6 +201,8 @@
 @endsection
 
 @push('script')
+<script src="{{ asset('assets/ckeditor/ckeditor.js') }}"></script>
+<script src="{{ asset('assets/ckeditor/adapters/jquery.js') }}"></script>
     <script>
         $('#save-form').click(function() {
             var url = "{{ route('manager.settings.cooperative-settings.update', $cooperative->id) }}";
@@ -231,4 +233,19 @@
             $(MODAL_XL).modal('show');
         });
     </script>
+    <script type="text/javascript">
+       $('#resume').keyup(function() {
+    var characterCount = $(this).val().length,
+        current_count = $('#current_count'),
+        maximum_count = $('#maximum_count'),
+        count = $('#count');
+        current_count.text(characterCount);
+});
+    </script>
+     <script>
+  $( 'textarea.editor' ).ckeditor( {
+    language: 'fr', 
+});
+  </script>
 @endpush
+ 
