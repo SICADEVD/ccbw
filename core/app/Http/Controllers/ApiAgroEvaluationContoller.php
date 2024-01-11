@@ -178,4 +178,9 @@ class ApiAgroEvaluationContoller extends Controller
         }
         
     }
+    public function getApprovisionnementSection(){
+        $approvisionnements = DB::table('agroapprovisionnement_sections')->get();
+        return response()->json($approvisionnements, 201);
+
+    }
 }
