@@ -55,7 +55,7 @@ use Illuminate\Support\Str;
             }
             
             foreach($formation as $data){ 
-                $labels3[] = utf8_encode(Str::remove("\r\n",utf8_decode($data->nom)));
+                $labels3[] = utf8_encode(Str::remove("\r\n",utf8_decode(Str::between($data->nom,"(",")"))));
                 $total3[] = $data->nombre; 
             }
              
