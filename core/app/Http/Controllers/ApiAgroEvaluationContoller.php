@@ -82,47 +82,44 @@ class ApiAgroEvaluationContoller extends Controller
         return response()->json($agroevaluation, 201);
 
         $message = "$i arbres à ombrage ont été exprimés comme besoin de cet Producteur.";
-
     }
 
     // public function getproducteursBesoin(Request $request){
-        // $manager = User::where('id',$request->userid)->get()->first();
-        // $listeprod = Agroevaluation::select('producteur_id')->get();
-        // $dataProd = array();
-        // if ($listeprod->count()) {
-        //     foreach ($listeprod as $data) {
-        //         $dataProd[] = $data->producteur_id;
-        //     }
-        // }
-        // $producteurs = Producteur::joinRelationship('localite.section')->where('cooperative_id', $manager->cooperative_id)->whereNotIn('producteurs.id', $dataProd)->select('producteurs.id')->get();
-        // return response()->json([
-        //     'producteurs' => $producteurs,
-        // ], 201);
+    // $manager = User::where('id',$request->userid)->get()->first();
+    // $listeprod = Agroevaluation::select('producteur_id')->get();
+    // $dataProd = array();
+    // if ($listeprod->count()) {
+    //     foreach ($listeprod as $data) {
+    //         $dataProd[] = $data->producteur_id;
+    //     }
+    // }
+    // $producteurs = Producteur::joinRelationship('localite.section')->where('cooperative_id', $manager->cooperative_id)->whereNotIn('producteurs.id', $dataProd)->select('producteurs.id')->get();
+    // return response()->json([
+    //     'producteurs' => $producteurs,
+    // ], 201);
 
     // }
-    public function besoinproducteur( Request $request){
-    //    $evaluations = DB::table('agroevaluation_especes')
-    //    ->join('agroevaluations', 'agroevaluations.id', '=', 'agroevaluation_especes.agroevaluation_id')
-    //    ->select('agroevaluation_especes.agroespecesarbre_id', 'agroevaluations.producteur_id','agroevaluation_especes.total')
-    //    ->get();
-    //    return response()->json([
-    //        'evaluations' => $evaluations,
-    //    ], 201);
+    public function besoinproducteur(Request $request)
+    {
 
-    $manager = User::where('id',$request->userid)->get()->first();
-    $listeprod = Agroevaluation::select('producteur_id')->get();
-    $dataProd = array();
-    if ($listeprod->count()) {
-        foreach ($listeprod as $data) {
-            $dataProd[] = $data->producteur_id;
+        $manager = User::where('id', $request->userid)->get()->first();
+        $listeprod = Agroevaluation::select('producteur_id')->get();
+        $dataProd = array();
+        if ($listeprod->count()) {
+            foreach ($listeprod as $data) {
+                $dataProd[] = $data->producteur_id;
+            }
         }
-    }
-    $producteurs = Producteur::joinRelationship('localite.section')->where('cooperative_id', $manager->cooperative_id)->whereNotIn('producteurs.id', $dataProd)->select('producteurs.id')->get();
-    return response()->json([
-        'producteurs' => $producteurs,
-    ], 201);
-    
-
+        $producteurs = Producteur::joinRelationship('localite.section')
+            ->join('agroevaluations', 'agroevaluations.producteur_id', '=', 'producteurs.id')
+            ->join('agroevaluation_especes', 'agroevaluation_especes.agroevaluation_id', '=', 'agroevaluations.id')
+            ->where('cooperative_id', $manager->cooperative_id)
+            ->whereHas('agroevaluation')
+            ->select('producteurs.id as producteur_id', 'agroevaluation_especes.agroespecesarbre_id', 'agroevaluation_especes.total')
+            ->get();
+        return response()->json([
+            'evaluations' => $producteurs,
+        ], 201);
     }
     public function store_distribution(Request $request)
     {
@@ -130,7 +127,7 @@ class ApiAgroEvaluationContoller extends Controller
             'quantite' => 'required|array',
         ];
 
-        
+
         $request->validate($validationRule);
 
 
@@ -147,7 +144,7 @@ class ApiAgroEvaluationContoller extends Controller
         $k = 0;
         $i = 0;
         $nb = 0;
-        
+
         if ($request->quantite) {
             $datas = [];
             foreach ($request->quantite as $producteurid => $agroespeces) {
@@ -209,9 +206,9 @@ class ApiAgroEvaluationContoller extends Controller
         }
         return response()->json([], 409);
     }
-    public function getApprovisionnementSection(){
+    public function getApprovisionnementSection()
+    {
         $approvisionnements = DB::table('agroapprovisionnement_sections')->get();
         return response()->json($approvisionnements, 201);
-
     }
 }
