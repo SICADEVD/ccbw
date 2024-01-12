@@ -103,22 +103,44 @@ class ApiAgroEvaluationContoller extends Controller
     {
 
         $manager = User::where('id', $request->userid)->get()->first();
-        $listeprod = Agroevaluation::select('producteur_id')->get();
-        $dataProd = array();
-        if ($listeprod->count()) {
-            foreach ($listeprod as $data) {
-                $dataProd[] = $data->producteur_id;
+        // $listeprod = Agroevaluation::select('producteur_id')->get();
+        // $dataProd = array();
+        // if ($listeprod->count()) {
+        //     foreach ($listeprod as $data) {
+        //         $dataProd[] = $data->producteur_id;
+        //     }
+        // }
+        // $producteurs = Producteur::joinRelationship('localite.section')
+        //     ->join('agroevaluations', 'agroevaluations.producteur_id', '=', 'producteurs.id')
+        //     ->join('agroevaluation_especes', 'agroevaluation_especes.agroevaluation_id', '=', 'agroevaluations.id')
+        //     ->where('cooperative_id', $manager->cooperative_id)
+        //     ->whereDoesntHave('agroevaluation')
+        //     ->select('producteurs.id as producteur_id', 'agroevaluation_especes.agroespecesarbre_id', 'agroevaluation_especes.total')
+        //     ->get();
+
+        $producteurDistri = array();
+        $producteurs  = Producteur::joinRelationship('localite.section')
+        ->join('agroevaluations', 'agroevaluations.producteur_id', '=', 'producteurs.id')
+        ->join('agroevaluation_especes', 'agroevaluation_especes.agroevaluation_id', '=', 'agroevaluations.id')
+        ->where('cooperative_id', $manager->cooperative_id)
+        ->select('producteurs.id as producteur_id', 'agroevaluation_especes.agroespecesarbre_id', 'agroevaluation_especes.total')
+        ->get();
+        
+        $produc = Agrodistribution::select('producteur_id')->get();
+        if ($produc) {
+            foreach ($produc as $data) {
+                $producteurDistri[] = $data->producteur_id;
             }
         }
-        $producteurs = Producteur::joinRelationship('localite.section')
-            ->join('agroevaluations', 'agroevaluations.producteur_id', '=', 'producteurs.id')
-            ->join('agroevaluation_especes', 'agroevaluation_especes.agroevaluation_id', '=', 'agroevaluations.id')
-            ->where('cooperative_id', $manager->cooperative_id)
-            ->whereDoesntHave('agroevaluation')
-            ->select('producteurs.id as producteur_id', 'agroevaluation_especes.agroespecesarbre_id', 'agroevaluation_especes.total')
-            ->get();
+
+        $producteurs2 = [];
+        foreach($producteurs as $producteur){
+            if(in_array($producteur->producteur_id,$producteurDistri) == false){
+                $producteurs2[] = $producteur;
+            }
+        }
         return response()->json([
-            'evaluations' => $producteurs,
+            'evaluations' => $producteurs2,
         ], 201);
     }
     public function store_distribution(Request $request)
