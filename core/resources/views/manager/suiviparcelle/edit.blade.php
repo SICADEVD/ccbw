@@ -232,6 +232,13 @@
                                                                     <option value="L"
                                                                         {{ $pesticide['unite'] == 'L' ? 'selected' : '' }}>
                                                                         L</option>
+                                                                    <option value="g"
+                                                                        {{ $pesticide['unite'] == 'g' ? 'selected' : '' }}>
+                                                                        g</option>
+                                                                    <option value="ml"
+                                                                        {{ $pesticide['unite'] == 'ml' ? 'selected' : '' }}>
+                                                                            ml
+                                                                        </option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -316,6 +323,8 @@
                                                                 <option value="">Selectionner une option</option>
                                                                 <option value="Kg">Kg</option>
                                                                 <option value="L">L</option>
+                                                                <option value="g">g</option>
+                                                                <option value="ml">ml</option>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -425,6 +434,13 @@
                                                                     <option value="L"
                                                                         {{ $intrant['unite'] == 'L' ? 'selected' : '' }}>
                                                                         L</option>
+                                                                    <option value="g"
+                                                                        {{ $intrant['unite'] == 'g' ? 'selected' : '' }}>
+                                                                        g</option>
+                                                                    <option value="ml"
+                                                                        {{ $intrant['unite'] == 'ml' ? 'selected' : '' }}>
+                                                                            ml
+                                                                        </option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -514,6 +530,8 @@
                                                                 <option value="">Selectionner une option</option>
                                                                 <option value="Kg">Kg</option>
                                                                 <option value="L">L</option>
+                                                                <option value="g">g</option>
+                                                                <option value="ml">ml</option>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -959,6 +977,13 @@
                                                                     <option value="L"
                                                                         {{ $traitement['unite'] == 'L' ? 'selected' : '' }}>
                                                                         L</option>
+                                                                    <option value="g"
+                                                                        {{ $traitement['unite'] == 'g' ? 'selected' : '' }}>
+                                                                        g</option>
+                                                                    <option value="ml"
+                                                                        {{ $traitement['unite'] == 'ml' ? 'selected' : '' }}>
+                                                                        ml</option>
+                                                                    
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -1056,6 +1081,8 @@
                                                                 <option value="">Selectionner une option</option>
                                                                 <option value="Kg">Kg</option>
                                                                 <option value="L">L</option>
+                                                                <option value="g">g</option>
+                                                                <option value="ml">ml</option>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -1613,7 +1640,7 @@
                     '][nom]"><option value="Herbicides">Herbicides</option><option value="Fongicides">Fongicides</option><option value="Nematicides">Nematicides</option><option value="Insecticide">Insecticide</option><option value="Acaricides">Acaricides</option><option value="Pesticides">Pesticides</option></select></div></div><div class="col-xs-12 col-sm-2"><div class="form-group row"><label>Unité</label><select class="form-control unite" name="pesticidesAnneDerniere[' +
                     pesticidesCount + '][unite]" id="unite-' +
                     pesticidesCount +
-                    '"><option value="Kg">Kg</option><option value="L">L</option></select></div></div> <div class="col-xs-12 col-sm-2"><div class="form-group row"><label for="" class="">Quantité</label><input type="number" name ="pesticidesAnneDerniere[' +
+                    '"><option value="Kg">Kg</option><option value="L">L</option><option value="g">g</option><option value="ml">ml</option></select></div></div> <div class="col-xs-12 col-sm-2"><div class="form-group row"><label for="" class="">Quantité</label><input type="number" name ="pesticidesAnneDerniere[' +
                     pesticidesCount + '][quantite]" id="quantite-' +
                     pesticidesCount +
                     '" class="form-control quantite" placeholder="Quantité"></div></div><div class="col-xs-12 col-sm-2"><div class="form-group row"><label>Type contenant</label><select class="form-control contenant" name="pesticidesAnneDerniere[' +
@@ -1658,7 +1685,7 @@
                     '][nom]"><option value="Dechets animaux">Dechets animaux</option><option value="Fongicides">Fongicides</option><option value="NPK">NPK</option><option value="Compost">Compost</option><option value="Biofertilisant/Bio stimulant">Biofertilisant/Bio stimulant</option><option value="Engrais organique préfabriqué">Engrais organique préfabriqué</option><option value="Engrais foliaire">Engrais foliaire</option></select></div></div><div class="col-xs-12 col-sm-2"><div class="form-group row"><label>Unité</label><select class="form-control unite" name="intrantsAnneDerniere[' +
                     intrantsCount + '][unite]" id="unite-' +
                     intrantsCount +
-                    '"><option value="Kg">Kg</option><option value="L">L</option></select></div></div> <div class="col-xs-12 col-sm-2"><div class="form-group row"><label for="" class="">Quantité</label><input type="number" name ="intrantsAnneDerniere[' +
+                    '"><option value="Kg">Kg</option><option value="L">L</option><option value="g">g</option><option value="ml">ml</option></select></div></div> <div class="col-xs-12 col-sm-2"><div class="form-group row"><label for="" class="">Quantité</label><input type="number" name ="intrantsAnneDerniere[' +
                     intrantsCount + '][quantite]" id="quantite-' +
                     intrantsCount +
                     '" class="form-control quantite" placeholder="Quantité"></div></div><div class="col-xs-12 col-sm-2"><div class="form-group row"><label>Type contenant</label><select class="form-control contenant" name="intrantsAnneDerniere[' +
@@ -1700,7 +1727,7 @@
                 '][nom]"><option value="">Selectionner une option</option><option value="Herbicides">Herbicides</option><option value="Fongicides">Fongicides</option><option value="Compost">Compost</option><option value="Déchets animaux">Déchets animaux</option><option value="Fiente">Fiente</option><option value="Nematicides">Nematicides</option><option value="Insecticide">Insecticide</option><option value="Biofertilisant">Biofertilisant</option><option value="Engrais chimique">Engrais chimique</option><option value="Engrais foliaire">Engrais foliaire</option><option value="Bouse de vache">Bouse de vache</option><option>NPK</option><option value="Insecticide organique">Insecticide organique</option><option value="Insecticide chimique">Insecticide chimique</option><option value="Pesticides">Pesticides</option></select></div></div><div class="col-xs-12 col-sm-2"><div class="form-group row"><label>Unité</label><select class="form-control unite" name="traitement[' +
                 traitementCount + '][unite]" id="unite-' +
                 traitementCount +
-                '"><option value="">Selectionner une option</option><option value="Kg">Kg</option><option value="L">L</option></select></div></div> <div class="col-xs-12 col-sm-2"><div class="form-group row"><label for="" class="">Quantité</label><input type="number" name ="traitement[' +
+                '"><option value="">Selectionner une option</option><option value="Kg">Kg</option><option value="L">L</option><option value="g">g</option><option value="ml">ml</option></select></div></div> <div class="col-xs-12 col-sm-2"><div class="form-group row"><label for="" class="">Quantité</label><input type="number" name ="traitement[' +
                 traitementCount + '][quantite]" id="quantite-' +
                 traitementCount +
                 '" class="form-control quantite" placeholder="Quantité"></div></div><div class="col-xs-12 col-sm-2"><div class="form-group row"><label>Type contenant</label><select class="form-control contenant" name="traitement[' +
