@@ -109,13 +109,15 @@ class ApiAgroEvaluationContoller extends Controller
            'evaluations' => $evaluations,
        ], 201);
     }
-    public function store_distribution( Request $request){
+    public function store_distribution(Request $request)
+    {
         $validationRule = [
             'quantite' => 'required|array',
         ];
 
+        
         $request->validate($validationRule);
-        $distribution = null;
+
 
         if ($request->id) {
             $distribution = Agrodistribution::findOrFail($request->id);
@@ -123,18 +125,28 @@ class ApiAgroEvaluationContoller extends Controller
         } else {
             $distribution = new Agrodistribution();
         }
-        $manager   = User::where('id', $request->userid)->get()->first();
+        $manager   = User::where('id', $request->userid)->first();
+        $campagne = Campagne::active()->first();
+
+        $datas = [];
         $k = 0;
         $i = 0;
         $nb = 0;
+        
         if ($request->quantite) {
+            $datas = [];
             foreach ($request->quantite as $producteurid => $agroespeces) {
 
                 $existe = Agrodistribution::where('producteur_id', $producteurid)->first();
 
                 if ($existe != null) {
                     $distributionID = $existe->id;
+                    $datas = [
+                        'id' => $distributionID,
+                        'quantite' => $request->qtelivre,
+                    ];
                 } else {
+
                     $distribution = new Agrodistribution();
                     $distribution->cooperative_id = $manager->cooperative_id;
                     $distribution->producteur_id = $producteurid;
@@ -142,6 +154,10 @@ class ApiAgroEvaluationContoller extends Controller
                     $distribution->save();
                     $distributionID = $distribution->id;
                     $nb++;
+                    $datas = [
+                        'id' => $distributionID,
+                        'quantite' => $request->qtelivre,
+                    ];
                 }
                 $agroespeces = array_filter($agroespeces);
                 foreach ($agroespeces as $agroespecesarbresid => $total) {
@@ -164,7 +180,6 @@ class ApiAgroEvaluationContoller extends Controller
                             if ($agroapprov != null) {
                                 $agroapprov->total_restant = $agroapprov->total_restant + $total;
                                 $agroapprov->save();
-                                return response()->json($distribution, 201);
                             }
                             $i++;
                         } else {
@@ -175,8 +190,9 @@ class ApiAgroEvaluationContoller extends Controller
                     }
                 }
             }
+            return response()->json($datas, 201);
         }
-        
+        return response()->json([], 201);
     }
     public function getApprovisionnementSection(){
         $approvisionnements = DB::table('agroapprovisionnement_sections')->get();
