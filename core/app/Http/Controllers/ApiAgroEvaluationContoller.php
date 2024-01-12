@@ -114,7 +114,7 @@ class ApiAgroEvaluationContoller extends Controller
             ->join('agroevaluations', 'agroevaluations.producteur_id', '=', 'producteurs.id')
             ->join('agroevaluation_especes', 'agroevaluation_especes.agroevaluation_id', '=', 'agroevaluations.id')
             ->where('cooperative_id', $manager->cooperative_id)
-            ->whereHas('agroevaluation')
+            ->whereDoesntHave('agroevaluation')
             ->select('producteurs.id as producteur_id', 'agroevaluation_especes.agroespecesarbre_id', 'agroevaluation_especes.total')
             ->get();
         return response()->json([
