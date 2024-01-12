@@ -202,7 +202,7 @@ function update_amounts()
     $('#totalquestionnonconforme').val(nonconforme);
     $('#totalquestionnonapplicable').val(nonapplicable);
     $('#totalquestionconforme').val(conforme); 
-    tauxconformite = (100*conforme)/$('#totalquestion').val()-nonapplicable;
+    tauxconformite = (100*$('#totalquestionnonconforme').val())/($('#totalquestion').val()-$('#totalquestionnonapplicable').val());
     $('#note').val(Math.round(tauxconformite));
     //just update the total to sum
 }
