@@ -90,6 +90,7 @@ Route::match(['POST'],'apiagroevaluation', [ApiAgroEvaluationContoller::class, '
 Route::match(['POST'],'getbesoinsproducteurs', [ApiAgroEvaluationContoller::class, 'getproducteursBesoin']);
 Route::match(['POST'],'apidistribution', [ApiAgroEvaluationContoller::class, 'store_distribution']);
 Route::match(['POST'],'getbesoinprod', [ApiAgroEvaluationContoller::class, 'besoinproducteur']);
+Route::match(['POST'],'getapprovisionnementsection', [ApiAgroEvaluationContoller::class, 'getApprovisionnementSection']);
 
 // route pour sous themes
 Route::match(['POST'],'getsousthemes', [ApisuiviformationController::class, 'getsousthemes']);
