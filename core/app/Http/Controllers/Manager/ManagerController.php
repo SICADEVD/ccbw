@@ -51,7 +51,8 @@ class ManagerController extends Controller
  
 //Producteurs formés par Module
         $modules = DB::select('SELECT 
-        tf.type_formation_id AS module_id,
+        tyf.nom AS module,
+        p.sexe AS sexe_producteur,
         COUNT(sf.producteur_id) AS nombre_producteurs
     FROM 
         suivi_formation_producteurs sf
@@ -61,15 +62,19 @@ class ManagerController extends Controller
     INNER JOIN 
         type_formation_themes tf
         ON s.id = tf.suivi_formation_id
+    INNER JOIN 
+        type_formations tyf
+        ON tyf.id = tf.type_formation_id
+    INNER JOIN 
+    producteurs p
+    ON sf.producteur_id = p.id
     GROUP BY 
-        tf.type_formation_id');
- 
-    $modulenom = TypeFormation::whereIn('id',Arr::pluck($modules,'module_id'))->select('nom')->get();
-    
+        tf.type_formation_id, p.sexe');
+   
         // Nombre de parcelles
         $parcelles = Parcelle::select(DB::raw('DATE_FORMAT(created_at,"%Y-%m-%d") as date'),DB::raw('count(id) as nombre'))->groupBy('date')->get();
  
-        return view('manager.dashboard', compact('pageTitle','nbcoop','nbparcelle','genre','parcelle','formation','modules','modulenom'));
+        return view('manager.dashboard', compact('pageTitle','nbcoop','nbparcelle','genre','parcelle','formation','modules'));
     }
 
     public function changeLanguage($lang = null)

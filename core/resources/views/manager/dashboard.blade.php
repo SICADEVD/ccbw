@@ -37,6 +37,7 @@
 @endpush
 @push('script')  
 <?php
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
             foreach($genre as $data){
                 $labels[] = utf8_encode(Str::remove("\r\n",utf8_decode($data->sexe)));
@@ -52,17 +53,43 @@ use Illuminate\Support\Str;
                 $value = $data->nombre;
                 $donnees2[] = "{ value: $value, name: '$name' }";
             }
-
-            foreach($formation as $data){
-                $labels3[] = utf8_encode(Str::remove("\r\n",utf8_decode($data->nom)));
-                $total3[] = $data->nombre;
-            }
-            $i=0;
             
+            foreach($formation as $data){ 
+                $labels3[] = utf8_encode(Str::remove("\r\n",utf8_decode($data->nom)));
+                $total3[] = $data->nombre; 
+            }
+             
+            $totalsexe=$sexe=$xAxisData=array();
+             
             foreach($modules as $data){
-                $labels4[] = utf8_encode(Str::remove("\r\n",utf8_decode($modulenom[$i]->nom)));
-                $total4[] = $data->nombre_producteurs;
-                $i++;
+
+              if(!in_array(Str::between($data->module,"(",")"),$xAxisData))
+              {  
+                $xAxisData[] = utf8_encode(Str::remove("\r\n",utf8_decode(Str::between($data->module,"(",")"))));
+              }
+                foreach($modules as $data2){
+                  if($data->sexe_producteur ==$data2->sexe_producteur){
+                    $totalsexe[] = $data2->nombre_producteurs;
+                  } 
+                }
+                $totalsexe = implode(",",$totalsexe);
+                if(!in_array($data->sexe_producteur,$sexe)){
+                  
+                  $sexe[]=$data->sexe_producteur;
+                  $donnees3[] = "
+                  { name:'$data->sexe_producteur',
+                    nameTextStyle: {
+                      fontStyle: 'oblique'
+                    },
+                    type: 'bar', 
+                    stack: 'one',
+                    data: [$totalsexe]
+                  }";
+                }
+                
+              
+              $totalsexe=array();
+                
             }
             ?>
 <script type="text/javascript">
@@ -196,7 +223,6 @@ var myChart3 = echarts.init(document.getElementById('formationmodule'));
 
 
         // Display the chart using the configuration items and data just specified.
-myChart2.setOption(option2);
 
 var myChart4 = echarts.init(document.getElementById('producteurmodule'));
  
@@ -213,24 +239,14 @@ var myChart4 = echarts.init(document.getElementById('producteurmodule'));
             },
             tooltip: {}, 
             legend: {
-                data: [<?php echo "'".implode("','",$labels4)."'"; ?>]
+              show: false
             },
-            xAxis: {
-                type: 'value',
-    boundaryGap: [0, 0.01]
+            xAxis: { 
+              type: 'category',
+                data: [<?php echo "'".implode("','",$xAxisData)."'"; ?>]
             },
-            yAxis: {
-                type: 'category',
-                data: [<?php echo "'".implode("','",$labels4)."'"; ?>]
-            },
-            series: [{
-                name: '',
-                label: {
-            show: true
-            },
-                type: 'bar',
-                data: [<?php echo "'".implode("','",$total4)."'"; ?>]
-            }]
+            yAxis: { },
+            series: [<?php echo implode(",",$donnees3); ?>]
         };
 
         // use configuration item and data specified to show chart
