@@ -85,21 +85,21 @@ class ApiAgroEvaluationContoller extends Controller
 
     }
 
-    public function getproducteursBesoin(Request $request){
-        $manager = User::where('id',$request->userid)->get()->first();
-        $listeprod = Agroevaluation::select('producteur_id')->get();
-        $dataProd = array();
-        if ($listeprod->count()) {
-            foreach ($listeprod as $data) {
-                $dataProd[] = $data->producteur_id;
-            }
-        }
-        $producteurs = Producteur::joinRelationship('localite.section')->where('cooperative_id', $manager->cooperative_id)->whereNotIn('producteurs.id', $dataProd)->select('producteurs.id')->get();
-        return response()->json([
-            'producteurs' => $producteurs,
-        ], 201);
+    // public function getproducteursBesoin(Request $request){
+    //     $manager = User::where('id',$request->userid)->get()->first();
+    //     $listeprod = Agroevaluation::select('producteur_id')->get();
+    //     $dataProd = array();
+    //     if ($listeprod->count()) {
+    //         foreach ($listeprod as $data) {
+    //             $dataProd[] = $data->producteur_id;
+    //         }
+    //     }
+    //     $producteurs = Producteur::joinRelationship('localite.section')->where('cooperative_id', $manager->cooperative_id)->whereNotIn('producteurs.id', $dataProd)->select('producteurs.id')->get();
+    //     return response()->json([
+    //         'producteurs' => $producteurs,
+    //     ], 201);
 
-    }
+    // }
     public function besoinproducteur(){
        $evaluations = DB::table('agroevaluation_especes')
        ->join('agroevaluations', 'agroevaluations.id', '=', 'agroevaluation_especes.agroevaluation_id')
