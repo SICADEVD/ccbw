@@ -67,6 +67,8 @@ class AgrodistributionController extends Controller
         
         $request->validate($validationRule);
 
+        dd(json_encode($request->all()));
+
         if ($request->id) {
             $distribution = Agrodistribution::findOrFail($request->id);
             $message = "La distribution a été mise à jour avec succès";
