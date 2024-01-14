@@ -72,7 +72,7 @@ class Kernel extends HttpKernel
         'check.status' => \App\Http\Middleware\CheckStatus::class,
         'manager' => \App\Http\Middleware\Manager::class,
         'staff' => \App\Http\Middleware\Staff::class,
-        'registration.complete' => \App\Http\Middleware\RegistrationStep::class,
+        // 'registration.complete' => \App\Http\Middleware\RegistrationStep::class,
         'maintenance' => \App\Http\Middleware\MaintenanceMode::class,
 
         //ajout des middleware pour la gestion des roles et permission
