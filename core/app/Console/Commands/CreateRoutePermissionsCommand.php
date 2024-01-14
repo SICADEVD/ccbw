@@ -47,12 +47,15 @@ class CreateRoutePermissionsCommand extends Command
             
             if ($route->getName() != '') {
                 $nameRoute = Str::before($route->getName(), '.');
-                if($nameRoute !='admin'){
-                $permission = Permission::where('name', $route->getName())->first();
-                
-
-                if (is_null($permission)) {
-                    permission::create(['name' => $route->getName()]);
+                if($nameRoute =='manager'){
+                    
+                $permission = Permission::where('name', $route->getName())->first(); 
+                 
+                if ($permission ==null) {
+                    $permission = new Permission();
+                    $permission->name=$route->getName();
+                    $permission->save();
+                    //permission::create(['name' => $route->getName()]);
                 }
                 }
             }
