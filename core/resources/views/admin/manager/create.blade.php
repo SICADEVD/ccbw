@@ -7,7 +7,7 @@
                     <form action="{{ route('admin.cooperative.manager.store') }}" method="POST">
                         @csrf
                         <div class="row">
-                            <div class="form-group col-lg-12">
+                            <div class="form-group col-lg-6">
                                 <label>@lang('Select Cooperative')</label>
                                 <select class="form-control" name="cooperative" required>
                                     <option value="">@lang('Selectionner une option')</option>
@@ -17,7 +17,14 @@
                                     @endforeach
                                 </select>
                             </div>
-                            
+                            <div class="form-group col-lg-6">
+                                <label for="rolePermission" class="form-label">Role</label>
+                                <select class="form-control" name="role" required> 
+                                    @foreach ($roles as $role)
+                                        <option value="{{ $role->id }}">{{ $role->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                         <div class="row"> 
                             <div class="form-group col-lg-6">

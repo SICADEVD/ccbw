@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Constants\Status;
-use App\Http\Controllers\Controller;
-use App\Models\Cooperative;
 use App\Models\User;
+use App\Constants\Status;
+use App\Models\Cooperative;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 
 class CooperativeManagerController extends Controller
@@ -24,7 +26,8 @@ class CooperativeManagerController extends Controller
         $pageTitle = "Ajouter un gestionnaire de coopérative";
         // $cooperatives  = Cooperative::active()->orderBy('name')->get();
         $cooperatives = Cooperative::where('status', Status::YES)->orderBy('name')->get();
-        return view('admin.manager.create', compact('pageTitle', 'cooperatives'));
+        $roles = Role::where('name','Manager')->latest()->get();
+        return view('admin.manager.create', compact('pageTitle', 'cooperatives','roles'));
     }
 
     public function store(Request $request)
@@ -89,11 +92,15 @@ class CooperativeManagerController extends Controller
         $manager->save();
 
         if (!$request->id) {
+            $manager->syncRoles($request->role);
             notify($manager, 'MANAGER_CREATE', [
                 'username' => $manager->username,
                 'email'    => $manager->email,
                 'password' => $request->password,
             ]);
+        }else{
+            DB::table('model_has_roles')->where('model_id', $request->id)->delete();
+            $manager->syncRoles($request->get('role'));
         }
 
         $notify[] = ['success', isset($message) ? $message : 'Le gestionnaire a été ajouté avec succès'];
@@ -102,10 +109,12 @@ class CooperativeManagerController extends Controller
 
     public function edit($id)
     {
-        $pageTitle = "Mise à jour du gestionnaire de coopérative";
-        $cooperatives  = Cooperative::active()->orderBy('name')->get();
+        $pageTitle = "Mise à jour du gestionnaire de coopérative"; 
         $manager   = User::findOrFail($id);
-        return view('admin.manager.edit', compact('pageTitle', 'cooperatives', 'manager'));
+        $cooperatives = Cooperative::where('status', Status::YES)->orderBy('name')->get();
+        $userRole = $manager->roles->pluck('name')->toArray();
+        $roles = Role::latest()->get();
+        return view('admin.manager.edit', compact('pageTitle', 'cooperatives', 'manager','userRole', 'roles'));
     }
 
     public function staffList($cooperativeId)

@@ -162,7 +162,7 @@ class StaffController extends Controller
         //$staff->syncRoles($request->get('rolePermission'));
         $staff->save();
 
-        if ($staff != null) {
+        if (!$request->id) {
 
             $staff->syncRoles($request->role);
 
