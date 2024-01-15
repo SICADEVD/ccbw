@@ -153,6 +153,7 @@
                 $productionVente = getvente($date);
                 $productionVenteOrdinaire = getventeOrdinaire($date);
                 $productionVenteProgramme = getventeProgramme($date);
+                $productionAntrePartenaire = getautreProduction($date);
                 ?>
 
                 <table class="table table-striped table-bordered">
@@ -241,25 +242,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {{-- @foreach ($certifications as $data) --}}
-                        <?php
-                        //$ventecert = getventeCertifie($date, $data->nom);
-                        ?>
+                        
                         <tr>
-                            <td>Certifié {{ $data->nom }}</td>
-                            <td>{{ $ventecert }}</td>
-                        </tr>
-                        {{-- @if ($ventecert)
-                            @endif --}}
-                        {{-- @endforeach --}}
-
-                        <tr>
-                            <td>Programme Durabilité </td>
-                            <td>0</td>
-                        </tr>
-                        <tr>
-                            <td>Conventionnel/Ordinaire</td>
-                            <td>0</td>
+                            <td>Cacao </td>
+                            <td> {{ $productionAntrePartenaire }} </td>
                         </tr>
                         <tr>
                             <td>Chiffre d'affaire (F CFA)</td>

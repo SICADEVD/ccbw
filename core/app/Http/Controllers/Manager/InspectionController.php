@@ -92,6 +92,7 @@ class InspectionController extends Controller
         $inspection->total_question_conforme  = $request->total_question_conforme;
         $inspection->total_question_non_conforme  = $request->total_question_non_conforme;
         $inspection->total_question_non_applicable  = $request->total_question_non_applicable;
+        $inspection->production = $request->production;
         
         $inspection->date_evaluation     = $request->date_evaluation; 
 

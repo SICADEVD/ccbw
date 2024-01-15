@@ -17,6 +17,7 @@ use App\Models\GeneralSetting;
 use App\Lib\GoogleAuthenticator;
 use App\Models\Connaissement;
 use App\Models\ConnaissementProduit;
+use App\Models\Inspection;
 use App\Models\LivraisonProduct;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
@@ -518,6 +519,19 @@ function getproduction($date=null)
                                 ->sum('qty');
 
     return $quantite;
+}
+function getautreProduction($date){
+    $date = explode('-', $date);
+   
+    $startDate = Carbon::parse(trim($date[0]))->format('Y-m-d'); 
+    $endDate = @$date[1] ? Carbon::parse(trim(@$date[1]))->format('Y-m-d') : $startDate;
+    $quantite = Inspection::joinRelationship('producteur.localite.section')
+                                ->where('cooperative_id', auth()->user()->cooperative_id)
+                                ->whereDate('inspections.date_evaluation', '>=', $startDate)
+                                ->whereDate('inspections.date_evaluation', '<=', $endDate)
+                                ->sum('production');
+    return $quantite;
+
 }
 function getproductionCertifie($date, $certif)
 {
