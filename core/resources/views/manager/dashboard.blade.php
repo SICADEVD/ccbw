@@ -165,6 +165,17 @@ use Illuminate\Support\Str;
     fontStyle: 'normal'
     }
   },
+  toolbox: {
+          show: true,
+          //orient: 'vertical',
+          left: 'left',
+          bottom: 'bottom',
+          feature: {
+            dataView: { readOnly: false },
+            restore: {},
+            saveAsImage: {}
+          }
+        },
   tooltip: {
     trigger: 'item'
   },
@@ -212,11 +223,23 @@ textStyle:{
     fontStyle: 'normal'
     }
 },
+toolbox: {
+          show: true,
+          //orient: 'vertical',
+          left: 'left',
+          bottom: 'bottom',
+          feature: {
+            dataView: { readOnly: false },
+            restore: {},
+            saveAsImage: {}
+          }
+        },
 tooltip: {
 trigger: 'item'
 },
 legend: {
 orient: 'horizontal',
+right:'right',
 bottom: 'bottom'
 },
 series: [
@@ -255,6 +278,17 @@ var myChart3 = echarts.init(document.getElementById('formationmodule'));
                 fontStyle: 'normal'
                 }
             },
+            toolbox: {
+          show: true,
+          //orient: 'vertical',
+          left: 'left',
+          bottom: 'bottom',
+          feature: {
+            dataView: { readOnly: false },
+            restore: {},
+            saveAsImage: {}
+          }
+        },
             tooltip: {}, 
             legend: {
                 data: [<?php echo "'".implode("','",$labels3)."'"; ?>]
@@ -290,6 +324,17 @@ var myChart4 = echarts.init(document.getElementById('producteurmodule'));
                 fontStyle: 'normal'
                 }
             },
+            toolbox: {
+          show: true,
+          //orient: 'vertical',
+          left: 'left',
+          bottom: 'bottom',
+          feature: {
+            dataView: { readOnly: false },
+            restore: {},
+            saveAsImage: {}
+          }
+        },
             tooltip: {}, 
             legend: {
               show: false
@@ -318,6 +363,17 @@ textStyle:{
     fontStyle: 'normal'
     }
 },
+toolbox: {
+          show: true,
+          //orient: 'vertical',
+          left: 'left',
+          bottom: 'bottom',
+          feature: {
+            dataView: { readOnly: false },
+            restore: {},
+            saveAsImage: {}
+          }
+        },
 tooltip: {
 trigger: 'item'
 },
@@ -361,6 +417,17 @@ var myChart6 = echarts.init(document.getElementById('producteurparcertification'
                 fontStyle: 'normal'
                 }
             },
+            toolbox: {
+          show: true,
+          //orient: 'vertical',
+          left: 'left',
+          bottom: 'bottom',
+          feature: {
+            dataView: { readOnly: false },
+            restore: {},
+            saveAsImage: {}
+          }
+        },
             tooltip: {}, 
             legend: {
                 data: [<?php echo "'".implode("','",$labels6)."'"; ?>]
@@ -392,6 +459,17 @@ var myChart6 = echarts.init(document.getElementById('producteurparcertification'
                 fontStyle: 'normal'
                 }
             },
+            toolbox: {
+          show: true,
+          //orient: 'vertical',
+          left: 'left',
+          bottom: 'bottom',
+          feature: {
+            dataView: { readOnly: false },
+            restore: {},
+            saveAsImage: {}
+          }
+        },
             tooltip: {}, 
             legend: {
               show: false
