@@ -109,11 +109,11 @@ class AuthController extends Controller
             { 
                 foreach($user->getAllPermissions() as $v)
                 {
-                    $permissionsrolesName=Str::replace("staff.","",$v->name);
-                    $permissionsrolesName=Str::replace("suivi.","",$permissionsrolesName);
-                    $permissionsrolesName=Str::replace("traca.","",$permissionsrolesName);
+                    $permissionsrolesName=Str::replace("manager.staff.","",$v->name);
+                    $permissionsrolesName=Str::replace("manager.suivi.","",$permissionsrolesName);
+                    $permissionsrolesName=Str::replace("manager.traca.","",$permissionsrolesName);
                     //ajout de agro
-                    $permissionsrolesName=Str::replace("agro.","",$permissionsrolesName);
+                    $permissionsrolesName=Str::replace("manager.agro.","",$permissionsrolesName);
                     
                     
                     $permissionsroles[]=Str::before($permissionsrolesName,".");
