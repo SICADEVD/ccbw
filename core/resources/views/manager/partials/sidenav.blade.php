@@ -238,7 +238,7 @@
                     </div>
                 </li>
                 @endif
-                @if(Auth::user()->can('presentation-coop.index') || Auth::user()->can('manager.employees.index') || Auth::user()->can('manager.hr.attendances.index') || Auth::user()->can('manager.leaves.index') || Auth::user()->can('manager.holidays.index') || Auth::user()->can('manager.formation-staff.index') || Auth::user()->can('manager.archivages.index'))
+                @if(Auth::user()->can('manager.presentation-coop.index') || Auth::user()->can('manager.employees.index') || Auth::user()->can('manager.hr.attendances.index') || Auth::user()->can('manager.leaves.index') || Auth::user()->can('manager.holidays.index') || Auth::user()->can('manager.formation-staff.index') || Auth::user()->can('manager.archivages.index'))
                 <li class="sidebar-menu-item sidebar-dropdown">
                     <a href="javascript:void(0)"
                         class="{{ menuActive(['manager.hr.*', 'manager.employees.index', 'manager.holidays.*', 'manager.departments.*', 'manager.designations.*', 'manager.holidays.*', 'manager.leaves.*', 'manager.archivages.*', 'manager.formation-staff.*', 'presentation-coop.*'], 3) }}">
@@ -248,9 +248,9 @@
                     <div
                         class="sidebar-submenu {{ menuActive(['manager.hr.*', 'manager.employees.*', 'manager.holidays.*', 'manager.departments.*', 'manager.designations.*', 'manager.holidays.*', 'manager.leaves.*', 'manager.archivages.*', 'manager.formation-staff.*', 'presentation-coop.*'], 2) }} ">
                         <ul> 
-                            @can('presentation-coop.index')
-                            <li class="sidebar-menu-item {{ menuActive('presentation-coop.index') }}">
-                                <a href="{{ route('presentation-coop.index') }}" class="nav-link">
+                            @can('manager.presentation-coop.index')
+                            <li class="sidebar-menu-item {{ menuActive('manager.presentation-coop.index') }}">
+                                <a href="{{ route('manager.presentation-coop.index') }}" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>
                                     <span class="menu-title">@lang('Présentation de la coopérative')</span>
                                 </a>
