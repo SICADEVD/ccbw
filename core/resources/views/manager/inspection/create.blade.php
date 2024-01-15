@@ -222,9 +222,13 @@
                 //$('#note').val(sum);
                 $('#totalquestionnonconforme').val(nonconforme);
                 $('#totalquestionnonapplicable').val(nonapplicable);
-                $('#totalquestionconforme').val(conforme);
-                tauxconformite = (100 * $('#totalquestionnonconforme').val()) / ($('#totalquestion').val() - $(
-                    '#totalquestionnonapplicable').val());
+                totalquestionconforme = $('#totalquestion').val() - $('#totalquestionnonconforme').val();
+                console.log(totalquestionconforme)
+                $('#totalquestionconforme').val(totalquestionconforme);
+                var total1= $('#totalquestionconforme').val();
+                var total2 = $('#totalquestion').val();
+                
+                tauxconformite = (total1 / total2)*100;
                 $('#note').val(Math.round(tauxconformite));
                 //just update the total to sum
             }
