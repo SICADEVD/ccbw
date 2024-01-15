@@ -1,89 +1,90 @@
 @extends('manager.layouts.app')
 @section('panel')
-<?php 
-use Illuminate\Support\Arr; 
-use App\Models\Certification;
-use App\Models\Programme;
-
-?>
+    <?php
+    use Illuminate\Support\Arr;
+    use App\Models\Certification;
+    use App\Models\Programme;
+    
+    ?>
     <div class="row mb-none-30">
-    <div class="card b-radius--10 mb-3">
-                <div class="card-body">
-                    <form action="">
-                        <div class="d-flex flex-wrap gap-4">
-                            
-                            <!-- <div class="flex-grow-1">
-                                <label>@lang('Date')</label>
-                                <input name="date" type="text" class="dates form-control"
-                                    placeholder="@lang('Date de début - Date de fin')" autocomplete="off" value="{{ request()->date }}">
-                            </div> -->
-                            <div class="flex-grow-1">
-                                <label>@lang("Année d'activité")</label>
-                                <select name="date" class="form-control">
-                                    <option value="">@lang('Selectionner une date')</option>
-                                    @for($i=gmdate('Y');$i>=2023;$i--)
-                                        <option value="{{ $i }}" {{ request()->date == $i ? 'selected' : '' }}>{{ $i }}</option>
-                                    @endfor
-                                </select>
-                            </div>
-                            <div class="flex-grow-1 align-self-end">
-                                <button class="btn btn--primary w-100 h-45"><i class="fas fa-filter"></i>
-                                    @lang('Filtrer')</button>
-                            </div>
+        <div class="card b-radius--10 mb-3">
+            <div class="card-body">
+                <form action="">
+                    <div class="d-flex flex-wrap gap-4">
+
+                        <!-- <div class="flex-grow-1">
+                                                        <label>@lang('Date')</label>
+                                                        <input name="date" type="text" class="dates form-control"
+                                                            placeholder="@lang('Date de début - Date de fin')" autocomplete="off" value="{{ request()->date }}">
+                                                    </div> -->
+                        <div class="flex-grow-1">
+                            <label>@lang("Année d'activité")</label>
+                            <select name="date" class="form-control">
+                                <option value="">@lang('Selectionner une date')</option>
+                                @for ($i = gmdate('Y'); $i >= 2023; $i--)
+                                    <option value="{{ $i }}" {{ request()->date == $i ? 'selected' : '' }}>
+                                        {{ $i }}</option>
+                                @endfor
+                            </select>
                         </div>
-                    </form>
-                </div>
+                        <div class="flex-grow-1 align-self-end">
+                            <button class="btn btn--primary w-100 h-45"><i class="fas fa-filter"></i>
+                                @lang('Filtrer')</button>
+                        </div>
+                    </div>
+                </form>
             </div>
+        </div>
         <div class="row">
             <div class="col-md-6">
-            <h3>Evalution des membres</h3>
-            
-               
+                <h3>Evalution des membres</h3>
+
+
 
                 <?php
-                $date = request()->date ? "01/01/".request()->date."-12/31/".request()->date : "01/01/".gmdate('Y')."-12/31/".gmdate('Y');  
-        $certifications = Certification::get(); 
-        $programmes = Programme::get();
-        $producteurs = getproducteur($date);  
-       $sexe = array_count_values(Arr::pluck($producteurs,'sexe'));
-        
+                $date = request()->date ? '01/01/' . request()->date . '-12/31/' . request()->date : '01/01/' . gmdate('Y') . '-12/31/' . gmdate('Y');
+                $certifications = Certification::get();
+                $programmes = Programme::get();
+                $producteurs = getproducteur($date);
+                $sexe = array_count_values(Arr::pluck($producteurs, 'sexe'));
+                
                 ?>
                 <table class="table table-striped table-bordered">
-                    
+
                     <thead class="bg--primary ">
                         <tr>
                             <th class="text-white">Membre-Adhérent</th>
                             <th class="text-white text-center">{{ request()->date ? request()->date : gmdate('Y') }}</th>
                         </tr>
                     </thead>
-                    <tbody> 
+                    <tbody>
                         <tr>
                             <td>Homme</td>
-                            <td  class="text-center">{{$sexe['Homme']}}</td>
+                            <td class="text-center">{{ $sexe['Homme'] }}</td>
                         </tr>
                         <tr>
                             <td>Femmes</td>
-                            <td  class="text-center">{{ $sexe['Femme'] }}</td>
+                            <td class="text-center">{{ $sexe['Femme'] }}</td>
                         </tr>
                         <tr>
                             <td>Total</td>
-                            <td  class="text-center">{{ array_sum(array_values($sexe))}}</td>
+                            <td class="text-center">{{ array_sum(array_values($sexe)) }}</td>
                         </tr>
                     </tbody>
                 </table>
-                <table class="table table-striped table-bordered"> 
+                <table class="table table-striped table-bordered">
                     <thead class="bg--primary ">
                         <tr>
                             <th class="text-white">Membres Ordinaire</th>
                             <th class="text-white text-center">{{ request()->date ? request()->date : gmdate('Y') }}</th>
                         </tr>
                     </thead>
-                    <tbody>  
-                        <?php 
-                         $producteursOrdinaires =  getproducteurOrdinaire($date);
-                         $sexe = array_count_values(Arr::pluck($producteursOrdinaires,'sexe'));
+                    <tbody>
+                        <?php
+                        $producteursOrdinaires = getproducteurOrdinaire($date);
+                        $sexe = array_count_values(Arr::pluck($producteursOrdinaires, 'sexe'));
                         ?>
-                         <tr>
+                        <tr>
                             <td>Homme</td>
                             <td>{{ @$sexe['Homme'] ? @$sexe['Homme'] : 0 }} </td>
                         </tr>
@@ -93,68 +94,68 @@ use App\Models\Programme;
                         </tr>
                         <tr>
                             <td>Total</td>
-                            <td>{{ array_sum(array_values($sexe))}}</td>
+                            <td>{{ array_sum(array_values($sexe)) }}</td>
                         </tr>
                     </tbody>
                 </table>
-                        <table class="table table-striped table-bordered"> 
+                <table class="table table-striped table-bordered">
                     <thead class="bg--primary ">
                         <tr>
                             <th class="text-white">Répartition des membres par programme </th>
                             <th class="text-white text-center">{{ request()->date ? request()->date : gmdate('Y') }}</th>
                         </tr>
                     </thead>
-                    <tbody> 
-                        @foreach($programmes as $res)
-                        <tr>
-                            <td class="text-center bg--warning" colspan="2">{{ $res->libelle}}</td>
-                        </tr>
-                        @foreach($certifications as $data)
-                        <?php
-                        $programmecert = getProducteurProgramme($date, $data->nom, $res->id); 
-                        ?>
-                        @if($programmecert->count())
-                        <?php $sexe = array_count_values(Arr::pluck($programmecert,'sexe')); ?>
-                        <tr>
-                            <td><span class="badge badge-info">Certifiés {{ $data->nom}}</span></td>
-                            <td> </td>
-                        </tr>
-                        <tr>
-                            <td>Homme</td>
-                            <td class="text-center"> {{ @$sexe['Homme'] ? @$sexe['Homme'] : 0 }} </td>
-                        </tr>
-                        <tr>
-                            <td>Femmes</td>
-                            <td class="text-center"> {{ @$sexe['Femme'] ? @$sexe['Femme'] : 0 }} </td>
-                        </tr> 
-                        <tr>
-                            <td>Total</td>
-                            <td class="text-center"> {{ array_sum(array_values($sexe))}} </td>
-                        </tr>
-                        @endif
-                        @endforeach
+                    <tbody>
+                        @foreach ($programmes as $res)
+                            <tr>
+                                <td class="text-center bg--warning" colspan="2">{{ $res->libelle }}</td>
+                            </tr>
+                            @foreach ($certifications as $data)
+                                <?php
+                                $programmecert = getProducteurProgramme($date, $data->nom, $res->id);
+                                ?>
+                                @if ($programmecert->count())
+                                    <?php $sexe = array_count_values(Arr::pluck($programmecert, 'sexe')); ?>
+                                    <tr>
+                                        <td><span class="badge badge-info">Certifiés {{ $data->nom }}</span></td>
+                                        <td> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Homme</td>
+                                        <td class="text-center"> {{ @$sexe['Homme'] ? @$sexe['Homme'] : 0 }} </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Femmes</td>
+                                        <td class="text-center"> {{ @$sexe['Femme'] ? @$sexe['Femme'] : 0 }} </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Total</td>
+                                        <td class="text-center"> {{ array_sum(array_values($sexe)) }} </td>
+                                    </tr>
+                                @endif
+                            @endforeach
                         @endforeach
                     </tbody>
-                        </table>
-                        
-                
+                </table>
+
+
             </div>
             <div class="col-md-6">
-            <h3>Evolution de la production des membres</h3>
-            
-                
-            <?php 
-           $date = request()->date ? "01/01/".request()->date."-12/31/".request()->date : "01/01/".gmdate('Y')."-12/31/".gmdate('Y');  
-            $parcelle = getparcelle($date);  
-            $production = getproduction($date); 
-            $productionOrdinaire = getproductionOrdinaire($date);
-            $productionProgramme =getproductionProgramme($date);
-            $productionVente = getvente($date);
-            $productionVenteOrdinaire =getventeOrdinaire($date);
-            $productionVenteProgramme =getventeProgramme($date);
-            ?>
-                    
-                    <table class="table table-striped table-bordered"> 
+                <h3>Evolution de la production des membres</h3>
+
+
+                <?php
+                $date = request()->date ? '01/01/' . request()->date . '-12/31/' . request()->date : '01/01/' . gmdate('Y') . '-12/31/' . gmdate('Y');
+                $parcelle = getparcelle($date);
+                $production = getproduction($date);
+                $productionOrdinaire = getproductionOrdinaire($date);
+                $productionProgramme = getproductionProgramme($date);
+                $productionVente = getvente($date);
+                $productionVenteOrdinaire = getventeOrdinaire($date);
+                $productionVenteProgramme = getventeProgramme($date);
+                ?>
+
+                <table class="table table-striped table-bordered">
                     <thead class="bg--primary">
                         <tr>
                             <th class="text-white">Cacao</th>
@@ -167,27 +168,27 @@ use App\Models\Programme;
                             <td> {{ @$parcelle ? @$parcelle : 0 }} </td>
                         </tr>
                     </tbody>
-                    </table>
-                        <table class="table table-striped table-bordered"> 
+                </table>
+                <table class="table table-striped table-bordered">
                     <thead class="bg--primary ">
                         <tr>
                             <th class="text-white">Cacao Production (Kg) </th>
                             <th class="text-white text-center">{{ request()->date ? request()->date : gmdate('Y') }}</th>
                         </tr>
                     </thead>
-                    <tbody> 
-                        @foreach($certifications as $data)
-                        <?php
-                        $productioncert = getproductionCertifie($date, $data->nom); 
-                        ?>
-                        @if($productioncert)
-                        <tr>
-                            <td>Certifié {{$data->nom}}</td>
-                            <td>{{$productioncert}}</td>
-                        </tr>
-                        @endif
+                    <tbody>
+                        @foreach ($certifications as $data)
+                            <?php
+                            $productioncert = getproductionCertifie($date, $data->nom);
+                            ?>
+                            @if ($productioncert)
+                                <tr>
+                                    <td>Certifié {{ $data->nom }}</td>
+                                    <td>{{ $productioncert }}</td>
+                                </tr>
+                            @endif
                         @endforeach
-                         
+
                         <tr>
                             <td>Programme Durabilité </td>
                             <td>{{ @$productionProgramme ? @$productionProgramme : 0 }}</td>
@@ -197,40 +198,126 @@ use App\Models\Programme;
                             <td>{{ @$productionOrdinaire ? @$productionOrdinaire : 0 }}</td>
                         </tr>
                     </tbody>
-                        </table>
-                        <table class="table table-striped table-bordered"> 
+                </table>
+                <table class="table table-striped table-bordered">
                     <thead class="bg--primary ">
                         <tr>
-                            <th class="text-white">Cacao Vente (Kg) </th>
+                            <th class="text-white">Cacao Vendu à CCB (Kg) </th>
                             <th class="text-white text-center">{{ request()->date ? request()->date : gmdate('Y') }}</th>
                         </tr>
                     </thead>
-                    <tbody>  
-                        @foreach($certifications as $data)
-                        <?php
-                        $ventecert = getventeCertifie($date, $data->nom); 
-                        ?>
-                        @if($ventecert)
-                        <tr>
-                            <td>Certifié {{$data->nom}}</td>
-                            <td>{{$ventecert}}</td>
-                        </tr>
-                        @endif
+                    <tbody>
+                        @foreach ($certifications as $data)
+                            <?php
+                            $ventecert = getventeCertifie($date, $data->nom);
+                            ?>
+                            @if ($ventecert)
+                                <tr>
+                                    <td>Certifié {{ $data->nom }}</td>
+                                    <td>{{ $ventecert }}</td>
+                                </tr>
+                            @endif
                         @endforeach
-                          
+
                         <tr>
                             <td>Programme Durabilité </td>
-                            <td>{{ @$productionVenteProgramme  ? @$productionVenteProgramme : 0 }}</td>
+                            <td>{{ @$productionVenteProgramme ? @$productionVenteProgramme : 0 }}</td>
                         </tr>
                         <tr>
                             <td>Conventionnel/Ordinaire</td>
                             <td>{{ @$productionVenteOrdinaire ? @$productionVenteOrdinaire : 0 }}</td>
                         </tr>
+                        <tr>
+                            <td>Chiffre d'affaire (F CFA)</td>
+                            <td>0</td>
+                        </tr>
                     </tbody>
                 </table>
-                 
+                <table class="table table-striped table-bordered">
+                    <thead class="bg--primary ">
+                        <tr>
+                            <th class="text-white">Cacao Vendu aux autres partenaires (Kg) </th>
+                            <th class="text-white text-center">{{ request()->date ? request()->date : gmdate('Y') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{-- @foreach ($certifications as $data) --}}
+                        <?php
+                        //$ventecert = getventeCertifie($date, $data->nom);
+                        ?>
+                        <tr>
+                            <td>Certifié {{ $data->nom }}</td>
+                            <td>{{ $ventecert }}</td>
+                        </tr>
+                        {{-- @if ($ventecert)
+                            @endif --}}
+                        {{-- @endforeach --}}
+
+                        <tr>
+                            <td>Programme Durabilité </td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>Conventionnel/Ordinaire</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>Chiffre d'affaire (F CFA)</td>
+                            <td>0</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h3 class="mt-5">Performance financière</h3>
+                <table class="table table-striped table-bordered">
+                    <thead class="bg--primary ">
+                        <tr>
+                            <th class="text-white">Chiffre d'affaire (F CFA) </th>
+                            {{-- <th class="text-white">Produits </th> --}}
+                            <th class="text-white text-center">{{ request()->date ? request()->date : gmdate('Y') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Cacao</td>
+                            <td>0</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table class="table table-striped table-bordered">
+                    <thead class="bg--primary ">
+                        <tr>
+                            <th class="text-white">Marge Brute d'exploitation (F CFA) </th>
+                            {{-- <th class="text-white">Produits </th> --}}
+                            <th class="text-white text-center">{{ request()->date ? request()->date : gmdate('Y') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Cacao</td>
+                            <td>0</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table class="table table-striped table-bordered">
+                    <thead class="bg--primary ">
+                        <tr>
+                            <th class="text-white">Marge Brute d'exploitation (F CFA) </th>
+                            {{-- <th class="text-white">Produits </th> --}}
+                            <th class="text-white text-center">{{ request()->date ? request()->date : gmdate('Y') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Cacao</td>
+                            <td>0</td>
+                        </tr>
+                    </tbody>
+                </table>
+
             </div>
-            
+
         </div>
         <div class="row mt-4">
             <div class="col-md-6">
@@ -346,18 +433,18 @@ use App\Models\Programme;
 @push('script')
     <script src="{{ asset('assets/fcadmin/js/vendor/datepicker.min.js') }}"></script>
     <script src="{{ asset('assets/fcadmin/js/vendor/datepicker.fr.js') }}"></script>
-<script src="{{ asset('assets/fcadmin/js/vendor/datepicker.en.js') }}"></script>
+    <script src="{{ asset('assets/fcadmin/js/vendor/datepicker.en.js') }}"></script>
 @endpush
 @push('script')
-    <script> 
-$('.dates').datepicker({
-                maxDate: new Date(),
-                range: true,
-                multipleDatesSeparator: "-",
-                language: 'fr'
-            });
-        $('form select').on('change', function(){
-    $(this).closest('form').submit();
-});
+    <script>
+        $('.dates').datepicker({
+            maxDate: new Date(),
+            range: true,
+            multipleDatesSeparator: "-",
+            language: 'fr'
+        });
+        $('form select').on('change', function() {
+            $(this).closest('form').submit();
+        });
     </script>
 @endpush
