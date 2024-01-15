@@ -22,9 +22,8 @@ use App\Models\TypeFormationTheme;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;   
-use App\Models\SuiviFormationProducteur;
-use ArielMejiaDev\LarapexCharts\PieChart;
-use ArielMejiaDev\LarapexCharts\Facades\LarapexChart;
+use App\Models\SuiviFormationProducteur; 
+use App\Models\Producteur_certification;
 
 class ManagerController extends Controller
 {
@@ -72,9 +71,24 @@ class ManagerController extends Controller
         tf.type_formation_id, p.sexe');
    
         // Nombre de parcelles
-        $parcelles = Parcelle::select(DB::raw('DATE_FORMAT(created_at,"%Y-%m-%d") as date'),DB::raw('count(id) as nombre'))->groupBy('date')->get();
+        $parcellespargenre = Parcelle::joinRelationship('producteur')->select('producteurs.sexe as genre',DB::raw('count(parcelles.id) as nombre'))->groupBy('producteurs.sexe')->get();
+       
+        $producteurparcertification = Producteur_certification::joinRelationship('producteur.programme')
+                                ->joinRelationship('producteur.localite.section')
+                                ->where('cooperative_id', auth()->user()->cooperative_id) 
+                                ->select('producteur_certifications.certification',DB::raw('count(producteur_certifications.id) as nombre')) 
+                                ->groupBy('producteur_certifications.certification')
+                                ->get();
+        
+$producteurparGenreCertification = Producteur_certification::joinRelationship('producteur.programme')
+                                ->joinRelationship('producteur.localite.section')
+                                ->where('cooperative_id', auth()->user()->cooperative_id) 
+                                ->select('producteur_certifications.certification','producteurs.sexe as genre',DB::raw('count(producteur_certifications.id) as nombre')) 
+                                ->groupBy('producteur_certifications.certification','producteurs.sexe')
+                                ->get();
  
-        return view('manager.dashboard', compact('pageTitle','nbcoop','nbparcelle','genre','parcelle','formation','modules'));
+
+        return view('manager.dashboard', compact('pageTitle','nbcoop','nbparcelle','genre','parcelle','formation','modules','parcellespargenre','producteurparcertification','producteurparGenreCertification'));
     }
 
     public function changeLanguage($lang = null)

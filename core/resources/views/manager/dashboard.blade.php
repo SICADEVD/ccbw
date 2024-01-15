@@ -21,8 +21,18 @@
                     <div class="card box--shadow2 bg--white" id="producteurmodule" style="min-height:230px;"> 
                     </div>
         </div>
- 
-
+        <div class="col-xxl-4 col-sm-4"> 
+                    <div class="card box--shadow2 bg--white" id="parcellespargenre" style="min-height:230px;"> 
+                    </div>
+        </div>
+        <div class="col-xxl-4 col-sm-4"> 
+                    <div class="card box--shadow2 bg--white" id="producteurparcertification" style="min-height:230px;"> 
+                    </div>
+        </div>
+        <div class="col-xxl-4 col-sm-4"> 
+                    <div class="card box--shadow2 bg--white" id="producteurparcertificationparsexe" style="min-height:230px;"> 
+                    </div>
+        </div>
 
     </div><!-- row end-->
 
@@ -53,6 +63,7 @@ use Illuminate\Support\Str;
                 $value = $data->nombre;
                 $donnees2[] = "{ value: $value, name: '$name' }";
             }
+            
             
             foreach($formation as $data){ 
                 $labels3[] = utf8_encode(Str::remove("\r\n",utf8_decode(Str::between($data->nom,"(",")"))));
@@ -89,6 +100,52 @@ use Illuminate\Support\Str;
                 
               
               $totalsexe=array();
+                
+            }
+
+            foreach($parcellespargenre as $data){
+              $labels[] = utf8_encode(Str::remove("\r\n",utf8_decode($data->genre)));
+              $total[] = $data->nombre;
+              $name = utf8_encode(Str::remove("\r\n",utf8_decode($data->genre ? $data->genre : 'Aucun')));
+              $value = $data->nombre;
+              $donnees4[] = "{ value: $value, name: '$name' }";
+          }
+
+          foreach($producteurparcertification as $data){ 
+            $labels6[] = utf8_encode(Str::remove("\r\n",utf8_decode(Str::between($data->certification,"(",")"))));
+            $total6[] = $data->nombre; 
+        }
+
+        $totalsexe7=$sexe7=$xAxisData7=array();
+             
+            foreach($producteurparGenreCertification as $data){
+
+              if(!in_array(Str::between($data->certification,"(",")"),$xAxisData7))
+              {  
+                $xAxisData7[] = utf8_encode(Str::remove("\r\n",utf8_decode(Str::between($data->certification,"(",")"))));
+              }
+                foreach($producteurparGenreCertification as $data2){
+                  if($data->genre ==$data2->genre){
+                    $totalsexe7[] = $data2->nombre;
+                  } 
+                }
+                $totalsexe7 = implode(",",$totalsexe7);
+                if(!in_array($data->genre,$sexe7)){
+                  
+                  $sexe7[]=$data->genre;
+                  $donnees7[] = "
+                  { name:'$data->genre',
+                    nameTextStyle: {
+                      fontStyle: 'oblique'
+                    },
+                    type: 'bar', 
+                    stack: 'one',
+                    data: [$totalsexe7]
+                  }";
+                }
+                
+              
+              $totalsexe7=array();
                 
             }
             ?>
@@ -188,8 +245,6 @@ emphasis: {
 myChart2.setOption(option2);
 
 var myChart3 = echarts.init(document.getElementById('formationmodule'));
- 
-        // specify chart configuration item and data
         var option3 = {
             title: { 
                 show: true,
@@ -217,8 +272,6 @@ var myChart3 = echarts.init(document.getElementById('formationmodule'));
                 data: [<?php echo "'".implode("','",$total3)."'"; ?>]
             }]
         };
-
-        // use configuration item and data specified to show chart
         myChart3.setOption(option3);
 
 
@@ -230,7 +283,7 @@ var myChart4 = echarts.init(document.getElementById('producteurmodule'));
         var option4 = {
             title: { 
                 show: true,
-                text: 'Producteurs formés par Module',
+                text: 'Producteurs formés par genre/Module',
                 textStyle:{
                 fontSize: 16,
                 fontWeight: 'normal',
@@ -251,5 +304,105 @@ var myChart4 = echarts.init(document.getElementById('producteurmodule'));
 
         // use configuration item and data specified to show chart
         myChart4.setOption(option4);
+
+         // Initialize the echarts instance based on the prepared dom
+ var myChart5 = echarts.init(document.getElementById('parcellespargenre')); 
+var option5 = {
+title: {
+text: 'Parcelles par Genre',
+subtext: '',
+left: 'center',
+textStyle:{
+    fontSize: 16,
+    fontWeight: 'normal',
+    fontStyle: 'normal'
+    }
+},
+tooltip: {
+trigger: 'item'
+},
+legend: {
+orient: 'horizontal',
+bottom: 'bottom'
+},
+series: [
+{
+name: '',
+type: 'pie',
+label: {
+  formatter: '{d}%',
+  position: 'outside'
+},
+radius: '50%',
+data: [
+  <?php echo implode(",",$donnees4); ?>
+],
+emphasis: {
+  itemStyle: {
+    shadowBlur: 10,
+    shadowOffsetX: 0,
+    shadowColor: 'rgba(0, 0, 0, 0.5)'
+  }
+}
+}
+]
+}; 
+myChart5.setOption(option5);
+
+
+var myChart6 = echarts.init(document.getElementById('producteurparcertification'));
+        var option6 = {
+            title: { 
+                show: true,
+                text: 'Producteurs par Certification',
+                textStyle:{
+                fontSize: 16,
+                fontWeight: 'normal',
+                fontStyle: 'normal'
+                }
+            },
+            tooltip: {}, 
+            legend: {
+                data: [<?php echo "'".implode("','",$labels6)."'"; ?>]
+            },
+            xAxis: {
+                data: [<?php echo "'".implode("','",$labels6)."'"; ?>]
+            },
+            yAxis: {},
+            series: [{
+                name: '',
+                label: {
+            show: true
+            },
+                type: 'bar',
+                data: [<?php echo "'".implode("','",$total6)."'"; ?>]
+            }]
+        };
+        myChart6.setOption(option6);
+
+
+        var myChart7 = echarts.init(document.getElementById('producteurparcertificationparsexe')); 
+        var option7 = {
+            title: { 
+                show: true,
+                text: 'Producteurs par Genre/Certification',
+                textStyle:{
+                fontSize: 16,
+                fontWeight: 'normal',
+                fontStyle: 'normal'
+                }
+            },
+            tooltip: {}, 
+            legend: {
+              show: false
+            },
+            xAxis: { 
+              type: 'category',
+                data: [<?php echo "'".implode("','",$xAxisData7)."'"; ?>]
+            },
+            yAxis: { },
+            series: [<?php echo implode(",",$donnees7); ?>]
+        }; 
+        myChart7.setOption(option7);
     </script>
 @endpush
