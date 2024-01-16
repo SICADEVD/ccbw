@@ -99,6 +99,9 @@ class AuthController extends Controller
 
             if($user)
             {
+                dd($user->getAllPermissions()->map (function ($item, $key) {
+                    return $item->name;
+                })->toArray());
                 
                 if(($user->type_compte=='mobile') || ($user->type_compte=='mobile-web'))
                 {
@@ -114,7 +117,6 @@ class AuthController extends Controller
                     $permissionsrolesName=Str::replace("manager.traca.","",$permissionsrolesName);
                     //ajout de agro
                     $permissionsrolesName=Str::replace("manager.agro.","",$permissionsrolesName);
-                    
                     
                     $permissionsroles[]=Str::before($permissionsrolesName,".");
                    

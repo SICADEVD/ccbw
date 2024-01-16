@@ -395,10 +395,10 @@ Route::middleware('auth')->group(function () {
             Route::get('/exportFormationsExcel', [FormationController::class,'exportExcel'])->name('exportExcel.formationAll');
 
 
-            Route::get('visiteur/{id}', [FormationController::class,'visiteur'])->name('visiteurs');
-            Route::get('visiteur/create/{id}', [FormationController::class,'createvisiteur'])->name('createvisiteur');
-            Route::post('visiteur/store', [FormationController::class,'storevisiteur'])->name('storevisiteur');
-            Route::get('visiteur/edit/{id}', [FormationController::class,'editvisiteur'])->name('editvisiteur');
+            Route::get('visiteur/{id}', [FormationController::class,'visiteur'])->name('visiteur.visiteurs');
+            Route::get('visiteur/create/{id}', [FormationController::class,'createvisiteur'])->name('visiteur.createvisiteur');
+            Route::post('visiteur/store', [FormationController::class,'storevisiteur'])->name('visiteur.storevisiteur');
+            Route::get('visiteur/edit/{id}', [FormationController::class,'editvisiteur'])->name('visiteur.editvisiteur');
         });
 
 

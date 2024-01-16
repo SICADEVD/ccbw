@@ -5,7 +5,7 @@
             <div class="card">
                 <div class="card-body">
                     {!! Form::open([
-                        'route' => ['manager.suivi.formation.storevisiteur'],
+                        'route' => ['manager.suivi.formation.visiteur.storevisiteur'],
                         'method' => 'POST',
                         'class' => 'form-horizontal',
                         'id' => 'flocal',
@@ -84,7 +84,7 @@
 @endsection
 
 @push('breadcrumb-plugins')
-    <x-back route="{{route('manager.suivi.formation.visiteurs',$id)}}" />
+    <x-back route="{{route('manager.suivi.formation.visiteur.visiteurs',$id)}}" />
 @endpush
 
 @push('script')

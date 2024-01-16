@@ -520,6 +520,20 @@ function getproduction($date=null)
 
     return $quantite;
 }
+function getChiffreDaffaireProduction($date=null)
+{
+    $date = explode('-', $date);
+   
+    $startDate = Carbon::parse(trim($date[0]))->format('Y'); 
+    $endDate = @$date[1] ? Carbon::parse(trim(@$date[1]))->format('Y') : $startDate;
+    
+    $quantite = LivraisonProduct::joinRelationship('livraisonInfo')->where('sender_cooperative_id', auth()->user()->cooperative_id) 
+                                ->whereDate('livraison_products.created_at', '>=', $startDate)
+                                ->whereDate('livraison_products.created_at', '<=', $endDate)
+                                ->sum('qty');
+
+    return $quantite;
+}
 function getautreProduction($date){
     $date = explode('-', $date);
    

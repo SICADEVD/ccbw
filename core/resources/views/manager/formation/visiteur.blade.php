@@ -60,7 +60,7 @@
                                 @forelse($visiteurs as $formation)
                                     <tr>
                                         <td>
-                                            <span> <a href="{{ route('manager.suivi.formation.editvisiteur', $formation->id) }}">
+                                            <span> <a href="{{ route('manager.suivi.formation.visiteur.editvisiteur', $formation->id) }}">
                                                     <span>@</span>{{ $formation->prenom }}
                                                     {{ $formation->nom }}</a></span>
                                                 </a></span>
@@ -84,7 +84,7 @@
                                                     class="las la-ellipsis-v"></i>@lang('Action')
                                             </button>
                                             <div class="dropdown-menu p-0">
-                                                <a href="{{ route('manager.suivi.formation.editvisiteur', $formation->id) }}"
+                                                <a href="{{ route('manager.suivi.formation.visiteur.editvisiteur', $formation->id) }}"
                                                     class="dropdown-item"><i class="la la-pen"></i>@lang('Edit')</a>
 
                                             </div>
@@ -113,7 +113,7 @@
 
 @push('breadcrumb-plugins')
     <x-search-form placeholder="Search here..." />
-    <a href="{{ route('manager.suivi.formation.createvisiteur', $id) }}"
+    <a href="{{ route('manager.suivi.formation.visiteur.createvisiteur', $id) }}"
         class="btn  btn-outline--primary h-45 addNewCooperative">
         <i class="las la-plus"></i>@lang('Ajouter nouveau')
     </a>
