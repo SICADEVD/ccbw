@@ -76,6 +76,7 @@ class ApievaluationController extends Controller
         $inspection->total_question_non_conforme  = $request->total_question_non_conforme;
         $inspection->total_question_non_applicable  = $request->total_question_non_applicable;
         $inspection->date_evaluation     = $request->date_evaluation; 
+        $inspection->production = $request->production;
         $inspection->save();
         if($inspection !=null ){
             $id = $inspection->id;
