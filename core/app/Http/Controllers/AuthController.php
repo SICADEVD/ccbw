@@ -99,9 +99,9 @@ class AuthController extends Controller
 
             if($user)
             {
-                dd($user->getAllPermissions()->map (function ($item, $key) {
-                    return $item->name;
-                })->toArray());
+                // dd($user->getAllPermissions()->map (function ($item, $key) {
+                //     return $item->name;
+                // })->toArray());
                 
                 if(($user->type_compte=='mobile') || ($user->type_compte=='mobile-web'))
                 {
@@ -121,6 +121,7 @@ class AuthController extends Controller
                     $permissionsroles[]=Str::before($permissionsrolesName,".");
                    
                 }
+                dd($permissionsroles);
                 
                 $nolisting = array(
                     "localites",
