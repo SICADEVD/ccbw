@@ -116,13 +116,12 @@ class AuthController extends Controller
                     $permissionsrolesName=Str::replace("manager.suivi.","",$permissionsrolesName);
                     $permissionsrolesName=Str::replace("manager.traca.","",$permissionsrolesName);
                     //ajout de agro
-                    $permissionsrolesName=Str::replace("manager.agro.","",$permissionsrolesName);
-                    $permissionsrolesName = Str::replace(".","_",$permissionsrolesName);
+                    $permissionsrolesName=Str::replace("manager.","",$permissionsrolesName);
                     
                     $permissionsroles[]=Str::before($permissionsrolesName,".");
+                    $permissionsroles[]=Str::replace(".","_", Str::beforeLast($permissionsrolesName,"."));
                    
                 }
-                dd($permissionsroles);
                 
                 $nolisting = array(
                     "localites",
@@ -135,14 +134,21 @@ class AuthController extends Controller
                     "evaluation",
                     "ssrteclmrs",
                     "menage",
+                    "formation_visiteur",
+                    "livraison_magcentral",
+                    "agro_evaluation",
+                    "agro_distribution",
                     "application", //designant suivi d'application
                 );
+                
+
                 $permissionsroles = array_unique($permissionsroles); 
                 foreach($permissionsroles as $res){
                     if(in_array($res,$nolisting)){
                         $menuliste[] = strtoupper($res);
                     }
                 }
+                //dd($nolisting);
                 $permissionsroles = Arr::flatten($permissionsroles);
                 
             }
