@@ -117,6 +117,7 @@ class AuthController extends Controller
                     $permissionsrolesName=Str::replace("manager.traca.","",$permissionsrolesName);
                     //ajout de agro
                     $permissionsrolesName=Str::replace("manager.agro.","",$permissionsrolesName);
+                    $permissionsrolesName = Str::replace(".","_",$permissionsrolesName);
                     
                     $permissionsroles[]=Str::before($permissionsrolesName,".");
                    
