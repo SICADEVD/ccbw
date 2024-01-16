@@ -35,17 +35,34 @@ class ManagerController extends Controller
         $nbcoop = Cooperative::count();
         $nbparcelle = Parcelle::count(); 
         //Producteurs par Genre
-        $genre = Producteur::select('sexe',DB::raw('count(id) as nombre'))->groupBy('sexe')->get();
+        $genre = Producteur::joinRelationship('localite.section')
+                            ->where('cooperative_id', auth()->user()->cooperative_id)
+                            ->select('sexe',DB::raw('count(producteurs.id) as nombre'))
+                            ->groupBy('sexe')
+                            ->get();
         
     
 //Mapping des parcelles
-    $parcelle = Parcelle::select('typedeclaration',DB::raw('count(id) as nombre'))->groupBy('typedeclaration')->get(); 
+    $parcelle = Parcelle::joinRelationship('producteur.localite.section')
+                            ->where('cooperative_id', auth()->user()->cooperative_id)
+                            ->select('typedeclaration',DB::raw('count(parcelles.id) as nombre'))
+                            ->groupBy('typedeclaration')
+                            ->get(); 
 
 //Producteurs inscrits par Date
-        $producteurbydays = Producteur::select(DB::raw('DATE_FORMAT(created_at,"%Y-%m-%d") as date'),DB::raw('count(id) as nombre'))->groupBy('date')->get();  
+        $producteurbydays = Producteur::joinRelationship('localite.section')
+                                        ->where('cooperative_id', auth()->user()->cooperative_id)
+                                        ->select(DB::raw('DATE_FORMAT(producteurs.created_at,"%Y-%m-%d") as date'),DB::raw('count(producteurs.id) as nombre'))
+                                        ->groupBy('date')
+                                        ->get();  
 
         // Formations par Modules
-        $formation = TypeFormationTheme::joinRelationship('typeFormation')->select('type_formations.nom',DB::raw('count(type_formation_themes.id) as nombre'))->groupBy('type_formation_id')->get();
+        $formation = TypeFormationTheme::joinRelationship('typeFormation')
+                                        ->joinRelationship('suiviFormation.localite.section')
+                                        ->where('cooperative_id', auth()->user()->cooperative_id)
+                                        ->select('type_formations.nom',DB::raw('count(type_formation_themes.id) as nombre'))
+                                        ->groupBy('type_formation_id')
+                                        ->get();
  
  
 //Producteurs formés par Module
@@ -68,8 +85,7 @@ class ManagerController extends Controller
     producteurs p
     ON sf.producteur_id = p.id
     GROUP BY 
-        tf.type_formation_id, p.sexe');
-   
+        tf.type_formation_id, p.sexe'); 
         // Nombre de parcelles
         $parcellespargenre = Parcelle::joinRelationship('producteur')->select('producteurs.sexe as genre',DB::raw('count(parcelles.id) as nombre'))->groupBy('producteurs.sexe')->get();
        
