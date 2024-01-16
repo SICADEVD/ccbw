@@ -122,6 +122,7 @@ class AuthController extends Controller
                     $permissionsroles[]=Str::replace(".","_", Str::beforeLast($permissionsrolesName,"."));
                    
                 }
+                // dd($permissionsroles);
                 
                 $nolisting = array(
                     "localites",
@@ -132,6 +133,7 @@ class AuthController extends Controller
                     "formation", //designant suivi de formation
                     "estimation",
                     "evaluation",
+                    "inspection",
                     "ssrteclmrs",
                     "menage",
                     "formation_visiteur",
