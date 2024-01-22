@@ -21,6 +21,8 @@ use App\Models\LivraisonPayment;
 use App\Models\TypeFormationTheme;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\Agrodistribution;
+use App\Models\Inspection;
 use Illuminate\Support\Facades\Hash;   
 use App\Models\SuiviFormationProducteur; 
 use App\Models\Producteur_certification;
@@ -33,7 +35,17 @@ class ManagerController extends Controller
         $manager = auth()->user();
         $pageTitle = "Manager Dashboard";  
         $nbcoop = Cooperative::count();
-        $nbparcelle = Parcelle::count(); 
+        $nbparcelle = Parcelle::joinRelationship('producteur.localite.section')
+                                ->where('cooperative_id', auth()->user()->cooperative_id)
+                                ->sum('superficie');  
+        $nbproducteur = Producteur::joinRelationship('localite.section')
+                                ->where('cooperative_id', auth()->user()->cooperative_id)
+                                ->count(); 
+        $nbinspection = Inspection::joinRelationship('producteur.localite.section')
+                                ->where('cooperative_id', auth()->user()->cooperative_id)
+                                ->count(); 
+        $nbarbredistribue = Agrodistribution::where('cooperative_id', auth()->user()->cooperative_id)
+                                ->sum('quantite');
         //Producteurs par Genre
         $genre = Producteur::joinRelationship('localite.section')
                             ->where('cooperative_id', auth()->user()->cooperative_id)
@@ -104,7 +116,7 @@ $producteurparGenreCertification = Producteur_certification::joinRelationship('p
                                 ->get();
  
 
-        return view('manager.dashboard', compact('pageTitle','nbcoop','nbparcelle','genre','parcelle','formation','modules','parcellespargenre','producteurparcertification','producteurparGenreCertification'));
+        return view('manager.dashboard', compact('pageTitle','nbproducteur','nbparcelle','nbinspection','nbarbredistribue', 'genre','parcelle','formation','modules','parcellespargenre','producteurparcertification','producteurparGenreCertification'));
     }
 
     public function changeLanguage($lang = null)

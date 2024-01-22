@@ -1,6 +1,67 @@
 @extends('manager.layouts.app')
 @section('panel')
- 
+<div class="row row-cols-1 row-cols-md-2 row-cols-xl-4">
+                   <div class="col">
+					 <div class="card radius-10 border-start border-0 border-4 border-info">
+						<div class="card-body">
+							<div class="d-flex align-items-center">
+								<div>
+									<p class="mb-0 text-secondary">Total Producteurs</p>
+									<h4 class="my-1 text-info">{{ number_format($nbproducteur,0,'',' ')}}</h4>
+									<p class="mb-0 font-13"></p>
+								</div>
+								<div class="widgets-icons-2 rounded-circle bg-gradient-blues text-white ms-auto"><i class="fa fa-users"></i>
+								</div>
+							</div>
+						</div>
+					 </div>
+				   </div>
+				   <div class="col">
+					<div class="card radius-10 border-start border-0 border-4 border-danger">
+					   <div class="card-body">
+						   <div class="d-flex align-items-center">
+							   <div>
+								   <p class="mb-0 text-secondary">Total Superficie Parcelles</p>
+								   <h4 class="my-1 text-danger">{{ number_format($nbparcelle,0,'',' ')}} ha</h4>
+								   <p class="mb-0 font-13"></p>
+							   </div>
+							   <div class="widgets-icons-2 rounded-circle bg-gradient-burning text-white ms-auto"><i class="fa fa-map"></i>
+							   </div>
+						   </div>
+					   </div>
+					</div>
+				  </div>
+				  <div class="col">
+					<div class="card radius-10 border-start border-0 border-4 border-success">
+					   <div class="card-body">
+						   <div class="d-flex align-items-center">
+							   <div>
+								   <p class="mb-0 text-secondary">Total Arbres distribués</p>
+								   <h4 class="my-1 text-success">{{ number_format($nbarbredistribue,0,'',' ')}}</h4>
+								   <p class="mb-0 font-13"></p>
+							   </div>
+							   <div class="widgets-icons-2 rounded-circle bg-gradient-ohhappiness text-white ms-auto"><i class="fa fa-tree"></i>
+							   </div>
+						   </div>
+					   </div>
+					</div>
+				  </div>
+				  <div class="col">
+					<div class="card radius-10 border-start border-0 border-4 border-warning">
+					   <div class="card-body">
+						   <div class="d-flex align-items-center">
+							   <div>
+								   <p class="mb-0 text-secondary">Total Inspection</p>
+								   <h4 class="my-1 text-warning">{{ round(($nbinspection/$nbproducteur)*100,2) }}%</h4>
+								   <p class="mb-0 font-13"></p>
+							   </div>
+							   <div class="widgets-icons-2 rounded-circle bg-gradient-orange text-white ms-auto"><i class="fa fa-search"></i>
+							   </div>
+						   </div>
+					   </div>
+					</div>
+				  </div> 
+				</div>
     <div class="row gy-4"> 
     <div class="col-xxl-4 col-sm-4">  
                         <div class="card box--shadow2 bg--white" id="producteur" style="min-height:230px;"> 

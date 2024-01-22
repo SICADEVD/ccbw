@@ -226,10 +226,10 @@
                             </li>
                             @endcan
                             @can('manager.agro.deforestation.index')
-                            <li class="sidebar-menu-item {{ menuActive('manager.agro.deforestation.index') }}">
-                                <a href="{{ route('manager.agro.deforestation.index') }}" class="nav-link">
+                            <li class="sidebar-menu-item {{ menuActive('manager.agro.postplanting.index') }}">
+                                <a href="{{ route('manager.agro.postplanting.index') }}" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('Risques Déforestation')</span>
+                                    <span class="menu-title">@lang('Evaluation Post-Planting')</span>
                                 </a>
                             </li>
                             @endcan 

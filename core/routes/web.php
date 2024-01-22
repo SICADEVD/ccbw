@@ -40,6 +40,7 @@ use App\Http\Controllers\Manager\SectionSettingController;
 use App\Http\Controllers\Manager\LocaliteSettingController;
 use App\Http\Controllers\Manager\TimelogCalendarController;
 use App\Http\Controllers\Manager\AgrodistributionController;
+use App\Http\Controllers\Manager\AgropostplantingController;
 use App\Http\Controllers\Manager\EmergencyContactController;
 use App\Http\Controllers\Manager\PresentationCoopController;
 use App\Http\Controllers\Manager\ProgrammeSettingController;
@@ -459,6 +460,18 @@ Route::middleware('auth')->group(function () {
             Route::post('status/{id}', [AgrodistributionController::class,'status'])->name('status');
             Route::get('/exportDistributionsExcel', [AgrodistributionController::class,'exportExcel'])->name('exportExcel.distributionAll');
             Route::post('/get/agroparcelles/arbres', [AgrodistributionController::class,'getAgroParcellesArbres'])->name('getAgroParcellesArbres');
+        });
+
+         //Manage Agrodistributions
+         Route::name('agro.postplanting.')->prefix('agro/postplanting')->group(function () {
+            Route::get('list', [AgropostplantingController::class,'index'])->name('index');
+            Route::get('create', [AgropostplantingController::class,'create'])->name('create');
+            Route::post('store', [AgropostplantingController::class,'store'])->name('store');
+            Route::post('update', [AgropostplantingController::class,'update'])->name('update');
+            Route::get('edit/{id}', [AgropostplantingController::class,'edit'])->name('edit');
+            Route::post('status/{id}', [AgropostplantingController::class,'status'])->name('status');
+            Route::get('/exportPostplantingsExcel', [AgropostplantingController::class,'exportExcel'])->name('exportExcel.postplantingAll');
+            Route::get('/get/agroparcelles/arbres', [AgropostplantingController::class,'getAgroParcellesArbres'])->name('getAgroParcellesArbres');
         });
 
         //Manage Agroevaluations
