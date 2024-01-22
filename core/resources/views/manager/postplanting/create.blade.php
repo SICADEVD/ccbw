@@ -74,7 +74,13 @@
     <div class="form-group row">
         <?php echo Form::label(__('QUANTITE PLANTEE'), null, ['class' => 'col-sm-4 control-label required', 'style'=>'font-weight:bold;font-size:20px;']); ?>
         <div class="col-xs-12 col-sm-8">
-        <input type="number" name="qtelivre" id="qtelivre" class="form-control" readonly style="color:#FF0000; font-weight:bold; font-size:20px;" />
+        <input type="number" name="qteplante" id="qteplante" class="form-control" readonly style="color:#FF0000; font-weight:bold; font-size:20px;" />
+      </div>
+      </div>
+      <div class="form-group row">
+        <?php echo Form::label(__('QUANTITE SURVECU'), null, ['class' => 'col-sm-4 control-label required', 'style'=>'font-weight:bold;font-size:20px;']); ?>
+        <div class="col-xs-12 col-sm-8">
+        <input type="number" name="qtesurvecue" id="qtesurvecue" class="form-control" readonly style="color:#FF0000; font-weight:bold; font-size:20px;" />
       </div>
       </div>
 <hr class="panel-wide">
@@ -109,8 +115,8 @@ var urlsend='{{ route("manager.agro.postplanting.getAgroParcellesArbres") }}';
             success:function(html){
             $('#listeespece').html(html.tableau);
             $("#total").val(html.total);
-            $("#qtelivre").val(html.total);
-            
+            $("#qteplante").val(html.total);
+            $("#qtesurvecue").val(html.total);
             }
 
         });
@@ -128,7 +134,7 @@ function update_amounts(id,k,s)
 {
     let total= $('#total').val();
     var sum= 0;  
-    let qtelivre = parseInt($('#qtelivre').val()); 
+    let qteplante = parseInt($('#qteplante').val()); 
     let max = $('.quantity-'+id).attr('max'); 
    
     let quantite = 0;
@@ -152,7 +158,7 @@ function update_amounts(id,k,s)
             sum = parseInt(sum) + parseInt(nb);  
              });
         }else{
-            $('#qtelivre').val(sum);
+            $('#qteplante').val(sum);
         }
         for(let i = 1; i < 6; i++) {
             var soustotal = 0; 
@@ -166,9 +172,51 @@ function update_amounts(id,k,s)
             
         }  
     
-    $("#qtelivre").attr({
+    $("#qteplante").attr({
               "max" : total,       
-              "min" : 1      
+              "min" : 0      
+            });
+}
+
+function getQuantite2(id,k,s)
+  { 
+    update_survecue(id,k,s);
+  }
+function update_survecue(id,k,s)
+{
+    let total= $('#qtesurvecue').val();
+    var sum= 0;  
+    let qtesurvecue = parseInt($('#qtesurvecue').val()); 
+    let max = $('.quantity2-'+id).attr('max'); 
+   
+    let quantite = 0;
+    $('.quantity2-'+id).each(function() {
+    var qty = $(this).val();
+     quantite = parseInt(quantite) + parseInt(qty);
+    //  if(quantite>max){
+    //     $('#qte-'+k).val(0); 
+    //     } 
+    });
+     
+    $('.totaux2').each(function() {
+        var nb = $(this).val(); 
+            sum = parseInt(sum) + parseInt(nb);  
+    });
+
+    if(sum > total){ 
+        $('#qte-'+k).val(0); 
+        $('.totaux2').each(function() {
+        var nb = $(this).val(); 
+            sum = parseInt(sum) + parseInt(nb);  
+             });
+        }else{
+            $('#qtesurvecue').val(sum);
+        }
+          
+    
+    $("#qtesurvecue").attr({
+              "max" : total,       
+              "min" : 0      
             });
 }
 $("#localite").chained("#section");

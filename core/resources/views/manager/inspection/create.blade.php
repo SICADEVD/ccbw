@@ -223,10 +223,10 @@
                 $('#totalquestionnonconforme').val(nonconforme);
                 $('#totalquestionnonapplicable').val(nonapplicable);
                 totalquestionconforme = $('#totalquestion').val() - $('#totalquestionnonconforme').val();
-                console.log(totalquestionconforme)
+                 
                 $('#totalquestionconforme').val(totalquestionconforme);
                 var total1= $('#totalquestionconforme').val();
-                var total2 = $('#totalquestion').val();
+                var total2 = $('#totalquestion').val() - $('#totalquestionnonapplicable').val();
                 
                 tauxconformite = (total1 / total2)*100;
                 $('#note').val(Math.round(tauxconformite));

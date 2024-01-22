@@ -291,6 +291,8 @@ class AgropostplantingController extends Controller
                         $results .= '<th>Variété</th>';
                         $results .= '<th>Quantité reçue</th>';
                         $results .= '<th>Quantité Plantée</th>';
+                        $results .= '<th>Quantité Survécue</th>';
+                        $results .= '<th>Commentaires</th>';
                         $results .= ' </tr></thead><tbody>';
 
                         $i = 0;
@@ -304,7 +306,9 @@ class AgropostplantingController extends Controller
                                 $totalrecu = $totalrecu + $data->total;
                                 $results .= '<tr><td><input type="hidden" name="agroapprovisionnementsection" value="' . $data->agroapprovisionnement_section_id . '">' . $data->agroespecesarbre->nom . '</td>';
                                 $results .= '<td><button class="btn btn-primary" type="button">' . $totalespece . '</button></td>';
-                                $results .= '<td><div class="input-group"><input type="number" name="quantite[' . $producteurId . '][' . $data->agroespecesarbre_id . ']" min="0" max="' . $totalespece . '" value="' . $totalespece . '" id="qte-' . $k . '"  class="form-control totaux quantity-' . $i . ' st-' . $s . '" onchange=getQuantite(' . $i . ',' . $k . ',' . $s . ') style="width: 100px;"><span class="input-group-btn"></span></div></td>';
+                                $results .= '<td><div class="input-group"><input type="number" name="quantite[' . $producteurId . '][' . $data->agroespecesarbre_id . ']" min="0" max="' . $totalespece . '" value="' . $totalespece . '" id="qte-' . $k . '"  class="form-control totaux quantity-' . $i . ' st-' . $s . '" onchange=getQuantite(' . $i . ',' . $k . ',' . $s . ') ></div></td>';
+                                $results .= '<td><div class="input-group"><input type="number" name="quantitesurvecuee[' . $producteurId . '][' . $data->agroespecesarbre_id . ']" min="0" max="' . $totalespece . '" value="' . $totalespece . '" id="qte2-' . $k . '"  class="form-control totaux2 quantity2-' . $i . ' st2-' . $s . '" onchange=getQuantite2(' . $i . ',' . $k . ',' . $s . ') ></div></td>';
+                                $results .= '<td><div class="input-group"><textarea name="commentaire[' . $producteurId . '][' . $data->agroespecesarbre_id . ']" id="commentaire-' . $k . '"  class="form-control""></textarea></div></td>';
                                 $k++;
                                 $s++;
                                 $i++;
