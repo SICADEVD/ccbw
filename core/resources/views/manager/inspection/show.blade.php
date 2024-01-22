@@ -3,7 +3,7 @@
     <div class="row mb-none-30">
         <div class="col-lg-12 mb-30">
             <div class="card">
-                <div class="card-body"> 
+                <div class="card-body" id="printFacture"> 
          {!! Form::model($inspection, ['method' => 'POST','route' => ['manager.suivi.inspection.store', $inspection->id],'class'=>'form-horizontal', 'id'=>'flocal', 'enctype'=>'multipart/form-data']) !!}
                         <input type="hidden" name="id" value="{{ $inspection->id }}"> 
                         
@@ -122,6 +122,14 @@
             </div>
         </div>
     </div>
+    <div class="row no-print">
+                <div class="col-sm-12">
+                    <div class="float-sm-end">
+                        <button class="btn btn-outline--primary  printFacture"><i
+                                class="las la-download"></i></i>@lang('Imprimer')</button>
+                    </div>
+                </div>
+            </div>
 @endsection
 
 @push('breadcrumb-plugins')
