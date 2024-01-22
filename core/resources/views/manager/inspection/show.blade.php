@@ -136,6 +136,14 @@
     <x-back route="{{ route('manager.suivi.inspection.index') }}" />
 @endpush
 @push('script')
+    <script>
+        "use strict";
+        $('.printFacture').click(function() {
+            $('#printFacture').printThis();
+        });
+    </script>
+@endpush
+@push('script')
 <script type="text/javascript">
       $(document).ready(function(){
 
