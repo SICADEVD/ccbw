@@ -15,6 +15,7 @@ use Illuminate\Support\Str;
 use App\Models\LivraisonInfo;
 use App\Models\GeneralSetting;
 use App\Lib\GoogleAuthenticator;
+use App\Models\ChiffreAffairePartenaire;
 use App\Models\Connaissement;
 use App\Models\ConnaissementProduit;
 use App\Models\CoopChiffreAffaire;
@@ -569,9 +570,9 @@ function getChiffreAutrePartenaire($date){
 
     $endDate = @$date[1] ? Carbon::parse(trim(@$date[1]))->format('Y') : $startDate;
 
-    $chiffre = optional(CoopChiffreAffaire::where('cooperative_id', auth()->user()->cooperative_id)
+    $chiffre = optional(ChiffreAffairePartenaire::where('cooperative_id', auth()->user()->cooperative_id)
         ->where('annee', '>=', $startDate)
-        ->where('annee', '<=', $startDate)
+        ->where('annee', '<=', $endDate)
         ->select('montant')->first())->montant ?? 0;
     return $chiffre;
 }
