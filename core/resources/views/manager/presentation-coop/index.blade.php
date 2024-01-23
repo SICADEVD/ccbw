@@ -13,10 +13,10 @@
                     <div class="d-flex flex-wrap gap-4">
 
                         <!-- <div class="flex-grow-1">
-                                                                            <label>@lang('Date')</label>
-                                                                            <input name="date" type="text" class="dates form-control"
-                                                                                placeholder="@lang('Date de début - Date de fin')" autocomplete="off" value="{{ request()->date }}">
-                                                                        </div> -->
+                                                                                    <label>@lang('Date')</label>
+                                                                                    <input name="date" type="text" class="dates form-control"
+                                                                                        placeholder="@lang('Date de début - Date de fin')" autocomplete="off" value="{{ request()->date }}">
+                                                                                </div> -->
                         <div class="flex-grow-1">
                             <label>@lang("Année d'activité")</label>
                             <select name="date" class="form-control">
@@ -257,11 +257,10 @@
                     </tbody>
                 </table>
                 <h3 class="mt-5">Performance financière</h3>
-                <table class="table table-striped table-bordered">
+                {{-- <table class="table table-striped table-bordered">
                     <thead class="bg--primary ">
                         <tr>
                             <th class="text-white">Chiffre d'affaire (F CFA) </th>
-                            {{-- <th class="text-white">Produits </th> --}}
                             <th class="text-white text-center">{{ request()->date ? request()->date : gmdate('Y') }}</th>
                         </tr>
                     </thead>
@@ -271,13 +270,12 @@
                             <td>0</td>
                         </tr>
                     </tbody>
-                </table>
+                </table> --}}
 
-                <table class="table table-striped table-bordered">
+                {{-- <table class="table table-striped table-bordered">
                     <thead class="bg--primary ">
                         <tr>
                             <th class="text-white">Marge Brute d'exploitation (F CFA) </th>
-                            {{-- <th class="text-white">Produits </th> --}}
                             <th class="text-white text-center">{{ request()->date ? request()->date : gmdate('Y') }}</th>
                         </tr>
                     </thead>
@@ -287,13 +285,12 @@
                             <td>0</td>
                         </tr>
                     </tbody>
-                </table>
+                </table> --}}
 
-                <table class="table table-striped table-bordered">
+                {{-- <table class="table table-striped table-bordered">
                     <thead class="bg--primary ">
                         <tr>
                             <th class="text-white">Marge Brute d'exploitation (F CFA) </th>
-                            {{-- <th class="text-white">Produits </th> --}}
                             <th class="text-white text-center">{{ request()->date ? request()->date : gmdate('Y') }}</th>
                         </tr>
                     </thead>
@@ -303,7 +300,7 @@
                             <td>0</td>
                         </tr>
                     </tbody>
-                </table>
+                </table> --}}
 
             </div>
 
@@ -461,11 +458,10 @@
             var chiffrePartenaire = $(this).val();
             var currentYear = new Date().getFullYear();
             var token = "{{ csrf_token() }}";
-
             $.ajax({
-                url: '{{ route('manager.presentation-coop.chifrreAffairePartenaire') }}', // Remplacez par l'URL de votre API
+                url: '{{ route('manager.presentation-coop.chiffreAffairePartenaire') }}',
                 method: 'POST',
-                data: { // Remplacez par l'ID de la coopérative
+                data: {
                     '_token': token,
                     montant: chiffrePartenaire,
                     date: currentYear
