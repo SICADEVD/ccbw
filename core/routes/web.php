@@ -101,6 +101,7 @@ Route::middleware('auth')->group(function () {
             Route::get('index', [PresentationCoopController::class, 'index'])->name('index');
             Route::get('create', [PresentationCoopController::class, 'create'])->name('create');
             Route::post('store', [PresentationCoopController::class, 'store'])->name('store');
+            Route::get('chifrreAffairePartenaire', [PresentationCoopController::class, 'chiffre_affaire_partenaire'])->name('chifrreAffairePartenaire');
         });
         //Manage Staff
         Route::name('staff.')->prefix('staff')->group(function () {

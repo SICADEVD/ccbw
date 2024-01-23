@@ -457,7 +457,26 @@
                 }
             });
         });
+        $('#chiffreAutrePartenaire').on('blur', function() {
+            var chiffrePartenaire = $(this).val();
+            var currentYear = new Date().getFullYear();
+            var token = "{{ csrf_token() }}";
 
-        
+            $.ajax({
+                url: '{{ route('manager.presentation-coop.chifrreAffairePartenaire') }}', // Remplacez par l'URL de votre API
+                method: 'POST',
+                data: { // Remplacez par l'ID de la coopérative
+                    '_token': token,
+                    montant: chiffrePartenaire,
+                    date: currentYear
+                },
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus, errorThrown);
+                }
+            });
+        });
     </script>
 @endpush
