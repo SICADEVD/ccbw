@@ -252,7 +252,7 @@
                         <tr>
                             <td>Chiffre d'affaire (F CFA)</td>
                             <td><input id="chiffreAutrePartenaire" type="number" name="chiffreAutrePartenaire"
-                                    value="0"></td>
+                                    value="{{ getChiffreAutrePartenaire($date) }}"></td>
                         </tr>
                     </tbody>
                 </table>
