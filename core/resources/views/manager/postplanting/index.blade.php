@@ -39,7 +39,9 @@
                                 <tr> 
                                     <th>@lang('Localite')</th> 
                                     <th>@lang('Producteur')</th>
-                                    <th>@lang('Quantite')</th> 
+                                    <th>@lang('Quantite réçue')</th> 
+                                    <th>@lang('Quantite plantée')</th> 
+                                    <th>@lang('Quantite survécue')</th> 
                                     <th>@lang('Ajoutée le')</th> 
                                     <th>@lang('Action')</th>
                                 </tr>
@@ -56,7 +58,13 @@
                                             </span>
                                         </td>
                                         <td>
-                                            <span>{{ $data->quantite }}</span>
+                                            <span>{{ number_format($data->quantite,0,'',' ') }}</span>
+                                        </td> 
+                                        <td>
+                                            <span>{{ number_format($data->quantitePlantee,0,'',' ') }}</span>
+                                        </td> 
+                                        <td>
+                                            <span>{{ number_format($data->quantiteSurvecue,0,'',' ') }}</span>
                                         </td> 
                                         <td>
                                             <span class="d-block">{{ showDateTime($data->created_at) }}</span>

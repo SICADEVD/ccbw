@@ -3,27 +3,28 @@
 namespace App\Http\Controllers\Manager;
 
 use Excel;
-use App\Models\Campagne;
 use App\Models\Section;
-use App\Constants\Status;
+use App\Models\Campagne;
 use App\Models\Localite;
+use App\Constants\Status;
 use App\Models\Producteur;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\Agroevaluation;
+use App\Models\Agrodistribution;
 use App\Models\Agropostplanting;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\AgroevaluationEspece;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Agroapprovisionnement;
+use App\Models\AgrodistributionEspece;
 use App\Models\AgropostplantingEspece;
 use App\Imports\AgropostplantingImport;
 use App\Exports\ExportAgropostplantings;
 use App\Models\AgroapprovisionnementEspece;
 use App\Models\AgroapprovisionnementSectionEspece;
-use App\Models\Agrodistribution;
-use App\Models\AgrodistributionEspece;
 use Google\Service\ContainerAnalysis\Distribution;
 
 class AgropostplantingController extends Controller
@@ -79,34 +80,34 @@ class AgropostplantingController extends Controller
         }
         $manager   = auth()->user();
         $campagne = Campagne::active()->first();
+        $distribution->cooperative_id = $manager->cooperative_id;
+        $distribution->producteur_id = $request->producteur;
+        $distribution->quantite =  $request->total; 
+        $distribution->quantitePlantee =  $request->qteplante; 
+        $distribution->quantiteSurvecue =  $request->qtesurvecue; 
+        $distribution->save();
 
         $datas = [];
         $k = 0;
         $i = 0;
         $nb = 0;
         
-        if ($request->quantite) {
+        if ($distribution->id) {
+
+            $distributionID = $distribution->id;
+            $quantiterecue = $request->quantiterecue;
+            $quantiteplantee = $request->quantite;
+            $quantitesurvecuee = $request->quantitesurvecuee;
+            $commentaire = $request->commentaire;
+
             foreach ($request->quantite as $producteurid => $agroespeces) {
-
-                $existe = Agropostplanting::where('producteur_id', $producteurid)->first();
-
-                if ($existe != null) {
-                    $distributionID = $existe->id;
-                } else {
-
-                    $distribution = new Agropostplanting();
-                    $distribution->cooperative_id = $manager->cooperative_id;
-                    $distribution->producteur_id = $producteurid;
-                    $distribution->quantite = $request->qtelivre;
-                    $distribution->save();
-                    $distributionID = $distribution->id;
-                    $nb++;
-                }
+ 
                 $agroespeces = array_filter($agroespeces);
-                foreach ($agroespeces as $agroespecesarbresid => $total) {
-
+                
+                foreach($agroespeces as $agroespecesarbresid => $total) {
+                    
                     $find = AgropostplantingEspece::where([
-                        ['Agropostplanting_id', $distributionID],
+                        ['agropostplanting_id', $distributionID],
                         ['agroespecesarbre_id', $agroespecesarbresid]
                     ])->first();
                     if ($find == null) {
@@ -115,15 +116,18 @@ class AgropostplantingController extends Controller
                             AgropostplantingEspece::insert([
                                 'Agropostplanting_id' => $distributionID,
                                 'agroespecesarbre_id' => $agroespecesarbresid,
-                                'total' => $total,
+                                'total' => $quantiterecue[$producteurid][$agroespecesarbresid],
+                                'total_plante' => $quantiteplantee[$producteurid][$agroespecesarbresid],
+                                'total_survecue' => $quantitesurvecuee[$producteurid][$agroespecesarbresid],
+                                'commentaire' => $commentaire[$producteurid][$agroespecesarbresid],
                                 'created_at' => NOW()
                             ]);
 
-                            $agroapprov = AgroapprovisionnementSectionEspece::joinRelationship('agroapprovisionnementSection')->where([['agroapprovisionnement_section_id', $request->agroapprovisionnementsection], ['agroapprovisionnement_section_especes.agroespecesarbre_id', $agroespecesarbresid]])->first();
-                            if ($agroapprov != null) {
-                                $agroapprov->total_restant = $agroapprov->total_restant + $total;
-                                $agroapprov->save();
-                            }
+                            // $agroapprov = AgroapprovisionnementSectionEspece::joinRelationship('agroapprovisionnementSection')->where([['agroapprovisionnement_section_id', $request->agroapprovisionnementsection], ['agroapprovisionnement_section_especes.agroespecesarbre_id', $agroespecesarbresid]])->first();
+                            // if ($agroapprov != null) {
+                            //     $agroapprov->total_restant = $agroapprov->total_restant + $total;
+                            //     $agroapprov->save();
+                            // }
                             $i++;
                         } else {
                             $k++;
@@ -136,7 +140,7 @@ class AgropostplantingController extends Controller
         }
 
 
-        $notify[] = ['success', isset($message) ? $message : "$i nouveau(x) types d'arbres à ombrage ont été distribué au producteur."];
+        $notify[] = ['success', isset($message) ? $message : "L'évaluation post-planting des arbres à ombres a été bien enregistrée."];
 
         return back()->withNotify($notify);
     }
@@ -279,12 +283,24 @@ class AgropostplantingController extends Controller
     public function getAgroParcellesArbres()
     {
         $input = request()->all(); 
-        $somme = 0;
-        $producteurId = $input['producteur']; 
-        $especes = AgrodistributionEspece::joinRelationship('agrodistribution')->joinRelationship('agroespecesarbre')->where('producteur_id', request()->producteur)->get();
- 
-        if (count($especes)) {
+        $totalrecu = 0;
+        $producteurId = request()->producteur; 
+        
+        if(request()->producteur !=null){
 
+        $especes = AgrodistributionEspece::joinRelationship('agrodistribution')->joinRelationship('agroespecesarbre')->where('producteur_id', request()->producteur)->get(); 
+ 
+
+        if (count($especes)) {
+            $existe = Agropostplanting::where('producteur_id', request()->producteur)->latest('id')->first();
+           
+            if($existe !=null)
+            {
+            $especes2 = AgropostplantingEspece::joinRelationship('agropostplanting')->joinRelationship('agroespecesarbre')->where('agropostplanting_id', $existe->id)->get();
+                if(count($especes2)) {
+                    $especes = $especes2; 
+                }
+            }
                         $somme = 0;
 
                         $results = '<table class="table table-bordered"><thead><tr>';
@@ -298,14 +314,17 @@ class AgropostplantingController extends Controller
                         $i = 0;
                         $k = 1;
                         $totalrecu = 0;
-
+                         
                         foreach($especes as $data) { 
 
                             $s = 1;
-                                $totalespece = $data->total;  
-                                $totalrecu = $totalrecu + $data->total;
+                                $totalespece = isset($data->total_survecue) ? $data->total_survecue : $data->total;  
+                                if($totalespece==0){
+                                    continue;
+                                }
+                                $totalrecu = $totalrecu + $totalespece;
                                 $results .= '<tr><td><input type="hidden" name="agroapprovisionnementsection" value="' . $data->agroapprovisionnement_section_id . '">' . $data->agroespecesarbre->nom . '</td>';
-                                $results .= '<td><button class="btn btn-primary" type="button">' . $totalespece . '</button></td>';
+                                $results .= '<td><input type="hidden" name="quantiterecue[' . $producteurId . '][' . $data->agroespecesarbre_id . ']" min="0" max="' . $totalespece . '" value="' . $totalespece . '" id="qterecue-' . $k . '" /><button class="btn btn-primary" type="button">' . $totalespece . '</button></td>';
                                 $results .= '<td><div class="input-group"><input type="number" name="quantite[' . $producteurId . '][' . $data->agroespecesarbre_id . ']" min="0" max="' . $totalespece . '" value="' . $totalespece . '" id="qte-' . $k . '"  class="form-control totaux quantity-' . $i . ' st-' . $s . '" onchange=getQuantite(' . $i . ',' . $k . ',' . $s . ') ></div></td>';
                                 $results .= '<td><div class="input-group"><input type="number" name="quantitesurvecuee[' . $producteurId . '][' . $data->agroespecesarbre_id . ']" min="0" max="' . $totalespece . '" value="' . $totalespece . '" id="qte2-' . $k . '"  class="form-control totaux2 quantity2-' . $i . ' st2-' . $s . '" onchange=getQuantite2(' . $i . ',' . $k . ',' . $s . ') ></div></td>';
                                 $results .= '<td><div class="input-group"><textarea name="commentaire[' . $producteurId . '][' . $data->agroespecesarbre_id . ']" id="commentaire-' . $k . '"  class="form-control""></textarea></div></td>';
@@ -323,6 +342,13 @@ class AgropostplantingController extends Controller
                 color: #f70000;
                 font-weight: bold;
             ">Ce producteur n\'a pas encore reçu d\'arbres à ombres.</span>';
+        }
+    }else {
+            $results = '<span style="
+                text-align: center;
+                color: #f70000;
+                font-weight: bold;
+            ">Veuillez choisir un producteur.</span>';
         }
 
         $contents['tableau'] = $results;

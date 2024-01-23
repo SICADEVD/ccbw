@@ -127,7 +127,7 @@ $('#flocal').change('keyup change blur',function() {
 });
 function getQuantite(id,k,s)
   { 
-    update_amounts(id,k,s);
+    update_amounts(id,k,s); 
   }
 
 function update_amounts(id,k,s)
@@ -138,6 +138,16 @@ function update_amounts(id,k,s)
     let max = $('.quantity-'+id).attr('max'); 
    
     let quantite = 0;
+    
+    // update Quantite Survecue
+    var qteCurrent = $("#qte-"+k).val(); 
+        $("#qte2-"+k).val(qteCurrent);
+        $("#qte2"+k).attr({
+              "max" : qteCurrent,       
+              "min" : 0      
+            }); 
+     update_survecue(id,k,s);  
+
     $('.quantity-'+id).each(function() {
     var qty = $(this).val();
      quantite = parseInt(quantite) + parseInt(qty);
@@ -147,7 +157,8 @@ function update_amounts(id,k,s)
     });
      
     $('.totaux').each(function() {
-        var nb = $(this).val(); 
+        var nb = $(this).val();
+        // update Quantite survecue 
             sum = parseInt(sum) + parseInt(nb);  
     });
 
@@ -179,7 +190,7 @@ function update_amounts(id,k,s)
 }
 
 function getQuantite2(id,k,s)
-  { 
+  {  
     update_survecue(id,k,s);
   }
 function update_survecue(id,k,s)
