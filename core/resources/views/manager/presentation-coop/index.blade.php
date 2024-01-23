@@ -13,10 +13,10 @@
                     <div class="d-flex flex-wrap gap-4">
 
                         <!-- <div class="flex-grow-1">
-                                                        <label>@lang('Date')</label>
-                                                        <input name="date" type="text" class="dates form-control"
-                                                            placeholder="@lang('Date de début - Date de fin')" autocomplete="off" value="{{ request()->date }}">
-                                                    </div> -->
+                                                                            <label>@lang('Date')</label>
+                                                                            <input name="date" type="text" class="dates form-control"
+                                                                                placeholder="@lang('Date de début - Date de fin')" autocomplete="off" value="{{ request()->date }}">
+                                                                        </div> -->
                         <div class="flex-grow-1">
                             <label>@lang("Année d'activité")</label>
                             <select name="date" class="form-control">
@@ -154,6 +154,7 @@
                 $productionVenteOrdinaire = getventeOrdinaire($date);
                 $productionVenteProgramme = getventeProgramme($date);
                 $productionAntrePartenaire = getautreProduction($date);
+                $chiffreCcb = getChiffreCcb($date);
                 ?>
 
                 <table class="table table-striped table-bordered">
@@ -230,7 +231,8 @@
                         </tr>
                         <tr>
                             <td>Chiffre d'affaire (F CFA)</td>
-                            <td>0</td>
+                            <td><input id="chiffreCcb" type="number" name="chiffreCcb" value="{{ getChiffreCcb($date) }}">
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -242,14 +244,15 @@
                         </tr>
                     </thead>
                     <tbody>
-                        
+
                         <tr>
                             <td>Cacao </td>
                             <td> {{ $productionAntrePartenaire }} </td>
                         </tr>
                         <tr>
                             <td>Chiffre d'affaire (F CFA)</td>
-                            <td>0</td>
+                            <td><input id="chiffreAutrePartenaire" type="number" name="chiffreAutrePartenaire"
+                                    value="0"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -432,5 +435,29 @@
         $('form select').on('change', function() {
             $(this).closest('form').submit();
         });
+
+        $('#chiffreCcb').on('blur', function() {
+            var chiffreCcb = $(this).val();
+            var currentYear = new Date().getFullYear();
+            var token = "{{ csrf_token() }}";
+
+            $.ajax({
+                url: '{{ route('manager.presentation-coop.store') }}', // Remplacez par l'URL de votre API
+                method: 'POST',
+                data: { // Remplacez par l'ID de la coopérative
+                    '_token': token,
+                    montant: chiffreCcb,
+                    date: currentYear
+                },
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus, errorThrown);
+                }
+            });
+        });
+
+        
     </script>
 @endpush
