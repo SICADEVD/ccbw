@@ -59,11 +59,10 @@
 						   <div class="d-flex align-items-center">
 							   <div>
                  <?php
-                 $taux = 0;
-                 
-                //  if($nbproducteur && $nbinspection){
-                //   $taux = round(($nbinspection / $nbproducteur)*100,2);
-                //  } 
+                 $taux = 0; 
+                 if($nbproducteur && $nbinspection){
+                  $taux = round(($nbinspection / $nbproducteur)*100,2);
+                 } 
                  ?>
 								   <p class="mb-0 text-secondary">Total Inspection</p>
 								   <h4 class="my-1 text-warning"> 0 %</h4>
@@ -134,14 +133,20 @@
 <?php
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-            foreach($genre as $data){
+
+$donnees = $donnees2 = $donnees3 = $donnees4 = $donnees5 = $donnees6 = $donnees7 = $donnees9 = array();
+$labels = $labels2 = $labels3 = $labels4 = $labels5 = $labels6 = $labels7 = $labels9 = array();
+$total = $total2 = $total3 = $total4 = $total5 = $total6 = $total7 = $total9 = array();
+
+
+            foreach(@$genre as $data){
                 $labels[] = utf8_encode(Str::remove("\r\n",utf8_decode($data->sexe)));
                 $total[] = $data->nombre;
                 $name = utf8_encode(Str::remove("\r\n",utf8_decode($data->sexe)));
                 $value = $data->nombre;
                 $donnees[] = "{ value: $value, name: '$name' }";
             }
-            foreach($parcelle as $data){
+            foreach(@$parcelle as $data){
                 $labels[] = utf8_encode(Str::remove("\r\n",utf8_decode($data->typedeclaration)));
                 $total[] = $data->nombre;
                 $name = utf8_encode(Str::remove("\r\n",utf8_decode($data->typedeclaration ? $data->typedeclaration : 'Aucun')));
@@ -150,14 +155,14 @@ use Illuminate\Support\Str;
             }
             
             
-            foreach($formation as $data){ 
+            foreach(@$formation as $data){ 
                 $labels3[] = utf8_encode(Str::remove("\r\n",utf8_decode(Str::between($data->nom,"(",")"))));
                 $total3[] = $data->nombre; 
             }
              
             $totalsexe=$sexe=$xAxisData=array();
              
-            foreach($modules as $data){
+            foreach(@$modules as $data){
 
               if(!in_array(Str::between($data->module,"(",")"),$xAxisData))
               {  
@@ -188,7 +193,7 @@ use Illuminate\Support\Str;
                 
             }
 
-            foreach($parcellespargenre as $data){
+            foreach(@$parcellespargenre as $data){
               $labels[] = utf8_encode(Str::remove("\r\n",utf8_decode($data->genre)));
               $total[] = $data->nombre;
               $name = utf8_encode(Str::remove("\r\n",utf8_decode($data->genre ? $data->genre : 'Aucun')));
@@ -196,14 +201,14 @@ use Illuminate\Support\Str;
               $donnees4[] = "{ value: $value, name: '$name' }";
           }
 
-          foreach($producteurparcertification as $data){ 
+          foreach(@$producteurparcertification as $data){ 
             $labels6[] = utf8_encode(Str::remove("\r\n",utf8_decode(Str::between($data->certification,"(",")"))));
             $total6[] = $data->nombre; 
         }
 
         $totalsexe7=$sexe7=$xAxisData7=array();
              
-            foreach($producteurparGenreCertification as $data){
+            foreach(@$producteurparGenreCertification as $data){
 
               if(!in_array(Str::between($data->certification,"(",")"),$xAxisData7))
               {  
