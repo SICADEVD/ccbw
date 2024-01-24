@@ -61,6 +61,7 @@
                   <?php
                  $nbinspection = @isset($nbinspection) ? $nbinspection : 0;
                  $nbproducteur = @isset($nbproducteur) ? $nbproducteur : 0;
+                 dd($nbproducteur);
                  ?>
 								   <p class="mb-0 text-secondary">Total Inspection</p>
 								   <h4 class="my-1 text-warning">{{ @if($nbinspection>0 && $nbproducteur>0) round(($nbinspection / $nbproducteur)*100,2) }} % @endif </h4>
