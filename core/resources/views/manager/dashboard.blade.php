@@ -58,8 +58,12 @@
 					   <div class="card-body">
 						   <div class="d-flex align-items-center">
 							   <div>
+                  <?php
+                 $nbinspection = @isset($nbinspection) ? $nbinspection : 0;
+                 $nbproducteur = @isset($nbproducteur) ? $nbproducteur : 0;
+                 ?>
 								   <p class="mb-0 text-secondary">Total Inspection</p>
-								   <h4 class="my-1 text-warning">{{ round((@isset(@$nbinspection) ? @$nbinspection : 0 / @isset(@$nbproducteur) ? @$nbproducteur : 0)*100,2) }}%</h4>
+								   <h4 class="my-1 text-warning">{{ round(($nbinspection / $nbproducteur)*100,2) }}%</h4>
 								   <p class="mb-0 font-13"></p>
 							   </div>
 							   <div class="widgets-icons-2 rounded-circle bg-gradient-orange text-white ms-auto"><i class="fa fa-search"></i>
