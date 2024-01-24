@@ -4,6 +4,7 @@ namespace App\Imports;
 
 use App\Models\Localite;
 use App\Models\Producteur;
+use App\Models\Section;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -14,7 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\WithValidation;
 
-class LocaliteImport implements ToCollection, WithHeadingRow, WithValidation
+class SectionImport implements ToCollection, WithHeadingRow, WithValidation
 {
     /**
     * @param Collection $collection
@@ -26,41 +27,32 @@ class LocaliteImport implements ToCollection, WithHeadingRow, WithValidation
         ];
     }
     public function collection(Collection $collection)
-    {
-        $section = request()->section;
+    { 
         $j = 0;
         $k = '';
         if (count($collection)) {
 
             foreach ($collection as $row) {
 
-                $nom = $this->verifylocalite($row['nom']);
-                $codeLocal = $this->generelocalitecode($nom);
+                $nom = $this->verifysection($row['nom']);
 
                 $insert_data = array(
-                    'section_id' => $section,
-                    'codeLocal' => $codeLocal,
-                    'nom' => $nom,
-                    'type_localites' => 'N/A',
-                    'sousprefecture' => 'N/A',
-                    'centresante' => 'N/A',
-                    'typecentre' => 'N/A',
-                    'ecole' => 'N/A',
-                    'electricite' => 'N/A',
-                    'userid' => auth('admin')->check() ? auth('admin')->user()->id : auth()->user()->id,
+                    'cooperative_id' => auth()->user()->cooperative_id, 
+                    'libelle' => $nom,
+                    'sousPrefecture' => 'N/A',
                     'created_at' => NOW(),
                     'updated_at' => NOW()
                 );
 
-                DB::table('localites')->insert($insert_data);
+                DB::table('sections')->insert($insert_data);
                 $j++;
             }
 
             if (!empty($j)) {
-                $notify[] = ['success', "$j Localités ont été crée avec succès."];
+                $notify[] = ['success', "$j Section(s) ont été crée avec succès."];
                 return back()->withNotify($notify);
             } else {
-                $notify[] = ['error', "Aucune Localité n'a été ajouté à la base car ils existent déjà."];
+                $notify[] = ['error', "Aucune Section n'a été ajouté à la base car ils existent déjà."];
                 return back()->withNotify($notify);
             }
         } else {
@@ -71,16 +63,16 @@ class LocaliteImport implements ToCollection, WithHeadingRow, WithValidation
     }
 
 
-    private function verifylocalite($nom)
+    private function verifysection($nom)
     {
         $action = 'non';
         do {
-            $data = Localite::select('nom')->where('nom', $nom)->orderby('id', 'desc')->first();
+            $data = Section::select('libelle')->where([['cooperative_id',auth()->user()->cooperative_id],['libelle', $nom]])->orderby('id', 'desc')->first();
             if ($data != '') {
 
-                $nomLocal = $data->nom;
-                $nom = Str::beforeLast($nomLocal, ' ');
-                $chaine_number = Str::afterLast($nomLocal, ' ');
+                $nomSection = $data->libelle;
+                $nom = Str::beforeLast($nomSection, ' ');
+                $chaine_number = Str::afterLast($nomSection, ' ');
 
                 if (is_numeric($chaine_number) && ($chaine_number < 10)) {
                     $zero = "00";
@@ -93,21 +85,21 @@ class LocaliteImport implements ToCollection, WithHeadingRow, WithValidation
 
                 $sub = $nom . ' ';
                 $lastCode = $chaine_number + 1;
-                $nomLocal = $sub . $zero . $lastCode;
+                $nomSection = $sub . $zero . $lastCode;
             } else {
 
-                $nomLocal = $nom;
+                $nomSection = $nom;
             }
-            $verif = Localite::select('nom')->where('nom', $nomLocal)->orderby('id', 'desc')->first();
+            $verif = Section::select('libelle')->where([['cooperative_id',auth()->user()->cooperative_id],['libelle', $nomSection]])->orderby('id', 'desc')->first();
             if ($verif == null) {
                 $action = 'non';
             } else {
                 $action = 'oui';
-                $nom = $verif->nom;
+                $nom = $verif->libelle;
             }
         } while ($action != 'non');
 
-        return $nomLocal;
+        return $nomSection;
     }
     private function generelocalitecode($name)
     {

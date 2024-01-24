@@ -155,6 +155,7 @@ Route::middleware('auth')->group(function () {
             Route::resource('leaves-settings', LeaveSettingController::class);
             Route::resource('cooperative-settings', CooperativeSettingController::class);
             Route::resource('durabilite-settings', ProgrammeSettingController::class);
+            Route::post('/uploadcontent/section', [SectionSettingController::class,'uploadContent'])->name('section-settings.uploadcontent');
             Route::resource('section-settings', SectionSettingController::class);
             Route::resource('localite-settings', LocaliteSettingController::class);
             Route::post('localite-settings/status/{id}', [LocaliteSettingController::class, 'status'])->name('localite-settings.status');

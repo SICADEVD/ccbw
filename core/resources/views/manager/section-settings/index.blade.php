@@ -87,25 +87,15 @@
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <i class="las la-times"></i> </button>
                 </div>
-                <form action="" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('manager.settings.section-settings.uploadcontent')}}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">   
-                        <p>Fichier d'exemple à utiliser :<a href="" target="_blank">@lang('section-import-exemple.xlsx')</a></p>
+                    <p>Fichier d'exemple à utiliser :
+                            <a href="{{ asset('assets/section-import-exemple.xlsx') }}" target="_blank">@lang('section-import-exemple.xlsx')</a>
+                        </p>
                     </div>    
-                    <div class="form-group row">
-                        <label class="col-sm-4 control-label">@lang('Type de Formation')</label>
-                        <div class="col-xs-12 col-sm-8">
-                            <select class="form-control" name="localite_id" required>
-                                <option value="">@lang('Selectionner une option')</option>
-                                {{-- @foreach($localites as $localite)
-                                    <option value="{{ $localite->id }}" @selected(old('cooperative'))> {{ __($localite->libelle) }}</option>
-                                @endforeach --}}
-                            </select>
-                        </div> 
-                    </div>
-                    <div class="form-group row">
-                        
-    
+                    
+                    <div class="form-group row"> 
                         {{ Form::label(__('Fichier(.xls, .xlsx)'), null, ['class' => 'control-label col-sm-4']) }}
                         <div class="col-xs-12 col-sm-8 col-md-8">
                             <input type="file" name="uploaded_file" accept=".xls, .xlsx" class="form-control dropify-fr" placeholder="Choisir une image" id="image" required> 

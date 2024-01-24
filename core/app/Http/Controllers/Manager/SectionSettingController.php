@@ -1,13 +1,15 @@
 <?php
 
 namespace App\Http\Controllers\Manager;
-use App\Http\Helpers\Reply;
 use App\Models\Section;
 use App\Models\Localite;
 use App\Constants\Status;
+use App\Http\Helpers\Reply;
 use App\Models\Cooperative;
 use Illuminate\Http\Request;
+use App\Imports\SectionImport;
 use App\Http\Controllers\Controller;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Requests\StoreSectionRequest;
 use App\Http\Requests\UpdateSectionRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -86,6 +88,11 @@ class SectionSettingController extends Controller
     //affichant le formulaire de modification d'une localité d'une section
     public function localitesectionedit($id){
 
+    }
+    public function  uploadContent(Request $request)
+    {
+        Excel::import(new SectionImport, $request->file('uploaded_file'));
+        return back();
     }
     public function destroy($id)
     {

@@ -119,7 +119,7 @@
                         <div class="form-group row">
                             <label class="col-sm-4 control-label">@lang('Section')</label>
                             <div class="col-xs-12 col-sm-8">
-                                <select class="form-control" name="coop_id" required>
+                                <select class="form-control" name="section" required>
                                     <option value="">@lang('Selectionner une option')</option>
                                     @foreach ($sections as $coop)
                                         <option value="{{ $coop->id }}" @selected(old('section'))>
