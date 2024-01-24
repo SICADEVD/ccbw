@@ -76,7 +76,7 @@
                         <div class="card box--shadow2 bg--white" id="producteur" style="min-height:230px;"> 
                         </div>
         </div>
-        @encan
+        @endcan
         @can('manager.traca.parcelle.index')
         <div class="col-xxl-4 col-sm-4"> 
         <div class="card box--shadow2 bg--white" id="mapping" style="min-height:230px;"> 
