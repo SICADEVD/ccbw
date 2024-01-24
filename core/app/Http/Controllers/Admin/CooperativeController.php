@@ -25,9 +25,9 @@ class CooperativeController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name'    => 'required|max:40',
-            'email'   => 'required|email|max:40',
-            'phone'   => 'required|max:40',
+            'name'    => 'required|max:255',
+            'email'   => 'required|email|max:255',
+            'phone'   => 'required|max:255',
             'address' => 'required|max:255',
             'web' => 'required|max:255',
             'mobile' => 'required|max:255',
