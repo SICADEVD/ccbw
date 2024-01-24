@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Manager;
 
 use Excel;
+use SimpleXMLElement;
 use App\Models\Section;
 use App\Models\Campagne;
 use App\Models\Localite;
@@ -105,7 +106,59 @@ class ParcelleController extends Controller
         $arbres = Agroespecesarbre::all();
         return view('manager.parcelle.create', compact('pageTitle', 'producteurs', 'localites', 'sections', 'arbres'));
     }
-
+    
+    public function uploadKML(Request $request)
+    {
+        $pageTitle = "Importation de fichier KML";
+        $manager   = auth()->user();
+        // $cooperative = Cooperative::with('sections.localites', 'sections.localites.section')->find($manager->cooperative_id);
+        // $sections = $cooperative->sections;
+        // $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
+        //     return $localite->active();
+        // }); 
+        if($request->file('fichier_kml')){
+            $file = $request->file('fichier_kml');
+            @unlink(public_path('upload/kml/'));
+            $filename = $file->getClientOriginalName();
+            $file->move(public_path('upload/kml'), $filename);
+            $filePath = public_path('upload/kml/'.$filename); 
+            $coordinates = $this->getCoordinatesFromKML($filePath);
+            $notify[] = ['success', 'Le fichier KLM a été enregistré avec succès.'];
+        return back()->withNotify($notify);
+        }
+        
+        
+        // Afficher les coordonnées
+        // foreach ($coordinates as $index => $coordinateSet) {
+        //     echo "Coordonnées du Placemark ", ($index + 1), " : ", $coordinateSet, PHP_EOL;
+        // }
+        return view('manager.parcelle.uploadkml', compact('pageTitle'));
+    }
+    public function getCoordinatesFromKML($filePath) {
+        // Charger le fichier KML
+        $kmlContent = file_get_contents($filePath);
+        
+        // Créer un objet SimpleXML pour parcourir le fichier KML
+        $kml = new SimpleXMLElement($kmlContent);
+        
+        // Initialiser un tableau pour stocker les coordonnées
+        $coordinatesArray = $kmlId = $content = array();
+        
+        // Parcourir chaque Placemark dans le document KML
+        foreach ($kml->Document->Placemark as $placemark) {
+            // Récupérer les coordonnées de la balise <coordinates>
+            $coordinates = (string)$placemark->Polygon->outerBoundaryIs->LinearRing->coordinates;
+            $id = (string)$placemark->id;
+            
+            // Ajouter les coordonnées au tableau
+            $coordinatesArray[] = $coordinates;
+            $kmlId[] = $id;
+        }
+        $content['id'] = $kmlId;
+        $content['coordinates'] = $coordinatesArray;
+        // Retourner le tableau des coordonnées
+        return $content;
+    }
     public function store(Request $request)
     {
         $validationRule = [

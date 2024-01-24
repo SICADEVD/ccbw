@@ -353,6 +353,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/exportParcellesExcel', [ParcelleController::class,'exportExcel'])->name('exportExcel.parcelleAll');
             Route::get('mapping', [ParcelleController::class,'mapping'])->name('mapping');
             Route::post('/uploadcontent', [ParcelleController::class,'uploadContent'])->name('uploadcontent');
+            Route::get('/upload/kml', [ParcelleController::class,'uploadKML'])->name('uploadkml');
+            Route::post('/upload/kml', [ParcelleController::class,'uploadKML'])->name('uploadkml');
         });
 
         //Manage Estimation
