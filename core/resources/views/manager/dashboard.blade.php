@@ -59,8 +59,7 @@
 						   <div class="d-flex align-items-center">
 							   <div>
                   <?php
-                 $nbinspection = @isset($nbinspection) ? $nbinspection : 0;
-                 $nbproducteur = @isset($nbproducteur) ? $nbproducteur : 0;
+                 
                  dd($nbproducteur);
                  ?>
 								   <p class="mb-0 text-secondary">Total Inspection</p>
