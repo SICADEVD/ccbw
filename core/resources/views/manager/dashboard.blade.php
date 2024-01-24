@@ -58,8 +58,15 @@
 					   <div class="card-body">
 						   <div class="d-flex align-items-center">
 							   <div>
+                 <?php
+                 $taux = 0;
+                 
+                //  if($nbproducteur && $nbinspection){
+                //   $taux = round(($nbinspection / $nbproducteur)*100,2);
+                //  } 
+                 ?>
 								   <p class="mb-0 text-secondary">Total Inspection</p>
-								   <h4 class="my-1 text-warning"> 0%</h4>
+								   <h4 class="my-1 text-warning"> 0 %</h4>
 								   <p class="mb-0 font-13"></p>
 							   </div>
 							   <div class="widgets-icons-2 rounded-circle bg-gradient-orange text-white ms-auto"><i class="fa fa-search"></i>
