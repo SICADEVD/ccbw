@@ -180,10 +180,8 @@ class CooperativeController extends Controller
             ['type_name' => 'Maladie', 'color' => '#DB1313', 'cooperative_id' => $cooperative->id, 'gender' => json_encode($gender), 'marital_status' => json_encode($maritalstatus), 'role' => ''],
             ['type_name' => 'Deuil', 'color' => '#B078C6', 'cooperative_id' => $cooperative->id, 'gender' => json_encode($gender), 'marital_status' => json_encode($maritalstatus), 'role' => ''],
             ['type_name' => 'Maternite', 'color' => '#B078C6', 'cooperative_id' => $cooperative->id, 'gender' => json_encode($gender), 'marital_status' => json_encode($maritalstatus), 'role' => ''],
-            ['type_name' => 'R & R / Home leave', 'color' => '#B078C6', 'cooperative_id' => $cooperative->id, 'gender' => json_encode($gender), 'marital_status' => json_encode($maritalstatus), 'role' => ''],
-            ['type_name' => 'Sans solde', 'color' => '#B078C6', 'cooperative_id' => $cooperative->id, 'gender' => json_encode($gender), 'marital_status' => json_encode($maritalstatus), 'role' => ''],
-            ['type_name' => 'Compensation', 'color' => '#B078C6', 'cooperative_id' => $cooperative->id, 'gender' => json_encode($gender), 'marital_status' => json_encode($maritalstatus), 'role' => ''],
-            ['type_name' => 'Fin de contrat', 'color' => '#B078C6', 'cooperative_id' => $cooperative->id, 'gender' => json_encode($gender), 'marital_status' => json_encode($maritalstatus), 'role' => '']
+            ['type_name' => 'Parternite', 'color' => '#B078C6', 'cooperative_id' => $cooperative->id, 'gender' => json_encode($gender), 'marital_status' => json_encode($maritalstatus), 'role' => ''], 
+            ['type_name' => 'Compensation', 'color' => '#B078C6', 'cooperative_id' => $cooperative->id, 'gender' => json_encode($gender), 'marital_status' => json_encode($maritalstatus), 'role' => '']
         ];
 
         LeaveType::insert($status);
