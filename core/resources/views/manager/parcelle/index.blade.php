@@ -187,8 +187,8 @@
     <a href="{{ route('manager.traca.parcelle.create') }}" class="btn  btn-outline--primary h-45 addNewCooperative">
         <i class="las la-plus"></i>@lang('Ajouter nouveau')
     </a>
-    <a href="{{ route('manager.traca.parcelle.uploadkml') }}" class="btn btn-outline--info h-45 addType"><i class="las la-cloud-upload-alt"></i> Importer des Parcelles</a>
-    <a class="btn  btn-danger h-45"><i class="las la-cloud-upload-alt"></i> Importer un Fichier KML</a>
+    <a class="btn btn-outline--info h-45 addType"><i class="las la-cloud-upload-alt"></i> Importer des Parcelles</a>
+    <a href="{{ route('manager.traca.parcelle.uploadkml') }}" class="btn btn-danger h-45"><i class="las la-cloud-upload-alt"></i> Importer un Fichier KML</a>
     <a href="{{ route('manager.traca.parcelle.exportExcel.parcelleAll') }}" class="btn  btn-outline--warning h-45"><i
             class="las la-cloud-download-alt"></i> Exporter en Excel</a>
 <a href="{{ route('manager.traca.parcelle.mapping') }}"  class="btn  btn-outline--primary h-45 "><i class="las la-map-marker"></i> Voir mapping des parcelles</a>
