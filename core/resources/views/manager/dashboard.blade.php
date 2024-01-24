@@ -59,12 +59,11 @@
 						   <div class="d-flex align-items-center">
 							   <div>
                   <?php
+                 $taux = 0;
                  
-                 if($nbproducteur && $nbinspection){
-                  $taux = round(($nbinspection / $nbproducteur)*100,2);
-                 }else{
-                  $taux = 0;
-                 }
+                //  if($nbproducteur && $nbinspection){
+                //   $taux = round(($nbinspection / $nbproducteur)*100,2);
+                //  } 
                  ?>
 								   <p class="mb-0 text-secondary">Total Inspection</p>
 								   <h4 class="my-1 text-warning">{{ $taux }} % @endif </h4>
