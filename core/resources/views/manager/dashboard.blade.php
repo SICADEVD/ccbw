@@ -1,6 +1,7 @@
 @extends('manager.layouts.app')
 @section('panel')
 <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4">
+@can('manager.traca.producteur.index')
                    <div class="col">
 					 <div class="card radius-10 border-start border-0 border-4 border-info">
 						<div class="card-body">
@@ -16,6 +17,8 @@
 						</div>
 					 </div>
 				   </div>
+           @endcan
+           @can('manager.traca.parcelle.index')
 				   <div class="col">
 					<div class="card radius-10 border-start border-0 border-4 border-danger">
 					   <div class="card-body">
@@ -31,6 +34,8 @@
 					   </div>
 					</div>
 				  </div>
+          @endcan
+          @can('manager.agro.distribution.index')
 				  <div class="col">
 					<div class="card radius-10 border-start border-0 border-4 border-success">
 					   <div class="card-body">
@@ -46,6 +51,8 @@
 					   </div>
 					</div>
 				  </div>
+          @endcan
+          @can('manager.suivi.inspection.index')
 				  <div class="col">
 					<div class="card radius-10 border-start border-0 border-4 border-warning">
 					   <div class="card-body">
@@ -61,31 +68,41 @@
 					   </div>
 					</div>
 				  </div> 
+          @endcan
 				</div>
     <div class="row gy-4"> 
+    @can('manager.traca.producteur.index')
     <div class="col-xxl-4 col-sm-4">  
                         <div class="card box--shadow2 bg--white" id="producteur" style="min-height:230px;"> 
                         </div>
         </div>
+        @endcan
+        @can('manager.traca.parcelle.index')
         <div class="col-xxl-4 col-sm-4"> 
         <div class="card box--shadow2 bg--white" id="mapping" style="min-height:230px;"> 
          
         </div>
         </div>
-
+@endcan
+@can('manager.suivi.formation.index')
         <div class="col-xxl-4 col-sm-4"> 
                     <div class="card box--shadow2 bg--white" id="formationmodule" style="min-height:230px;">  
                     
                     </div>
         </div>
+       
         <div class="col-xxl-4 col-sm-4"> 
                     <div class="card box--shadow2 bg--white" id="producteurmodule" style="min-height:230px;"> 
                     </div>
         </div>
+        @endcan
+        @can('manager.traca.parcelle.index')
         <div class="col-xxl-4 col-sm-4"> 
                     <div class="card box--shadow2 bg--white" id="parcellespargenre" style="min-height:230px;"> 
                     </div>
         </div>
+        @endcan
+        @can('manager.traca.producteur.index')
         <div class="col-xxl-4 col-sm-4"> 
                     <div class="card box--shadow2 bg--white" id="producteurparcertification" style="min-height:230px;"> 
                     </div>
@@ -94,7 +111,7 @@
                     <div class="card box--shadow2 bg--white" id="producteurparcertificationparsexe" style="min-height:230px;"> 
                     </div>
         </div>
-
+@endcan
     </div><!-- row end-->
 
    
