@@ -10,10 +10,14 @@
                             <thead>
                                 <tr>
                                     <th>@lang('Producteur')</th>
-                                    <th>@lang('Forets & jachere')</th>
-                                    <th>@lang('Autres Cultures')</th>
-                                    <th>@lang('Numéro Mobile Money')</th>
-                                    <th>@lang('Compte Banque')</th>
+                                    <th>@lang('Forêt & jachere')</th>
+                                    <th>@lang('superficie forêt & jachère')</th>
+                                    <th>@lang('Main-d\'oeuvre familiale')</th>
+                                    <th>@lang('Nombre de Travailleur')</th>
+                                    <th>@lang('Autres cultures en dehors du cacao')</th>
+                                    <th>@lang('Autres activités')</th>
+                                    <th>@lang('Mobile Money')</th>
+                                    <th>@lang('Compte Bancaire')</th>
                                     <th>@lang('Ajouté le')</th>
                                     <th>@lang('Action')</th>
                                 </tr>
@@ -28,9 +32,20 @@
                                         <td>
                                             <span class="fw-bold">{{ $info->foretsjachere }}</span>
                                         </td>
-
+                                        <td>
+                                            <span class="fw-bold">{{ $info->superficie }}</span>
+                                        </td>
+                                        <td>
+                                            <span class="fw-bold">{{ $info->mainOeuvreFamilial }}</span>
+                                        </td>
+                                        <td>
+                                            <span class="fw-bold">{{ $info->travailleurs }}</span>
+                                        </td>
                                         <td>
                                             <span class="fw-bold">{{ $info->autresCultures }}</span>
+                                        </td>
+                                        <td>
+                                            <span class="fw-bold">{{ $info->autreActivite }}</span>
                                         </td>
                                         <td>
                                             <span class="fw-bold">{{ $info->mobileMoney }}</span>
