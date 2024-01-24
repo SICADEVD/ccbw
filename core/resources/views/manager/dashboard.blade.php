@@ -8,7 +8,7 @@
 							<div class="d-flex align-items-center">
 								<div>
 									<p class="mb-0 text-secondary">Total Producteurs</p>
-									<h4 class="my-1 text-info">{{ number_format($nbproducteur,0,'',' ')}}</h4>
+									<h4 class="my-1 text-info">{{ number_format(@$nbproducteur,0,'',' ')}}</h4>
 									<p class="mb-0 font-13"></p>
 								</div>
 								<div class="widgets-icons-2 rounded-circle bg-gradient-blues text-white ms-auto"><i class="fa fa-users"></i>
@@ -25,7 +25,7 @@
 						   <div class="d-flex align-items-center">
 							   <div>
 								   <p class="mb-0 text-secondary">Total Superficie Parcelles</p>
-								   <h4 class="my-1 text-danger">{{ number_format($nbparcelle,0,'',' ')}} ha</h4>
+								   <h4 class="my-1 text-danger">{{ number_format(@$nbparcelle,0,'',' ')}} ha</h4>
 								   <p class="mb-0 font-13"></p>
 							   </div>
 							   <div class="widgets-icons-2 rounded-circle bg-gradient-burning text-white ms-auto"><i class="fa fa-map"></i>
@@ -42,7 +42,7 @@
 						   <div class="d-flex align-items-center">
 							   <div>
 								   <p class="mb-0 text-secondary">Total Arbres distribués</p>
-								   <h4 class="my-1 text-success">{{ number_format($nbarbredistribue,0,'',' ')}}</h4>
+								   <h4 class="my-1 text-success">{{ number_format(@$nbarbredistribue,0,'',' ')}}</h4>
 								   <p class="mb-0 font-13"></p>
 							   </div>
 							   <div class="widgets-icons-2 rounded-circle bg-gradient-ohhappiness text-white ms-auto"><i class="fa fa-tree"></i>
@@ -59,7 +59,7 @@
 						   <div class="d-flex align-items-center">
 							   <div>
 								   <p class="mb-0 text-secondary">Total Inspection</p>
-								   <h4 class="my-1 text-warning">{{ round(($nbinspection/$nbproducteur)*100,2) }}%</h4>
+								   <h4 class="my-1 text-warning">{{ round((@$nbinspection/@$nbproducteur)*100,2) }}%</h4>
 								   <p class="mb-0 font-13"></p>
 							   </div>
 							   <div class="widgets-icons-2 rounded-circle bg-gradient-orange text-white ms-auto"><i class="fa fa-search"></i>
