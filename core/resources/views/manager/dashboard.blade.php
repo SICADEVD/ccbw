@@ -63,7 +63,7 @@
                  dd($nbproducteur);
                  ?>
 								   <p class="mb-0 text-secondary">Total Inspection</p>
-								   <h4 class="my-1 text-warning">{{ @if($nbinspection>0 && $nbproducteur>0) round(($nbinspection / $nbproducteur)*100,2) }} % @endif </h4>
+								   <h4 class="my-1 text-warning">{{ @if($nbinspection && $nbproducteur) round(($nbinspection / $nbproducteur)*100,2) }} % @endif </h4>
 								   <p class="mb-0 font-13"></p>
 							   </div>
 							   <div class="widgets-icons-2 rounded-circle bg-gradient-orange text-white ms-auto"><i class="fa fa-search"></i>
