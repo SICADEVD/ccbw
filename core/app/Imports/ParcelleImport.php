@@ -40,8 +40,14 @@ class ParcelleImport implements ToCollection, WithHeadingRow, WithValidation
   $verification = DB::table('producteurs')->orWhere('codeProd',$codeProd)->orWhere('codeProdapp',$codeProd)->first();
 if($verification !=null)
 {
+  if($row['codeparcelle'])
+  {
+    $codeParc = $row['codeparcelle'];
+  }else{
     $codeProd = $verification->codeProdapp;
     $codeParc =$this->generecodeparc($verification->id,$codeProd);
+  }
+    
     $superficie = $row['superficie'];
     $superficie = Str::before($superficie,' ');
     if(Str::contains($superficie,","))
@@ -59,7 +65,7 @@ if($verification !=null)
   'anneeCreation' => $row['anneecreation'],
   'typedeclaration' => $row['typedeclaration'],
   'culture' => $row['cultureparcelle'],
-  'superficie' => $superficie,
+  'superficie' => round($superficie,2),
   'latitude' => $row['latitude'],
   'longitude' => $row['longitude'],
   'userid' => auth()->user()->id,
