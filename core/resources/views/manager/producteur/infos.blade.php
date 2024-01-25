@@ -12,10 +12,6 @@
                                     <th>@lang('Producteur')</th>
                                     <th>@lang('Forêt & jachere')</th>
                                     <th>@lang('superficie forêt & jachère')</th>
-                                    <th>@lang('Main-d\'oeuvre familiale')</th>
-                                    <th>@lang('Nombre de Travailleur')</th>
-                                    <th>@lang('Autres cultures en dehors du cacao')</th>
-                                    <th>@lang('Autres activités')</th>
                                     <th>@lang('Mobile Money')</th>
                                     <th>@lang('Compte Bancaire')</th>
                                     <th>@lang('Ajouté le')</th>
@@ -35,17 +31,9 @@
                                         <td>
                                             <span class="fw-bold">{{ $info->superficie }}</span>
                                         </td>
-                                        <td>
-                                            <span class="fw-bold">{{ $info->mainOeuvreFamilial }}</span>
+                                       
                                         </td>
-                                        <td>
-                                            <span class="fw-bold">{{ $info->travailleurs }}</span>
-                                        </td>
-                                        <td>
-                                            <span class="fw-bold">{{ $info->autresCultures }}</span>
-                                        </td>
-                                        <td>
-                                            <span class="fw-bold">{{ $info->autreActivite }}</span>
+                                       
                                         </td>
                                         <td>
                                             <span class="fw-bold">{{ $info->mobileMoney }}</span>
@@ -57,10 +45,13 @@
                                             {{ showDateTime($info->created_at) }} <br>
                                             {{ diffForHumans($info->created_at) }}
                                         </td>
+                                        
                                         <td>
+                                            <a href="{{ route('manager.traca.producteur.showinfosproducteur', encrypt($info->id)) }}"
+                                                class="icon-btn btn--info ml-1">@lang('Détails')</a>
+
                                             <a href="{{ route('manager.traca.producteur.editinfo', encrypt($info->id)) }}"
                                                 class="icon-btn btn--primary ml-1">@lang('Edit')</a>
-
                                         </td>
                                     </tr>
                                 @empty

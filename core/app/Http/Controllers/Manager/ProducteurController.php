@@ -187,6 +187,12 @@ class ProducteurController extends Controller
         $notify[] = ['success', isset($message) ? $message : "L'info du producteur a été crée avec succès."];
         return back()->withNotify($notify);
     }
+    public function showinfosproducteur($id)
+    {
+        $pageTitle = "Informations du producteur";
+        $infosproducteur = Producteur_info::findOrFail(decrypt($id));
+        return view('manager.producteur.show', compact('pageTitle', 'infosproducteur', 'id'));
+    }
 
     public function create()
     {
