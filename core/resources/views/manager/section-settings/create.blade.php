@@ -30,6 +30,12 @@
                   <?php echo Form::text('libelle', null, array('placeholder' => __('Nom de la section'),'class' => 'form-control', 'required')); ?>
                 </div>
             </div>
+             <div class="form-group row">
+              <?php echo Form::label(__('Région'), null, ['class' => 'control-label col-xs-12 col-sm-4']); ?>
+                <div class="col-xs-12 col-sm-8">
+                  <?php echo Form::text('region', null, array('placeholder' => __('Région'),'class' => 'form-control', 'required')); ?>
+                </div>
+            </div>
 
             <div class="form-group row">
               <?php echo Form::label(__('Sous Préfecture'), null, ['class' => 'control-label col-xs-12 col-sm-4']); ?>
