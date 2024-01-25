@@ -42,4 +42,7 @@ class Producteur extends Model
         return $this->belongsTo(Pays::class, 'pays_id');
     }
     
+    public function country(){
+        return $this->belongsTo(Country::class, 'nationalite');
+    }
 }

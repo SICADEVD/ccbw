@@ -181,9 +181,9 @@
                             <select class="form-control select2-basic" name="nationalite" id="nationalite" required>
                                 <option value="">@lang('Selectionner une option')</option>
                                 @foreach ($countries as $nationalite)
-                                    <option value="{{ $nationalite->name }}"
-                                        {{ $producteur->nationalite == $nationalite->name ? 'selected' : '' }}>
-                                        {{ __($nationalite->name) }}</option>
+                                    <option value="{{ $nationalite->id }}"
+                                        {{ $producteur->nationalite == $nationalite->id ? 'selected' : '' }}>
+                                        {{ __($nationalite->nicename) }}</option>
                                 @endforeach
                             </select>
                         </div>

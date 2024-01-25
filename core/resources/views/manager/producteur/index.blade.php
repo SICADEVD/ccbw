@@ -102,7 +102,7 @@
                                             <span>{{ $producteur->sexe }}</span>
                                         </td>
                                         <td>
-                                            <span>{{ $producteur->nationalite }}</span>
+                                            <span>{{ @$producteur->country->nicename }}</span>
                                         </td>
                                         <td>
                                             <span>{{ $producteur->phone1 }}</span>

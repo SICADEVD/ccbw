@@ -183,8 +183,8 @@
                                 required>
                                 <option value="">@lang('Selectionner une option')</option>
                                 @foreach ($countries as $nationalite)
-                                    <option value="{{ $nationalite->name }}" @selected(old('nationalite'))>
-                                        {{ __($nationalite->name) }}</option>
+                                    <option value="{{ $nationalite->id }}" @selected(old('nationalite'))>
+                                        {{ __($nationalite->nicename) }}</option>
                                 @endforeach
                             </select>
                         </div>
