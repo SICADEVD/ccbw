@@ -3,32 +3,35 @@
 namespace App\Http\Controllers\Manager;
 
 use Excel;
+use App\Models\Pays;
+use App\Models\Product;
 use App\Models\Section;
-use App\Constants\Status;
+use App\Models\Countrie;
 use App\Models\Localite;
+use App\Constants\Status;
 use App\Models\Programme;
 use App\Models\Producteur;
 use App\Models\Cooperative;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\Certification;
 use App\Models\Producteur_info;
 use Illuminate\Validation\Rule;
 use App\Imports\ProducteurImport;
 use App\Exports\ExportProducteurs;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\StoreInfoRequest;
+use App\Models\Producteur_infos_mobile;
+use App\Models\Producteur_certification;
+use App\Models\Producteur_infos_typeculture;
 use App\Http\Requests\StoreProducteurRequest;
 use App\Http\Requests\UpdateProducteurRequest;
-use App\Models\Certification;
-use App\Models\Product;
-use App\Models\Producteur_certification;
-use App\Models\Producteur_infos_autresactivite;
-use Illuminate\Support\Facades\Hash;
-use App\Models\Producteur_infos_typeculture;
 use App\Models\Producteur_infos_maladieenfant;
-use App\Models\Producteur_infos_mobile;
 use Illuminate\Validation\ValidationException;
+use App\Models\Producteur_infos_autresactivite;
+use Google\Service\Dfareporting\Resource\Countries;
 
 class ProducteurController extends Controller
 {
@@ -187,6 +190,12 @@ class ProducteurController extends Controller
         $notify[] = ['success', isset($message) ? $message : "L'info du producteur a été crée avec succès."];
         return back()->withNotify($notify);
     }
+    public function showinfosproducteur($id)
+    {
+        $pageTitle = "Informations du producteur";
+        $infosproducteur = Producteur_info::findOrFail(decrypt($id));
+        return view('manager.producteur.show', compact('pageTitle', 'infosproducteur', 'id'));
+    }
 
     public function create()
     {
@@ -196,7 +205,8 @@ class ProducteurController extends Controller
         $localites = Localite::active()->with('section')->get();
         $programmes = Programme::all();
         $certifications = Certification::all();
-        return view('manager.producteur.create', compact('pageTitle', 'localites', 'sections', 'programmes','certifications'));
+        $countries = Pays::all();
+        return view('manager.producteur.create', compact('pageTitle', 'localites', 'sections', 'programmes','certifications','countries'));
     }
 
     public function store(StoreProducteurRequest $request)
@@ -446,11 +456,12 @@ class ProducteurController extends Controller
         $manager   = auth()->user();
         $sections = Section::with('cooperative')->where('cooperative_id', $manager->cooperative_id)->get();
         $localites = Localite::active()->with('section')->get();
+        $countries = Pays::all();
         $programmes = Programme::all();
         $producteur   = Producteur::findOrFail($id);
         $certificationAll = Certification::all();
         $certifications = $producteur->certifications->pluck('certification')->all();
-        return view('manager.producteur.edit', compact('pageTitle', 'localites', 'producteur', 'programmes', 'sections', 'certifications','certificationAll'));
+        return view('manager.producteur.edit', compact('pageTitle', 'localites', 'producteur', 'programmes', 'sections', 'certifications','certificationAll','countries'));
     }
 
     private function generecodeProdApp($nom, $prenoms, $codeApp)

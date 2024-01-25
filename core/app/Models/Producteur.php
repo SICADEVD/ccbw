@@ -37,5 +37,9 @@ class Producteur extends Model
     {
         return $this->hasMany(Parcelle::class, 'producteur_id');
     }
+    public function countrie()
+    {
+        return $this->belongsTo(Pays::class, 'pays_id');
+    }
     
 }

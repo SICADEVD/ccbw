@@ -333,6 +333,7 @@ Route::middleware('auth')->group(function () {
         Route::name('traca.producteur.')->prefix('producteur')->group(function () {
             Route::get('list', [ProducteurController::class,'index'])->name('index');
             Route::get('infos/{id}', [ProducteurController::class,'infos'])->name('infos');
+            Route::get('show/{id}', [ProducteurController::class,'showinfosproducteur'])->name('showinfosproducteur');
             Route::get('create', [ProducteurController::class,'create'])->name('create');
             Route::post('store', [ProducteurController::class,'store'])->name('store');
             Route::post('update/{id}', [ProducteurController::class,'update'])->name('update');
