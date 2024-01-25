@@ -2,6 +2,7 @@
 
 namespace App\Imports;
 
+use App\Models\Country;
 use App\Models\Producteur;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
@@ -62,7 +63,19 @@ if($verification ==null)
   
   $agent = DB::table('user_localites')->select('user_id')->where('localite_id', $localites_id)->inRandomOrder()->first();
   if($agent !=null){
- 
+    $nationalite = null;
+ if($row['nationalite']){
+  $nationalite = Str::limit($row['nationalite'], 2, "");
+  if($nationalite=='C0'){
+    $nationalite="CI";
+  }
+$nationalite = Country::where('iso',$nationalite)->first();
+  if($nationalite !=null){
+    $nationalite = $nationalite->id;
+  }else{
+    $nationalite = null;
+  }
+ }
       $insert_data = array(
         'localite_id' => $localites_id,
   'codeProd' => $row['codeproducteur'],
@@ -73,6 +86,7 @@ if($verification ==null)
   'dateNaiss' => Date::excelToDateTimeObject($row['datenaissance'])->format('Y-m-d'),
   'phone1' => $row['phone1'],
   'phone2' => $row['phone2'],
+  'nationalite' => $nationalite,
   'consentement' => $row['consentement'],
   'statut' => $row['statut'],
   'certificat' => $row['anneecertification'],
