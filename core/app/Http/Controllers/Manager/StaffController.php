@@ -77,6 +77,7 @@ class StaffController extends Controller
         $userLocalite = array();
         $userSection = array();
         $dataLocalite = $staff->userLocalites;
+        
         if ($dataLocalite->count()) {
             foreach ($dataLocalite as $data) {
                 $userLocalite[] = $data->localite_id;
@@ -85,9 +86,26 @@ class StaffController extends Controller
                 $userSection[] = $data->localite->section->id;
             }
         }
+        
         return view('manager.staff.edit', compact('pageTitle', 'staff', 'localites', 'userLocalite', 'userRole', 'roles', 'sections', 'userSection'));
     }
+public function getLocalite(Request $request){
+ 
+    $localites = Localite::whereIn('section_id', $request->section)->get();
+   
+    if ($localites->count()) {
+       
+        $contents = '';
 
+        foreach ($localites as $data) {
+            $contents .= '<option value="' . $data->id . '" data-chained="'.$data->section_id.'">'. $data->nom . '</option>';
+        }
+         
+    } else {
+        $contents = null;
+    }
+return $contents;
+}
     public function store(Request $request)
     {
         $manager        = auth()->user();
@@ -186,6 +204,21 @@ class StaffController extends Controller
         } else {
             DB::table('model_has_roles')->where('model_id', $request->id)->delete();
             $staff->syncRoles($request->get('role'));
+            if (($request->localite != null)) {
+
+                $verification   = User_localite::where('user_id', $request->id)->get();
+                if ($verification->count()) {
+                    DB::table('user_localites')->where('user_id', $request->id)->delete();
+                }
+                $i = 0;
+
+                foreach ($request->localite as $data) {
+                    if ($data != null) {
+                        DB::table('user_localites')->insert(['user_id' => $request->id, 'localite_id' => $data]);
+                    }
+                    $i++;
+                }
+            }
         }
 
         if (!$request->id) {

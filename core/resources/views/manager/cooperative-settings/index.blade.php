@@ -49,12 +49,7 @@
                                 <label>@lang('N°Compte Contribuable ')</label>
                                 <input type="number" class="form-control" name="numCompteContribuable"
                                     value="{{ $cooperative->numCompteContribuable }}" required>
-                            </div>
-                            <div class="form-group">
-                                <label>@lang('N°Compte Contribuable ')</label>
-                                <input type="number" class="form-control" name="numCompteContribuable"
-                                    value="{{ $cooperative->numCompteContribuable }}" required>
-                            </div>
+                            </div> 
                             <div class="form-group">
                                 <label>@lang('Secteur d\'activité')</label>
                                 <select name="secteurActivite" class="form-control">

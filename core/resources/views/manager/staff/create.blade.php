@@ -4,13 +4,12 @@
         <div class="col-lg-12 col-md-12 mb-30">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ route('manager.staff.store') }}" method="POST">
+                    <form action="{{ route('manager.staff.store') }}" method="POST" id="flocal">
                         @csrf
                         <div class="row">
                             <div class="form-group col-lg-4">
                                 <label>@lang('Section')</label>
-                                <select class="form-control" name="section" required>
-                                    <option value="">@lang('Selectionner une option')</option>
+                                <select class="form-control select-picker" name="section[]" id="section" multiple required> 
                                     @foreach ($sections as $section)
                                         <option value="{{ $section->id }}" @selected(old('section'))>
                                             {{ __($section->libelle) }}</option>
@@ -20,13 +19,7 @@
                             <div class="form-group col-lg-4">
                                 <label>@lang('Localite')</label>
                                 <select class="form-control select2-multi-select" id="localite" name="localite[]" multiple
-                                    required>
-
-                                    @foreach ($localites as $localite)
-                                        <option value="{{ $localite->id }}" data-chained="{{ $localite->section->id }}"
-                                            @selected(old('localite'))>
-                                            {{ __($localite->nom) }}</option>
-                                    @endforeach
+                                    required> 
                                 </select>
                             </div>
                             <div class="form-group col-lg-4">
@@ -66,28 +59,30 @@
                         </div>
 
                         <div class="row">
-
-                            <div class="form-group col-lg-4">
-                                <label>@lang("Nom d'utilisateur")</label>
-                                <input type="text" class="form-control" name="username" value="{{ old('username') }}"
-                                    required>
-                            </div>
+ 
                             <div class="form-group col-lg-4">
                                 <label>@lang('Email Adresse')</label>
                                 <input type="email" class="form-control" name="email" value="{{ old('email') }}"
                                     required>
                             </div>
+                            
                             <div class="form-group col-lg-4">
                                 <label>@lang('Contact')</label>
                                 <input type="text" class="form-control" name="mobile" value="{{ old('mobile') }}"
                                     required>
                             </div>
-                            
-                        </div>
-                        <div class="row">
                             <div class="form-group col-lg-4">
                                 <label>@lang('Adresse')</label>
                                 <input type="text" class="form-control" name="adresse" value="{{ old('adresse') }}">
+                            </div>
+                            
+                        </div>
+                        <div class="row">
+ 
+                            <div class="form-group col-lg-4">
+                                <label>@lang("Nom d'utilisateur")</label>
+                                <input type="text" class="form-control" name="username" value="{{ old('username') }}"
+                                    required>
                             </div>
                             <div class="form-group col-lg-4">
                                 <label>@lang('Mot de passe')</label>
@@ -113,10 +108,28 @@
 @push('breadcrumb-plugins')
     <x-back route="{{ route('manager.staff.index') }}" />
 
-    <script type="text/javascript">
-        $(document).ready(function() {
 
-            $('#localite').chained("#section")
+@endpush
+@push('script')
+<script type="text/javascript">
+        $(document).ready(function() { 
+           // $('#localite').chained("#section")
         });
+
+                $('#section').change(function(){
+
+var urlsend='{{ route("manager.staff.getLocalite") }}';
+
+  $.ajax({
+            type:'get',
+            url: urlsend,
+            data: $('#flocal').serialize(),
+            success:function(html){
+            $('#localite').html(html);  
+            }
+
+        });
+});
+
     </script>
 @endpush

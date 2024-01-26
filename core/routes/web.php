@@ -110,7 +110,7 @@ Route::middleware('auth')->group(function () {
             Route::post('store', [StaffController::class, 'store'])->name('store');
             Route::get('edit/{id}', [StaffController::class, 'edit'])->name('edit');
             Route::post('status/{id}', [StaffController::class, 'status'])->name('status');
-
+            Route::get('staff/get/localite', [StaffController::class, 'getLocalite'])->name('getLocalite');
             Route::get('magasin/{id}', [StaffController::class, 'magasinIndex'])->name('magasin.index');
             Route::post('magasin/store', [StaffController::class, 'magasinStore'])->name('magasin.store');
             Route::post('magasin/status/{id}', [StaffController::class, 'magasinStatus'])->name('magasin.status');
