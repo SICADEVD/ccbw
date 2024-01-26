@@ -82,7 +82,7 @@
                             <div class="form-group col-lg-4">
                                 <label>@lang("Nom d'utilisateur")</label>
                                 <input type="text" class="form-control" name="username" value="{{ old('username') }}"
-                                    required>
+                                    required autocomplete="off">
                             </div>
                             <div class="form-group col-lg-4">
                                 <label>@lang('Mot de passe')</label>
