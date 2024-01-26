@@ -61,15 +61,16 @@
                                 </select>
                             </div>
                             <div class="form-group col-lg-4">
-                                <label>@lang('Prenom(s)')</label>
-                                <input type="text" class="form-control" name="firstname"
-                                    value="{{ __($staff->firstname) }}" required>
-                            </div>
-                            <div class="form-group col-lg-4">
                                 <label>@lang('Nom de famille')</label>
                                 <input type="text" class="form-control" value="{{ __($staff->lastname) }}"
                                     name="lastname" required>
                             </div>
+                            <div class="form-group col-lg-4">
+                                <label>@lang('Prenom(s)')</label>
+                                <input type="text" class="form-control" name="firstname"
+                                    value="{{ __($staff->firstname) }}" required>
+                            </div>
+                            
 
                         </div>
 
