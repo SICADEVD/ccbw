@@ -92,7 +92,7 @@ var lgt='-5.5679458';
     $total = count($parcelles);  
 $i=1;
 foreach ($parcelles as  $res) {
-    $producteur = $res->producteur->nom.' '.$res->producteur->prenoms;
+    $producteur = htmlentities($res->producteur->nom, ENT_QUOTES | ENT_IGNORE, "UTF-8").' '.htmlentities($res->producteur->prenoms, ENT_QUOTES | ENT_IGNORE, "UTF-8");
     $code=$res->producteur->codeProd;
     $parcelle =$res->codeParc;
     $localite=$res->producteur->localite->nom;
@@ -108,7 +108,7 @@ foreach ($parcelles as  $res) {
  $i++;
 }
 }
-
+ 
 ?>];
 
     var map = new google.maps.Map(document.getElementById('googleMap'), {

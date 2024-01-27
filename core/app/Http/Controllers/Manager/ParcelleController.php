@@ -23,8 +23,11 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use App\Models\agroespeceabre_parcelle;
+use App\Models\Certification;
 use App\Models\Parcelle_type_protection;
 use App\Models\Producteur_infos_typeculture;
+use App\Models\Programme;
+use App\Models\Producteur_certification;
 
 class ParcelleController extends Controller
 {
@@ -111,27 +114,86 @@ class ParcelleController extends Controller
     {
         $pageTitle = "Importation de fichier KML";
         $manager   = auth()->user();
-        // $cooperative = Cooperative::with('sections.localites', 'sections.localites.section')->find($manager->cooperative_id);
-        // $sections = $cooperative->sections;
-        // $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
-        //     return $localite->active();
-        // }); 
-        if($request->file('fichier_kml')){
+        
+        if($request->file('fichier_kml') !=null){
             $file = $request->file('fichier_kml');
             @unlink(public_path('upload/kml/'));
             $filename = $file->getClientOriginalName();
             $file->move(public_path('upload/kml'), $filename);
             $filePath = public_path('upload/kml/'.$filename); 
-            $coordinates = $this->getCoordinatesFromKML($filePath);
+            $dataPolygones = $this->getCoordinatesFromKML($filePath); 
+            $coordinates = $dataPolygones[0]; 
+
+            foreach($dataPolygones as $index => $data) {
+                
+                $producteur = Producteur::where('codeProd',$data['codeProducteur'])->first();
+                if($producteur ==null){
+                    $producteur = new Producteur(); 
+                }
+                $cooperative = Cooperative::where('name',$data['cooperative'])->first();
+                $section = Section::where([['cooperative_id',$cooperative->id],['libelle',$data['section']]])->first();
+                if($section==null){
+                    $section = new Section();
+                    $data['section'] = $this->verifysection($data['section']);
+                }
+                $section->region = $data['region'];
+                $section->departement = $data['departement'];
+                $section->sousPrefecture = $data['sousPrefecture'];
+                $section->libelle = $data['section'];
+                $section->save();
+
+                $localite = Localite::where([['section_id',$section->id],['nom',$data['localite']]])->first();
+                if($localite==null){
+                    $nomLocal = $this->verifylocalite($data['localite']);
+                    $codeLocal = $this->generelocalitecode($nomLocal);
+                    $localite = new Localite();
+                    $localite->nom = $nomLocal;
+                    $localite->section_id = $section->id;
+                    $localite->codeLocal = $codeLocal;
+                    $localite->save();
+                }
+                $programme = Programme::where('libelle',$data['programme'])->first(); 
+                 
+                $producteur->nom = utf8_encode($data['nom']);
+                $producteur->prenoms = utf8_encode($data['prenoms']);
+                $producteur->num_ccc = $data['codeCCC'];
+                $producteur->sexe = $data['genre'];
+                $producteur->codeProd = $data['codeProducteur'];
+                $producteur->programme_id = $programme->id;
+                $producteur->localite_id = $localite->id;
+                $producteur->save();
+                
+                $certification = Certification::where('fullname', $data['certification'])->first();
+                $prodcertif = Producteur_certification::where([['producteur_id',$producteur->id],['certification',$certification->nom]])->first();
+                if($prodcertif ==null){
+                    $prodcertif = new Producteur_certification();
+                } 
+                $prodcertif->producteur_id = $producteur->id;
+                $prodcertif->certification = $certification->nom;
+                $prodcertif->save();
+
+                $parcelle = Parcelle::where([['producteur_id',$producteur->id]])->first();
+                if($parcelle ==null)
+                {
+                    $parcelle = new Parcelle();
+                }
+                $centroid = $this->calculateCentroid($data['coordinates']);
+                
+                $parcelle->producteur_id  = $producteur->id;
+                $parcelle->superficie = round($data['size'],2); 
+                $parcelle->latitude = $centroid['y'];
+                $parcelle->longitude = $centroid['x'];
+                $parcelle->waypoints = $data['coordinates'];
+                $parcelle->save(); 
+            }
+         
             $notify[] = ['success', 'Le fichier KLM a été enregistré avec succès.'];
+
         return back()->withNotify($notify);
         }
         
         
-        // Afficher les coordonnées
-        // foreach ($coordinates as $index => $coordinateSet) {
-        //     echo "Coordonnées du Placemark ", ($index + 1), " : ", $coordinateSet, PHP_EOL;
-        // }
+        
         return view('manager.parcelle.uploadkml', compact('pageTitle'));
     }
     public function getCoordinatesFromKML($filePath) {
@@ -141,23 +203,205 @@ class ParcelleController extends Controller
         // Créer un objet SimpleXML pour parcourir le fichier KML
         $kml = new SimpleXMLElement($kmlContent);
         
-        // Initialiser un tableau pour stocker les coordonnées
-        $coordinatesArray = $kmlId = $content = array();
+        // Initialiser un tableau pour stocker les coordonnées 
+        $dataArray = array();
         
         // Parcourir chaque Placemark dans le document KML
-        foreach ($kml->Document->Placemark as $placemark) {
+        foreach ($kml->Document->Folder->Placemark as $placemark) {
             // Récupérer les coordonnées de la balise <coordinates>
-            $coordinates = (string)$placemark->Polygon->outerBoundaryIs->LinearRing->coordinates;
-            $id = (string)$placemark->id;
+            $coordinates = (string)$placemark->MultiGeometry->Polygon->outerBoundaryIs->LinearRing->coordinates;
+            $fieldID = (string)$placemark->ExtendedData->SchemaData->SimpleData[0];
+            $farmerID = (string)$placemark->ExtendedData->SchemaData->SimpleData[1];
+            $farmerName = (string)$placemark->ExtendedData->SchemaData->SimpleData[2];
+            $fieldName = (string)$placemark->ExtendedData->SchemaData->SimpleData[3];
+            $size = (string)$placemark->ExtendedData->SchemaData->SimpleData[4];
+            $supHa = (string)$placemark->ExtendedData->SchemaData->SimpleData[5];
+            $nOrdre = (string)$placemark->ExtendedData->SchemaData->SimpleData[6];
+            $cooperative = (string)$placemark->ExtendedData->SchemaData->SimpleData[7];
+            $codeCCC = (string)$placemark->ExtendedData->SchemaData->SimpleData[8];
+            $codeProducteur = (string)$placemark->ExtendedData->SchemaData->SimpleData[9];
+            $section = (string)$placemark->ExtendedData->SchemaData->SimpleData[10];
+            $localite = (string)$placemark->ExtendedData->SchemaData->SimpleData[11];
+            $sousPrefecture = (string)$placemark->ExtendedData->SchemaData->SimpleData[12];
+            $departement = (string)$placemark->ExtendedData->SchemaData->SimpleData[13];
+            $region = (string)$placemark->ExtendedData->SchemaData->SimpleData[14];
+            $prenoms = (string)$placemark->ExtendedData->SchemaData->SimpleData[15];
+            $nom = (string)$placemark->ExtendedData->SchemaData->SimpleData[16];
+            $genre = (string)$placemark->ExtendedData->SchemaData->SimpleData[17];
+            $certification = (string)$placemark->ExtendedData->SchemaData->SimpleData[22];
+            $programme = (string)$placemark->ExtendedData->SchemaData->SimpleData[23];
             
-            // Ajouter les coordonnées au tableau
+            // Ajouter les données au tableau
             $coordinatesArray[] = $coordinates;
-            $kmlId[] = $id;
+            $dataArray[] = array(
+                'coordinates' => $coordinates,
+                'fieldID' => $fieldID,
+                'farmerID' => $farmerID,
+                'farmerName' => $farmerName,
+                'fieldName' => $fieldName,
+                'size' => $size,
+                'supHa' => $supHa,
+                'nOrdre' => $nOrdre,
+                'cooperative' => $cooperative,
+                'codeCCC' => $codeCCC,
+                'codeProducteur' => $codeProducteur,
+                'section' => $section,
+                'localite' => $localite,
+                'sousPrefecture' => $sousPrefecture,
+                'departement' => $departement,
+                'region' => $region,
+                'prenoms' => $prenoms,
+                'nom' => $nom,
+                'genre' => $genre,
+                'certification' => $certification,
+                'programme' => $programme
+            );
         }
-        $content['id'] = $kmlId;
-        $content['coordinates'] = $coordinatesArray;
+        
         // Retourner le tableau des coordonnées
-        return $content;
+        return $dataArray;
+    }
+
+    public function calculateCentroid($coordinates) {
+        // Séparer les paires de coordonnées
+        $points = explode("\n", trim($coordinates));
+        
+        $xSum = 0;
+        $ySum = 0;
+        $pointCount = count($points);
+    
+        // Parcourir chaque paire de coordonnées
+        foreach ($points as $point) {
+            $coords = explode(',', trim($point));
+    
+            // Ajouter les coordonnées au total
+            $xSum += (float)$coords[0];
+            $ySum += (float)$coords[1];
+        }
+    
+        // Calculer le centroïde
+        $centroidX = $xSum / $pointCount;
+        $centroidY = $ySum / $pointCount;
+    
+        return array('x' => $centroidX, 'y' => $centroidY);
+    }
+    private function verifylocalite($nom)
+    {
+        $action = 'non';
+        do {
+            $data = Localite::select('nom')->where('nom', $nom)->orderby('id', 'desc')->first();
+            if ($data != '') {
+
+                $nomLocal = $data->nom;
+                $nom = Str::beforeLast($nomLocal, ' ');
+                $chaine_number = Str::afterLast($nomLocal, ' ');
+
+                if (is_numeric($chaine_number) && ($chaine_number < 10)) {
+                    $zero = "00";
+                } else if (is_numeric($chaine_number) && ($chaine_number < 100)) {
+                    $zero = "0";
+                } else {
+                    $zero = "00";
+                    $chaine_number = 0;
+                }
+
+                $sub = $nom . ' ';
+                $lastCode = $chaine_number + 1;
+                $nomLocal = $sub . $zero . $lastCode;
+            } else {
+
+                $nomLocal = $nom;
+            }
+            $verif = Localite::select('nom')->where('nom', $nomLocal)->orderby('id', 'desc')->first();
+            if ($verif == null) {
+                $action = 'non';
+            } else {
+                $action = 'oui';
+                $nom = $verif->nom;
+            }
+        } while ($action != 'non');
+
+        return $nomLocal;
+    }
+    private function generelocalitecode($name)
+    {
+        $action = 'non';
+        do {
+
+            $data = Localite::select('codeLocal')->where('nom', $name)->orderby('id', 'desc')->first();
+
+            if ($data != '') {
+
+                $code = $data->codeLocal;
+
+                $chaine_number = Str::afterLast($code, '-');
+
+                if ($chaine_number < 10) {
+                    $zero = "00";
+                } else if ($chaine_number < 100) {
+                    $zero = "0";
+                } else {
+                    $zero = "";
+                }
+            } else {
+                $zero = "00";
+                $chaine_number = 0;
+            }
+
+            $abrege = Str::upper(Str::substr($name, 0, 3));
+            $sub = $abrege . '-';
+            $lastCode = $chaine_number + 1;
+            $codeP = $sub . $zero . $lastCode;
+
+            $verif = Localite::select('nom')->where('codeLocal', $codeP)->orderby('id', 'desc')->first();
+            if ($verif == null) {
+                $action = 'non';
+            } else {
+                $action = 'oui';
+                $name = $verif->nom;
+            }
+        } while ($action != 'non');
+
+        return $codeP;
+    }
+
+    private function verifysection($nom)
+    {
+        $action = 'non';
+        do {
+            $data = Section::select('libelle')->where([['cooperative_id',auth()->user()->cooperative_id],['libelle', $nom]])->orderby('id', 'desc')->first();
+            if ($data != '') {
+
+                $nomSection = $data->libelle;
+                $nom = Str::beforeLast($nomSection, ' ');
+                $chaine_number = Str::afterLast($nomSection, ' ');
+
+                if (is_numeric($chaine_number) && ($chaine_number < 10)) {
+                    $zero = "00";
+                } else if (is_numeric($chaine_number) && ($chaine_number < 100)) {
+                    $zero = "0";
+                } else {
+                    $zero = "00";
+                    $chaine_number = 0;
+                }
+
+                $sub = $nom . ' ';
+                $lastCode = $chaine_number + 1;
+                $nomSection = $sub . $zero . $lastCode;
+            } else {
+
+                $nomSection = $nom;
+            }
+            $verif = Section::select('libelle')->where([['cooperative_id',auth()->user()->cooperative_id],['libelle', $nomSection]])->orderby('id', 'desc')->first();
+            if ($verif == null) {
+                $action = 'non';
+            } else {
+                $action = 'oui';
+                $nom = $verif->libelle;
+            }
+        } while ($action != 'non');
+
+        return $nomSection;
     }
     public function store(Request $request)
     {
