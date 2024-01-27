@@ -152,7 +152,8 @@ class ParcelleController extends Controller
                     $localite->codeLocal = $codeLocal;
                     $localite->save();
                 }
-                $programme = Programme::where('libelle',$data['programme'])->first(); 
+                $programme = Programme::where('libelle',$data['programme'])->first();
+               
                  
                 $producteur->nom = utf8_encode($data['nom']);
                 $producteur->prenoms = utf8_encode($data['prenoms']);
@@ -164,6 +165,12 @@ class ParcelleController extends Controller
                 $producteur->save();
                 
                 $certification = Certification::where('fullname', $data['certification'])->first();
+                if($certification==null){
+                    $certification = new Certification();
+                    $certification->nom = $data['certification'];
+                    $certification->fullname = $data['certification'];
+                    $certification->save();
+                } 
                 $prodcertif = Producteur_certification::where([['producteur_id',$producteur->id],['certification',$certification->nom]])->first();
                 if($prodcertif ==null){
                     $prodcertif = new Producteur_certification();
