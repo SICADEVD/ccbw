@@ -114,7 +114,7 @@ class ParcelleController extends Controller
     {
         $pageTitle = "Importation de fichier KML";
         $manager   = auth()->user();
-        
+        $i=0;
         if($request->file('fichier_kml') !=null){
             $file = $request->file('fichier_kml');
             @unlink(public_path('upload/kml/'));
@@ -185,9 +185,10 @@ class ParcelleController extends Controller
                 $parcelle->longitude = $centroid['x'];
                 $parcelle->waypoints = $data['coordinates'];
                 $parcelle->save(); 
+                $i++;
             }
          
-            $notify[] = ['success', 'Le fichier KLM a été enregistré avec succès.'];
+            $notify[] = ['success', "$i Polygones ont été importés avec succès"];
 
         return back()->withNotify($notify);
         }
