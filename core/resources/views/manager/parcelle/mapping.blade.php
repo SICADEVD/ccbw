@@ -65,7 +65,7 @@ use Illuminate\Support\Str;
 @endsection
 
 @push('breadcrumb-plugins') 
-    <x-back route="{{ route('manager.traca.parcelle.index') }}" />
+    <x-back route="{{ route('manager.traca.parcelle.mapping') }}" />
 @endpush
 @push('style')
     <style>
@@ -79,30 +79,31 @@ use Illuminate\Support\Str;
 @endpush
 @push('script')  
 @endpush
-@push('script')
+@push('script') 
 <script type="text/javascript">
  $("#localite").chained("#section");
  $("#producteur").chained("#localite");
-var lgt='-5.627491';
-    var ltt='6.149013';
-    var z=9; 
-    
+var lgt='-5.5004615';
+    var ltt='6.8817026';
+    var z=8; 
     var locations = [    <?php
     if(count($parcelles))
     {
     $total = count($parcelles);  
 $i=1;
-foreach ($parcelles as  $res) {
-    $producteur = htmlentities($res->producteur->nom, ENT_QUOTES | ENT_IGNORE, "UTF-8").' '.htmlentities($res->producteur->prenoms, ENT_QUOTES | ENT_IGNORE, "UTF-8");
-    $code=$res->producteur->codeProd;
-    $parcelle =$res->codeParc;
-    $localite=$res->producteur->localite->nom;
-    $annee=$res->anneeCreation;
-    $typedocument=$res->typeDoc;
-    $superficie=$res->superficie;
-    $proprietaire = 'Producteur : '.$producteur.'<br>Code producteur:'. $code.'<br>Localite:'. $localite.'<br>Parcelle:'. $parcelle.'<br>Année creation:'. $annee.'<br>Type document:'. $typedocument;
+foreach ($parcelles as  $data) {
+    $lat = htmlentities($data->latitude, ENT_QUOTES | ENT_IGNORE, "UTF-8");
+    $long= htmlentities($data->longitude, ENT_QUOTES | ENT_IGNORE, "UTF-8"); 
+    $producteur = htmlentities($data->producteur->nom, ENT_QUOTES | ENT_IGNORE, "UTF-8").' '.htmlentities($data->producteur->prenoms, ENT_QUOTES | ENT_IGNORE, "UTF-8");
+    $code= htmlentities($data->producteur->codeProd, ENT_QUOTES | ENT_IGNORE, "UTF-8");
+    $parcelle = htmlentities($data->codeParc, ENT_QUOTES | ENT_IGNORE, "UTF-8");
+    $localite=htmlentities($data->producteur->localite->nom, ENT_QUOTES | ENT_IGNORE, "UTF-8");
+    $annee= htmlentities($data->anneeCreation, ENT_QUOTES | ENT_IGNORE, "UTF-8");
+    $culture= htmlentities($data->culture, ENT_QUOTES | ENT_IGNORE, "UTF-8");
+    $superficie= htmlentities($data->superficie, ENT_QUOTES | ENT_IGNORE, "UTF-8");
+    $proprietaire = 'Producteur : '.$producteur.'<br>Code producteur:'. $code.'<br>Localite:'. $localite.'<br>Parcelle:'. $parcelle.'<br>Année creation:'. $annee;
  ?>
-  ['<?php echo $proprietaire; ?>', <?php echo $res->longitude; ?>, <?php echo $res->latitude; ?>, 7]
+  ['<?php echo $proprietaire; ?>', <?php echo $long; ?>, <?php echo $lat; ?>, 7]
   
  <?php
   if($total>$i){echo ',';}

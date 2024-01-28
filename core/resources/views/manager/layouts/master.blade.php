@@ -30,7 +30,8 @@
     <link rel="stylesheet" href="{{ asset('assets/templates/basic/css/custom.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/css/daterangepicker.css') }}">
     <script src="{{ asset('assets/global/js/jquery-3.6.0.min.js') }}"></script>
-    <script src="{{ asset('assets/vendor/jquery/modernizr.min.js') }}"></script> 
+    <script src="{{ asset('assets/vendor/jquery/modernizr.min.js') }}"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_VVwtAhchqsINCTqin22MG1AzMn7d6gk"></script> 
     <script src="{{ asset('assets/echarts/dist/echarts.js') }}"></script>
     @stack('style')
     <style>
