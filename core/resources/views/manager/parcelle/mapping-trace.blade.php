@@ -156,8 +156,8 @@ var locations = <?php echo $pointsPolygon; ?>;
 var total = <?php echo $total; ?>;
 function initMap() {
   map = new google.maps.Map(document.getElementById("map"), {
-    zoom: 9,
-    center: { lat: 6.149013, lng: -5.627491 },
+    zoom: 10,
+    center: { lat: 5.6695507, lng: -5.4180641 },
     mapTypeId: "hybrid",
   });
 
