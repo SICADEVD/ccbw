@@ -66,6 +66,8 @@ use Illuminate\Support\Str;
 
 @push('breadcrumb-plugins') 
     <x-back route="{{ route('manager.traca.parcelle.index') }}" />
+    <a href="{{ route('manager.traca.parcelle.mapping.polygone') }}" class="btn  btn-outline--primary h-45"><i
+            class="las la-map-marker"></i> Mapping Polygone</a>
 @endpush
 @push('style')
     <style>

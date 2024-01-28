@@ -133,6 +133,8 @@ $pointsPolygon = Str::replace('"','',json_encode($pointsPolygon));
 
 @push('breadcrumb-plugins') 
     <x-back route="{{ route('manager.traca.parcelle.index') }}" />
+    <a href="{{ route('manager.traca.parcelle.mapping') }}" class="btn  btn-outline--primary h-45"><i
+            class="las la-map-marker"></i> Mapping Waypoints</a>
 @endpush
 @push('style')
     <style>

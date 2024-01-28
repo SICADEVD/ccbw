@@ -193,7 +193,7 @@
             class="las la-cloud-download-alt"></i> Exporter en Excel</a>
             <button type="button" class="btn btn-outline--primary h-45"
                                                 data-bs-toggle="dropdown" aria-expanded="false"><i
-                                                    class="las la-ellipsis-v"></i>Voir Mapping
+                                                    class="las la-map-marker"></i>Voir Mapping
                                             </button>
                                             <div class="dropdown-menu p-0"> 
        <a class="dropdown-item" href="{{ route('manager.traca.parcelle.mapping') }}">Waypoints</a>
