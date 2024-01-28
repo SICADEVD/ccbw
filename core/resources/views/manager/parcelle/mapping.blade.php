@@ -65,7 +65,7 @@ use Illuminate\Support\Str;
 @endsection
 
 @push('breadcrumb-plugins') 
-    <x-back route="{{ route('manager.traca.parcelle.mapping') }}" />
+    <x-back route="{{ route('manager.traca.parcelle.index') }}" />
 @endpush
 @push('style')
     <style>
