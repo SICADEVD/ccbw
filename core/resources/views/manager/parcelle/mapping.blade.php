@@ -83,9 +83,9 @@ use Illuminate\Support\Str;
 <script type="text/javascript">
  $("#localite").chained("#section");
  $("#producteur").chained("#localite");
-var lgt='-5.5679458';
-    var ltt='7.9897371';
-    var z=7; 
+var lgt='-5.627491';
+    var ltt='6.149013';
+    var z=9; 
     var locations = [    <?php
     if(count($parcelles))
     {
@@ -114,7 +114,7 @@ foreach ($parcelles as  $res) {
     var map = new google.maps.Map(document.getElementById('googleMap'), {
       zoom: z,
       center: new google.maps.LatLng(ltt,lgt), 
-      mapTypeId: google.maps.MapTypeId.ROADMAP
+      mapTypeId: google.maps.MapTypeId.HYBRID
     });
 
     var infowindow = new google.maps.InfoWindow();

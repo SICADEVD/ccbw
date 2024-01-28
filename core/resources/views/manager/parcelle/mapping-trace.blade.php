@@ -157,7 +157,7 @@ var total = <?php echo $total; ?>;
 function initMap() {
   map = new google.maps.Map(document.getElementById("map"), {
     zoom: 9,
-    center: { lat: 5.90262475, lng: -6.11082431 },
+    center: { lat: 6.149013, lng: -5.627491 },
     mapTypeId: "hybrid",
   });
 
