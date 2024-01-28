@@ -146,7 +146,7 @@ $pointsPolygon = Str::replace('"','',json_encode($pointsPolygon));
 @endpush
 @push('script')
 <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
- <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_VVwtAhchqsINCTqin22MG1AzMn7d6gk&callback=initMap" ></script>  
+ <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_VVwtAhchqsINCTqin22MG1AzMn7d6gk" ></script>  
 @endpush
 @push('script')
     <script>  
@@ -154,7 +154,7 @@ $pointsPolygon = Str::replace('"','',json_encode($pointsPolygon));
 let infoWindow;
 var locations = <?php echo $pointsPolygon; ?>;
 var total = <?php echo $total; ?>;
-function initMap() {
+window.onload = function () {
   map = new google.maps.Map(document.getElementById("map"), {
     zoom: 8,
     center: { lat: 6.8817026, lng: -5.5004615 },
@@ -195,18 +195,17 @@ const randomColor = getRandomElement(arrayColor);
     polygon.setMap(map);
 }
 
+} 
 function getInfoWindowContent(location) {
         return `Producteur: ${location[0]}<br>Code producteur: ${location[3]}<br>Latitude: ${location[2]}<br>Longitude: ${location[1]}<br>Localite: ${location[4]}<br>Parcelle: ${location[5]}<br>Année creation: ${location[6]}<br>Culture: ${location[7]}<br>Superficie: ${location[8]} ha`;
     }
-
-} 
 
 function getRandomElement(array) {
     return array[Math.floor(Math.random() * array.length)];
   }
 
 
-window.initMap = initMap;
+ 
 $('form select').on('change', function(){
     $(this).closest('form').submit();
 });
