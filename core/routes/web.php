@@ -354,6 +354,7 @@ Route::middleware('auth')->group(function () {
             Route::post('status/{id}', [ParcelleController::class,'status'])->name('status');
             Route::get('/exportParcellesExcel', [ParcelleController::class,'exportExcel'])->name('exportExcel.parcelleAll');
             Route::get('mapping', [ParcelleController::class,'mapping'])->name('mapping');
+            Route::get('mapping/polygone', [ParcelleController::class,'mappingPolygone'])->name('mapping.polygone');
             Route::post('/uploadcontent', [ParcelleController::class,'uploadContent'])->name('uploadcontent');
             Route::get('/upload/kml', [ParcelleController::class,'uploadKML'])->name('uploadkml');
             Route::post('/upload/kml', [ParcelleController::class,'uploadKML'])->name('uploadkml');

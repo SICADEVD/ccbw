@@ -95,6 +95,38 @@ class ParcelleController extends Controller
  
         return view('manager.parcelle.mapping', compact('pageTitle','sections', 'parcelles', 'localites','producteurs'));
     }
+    public function mappingPolygone()
+    {
+        $pageTitle      = "Gestion de mapping des parcelles";
+        $manager   = auth()->user();
+ 
+        $cooperative = Cooperative::with('sections.localites')->find($manager->cooperative_id);
+
+        $sections = Section::where('cooperative_id', $manager->cooperative_id)->get();
+     
+        $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
+            return $localite->active();
+        });
+        $producteurs = Producteur::joinRelationship('localite.section')->where('cooperative_id', $manager->cooperative_id)->get();
+
+        $parcelles = Parcelle::dateFilter()->latest('id')
+            ->joinRelationship('producteur.localite.section')
+            ->where('cooperative_id', $manager->cooperative_id)
+            ->whereNotNull('waypoints')
+            ->when(request()->section, function ($query, $section) {
+                $query->where('section_id', $section);
+            })
+            ->when(request()->localite, function ($query, $localite) {
+                $query->where('localite_id', $localite);
+            })
+            ->when(request()->producteur, function ($query, $producteur) {
+                $query->where('producteur_id', $producteur);
+            })
+            ->with(['producteur.localite.section']) // Charger les relations nécessaires
+            ->limit(100)->get();
+ 
+        return view('manager.parcelle.mapping-trace', compact('pageTitle','sections', 'parcelles', 'localites','producteurs'));
+    }
 
     public function create()
     {
