@@ -318,12 +318,14 @@
 @endpush
 
 @push('script')
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_VVwtAhchqsINCTqin22MG1AzMn7d6gk"></script> 
     <script type="text/javascript">
         $("#localite").chained("#section");
         $("#producteur_id").chained("#localite");
     </script>
 
     <script type="text/javascript">
+        
         $(document).ready(function() {
             $('#anneeRegenerers,#courDeaus,#protection,#niveauPentes,#autreCourDeaus,#autreProtections').hide();
 
@@ -471,5 +473,27 @@
             });
 
         })(jQuery);
+
+        function geoFindMe() {
+  const status = document.querySelector("#status");
+  function success(position) {
+    const latitude = position.coords.latitude;
+    const longitude = position.coords.longitude;
+
+$('input[name=longitude]').val(longitude);
+$('input[name=latitude]').val(latitude);
+$("input[name=longitude], input[name=latitude]").attr({"readonly": 'readonly'})
+  }
+  function error() {
+    status.textContent = "Unable to retrieve your location";
+  }
+  if (!navigator.geolocation) {
+    status.textContent = "Geolocation is not supported by your browser";
+  } else {
+    // status.textContent = "Locating…";
+    navigator.geolocation.getCurrentPosition(success, error);
+  }
+}
+document.querySelector("#find-me").addEventListener("click", geoFindMe);
     </script>
 @endpush
