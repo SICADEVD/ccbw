@@ -86,6 +86,7 @@ use Illuminate\Support\Str;
 var lgt='-5.627491';
     var ltt='6.149013';
     var z=9; 
+    
     var locations = [    <?php
     if(count($parcelles))
     {
