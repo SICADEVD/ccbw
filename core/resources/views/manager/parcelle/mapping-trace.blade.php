@@ -146,7 +146,7 @@ $pointsPolygon = Str::replace('"','',json_encode($pointsPolygon));
 @endpush
 @push('script')
 <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_VVwtAhchqsINCTqin22MG1AzMn7d6gk&callback=initMap" async></script>  
+ <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_VVwtAhchqsINCTqin22MG1AzMn7d6gk&callback=initMap" ></script>  
 @endpush
 @push('script')
     <script>  
@@ -156,8 +156,8 @@ var locations = <?php echo $pointsPolygon; ?>;
 var total = <?php echo $total; ?>;
 function initMap() {
   map = new google.maps.Map(document.getElementById("map"), {
-    zoom: 10,
-    center: { lat: 5.6695507, lng: -5.4180641 },
+    zoom: 8,
+    center: { lat: 6.8817026, lng: -5.5004615 },
     mapTypeId: "hybrid",
   });
 
