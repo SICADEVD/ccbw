@@ -97,7 +97,7 @@ class ParcelleController extends Controller
     }
     public function mappingPolygone()
     {
-        $pageTitle      = "Gestion de mapping des parcelles";
+        
         $manager   = auth()->user();
  
         $cooperative = Cooperative::with('sections.localites')->find($manager->cooperative_id);
@@ -124,7 +124,8 @@ class ParcelleController extends Controller
             })
             ->with(['producteur.localite.section']) 
             ->get();
- 
+            $total = count($parcelles);
+            $pageTitle  = "Gestion de mapping des parcelles($total)";
         return view('manager.parcelle.mapping-trace', compact('pageTitle','sections', 'parcelles', 'localites','producteurs'));
     }
 
