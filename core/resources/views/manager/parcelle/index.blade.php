@@ -196,7 +196,7 @@
                                                     class="las la-ellipsis-v"></i>Voir mapping
                                             </button>
                                             <div class="dropdown-menu p-0"> 
-                                                    <a class="dropdown-item" href="{{ route('manager.traca.parcelle.mapping') }}">Points GPS</a>
+       <a class="dropdown-item" href="{{ route('manager.traca.parcelle.mapping') }}">Points GPS</a>
       <a class="dropdown-item" href="{{ route('manager.traca.parcelle.mapping.polygone') }}">Polygones</a> 
 
                                             </div>

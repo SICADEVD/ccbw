@@ -139,8 +139,8 @@ let infoWindow;
 var locations = <?php echo $pointsPolygon; ?>;
 function initMap() {
   map = new google.maps.Map(document.getElementById("map"), {
-    zoom: 13,
-    center: { lat: 5.634184, lng: -5.085206 },
+    zoom: 9,
+    center: { lat: 5.940008, lng: -5.642579 },
     mapTypeId: "terrain",
   });
 
