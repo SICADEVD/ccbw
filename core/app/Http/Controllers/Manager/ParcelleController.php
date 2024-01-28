@@ -123,7 +123,7 @@ class ParcelleController extends Controller
                 $query->where('producteur_id', $producteur);
             })
             ->with(['producteur.localite.section']) // Charger les relations nécessaires
-            ->limit(100)->get();
+            ->get();
  
         return view('manager.parcelle.mapping-trace', compact('pageTitle','sections', 'parcelles', 'localites','producteurs'));
     }
