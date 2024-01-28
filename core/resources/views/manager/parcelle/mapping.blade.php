@@ -65,7 +65,7 @@ use Illuminate\Support\Str;
 @endsection
 
 @push('breadcrumb-plugins') 
-    <x-back route="{{ route('manager.traca.parcelle') }}" />
+    <x-back route="{{ route('manager.traca.parcelle.index') }}" />
 @endpush
 @push('style')
     <style>
@@ -86,7 +86,7 @@ use Illuminate\Support\Str;
 var lgt='-5.627491';
     var ltt='6.149013';
     var z=9; 
-
+    
     var locations = [    <?php
     if(count($parcelles))
     {

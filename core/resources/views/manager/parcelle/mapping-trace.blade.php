@@ -132,7 +132,7 @@ $pointsPolygon = Str::replace('"','',json_encode($pointsPolygon));
 @endsection
 
 @push('breadcrumb-plugins') 
-    <x-back route="{{ route('manager.traca.parcelle') }}" />
+    <x-back route="{{ route('manager.traca.parcelle.index') }}" />
 @endpush
 @push('style')
     <style>
@@ -167,7 +167,7 @@ function initMap() {
 // Construct polygons
 for (let i = 0; i < total; i++) { 
     const arrayColor = ["#622F22","#5C3317","#644117","#654321","#704214","#804A00","#6F4E37","#835C3B","#7F5217","#7F462C","#A0522D","#8B4513","#8A4117","#7E3817","#7E3517","#954535","#9E4638","#C34A2C","#B83C08","#C04000","#EB5406","#C35817","#B86500","#B5651D","#B76734","#C36241","#CB6D51","#C47451","#D2691E","#CC6600","#E56717","#E66C2C","#FF6700","#FF5F1F","#FE632A","#F87217","#FF7900","#F88017","#FF8C00","#F87431","#FF7722","#E67451","#FF8040","#FF7F50","#F88158","#F9966B","#FFA07A","#F89880","#E9967A","#E78A61","#DA8A67","#FF8674","#FA8072","#F98B88","#F08080","#F67280","#E77471","#F75D59","#E55451","#CD5C5C","#FF6347","#E55B3C","#FF4500","#FF0000","#FD1C03","#FF2400","#F62217","#F70D1A","#F62817","#E42217","#E41B17","#DC381F","#C24641","#C11B17","#B22222","#B21807","#A52A2A","#A70D2A","#9F000F","#931314","#990000","#990012","#8B0000","#8F0B0B","#800000","#8C001A","#7E191B","#800517","#733635","#660000","#551606","#560319","#550A35","#810541","#7D0541","#7D0552","#872657","#7E354D","#E56E94","#DB7093","#D16587","#C25A7C","#C25283","#E75480","#F660AB","#FF69B4","#FC6C85","#F6358A","#F52887","#FF007F","#FF1493","#F535AA","#FF33AA","#FD349C","#E45E9D","#E759AC","#E3319D","#DA1884","#E4287C","#FA2A55","#E30B5D","#DC143C","#C32148","#C21E56","#C12869","#C12267","#CA226B","#CC338B","#C71585","#C12283","#B3446C","#B93B8F","#FF00FF","#E238EC"];
-
+    
 const randomColor = getRandomElement(arrayColor);
 
     const polygon = new google.maps.Polygon({
