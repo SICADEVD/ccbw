@@ -191,7 +191,16 @@
     <a href="{{ route('manager.traca.parcelle.uploadkml') }}" class="btn btn-danger h-45"><i class="las la-cloud-upload-alt"></i> Importer un Fichier KML</a>
     <a href="{{ route('manager.traca.parcelle.exportExcel.parcelleAll') }}" class="btn  btn-outline--warning h-45"><i
             class="las la-cloud-download-alt"></i> Exporter en Excel</a>
-<a href="{{ route('manager.traca.parcelle.mapping') }}"  class="btn  btn-outline--primary h-45 "><i class="las la-map-marker"></i> Voir mapping des parcelles</a>
+            <button type="button" class="btn btn-outline--primary h-45"
+                                                data-bs-toggle="dropdown" aria-expanded="false"><i
+                                                    class="las la-ellipsis-v"></i>Voir mapping
+                                            </button>
+                                            <div class="dropdown-menu p-0"> 
+                                                    <a class="dropdown-item" href="{{ route('manager.traca.parcelle.mapping') }}">Points GPS</a>
+      <a class="dropdown-item" href="{{ route('manager.traca.parcelle.mapping.polygone') }}">Polygones</a> 
+
+                                            </div>
+
 @endpush
 @push('style')
     <style>
