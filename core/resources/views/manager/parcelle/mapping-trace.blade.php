@@ -1,6 +1,7 @@
 @extends('manager.layouts.app')
 @section('panel')
 <?php
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str; 
 ?>
     <div class="row">
@@ -92,14 +93,27 @@ if(isset($parcelles) && count($parcelles)){
      $polygon ='';
 
         $coords = explode(',0', $data->waypoints);
-          
-        foreach($coords as $data2) { 
-            if($data2)
+        $coords = Arr::where($coords, function ($value, $key) {
+            if($value !="")
             {
-
-                $coords2 = explode(',', $data2); 
-                $polygon .='{ lat: ' . $coords2[1] . ', lng: ' . $coords2[0] . ' },';
+                return  $value;
             }
+            
+        });
+         
+         
+         $nombre = count($coords); 
+         $i=0;
+        foreach($coords as $data2) {
+             
+                $i++;
+                $coords2 = explode(',', $data2); 
+                if($i==$nombre){
+                    $polygon .='{ lat: ' . $coords2[1] . ', lng: ' . $coords2[0] . ' }';
+                }else{
+                    $polygon .='{ lat: ' . $coords2[1] . ', lng: ' . $coords2[0] . ' },';
+                } 
+            
         }
         
         $polygonCoordinates ='['.$polygon.']';
@@ -112,7 +126,7 @@ if(isset($parcelles) && count($parcelles)){
 $pointsPolygon = Str::replace('"','',json_encode($pointsPolygon));
  $pointsPolygon = Str::replace("''","'Aucun'",$pointsPolygon);
   
-}
+} 
 ?>
     <x-confirmation-modal />
 @endsection
@@ -132,7 +146,7 @@ $pointsPolygon = Str::replace('"','',json_encode($pointsPolygon));
 @endpush
 @push('script')
 <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_VVwtAhchqsINCTqin22MG1AzMn7d6gk&callback=initMap&v=terrain" async></script>  
+ <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_VVwtAhchqsINCTqin22MG1AzMn7d6gk&callback=initMap" async></script>  
 @endpush
 @push('script')
     <script>  
@@ -143,8 +157,8 @@ var total = <?php echo $total; ?>;
 function initMap() {
   map = new google.maps.Map(document.getElementById("map"), {
     zoom: 9,
-    center: { lat: 5.940008, lng: -5.642579 },
-    mapTypeId: "terrain",
+    center: { lat: 5.90262475, lng: -6.11082431 },
+    mapTypeId: "hybrid",
   });
 
   // Define the LatLng coordinates for the polygon.
@@ -157,10 +171,10 @@ const randomColor = getRandomElement(arrayColor);
 
     const polygon = new google.maps.Polygon({
         paths: triangleCoords[i],
-        strokeColor: randomColor,
+        strokeColor: "#FF0000",
         strokeOpacity: 0.8,
         strokeWeight: 3,
-        fillColor: randomColor,
+        fillColor: "#FF0000",
         fillOpacity: 0.35,
         clickable: true
     });
