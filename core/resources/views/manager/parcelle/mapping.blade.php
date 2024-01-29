@@ -94,15 +94,15 @@ var lgt='-5.5004615';
     $total = count($parcelles);  
 $i=1;
 foreach ($parcelles as  $data) {
-    $lat = htmlentities($data->latitude, ENT_QUOTES | ENT_IGNORE, "UTF-8");
-    $long= htmlentities($data->longitude, ENT_QUOTES | ENT_IGNORE, "UTF-8"); 
+    $lat = htmlentities($data->latitude, ENT_QUOTES | ENT_IGNORE, "UTF-8") ?? 'Non definie';
+    $long= htmlentities($data->longitude, ENT_QUOTES | ENT_IGNORE, "UTF-8") ?? 'Non definie'; 
     $producteur = htmlentities($data->producteur->nom, ENT_QUOTES | ENT_IGNORE, "UTF-8").' '.htmlentities($data->producteur->prenoms, ENT_QUOTES | ENT_IGNORE, "UTF-8");
-    $code= htmlentities($data->producteur->codeProd, ENT_QUOTES | ENT_IGNORE, "UTF-8");
-    $parcelle = htmlentities($data->codeParc, ENT_QUOTES | ENT_IGNORE, "UTF-8");
-    $localite=htmlentities($data->producteur->localite->nom, ENT_QUOTES | ENT_IGNORE, "UTF-8");
-    $annee= htmlentities($data->anneeCreation, ENT_QUOTES | ENT_IGNORE, "UTF-8");
-    $culture= htmlentities($data->culture, ENT_QUOTES | ENT_IGNORE, "UTF-8");
-    $superficie= htmlentities($data->superficie, ENT_QUOTES | ENT_IGNORE, "UTF-8");
+    $code= htmlentities($data->producteur->codeProd, ENT_QUOTES | ENT_IGNORE, "UTF-8") ?? 'Non defini';
+    $parcelle = htmlentities($data->codeParc, ENT_QUOTES | ENT_IGNORE, "UTF-8") ?? 'Non definie';
+    $localite=htmlentities($data->producteur->localite->nom, ENT_QUOTES | ENT_IGNORE, "UTF-8") ?? 'Non definie';
+    $annee= htmlentities($data->anneeCreation, ENT_QUOTES | ENT_IGNORE, "UTF-8") ?? 'Non definie';
+    $culture= htmlentities($data->culture, ENT_QUOTES | ENT_IGNORE, "UTF-8") ?? 'Non definie';
+    $superficie= htmlentities($data->superficie, ENT_QUOTES | ENT_IGNORE, "UTF-8") ?? 'Non definie';
     $proprietaire = 'Producteur : '.$producteur.'<br>Code producteur:'. $code.'<br>Localite:'. $localite.'<br>Parcelle:'. $parcelle.'<br>Année creation:'. $annee;
  ?>
   ['<?php echo $proprietaire; ?>', <?php echo $long; ?>, <?php echo $lat; ?>, 7]
