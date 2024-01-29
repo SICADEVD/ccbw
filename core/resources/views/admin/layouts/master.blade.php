@@ -12,9 +12,11 @@
     <link rel="stylesheet" href="{{asset('assets/fcadmin/css/vendor/bootstrap-toggle.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/global/css/all.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/global/css/line-awesome.min.css')}}">
-
+    <link rel="stylesheet" href="{{ asset('assets/dropify/css/dropify.min.css') }}">
     @stack('style-lib')
-
+    <link rel="stylesheet" href="{{ asset('assets/vendor/css/datepicker.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendor/css/bootstrap-timepicker.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendor/jquery/bootstrap-select.min.css') }}">
     <link rel="stylesheet" href="{{asset('assets/fcadmin/css/vendor/select2.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/fcadmin/css/app.css')}}">
 <link rel="stylesheet" href="{{asset('assets/templates/basic/css/custom.css')}}"> 
@@ -40,12 +42,14 @@
 @include('partials.plugins')
 @include('partials.notify')
 @stack('script-lib')
-
+<script src="{{ asset('assets/vendor/jquery/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jquery/bootstrap-timepicker.min.js') }}"></script>
 <script src="{{ asset('assets/fcadmin/js/nicEdit.js') }}"></script>
-<script src="{{ asset('assets/fcadmin/js/printThis.js') }}"></script>
-
+<script src="{{ asset('assets/fcadmin/js/printThis.js') }}"></script>  
+<script src="{{ asset('assets/vendor/jquery/bootstrap-select.js') }}"></script>
 <script src="{{asset('assets/fcadmin/js/vendor/select2.min.js')}}"></script>
 <script src="{{asset('assets/fcadmin/js/app.js')}}"></script> 
+<script src="{{ asset('assets/dropify/js/dropify.min.js') }}"></script>
 {{-- LOAD NIC EDIT --}}
 <script>
     "use strict";
@@ -67,7 +71,19 @@
 <script>
         (function ($) {
             "use strict"; 
-            
+               // Basic
+               $('.dropify').dropify();
+
+// Translated
+$('.dropify-fr').dropify({
+    messages: {
+        default: 'Glissez-déposez un fichier ici ou cliquez',
+        replace: 'Glissez-déposez un fichier ou cliquez pour remplacer',
+        remove: 'Supprimer',
+        error: 'Désolé, le fichier trop volumineux'
+    }
+});
+
             @if($general->ln) 
                 $(".langChanage").on("change", function () {
                     window.location.href = "{{ route('admin.lang') }}/" + $('#lang').val();

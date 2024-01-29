@@ -16,7 +16,7 @@
 
                         <?php echo Form::label(__('Charger un Fichier KML'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <input type="file" name="fichier_kml" class="form-control dropify-fr">
+                            <input type="file" name="fichier_kml" class="form-control dropify">
                         </div>
                     </div>
 

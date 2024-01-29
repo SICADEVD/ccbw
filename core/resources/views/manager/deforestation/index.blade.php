@@ -126,15 +126,74 @@ if(isset($parcelles) && count($parcelles)){
 $pointsPolygon = Str::replace('"','',json_encode($pointsPolygon));
  $pointsPolygon = Str::replace("''","'Aucun'",$pointsPolygon);
   
+}
+
+// Chargement des forets classées
+$lat = '';
+$long = '';
+$totalF = 0; 
+$pointsPolygonF = array();
+$seriescoordonatesF=array();
+$a=1;
+
+if(isset($foretclassees) && count($foretclassees)){
+
+  $totalF = count($foretclassees);
+
+  foreach ($foretclassees as $data) {
+      
+       
+      if($data->waypoints !=null)
+      {
+          $lat = htmlentities($data->latitude, ENT_QUOTES | ENT_IGNORE, "UTF-8");
+  $long= htmlentities($data->longitude, ENT_QUOTES | ENT_IGNORE, "UTF-8"); 
+  $producteur = htmlentities($data->nomForet, ENT_QUOTES | ENT_IGNORE, "UTF-8"); 
+  $region=htmlentities($data->region, ENT_QUOTES | ENT_IGNORE, "UTF-8");
+  $superficie= htmlentities($data->superficie, ENT_QUOTES | ENT_IGNORE, "UTF-8");
+   $polygon ='';
+
+      $coords = explode(',0', $data->waypoints);
+      $coords = Arr::where($coords, function ($value, $key) {
+          if($value !="")
+          {
+              return  $value;
+          }
+          
+      });
+    
+     
+       $nombre = count($coords); 
+       $i=0; 
+      foreach($coords as $data2) {
+           
+              $i++;
+              $coords2 = explode(',', $data2); 
+              if($i==$nombre){
+                  $polygon .='{ lat: ' . $coords2[1] . ', lng: ' . $coords2[0] . ' }';
+              }else{
+                  $polygon .='{ lat: ' . $coords2[1] . ', lng: ' . $coords2[0] . ' },';
+              } 
+          
+      }
+      
+      $polygonCoordinates ='['.$polygon.']';
+      
+      }
+      $seriescoordonatesF[]= $polygonCoordinates;
+      $pointsPolygonF[] = "['".$producteur."','".$long."','".$lat."','".$region."','".$superficie."']";
+  }
+ 
+$pointsPolygonF = Str::replace('"','',json_encode($pointsPolygonF));
+$pointsPolygonF = Str::replace("''","'Aucun'",$pointsPolygonF);
+
 } 
 ?>
     <x-confirmation-modal />
 @endsection
 
-@push('breadcrumb-plugins') 
-    <x-back route="{{ route('manager.traca.parcelle.index') }}" />
-    <a href="{{ route('manager.traca.parcelle.mapping') }}" class="btn  btn-outline--primary h-45"><i
-            class="las la-map-marker"></i> Mapping Waypoints</a>
+@push('breadcrumb-plugins')  
+    <a href="{{ route('manager.agro.deforestation.create') }}" class="btn  btn-outline--primary h-45"><i
+            class="las la-map-marker"></i> Importation KML des Forêts Classées</a>
 @endpush
 @push('style')
     <style>
@@ -156,10 +215,12 @@ $pointsPolygon = Str::replace('"','',json_encode($pointsPolygon));
 let infoWindow;
 var locations = <?php echo $pointsPolygon; ?>;
 var total = <?php echo $total; ?>;
+var locationsF = <?php echo $pointsPolygonF; ?>;
+var totalF = <?php echo $totalF; ?>;
 window.onload = function () {
   map = new google.maps.Map(document.getElementById("map"), {
-    zoom: 8,
-    center: { lat: 6.8817026, lng: -5.5004615 },
+    zoom: 7,
+    center: { lat: 6.881703, lng: -5.500461 },
     mapTypeId: "hybrid",
   });
 
@@ -196,10 +257,40 @@ const randomColor = getRandomElement(arrayColor);
 
     polygon.setMap(map);
 }
+const triangleCoordsF = <?php echo Str::replace('"','',json_encode($seriescoordonatesF)); ?>; 
+  const polygonsF = []; 
+for (let i = 0; i < totalF; i++) {   
+
+    const polygon = new google.maps.Polygon({
+        paths: triangleCoordsF[i],
+        strokeColor: "#FFFF00",
+        strokeOpacity: 0.8,
+        strokeWeight: 1,
+        fillColor: null,
+        fillOpacity: 0.35,
+        clickable: true
+    });
+
+    polygonsF.push(polygon);
+ 
+    google.maps.event.addListener(polygon, 'click', function (event) {
+        const infoWindow = new google.maps.InfoWindow({
+            content: getInfoWindowContentF(locationsF[i])
+        });
+
+        infoWindow.setPosition(event.latLng);
+        infoWindow.open(map);
+    });
+
+    polygon.setMap(map);
+}
 
 } 
 function getInfoWindowContent(location) {
         return `Producteur: ${location[0]}<br>Code producteur: ${location[3]}<br>Latitude: ${location[2]}<br>Longitude: ${location[1]}<br>Localite: ${location[4]}<br>Parcelle: ${location[5]}<br>Année creation: ${location[6]}<br>Culture: ${location[7]}<br>Superficie: ${location[8]} ha`;
+    }
+    function getInfoWindowContentF(location) {
+        return `Region: ${location[3]}<br>Nom: ${location[0]}<br>Latitude: ${location[2]}<br>Longitude: ${location[1]}<br>Superficie: ${location[4]} ha`;
     }
 
 function getRandomElement(array) {

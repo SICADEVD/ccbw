@@ -57,6 +57,14 @@ Route::middleware('admin')->group(function () {
         Route::post('status/{id}', 'status')->name('status');
     });
 
+    //Manage Forets Classees Controller
+    Route::controller('ForetClasseeController')->name('foretclassee.')->prefix('foretclassee')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('store', 'store')->name('store');
+        Route::get('create', 'create')->name('create');
+        Route::post('status/{id}', 'status')->name('status');
+    });
+
     //Cooperative Manager
     Route::controller('CooperativeManagerController')->name('cooperative.manager.')->prefix('cooperative-manager')->group(function () {
         Route::get('list', 'index')->name('index');

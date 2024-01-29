@@ -127,6 +127,7 @@ $pointsPolygon = Str::replace('"','',json_encode($pointsPolygon));
  $pointsPolygon = Str::replace("''","'Aucun'",$pointsPolygon);
   
 } 
+ 
 ?>
     <x-confirmation-modal />
 @endsection

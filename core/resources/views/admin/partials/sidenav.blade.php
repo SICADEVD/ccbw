@@ -67,6 +67,12 @@
                         <span class="menu-title">@lang('Gestion des Certifications')</span>
                     </a>
                 </li>
+                <li class="sidebar-menu-item  {{ menuActive(['admin.foretclassee*']) }}">
+                    <a href="{{ route('admin.foretclassee.index') }}" class="nav-link">
+                        <i class="menu-icon las la-tree"></i>
+                        <span class="menu-title">@lang('Gestion des Forêts Classées')</span>
+                    </a>
+                </li>
                 <li class="sidebar-menu-item  {{ menuActive(['admin.livraison.info*', 'admin.livraison.invoice']) }}">
                     <a href="{{ route('admin.livraison.info.index') }}" class="nav-link">
                         <i class="menu-icon las la-fax"></i>
