@@ -85,7 +85,7 @@ class AgropostplantingController extends Controller
         $distribution->quantite =  $request->total; 
         $distribution->quantitePlantee =  $request->qteplante; 
         $distribution->quantiteSurvecue =  $request->qtesurvecue; 
-        $distribution->date_plating =  $request->date_planting;
+        $distribution->date_planting =  $request->date_planting;
         $distribution->save();
 
         $datas = [];
