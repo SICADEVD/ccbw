@@ -100,10 +100,12 @@ foreach ($parcelles as  $data) {
     $code= htmlentities($data->producteur->codeProd, ENT_QUOTES | ENT_IGNORE, "UTF-8") ?? 'Non defini';
     $parcelle = htmlentities($data->codeParc, ENT_QUOTES | ENT_IGNORE, "UTF-8") ?? 'Non definie';
     $localite=htmlentities($data->producteur->localite->nom, ENT_QUOTES | ENT_IGNORE, "UTF-8") ?? 'Non definie';
+    $section=htmlentities($data->producteur->localite->section->libelle, ENT_QUOTES | ENT_IGNORE, "UTF-8") ?? 'Non definie';
+    $cooperative=htmlentities($data->producteur->localite->section->cooperative->name, ENT_QUOTES | ENT_IGNORE, "UTF-8") ?? 'Non definie';
     $annee= htmlentities($data->anneeCreation, ENT_QUOTES | ENT_IGNORE, "UTF-8") ?? 'Non definie';
     $culture= htmlentities($data->culture, ENT_QUOTES | ENT_IGNORE, "UTF-8") ?? 'Non definie';
     $superficie= htmlentities($data->superficie, ENT_QUOTES | ENT_IGNORE, "UTF-8") ?? 'Non definie';
-    $proprietaire = 'Producteur : '.$producteur.'<br>Code producteur:'. $code.'<br>Localite:'. $localite.'<br>Parcelle:'. $parcelle.'<br>Année creation:'. $annee;
+    $proprietaire = 'Coopérative:'. $cooperative.'<br>Section:'. $section.'<br>Localite:'. $localite.'<br>Producteur : '.$producteur.'<br>Code producteur:'. $code.'<br>Code Parcelle:'. $parcelle.'<br>Année creation:'. $annee;
  ?>
   ['<?php echo $proprietaire; ?>', <?php echo $long; ?>, <?php echo $lat; ?>, 7]
   
