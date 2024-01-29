@@ -14,6 +14,7 @@ use App\Models\ForetClassee;
 use Illuminate\Http\Request;
 use App\Imports\ParcelleImport;
 use App\Exports\ExportParcelles;
+use App\Models\ForetClasseeTampon;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
@@ -59,9 +60,10 @@ class AgrodeforestationController extends Controller
             ->get();
             $total = count($parcelles);
             $foretclassees = ForetClassee::get();
+            $foretclasseetampons = ForetClasseeTampon::get();
             $pageTitle  = "Gestion de mapping des parcelles($total)";
          
-        return view('manager.deforestation.index',compact('pageTitle','sections', 'parcelles', 'localites','producteurs','foretclassees'));
+        return view('manager.deforestation.index',compact('pageTitle','sections', 'parcelles', 'localites','producteurs','foretclassees','foretclasseetampons'));
     }
  
      

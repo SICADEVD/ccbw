@@ -56,11 +56,12 @@ if(isset($foretclassees) && count($foretclassees)){
             $lat = htmlentities($data->latitude, ENT_QUOTES | ENT_IGNORE, "UTF-8");
     $long= htmlentities($data->longitude, ENT_QUOTES | ENT_IGNORE, "UTF-8"); 
     $producteur = htmlentities($data->nomForet, ENT_QUOTES | ENT_IGNORE, "UTF-8"); 
-    $region=htmlentities($data->region, ENT_QUOTES | ENT_IGNORE, "UTF-8");
+    $region= htmlentities($data->region, ENT_QUOTES | ENT_IGNORE, "UTF-8");
     $superficie= htmlentities($data->superficie, ENT_QUOTES | ENT_IGNORE, "UTF-8");
      $polygon ='';
 
-        $coords = explode(',0', $data->waypoints);
+        $coords = explode(' ', $data->waypoints);
+        
         $coords = Arr::where($coords, function ($value, $key) {
             if($value !="")
             {
@@ -68,18 +69,18 @@ if(isset($foretclassees) && count($foretclassees)){
             }
             
         });
-      
-       
+        
+   
          $nombre = count($coords); 
+         
          $i=0; 
         foreach($coords as $data2) {
              
                 $i++;
                 $coords2 = explode(',', $data2); 
-                if($i==$nombre){
-                    $polygon .='{ lat: ' . $coords2[1] . ', lng: ' . $coords2[0] . ' }';
-                }else{
-                    $polygon .='{ lat: ' . $coords2[1] . ', lng: ' . $coords2[0] . ' },';
+                if(isset($coords2[1]) && isset($coords2[0]))
+                {
+                    $polygon .='{ lat: ' . $coords2[1] . ', lng: ' . $coords2[0] .'},';
                 } 
             
         }
@@ -95,6 +96,65 @@ $pointsPolygonF = Str::replace('"','',json_encode($pointsPolygonF));
  $pointsPolygonF = Str::replace("''","'Aucun'",$pointsPolygonF);
   
 } 
+
+// Chargement Zones Tampons
+$totalZT = 0; 
+  $pointsPolygonZT = array();
+  $seriescoordonatesZT=array();
+  $a=1;
+
+if(isset($foretclasseetampons) && count($foretclasseetampons)){
+
+    $totalZT = count($foretclasseetampons);
+
+    foreach ($foretclasseetampons as $data) {
+        
+         
+        if($data->waypoints !=null)
+        {
+            $lat = htmlentities($data->latitude, ENT_QUOTES | ENT_IGNORE, "UTF-8");
+    $long= htmlentities($data->longitude, ENT_QUOTES | ENT_IGNORE, "UTF-8"); 
+    $producteur = htmlentities($data->nomZToret, ENT_QUOTES | ENT_IGNORE, "UTF-8"); 
+    $region= htmlentities($data->region, ENT_QUOTES | ENT_IGNORE, "UTF-8");
+    $superficie= htmlentities($data->superficie, ENT_QUOTES | ENT_IGNORE, "UTF-8");
+     $polygon ='';
+
+        $coords = explode(' ', $data->waypoints);
+        
+        $coords = Arr::where($coords, function ($value, $key) {
+            if($value !="")
+            {
+                return  $value;
+            }
+            
+        });
+        
+   
+         $nombre = count($coords); 
+         
+         $i=0; 
+        foreach($coords as $data2) {
+             
+                $i++;
+                $coords2 = explode(',', $data2); 
+                if(isset($coords2[1]) && isset($coords2[0]))
+                {
+                    $polygon .='{ lat: ' . $coords2[1] . ', lng: ' . $coords2[0] .'},';
+                } 
+            
+        }
+        
+        $polygonCoordinates ='['.$polygon.']';
+        
+        }
+        $seriescoordonatesZT[]= $polygonCoordinates;
+        $pointsPolygonZT[] = "['".$producteur."','".$long."','".$lat."','".$region."','".$superficie."']";
+    }
+   
+$pointsPolygonZT = Str::replace('"','',json_encode($pointsPolygonZT));
+ $pointsPolygonZT = Str::replace("''","'Aucun'",$pointsPolygonZT);
+  
+} 
 ?>
     <x-confirmation-modal />
 @endsection
@@ -102,6 +162,8 @@ $pointsPolygonF = Str::replace('"','',json_encode($pointsPolygonF));
 @push('breadcrumb-plugins')  
     <a href="{{ route('admin.foretclassee.create') }}" class="btn  btn-outline--primary h-45"><i
             class="las la-map-marker"></i> Importation KML des Forêts Classées</a>
+            <a href="{{ route('admin.foretclassee.createTampon') }}" class="btn  btn-outline--info h-45"><i
+            class="las la-map-marker"></i> Importation Zones Tampons</a>
 @endpush
 @push('style')
     <style>
@@ -123,13 +185,44 @@ $pointsPolygonF = Str::replace('"','',json_encode($pointsPolygonF));
 let infoWindow;
 var locationsF = <?php echo $pointsPolygonF; ?>;
 var totalF = <?php echo $totalF; ?>;
+var locationsZT = <?php echo $pointsPolygonZT; ?>;
+var totalZT = <?php echo $totalZT; ?>;
 window.onload = function () {
   map = new google.maps.Map(document.getElementById("map"), {
     zoom: 7,
     center: { lat: 6.881703, lng: -5.500461 },
     mapTypeId: "hybrid",
   });
+ // Afichage Zones Tampons
+const triangleCoordsZT = <?php echo Str::replace('"','',json_encode($seriescoordonatesZT)); ?>; 
+  const polygonsZT = []; 
+for (let i = 0; i < totalZT; i++) {   
+
+    const polygon = new google.maps.Polygon({
+        paths: triangleCoordsZT[i],
+        strokeColor: "#FFFFFF",
+        strokeOpacity: 0.2,
+        strokeWeight: 2,
+        fillColor: "#FFFFFF",
+        fillOpacity: 0.2,
+        clickable: true
+    });
+
+    polygonsZT.push(polygon);
  
+    // google.maps.event.addListener(polygon, 'click', function (event) {
+    //     const infoWindow = new google.maps.InfoWindow({
+    //         content: getInfoWindowContentZT(locationsZT[i])
+    //     });
+
+    //     infoWindow.setPosition(event.latLng);
+    //     infoWindow.open(map);
+    // });
+
+    polygon.setMap(map);
+}
+
+// Afichage Forets Classées
   const triangleCoordsF = <?php echo Str::replace('"','',json_encode($seriescoordonatesF)); ?>; 
   const polygonsF = []; 
 for (let i = 0; i < totalF; i++) {   
@@ -138,9 +231,9 @@ for (let i = 0; i < totalF; i++) {
         paths: triangleCoordsF[i],
         strokeColor: "#FFFF00",
         strokeOpacity: 0.8,
-        strokeWeight: 3,
-        fillColor: null,
-        fillOpacity: 0.35,
+        strokeWeight: 2,
+        fillColor: "#1A281A",
+        fillOpacity: 0.8,
         clickable: true
     });
 
@@ -156,13 +249,15 @@ for (let i = 0; i < totalF; i++) {
     });
 
     polygon.setMap(map);
-}
+} 
 
 } 
 function getInfoWindowContentF(location) {
         return `Region: ${location[3]}<br>Nom: ${location[0]}<br>Latitude: ${location[2]}<br>Longitude: ${location[1]}<br>Superficie: ${location[4]} ha`;
     }
-
+    function getInfoWindowContentZT(location) {
+        return `Region: ${location[3]}<br>Nom: ${location[0]}<br>Latitude: ${location[2]}<br>Longitude: ${location[1]}<br>Superficie: ${location[4]} ha`;
+    }
 function getRandomElement(array) {
     return array[Math.floor(Math.random() * array.length)];
   }

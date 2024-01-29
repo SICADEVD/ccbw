@@ -18,6 +18,7 @@ use App\Exports\ExportParcelles;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\ForetClassees;
+use App\Models\ForetClasseeTampon;
 use Illuminate\Support\Facades\Hash;
 
 class ForetClasseeController extends Controller
@@ -28,10 +29,11 @@ class ForetClasseeController extends Controller
         $manager   = auth()->user();
   
         $foretclassees = ForetClassee::get();
+        $foretclasseetampons = ForetClasseeTampon::get();
             $total = count($foretclassees);
             $pageTitle  = "Gestion des Forêts Classées($total)";
          
-        return view('admin.foretclassee.index',compact('pageTitle','foretclassees'));
+        return view('admin.foretclassee.index',compact('pageTitle','foretclassees','foretclasseetampons'));
     }
  
     public function create()
@@ -74,6 +76,46 @@ class ForetClasseeController extends Controller
         return back()->withNotify($notify);
         } 
     }
+    public function createTampon()
+    {
+        $pageTitle = "Importation KML des Zones Tampons Forêts Classées";
+        $manager   = auth()->user();
+       
+        return view('admin.foretclassee.createTampon', compact('pageTitle'));
+    }
+
+    public function storeTampon(Request $request)
+    { 
+        if($request->file('fichier_kml') !=null){
+            $file = $request->file('fichier_kml');
+            @unlink(public_path('upload/foretclasseetampon/'));
+            $filename = $file->getClientOriginalName();
+            $file->move(public_path('upload/foretclasseetampon'), $filename);
+            $filePath = public_path('upload/foretclasseetampon/'.$filename); 
+            $dataPolygones = $this->getCoordinatesFromKML($filePath); 
+           $delete = DB::table('foret_classee_tampons')->delete();
+             
+            $i=0;
+            foreach($dataPolygones as $index => $data) {
+                
+                $foret = new ForetClasseeTampon(); 
+                $centroid = $this->calculateCentroid($data['coordinates']);
+
+                $foret->nomForet  = $data['nom'];  
+                $foret->region  = $data['region']; 
+                $foret->superficie  =  $data['superficie'];
+                $foret->latitude = round($centroid['y'],6);
+                $foret->longitude = round($centroid['x'],6);
+                $foret->waypoints = $data['coordinates'];
+                $foret->save(); 
+                $i++;
+            }
+         
+            $notify[] = ['success', "$i Polygones ont été importés avec succès"];
+
+        return back()->withNotify($notify);
+        } 
+    }
     public function getCoordinatesFromKML($filePath) {
         // Charger le fichier KML
         $kmlContent = file_get_contents($filePath);
@@ -85,12 +127,12 @@ class ForetClasseeController extends Controller
         $dataArray = array();
         
         // Parcourir chaque Placemark dans le document KML
-        foreach ($kml->Document->Document->Folder->Placemark as $placemark) {
+        foreach ($kml->Document->Folder->Placemark as $placemark) {
             // Récupérer les coordonnées de la balise <coordinates>
-            $coordinates = (string)$placemark->Polygon->outerBoundaryIs->LinearRing->coordinates;
-            $region = (string)$placemark->ExtendedData->SchemaData->SimpleData[12];
-            $nom = (string)$placemark->ExtendedData->SchemaData->SimpleData[13]; 
-            $superficie = (string)$placemark->ExtendedData->SchemaData->SimpleData[14];
+            $coordinates = (string)$placemark->MultiGeometry->Polygon->outerBoundaryIs->LinearRing->coordinates;
+            $region = (string)$placemark->ExtendedData->SchemaData->SimpleData[0];
+            $nom = (string)$placemark->ExtendedData->SchemaData->SimpleData[2]; 
+            $superficie = (string)$placemark->ExtendedData->SchemaData->SimpleData[3];
             // Ajouter les données au tableau
             $coordinatesArray[] = $coordinates;
             $dataArray[] = array(

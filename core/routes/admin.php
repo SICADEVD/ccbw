@@ -62,6 +62,8 @@ Route::middleware('admin')->group(function () {
         Route::get('list', 'index')->name('index');
         Route::post('store', 'store')->name('store');
         Route::get('create', 'create')->name('create');
+        Route::post('store/tampon', 'storeTampon')->name('storeTampon');
+        Route::get('create/tampon', 'createTampon')->name('createTampon');
         Route::post('status/{id}', 'status')->name('status');
     });
 
