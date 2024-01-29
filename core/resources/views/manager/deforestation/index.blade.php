@@ -191,9 +191,11 @@ $pointsPolygonF = Str::replace("''","'Aucun'",$pointsPolygonF);
     <x-confirmation-modal />
 @endsection
 
-@push('breadcrumb-plugins')  
-    <a href="{{ route('manager.agro.deforestation.create') }}" class="btn  btn-outline--primary h-45"><i
-            class="las la-map-marker"></i> Importation KML des Forêts Classées</a>
+@push('breadcrumb-plugins')   
+            <div class="btn-group h-45" role="group" aria-label="Basic example">
+  <button type="button" style="background-color:#FF0000;" class="btn text-white">Parcelles Producteurs</button>
+  <button type="button" style="background-color:#FFFF00;" class="btn">Forêts Classées</button> 
+</div>
 @endpush
 @push('style')
     <style>
