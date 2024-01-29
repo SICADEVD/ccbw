@@ -50,6 +50,12 @@
                                 style="color:#FF0000; font-weight:bold; font-size:20px;" />
                         </div>
                     </div>
+                    <div class="form-group row">
+                        {{ Form::label(__('Date'), null, ['class' => 'col-sm-4 control-label required']) }}
+                        <div class="col-xs-12 col-sm-8">
+                            <?php echo Form::date('date_planting', null, ['class' => 'form-control date_planting required']); ?>
+                        </div>
+                    </div>
                     <hr class="panel-wide">
 
 
