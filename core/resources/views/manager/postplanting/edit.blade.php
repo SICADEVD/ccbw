@@ -56,7 +56,6 @@
                             <?php echo Form::date('date_planting', null, ['class' => 'form-control date_planting required']); ?>
                         </div>
                     </div>
-                    <hr class="panel-wide">
 
 
                     <div class="form-group">
