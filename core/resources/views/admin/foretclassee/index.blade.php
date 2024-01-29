@@ -57,7 +57,7 @@ if(isset($foretclassees) && count($foretclassees)){
     $long= htmlentities($data->longitude, ENT_QUOTES | ENT_IGNORE, "UTF-8"); 
     $producteur = htmlentities($data->nomForet, ENT_QUOTES | ENT_IGNORE, "UTF-8"); 
     $region= htmlentities($data->region, ENT_QUOTES | ENT_IGNORE, "UTF-8");
-    $superficie= htmlentities($data->superficie, ENT_QUOTES | ENT_IGNORE, "UTF-8");
+    $superficie= round(htmlentities($data->superficie, ENT_QUOTES | ENT_IGNORE, "UTF-8")*0.0001,2);
      $polygon ='';
 
         $coords = explode(' ', $data->waypoints);
@@ -116,7 +116,7 @@ if(isset($foretclasseetampons) && count($foretclasseetampons)){
     $long= htmlentities($data->longitude, ENT_QUOTES | ENT_IGNORE, "UTF-8"); 
     $producteur = htmlentities($data->nomZToret, ENT_QUOTES | ENT_IGNORE, "UTF-8"); 
     $region= htmlentities($data->region, ENT_QUOTES | ENT_IGNORE, "UTF-8");
-    $superficie= htmlentities($data->superficie, ENT_QUOTES | ENT_IGNORE, "UTF-8");
+    $superficie= round(htmlentities($data->superficie, ENT_QUOTES | ENT_IGNORE, "UTF-8")*0.0001,2);
      $polygon ='';
 
         $coords = explode(' ', $data->waypoints);
@@ -183,6 +183,8 @@ $pointsPolygonZT = Str::replace('"','',json_encode($pointsPolygonZT));
     <script>  
     let map;
 let infoWindow;
+let infoWindowF;
+let infoWindowZT;
 var locationsF = <?php echo $pointsPolygonF; ?>;
 var totalF = <?php echo $totalF; ?>;
 var locationsZT = <?php echo $pointsPolygonZT; ?>;
@@ -210,14 +212,14 @@ for (let i = 0; i < totalZT; i++) {
 
     polygonsZT.push(polygon);
  
-    // google.maps.event.addListener(polygon, 'click', function (event) {
-    //     const infoWindow = new google.maps.InfoWindow({
-    //         content: getInfoWindowContentZT(locationsZT[i])
-    //     });
+    google.maps.event.addListener(polygon, 'click', function (event) {
+        const infoWindowZT = new google.maps.InfoWindowZT({
+            content: getInfoWindowContentZT(locationsZT[i])
+        });
 
-    //     infoWindow.setPosition(event.latLng);
-    //     infoWindow.open(map);
-    // });
+        infoWindowZT.setPosition(event.latLng);
+        infoWindowZT.open(map);
+    });
 
     polygon.setMap(map);
 }
@@ -240,12 +242,12 @@ for (let i = 0; i < totalF; i++) {
     polygonsF.push(polygon);
  
     google.maps.event.addListener(polygon, 'click', function (event) {
-        const infoWindow = new google.maps.InfoWindow({
+        const infoWindowF = new google.maps.infoWindowF({
             content: getInfoWindowContentF(locationsF[i])
         });
 
-        infoWindow.setPosition(event.latLng);
-        infoWindow.open(map);
+        infoWindowF.setPosition(event.latLng);
+        infoWindowF.open(map);
     });
 
     polygon.setMap(map);
