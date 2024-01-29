@@ -192,7 +192,7 @@
                     </div>
                 </li>
                 @endif
-                @if(Auth::user()->can('manager.agro.evaluation.index') || Auth::user()->can('manager.agro.approvisionnement.index') || Auth::user()->can('manager.agro.distribution.index') || Auth::user()->can('manager.agro.deforestation.index'))
+                @if(Auth::user()->can('manager.agro.evaluation.index') || Auth::user()->can('manager.agro.approvisionnement.index') || Auth::user()->can('manager.agro.distribution.index') || Auth::user()->can('manager.agro.deforestation.index') || Auth::user()->can('manager.agro.postplanting.index'))
                 <li class="sidebar-menu-item sidebar-dropdown">
                     <a href="javascript:void(0)" class="{{ menuActive('manager.agro*', 3) }}">
                         <i class="menu-icon las la-tree"></i>
@@ -225,11 +225,19 @@
                                 </a>
                             </li>
                             @endcan
-                            @can('manager.agro.deforestation.index')
+                            @can('manager.agro.postplanting.index')
                             <li class="sidebar-menu-item {{ menuActive('manager.agro.postplanting.index') }}">
                                 <a href="{{ route('manager.agro.postplanting.index') }}" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>
                                     <span class="menu-title">@lang('Evaluation Post-Planting')</span>
+                                </a>
+                            </li>
+                            @endcan 
+                            @can('manager.agro.deforestation.index')
+                            <li class="sidebar-menu-item {{ menuActive('manager.agro.deforestation.index') }}">
+                                <a href="{{ route('manager.agro.deforestation.index') }}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('Risques de Déforestation')</span>
                                 </a>
                             </li>
                             @endcan 

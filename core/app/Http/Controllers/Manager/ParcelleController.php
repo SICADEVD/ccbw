@@ -38,10 +38,19 @@ class ParcelleController extends Controller
         $manager   = auth()->user();
         // $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->get();
         $cooperative = Cooperative::with('sections.localites')->find($manager->cooperative_id);
-        $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
-            return $localite->active();
-        });
         $sections = Section::where('cooperative_id', $manager->cooperative_id)->get();
+        $localites = Localite::joinRelationship('section')
+                                ->where('cooperative_id', $manager->cooperative_id)
+                                ->when(request()->section, function ($query, $section) {
+                                    $query->where('section_id', $section);
+                                })
+                                ->get(); 
+$producteurs = Producteur::joinRelationship('localite.section')
+                        ->where('cooperative_id', $manager->cooperative_id)
+                        ->when(request()->localite, function ($query, $localite) {
+                            $query->where('localite_id', $localite);
+                        })
+                        ->get();
      
         $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
             return $localite->active();
@@ -73,11 +82,18 @@ class ParcelleController extends Controller
 
         $sections = Section::where('cooperative_id', $manager->cooperative_id)->get();
      
-        $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
-            return $localite->active();
-        });
-        $producteurs = Producteur::joinRelationship('localite.section')->where('cooperative_id', $manager->cooperative_id)->get();
-
+        $localites = Localite::joinRelationship('section')
+                                ->where('cooperative_id', $manager->cooperative_id)
+                                ->when(request()->section, function ($query, $section) {
+                                    $query->where('section_id', $section);
+                                })
+                                ->get(); 
+        $producteurs = Producteur::joinRelationship('localite.section')
+                            ->where('cooperative_id', $manager->cooperative_id)
+                            ->when(request()->localite, function ($query, $localite) {
+                                $query->where('localite_id', $localite);
+                            })
+                            ->get();
         $parcelles = Parcelle::dateFilter()->latest('id')
             ->joinRelationship('producteur.localite.section')
             ->where('cooperative_id', $manager->cooperative_id)
@@ -104,11 +120,18 @@ class ParcelleController extends Controller
 
         $sections = Section::where('cooperative_id', $manager->cooperative_id)->get();
      
-        $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
-            return $localite->active();
-        });
-        $producteurs = Producteur::joinRelationship('localite.section')->where('cooperative_id', $manager->cooperative_id)->get();
-
+        $localites = Localite::joinRelationship('section')
+        ->where('cooperative_id', $manager->cooperative_id)
+        ->when(request()->section, function ($query, $section) {
+            $query->where('section_id', $section);
+        })
+        ->get(); 
+$producteurs = Producteur::joinRelationship('localite.section')
+            ->where('cooperative_id', $manager->cooperative_id)
+            ->when(request()->localite, function ($query, $localite) {
+                $query->where('localite_id', $localite);
+            })
+            ->get();
         $parcelles = Parcelle::dateFilter()->latest('id')
             ->joinRelationship('producteur.localite.section')
             ->where('cooperative_id', $manager->cooperative_id)
