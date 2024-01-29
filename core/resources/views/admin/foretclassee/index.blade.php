@@ -13,9 +13,10 @@ use Illuminate\Support\Str;
                             <input type="hidden" name="table" value="foretclassees" /> 
                             <div class="flex-grow-1">
                                 <label>@lang('Localité')</label>
-                                <select name="localite" class="form-control" id="localite">
+                                <select name="typepolygone" class="form-control" id="typepolygone">
                                     <option value="">@lang('Toutes')</option>
-                                   
+                                    <option value="FC" {{ request()->typepolygone == 'FC' ? 'selected' : '' }}>@lang('Forets classées')</option>
+                                    <option value="ZT" {{ request()->typepolygone == 'ZT' ? 'selected' : '' }}>@lang('Zones Tampons')</option>
                                 </select> 
                             <div class="flex-grow-1 align-self-end">
                                 <button class="btn btn--primary w-100 h-45"><i class="fas fa-filter"></i>
@@ -155,6 +156,18 @@ $pointsPolygonZT = Str::replace('"','',json_encode($pointsPolygonZT));
  $pointsPolygonZT = Str::replace("''","'Aucun'",$pointsPolygonZT);
   
 } 
+$fc=null;
+$zt=null; 
+if(isset(request()->typepolygone) && (request()->typepolygone=='FC'))
+{
+    $fc=1;
+}
+
+if(isset(request()->typepolygone) && (request()->typepolygone=='ZT'))
+{
+    $zt=1;
+}
+
 ?>
     <x-confirmation-modal />
 @endsection
@@ -196,16 +209,18 @@ window.onload = function () {
     mapTypeId: "hybrid",
   });
  // Afichage Zones Tampons
+ @if(($fc==null && $zt==null) || $zt==1)
+ 
 const triangleCoordsZT = <?php echo Str::replace('"','',json_encode($seriescoordonatesZT)); ?>; 
   const polygonsZT = []; 
 for (let i = 0; i < totalZT; i++) {   
 
     const polygon = new google.maps.Polygon({
         paths: triangleCoordsZT[i],
-        strokeColor: "#FFFFFF",
+        strokeColor: "#9DFFFF",
         strokeOpacity: 0.2,
         strokeWeight: 2,
-        fillColor: "#FFFFFF",
+        fillColor: "#9DFFFF",
         fillOpacity: 0.2,
         clickable: true
     });
@@ -223,13 +238,15 @@ for (let i = 0; i < totalZT; i++) {
 
     polygon.setMap(map);
 }
-
+@endif
 // Afichage Forets Classées
+@if(($fc==null && $zt==null) || $fc==1)
+
   const triangleCoordsF = <?php echo Str::replace('"','',json_encode($seriescoordonatesF)); ?>; 
   const polygonsF = []; 
 for (let i = 0; i < totalF; i++) {   
 
-    const polygon = new google.maps.Polygon({
+    const polygonF = new google.maps.Polygon({
         paths: triangleCoordsF[i],
         strokeColor: "#FFFF00",
         strokeOpacity: 0.8,
@@ -239,10 +256,10 @@ for (let i = 0; i < totalF; i++) {
         clickable: true
     });
 
-    polygonsF.push(polygon);
+    polygonsF.push(polygonF);
  
-    google.maps.event.addListener(polygon, 'click', function (event) {
-        const infoWindowF = new google.maps.infoWindowF({
+    google.maps.event.addListener(polygonF, 'click', function (event) {
+        const infoWindowF = new google.maps.infoWindow({
             content: getInfoWindowContentF(locationsF[i])
         });
 
@@ -250,8 +267,9 @@ for (let i = 0; i < totalF; i++) {
         infoWindowF.open(map);
     });
 
-    polygon.setMap(map);
-} 
+    polygonF.setMap(map);
+}
+@endif 
 
 } 
 function getInfoWindowContentF(location) {
