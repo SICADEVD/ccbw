@@ -2,34 +2,56 @@
 
 namespace App\Http\Controllers\Manager;
 
-use App\Constants\Status;
-use App\Exports\ExportParcelles;
-use App\Http\Controllers\Controller;
-use App\Imports\ParcelleImport;
-use App\Models\Localite; 
-use App\Models\Producteur; 
-use App\Models\Parcelle; 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 use Excel;
+use App\Models\Section;
+use App\Constants\Status;
+use App\Models\Localite; 
+use App\Models\Parcelle; 
+use App\Models\Cooperative;
+use App\Models\Producteur; 
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Imports\ParcelleImport;
+use App\Exports\ExportParcelles;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 
 class AgrodeforestationController extends Controller
 {
 
     public function index()
     {
-        $pageTitle      = "Gestion des parcelles";
         $manager   = auth()->user();
-        $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->get();
-        $parcelles = Parcelle::dateFilter()->searchable(['codeParc', 'typedeclaration','anneeCreation','culture'])->latest('id')->joinRelationship('parcelle.producteur.localite.section')->where('sections.cooperative_id',$manager->cooperative_id)->where(function ($q) {
-            if(request()->localite != null){
-                $q->where('localite_id',request()->localite);
-            }
-        })->with('producteur')->paginate(getPaginate());
+ 
+        $cooperative = Cooperative::with('sections.localites')->find($manager->cooperative_id);
+
+        $sections = Section::where('cooperative_id', $manager->cooperative_id)->get();
+     
+        $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
+            return $localite->active();
+        });
+        $producteurs = Producteur::joinRelationship('localite.section')->where('cooperative_id', $manager->cooperative_id)->get();
+
+        $parcelles = Parcelle::dateFilter()->latest('id')
+            ->joinRelationship('producteur.localite.section')
+            ->where('cooperative_id', $manager->cooperative_id)
+            ->whereNotNull('waypoints')
+            ->when(request()->section, function ($query, $section) {
+                $query->where('section_id', $section);
+            })
+            ->when(request()->localite, function ($query, $localite) {
+                $query->where('localite_id', $localite);
+            })
+            ->when(request()->producteur, function ($query, $producteur) {
+                $query->where('producteur_id', $producteur);
+            })
+            ->with(['producteur.localite.section']) 
+            ->get();
+            $total = count($parcelles);
+            $pageTitle  = "Gestion de mapping des parcelles($total)";
          
-        return view('manager.parcelle.index', compact('pageTitle', 'parcelles','localites'));
+        return view('manager.deforestation.index',compact('pageTitle','sections', 'parcelles', 'localites','producteurs'));
     }
  
     public function create()

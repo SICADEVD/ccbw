@@ -220,7 +220,7 @@ class ParcelleController extends Controller
                 $centroid = $this->calculateCentroid($data['coordinates']);
                 
                 $parcelle->producteur_id  = $producteur->id;
-                $parcelle->superficie = round($data['size'],2); 
+                $parcelle->superficie = round($data['supHa'],2); 
                 $parcelle->latitude = $centroid['y'];
                 $parcelle->longitude = $centroid['x'];
                 $parcelle->waypoints = $data['coordinates'];
