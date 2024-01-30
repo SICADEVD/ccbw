@@ -115,7 +115,7 @@ if(isset($foretclasseetampons) && count($foretclasseetampons)){
         {
             $lat = htmlentities($data->latitude, ENT_QUOTES | ENT_IGNORE, "UTF-8");
     $long= htmlentities($data->longitude, ENT_QUOTES | ENT_IGNORE, "UTF-8"); 
-    $producteur = htmlentities($data->nomZToret, ENT_QUOTES | ENT_IGNORE, "UTF-8"); 
+    $producteur = htmlentities($data->nomForet, ENT_QUOTES | ENT_IGNORE, "UTF-8"); 
     $region= htmlentities($data->region, ENT_QUOTES | ENT_IGNORE, "UTF-8");
     $superficie= round(htmlentities($data->superficie, ENT_QUOTES | ENT_IGNORE, "UTF-8")*0.0001,2);
      $polygon ='';
@@ -216,15 +216,47 @@ window.onload = function () {
     center: { lat: 6.881703, lng: -5.500461 },
     mapTypeId: "hybrid",
   });
+  // Afichage Forets Classées
+@if(($fc==null && $zt==null) || $fc==1)
+
+const foretsClasseesCoords = <?php echo Str::replace('"','',json_encode($seriescoordonatesF)); ?>; 
+const polygons = []; 
+for (let i = 0; i < totalF; i++) {   
+
+  const polygon = new google.maps.Polygon({
+      paths: foretsClasseesCoords[i],
+      strokeColor: "#FFFF00",
+      strokeOpacity: 1,
+      strokeWeight: 2,
+      fillColor: "#1A281A",
+      fillOpacity: 1,
+      clickable: true
+  });
+
+  polygons.push(polygon);
+
+  google.maps.event.addListener(polygon, 'click', function (event) {
+      const infoWindow = new google.maps.infoWindow({
+          content: getInfoWindowContent(locationsF[i])
+      });
+
+      infoWindow.setPosition(event.latLng);
+      infoWindow.open(map);
+  });
+
+  polygon.setMap(map);
+}
+@endif 
+
  // Afichage Zones Tampons
  @if(($fc==null && $zt==null) || $zt==1)
  
-const triangleCoordsZT = <?php echo Str::replace('"','',json_encode($seriescoordonatesZT)); ?>; 
+const triangleCoords = <?php echo Str::replace('"','',json_encode($seriescoordonatesZT)); ?>; 
   const polygonsZT = []; 
 for (let i = 0; i < totalZT; i++) {   
 
     const polygon = new google.maps.Polygon({
-        paths: triangleCoordsZT[i],
+        paths: triangleCoords[i],
         strokeColor: "#9DFFFF",
         strokeOpacity: 0.2,
         strokeWeight: 2,
@@ -235,52 +267,21 @@ for (let i = 0; i < totalZT; i++) {
 
     polygonsZT.push(polygon);
  
-    google.maps.event.addListener(polygon, 'click', function (event) {
-        const infoWindowZT = new google.maps.InfoWindowZT({
-            content: getInfoWindowContentZT(locationsZT[i])
-        });
+    // google.maps.event.addListener(polygon, 'click', function (event) {
+    //     const infoWindow = new google.maps.InfoWindow({
+    //         content: getInfoWindowContentZT(locationsZT[i])
+    //     });
 
-        infoWindowZT.setPosition(event.latLng);
-        infoWindowZT.open(map);
-    });
+    //     infoWindow.setPosition(event.latLng);
+    //     infoWindow.open(map);
+    // });
 
     polygon.setMap(map);
 }
 @endif
-// Afichage Forets Classées
-@if(($fc==null && $zt==null) || $fc==1)
-
-  const triangleCoordsF = <?php echo Str::replace('"','',json_encode($seriescoordonatesF)); ?>; 
-  const polygonsF = []; 
-for (let i = 0; i < totalF; i++) {   
-
-    const polygonF = new google.maps.Polygon({
-        paths: triangleCoordsF[i],
-        strokeColor: "#FFFF00",
-        strokeOpacity: 0.8,
-        strokeWeight: 2,
-        fillColor: "#1A281A",
-        fillOpacity: 0.8,
-        clickable: true
-    });
-
-    polygonsF.push(polygonF);
- 
-    google.maps.event.addListener(polygonF, 'click', function (event) {
-        const infoWindowF = new google.maps.infoWindow({
-            content: getInfoWindowContentF(locationsF[i])
-        });
-
-        infoWindowF.setPosition(event.latLng);
-        infoWindowF.open(map);
-    });
-
-    polygonF.setMap(map);
-}
-@endif 
 
 } 
-function getInfoWindowContentF(location) {
+function getInfoWindowContent(location) {
         return `Region: ${location[3]}<br>Nom: ${location[0]}<br>Latitude: ${location[2]}<br>Longitude: ${location[1]}<br>Superficie: ${location[4]} ha`;
     }
     function getInfoWindowContentZT(location) {

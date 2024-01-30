@@ -324,34 +324,7 @@ const randomColor = getRandomElement(arrayColor);
     polygon.setMap(map);
 }
 
- // Afichage Zones Tampons
- const triangleCoordsZT = <?php echo Str::replace('"','',json_encode($seriescoordonatesZT)); ?>; 
-  const polygonsZT = []; 
-for (let i = 0; i < totalZT; i++) {   
 
-    const polygon = new google.maps.Polygon({
-        paths: triangleCoordsZT[i],
-        strokeColor: "#FFFFFF",
-        strokeOpacity: 0.2,
-        strokeWeight: 2,
-        fillColor: "#FFFFFF",
-        fillOpacity: 0.2,
-        clickable: true
-    });
-
-    polygonsZT.push(polygon);
- 
-    // google.maps.event.addListener(polygon, 'click', function (event) {
-    //     const infoWindow = new google.maps.InfoWindow({
-    //         content: getInfoWindowContentZT(locationsZT[i])
-    //     });
-
-    //     infoWindow.setPosition(event.latLng);
-    //     infoWindow.open(map);
-    // });
-
-    polygon.setMap(map);
-}
 
 // Afichage Forets Classées
   const triangleCoordsF = <?php echo Str::replace('"','',json_encode($seriescoordonatesF)); ?>; 
@@ -361,10 +334,10 @@ for (let i = 0; i < totalF; i++) {
     const polygon = new google.maps.Polygon({
         paths: triangleCoordsF[i],
         strokeColor: "#FFFF00",
-        strokeOpacity: 0.8,
+        strokeOpacity: 1,
         strokeWeight: 2,
         fillColor: "#1A281A",
-        fillOpacity: 0.8,
+        fillOpacity: 1,
         clickable: true
     });
 
@@ -381,7 +354,34 @@ for (let i = 0; i < totalF; i++) {
 
     polygon.setMap(map);
 } 
+ // Afichage Zones Tampons
+ const triangleCoordsZT = <?php echo Str::replace('"','',json_encode($seriescoordonatesZT)); ?>; 
+  const polygonsZT = []; 
+for (let i = 0; i < totalZT; i++) {   
 
+    const polygon = new google.maps.Polygon({
+        paths: triangleCoordsZT[i],
+        strokeColor: "#FFFFFF",
+        strokeOpacity: 0.2,
+        strokeWeight: 2,
+        fillColor: "#FFFFFF",
+        fillOpacity: 0.2,
+        clickable: false
+    });
+
+    polygonsZT.push(polygon);
+ 
+    // google.maps.event.addListener(polygon, 'click', function (event) {
+    //     const infoWindow = new google.maps.InfoWindow({
+    //         content: getInfoWindowContentZT(locationsZT[i])
+    //     });
+
+    //     infoWindow.setPosition(event.latLng);
+    //     infoWindow.open(map);
+    // });
+
+    polygon.setMap(map);
+}
 
 } 
 function getInfoWindowContent(location) {
