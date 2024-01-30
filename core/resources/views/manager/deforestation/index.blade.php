@@ -8,7 +8,7 @@ $listePolygon = ['Parcelles Producteurs'=>'PP','Forets classées'=>'FC','Zones T
     <div class="row">
         <div class="col-lg-12">
         <div class="card b-radius--10 mb-3">
-        <div class="card-header bg--primary">
+        <div class="card-header bg--warning">
             Filtre Général
           </div>
                 <div class="card-body">
@@ -456,7 +456,7 @@ function getRandomElement(array) {
     return array[Math.floor(Math.random() * array.length)];
   }
 
-  
+
 $('form select').on('change', function(){
     $(this).closest('form').submit();
 });
