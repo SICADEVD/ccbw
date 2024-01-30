@@ -3,6 +3,7 @@
 <?php
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str; 
+$listePolygon = ['Forets classées'=>'FC','Zones Tampons'=>'ZT'];
 ?>
     <div class="row">
         <div class="col-lg-12">
@@ -12,12 +13,14 @@ use Illuminate\Support\Str;
                         <div class="d-flex flex-wrap gap-4">
                             <input type="hidden" name="table" value="foretclassees" /> 
                             <div class="flex-grow-1">
-                                <label>@lang('Localité')</label>
-                                <select name="typepolygone" class="form-control" id="typepolygone">
+                                <label>@lang('Type de Polygone')</label>
+                                <select name="typepolygone[]" multiple class="form-control select2-multi-select" id="typepolygone">
                                     <option value="">@lang('Toutes')</option>
-                                    <option value="FC" {{ request()->typepolygone == 'FC' ? 'selected' : '' }}>@lang('Forets classées')</option>
-                                    <option value="ZT" {{ request()->typepolygone == 'ZT' ? 'selected' : '' }}>@lang('Zones Tampons')</option>
+                                    @foreach ($listePolygon as $pol=>$keypol)
+                                    <option value="{{ $keypol }}" @selected(in_array(@$keypol,@request()->typepolygone ?? $listePolygon))>{{ $pol }}</option>
+                                @endforeach
                                 </select> 
+                                </div> 
                             <div class="flex-grow-1 align-self-end">
                                 <button class="btn btn--primary w-100 h-45"><i class="fas fa-filter"></i>
                                     @lang('Filter')</button>
@@ -160,12 +163,12 @@ $pointsPolygonZT = Str::replace('"','',json_encode($pointsPolygonZT));
 } 
 $fc=null;
 $zt=null; 
-if(isset(request()->typepolygone) && (request()->typepolygone=='FC'))
+if(isset(request()->typepolygone) && (in_array('FC',request()->typepolygone)))
 {
     $fc=1;
 }
 
-if(isset(request()->typepolygone) && (request()->typepolygone=='ZT'))
+if(isset(request()->typepolygone) && (in_array('ZT',request()->typepolygone)))
 {
     $zt=1;
 }
@@ -286,8 +289,8 @@ function getRandomElement(array) {
 
 
  
-$('form select').on('change', function(){
-    $(this).closest('form').submit();
-});
+// $('form select').on('change', function(){
+//     $(this).closest('form').submit();
+// });
     </script>
 @endpush

@@ -24,9 +24,7 @@ class AgrodeforestationController extends Controller
 
     public function index()
     {
-        $manager   = auth()->user();
- 
-        $cooperative = Cooperative::with('sections.localites')->find($manager->cooperative_id);
+        $manager   = auth()->user(); 
 
         $sections = Section::where('cooperative_id', $manager->cooperative_id)->get();
      
@@ -40,7 +38,7 @@ class AgrodeforestationController extends Controller
                                     ->where('cooperative_id', $manager->cooperative_id)
                                     ->when(request()->localite, function ($query, $localite) {
                                         $query->where('localite_id', $localite);
-                                    })
+                                    }) 
                                     ->get();
 
         $parcelles = Parcelle::dateFilter()->latest('id')
@@ -56,7 +54,7 @@ class AgrodeforestationController extends Controller
             ->when(request()->producteur, function ($query, $producteur) {
                 $query->where('producteur_id', $producteur);
             })
-            ->with(['producteur.localite.section']) 
+            ->with(['producteur.localite.section.cooperative']) 
             ->get();
             $total = count($parcelles);
             $foretclassees = ForetClassee::get();

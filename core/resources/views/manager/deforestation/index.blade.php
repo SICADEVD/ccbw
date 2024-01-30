@@ -3,10 +3,14 @@
 <?php
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str; 
+$listePolygon = ['Parcelles Producteurs'=>'PP','Forets classées'=>'FC','Zones Tampons'=>'ZT'];
 ?>
     <div class="row">
         <div class="col-lg-12">
         <div class="card b-radius--10 mb-3">
+        <div class="card-header bg--primary">
+            Filtre Général
+          </div>
                 <div class="card-body">
                     <form action="">
                         <div class="d-flex flex-wrap gap-4">
@@ -37,20 +41,47 @@ use Illuminate\Support\Str;
                                         <option value="{{ $local->id }}" data-chained="{{ $local->localite_id }}" {{ request()->producteur == $local->id ? 'selected' : '' }}>{{ $local->nom }} {{ $local->prenoms }} ({{ $local->codeProd }})</option>
                                     @endforeach
                                 </select>
-                            </div>
-                            <div class="flex-grow-1">
-                                <label>@lang('Date')</label>
-                                <input name="date" type="text" class="dates form-control"
-                                    placeholder="@lang('Date de début - Date de fin')" autocomplete="off" value="{{ request()->date }}">
-                            </div>
+                            </div> 
                             <div class="flex-grow-1 align-self-end">
                                 <button class="btn btn--primary w-100 h-45"><i class="fas fa-filter"></i>
-                                    @lang('Filter')</button>
+                                    @lang('Filtrer')</button>
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
+            </div>
+            <div class="col-lg-12">
+        <div class="card b-radius--10 mb-3 ">
+        <div class="card-header bg--primary">
+            Filtre par Type de Polygones
+          </div>
+                <div class="card-body">
+                    
+                    <form action="">
+                        <div class="d-flex flex-wrap gap-4">
+                            <input type="hidden" name="table" value="foretclassees" /> 
+                            <div class="flex-grow-1">
+                                <label>@lang('Type de Polygone')</label>
+                                <select name="typepolygone[]" multiple class="form-control select2-multi-select" id="typepolygone">
+                                    <option value="">@lang('Toutes')</option>
+                                    @foreach ($listePolygon as $pol=>$keypol)
+                                    <option value="{{ $keypol }}" @selected(in_array(@$keypol,@request()->typepolygone ?? $listePolygon))>{{ $pol }}</option>
+                                @endforeach
+                                </select> 
+                                </div> 
+                            <div class="flex-grow-1 align-self-end">
+                                <button class="btn btn--primary w-100 h-45"><i class="fas fa-filter"></i>
+                                    @lang('Filtrer')</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>    
+        </div>
+        </div>
+ <div class="row">
+            <div class="col-lg-12">
             <div class="card b-radius--10 ">
                 <div class="card-body  p-0">
                     <div class="table-responsive--sm table-responsive" id="map" style="height: 800px;">
@@ -252,6 +283,23 @@ $pointsPolygonZT = Str::replace('"','',json_encode($pointsPolygonZT));
 $pointsPolygonZT = Str::replace("''","'Non Disponible'",$pointsPolygonZT);
 
 } 
+$fc=null;
+$zt=null;
+$pp=null; 
+if(isset(request()->typepolygone) && (in_array('FC',request()->typepolygone)))
+{
+    $fc=1;
+}
+
+if(isset(request()->typepolygone) && (in_array('ZT',request()->typepolygone)))
+{
+    $zt=1;
+}
+
+if(isset(request()->typepolygone) && (in_array('PP',request()->typepolygone)))
+{
+    $pp=1;
+}
 ?>
     <x-confirmation-modal />
 @endsection
@@ -282,12 +330,20 @@ $pointsPolygonZT = Str::replace("''","'Non Disponible'",$pointsPolygonZT);
     <script>  
     let map;
 let infoWindow;
+@if(!is_array($pointsPolygon))
 var locations = <?php echo $pointsPolygon; ?>;
 var total = <?php echo $total; ?>;
+@endif
+
+@if(!is_array($pointsPolygonF))
 var locationsF = <?php echo $pointsPolygonF; ?>;
 var totalF = <?php echo $totalF; ?>;
+@endif
+
+@if(!is_array($pointsPolygonZT))
 var locationsZT = <?php echo $pointsPolygonZT; ?>;
 var totalZT = <?php echo $totalZT; ?>;
+@endif
 window.onload = function () {
   map = new google.maps.Map(document.getElementById("map"), {
     zoom: 7,
@@ -295,7 +351,8 @@ window.onload = function () {
     mapTypeId: "hybrid",
   });
 
-  // Define the LatLng coordinates for the polygon.
+  // Affichage parcelles des producteurs
+  @if(($fc==null && $zt==null && $pp==null) || $pp==1)
   const triangleCoords = <?php echo Str::replace('"','',json_encode($seriescoordonates)); ?>; 
   const polygons = [];
 // Construct polygons
@@ -328,10 +385,11 @@ const randomColor = getRandomElement(arrayColor);
 
     polygon.setMap(map);
 }
-
+@endif
 
 
 // Afichage Forets Classées
+@if(($fc==null && $zt==null && $pp==null) || $fc==1)
   const triangleCoordsF = <?php echo Str::replace('"','',json_encode($seriescoordonatesF)); ?>; 
   const polygonsF = []; 
 for (let i = 0; i < totalF; i++) {   
@@ -359,7 +417,11 @@ for (let i = 0; i < totalF; i++) {
 
     polygon.setMap(map);
 } 
+
+@endif
+
  // Afichage Zones Tampons
+ @if(($fc==null && $zt==null && $pp==null) || $zt==1)
  const triangleCoordsZT = <?php echo Str::replace('"','',json_encode($seriescoordonatesZT)); ?>; 
   const polygonsZT = []; 
 for (let i = 0; i < totalZT; i++) {   
@@ -377,6 +439,7 @@ for (let i = 0; i < totalZT; i++) {
     polygonsZT.push(polygon); 
     polygon.setMap(map);
 }
+@endif
 
 } 
 function getInfoWindowContent(location) {
@@ -393,8 +456,7 @@ function getRandomElement(array) {
     return array[Math.floor(Math.random() * array.length)];
   }
 
-
- 
+  
 $('form select').on('change', function(){
     $(this).closest('form').submit();
 });

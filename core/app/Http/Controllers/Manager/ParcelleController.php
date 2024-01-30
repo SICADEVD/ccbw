@@ -119,7 +119,7 @@ $producteurs = Producteur::joinRelationship('localite.section')
  
         $cooperative = Cooperative::with('sections.localites')->find($manager->cooperative_id);
 
-        $sections = Section::where('cooperative_id', $manager->cooperative_id)->get();
+        $sections = Section::where('cooperative_id', $manager->cooperative_id)->with('cooperative')->get();
      
         $localites = Localite::joinRelationship('section')
         ->where('cooperative_id', $manager->cooperative_id)
