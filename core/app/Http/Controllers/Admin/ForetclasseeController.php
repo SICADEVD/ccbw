@@ -53,16 +53,20 @@ class ForetClasseeController extends Controller
             $file->move(public_path('upload/foretclassee'), $filename);
             $filePath = public_path('upload/foretclassee/'.$filename); 
             $dataPolygones = $this->getCoordinatesFromKML($filePath); 
-           $delete = DB::table('foret_classees')->delete();
-            $coordinates = $dataPolygones[0]; 
+        //    $delete = DB::table('foret_classees')->delete();
+           $old_foret = new ForetClassee(); 
+           $old_foret->delete();
             $i=0;
             foreach($dataPolygones as $index => $data) {
                 
                 $foret = new ForetClassee(); 
                 $centroid = $this->calculateCentroid($data['coordinates']);
-
-                $foret->nomForet  = $data['nom'];  
-                $foret->region  = $data['region']; 
+                // if($data['superficie']==510301)
+                // {
+                //     dd($data['coordinates']);
+                // }
+                $foret->nomForet  = htmlentities($data['nom'], ENT_QUOTES | ENT_IGNORE, "UTF-8");  
+                $foret->region  = htmlentities($data['region'], ENT_QUOTES | ENT_IGNORE, "UTF-8"); 
                 $foret->superficie  =  $data['superficie'];
                 $foret->latitude = round($centroid['y'],6);
                 $foret->longitude = round($centroid['x'],6);
@@ -93,16 +97,17 @@ class ForetClasseeController extends Controller
             $file->move(public_path('upload/foretclasseetampon'), $filename);
             $filePath = public_path('upload/foretclasseetampon/'.$filename); 
             $dataPolygones = $this->getCoordinatesFromKML($filePath); 
-           $delete = DB::table('foret_classee_tampons')->delete();
-             
+            
+           $old_tampon = new ForetClasseeTampon(); 
+           $old_tampon->delete();
             $i=0;
             foreach($dataPolygones as $index => $data) {
                 
                 $foret = new ForetClasseeTampon(); 
                 $centroid = $this->calculateCentroid($data['coordinates']);
-
-                $foret->nomForet  = $data['nom'];  
-                $foret->region  = $data['region']; 
+                
+                $foret->nomForet  = htmlentities($data['nom'], ENT_QUOTES | ENT_IGNORE, "UTF-8");  
+                $foret->region  = htmlentities($data['region'], ENT_QUOTES | ENT_IGNORE, "UTF-8"); 
                 $foret->superficie  =  $data['superficie'];
                 $foret->latitude = round($centroid['y'],6);
                 $foret->longitude = round($centroid['x'],6);

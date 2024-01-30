@@ -198,10 +198,18 @@ if(isset(request()->typepolygone) && (request()->typepolygone=='ZT'))
 let infoWindow;
 let infoWindowF;
 let infoWindowZT;
+var locationsF='';
+var totalF =0;
+var locationsZT = '';
+var totalZT=0;
+@if(!is_array($pointsPolygonF))
 var locationsF = <?php echo $pointsPolygonF; ?>;
 var totalF = <?php echo $totalF; ?>;
+@endif
+@if(!is_array($pointsPolygonZT))
 var locationsZT = <?php echo $pointsPolygonZT; ?>;
 var totalZT = <?php echo $totalZT; ?>;
+@endif
 window.onload = function () {
   map = new google.maps.Map(document.getElementById("map"), {
     zoom: 7,
