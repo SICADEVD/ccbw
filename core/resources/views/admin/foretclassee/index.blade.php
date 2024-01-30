@@ -56,8 +56,8 @@ if(isset($foretclassees) && count($foretclassees)){
         {
             $lat = htmlentities($data->latitude, ENT_QUOTES | ENT_IGNORE, "UTF-8");
     $long= htmlentities($data->longitude, ENT_QUOTES | ENT_IGNORE, "UTF-8"); 
-    $producteur = htmlentities($data->nomForet, ENT_QUOTES | ENT_IGNORE, "UTF-8"); 
-    $region= htmlentities($data->region, ENT_QUOTES | ENT_IGNORE, "UTF-8");
+    $producteur = $data->nomForet; 
+    $region= $data->region;
     $superficie= round(htmlentities($data->superficie, ENT_QUOTES | ENT_IGNORE, "UTF-8")*0.0001,2);
      $polygon ='';
 
@@ -94,7 +94,7 @@ if(isset($foretclassees) && count($foretclassees)){
     }
    
 $pointsPolygonF = Str::replace('"','',json_encode($pointsPolygonF));
- $pointsPolygonF = Str::replace("''","'Aucun'",$pointsPolygonF);
+ $pointsPolygonF = Str::replace("''","'Non Disponible'",$pointsPolygonF);
   
 } 
 
@@ -155,7 +155,7 @@ if(isset($foretclasseetampons) && count($foretclasseetampons)){
     }
    
 $pointsPolygonZT = Str::replace('"','',json_encode($pointsPolygonZT));
- $pointsPolygonZT = Str::replace("''","'Aucun'",$pointsPolygonZT);
+ $pointsPolygonZT = Str::replace("''","'Non Disponible'",$pointsPolygonZT);
   
 } 
 $fc=null;
@@ -239,7 +239,7 @@ for (let i = 0; i < totalF; i++) {
  
     google.maps.event.addListener(polygon, 'click', function (event) {
         const infoWindow = new google.maps.InfoWindow({
-            content: getInfoWindowContentF(locationsF[i])
+            content: getInfoWindowContent(locationsF[i])
         });
 
         infoWindow.setPosition(event.latLng);
