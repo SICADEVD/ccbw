@@ -245,8 +245,8 @@ $producteurs = Producteur::joinRelationship('localite.section')
                 $parcelle->producteur_id  = $producteur->id;
                 $parcelle->typedeclaration  = 'GPS';
                 $parcelle->superficie = round($data['supHa'],2); 
-                $parcelle->latitude = $centroid['y'];
-                $parcelle->longitude = $centroid['x'];
+                $parcelle->latitude = round($centroid['y'],6);
+                $parcelle->longitude = round($centroid['x'],6);
                 $parcelle->waypoints = $data['coordinates'];
                 $parcelle->save(); 
                 $i++;
@@ -596,7 +596,7 @@ $producteurs = Producteur::joinRelationship('localite.section')
                 return back()->withNotify($notify);
             }
         }
-        //  dd(json_encode($request->all()));
+         
         $parcelle->save();
         if ($parcelle != null) {
             $id = $parcelle->id;
@@ -705,12 +705,6 @@ $producteurs = Producteur::joinRelationship('localite.section')
 
 
         return view('manager.parcelle.edit', compact('pageTitle', 'localites', 'parcelle', 'producteurs', 'sections', 'protections', 'arbres', 'agroespeceabreParcelle'));
-
-        // $protections = Parcelle_type_protection::where('parcelle_id',$id)->get();
-
-        // $protections = Parcelle_type_protection::where('parcelle_id', $id)->get()->map(function ($protection) {
-        //     return $protection->typeProtection;
-        // });
     }
 
     public function status($id)
