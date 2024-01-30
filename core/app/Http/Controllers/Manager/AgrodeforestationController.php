@@ -61,10 +61,52 @@ class AgrodeforestationController extends Controller
             $total = count($parcelles);
             $foretclassees = ForetClassee::get();
             $foretclasseetampons = ForetClasseeTampon::get();
-            $pageTitle  = "Gestion de mapping des parcelles($total)";
+            $pageTitle  = "Risque de Deforestation par Polygones($total)";
          
         return view('manager.deforestation.index',compact('pageTitle','sections', 'parcelles', 'localites','producteurs','foretclassees','foretclasseetampons'));
     }
  
+    public function waypoints()
+    {
+        $manager   = auth()->user();
+ 
+        $cooperative = Cooperative::with('sections.localites')->find($manager->cooperative_id);
+
+        $sections = Section::where('cooperative_id', $manager->cooperative_id)->get();
+     
+        $localites = Localite::joinRelationship('section')
+                                ->where('cooperative_id', $manager->cooperative_id)
+                                ->when(request()->section, function ($query, $section) {
+                                    $query->where('section_id', $section);
+                                })
+                                ->get(); 
+        $producteurs = Producteur::joinRelationship('localite.section')
+                                    ->where('cooperative_id', $manager->cooperative_id)
+                                    ->when(request()->localite, function ($query, $localite) {
+                                        $query->where('localite_id', $localite);
+                                    })
+                                    ->get();
+
+        $parcelles = Parcelle::dateFilter()->latest('id')
+            ->joinRelationship('producteur.localite.section')
+            ->where('cooperative_id', $manager->cooperative_id) 
+            ->when(request()->section, function ($query, $section) {
+                $query->where('section_id', $section);
+            })
+            ->when(request()->localite, function ($query, $localite) {
+                $query->where('localite_id', $localite);
+            })
+            ->when(request()->producteur, function ($query, $producteur) {
+                $query->where('producteur_id', $producteur);
+            })
+            ->with(['producteur.localite.section']) 
+            ->get();
+            $total = count($parcelles);
+            $foretclassees = ForetClassee::get();
+            $foretclasseetampons = ForetClasseeTampon::get();
+            $pageTitle  = "Risque de Deforestation par Waypoints($total)";
+         
+        return view('manager.deforestation.waypoints',compact('pageTitle','sections', 'parcelles', 'localites','producteurs','foretclassees','foretclasseetampons'));
+    }
      
 }

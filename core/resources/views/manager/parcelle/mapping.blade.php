@@ -130,9 +130,7 @@ foreach ($parcelles as  $data) {
     for (i = 0; i < locations.length; i++) { 
       marker = new google.maps.Marker({
         position: new google.maps.LatLng(locations[i][2],locations[i][1]),
-        map: map,
-       // animation: google.maps.Animation.BOUNCE,
-        //icon: new google.maps.MarkerImage("<?php echo asset('assets/img/map-marker.png'); ?>")
+        map: map, 
       });
 
       google.maps.event.addListener(marker, 'click', (function(marker, i) {

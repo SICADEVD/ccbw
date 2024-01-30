@@ -493,12 +493,8 @@ Route::middleware('auth')->group(function () {
 
         //Manage Agrodeforestations
         Route::name('agro.deforestation.')->prefix('agro/deforestation')->group(function () {
-            Route::get('list', [AgrodeforestationController::class,'index'])->name('index');
-            Route::get('create', [AgrodeforestationController::class,'create'])->name('create');
-            Route::post('store', [AgrodeforestationController::class,'store'])->name('store');
-            Route::get('edit/{id}', [AgrodeforestationController::class,'edit'])->name('edit');
-            Route::post('status/{id}', [AgrodeforestationController::class,'status'])->name('status');
-            Route::get('/exportDeforestationsExcel', [AgrodeforestationController::class,'exportExcel'])->name('exportExcel.deforestationsAll');
+            Route::get('polygones', [AgrodeforestationController::class,'index'])->name('index');
+            Route::get('waypoints', [AgrodeforestationController::class,'waypoints'])->name('waypoints'); 
             
         });
 
