@@ -68,7 +68,7 @@ $lat = '';
 $long = '';
 $total = 0;
 $mappingparcellle ='';
-$pointsPolygon = array();
+$pointsPolygon = $pointsWaypoints = array();
 $seriescoordonates=array();
 $a=1;
 
@@ -93,7 +93,8 @@ if(isset($parcelles) && count($parcelles)){
             $culture= isset($data->culture) ? htmlentities($data->culture, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
             $superficie= isset($data->superficie) ? htmlentities($data->superficie, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
             $proprietaire = 'Coopérative:'. $cooperative.'<br>Section:'. $section.'<br>Localite:'. $localite.'<br>Producteur : '.$producteur.'<br>Code producteur:'. $code.'<br>Code Parcelle:'. $parcelle.'<br>Année creation:'. $annee.'<br>Latitude:'. $lat.'<br>Longitude:'. $long.'<br>Superficie:'. $superficie.' ha';
-
+           
+            $pointsCoordinates = "['".$proprietaire."',".$long.",".$lat."]";
      $polygon ='';
 
         $coords = explode(',0', $data->waypoints);
@@ -125,10 +126,13 @@ if(isset($parcelles) && count($parcelles)){
         }
         $seriescoordonates[]= $polygonCoordinates;
         $pointsPolygon[] = "['".$proprietaire."']";
+        $pointsWaypoints[] = $pointsCoordinates;
     }
    
 $pointsPolygon = Str::replace('"','',json_encode($pointsPolygon));
  $pointsPolygon = Str::replace("''","'Non Disponible'",$pointsPolygon);
+ $pointsWaypoints = Str::replace('"','',json_encode($pointsWaypoints));
+ $pointsWaypoints = Str::replace("''","'Non Disponible'",$pointsWaypoints);
   
 } 
  
@@ -160,6 +164,7 @@ $pointsPolygon = Str::replace('"','',json_encode($pointsPolygon));
     let map;
 let infoWindow;
 var locations = <?php echo $pointsPolygon; ?>;
+var locationsWaypoints = <?php echo $pointsWaypoints; ?>;
 var total = <?php echo $total; ?>;
 window.onload = function () {
   map = new google.maps.Map(document.getElementById("map"), {
@@ -201,6 +206,25 @@ const randomColor = getRandomElement(arrayColor);
 
     polygon.setMap(map);
 }
+
+// Affichage des waypoints
+var infowindow2 = new google.maps.InfoWindow();
+
+    var marker, i;
+
+    for (i = 0; i < total; i++) { 
+      marker = new google.maps.Marker({
+        position: new google.maps.LatLng(locationsWaypoints[i][2],locationsWaypoints[i][1]),
+        map: map, 
+      });
+
+      google.maps.event.addListener(marker, 'click', (function(marker, i) {
+        return function() {
+        infowindow2.setContent(locationsWaypoints[i][0]);
+          infowindow2.open(map, marker);
+        }
+      })(marker, i));
+    } 
 
 } 
 function getInfoWindowContent(location) {

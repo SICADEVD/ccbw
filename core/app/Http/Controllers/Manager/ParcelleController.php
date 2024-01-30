@@ -28,6 +28,7 @@ use App\Models\Parcelle_type_protection;
 use App\Models\Producteur_infos_typeculture;
 use App\Models\Programme;
 use App\Models\Producteur_certification;
+use Illuminate\Support\Arr;
 
 class ParcelleController extends Controller
 {
@@ -241,12 +242,13 @@ $producteurs = Producteur::joinRelationship('localite.section')
                     $parcelle = new Parcelle();
                 }
                 $centroid = $this->calculateCentroid($data['coordinates']);
+                //$aire = $this->calculatePolygonArea($data['coordinates']);
                 
                 $parcelle->producteur_id  = $producteur->id;
                 $parcelle->typedeclaration  = 'GPS';
                 $parcelle->superficie = round($data['supHa'],2); 
-                $parcelle->latitude = round($centroid['y'],6);
-                $parcelle->longitude = round($centroid['x'],6);
+                $parcelle->latitude = round($centroid['lat'],6);
+                $parcelle->longitude = round($centroid['lng'],6);
                 $parcelle->waypoints = $data['coordinates'];
                 $parcelle->save(); 
                 $i++;
@@ -326,30 +328,64 @@ $producteurs = Producteur::joinRelationship('localite.section')
         // Retourner le tableau des coordonnées
         return $dataArray;
     }
-
-    public function calculateCentroid($coordinates) {
-        // Séparer les paires de coordonnées
-        $points = explode("\n", trim($coordinates));
-        
-        $xSum = 0;
-        $ySum = 0;
-        $pointCount = count($points);
+ 
+    private function calculateCentroid($coordinates) {
+        /*
+        Calcule le centroïde d'un polygone à partir de ses coordonnées.
     
-        // Parcourir chaque paire de coordonnées
-        foreach ($points as $point) {
-            $coords = explode(',', trim($point));
+        Args:
+            $coordinates (str): Les coordonnées du polygone.
     
-            // Ajouter les coordonnées au total
-            $xSum += (float)$coords[0];
-            $ySum += (float)$coords[1];
-        }
+        Returns:
+            str: Les coordonnées du centroïde.
+        */
+        // Convertir les coordonnées en une liste de tuples
+        $coords = array_map(function($coord) {
+            return array_map('floatval', explode(',', $coord));
+        }, explode(' ', $coordinates));
+    
+        // Calculer la somme des coordonnées
+        $sum_x = array_sum(array_column($coords, 0));
+        $sum_y = array_sum(array_column($coords, 1));
     
         // Calculer le centroïde
-        $centroidX = $xSum / $pointCount;
-        $centroidY = $ySum / $pointCount;
-    
-        return array('x' => $centroidX, 'y' => $centroidY);
+        $centroid_x = $sum_x / count($coords);
+        $centroid_y = $sum_y / count($coords);
+         
+        // Retourner les coordonnées du centroïde
+        
+        return array('lat' => number_format($centroid_y, 6), 'lng' => number_format($centroid_x, 6));
     }
+     
+    
+    // Fonction pour calculer la superficie du polygone
+    private function calculatePolygonArea($coordinates) {
+        /*
+        Calcule l'aire d'un polygone à partir de ses coordonnées.
+    
+        Args:
+            $coordinates (str): Les coordonnées du polygone.
+    
+        Returns:
+            float: L'aire du polygone.
+        */
+        // Convertir les coordonnées en une liste de tuples
+        $coords = array_map(function($coord) {
+            return array_map('floatval', explode(',', $coord));
+        }, explode(' ', $coordinates));
+    
+        // Calculer l'aire
+        $area = 0.0;
+        for ($i = 0; $i < count($coords); $i++) {
+            $j = ($i + 1) % count($coords);
+            $area += $coords[$i][0] * $coords[$j][1] - $coords[$j][0] * $coords[$i][1];
+        }
+        $area /= 2.0;
+    
+        // Retourner l'aire
+        return abs($area)*0.0001;
+    }
+    
     private function verifylocalite($nom)
     {
         $action = 'non';
