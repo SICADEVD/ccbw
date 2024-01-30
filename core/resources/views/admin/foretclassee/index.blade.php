@@ -99,6 +99,8 @@ $pointsPolygonF = Str::replace('"','',json_encode($pointsPolygonF));
 } 
 
 // Chargement Zones Tampons
+$lat = '';
+$long = '';
 $totalZT = 0; 
   $pointsPolygonZT = array();
   $seriescoordonatesZT=array();
@@ -219,62 +221,53 @@ window.onload = function () {
   // Afichage Forets Classées
 @if(($fc==null && $zt==null) || $fc==1)
 
-const foretsClasseesCoords = <?php echo Str::replace('"','',json_encode($seriescoordonatesF)); ?>; 
-const polygons = []; 
+const triangleCoordsF = <?php echo Str::replace('"','',json_encode($seriescoordonatesF)); ?>; 
+  const polygonsF = []; 
 for (let i = 0; i < totalF; i++) {   
 
-  const polygon = new google.maps.Polygon({
-      paths: foretsClasseesCoords[i],
-      strokeColor: "#FFFF00",
-      strokeOpacity: 1,
-      strokeWeight: 2,
-      fillColor: "#1A281A",
-      fillOpacity: 1,
-      clickable: true
-  });
+    const polygon = new google.maps.Polygon({
+        paths: triangleCoordsF[i],
+        strokeColor: "#FFFF00",
+        strokeOpacity: 1,
+        strokeWeight: 2,
+        fillColor: "#1A281A",
+        fillOpacity: 1,
+        clickable: true
+    });
 
-  polygons.push(polygon);
+    polygonsF.push(polygon);
+ 
+    google.maps.event.addListener(polygon, 'click', function (event) {
+        const infoWindow = new google.maps.InfoWindow({
+            content: getInfoWindowContentF(locationsF[i])
+        });
 
-  google.maps.event.addListener(polygon, 'click', function (event) {
-      const infoWindow = new google.maps.infoWindow({
-          content: getInfoWindowContent(locationsF[i])
-      });
+        infoWindow.setPosition(event.latLng);
+        infoWindow.open(map);
+    });
 
-      infoWindow.setPosition(event.latLng);
-      infoWindow.open(map);
-  });
-
-  polygon.setMap(map);
-}
+    polygon.setMap(map);
+} 
 @endif 
 
  // Afichage Zones Tampons
  @if(($fc==null && $zt==null) || $zt==1)
  
-const triangleCoords = <?php echo Str::replace('"','',json_encode($seriescoordonatesZT)); ?>; 
+ const triangleCoordsZT = <?php echo Str::replace('"','',json_encode($seriescoordonatesZT)); ?>; 
   const polygonsZT = []; 
 for (let i = 0; i < totalZT; i++) {   
 
     const polygon = new google.maps.Polygon({
-        paths: triangleCoords[i],
-        strokeColor: "#9DFFFF",
+        paths: triangleCoordsZT[i],
+        strokeColor: "#FFFFFF",
         strokeOpacity: 0.2,
         strokeWeight: 2,
-        fillColor: "#9DFFFF",
+        fillColor: "#FFFFFF",
         fillOpacity: 0.2,
-        clickable: true
+        clickable: false
     });
 
-    polygonsZT.push(polygon);
- 
-    // google.maps.event.addListener(polygon, 'click', function (event) {
-    //     const infoWindow = new google.maps.InfoWindow({
-    //         content: getInfoWindowContentZT(locationsZT[i])
-    //     });
-
-    //     infoWindow.setPosition(event.latLng);
-    //     infoWindow.open(map);
-    // });
+    polygonsZT.push(polygon); 
 
     polygon.setMap(map);
 }

@@ -147,8 +147,8 @@ if(isset($foretclassees) && count($foretclassees)){
       {
           $lat = htmlentities($data->latitude, ENT_QUOTES | ENT_IGNORE, "UTF-8");
   $long= htmlentities($data->longitude, ENT_QUOTES | ENT_IGNORE, "UTF-8"); 
-  $producteur = htmlentities($data->nomForet, ENT_QUOTES | ENT_IGNORE, "UTF-8"); 
-  $region= htmlentities($data->region, ENT_QUOTES | ENT_IGNORE, "UTF-8");
+  $producteur = $data->nomForet; 
+  $region= $data->region;
   $superficie= round(htmlentities($data->superficie, ENT_QUOTES | ENT_IGNORE, "UTF-8")*0.0001,2);
    $polygon ='';
 
@@ -208,7 +208,7 @@ if(isset($foretclasseetampons) && count($foretclasseetampons)){
       {
           $lat = htmlentities($data->latitude, ENT_QUOTES | ENT_IGNORE, "UTF-8");
   $long= htmlentities($data->longitude, ENT_QUOTES | ENT_IGNORE, "UTF-8"); 
-  $producteur = htmlentities($data->nomZToret, ENT_QUOTES | ENT_IGNORE, "UTF-8"); 
+  $producteur = htmlentities($data->nomForet, ENT_QUOTES | ENT_IGNORE, "UTF-8"); 
   $region= htmlentities($data->region, ENT_QUOTES | ENT_IGNORE, "UTF-8");
   $superficie= round(htmlentities($data->superficie, ENT_QUOTES | ENT_IGNORE, "UTF-8")*0.0001,2);
    $polygon ='';
