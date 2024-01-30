@@ -211,10 +211,10 @@ const randomColor = getRandomElement(arrayColor);
 var infowindow2 = new google.maps.InfoWindow();
 
     var marker, i;
-
+     
     for (i = 0; i < total; i++) { 
       marker = new google.maps.Marker({
-        position: new google.maps.LatLng(locationsWaypoints[i][2],locationsWaypoints[i][1]),
+        position: new google.maps.LatLng(locationsWaypoints[i][2],locationsWaypoints[i][1]),  
         map: map, 
       });
 
