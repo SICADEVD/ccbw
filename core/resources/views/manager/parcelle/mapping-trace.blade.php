@@ -208,23 +208,23 @@ const randomColor = getRandomElement(arrayColor);
 }
 
 // Affichage des waypoints
-var infowindow2 = new google.maps.InfoWindow();
+// var infowindow2 = new google.maps.InfoWindow();
 
-    var marker, i;
+//     var marker, i;
      
-    for (i = 0; i < total; i++) { 
-      marker = new google.maps.Marker({
-        position: new google.maps.LatLng(locationsWaypoints[i][2],locationsWaypoints[i][1]),  
-        map: map, 
-      });
+//     for (i = 0; i < total; i++) { 
+//       marker = new google.maps.Marker({
+//         position: new google.maps.LatLng(locationsWaypoints[i][2],locationsWaypoints[i][1]),  
+//         map: map, 
+//       });
 
-      google.maps.event.addListener(marker, 'click', (function(marker, i) {
-        return function() {
-        infowindow2.setContent(locationsWaypoints[i][0]);
-          infowindow2.open(map, marker);
-        }
-      })(marker, i));
-    } 
+//       google.maps.event.addListener(marker, 'click', (function(marker, i) {
+//         return function() {
+//         infowindow2.setContent(locationsWaypoints[i][0]);
+//           infowindow2.open(map, marker);
+//         }
+//       })(marker, i));
+//     } 
 
 } 
 function getInfoWindowContent(location) {
