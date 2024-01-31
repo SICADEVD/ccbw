@@ -352,6 +352,7 @@ Route::middleware('auth')->group(function () {
             Route::get('create', [ParcelleController::class,'create'])->name('create');
             Route::post('store', [ParcelleController::class,'store'])->name('store');
             Route::get('edit/{id}', [ParcelleController::class,'edit'])->name('edit');
+            Route::get('show/{id}', [ParcelleController::class,'show'])->name('show');
             Route::post('status/{id}', [ParcelleController::class,'status'])->name('status');
             Route::get('/exportParcellesExcel', [ParcelleController::class,'exportExcel'])->name('exportExcel.parcelleAll');
             Route::get('mapping', [ParcelleController::class,'mapping'])->name('mapping');

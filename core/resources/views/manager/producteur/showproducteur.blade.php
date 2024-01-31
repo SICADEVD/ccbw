@@ -301,7 +301,7 @@
 
 @push('script')
     <script type="text/javascript">
-        $("#section_id").chained("#localite");
+        //$("#section_id").chained("#localite");
     </script>
 @endpush
 

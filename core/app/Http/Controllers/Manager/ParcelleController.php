@@ -41,18 +41,18 @@ class ParcelleController extends Controller
         $cooperative = Cooperative::with('sections.localites')->find($manager->cooperative_id);
         $sections = Section::where('cooperative_id', $manager->cooperative_id)->get();
         $localites = Localite::joinRelationship('section')
-                                ->where('cooperative_id', $manager->cooperative_id)
-                                ->when(request()->section, function ($query, $section) {
-                                    $query->where('section_id', $section);
-                                })
-                                ->get(); 
-$producteurs = Producteur::joinRelationship('localite.section')
-                        ->where('cooperative_id', $manager->cooperative_id)
-                        ->when(request()->localite, function ($query, $localite) {
-                            $query->where('localite_id', $localite);
-                        })
-                        ->get();
-     
+            ->where('cooperative_id', $manager->cooperative_id)
+            ->when(request()->section, function ($query, $section) {
+                $query->where('section_id', $section);
+            })
+            ->get();
+        $producteurs = Producteur::joinRelationship('localite.section')
+            ->where('cooperative_id', $manager->cooperative_id)
+            ->when(request()->localite, function ($query, $localite) {
+                $query->where('localite_id', $localite);
+            })
+            ->get();
+
         $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
             return $localite->active();
         });
@@ -71,30 +71,30 @@ $producteurs = Producteur::joinRelationship('localite.section')
             ->paginate(getPaginate());
 
 
-        return view('manager.parcelle.index', compact('pageTitle','sections', 'parcelles', 'localites','producteurs'));
+        return view('manager.parcelle.index', compact('pageTitle', 'sections', 'parcelles', 'localites', 'producteurs'));
     }
 
     public function mapping()
     {
         $pageTitle      = "Gestion de mapping des parcelles";
         $manager   = auth()->user();
- 
+
         $cooperative = Cooperative::with('sections.localites')->find($manager->cooperative_id);
 
         $sections = Section::where('cooperative_id', $manager->cooperative_id)->get();
-     
+
         $localites = Localite::joinRelationship('section')
-                                ->where('cooperative_id', $manager->cooperative_id)
-                                ->when(request()->section, function ($query, $section) {
-                                    $query->where('section_id', $section);
-                                })
-                                ->get(); 
+            ->where('cooperative_id', $manager->cooperative_id)
+            ->when(request()->section, function ($query, $section) {
+                $query->where('section_id', $section);
+            })
+            ->get();
         $producteurs = Producteur::joinRelationship('localite.section')
-                            ->where('cooperative_id', $manager->cooperative_id)
-                            ->when(request()->localite, function ($query, $localite) {
-                                $query->where('localite_id', $localite);
-                            })
-                            ->get();
+            ->where('cooperative_id', $manager->cooperative_id)
+            ->when(request()->localite, function ($query, $localite) {
+                $query->where('localite_id', $localite);
+            })
+            ->get();
         $parcelles = Parcelle::dateFilter()->latest('id')
             ->joinRelationship('producteur.localite.section')
             ->where('cooperative_id', $manager->cooperative_id)
@@ -109,25 +109,25 @@ $producteurs = Producteur::joinRelationship('localite.section')
             })
             ->with(['producteur.localite.section']) // Charger les relations nécessaires
             ->get();
- 
-        return view('manager.parcelle.mapping', compact('pageTitle','sections', 'parcelles', 'localites','producteurs'));
+
+        return view('manager.parcelle.mapping', compact('pageTitle', 'sections', 'parcelles', 'localites', 'producteurs'));
     }
     public function mappingPolygone()
     {
-        
+
         $manager   = auth()->user();
- 
+
         $cooperative = Cooperative::with('sections.localites')->find($manager->cooperative_id);
 
         $sections = Section::where('cooperative_id', $manager->cooperative_id)->with('cooperative')->get();
-     
+
         $localites = Localite::joinRelationship('section')
-        ->where('cooperative_id', $manager->cooperative_id)
-        ->when(request()->section, function ($query, $section) {
-            $query->where('section_id', $section);
-        })
-        ->get(); 
-$producteurs = Producteur::joinRelationship('localite.section')
+            ->where('cooperative_id', $manager->cooperative_id)
+            ->when(request()->section, function ($query, $section) {
+                $query->where('section_id', $section);
+            })
+            ->get();
+        $producteurs = Producteur::joinRelationship('localite.section')
             ->where('cooperative_id', $manager->cooperative_id)
             ->when(request()->localite, function ($query, $localite) {
                 $query->where('localite_id', $localite);
@@ -146,11 +146,11 @@ $producteurs = Producteur::joinRelationship('localite.section')
             ->when(request()->producteur, function ($query, $producteur) {
                 $query->where('producteur_id', $producteur);
             })
-            ->with(['producteur.localite.section']) 
+            ->with(['producteur.localite.section'])
             ->get();
-            $total = count($parcelles);
-            $pageTitle  = "Gestion de mapping des parcelles($total)";
-        return view('manager.parcelle.mapping-trace', compact('pageTitle','sections', 'parcelles', 'localites','producteurs'));
+        $total = count($parcelles);
+        $pageTitle  = "Gestion de mapping des parcelles($total)";
+        return view('manager.parcelle.mapping-trace', compact('pageTitle', 'sections', 'parcelles', 'localites', 'producteurs'));
     }
 
     public function create()
@@ -166,30 +166,30 @@ $producteurs = Producteur::joinRelationship('localite.section')
         $arbres = Agroespecesarbre::all();
         return view('manager.parcelle.create', compact('pageTitle', 'producteurs', 'localites', 'sections', 'arbres'));
     }
-    
+
     public function uploadKML(Request $request)
     {
         $pageTitle = "Importation de fichier KML";
         $manager   = auth()->user();
-        $i=0;
-        if($request->file('fichier_kml') !=null){
+        $i = 0;
+        if ($request->file('fichier_kml') != null) {
             $file = $request->file('fichier_kml');
             @unlink(public_path('upload/kml/'));
             $filename = $file->getClientOriginalName();
             $file->move(public_path('upload/kml'), $filename);
-            $filePath = public_path('upload/kml/'.$filename); 
-            $dataPolygones = $this->getCoordinatesFromKML($filePath); 
-            $coordinates = $dataPolygones[0]; 
+            $filePath = public_path('upload/kml/' . $filename);
+            $dataPolygones = $this->getCoordinatesFromKML($filePath);
+            $coordinates = $dataPolygones[0];
 
-            foreach($dataPolygones as $index => $data) {
-                
-                $producteur = Producteur::where('codeProd',$data['codeProducteur'])->first();
-                if($producteur ==null){
-                    $producteur = new Producteur(); 
+            foreach ($dataPolygones as $index => $data) {
+
+                $producteur = Producteur::where('codeProd', $data['codeProducteur'])->first();
+                if ($producteur == null) {
+                    $producteur = new Producteur();
                 }
-                $cooperative = Cooperative::where('name',$data['cooperative'])->first();
-                $section = Section::where([['cooperative_id',$cooperative->id],['libelle',$data['section']]])->first();
-                if($section==null){
+                $cooperative = Cooperative::where('name', $data['cooperative'])->first();
+                $section = Section::where([['cooperative_id', $cooperative->id], ['libelle', $data['section']]])->first();
+                if ($section == null) {
                     $section = new Section();
                     $data['section'] = $this->verifysection($data['section']);
                 }
@@ -199,8 +199,8 @@ $producteurs = Producteur::joinRelationship('localite.section')
                 $section->libelle = $data['section'];
                 $section->save();
 
-                $localite = Localite::where([['section_id',$section->id],['nom',$data['localite']]])->first();
-                if($localite==null){
+                $localite = Localite::where([['section_id', $section->id], ['nom', $data['localite']]])->first();
+                if ($localite == null) {
                     $nomLocal = $this->verifylocalite($data['localite']);
                     $codeLocal = $this->generelocalitecode($nomLocal);
                     $localite = new Localite();
@@ -209,9 +209,9 @@ $producteurs = Producteur::joinRelationship('localite.section')
                     $localite->codeLocal = $codeLocal;
                     $localite->save();
                 }
-                $programme = Programme::where('libelle',$data['programme'])->first();
-               
-                 
+                $programme = Programme::where('libelle', $data['programme'])->first();
+
+
                 $producteur->nom = utf8_encode($data['nom']);
                 $producteur->prenoms = utf8_encode($data['prenoms']);
                 $producteur->num_ccc = $data['codeCCC'];
@@ -220,59 +220,59 @@ $producteurs = Producteur::joinRelationship('localite.section')
                 $producteur->programme_id = $programme->id;
                 $producteur->localite_id = $localite->id;
                 $producteur->save();
-                
+
                 $certification = Certification::where('fullname', $data['certification'])->first();
-                if($certification==null){
+                if ($certification == null) {
                     $certification = new Certification();
                     $certification->nom = $data['certification'];
                     $certification->fullname = $data['certification'];
                     $certification->save();
-                } 
-                $prodcertif = Producteur_certification::where([['producteur_id',$producteur->id],['certification',$certification->nom]])->first();
-                if($prodcertif ==null){
+                }
+                $prodcertif = Producteur_certification::where([['producteur_id', $producteur->id], ['certification', $certification->nom]])->first();
+                if ($prodcertif == null) {
                     $prodcertif = new Producteur_certification();
-                } 
+                }
                 $prodcertif->producteur_id = $producteur->id;
                 $prodcertif->certification = $certification->nom;
                 $prodcertif->save();
 
-                $parcelle = Parcelle::where([['producteur_id',$producteur->id]])->first();
-                if($parcelle ==null)
-                {
+                $parcelle = Parcelle::where([['producteur_id', $producteur->id]])->first();
+                if ($parcelle == null) {
                     $parcelle = new Parcelle();
                 }
                 $centroid = $this->calculateCentroid($data['coordinates']);
                 //$aire = $this->calculatePolygonArea($data['coordinates']);
-                
+
                 $parcelle->producteur_id  = $producteur->id;
                 $parcelle->typedeclaration  = 'GPS';
-                $parcelle->superficie = round($data['supHa'],2); 
-                $parcelle->latitude = round($centroid['lat'],6);
-                $parcelle->longitude = round($centroid['lng'],6);
+                $parcelle->superficie = round($data['supHa'], 2);
+                $parcelle->latitude = round($centroid['lat'], 6);
+                $parcelle->longitude = round($centroid['lng'], 6);
                 $parcelle->waypoints = $data['coordinates'];
-                $parcelle->save(); 
+                $parcelle->save();
                 $i++;
             }
-         
+
             $notify[] = ['success', "$i Polygones ont été importés avec succès"];
 
-        return back()->withNotify($notify);
+            return back()->withNotify($notify);
         }
-        
-        
-        
+
+
+
         return view('manager.parcelle.uploadkml', compact('pageTitle'));
     }
-    public function getCoordinatesFromKML($filePath) {
+    public function getCoordinatesFromKML($filePath)
+    {
         // Charger le fichier KML
         $kmlContent = file_get_contents($filePath);
-        
+
         // Créer un objet SimpleXML pour parcourir le fichier KML
         $kml = new SimpleXMLElement($kmlContent);
-        
+
         // Initialiser un tableau pour stocker les coordonnées 
         $dataArray = array();
-        
+
         // Parcourir chaque Placemark dans le document KML
         foreach ($kml->Document->Folder->Placemark as $placemark) {
             // Récupérer les coordonnées de la balise <coordinates>
@@ -297,7 +297,7 @@ $producteurs = Producteur::joinRelationship('localite.section')
             $genre = (string)$placemark->ExtendedData->SchemaData->SimpleData[17];
             $certification = (string)$placemark->ExtendedData->SchemaData->SimpleData[22];
             $programme = (string)$placemark->ExtendedData->SchemaData->SimpleData[23];
-            
+
             // Ajouter les données au tableau
             $coordinatesArray[] = $coordinates;
             $dataArray[] = array(
@@ -324,12 +324,13 @@ $producteurs = Producteur::joinRelationship('localite.section')
                 'programme' => $programme
             );
         }
-        
+
         // Retourner le tableau des coordonnées
         return $dataArray;
     }
- 
-    private function calculateCentroid($coordinates) {
+
+    private function calculateCentroid($coordinates)
+    {
         /*
         Calcule le centroïde d'un polygone à partir de ses coordonnées.
     
@@ -340,26 +341,27 @@ $producteurs = Producteur::joinRelationship('localite.section')
             str: Les coordonnées du centroïde.
         */
         // Convertir les coordonnées en une liste de tuples
-        $coords = array_map(function($coord) {
+        $coords = array_map(function ($coord) {
             return array_map('floatval', explode(',', $coord));
         }, explode(' ', $coordinates));
-    
+
         // Calculer la somme des coordonnées
         $sum_x = array_sum(array_column($coords, 0));
         $sum_y = array_sum(array_column($coords, 1));
-    
+
         // Calculer le centroïde
         $centroid_x = $sum_x / count($coords);
         $centroid_y = $sum_y / count($coords);
-         
+
         // Retourner les coordonnées du centroïde
-        
+
         return array('lat' => number_format($centroid_y, 6), 'lng' => number_format($centroid_x, 6));
     }
-     
-    
+
+
     // Fonction pour calculer la superficie du polygone
-    private function calculatePolygonArea($coordinates) {
+    private function calculatePolygonArea($coordinates)
+    {
         /*
         Calcule l'aire d'un polygone à partir de ses coordonnées.
     
@@ -370,10 +372,10 @@ $producteurs = Producteur::joinRelationship('localite.section')
             float: L'aire du polygone.
         */
         // Convertir les coordonnées en une liste de tuples
-        $coords = array_map(function($coord) {
+        $coords = array_map(function ($coord) {
             return array_map('floatval', explode(',', $coord));
         }, explode(' ', $coordinates));
-    
+
         // Calculer l'aire
         $area = 0.0;
         for ($i = 0; $i < count($coords); $i++) {
@@ -381,11 +383,11 @@ $producteurs = Producteur::joinRelationship('localite.section')
             $area += $coords[$i][0] * $coords[$j][1] - $coords[$j][0] * $coords[$i][1];
         }
         $area /= 2.0;
-    
+
         // Retourner l'aire
-        return abs($area)*0.0001;
+        return abs($area) * 0.0001;
     }
-    
+
     private function verifylocalite($nom)
     {
         $action = 'non';
@@ -470,7 +472,7 @@ $producteurs = Producteur::joinRelationship('localite.section')
     {
         $action = 'non';
         do {
-            $data = Section::select('libelle')->where([['cooperative_id',auth()->user()->cooperative_id],['libelle', $nom]])->orderby('id', 'desc')->first();
+            $data = Section::select('libelle')->where([['cooperative_id', auth()->user()->cooperative_id], ['libelle', $nom]])->orderby('id', 'desc')->first();
             if ($data != '') {
 
                 $nomSection = $data->libelle;
@@ -493,7 +495,7 @@ $producteurs = Producteur::joinRelationship('localite.section')
 
                 $nomSection = $nom;
             }
-            $verif = Section::select('libelle')->where([['cooperative_id',auth()->user()->cooperative_id],['libelle', $nomSection]])->orderby('id', 'desc')->first();
+            $verif = Section::select('libelle')->where([['cooperative_id', auth()->user()->cooperative_id], ['libelle', $nomSection]])->orderby('id', 'desc')->first();
             if ($verif == null) {
                 $action = 'non';
             } else {
@@ -632,7 +634,7 @@ $producteurs = Producteur::joinRelationship('localite.section')
                 return back()->withNotify($notify);
             }
         }
-         
+
         $parcelle->save();
         if ($parcelle != null) {
             $id = $parcelle->id;
@@ -641,13 +643,13 @@ $producteurs = Producteur::joinRelationship('localite.section')
                 Parcelle_type_protection::where('parcelle_id', $id)->delete();
                 $i = 0;
                 foreach ($request->protection as $protection) {
-                    if (!empty($protection)) { 
+                    if (!empty($protection)) {
                         $datas[] = [
                             'parcelle_id' => $id,
                             'typeProtection' => $protection,
                         ];
                     }
-                    
+
                     $i++;
                 }
             }
@@ -742,6 +744,23 @@ $producteurs = Producteur::joinRelationship('localite.section')
 
         return view('manager.parcelle.edit', compact('pageTitle', 'localites', 'parcelle', 'producteurs', 'sections', 'protections', 'arbres', 'agroespeceabreParcelle'));
     }
+    public function show($id)
+    {
+        $pageTitle = "Détails de la parcelle";
+        $parcelle   = Parcelle::findOrFail($id);
+        $manager   = auth()->user();
+        $cooperative = Cooperative::with('sections.localites', 'sections.localites.section')->find($manager->cooperative_id);
+        $sections = $cooperative->sections;
+        $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
+            return $localite->active();
+        });
+        $producteurs  = Producteur::with('localite')->get();
+        $protections = $parcelle->parcelleTypeProtections->pluck('typeProtection')->all();
+        $arbres = Agroespecesarbre::all();
+        $agroespeceabreParcelle = agroespeceabre_parcelle::where('parcelle_id', $id)->get();
+        return view('manager.parcelle.show', compact('pageTitle', 'localites', 'parcelle', 'producteurs', 'sections', 'protections', 'arbres', 'agroespeceabreParcelle'));
+    }
+
 
     public function status($id)
     {

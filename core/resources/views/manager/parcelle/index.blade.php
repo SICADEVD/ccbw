@@ -112,6 +112,8 @@
                                             <div class="dropdown-menu p-0">
                                                 <a href="{{ route('manager.traca.parcelle.edit', $parcelle->id) }}"
                                                     class="dropdown-item"><i class="la la-pen"></i>@lang('Edit')</a>
+                                                <a href="{{ route('manager.traca.parcelle.show', $parcelle->id) }}"
+                                                    class="dropdown-item"><i class="las la-file-invoice"></i>@lang('Détail')</a>
                                                 @if ($parcelle->status == Status::DISABLE)
                                                     <button type="button" class="confirmationBtn  dropdown-item"
                                                         data-action="{{ route('manager.traca.parcelle.status', $parcelle->id) }}"
