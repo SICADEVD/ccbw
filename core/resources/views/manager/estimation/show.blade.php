@@ -16,7 +16,7 @@
                     <div class="form-group row">
                         <label class="col-sm-4 control-label">@lang('Selectionner une localite')</label>
                         <div class="col-xs-12 col-sm-8">
-                            <select class="form-control" name="localite" id="localite" required>
+                            <select class="form-control" name="localite" id="localite" required disabled>
                                 <option value="">@lang('Selectionner une option')</option>
                                 @foreach ($localites as $localite)
                                     <option value="{{ $localite->id }}" @selected($localite->id == $estimation->parcelle->producteur->localite->id)>
@@ -29,7 +29,7 @@
                     <div class="form-group row">
                         <label class="col-sm-4 control-label">@lang('Selectionner un producteur')</label>
                         <div class="col-xs-12 col-sm-8">
-                            <select class="form-control" name="producteur" id="producteur" required>
+                            <select class="form-control" name="producteur" id="producteur" required disabled>
                                 <option value="">@lang('Selectionner une option')</option>
                                 @foreach ($producteurs as $producteur)
                                     <option value="{{ $producteur->id }}" data-chained="{{ $producteur->localite->id }}"
@@ -45,13 +45,13 @@
                         <div class="col-xs-12 col-sm-8">
                             <input type="text" name="culture" placeholder="Café, Cacao"
                                 class="form-control @error('culture') is-invalid @enderror"
-                                value="{{ old('culture') ?? $estimation->culture }}" required>
+                                value="{{ old('culture') ?? $estimation->culture }}" required disabled>
                         </div>
                     </div>
                     <div class="form-group row">
                         <?php echo Form::label(__('Type de déclaration superficie'), null, ['class' => 'col-sm-4 control-label required']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('typedeclaration', ['Verbale' => __('Verbale'), 'GPS' => __('GPS')], null, ['class' => 'form-control typedeclaration', 'id' => 'typedeclaration', 'required']); ?>
+                            <?php echo Form::select('typedeclaration', ['Verbale' => __('Verbale'), 'GPS' => __('GPS')], null, ['class' => 'form-control typedeclaration', 'id' => 'typedeclaration', 'required','disabled']); ?>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -70,7 +70,7 @@
                                                         'placeholder' => __('Superficie'),
                                                         'class' => 'form-control superficie',
                                                         'id' => 'superficie-1',
-                                                        'required',
+                                                        'required','disabled'
                                                     ]) !!}
 
                                                 </div>
@@ -82,7 +82,7 @@
                                                     {!! Form::text('latitude', null, [
                                                         'placeholder' => __('Latitude'),
                                                         'class' => 'form-control',
-                                                        'id' => 'latitude-1',
+                                                        'id' => 'latitude-1','disabled'
                                                     ]) !!}
 
                                                 </div>
@@ -93,7 +93,7 @@
                                                     {!! Form::text('longitude', null, [
                                                         'placeholder' => __('Longitude'),
                                                         'class' => 'form-control',
-                                                        'id' => 'longitude-1',
+                                                        'id' => 'longitude-1','disabled'
                                                     ]) !!}
                                                 </div>
                                             </div>
@@ -107,6 +107,7 @@
                                                         'required',
                                                         'min' => 1990,
                                                         'max' => gmdate('Y') - 5,
+                                                        'disabled'
                                                     ]) !!}
                                                 </div>
                                             </div>
@@ -126,15 +127,15 @@
 
                         <?php echo Form::label(__('Fichier KML ou GPX existant'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <input type="file" name="fichier_kml_gpx" class="form-control dropify-fr">
+                            <input type="file" name="fichier_kml_gpx" class="form-control dropify-fr" disabled>
                         </div>
                     </div>
                     <hr class="panel-wide">
 
 
-                    <div class="form-group">
+                    {{-- <div class="form-group">
                         <button type="submit" class="btn btn--primary btn-block h-45 w-100">@lang('Envoyer')</button>
-                    </div>
+                    </div> --}}
                     {!! Form::close() !!}
                 </div>
             </div>
@@ -148,8 +149,8 @@
 
 @push('script')
     <script type="text/javascript">
-        $('#localite').change(function() {
-            $("#producteur").chained("#localite");
-        });
+        //$('#localite').change(function() {
+            //$("#producteur").chained("#localite");
+        //});
     </script>
 @endpush

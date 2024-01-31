@@ -118,6 +118,14 @@ class EstimationController extends Controller
         $estimation   = Estimation::findOrFail($id);
         return view('manager.estimation.edit', compact('pageTitle', 'localites', 'estimation','producteurs'));
     } 
+    public function show($id){
+        $pageTitle = "Détails de la estimation";
+        $manager = auth()->user();
+        $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->get();
+        $producteurs  = Producteur::with('localite')->get();
+        $estimation   = Estimation::findOrFail($id);
+        return view('manager.estimation.show', compact('pageTitle', 'localites', 'estimation','producteurs'));
+    }
 
     public function status($id)
     {

@@ -368,6 +368,7 @@ Route::middleware('auth')->group(function () {
             Route::get('create', [EstimationController::class,'create'])->name('create');
             Route::post('store', [EstimationController::class,'store'])->name('store');
             Route::get('edit/{id}', [EstimationController::class,'edit'])->name('edit');
+            Route::get('show/{id}', [EstimationController::class,'show'])->name('show');
             Route::post('status/{id}', [EstimationController::class,'status'])->name('status');
             Route::get('/exportEstimationsExcel', [EstimationController::class,'exportExcel'])->name('exportExcel.estimationAll');
             Route::post('/uploadcontent', [EstimationController::class,'uploadContent'])->name('uploadcontent');
