@@ -334,6 +334,7 @@ Route::middleware('auth')->group(function () {
             Route::get('list', [ProducteurController::class,'index'])->name('index');
             Route::get('infos/{id}', [ProducteurController::class,'infos'])->name('infos');
             Route::get('show/{id}', [ProducteurController::class,'showinfosproducteur'])->name('showinfosproducteur');
+            Route::get('showproducteur/{id}', [ProducteurController::class,'showproducteur'])->name('showproducteur');
             Route::get('create', [ProducteurController::class,'create'])->name('create');
             Route::post('store', [ProducteurController::class,'store'])->name('store');
             Route::post('update/{id}', [ProducteurController::class,'update'])->name('update');

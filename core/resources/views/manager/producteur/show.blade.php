@@ -18,7 +18,7 @@
                         <div class="form-group row">
                             <?php echo Form::label(__('Avez-vous des forets ou jachère ?'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::select('foretsjachere', ['non' => 'Non', 'oui' => 'Oui'], null, ['class' => 'form-control foretsjachere', 'required','readonly']); ?>
+                                <?php echo Form::select('foretsjachere', ['non' => 'Non', 'oui' => 'Oui'], null, ['class' => 'form-control foretsjachere', 'required','disabled']); ?>
 
                             </div>
                         </div>
@@ -35,7 +35,7 @@
                         <div class="form-group row">
                             <?php echo Form::label(__('Avez-vous D’autres Cultures En Dehors Du Cacao?'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::select('autresCultures', ['non' => 'Non', 'oui' => 'Oui'], null, ['class' => 'form-control autresCultures', 'required','readonly']); ?>
+                                <?php echo Form::select('autresCultures', ['non' => 'Non', 'oui' => 'Oui'], null, ['class' => 'form-control autresCultures', 'required','disabled']); ?>
 
                             </div>
                         </div>
@@ -232,7 +232,7 @@
                         <div class="form-group row">
                             <?php echo Form::label(__('As-tu un Compte Mobile Money ?'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::select('mobileMoney', ['non' => 'Non', 'oui' => 'Oui'], null, ['class' => 'form-control mobileMoney', 'required','readonly']); ?>
+                                <?php echo Form::select('mobileMoney', ['non' => 'Non', 'oui' => 'Oui'], null, ['class' => 'form-control mobileMoney', 'required','disabled']); ?>
 
                             </div>
                         </div>
@@ -342,7 +342,7 @@
                         <div class="form-group row" id="nomBanque">
                             <?php echo Form::label(__('Nom de la banque'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::select('nomBanque', ['Advans' => 'Advans', 'Coopec' => 'Coopec', 'Microcred' => 'Microcred', 'Autre' => 'Autre'], null, ['class' => 'form-control nomBanque','readonly']); ?>
+                                <?php echo Form::select('nomBanque', ['Advans' => 'Advans', 'Coopec' => 'Coopec', 'Microcred' => 'Microcred', 'Autre' => 'Autre'], null, ['class' => 'form-control nomBanque','disabled']); ?>
                             </div>
                         </div>
                         <div class="form-group row" id="autreBanque">

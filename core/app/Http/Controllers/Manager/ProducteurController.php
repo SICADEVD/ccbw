@@ -196,6 +196,19 @@ class ProducteurController extends Controller
         $infosproducteur = Producteur_info::findOrFail(decrypt($id));
         return view('manager.producteur.show', compact('pageTitle', 'infosproducteur', 'id'));
     }
+    public function showproducteur($id)
+    {
+        $pageTitle = "Informations du producteur";
+        $producteur = Producteur::findOrFail($id);
+        $manager   = auth()->user();
+        $sections = Section::with('cooperative')->where('cooperative_id', $manager->cooperative_id)->get();
+        $localites = Localite::active()->with('section')->get();
+        $countries = Pays::all();
+        $programmes = Programme::all();
+        $certificationAll = Certification::all();
+        $certifications = $producteur->certifications->pluck('certification')->all();
+        return view('manager.producteur.showproducteur', compact('pageTitle', 'producteur', 'id', 'localites', 'sections', 'certifications','certificationAll','countries','programmes'));
+    }
 
     public function create()
     {
