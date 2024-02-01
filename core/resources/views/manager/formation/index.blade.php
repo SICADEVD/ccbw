@@ -95,6 +95,8 @@
                                             <div class="dropdown-menu p-0">
                                                 <a href="{{ route('manager.suivi.formation.edit', $formation->id) }}"
                                                     class="dropdown-item"><i class="la la-pen"></i>@lang('Edit')</a>
+                                                <a href="{{ route('manager.suivi.formation.show', $formation->id) }}"
+                                                    class="dropdown-item"><i class="las la-file-invoice"></i>@lang('Détail')</a>
                                                     
                                                 @if ($formation->status == Status::DISABLE)
                                                     <button type="button" class="confirmationBtn  dropdown-item"

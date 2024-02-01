@@ -209,6 +209,39 @@ class FormationController extends Controller
 
         return view('manager.formation.edit', compact('pageTitle', 'localites', 'formation', 'producteurs', 'typeformations', 'themes', 'staffs', 'dataProducteur', 'dataTheme', 'modules', 'themesSelected', 'sousthemes', 'sousThemesSelected', 'producteursSelected'));
     }
+    public function show($id){
+        $pageTitle = "Détails de la formation";
+        $manager   = auth()->user();
+        $producteurs  = Producteur::with('localite')->get();
+        $localites = Localite::joinRelationship('section')->where([['cooperative_id', $manager->cooperative_id], ['localites.status', 1]])->get();
+        $formation   = SuiviFormation::findOrFail($id);
+        $typeformations  = TypeFormation::all();
+
+        $modules = array();
+        $themesSelected = array();
+        $sousThemesSelected = array();
+        $producteursSelected = array();
+        
+        foreach ($formation->formationProducteur as $item) {
+            $producteursSelected[] = $item->producteur_id;
+        }
+        foreach ($formation->typeFormationTheme as $item) {
+            $modules[] = $item->type_formation_id; 
+            $themesSelected[] = $item->theme_formation_id;
+        }
+        
+        foreach ($formation->themeSousTheme as $item) {
+            $sousThemesSelected[] = $item->sous_theme_id;
+        }
+
+        $themes  = ThemesFormation::with('typeFormation')->get();
+        $sousthemes  = SousThemeFormation::with('themeFormation')->get();
+        $staffs  = User::staff()->get();
+        
+        $dataProducteur = $dataVisiteur = $dataTheme = array();
+
+        return view('manager.formation.show', compact('pageTitle', 'localites', 'formation', 'producteurs', 'typeformations', 'themes', 'staffs', 'dataProducteur', 'dataTheme', 'modules', 'themesSelected', 'sousthemes', 'sousThemesSelected', 'producteursSelected'));
+    }
 
     public function visiteur($id)
     {

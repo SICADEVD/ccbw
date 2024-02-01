@@ -402,6 +402,7 @@ Route::middleware('auth')->group(function () {
             Route::get('create', [FormationController::class,'create'])->name('create');
             Route::post('store', [FormationController::class,'store'])->name('store');
             Route::get('edit/{id}', [FormationController::class,'edit'])->name('edit');
+            Route::get('show/{id}', [FormationController::class,'show'])->name('show');
             Route::post('status/{id}', [FormationController::class,'status'])->name('status');
             Route::get('/exportFormationsExcel', [FormationController::class,'exportExcel'])->name('exportExcel.formationAll');
 
