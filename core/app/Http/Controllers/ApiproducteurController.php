@@ -40,20 +40,7 @@ class ApiproducteurController extends Controller
   public function getproducteurs(Request $request)
   {
     $userid = $request->userid;
-    // $producteur = array();
-    // $localite = DB::table('user_localites as rl')->join('localites as l', 'rl.localite_id','=','l.id')->where('user_id', $input['userid'])->select('l.id')->get();
-    // if(isset($localite) && count($localite)){
-    //     foreach($localite as $data){
-    //         $idlocal[] = $data->id;
-    //       }
-
-    //       $localites=implode(',',$idlocal); 
-
-    //       $producteur = Producteur::select('id','nom','prenoms','codeProdapp as codeProd','localite_id')->whereIn('localite_id', $idlocal)->get(); 
-
-    // }
-
-    
+   
     /**
      * Retrieve producteurs with their associated localites and certifications.
      *
@@ -62,7 +49,6 @@ class ApiproducteurController extends Controller
      */
     $producteurs = Producteur::join('localites', 'producteurs.localite_id', '=', 'localites.id')
       ->leftJoin('producteur_certifications', 'producteurs.id', '=', 'producteur_certifications.producteur_id')
-      ->where('producteurs.userid', $userid)
       ->select('producteurs.nom', 'producteurs.prenoms', 'localites.section_id as section_id', 'localites.id as localite_id', 'producteurs.id as id', 'producteurs.codeProd as codeProd', 'producteurs.statut')
       ->selectRaw('GROUP_CONCAT(producteur_certifications.certification) as certification')
       ->groupBy('producteurs.nom', 'producteurs.prenoms', 'localites.section_id', 'localites.id', 'producteurs.id', 'producteurs.codeProd', 'producteurs.statut')
