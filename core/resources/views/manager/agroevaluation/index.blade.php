@@ -78,6 +78,8 @@
                                             <div class="dropdown-menu p-0">
                                                 <a href="{{ route('manager.agro.evaluation.edit', $agroevaluation->id) }}"
                                                     class="dropdown-item"><i class="la la-pen"></i>@lang('Edit')</a>
+                                                <a href="{{ route('manager.agro.evaluation.show', $agroevaluation->id) }}"
+                                                    class="dropdown-item"><i class="las la-file-invoice"></i>@lang('Détail')</a>
                                                     <a href="{{ route('manager.agro.evaluation.destroy', encrypt($agroevaluation->id)) }}"
                                                 class="dropdown-item"><i
                                                     class="las la-trash"></i>@lang('Delete')</a>

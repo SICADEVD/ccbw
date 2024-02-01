@@ -146,6 +146,25 @@ class AgroevaluationController extends Controller
 
         return view('manager.agroevaluation.edit', compact('pageTitle', 'evaluation', 'especesarbres', 'producteurs', 'dataEspece', 'dataQuantite'));
     }
+    public function show($id){
+        $pageTitle = "Détails de l'évaluation AgroForesterie";
+        $manager = auth()->user();
+        $localites = Localite::joinRelationship('section')->where([['cooperative_id', $manager->cooperative_id], ['localites.status', 1]])->orderBy('nom')->get();
+
+        $evaluation   = Agroevaluation::findOrFail($id);
+        $producteurs  = Producteur::where('id', $evaluation->producteur_id)->first();
+        $especesarbres  = Agroespecesarbre::orderby('strate', 'asc')->orderby('nom', 'asc')->get();
+        $agroevaluationEspece  = AgroevaluationEspece::where('agroevaluation_id', $evaluation->id)->get();
+        $dataEspece = $dataQuantite = array();
+        if ($agroevaluationEspece->count()) {
+            foreach ($agroevaluationEspece as $data) {
+                $dataEspece[] = $data->agroespecesarbre_id;
+                $dataQuantite[$data->agroespecesarbre_id] = $data->total;
+            }
+        }
+
+        return view('manager.agroevaluation.show', compact('pageTitle', 'evaluation', 'especesarbres', 'producteurs', 'dataEspece', 'dataQuantite'));
+    }
 
     public function status($id)
     {

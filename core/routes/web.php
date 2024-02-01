@@ -496,6 +496,7 @@ Route::middleware('auth')->group(function () {
             Route::post('store', [AgroevaluationController::class,'store'])->name('store');
             Route::get('destroy/{id}', [AgroevaluationController::class,'destroy'])->name('destroy');
             Route::get('edit/{id}', [AgroevaluationController::class,'edit'])->name('edit');
+            Route::get('show/{id}', [AgroevaluationController::class,'show'])->name('show');
             Route::post('status/{id}', [AgroevaluationController::class,'status'])->name('status');
             Route::get('/exportEvaluationsExcel', [AgroevaluationController::class,'exportExcel'])->name('exportExcel.evaluationsAll');
         });
