@@ -277,6 +277,21 @@ class MenageController extends Controller
         $energies = $menage->menage_sourceEnergie->pluck('source_energie')->toArray();
         return view('manager.menage.edit', compact('pageTitle', 'localites', 'menage', 'producteurs', 'sections', 'ordures', 'energies'));
     }
+    public function show($id)
+    {
+        $pageTitle = "Détails du menage";
+        $manager   = auth()->user();
+        $cooperative = Cooperative::with('sections.localites', 'sections.localites.section')->find($manager->cooperative_id);
+        $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
+            return $localite->active();
+        });
+        $producteurs  = Producteur::with('localite')->get();
+        $sections = $cooperative->sections;
+        $menage   = Menage::findOrFail($id);
+        $ordures = $menage->menage_ordure->pluck('ordure_menagere')->toArray();
+        $energies = $menage->menage_sourceEnergie->pluck('source_energie')->toArray();
+        return view('manager.menage.show', compact('pageTitle', 'localites', 'menage', 'producteurs', 'sections', 'ordures', 'energies'));
+    }
 
     public function status($id)
     {

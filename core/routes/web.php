@@ -381,6 +381,7 @@ Route::middleware('auth')->group(function () {
             Route::get('create', [MenageController::class,'create'])->name('create');
             Route::post('store', [MenageController::class,'store'])->name('store');
             Route::get('edit/{id}', [MenageController::class,'edit'])->name('edit');
+            Route::get('show/{id}', [MenageController::class,'show'])->name('show');
             Route::post('status/{id}', [MenageController::class,'status'])->name('status');
             Route::get('/exportMenagesExcel', [MenageController::class,'exportExcel'])->name('exportExcel.menageAll');
         });
