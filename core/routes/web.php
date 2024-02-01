@@ -109,6 +109,7 @@ Route::middleware('auth')->group(function () {
             Route::get('list', [StaffController::class, 'index'])->name('index');
             Route::post('store', [StaffController::class, 'store'])->name('store');
             Route::get('edit/{id}', [StaffController::class, 'edit'])->name('edit');
+            Route::post('delete/{id}', [StaffController::class, 'delete'])->name('delete');
             Route::post('status/{id}', [StaffController::class, 'status'])->name('status');
             Route::get('staff/get/localite', [StaffController::class, 'getLocalite'])->name('getLocalite');
             Route::get('magasin/{id}', [StaffController::class, 'magasinIndex'])->name('magasin.index');
