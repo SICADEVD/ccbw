@@ -52,7 +52,7 @@ class ApiproducteurController extends Controller
       ->select('producteurs.nom', 'producteurs.prenoms', 'localites.section_id as section_id', 'localites.id as localite_id', 'producteurs.id as id', 'producteurs.codeProd as codeProd', 'producteurs.statut')
       ->selectRaw('GROUP_CONCAT(producteur_certifications.certification) as certification')
       ->groupBy('producteurs.nom', 'producteurs.prenoms', 'localites.section_id', 'localites.id', 'producteurs.id', 'producteurs.codeProd', 'producteurs.statut')
-      ->get();
+      ->count();
 
 
     return response()->json($producteurs, 201);
