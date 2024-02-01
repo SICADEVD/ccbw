@@ -77,8 +77,15 @@
                                                     <i class="la la-eye-slash"></i> @lang('Désactiver')
                                                 </button>
                                             @endif
+                                            <a href="javascript:void();"
+                                                class="btn btn-sm btn-outline--danger confirmationBtn"
+                                                data-action="{{ route('manager.staff.delete', encrypt($staff->id)) }}"
+                                                data-question="@lang('Êtes-vous sûr de supprimer ce staff?')"
+                                                ><i
+                                                    class="las la-trash"></i>@lang('Del')</a>
                                             <a href="{{ route('manager.staff.stafflogin', $staff->id) }}"
-                                                class="btn btn-sm btn-outline--success" target="_blank"><i
+                                                class="btn btn-sm btn-outline--success " 
+                                                target="_blank"><i
                                                     class="las la-sign-in-alt"></i>
                                                 @lang('Login')</a>
                                         </td>

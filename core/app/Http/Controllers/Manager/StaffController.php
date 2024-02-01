@@ -307,4 +307,12 @@ return $contents;
     {
         return (new ExportStaffs())->download('staffs.xlsx');
     }
+
+    public function delete($id)
+    { 
+        User::where('id', decrypt($id))->delete();
+        $notify[] = ['success', 'Le contenu supprimé avec succès'];
+        return redirect()->route('manager.staff.index')->withNotify($notify);
+    }
+
 }
