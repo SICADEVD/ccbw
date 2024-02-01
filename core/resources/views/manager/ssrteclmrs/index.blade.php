@@ -90,6 +90,8 @@
                                             <div class="dropdown-menu p-0">
                                                 <a href="{{ route('manager.suivi.ssrteclmrs.edit', $data->id) }}"
                                                     class="dropdown-item"><i class="la la-pen"></i>@lang('Edit')</a> 
+                                                <a href="{{ route('manager.suivi.ssrteclmrs.show', $data->id) }}"
+                                                    class="dropdown-item"><i class="las la-file-invoice"></i>@lang('Détail')</a>
                                                 @if ($data->status == Status::DISABLE)
                                                     <button type="button" class="confirmationBtn  dropdown-item"
                                                         data-action="{{ route('manager.suivi.ssrteclmrs.status', $data->id) }}"

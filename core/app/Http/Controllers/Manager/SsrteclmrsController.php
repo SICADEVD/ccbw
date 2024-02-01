@@ -64,7 +64,6 @@ class SsrteclmrsController extends Controller
     public function edit($id)
     {
         $pageTitle = "Mise à jour de la ssrteclmrs";
-        // $localites  = Localite::active()->where('cooperative_id', auth()->user()->cooperative_id)->orderBy('nom')->get();
         $manager   = auth()->user();
         $cooperative = Cooperative::with('sections.localites', 'sections.localites.section')->find($manager->cooperative_id);
         $sections = $cooperative->sections;
@@ -84,6 +83,27 @@ class SsrteclmrsController extends Controller
         $ssrteclmrs   = Ssrteclmrs::findOrFail($id);
 
         return view('manager.ssrteclmrs.edit', compact('pageTitle', 'localites', 'ssrteclmrs', 'producteurs', 'raisonArretEcole', 'travauxDangereux', 'lieuTravaux', 'travauxLegers', 'lienParente', 'niveauEtude', 'moyenTransport', 'classes', 'sections', 'niveauEtudeAvant'));
+    }
+    public function show($id){
+        $pageTitle = "Détails de la ssrteclmrs";
+        $manager   = auth()->user();
+        $cooperative = Cooperative::with('sections.localites', 'sections.localites.section')->find($manager->cooperative_id);
+        $sections = $cooperative->sections;
+        $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
+            return $localite->active();
+        });
+        $producteurs  = Producteur::with('localite')->get();
+        $niveauEtudeAvant = NiveauxEtude::pluck('nom', 'nom')->all();
+        $niveauEtude = NiveauxEtude::all();
+        $classes = ClasseEtude::with('niveau')->get();
+        $moyenTransport = DB::table('moyens_transport')->pluck('nom', 'nom')->all();
+        $lienParente = DB::table('lien_parente')->pluck('nom', 'nom')->all();
+        $raisonArretEcole = DB::table('arret_ecoles')->get();
+        $travauxDangereux = DB::table('travaux_dangereux')->get();
+        $lieuTravaux = DB::table('lieux_travaux')->get();
+        $travauxLegers = DB::table('travaux_legers')->get();
+        $ssrteclmrs   = Ssrteclmrs::findOrFail($id);
+        return view('manager.ssrteclmrs.show', compact('pageTitle', 'ssrteclmrs','localites', 'producteurs', 'raisonArretEcole', 'travauxDangereux', 'lieuTravaux', 'travauxLegers', 'lienParente', 'niveauEtude', 'moyenTransport', 'classes', 'sections', 'niveauEtudeAvant'));
     }
 
     public function store(Request $request)

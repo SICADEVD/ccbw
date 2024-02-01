@@ -445,6 +445,7 @@ Route::middleware('auth')->group(function () {
             Route::get('create', [SsrteclmrsController::class,'create'])->name('create');
             Route::post('store', [SsrteclmrsController::class,'store'])->name('store');
             Route::get('edit/{id}', [SsrteclmrsController::class,'edit'])->name('edit');
+            Route::get('show/{id}', [SsrteclmrsController::class,'show'])->name('show');
             Route::post('status/{id}', [SsrteclmrsController::class,'status'])->name('status');
             Route::get('/exportSsrteclmrsExcel', [SsrteclmrsController::class,'exportExcel'])->name('exportExcel.ssrteclmrsAll');
         });
