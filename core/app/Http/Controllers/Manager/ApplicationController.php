@@ -185,11 +185,32 @@ class ApplicationController extends Controller
             return $applicationPesticide->matieresActives = $matieresActives->where('application_pesticide_id', $applicationPesticide->id)->pluck('nom');
         })->all();
         $applicationMaladies = $application->applicationMaladies->pluck('nom')->all();
-        
-        
-
        
         return view('manager.application.edit', compact('pageTitle', 'application', 'producteurs', 'localites', 'parcelles', 'staffs', 'sections', 'campagnes', 'applicationPesticides', 'applicationMaladies'));
+    }
+    public function show($id){
+        $pageTitle = "Détails de la application";
+        $manager   = auth()->user();
+        $producteurs  = Producteur::with('localite')->get();
+        $parcelles = Parcelle::with('producteur')->get();
+        $staffs = User::whereHas('roles', function($q){ $q->whereIn('name', ['Applicateur']); });
+        $campagnes = Campagne::active()->pluck('nom', 'id');
+        $cooperative = Cooperative::with('sections.localites', 'sections.localites.section')->find($manager->cooperative_id);
+        $sections = $cooperative->sections;
+        $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
+            return $localite->active();
+        });
+        $application   = Application::findOrFail($id);
+
+        $applicationPesticides = $application->applicationPesticides;
+        $matieresActives = MatiereActive::where('application_id', $id)->get();
+
+        $applicationPesticides->map(function ($applicationPesticide) use ($matieresActives) {
+            return $applicationPesticide->matieresActives = $matieresActives->where('application_pesticide_id', $applicationPesticide->id)->pluck('nom');
+        })->all();
+        $applicationMaladies = $application->applicationMaladies->pluck('nom')->all();
+       
+        return view('manager.application.show', compact('pageTitle', 'application', 'producteurs', 'localites', 'parcelles', 'staffs', 'sections', 'campagnes', 'applicationPesticides', 'applicationMaladies'));
     }
 
     public function status($id)

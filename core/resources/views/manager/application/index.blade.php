@@ -74,6 +74,8 @@
                                             <div class="dropdown-menu p-0">
                                                 <a href="{{ route('manager.suivi.application.edit', $application->id) }}"
                                                     class="dropdown-item"><i class="la la-pen"></i>@lang('Edit')</a> 
+                                                <a href="{{ route('manager.suivi.application.show', $application->id) }}"
+                                                    class="dropdown-item"><i class="las la-file-invoice"></i>@lang('Détail')</a>
                                                 @if ($application->status == Status::DISABLE)
                                                     <button type="button" class="confirmationBtn  dropdown-item"
                                                         data-action="{{ route('manager.suivi.application.status', $application->id) }}"

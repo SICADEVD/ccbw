@@ -433,6 +433,7 @@ Route::middleware('auth')->group(function () {
             Route::get('create', [ApplicationController::class,'create'])->name('create');
             Route::post('store', [ApplicationController::class,'store'])->name('store');
             Route::get('edit/{id}', [ApplicationController::class,'edit'])->name('edit');
+            Route::get('show/{id}', [ApplicationController::class,'show'])->name('show');
             Route::post('status/{id}', [ApplicationController::class,'status'])->name('status');
             Route::get('/exportApplicationsExcel', [ApplicationController::class,'exportExcel'])->name('exportExcel.applicationAll');
         });
