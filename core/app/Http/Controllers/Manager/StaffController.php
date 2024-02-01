@@ -116,7 +116,6 @@ return $contents;
 
         if ($request->id) {
             $validationRule = array_merge($validationRule, [
-                'email'    => 'required|email|max:40|unique:users,email,' . $request->id,
                 'username' => 'required|max:40|unique:users,username,' . $request->id,
                 'mobile'   => 'required|max:40|unique:users,mobile,' . $request->id,
                 'password' => 'nullable|confirmed|min:4',
@@ -125,7 +124,6 @@ return $contents;
             ]);
         } else {
             $validationRule = array_merge($validationRule, [
-                'email'    => 'required|email|max:40|unique:users',
                 'username' => 'required|max:40|unique:users',
                 'mobile'   => 'required|max:40|unique:users',
                 'password' => 'required|confirmed|min:4',
