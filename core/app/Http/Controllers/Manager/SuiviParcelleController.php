@@ -368,6 +368,31 @@ class SuiviParcelleController extends Controller
 
         return view('manager.suiviparcelle.edit', compact('pageTitle', 'suiviparcelle', 'producteurs', 'localites', 'campagnes', 'parcelles', 'sections', 'arbres', 'arbreOmbrages', 'arbreAgroForestiers', 'parasites', 'pesticidesAnneDerniere', 'intrantsAnneDerniere', 'traitements','autreParasites','amis'));
     }
+    public function show($id){
+        $pageTitle = "Détails du suivi parcelle";
+        $manager   = auth()->user();
+        $producteurs  = Producteur::with('localite')->get();
+        $cooperative = Cooperative::with('sections.localites', 'sections.localites.section')->find($manager->cooperative_id);
+        $sections = $cooperative->sections;
+        $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
+            return $localite->active();
+        });
+        $campagnes = Campagne::active()->pluck('nom', 'id');
+        $parcelles  = Parcelle::with('producteur')->get();
+        $suiviparcelle   = SuiviParcelle::findOrFail($id);
+        $pesticidesAnneDerniere = $suiviparcelle->pesticidesAnneDerniere;
+        $intrantsAnneDerniere = $suiviparcelle->intrantsAnneDerniere;
+        $traitements = $suiviparcelle->traitements;
+        $parasites = $suiviparcelle->parasites;
+        $autreParasites = $suiviparcelle->autreParasites;
+        $amis = $suiviparcelle->insectes;
+        $arbres = Agroespecesarbre::all();
+        $arbreAgroForestiers = SuiviParcellesAgroforesterie::where('suivi_parcelle_id', $id)->get();
+        $arbreOmbrages = SuiviParcellesOmbrage::where('suivi_parcelle_id', $id)->pluck('agroespecesarbre_id')->toArray();
+        $parasites = SuiviParcellesParasite::where('suivi_parcelle_id', $id)->get();
+
+        return view('manager.suiviparcelle.show', compact('pageTitle', 'suiviparcelle', 'producteurs', 'localites', 'campagnes', 'parcelles', 'sections', 'arbres', 'arbreOmbrages', 'arbreAgroForestiers', 'parasites', 'pesticidesAnneDerniere', 'intrantsAnneDerniere', 'traitements','autreParasites','amis'));
+    }
 
     public function status($id)
     {

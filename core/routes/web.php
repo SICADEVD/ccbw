@@ -391,6 +391,7 @@ Route::middleware('auth')->group(function () {
             Route::get('create', [SuiviParcelleController::class,'create'])->name('create');
             Route::post('store', [SuiviParcelleController::class,'store'])->name('store');
             Route::get('edit/{id}', [SuiviParcelleController::class,'edit'])->name('edit');
+            Route::get('show/{id}', [SuiviParcelleController::class,'show'])->name('show');
             Route::post('status/{id}', [SuiviParcelleController::class,'status'])->name('status');
             Route::get('/exportSuiviParcellesExcel', [SuiviParcelleController::class,'exportExcel'])->name('exportExcel.suiviParcelleAll');
         });
