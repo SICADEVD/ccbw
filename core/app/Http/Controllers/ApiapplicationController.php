@@ -7,7 +7,7 @@ use App\Models\Localite;
 use App\Models\Application;
 use Illuminate\Http\Request;
 use App\Models\MatiereActive;
-use Illuminate\Support\Str;  
+use Illuminate\Support\Str;
 use App\Models\ApplicationMaladie;
 use Illuminate\Support\Facades\DB;
 use App\Models\ApplicationPesticide;
@@ -23,7 +23,7 @@ class ApiapplicationController extends Controller
      */
     public function index()
     {
-	
+
         //
     }
 
@@ -34,7 +34,7 @@ class ApiapplicationController extends Controller
      */
     public function create()
     {
-	
+
         //
     }
 
@@ -85,7 +85,6 @@ class ApiapplicationController extends Controller
         $application->personneApplication = $request->personneApplication;
         $application->date_application = $request->date_application;
         $application->userid = $request->userid;
-
         $application->save();
 
         if ($application != null) {
@@ -101,8 +100,9 @@ class ApiapplicationController extends Controller
                 }
                 ApplicationMaladie::insert($data);
             }
-            if($request->pesticides[0]['nom'] != null && $request->pesticides[0]['nomCommercial'] != null && $request->pesticides[0]['dose'] != null && $request->pesticides[0]['toxicicologie'] != null && $request->pesticides[0]['frequence'] != null && $request->pesticides[0]['matiereActive'] != null){
+            if ($request->pesticides != null) {
                 ApplicationPesticide::where('application_id', $id)->delete();
+                MatiereActive::where('application_id', $id)->delete();
                 foreach ($request->pesticides as $pesticide) {
                     $applicationPesticide = new ApplicationPesticide();
                     $applicationPesticide->application_id = $id;
@@ -113,25 +113,25 @@ class ApiapplicationController extends Controller
                     $applicationPesticide->frequence = $pesticide['frequence'];
                     $applicationPesticide->save();
 
-                    if($applicationPesticide != null){
+                    if ($applicationPesticide != null) {
                         MatiereActive::where('application_pesticide_id', $applicationPesticide->id)->delete();
                         $idApplicationPesticide = $applicationPesticide->id;
-                        $matiereActive = explode(',',$pesticide['matiereActive']);
+                        $matiereActive = explode(',', $pesticide['matiereActive']);
                         foreach ($matiereActive as $matiere) {
                             $applicationMatieresactive = new MatiereActive();
+                            $applicationMatieresactive->application_id = $id;
                             $applicationMatieresactive->application_pesticide_id = $idApplicationPesticide;
-                            $applicationMatieresactive->nom = $matiere;
+                            $applicationMatieresactive->nom = trim($matiere);
                             $applicationMatieresactive->save();
                         }
                     }
                 }
             }
-           
         }
         return response()->json($application, 201);
     }
 
-    
+
     /**
      * Display the specified resource.
      *
@@ -140,7 +140,7 @@ class ApiapplicationController extends Controller
      */
     public function show($id)
     {
-	
+
         //
     }
 
@@ -152,7 +152,7 @@ class ApiapplicationController extends Controller
      */
     public function edit($id)
     {
-	
+
         //
     }
 
@@ -164,7 +164,7 @@ class ApiapplicationController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    { 
+    {
         //
     }
 
@@ -175,7 +175,7 @@ class ApiapplicationController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
-    { 
+    {
         //
     }
 }

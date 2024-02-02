@@ -149,7 +149,7 @@ class ApplicationController extends Controller
                             $applicationMatieresactive = new MatiereActive();
                             $applicationMatieresactive->application_id = $id;
                             $applicationMatieresactive->application_pesticide_id = $idApplicationPesticide;
-                            $applicationMatieresactive->nom = $matiere;
+                            $applicationMatieresactive->nom = trim($matiere);
                             $applicationMatieresactive->save();
                         }
                     }
