@@ -28,7 +28,7 @@
                     <div class="form-group row">
                         <?php echo Form::label(__('Sexe'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('sexe', ['' => 'Selectionner une option', 'Masculin' => 'Masculin', 'Feminin' => 'Feminin'], null, ['class' => 'form-control', 'required' => 'required']); ?>
+                            <?php echo Form::select('sexe', ['' => 'Selectionner une option', 'Homme' => 'Homme', 'Femme' => 'Femme'], null, ['class' => 'form-control', 'required' => 'required']); ?>
                         </div>
                     </div>
 
@@ -41,7 +41,7 @@
                     <div class="form-group row">
                         <?php echo Form::label(__('Representez vous un producteur ? '), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('representer', ['' => 'Selectionner une option', 'Non' => 'Non', 'Oui' => 'Oui'], null, ['class' => 'form-control representer', 'required' => 'required']); ?>
+                            <?php echo Form::select('representer', ['' => 'Selectionner une option', 'non' => 'Non', 'oui' => 'Oui'], null, ['class' => 'form-control representer', 'required' => 'required']); ?>
                         </div>
                     </div>
                     <div id="producteur">
@@ -60,7 +60,7 @@
                         <div class="form-group row">
                             <?php echo Form::label(__('Type de lien '), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::select('lien', ['' => 'Selectionner une option', 'Conjoint' => 'Conjoint', 'Enfant' => 'Enfant', 'Pere' => 'Père', 'Mere' => 'Mère', 'Oncle' => 'Oncle', 'Frere' => 'Frère', 'Autre' => 'Autre'], null, ['class' => 'form-control lien', 'required' => 'required']); ?>
+                                <?php echo Form::select('lien', ['' => 'Selectionner une option', 'Conjoint' => 'Conjoint', 'Neveu/Niece' => 'Neveu/Nièce', 'Fils/Fille' => 'Fils/Fille', 'Oncle/Tante' => 'Oncle/Tante', 'Frere/Soeur' => 'Frère/Soeur', 'Autre' => 'Autre'], null, ['class' => 'form-control lien', 'required' => 'required']); ?>
                             </div>
                         </div>
                     </div>
@@ -92,7 +92,7 @@
         $(document).ready(function() {
             $('#producteur,#autre').hide();
             $('.representer').change(function() {
-                if ($(this).val() == 'Oui') {
+                if ($(this).val() == 'oui') {
                     $('#producteur').show('slow');
                     $('#producteur select[name="producteur"]').prop('required', true);
                     $('#producteur select[name="producteur"]').show('slow');
