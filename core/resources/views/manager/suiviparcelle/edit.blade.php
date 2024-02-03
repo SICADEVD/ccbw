@@ -1063,7 +1063,7 @@
                                                                 <option value="Engrais chimique">Engrais chimique</option>
                                                                 <option value="Engrais foliaire">Engrais foliaire</option>
                                                                 <option value="Bouse de vache">Bouse de vache</option>
-                                                                <option value="NPK>">NPK</option>
+                                                                <option value="NPK">NPK</option>
                                                                 <option value="Insecticide organique">Insecticide organique
                                                                 </option>
                                                                 <option value="Insecticide chimique">Insecticide chimique

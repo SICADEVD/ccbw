@@ -9,11 +9,12 @@ use Kirschbaum\PowerJoins\PowerJoins;
 
 class SuiviParcellesParasite extends Model
 {
-    use Searchable, GlobalStatus, PowerJoins; 
+    use Searchable, GlobalStatus, PowerJoins;
+    protected $tables = 'suivi_parcelles_parasites'; 
 
     public function suiviParcelle()
     {
-        return $this->belongsTo(SuiviParcelle::class);
+        return $this->belongsTo(SuiviParcelle::class, 'suivi_parcelle_id', 'id');
     }
      
      

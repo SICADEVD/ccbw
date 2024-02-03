@@ -22,11 +22,6 @@ class SuiviParcelle extends Model
     {
         return $this->belongsTo(Parcelle::class);
     }
-
-    public function parasites()
-    {
-        return $this->hasMany(SuiviParcellesParasite::class, 'suivi_parcelle_id', 'id');
-    }
     public function ombrage()
     {
         return $this->hasMany(SuiviParcellesOmbrage::class, 'suivi_parcelle_id', 'id');
@@ -54,5 +49,8 @@ class SuiviParcelle extends Model
     }
     public function intrantsAnneDerniere(){
         return $this->hasMany(SuiviParcellesIntrantAnneeDerniere::class, 'suivi_parcelle_id', 'id');
+    }
+    public function parasites(){
+        return $this->hasMany(SuiviParcellesParasite::class, 'suivi_parcelle_id', 'id');
     }
 }

@@ -227,7 +227,8 @@ class SuiviParcelleController extends Controller
             //fin les arbres agro-forestiers obtenus
 
             //insectes parasites ou ravageurs$request->insectesParasites != null)
-            if ( $request->insectParasites != null && !collect($request->insectesParasites)->contains(null)) {
+            
+            if ( $request->insectesParasites != null && !collect($request->insectesParasites)->contains(null)) {
                 SuiviParcellesParasite::where('suivi_parcelle_id', $id)->delete();
                $datas5 = [];
                foreach ($request->insectesParasites as $parasite) {
@@ -296,7 +297,7 @@ class SuiviParcelleController extends Controller
             //fin traitement parcelle
 
             //insectes amis
-            if (($request->insectesParasites != null)) {
+            if ( $request->insectesAmis != null && !collect($request->insectesAmis)->contains(null)) {
                 SuiviParcellesInsecteAmi::where('suivi_parcelle_id', $id)->delete();
                 $i = 0;
                 foreach ($request->insectesAmis as $data) {
@@ -313,7 +314,7 @@ class SuiviParcelleController extends Controller
             //fin insectes amis
 
             //animaux rencontres
-            if (($request->animauxRencontres != null)) {
+            if ( $request->animauxRencontres != null && !collect($request->animauxRencontres)->contains(null)) {
                 SuiviParcellesAnimal::where('suivi_parcelle_id', $id)->delete();
                 $i = 0;
                 foreach ($request->animauxRencontres as $data) {
