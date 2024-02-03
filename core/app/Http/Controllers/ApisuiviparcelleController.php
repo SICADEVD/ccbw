@@ -200,12 +200,12 @@ class ApisuiviparcelleController extends Controller
             //fin les arbres agro-forestiers obtenus
 
             //insectes parasites ou ravageurs$request->insectesParasites != null)
-            if ( $request->insectParasites != null && !collect($request->insectesParasites)->contains(null)) {
+            if ( $request->insectesParasites != null && !collect($request->insectesParasites)->contains(null)) {
                 SuiviParcellesParasite::where('suivi_parcelle_id', $id)->delete();
                $datas5 = [];
                foreach ($request->insectesParasites as $parasite) {
                    // Vérifier que la clé "contenant" n'est pas nulle
-                   if ($parasite['nom'] !== null && $parasite['nombreinsectesParasites'] !== null) {
+                   if ($parasite['nom'] !== null) {
                        $datas5[] = [
                            'suivi_parcelle_id' => $id,
                            'parasite' =>$parasite['nom'],
@@ -213,7 +213,6 @@ class ApisuiviparcelleController extends Controller
                        ];
                    }
                }
-               //dd($datas5);
                if (!empty($datas5)) {
                    SuiviParcellesParasite::insert($datas5);
                }
