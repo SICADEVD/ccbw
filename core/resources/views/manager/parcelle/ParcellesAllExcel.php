@@ -27,7 +27,12 @@
     <thead>
     <tr>
         <td>ID</td>
+        <td>Cooperative</td>
+        <td>Section</td>
         <td>Localite</td>
+        <td>Nom</td>
+        <td>Prenoms</td>
+        <td>Code Producteur</td>
         <td>Code Parcelle</td>
         <td>Type declaration</td>
         <td>Annee Creation</td>
@@ -45,7 +50,12 @@
         <tbody>
         <tr>
             <td><?php echo $c->id; ?></td>
+            <td><?php echo $c->producteur->localite->section->cooperative->name; ?></td>
+            <td><?php echo $c->producteur->localite->section->libelle; ?></td>
             <td><?php echo $c->producteur->localite->nom; ?></td>
+            <td><?php echo $c->producteur->nom; ?></td> 
+            <td><?php echo $c->producteur->prenoms; ?></td> 
+            <td><?php echo $c->producteur->codeProd; ?></td> 
             <td><?php echo $c->codeParc; ?></td>
             <td><?php echo $c->typedeclaration; ?></td>
             <td><?php echo $c->anneeCreation; ?></td>

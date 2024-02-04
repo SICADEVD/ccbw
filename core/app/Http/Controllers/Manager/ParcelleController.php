@@ -2,33 +2,25 @@
 
 namespace App\Http\Controllers\Manager;
 
-use Excel;
 use SimpleXMLElement;
-use App\Models\Section;
-use App\Models\Campagne;
+use App\Models\Section; 
 use App\Models\Localite;
 use App\Models\Parcelle;
 use App\Constants\Status;
+use App\Models\Programme;
 use App\Models\Producteur;
-use App\Models\Cooperative;
+use App\Models\Cooperative; 
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Models\LivraisonPrime;
-use App\Imports\ParcelleImport;
-use App\Models\LivraisonScelle;
+use App\Models\Certification; 
+use App\Imports\ParcelleImport; 
 use App\Exports\ExportParcelles;
-use App\Models\Agroespecesarbre;
-use App\Models\LivraisonProduct;
-use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
+use App\Models\Agroespecesarbre;  
+use App\Http\Controllers\Controller; 
+use Maatwebsite\Excel\Facades\Excel;
 use App\Models\agroespeceabre_parcelle;
-use App\Models\Certification;
 use App\Models\Parcelle_type_protection;
-use App\Models\Producteur_infos_typeculture;
-use App\Models\Programme;
-use App\Models\Producteur_certification;
-use Illuminate\Support\Arr;
+use App\Models\Producteur_certification; 
 
 class ParcelleController extends Controller
 {
@@ -767,9 +759,11 @@ class ParcelleController extends Controller
         return Parcelle::changeStatus($id);
     }
 
+    
     public function exportExcel()
     {
-        return (new ExportParcelles())->download('parcelles.xlsx');
+        $filename = 'parcelles-' . gmdate('dmYhms') . '.xlsx';
+        return Excel::download(new ExportParcelles, $filename);
     }
 
     public function  uploadContent(Request $request)
