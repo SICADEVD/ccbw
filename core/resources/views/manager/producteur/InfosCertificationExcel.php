@@ -27,23 +27,29 @@
     <thead>
     <tr>
         <td>ID</td>
+        <td>Cooperative</td>
+        <td>Section</td>
+        <td>Localite</td>
         <td>Nom</td>
         <td>Prenoms</td>
         <td>Code Prod</td>
-        <td>Maladie Enfant</td> 
+        <td>Certificat</td> 
     </tr>
     </thead> 
     <?php
-    foreach($maladies as $c)
+    foreach($certification as $c)
     {
     ?>
         <tbody>
         <tr>
             <td><?php echo $c->id; ?></td> 
-            <td><?php echo $c->producteurInfo->producteur->nom; ?></td> 
-            <td><?php echo $c->producteurInfo->producteur->prenoms; ?></td> 
-            <td><?php echo $c->producteurInfo->producteur->codeProd; ?></td> 
-            <td><?php echo $c->maladieenfant; ?></td>
+            <td><?php echo $c->producteurInfo->localite->section->cooperative->name; ?></td>
+            <td><?php echo $c->producteurInfo->localite->section->libelle; ?></td>
+            <td><?php echo $c->producteurInfo->localite->nom; ?></td>
+            <td><?php echo $c->producteurInfo->nom; ?></td> 
+            <td><?php echo $c->producteurInfo->prenoms; ?></td> 
+            <td><?php echo $c->producteurInfo->codeProd; ?></td> 
+            <td><?php echo $c->certification; ?></td>
         </tr>
         </tbody>
         <?php

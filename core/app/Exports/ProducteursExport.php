@@ -24,4 +24,9 @@ class ProducteursExport implements FromView
      
         return view('manager.producteur.ProducteursAllExcel',compact('producteurs'));
     }
+
+    public function title(): string
+    {
+        Return "Producteurs";
+    }
 }

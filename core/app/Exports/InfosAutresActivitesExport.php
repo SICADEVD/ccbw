@@ -3,13 +3,15 @@
 namespace App\Exports;
 
 use App\Models\Producteur_info;
+use App\Models\Producteur_infos_autresactivite;
 use App\Models\Producteur_infos_maladieenfant;
+use App\Models\Producteur_infos_typeculture;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\WithTitle;
 
-class InfosMaladiesEnfantExport implements FromView, WithTitle
+class InfosAutresActivitesExport implements FromView, WithTitle
 {
     /**
     * @return \Illuminate\Support\Collection
@@ -20,13 +22,13 @@ class InfosMaladiesEnfantExport implements FromView, WithTitle
     {
         // TODO: Implement view() method.
         
-        return view('manager.producteur.InfosMaladiesEnfantExcel',[
-            'maladies' => Producteur_infos_maladieenfant::joinRelationship('producteurInfo.producteur.localite.section')->where('cooperative_id',auth()->user()->cooperative_id)->get()
+        return view('manager.producteur.InfosAutresActivitesExcel',[
+            'autresactivites' => Producteur_infos_autresactivite::joinRelationship('producteurInfo.producteur.localite.section')->where('cooperative_id',auth()->user()->cooperative_id)->get()
         ]);
     }
 
     public function title(): string
     {
-        Return "Infos Maladies Enfant";
+        Return "Infos Autres Activites";
     }
 }

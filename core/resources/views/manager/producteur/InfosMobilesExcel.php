@@ -33,26 +33,12 @@
         <td>Nom</td>
         <td>Prenoms</td>
         <td>Code Prod</td>
-        <td>main Oeuvre Familial</td>
-<td>travailleur amilial</td>
-<td>societe Travail</td>
-<td>nombre Personne</td>
-<td>autre Banque</td>
-<td>nom Banque</td>
-<td>autre Activite</td>
-<td>forets jachere</td>
-<td>superficie</td>
-<td>autres Cultures</td>
-<td>travailleurs</td>
-<td>travailleurs permanents</td>
-<td>travailleurs temporaires</td>
-<td>compte Banque</td>
-<td>mobile Money</td>
-
+        <td>operateur</td> 
+        <td>numero</td>
     </tr>
     </thead> 
     <?php
-    foreach($infos as $c)
+    foreach($mobiles as $c)
     {
     ?>
         <tbody>
@@ -64,21 +50,8 @@
             <td><?php echo $c->producteur->nom; ?></td> 
             <td><?php echo $c->producteur->prenoms; ?></td> 
             <td><?php echo $c->producteur->codeProd; ?></td> 
-            <td><?php echo $c->mainOeuvreFamilial; ?></td>
-<td><?php echo $c->travailleurFamilial; ?></td>
-<td><?php echo $c->societeTravail; ?></td>
-<td><?php echo $c->nombrePersonne; ?></td>
-<td><?php echo $c->autreBanque; ?></td>
-<td><?php echo $c->nomBanque; ?></td>
-<td><?php echo $c->autreActivite; ?></td>
-<td><?php echo $c->foretsjachere; ?></td>
-<td><?php echo $c->superficie; ?></td>
-<td><?php echo $c->autresCultures; ?></td>
-<td><?php echo $c->travailleurs; ?></td>
-<td><?php echo $c->travailleurspermanents; ?></td>
-<td><?php echo $c->travailleurstemporaires; ?></td>
-<td><?php echo $c->compteBanque; ?></td>
-<td><?php echo $c->mobileMoney; ?></td>
+            <td><?php echo $c->operateur; ?></td>
+            <td><?php echo $c->numero; ?></td>
         </tr>
         </tbody>
         <?php

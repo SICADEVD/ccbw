@@ -11,8 +11,10 @@ class ExportProducteurs implements WithMultipleSheets
     {    
       $feuilles=array();  
       $feuilles[] = new InfosProducteurExport();
-      $feuilles[] = new InfosMaladiesEnfantExport();   
-      $feuilles[] = new InfosTypeculturesExport();  
+      $feuilles[] = new InfosCertificationExport();   
+      $feuilles[] = new InfosTypeculturesExport(); 
+      $feuilles[] = new InfosAutresActivitesExport();  
+      $feuilles[] = new InfosMobilesExport();  
 
     $sheets = [ new ProducteursExport(), ];
     $sheets = array_merge($sheets, $feuilles);
