@@ -106,13 +106,13 @@
         <div class="form-group row">
             <label class="col-sm-4 control-label" for="photos">Photos:</label>
             <div class="col-xs-12 col-sm-8">
-        <input type="file" id="photos" class="form-control" name="photos[]" accept="image/*" multiple></div>
+        <input type="file" id="photos" class="form-control dropify-fr" name="photos[]" accept="image/*" multiple></div>
                     </div> 
         
         <div class="form-group row">
             <label class="col-sm-4 control-label" for="documents_joints">Documents joints:</label>
             <div class="col-xs-12 col-sm-8">
-        <input type="file" id="documents_joints" class="form-control" name="documents_joints[]" multiple></div>
+        <input type="file" id="documents_joints" class="form-control dropify-fr" name="documents_joints[]" multiple></div>
                     </div> 
         
         <div class="form-group row">
