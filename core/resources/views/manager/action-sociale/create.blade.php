@@ -148,5 +148,6 @@
             dateFinProjetContainer.style.display = 'none';
         }
     });
+
     </script>
 @endpush

@@ -47,7 +47,7 @@ class ActionSocialeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+         //
     }
 
     /**
