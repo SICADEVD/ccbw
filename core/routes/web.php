@@ -20,6 +20,7 @@ use App\Http\Controllers\Manager\LeaveFileController;
 use App\Http\Controllers\Manager\LeaveTypeController;
 use App\Http\Controllers\Manager\LivraisonController;
 use App\Http\Controllers\Manager\AttendanceController;
+use App\Http\Controllers\Manager\CommunauteController;
 use App\Http\Controllers\Manager\DepartmentController;
 use App\Http\Controllers\Manager\EstimationController;
 use App\Http\Controllers\Manager\InspectionController;
@@ -31,6 +32,7 @@ use App\Http\Controllers\Manager\EmployeeDocController;
 use App\Http\Controllers\Manager\LeavesQuotaController;
 use App\Http\Controllers\Manager\EmployeeFileController;
 use App\Http\Controllers\Manager\LeaveSettingController;
+use App\Http\Controllers\Manager\ActionSocialeController;
 use App\Http\Controllers\Manager\EmployeeShiftController;
 use App\Http\Controllers\Manager\ManagerTicketController;
 use App\Http\Controllers\Manager\SuiviParcelleController;
@@ -48,6 +50,7 @@ use App\Http\Controllers\Manager\AgrodeforestationController;
 use App\Http\Controllers\Manager\AttendanceSettingController;
 use App\Http\Controllers\Manager\LivraisonCentraleController;
 use App\Http\Controllers\Manager\CooperativeSettingController;
+use App\Http\Controllers\Manager\ActiviteCommunautaireController;
 use App\Http\Controllers\Manager\AgroapprovisionnementController;
 
 Route::namespace('Manager\Auth')->group(function () {
@@ -499,6 +502,31 @@ Route::middleware('auth')->group(function () {
             Route::get('show/{id}', [AgroevaluationController::class,'show'])->name('show');
             Route::post('status/{id}', [AgroevaluationController::class,'status'])->name('status');
             Route::get('/exportEvaluationsExcel', [AgroevaluationController::class,'exportExcel'])->name('exportExcel.evaluationsAll');
+        });
+
+                //Manage Communauté résiliente
+        Route::name('communaute.')->prefix('communaute/resiliente')->group(function () {
+
+            // Action communautaire
+            Route::get('action/sociale/list', [ActionSocialeController::class,'index'])->name('action.sociale.index');
+            Route::get('action/sociale/create', [ActionSocialeController::class,'create'])->name('action.sociale.create');
+            Route::post('action/sociale/store', [ActionSocialeController::class,'store'])->name('action.sociale.store');
+            Route::get('action/sociale/destroy/{id}', [ActionSocialeController::class,'destroy'])->name('action.sociale.destroy');
+            Route::get('action/sociale/edit/{id}', [ActionSocialeController::class,'edit'])->name('action.sociale.edit');
+            Route::get('action/sociale/show/{id}', [ActionSocialeController::class,'show'])->name('action.sociale.show');
+            Route::post('action/sociale/status/{id}', [ActionSocialeController::class,'status'])->name('action.sociale.status');
+            Route::get('action/sociale/exportActionSocialeExcel', [ActionSocialeController::class,'exportExcel'])->name('action.sociale.exportExcel.actionSocialeAll');
+
+        // Activite communautaire
+            Route::get('activite/communautaire/list', [ActiviteCommunautaireController::class,'index'])->name('activite.communautaire.index');
+            Route::get('activite/communautaire/create', [ActiviteCommunautaireController::class,'create'])->name('activite.communautaire.create');
+            Route::post('activite/communautaire/store', [ActiviteCommunautaireController::class,'store'])->name('activite.communautaire.store');
+            Route::get('activite/communautaire/destroy/{id}', [ActiviteCommunautaireController::class,'destroy'])->name('activite.communautaire.destroy');
+            Route::get('activite/communautaire/edit/{id}', [ActiviteCommunautaireController::class,'edit'])->name('activite.communautaire.edit');
+            Route::get('activite/communautaire/show/{id}', [ActiviteCommunautaireController::class,'show'])->name('activite.communautaire.show');
+            Route::post('activite/communautaire/status/{id}', [ActiviteCommunautaireController::class,'status'])->name('activite.communautaire.status');
+            Route::get('activite/communautaire/exportActiviteCommunautaireExcel', [ActiviteCommunautaireController::class,'exportExcel'])->name('activite.communautaire.exportExcel.activiteCommunautaireAll');
+
         });
 
         //Manage Agrodeforestations
