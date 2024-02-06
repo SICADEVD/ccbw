@@ -8,7 +8,7 @@ use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\WithTitle;
 
-class ParasitesExport implements FromView, WithTitle
+class SuiviParcellesParasiteExport implements FromView, WithTitle
 {
     /**
     * @return \Illuminate\Support\Collection

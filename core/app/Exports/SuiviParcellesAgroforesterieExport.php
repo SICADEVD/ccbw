@@ -8,7 +8,7 @@ use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\WithTitle;
 
-class AgroforesterieExport implements FromView, WithTitle
+class SuiviParcellesAgroforesterieExport implements FromView, WithTitle
 {
     /**
     * @return \Illuminate\Support\Collection

@@ -2,10 +2,17 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Traits\GlobalStatus;
+use App\Traits\Searchable;
 use Illuminate\Database\Eloquent\Model;
+use Kirschbaum\PowerJoins\PowerJoins;
 
 class SuiviParcellesInsecteAmi extends Model
 {
-    use HasFactory;
+    use Searchable, GlobalStatus, PowerJoins; 
+
+    public function suiviParcelle()
+    {
+        return $this->belongsTo(SuiviParcelle::class);
+    }
 }

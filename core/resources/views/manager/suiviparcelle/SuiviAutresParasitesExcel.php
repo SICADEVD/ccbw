@@ -34,12 +34,12 @@
         <td>Prenoms</td>
         <td>Code Producteur</td>
         <td>Code Parcelle</td>
-        <td>Ombrage</td>
+        <td>Parasite</td>
         <td>Nombre</td>
     </tr>
     </thead> 
     <?php
-    foreach($ombrages as $c)
+    foreach($autresparasites as $c)
     {
     ?>
         <tbody>
@@ -52,7 +52,7 @@
             <td><?php echo $c->suiviParcelle->parcelle->producteur->prenoms; ?></td> 
             <td><?php echo $c->suiviParcelle->parcelle->producteur->codeProd; ?></td> 
             <td><?php echo $c->suiviParcelle->parcelle->codeParc; ?></td>
-            <td><?php echo $c->ombrage; ?></td> 
+            <td><?php echo $c->parasite; ?></td> 
             <td><?php echo $c->nombre; ?></td> 
         </tr>
         </tbody>

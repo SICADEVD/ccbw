@@ -26,12 +26,15 @@
 <table id="categories" width="100%">
     <thead>
     <tr>
-        <td>ID</td>
+        <td>ID</td> 
+        <td>Campagne</td>  
+        <td>Cooperative</td>
+        <td>Section</td>
         <td>Localite</td>
-        <td>Campagne</td>
         <td>Nom</td>
         <td>Prenoms</td>
-        <td>Parcelle</td>
+        <td>Code Producteur</td>
+        <td>Code Parcelle</td>
         <td>Varietes Cacao</td>
 <td>Autre Variete</td>
 <td>Existe Cours Eaux</td>
@@ -76,11 +79,14 @@
     ?>
         <tbody>
         <tr>
-            <td><?php echo $c->id; ?></td>
+            <td><?php echo $c->id; ?></td> 
+            <td><?php echo $c->campagne->nom; ?></td> 
+            <td><?php echo $c->parcelle->producteur->localite->section->cooperative->name; ?></td>
+            <td><?php echo $c->parcelle->producteur->localite->section->libelle; ?></td>
             <td><?php echo $c->parcelle->producteur->localite->nom; ?></td>
-            <td><?php echo $c->campagne->nom; ?></td>
-            <td><?php echo $c->parcelle->producteur->nom; ?></td>
-            <td><?php echo $c->parcelle->producteur->prenoms; ?></td>
+            <td><?php echo $c->parcelle->producteur->nom; ?></td> 
+            <td><?php echo $c->parcelle->producteur->prenoms; ?></td> 
+            <td><?php echo $c->parcelle->producteur->codeProd; ?></td> 
             <td><?php echo $c->parcelle->codeParc; ?></td>
             <td><?php echo $c->varietes_cacao; ?></td>
 <td><?php echo $c->autreVariete; ?></td>

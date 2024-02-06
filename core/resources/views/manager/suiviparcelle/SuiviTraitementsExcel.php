@@ -34,12 +34,15 @@
         <td>Prenoms</td>
         <td>Code Producteur</td>
         <td>Code Parcelle</td>
-        <td>Ombrage</td>
-        <td>Nombre</td>
+        <td>nom</td>
+        <td>unite</td>
+        <td>quantite</td>
+        <td>contenant</td>
+        <td>frequence</td> 
     </tr>
     </thead> 
     <?php
-    foreach($ombrages as $c)
+    foreach($traitements as $c)
     {
     ?>
         <tbody>
@@ -52,8 +55,11 @@
             <td><?php echo $c->suiviParcelle->parcelle->producteur->prenoms; ?></td> 
             <td><?php echo $c->suiviParcelle->parcelle->producteur->codeProd; ?></td> 
             <td><?php echo $c->suiviParcelle->parcelle->codeParc; ?></td>
-            <td><?php echo $c->ombrage; ?></td> 
-            <td><?php echo $c->nombre; ?></td> 
+            <td><?php echo $c->nom; ?></td> 
+            <td><?php echo $c->unite; ?></td> 
+            <td><?php echo $c->quantite; ?></td> 
+            <td><?php echo $c->contenant; ?></td>
+            <td><?php echo $c->frequence; ?></td>  
         </tr>
         </tbody>
         <?php

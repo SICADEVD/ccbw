@@ -83,7 +83,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label class="col-sm-4 control-label">@lang('Quelle variété d’arbre ombrage souhaiterais-tu avoir ?')</label>
+                            <label class="col-sm-4 control-label">@lang('Quelle variété d\'arbre ombrage souhaiterais-tu avoir ?')</label>
                             <div class="col-xs-12 col-sm-8">
                                 <select class="form-control select2-multi-select" name="arbre[]" id="arbre" multiple
                                     required>
@@ -104,7 +104,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <?php echo Form::label(__('As-tu bénéficié d’arbres agro-forestiers ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <?php echo Form::label(__('As-tu bénéficié d\'arbres agro-forestiers ?'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
                                 <?php echo Form::select('arbresagroforestiers', ['' => 'Selectionner une option', 'non' => __('non'), 'oui' => __('oui')], null, ['class' => 'form-control arbresagroforestiers', 'required']); ?>
                             </div>
@@ -181,7 +181,7 @@
                             </h5>
                         </legend>
                         <div class="form-group row">
-                            <?php echo Form::label(__('Quels sont les Pesticides utilisés l’année dernière'), null, ['class' => 'col-sm-12 control-label pt-3']); ?>
+                            <?php echo Form::label(__('Quels sont les Pesticides utilisés l\'année dernière'), null, ['class' => 'col-sm-12 control-label pt-3']); ?>
                             <div class="col-xs-12 col-sm-12">
                                 <table class="table table-striped table-bordered">
                                     <tbody id="pesticidesAnneDerniere_area">
@@ -268,7 +268,7 @@
 
                         </div>
                         <div class="form-group row">
-                            <?php echo Form::label(__('Quels sont les Intrants (fertilisant, biofertilisant) utilisés l’année dernière'), null, ['class' => 'col-sm-12 control-label pt-3']); ?>
+                            <?php echo Form::label(__('Quels sont les Intrants (fertilisant, biofertilisant) utilisés l\'année dernière'), null, ['class' => 'col-sm-12 control-label pt-3']); ?>
 
                             {{-- NPK   Compost   Biofertilisant/Bio stimulant Engrais organique préfabriqué --}}
                             <div class="col-xs-12 col-sm-12">
@@ -375,7 +375,7 @@
 
 
                         <div class="form-group row">
-                            <?php echo Form::label(__('Activité d’Egourmandage dans la Parcelle'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <?php echo Form::label(__('Activité d\'Egourmandage dans la Parcelle'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
                                 <?php echo Form::select('activiteEgourmandage', ['Faible' => __('Faible'), 'Moyen' => __('Moyen'), 'Elevé' => __('Elevé')], null, ['class' => 'form-control activiteEgourmandage']); ?>
                             </div>
@@ -429,7 +429,7 @@
                                 parasites du cacaoyer dans la parcelle</h5>
                         </legend>
                         <div class="form-group row">
-                            <?php echo Form::label(__('Présence d’insectes parasites ou ravageurs ?'), null, ['class' => 'col-sm-6 control-label']); ?>
+                            <?php echo Form::label(__('Présence d\'insectes parasites ou ravageurs ?'), null, ['class' => 'col-sm-6 control-label']); ?>
                             <div class="col-xs-12 col-sm-6">
                                 <?php echo Form::select('presenceInsectesParasites', ['' => 'Selectionner une option', 'non' => __('non'), 'oui' => __('oui')], null, ['class' => 'form-control presenceInsectesParasites']); ?>
                             </div>
@@ -673,7 +673,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <?php echo Form::label(__('Présence d’Araignée'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <?php echo Form::label(__('Présence d\'Araignée'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
                                 <?php echo Form::select('presenceAraignee', ['Faible' => __('Faible'), 'Moyen' => __('Moyen'), 'Elevé' => __('Elevé')], null, ['class' => 'form-control presenceAraignee']); ?>
                             </div>
@@ -693,7 +693,7 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <?php echo Form::label(__('Présence d’autres types d’insecte amis ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <?php echo Form::label(__('Présence d\'autres types d\'insecte amis ?'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
                                 <?php echo Form::select('presenceAutreTypeInsecteAmi', ['' => 'Selectionner une option', 'non' => __('non'), 'oui' => __('oui')], null, ['class' => 'form-control presenceAutreTypeInsecteAmi', 'required']); ?>
                             </div>
