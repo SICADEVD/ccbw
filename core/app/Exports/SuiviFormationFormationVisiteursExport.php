@@ -1,14 +1,14 @@
 <?php
 
 namespace App\Exports;
-
-use App\Models\SuiviFormationProducteur;
+ 
+use App\Models\SuiviFormationVisiteur;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\WithTitle;
 
-class FormationProducteursExport implements FromView, WithTitle
+class SuiviFormationFormationVisiteursExport implements FromView, WithTitle
 {
     /**
     * @return \Illuminate\Support\Collection
@@ -19,8 +19,8 @@ class FormationProducteursExport implements FromView, WithTitle
     {
         // TODO: Implement view() method.
         
-        return view('manager.formation.FormationsProducteurExcel',[
-            'producteurs' => SuiviFormationProducteur::joinRelationship('suiviFormation.localite.section')->where('cooperative_id',auth()->user()->cooperative_id)
+        return view('manager.formation.FormationsVisiteurExcel',[
+            'visiteurs' => SuiviFormationVisiteur::joinRelationship('suiviFormation.localite.section')->where('cooperative_id',auth()->user()->cooperative_id)
             ->when(request()->id, function ($query, $id) {
                 $query->where('suivi_formation_id',decrypt($id)); 
            })
@@ -30,6 +30,6 @@ class FormationProducteursExport implements FromView, WithTitle
 
     public function title(): string
     {
-        Return "Formation Producteurs";
+        Return "Formation Visiteurs";
     }
 }

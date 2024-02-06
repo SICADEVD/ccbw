@@ -4,10 +4,11 @@ namespace App\Exports;
 
 use App\Models\SuiviFormation;
 use Illuminate\Contracts\View\View;
-use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromView;
+use Maatwebsite\Excel\Concerns\WithTitle;
+use Maatwebsite\Excel\Concerns\Exportable;
 
-class FormationsExport implements FromView
+class SuiviFormationsExport implements FromView, WithTitle
 {
     /**
     * @return \Illuminate\Support\Collection
@@ -25,4 +26,9 @@ class FormationsExport implements FromView
             ->get()
         ]);
     } 
+
+    public function title(): string
+    {
+        Return "Suivi Formation";
+    }
 }

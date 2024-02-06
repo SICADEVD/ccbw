@@ -14,8 +14,17 @@ class SousThemeFormation extends Model
 
     protected $table = 'formation_sous_themes';
 
+    public function suiviFormation()
+    {
+        return $this->belongsTo(SuiviFormation::class);
+    }
+
     public function themeFormation()
     {
         return $this->belongsTo(ThemesFormation::class, 'theme_formation_id');
+    }
+    public function sousThemeFormation()
+    {
+        return $this->belongsTo(SousThemeFormation::class, 'sous_theme_id');
     }
 }

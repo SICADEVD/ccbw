@@ -10,11 +10,12 @@ class ExportFormations implements WithMultipleSheets
   public function sheets(): array 
     {    
       $feuilles=array();  
-      $feuilles[] = new FormationProducteursExport();
-      $feuilles[] = new FormationThemesExport();   
-      $feuilles[] = new FormationVisiteursExport();  
+      $feuilles[] = new SuiviFormationProducteurExport();
+      $feuilles[] = new SuiviFormationTypeFormationThemeExport();   
+      $feuilles[] = new SuiviFormationThemeSousThemeExport();  
+      $feuilles[] = new SuiviFormationFormationVisiteursExport();  
 
-    $sheets = [ new FormationsExport(), ];
+    $sheets = [ new SuiviFormationsExport(), ];
     $sheets = array_merge($sheets, $feuilles);
    
 

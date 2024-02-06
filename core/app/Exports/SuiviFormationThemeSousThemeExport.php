@@ -2,14 +2,16 @@
 
 namespace App\Exports;
 
+use App\Models\SousThemeFormation;
 use App\Models\SuiviFormationTheme;
+use App\Models\ThemeSousTheme;
 use App\Models\TypeFormationTheme;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\WithTitle;
 
-class FormationThemesExport implements FromView, WithTitle
+class SuiviFormationThemeSousThemeExport implements FromView, WithTitle
 {
     /**
     * @return \Illuminate\Support\Collection
@@ -20,10 +22,10 @@ class FormationThemesExport implements FromView, WithTitle
     {
         // TODO: Implement view() method.
         
-        return view('manager.formation.FormationsThemeExcel',[
-            'themes' => TypeFormationTheme::joinRelationship('suiviFormation.localite.section')->where('cooperative_id',auth()->user()->cooperative_id)
+        return view('manager.formation.FormationsSousThemeExcel',[
+            'sousthemes' => ThemeSousTheme::joinRelationship('suiviFormation.localite.section')->where('cooperative_id',auth()->user()->cooperative_id)
             ->when(request()->id, function ($query, $id) {
-                $query->where('suivi_formation_id',decrypt($id)); 
+                $query->where('suivi_formations.suivi_formation_id',decrypt($id)); 
            })
             ->get()
         ]);
@@ -31,6 +33,6 @@ class FormationThemesExport implements FromView, WithTitle
 
     public function title(): string
     {
-        Return "Formation Themes";
+        Return "Formation Sous Themes";
     }
 }
