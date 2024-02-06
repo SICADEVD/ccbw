@@ -163,7 +163,10 @@ class ActionSocialeController extends Controller
      */
     public function show($id)
     {
-        //
+        $pageTitle = "Détail Action Sociale";
+        $actionSociale = ActionSociale::find($id); // Remplacez ActionSociale par le nom de votre modèle
+        $partenaires = $actionSociale->partenaires;
+        return view('manager.action-sociale.show', compact('actionSociale', 'pageTitle','partenaires'));
     }
 
     /**
@@ -176,7 +179,8 @@ class ActionSocialeController extends Controller
     {
         $pageTitle = "Modifier une Action Sociale";
         $actionSociale = ActionSociale::find($id); // Remplacez ActionSociale par le nom de votre modèle
-        return view('manager.action-sociale.edit', compact('actionSociale', 'pageTitle'));
+        $partenaires = $actionSociale->partenaires;
+        return view('manager.action-sociale.edit', compact('actionSociale', 'pageTitle','partenaires'));
     }
 
     /**
