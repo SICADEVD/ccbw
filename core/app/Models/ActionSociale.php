@@ -11,8 +11,14 @@ class ActionSociale extends Model
 {
     use Searchable, GlobalStatus, PowerJoins;
 
+    protected $guarded = [];
+
     public function cooperative()
     {
         return $this->belongsTo(Cooperative::class);
+    }
+    public function partenaires()
+    {
+        return $this->hasMany(Partenaire::class, 'action_sociale_id');
     }
 }
