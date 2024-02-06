@@ -58,7 +58,7 @@
                     <div class="form-group row">
                         <label class="col-sm-4 control-label" for="niveau_realisation">Niveau de réalisation:</label>
                         <div class="col-xs-12 col-sm-8">
-                            <select id="niveau_realisation" class="form-control" name="niveau_realisation" required>
+                            <select id="niveau_realisation" class="form-control" name="niveau_realisation">
                                 <option value="Non démarré"
                                     {{ old('niveau_realisation') == 'Non démarré' ? 'selected' : '' }}>Non démarré</option>
                                 <option value="En Cours" {{ old('niveau_realisation') == 'En Cours' ? 'selected' : '' }}>En
@@ -69,11 +69,14 @@
                         </div>
                     </div>
 
-                    <div class="form-group row">
-                        <label class="col-sm-4 control-label" for="date_demarrage">Date de démarrage du projet:</label>
-                        <div class="col-xs-12 col-sm-8">
-                            <input type="date" id="date_demarrage" class="form-control" name="date_demarrage"
-                                value="{{ old('date_demarrage') }}">
+
+                    <div id="date_demarrage_container" style="display:none;">
+                        <div class="form-group row">
+                            <label class="col-sm-4 control-label" for="date_demarrage">Date de démarrage du projet:</label>
+                            <div class="col-xs-12 col-sm-8">
+                                <input type="date" id="date_demarrage" class="form-control" name="date_demarrage"
+                                    value="{{ old('date_demarrage') }}">
+                            </div>
                         </div>
                     </div>
 
@@ -134,8 +137,8 @@
                                                     <label class="col-sm-4 control-label"
                                                         for="montant_contribution-1">Montant de la
                                                         contribution:</label>
-                                                    <input type="text" id="montant_contribution-1" class="form-control"
-                                                        name="partenaires[0][montant_contribution]"
+                                                    <input type="text" id="montant_contribution-1"
+                                                        class="form-control" name="partenaires[0][montant_contribution]"
                                                         placeholder="Montant de la contribution">
                                                 </div>
                                             </div>
@@ -206,27 +209,43 @@
     <script src="{{ asset('assets/vendor/jquery/daterangepicker.min.js') }}"></script>
     <script type="text/javascript">
         document.getElementById('niveau_realisation').addEventListener('change', function() {
+            var dateFinProjet = document.getElementById('date_fin_projet');
+            var dateDemarrage = document.getElementById('date_demarrage');
             var dateFinProjetContainer = document.getElementById('date_fin_projet_container');
+            var dateDemarrageContainer = document.getElementById('date_demarrage_container');
+
             if (this.value === 'En Cours' || this.value === 'Achevé') {
                 dateFinProjetContainer.style.display = 'block';
+                dateDemarrageContainer.style.display = 'block';
+                dateFinProjet.required = true; // Rend le champ requis
+                dateDemarrage.required = true; // Rend le champ requis
             } else {
                 dateFinProjetContainer.style.display = 'none';
+                dateDemarrageContainer.style.display = 'none';
+                dateFinProjet.required = false; // Rend le champ non requis
+                dateDemarrage.required = false; // Rend le champ non requis
             }
         });
+        
         $(document).ready(function() {
-                //intrants lannee derniere
+            //intrants lannee derniere
             var partenairesCount = $("#partenaire_area tr").length;
-           
+
             $(document).on('click', '#addRowPartenaire', function() {
 
                 var html_table = '<tr>';
                 html_table +=
                     '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm">Partenaire impliqué ' +
                     partenairesCount +
-                    '</badge></div><div class="col-xs-12 col-sm-4 pr-0"><div class="form-group"><label class="col-sm-4 control-label" for="partenaire">Partenaire impliqué:</label><input type="text" id="partenaire-' + partenairesCount +'" class="form-control"name="partenaires[' + partenairesCount +
-                    '][partenaire]" placeholder="Partenaire impliqué"></div></div> <div class="col-xs-12 col-sm-4"><div class="form-group row pr-0"><label class="col-sm-4 control-label" for="type_partenariat">Type de partenariat:</label> <select id="type_partenariat-' + partenairesCount +'" class="form-control" name="partenaires[' + partenairesCount +
-                    '][type_partenaire]"><option value="">Selectionner une option</option><option value="Technique">Technique</option><option value="Financier">Financier</option><option value="Technique et Financier">Technique et Financier</option></select></div></div><div class="col-xs-12 col-sm-4 pr-0"><div class="form-group"> <label class="col-sm-4 control-label" for="montant_contribution-1">Montant de la contribution:</label><input type="text" id="montant_contribution-' + partenairesCount +'" class="form-control" name="partenaires[' + partenairesCount +
-                    '][montant_contribution]" placeholder="Montant de la contribution"></div></div></td>';
+                    '</badge></div><div class="col-xs-12 col-sm-4 pr-0"><div class="form-group"><label class="col-sm-4 control-label" for="partenaire">Partenaire impliqué:</label><input type="text" id="partenaire-' +
+                    partenairesCount + '" class="form-control"name="partenaires[' + partenairesCount +
+                    '][partenaire]" placeholder="Partenaire impliqué"></div></div> <div class="col-xs-12 col-sm-4"><div class="form-group row pr-0"><label class="col-sm-4 control-label" for="type_partenariat">Type de partenariat:</label> <select id="type_partenariat-' +
+                    partenairesCount + '" class="form-control" name="partenaires[' + partenairesCount +
+                    '][type_partenaire]"><option value="">Selectionner une option</option><option value="Technique">Technique</option><option value="Financier">Financier</option><option value="Technique et Financier">Technique et Financier</option></select></div></div><div class="col-xs-12 col-sm-4 pr-0"><div class="form-group"> <label class="col-sm-4 control-label" for="montant_contribution-1">Montant de la contribution:</label><input type="text" id="montant_contribution-' +
+                    partenairesCount + '" class="form-control" name="partenaires[' + partenairesCount +
+                    '][montant_contribution]" placeholder="Montant de la contribution"></div></div><div class="col-xs-12 col-sm-8"><button type="button" id="' +
+                    partenairesCount +
+                    '" class="removeRowPartenaire btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></td>';
                 html_table += '</tr>';
                 //---> End create table tr
 
@@ -241,7 +260,7 @@
                     partenairesCount = parseInt(partenairesCount) - 1;
                 }
             });
-            
+
         });
     </script>
 @endpush

@@ -51,6 +51,17 @@ class ActionSocialeController extends Controller
      */
     public function store(Request $request)
     {
+        $validationRule = [
+            'type_projet' => 'required',
+            'titre_projet' => 'required',
+            'description_projet' => 'required',
+            'beneficiaires_projet' => 'required',
+            'niveau_realisation' => 'required',
+            'partenaires.*.partenaire' => 'required',
+            'partenaires.*.type_partenaire' => 'required',
+            'partenaires.*.montant_contribution' => 'required',
+        ];
+        $request->validate($validationRule);
         
         if($request->id){
             $action = ActionSociale::find($request->id);
