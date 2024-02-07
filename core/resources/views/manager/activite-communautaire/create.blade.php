@@ -54,12 +54,12 @@
                         </div>
                     </div>
 
-                    <div class="form-group row">
+                    {{-- <div class="form-group row">
                         <label class="col-sm-4 control-label" for="localite_projet">Localité:</label>
                         <div class="col-xs-12 col-sm-8">
                             <input type="text" id="localite_projet" class="form-control" name="localite_projet" required>
                         </div>
-                    </div>
+                    </div> --}}
 
                     <div class="form-group row">
                         <label class="col-sm-4 control-label" for="beneficiaires_projet">Bénéficiaires du Projet:</label>

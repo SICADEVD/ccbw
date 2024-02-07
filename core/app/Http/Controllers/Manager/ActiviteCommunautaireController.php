@@ -80,6 +80,7 @@ class ActiviteCommunautaireController extends Controller
         $communaute->date_fin_projet = $request->date_fin_projet;
         $communaute->date_demarrage = $request->date_demarrage;
         $communaute->liste_beneficiaires = $request->liste_beneficiaires;
+        // $communaute->localite_projet = $request->localite_projet;
         if ($request->has('photos')) {
             $paths = [];
             foreach ($request->file('photos') as $photo) {
@@ -154,8 +155,9 @@ class ActiviteCommunautaireController extends Controller
         $pageTitle = "Modifier une Activité Communautaire";
         $manager = auth()->user(); 
         $communauteSociale = ActiviteCommunautaire::find($id); // Remplacez ActionSociale par le nom de votre modèle
+        $dataLocalite = ActiviteCommunautaireLocalite::where('activite_communautaire_id', $id)->pluck('localite_id')->toArray();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id', $manager->cooperative_id], ['localites.status', 1]])->orderBy('nom')->get();
-        return view('manager.activite-communautaire.edit', compact('actionSociale','localites'));
+        return view('manager.activite-communautaire.edit', compact('localites','pageTitle','communauteSociale','dataLocalite'));
     }
 
     /**
