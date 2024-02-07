@@ -58,14 +58,14 @@ if($verification !=null)
         $superficie = Str::replaceFirst( 'm²','',$superficie);
         } 
     }
-
+ 
       $insert_data = array(  
   'producteur_id' => $verification->id,
   'codeParc' => $codeParc,
   'anneeCreation' => $row['anneecreation'],
   'typedeclaration' => 'Verbale',
   'culture' => $row['cultureparcelle'],
-  'superficie' => round($superficie,2),
+  'superficie' => is_numeric(trim($superficie)) ? round(trim($superficie),2) : trim($superficie),
   'latitude' => round($row['latitude'],6),
   'longitude' => round($row['longitude'],6),
   'userid' => auth()->user()->id,
