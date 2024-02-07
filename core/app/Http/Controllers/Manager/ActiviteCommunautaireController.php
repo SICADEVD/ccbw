@@ -6,6 +6,7 @@ use App\Models\Localite;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\ActiviteCommunautaire;
+use Illuminate\Support\Facades\Storage;
 use App\Models\ActiviteCommunautaireLocalite;
 
 class ActiviteCommunautaireController extends Controller
@@ -79,6 +80,40 @@ class ActiviteCommunautaireController extends Controller
         $communaute->date_fin_projet = $request->date_fin_projet;
         $communaute->date_demarrage = $request->date_demarrage;
         $communaute->liste_beneficiaires = $request->liste_beneficiaires;
+        if ($request->has('photos')) {
+            $paths = [];
+            foreach ($request->file('photos') as $photo) {
+                try {
+                    $directory = 'public/ActiviteCommunautaires/photos';
+                    if (!Storage::exists($directory)) {
+                        Storage::makeDirectory($directory);
+                    }
+                    $path = $photo->store($directory);
+                    $paths[] = $path;
+                } catch (\Exception $exp) {
+                    $notify[] = ['error', 'Impossible de télécharger votre image'];
+                    return back()->withNotify($notify);
+                }
+            }
+            $communaute->photos = json_encode($paths);
+        }
+        if ($request->has('documents_joints')) {
+            $paths = [];
+            foreach ($request->file('documents_joints') as $document) {
+                try {
+                    $directory = 'public/ActiviteCommunautaires/documents';
+                    if (!Storage::exists($directory)) {
+                        Storage::makeDirectory($directory);
+                    }
+                    $path = $document->store($directory);
+                    $paths[] = $path;
+                } catch (\Exception $exp) {
+                    $notify[] = ['error', 'Impossible de télécharger votre image'];
+                    return back()->withNotify($notify);
+                }
+            }
+            $communaute->documents_joints = json_encode($paths);
+        }
         $communaute->save();
         if($communaute != null){
             $id = $communaute->id;
@@ -118,7 +153,7 @@ class ActiviteCommunautaireController extends Controller
     {
         $pageTitle = "Modifier une Activité Communautaire";
         $manager = auth()->user(); 
-        $actionSociale = ActiviteCommunautaire::find($id); // Remplacez ActionSociale par le nom de votre modèle
+        $communauteSociale = ActiviteCommunautaire::find($id); // Remplacez ActionSociale par le nom de votre modèle
         $localites = Localite::joinRelationship('section')->where([['cooperative_id', $manager->cooperative_id], ['localites.status', 1]])->orderBy('nom')->get();
         return view('manager.activite-communautaire.edit', compact('actionSociale','localites'));
     }
