@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Manager;
 
+use App\Models\Partenaire;
 use Illuminate\Http\Request;
 use App\Models\ActionSociale;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\Partenaire;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Google\Service\CloudLifeSciences\Action;
 
 class ActionSocialeController extends Controller
@@ -71,57 +72,6 @@ class ActionSocialeController extends Controller
             $action = new ActionSociale();
             $message = 'Action Sociale ajoutée avec succès.';
         }
-        
-
-        try {
-            if ($request->hasFile('photos')) {
-                $photos = $request->file('photos');
-
-                // Parcourez chaque fichier
-                foreach ($photos as $photo) {
-                    // Générez un nouveau nom pour le fichier
-                    $filename = time() . '_' . $photo->getClientOriginalName();
-
-                    // Vérifiez si le répertoire existe, sinon créez-le
-                    $path = public_path('ActionSociales/photos');
-                    if (!File::exists($path)) {
-                        File::makeDirectory($path, 0777, true);
-                    }
-
-                    // Déplacez le fichier dans le répertoire
-                    $photo->move($path, $filename);
-                }
-            }
-            // Continuez avec le reste de votre méthode store...
-        } catch (\Exception $e) {
-            // Gérez l'erreur, par exemple en renvoyant un message d'erreur à l'utilisateur
-            $notify[] = ['error', 'Une erreur s\'est produite lors du téléchargement des photos : ' . $e->getMessage()];
-            return back()->withNotify($notify);
-        }
-        try {
-            // Vérifiez si des fichiers ont été téléchargés
-            if ($request->hasFile('documents_joints')) {
-
-                $documents = $request->file('documents_joints');
-
-                foreach ($documents as $document) {
-                    // Générez un nouveau nom pour le fichier
-                    $filename = time() . '_' . $document->getClientOriginalName();
-
-                    // Vérifiez si le répertoire existe, sinon créez-le
-                    $path = public_path('ActionSociales/documents');
-                    if (!File::exists($path)) {
-                        File::makeDirectory($path, 0777, true);
-                    }
-
-                    $document->move($path, $filename);
-                }
-            }
-        } catch (\Exception $e) {
-            // Gérez l'erreur, par exemple en renvoyant un message d'erreur à l'utilisateur
-            $notify[] = ['error', 'Une erreur s\'est produite lors du téléchargement des photos : ' . $e->getMessage()];
-            return back()->withNotify($notify);
-        }
         $action->type_projet = $request->type_projet;
         $action->titre_projet = $request->titre_projet;
         $action->description_projet = $request->description_projet;
@@ -134,6 +84,40 @@ class ActionSocialeController extends Controller
         $action->date_livraison = $request->date_livraison;
         $action->commentaires = $request->commentaires;
         $action->cooperative_id = auth()->user()->cooperative_id;
+        if ($request->has('photos')) {
+            $paths = [];
+            foreach ($request->file('photos') as $photo) {
+                try {
+                    $directory = 'public/ActionSociales/photos';
+                    if (!Storage::exists($directory)) {
+                        Storage::makeDirectory($directory);
+                    }
+                    $path = $photo->store($directory);
+                    $paths[] = $path;
+                } catch (\Exception $exp) {
+                    $notify[] = ['error', 'Impossible de télécharger votre image'];
+                    return back()->withNotify($notify);
+                }
+            }
+            $action->photos = json_encode($paths);
+        }
+        if ($request->has('documents_joints')) {
+            $paths = [];
+            foreach ($request->file('documents_joints') as $document) {
+                try {
+                    $directory = 'public/ActionSociales/documents';
+                    if (!Storage::exists($directory)) {
+                        Storage::makeDirectory($directory);
+                    }
+                    $path = $document->store($directory);
+                    $paths[] = $path;
+                } catch (\Exception $exp) {
+                    $notify[] = ['error', 'Impossible de télécharger votre image'];
+                    return back()->withNotify($notify);
+                }
+            }
+            $action->documents_joints = json_encode($paths);
+        }
         $action->save();
         if($action != null){
             if($request->partenaires != null && !collect($request->partenaires)->contains(null)){
