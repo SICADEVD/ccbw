@@ -99,7 +99,8 @@ class ManagerController extends Controller
     GROUP BY 
         tf.type_formation_id, p.sexe'); 
         // Nombre de parcelles
-        $parcellespargenre = Parcelle::joinRelationship('producteur')->select('producteurs.sexe as genre',DB::raw('count(parcelles.id) as nombre'))->groupBy('producteurs.sexe')->get();
+        $parcellespargenre = Parcelle::joinRelationship('producteur.localite.section')
+        ->where('cooperative_id', auth()->user()->cooperative_id)->select('producteurs.sexe as genre',DB::raw('count(parcelles.id) as nombre'))->groupBy('producteurs.sexe')->get();
        
         $producteurparcertification = Producteur_certification::joinRelationship('producteur.programme')
                                 ->joinRelationship('producteur.localite.section')
