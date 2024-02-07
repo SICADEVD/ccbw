@@ -61,8 +61,7 @@ class ParcelleController extends Controller
             })
             ->with(['producteur.localite.section']) // Charger les relations nécessaires
             ->paginate(getPaginate());
-
-
+         
         return view('manager.parcelle.index', compact('pageTitle', 'sections', 'parcelles', 'localites', 'producteurs'));
     }
 
@@ -237,7 +236,7 @@ class ParcelleController extends Controller
 
                 $parcelle->producteur_id  = $producteur->id;
                 $parcelle->typedeclaration  = 'GPS';
-                $parcelle->superficie = round($data['supHa'], 2);
+                $parcelle->superficie = is_numeric(trim($data['supHa'])) ? round(trim($data['supHa']),2) : trim($data['supHa']);
                 $parcelle->latitude = round($centroid['lat'], 6);
                 $parcelle->longitude = round($centroid['lng'], 6);
                 $parcelle->waypoints = $data['coordinates'];
@@ -269,26 +268,57 @@ class ParcelleController extends Controller
         foreach ($kml->Document->Folder->Placemark as $placemark) {
             // Récupérer les coordonnées de la balise <coordinates>
             $coordinates = (string)$placemark->MultiGeometry->Polygon->outerBoundaryIs->LinearRing->coordinates;
-            $fieldID = (string)$placemark->ExtendedData->SchemaData->SimpleData[0];
-            $farmerID = (string)$placemark->ExtendedData->SchemaData->SimpleData[1];
-            $farmerName = (string)$placemark->ExtendedData->SchemaData->SimpleData[2];
-            $fieldName = (string)$placemark->ExtendedData->SchemaData->SimpleData[3];
-            $size = (string)$placemark->ExtendedData->SchemaData->SimpleData[4];
-            $supHa = (string)$placemark->ExtendedData->SchemaData->SimpleData[5];
-            $nOrdre = (string)$placemark->ExtendedData->SchemaData->SimpleData[6];
-            $cooperative = (string)$placemark->ExtendedData->SchemaData->SimpleData[7];
-            $codeCCC = (string)$placemark->ExtendedData->SchemaData->SimpleData[8];
-            $codeProducteur = (string)$placemark->ExtendedData->SchemaData->SimpleData[9];
-            $section = (string)$placemark->ExtendedData->SchemaData->SimpleData[10];
-            $localite = (string)$placemark->ExtendedData->SchemaData->SimpleData[11];
-            $sousPrefecture = (string)$placemark->ExtendedData->SchemaData->SimpleData[12];
-            $departement = (string)$placemark->ExtendedData->SchemaData->SimpleData[13];
-            $region = (string)$placemark->ExtendedData->SchemaData->SimpleData[14];
-            $prenoms = (string)$placemark->ExtendedData->SchemaData->SimpleData[15];
-            $nom = (string)$placemark->ExtendedData->SchemaData->SimpleData[16];
-            $genre = (string)$placemark->ExtendedData->SchemaData->SimpleData[17];
-            $certification = (string)$placemark->ExtendedData->SchemaData->SimpleData[22];
-            $programme = (string)$placemark->ExtendedData->SchemaData->SimpleData[23];
+            // $fieldID = (string)$placemark->ExtendedData->SchemaData->SimpleData[0];
+            // $farmerID = (string)$placemark->ExtendedData->SchemaData->SimpleData[1];
+            // $farmerName = (string)$placemark->ExtendedData->SchemaData->SimpleData[2];
+            // $fieldName = (string)$placemark->ExtendedData->SchemaData->SimpleData[3];
+            // $size = (string)$placemark->ExtendedData->SchemaData->SimpleData[4];
+            // $supHa = (string)$placemark->ExtendedData->SchemaData->SimpleData[5];
+            // $nOrdre = (string)$placemark->ExtendedData->SchemaData->SimpleData[6];
+            // $cooperative = (string)$placemark->ExtendedData->SchemaData->SimpleData[7];
+            // $codeCCC = (string)$placemark->ExtendedData->SchemaData->SimpleData[8];
+            // $codeProducteur = (string)$placemark->ExtendedData->SchemaData->SimpleData[9];
+            // $section = (string)$placemark->ExtendedData->SchemaData->SimpleData[10];
+            // $localite = (string)$placemark->ExtendedData->SchemaData->SimpleData[11];
+            // $sousPrefecture = (string)$placemark->ExtendedData->SchemaData->SimpleData[12];
+            // $departement = (string)$placemark->ExtendedData->SchemaData->SimpleData[13];
+            // $region = (string)$placemark->ExtendedData->SchemaData->SimpleData[14];
+            // $prenoms = (string)$placemark->ExtendedData->SchemaData->SimpleData[15];
+            // $nom = (string)$placemark->ExtendedData->SchemaData->SimpleData[16];
+            // $genre = (string)$placemark->ExtendedData->SchemaData->SimpleData[17];
+            // $certification = (string)$placemark->ExtendedData->SchemaData->SimpleData[22];
+            // $programme = (string)$placemark->ExtendedData->SchemaData->SimpleData[23];
+            $fieldID="";
+            $farmerID="";
+            $farmerName="";
+            $fieldName="";
+            $size="";
+            $nOrdre="";
+            $supHa = (string)$placemark->ExtendedData->SchemaData->SimpleData[1];
+            $cooperative = (string)$placemark->ExtendedData->SchemaData->SimpleData[4];
+            $codeCCC = (string)$placemark->ExtendedData->SchemaData->SimpleData[5];
+            $codeProducteur = Str::before((string)$placemark->ExtendedData->SchemaData->SimpleData[6]," ");
+            $section = (string)$placemark->ExtendedData->SchemaData->SimpleData[7];
+            $localite = (string)$placemark->ExtendedData->SchemaData->SimpleData[8];
+            $sousPrefecture = (string)$placemark->ExtendedData->SchemaData->SimpleData[9];
+            $departement = (string)$placemark->ExtendedData->SchemaData->SimpleData[10];
+            $region = (string)$placemark->ExtendedData->SchemaData->SimpleData[11];
+            $prenoms = (string)$placemark->ExtendedData->SchemaData->SimpleData[12];
+            $nom = (string)$placemark->ExtendedData->SchemaData->SimpleData[13];
+            $genre = (string)$placemark->ExtendedData->SchemaData->SimpleData[14];
+            $certification = "Rainforest Alliance";
+            $programme = "Bandama";
+
+            $supHa = Str::before($supHa,' ');
+    if(Str::contains($supHa,","))
+    {
+    $supHa = Str::replaceFirst( ',','.',$supHa);
+    if(Str::contains($supHa,","))
+        {
+        $supHa = Str::replaceFirst( 'm²','',$supHa);
+        } 
+    }
+            //Récupérer les coordonnées de la balise
 
             // Ajouter les données au tableau
             $coordinatesArray[] = $coordinates;
@@ -299,8 +329,8 @@ class ParcelleController extends Controller
                 'farmerName' => $farmerName,
                 'fieldName' => $fieldName,
                 'size' => $size,
-                'supHa' => $supHa,
                 'nOrdre' => $nOrdre,
+                'supHa' => $supHa, 
                 'cooperative' => $cooperative,
                 'codeCCC' => $codeCCC,
                 'codeProducteur' => $codeProducteur,
