@@ -6,6 +6,7 @@ use App\Models\Localite;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\ActiviteCommunautaire;
+use App\Models\ActiviteCommunautaireLocalite;
 
 class ActiviteCommunautaireController extends Controller
 {
@@ -49,7 +50,51 @@ class ActiviteCommunautaireController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validationRule = [
+            'titre_projet' => 'required',
+            'description_projet' => 'required',
+            'type_projet' => 'required',
+            'niveau_realisation' => 'required',
+            'cout_projet' => 'required',
+        ];
+        $request->validate($validationRule);
+        if($request->id){
+            $communaute = ActiviteCommunautaire::find($request->id);
+            $message = "Activité Communautaire modifiée avec succès";
+        }
+        else{
+            $communaute = new ActiviteCommunautaire();
+            $message = "Activité Communautaire ajoutée avec succès";
+        }
+        $communaute->titre_projet = $request->titre_projet;
+        $communaute->description_projet = $request->description_projet;
+        $communaute->type_projet = $request->type_projet;
+        $communaute->niveau_realisation = $request->niveau_realisation;
+        $communaute->cout_projet = $request->cout_projet;
+        $communaute->cooperative_id = auth()->user()->cooperative_id;
+        $communaute->localite_id = $request->localite_id;
+        $communaute->commentaires = $request->commentaires;
+        $communaute->date_livraison = $request->date_livraison;
+        $communaute->date_demarrage = $request->date_demarrage;
+        $communaute->date_fin_projet = $request->date_fin_projet;
+        $communaute->date_demarrage = $request->date_demarrage;
+        $communaute->liste_beneficiaires = $request->liste_beneficiaires;
+        $communaute->save();
+        if($communaute != null){
+            $id = $communaute->id;
+            ActiviteCommunautaireLocalite::where('activite_communautaire_id', $id)->delete();
+            if($request->localite != null && !collect($request->localite)->contains(null)){
+                foreach($request->localite as $localite){
+                    $communauteLocalite = new ActiviteCommunautaireLocalite();
+                    $communauteLocalite->activite_communautaire_id = $id;
+                    $communauteLocalite->localite_id = $localite;
+                    $communauteLocalite->save();
+                }
+            }
+        }
+        $notify[] = ['success', isset($message) ? $message : 'Activité Communautaire ajoutée avec succès.'];
+        return back()->withNotify($notify);
+        
     }
 
     /**

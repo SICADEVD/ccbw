@@ -15,9 +15,4 @@ class ActiviteCommunautaire extends Model
     {
         return $this->belongsTo(Cooperative::class);
     }
-
-    public function localite()
-    {
-        return $this->belongsTo(Localite::class);
-    }
 }
