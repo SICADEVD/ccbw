@@ -141,7 +141,12 @@ class ActiviteCommunautaireController extends Controller
      */
     public function show($id)
     {
-        //
+        $pageTitle = "Détails de l'Activité Communautaire";
+        $manager = auth()->user(); 
+        $communauteSociale = ActiviteCommunautaire::find($id); // Remplacez ActionSociale par le nom de votre modèle
+        $dataLocalite = ActiviteCommunautaireLocalite::where('activite_communautaire_id', $id)->pluck('localite_id')->toArray();
+        $localites = Localite::joinRelationship('section')->where([['cooperative_id', $manager->cooperative_id], ['localites.status', 1]])->orderBy('nom')->get();
+        return view('manager.activite-communautaire.show', compact('pageTitle','communauteSociale','dataLocalite','localites'));
     }
 
     /**
