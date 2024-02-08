@@ -51,12 +51,20 @@ class ActiviteCommunautaireController extends Controller
      */
     public function store(Request $request)
     {
+        // function generateCode() {
+        //     static $number = 0;
+        //     $number++;
+        //     $year = date('Y');
+        //     return sprintf('CR-AS-%s-%03d', $year, $number);
+        // }
         $validationRule = [
             'titre_projet' => 'required',
             'description_projet' => 'required',
             'type_projet' => 'required',
             'niveau_realisation' => 'required',
             'cout_projet' => 'required',
+            'photos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'documents_joints.*' => 'nullable|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:2048'
         ];
         $request->validate($validationRule);
         if($request->id){

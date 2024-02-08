@@ -61,6 +61,8 @@ class ActionSocialeController extends Controller
             'partenaires.*.partenaire' => 'required',
             'partenaires.*.type_partenaire' => 'required',
             'partenaires.*.montant_contribution' => 'required',
+            'photos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'documents_joints.*' => 'nullable|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:2048'
         ];
         $request->validate($validationRule);
         
