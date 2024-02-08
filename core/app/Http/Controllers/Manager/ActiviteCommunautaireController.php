@@ -51,12 +51,6 @@ class ActiviteCommunautaireController extends Controller
      */
     public function store(Request $request)
     {
-        // function generateCode() {
-        //     static $number = 0;
-        //     $number++;
-        //     $year = date('Y');
-        //     return sprintf('CR-AS-%s-%03d', $year, $number);
-        // }
         $validationRule = [
             'titre_projet' => 'required',
             'description_projet' => 'required',
@@ -73,6 +67,7 @@ class ActiviteCommunautaireController extends Controller
         }
         else{
             $communaute = new ActiviteCommunautaire();
+            $communaute->code = $this->generateCode();
             $message = "Activité Communautaire ajoutée avec succès";
         }
         $communaute->titre_projet = $request->titre_projet;
@@ -139,6 +134,12 @@ class ActiviteCommunautaireController extends Controller
         $notify[] = ['success', isset($message) ? $message : 'Activité Communautaire ajoutée avec succès.'];
         return back()->withNotify($notify);
         
+    }
+    private function generateCode(){
+        static $nbr = 0;
+        $nbr++;
+        $year = date('Y');
+        return sprintf('CR-AC-%s-%03d', $year, $nbr);
     }
 
     /**

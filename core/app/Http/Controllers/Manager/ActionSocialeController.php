@@ -72,6 +72,7 @@ class ActionSocialeController extends Controller
         }
         else{
             $action = new ActionSociale();
+            $action->code = $this->generateCode();
             $message = 'Action Sociale ajoutée avec succès.';
         }
         $action->type_projet = $request->type_projet;
@@ -139,6 +140,13 @@ class ActionSocialeController extends Controller
 
         $notify[] = ['success', isset($message) ? $message : 'Action Sociale ajoutée avec succès.'];
         return back()->withNotify($notify);
+    }
+
+    private function generateCode(){
+        static $number = 0;
+        $number++;
+        $year = date('Y');
+        return sprintf('CR-AS-%s-%03d', $year, $number);
     }
 
     /**
