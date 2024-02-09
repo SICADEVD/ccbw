@@ -36,11 +36,13 @@
         <td>Activite</td> 
     </tr>
     </thead> 
-    <?php
+    <?php 
     foreach($autresactivites as $c)
     {
     ?>
+    
         <tbody>
+            
         <tr>
             <td><?php echo $c->id; ?></td> 
             <td><?php echo $c->producteurInfo->localite->section->cooperative->name; ?></td>

@@ -21,10 +21,11 @@ class InfosAutresActivitesExport implements FromView, WithTitle
     public function view(): View
     {
         // TODO: Implement view() method.
-        
-        return view('manager.producteur.InfosAutresActivitesExcel',[
-            'autresactivites' => Producteur_infos_autresactivite::joinRelationship('producteurInfo.producteur.localite.section')->where('cooperative_id',auth()->user()->cooperative_id)->get()
-        ]);
+        $manager = auth()->user();
+        $autresactivites = Producteur_infos_autresactivite::joinRelationship('producteurInfo.producteur.localite.section')
+            ->where('cooperative_id', $manager->cooperative_id)->get();
+
+        return view('manager.producteur.InfosAutresActivitesExcel',compact('autresactivites'));
     }
 
     public function title(): string

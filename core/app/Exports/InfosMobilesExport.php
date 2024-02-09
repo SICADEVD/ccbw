@@ -23,7 +23,7 @@ class InfosMobilesExport implements FromView, WithTitle
     {
         // TODO: Implement view() method.
         
-        return view('manager.producteur.InfosAutresActivitesExcel',[
+        return view('manager.producteur.InfosMobilesExcel',[
             'mobiles' => Producteur_infos_mobile::joinRelationship('producteurInfo.producteur.localite.section')->where('cooperative_id',auth()->user()->cooperative_id)->get()
         ]);
     }

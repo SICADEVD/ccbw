@@ -43,12 +43,12 @@
         <tbody>
         <tr>
             <td><?php echo $c->id; ?></td> 
-            <td><?php echo $c->producteurInfo->localite->section->cooperative->name; ?></td>
-            <td><?php echo $c->producteurInfo->localite->section->libelle; ?></td>
-            <td><?php echo $c->producteurInfo->localite->nom; ?></td>
-            <td><?php echo $c->producteurInfo->nom; ?></td> 
-            <td><?php echo $c->producteurInfo->prenoms; ?></td> 
-            <td><?php echo $c->producteurInfo->codeProd; ?></td> 
+            <td><?php echo $c->producteur->localite->section->cooperative->name; ?></td>
+            <td><?php echo $c->producteur->localite->section->libelle; ?></td>
+            <td><?php echo $c->producteur->localite->nom; ?></td>
+            <td><?php echo $c->producteur->nom; ?></td> 
+            <td><?php echo $c->producteur->prenoms; ?></td> 
+            <td><?php echo $c->producteur->codeProd; ?></td> 
             <td><?php echo $c->certification; ?></td>
         </tr>
         </tbody>
