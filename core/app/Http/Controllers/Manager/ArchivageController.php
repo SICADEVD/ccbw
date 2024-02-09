@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\File;
 use Mpdf\Mpdf;
 use Mpdf\Output\Destination; 
 use Illuminate\Support\Facades\DB;
+ 
 
 class ArchivageController extends Controller
 {
