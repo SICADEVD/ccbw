@@ -7,7 +7,7 @@ use App\Models\Pays;
 use App\Models\Product;
 use App\Models\Section;
 use App\Models\Countrie;
-use Barryvdh\DomPDF\PDF; 
+use PDF;
 use App\Constants\Status;
 use App\Models\Localite; 
 use App\Models\Programme;
@@ -67,6 +67,19 @@ class ProducteurController extends Controller
             ->where('cooperative_id', $manager->cooperative_id)
             ->paginate(getPaginate());
 
+            if(request()->download){
+                $producteur = Producteur::find(decrypt(request()->download));
+                $producteurNameFile = Str::slug($producteur->nom.$producteur->prenoms.$producteur->codeProd,'-');
+                $producteurNameFile = $producteurNameFile.'.pdf';
+                if(!file_exists(storage_path(). "/app/public/producteurs-pdf")){  
+                    File::makeDirectory(storage_path(). "/app/public/producteurs-pdf", 0777, true);
+                }
+                @unlink(storage_path('app/public/producteurs-pdf'). "/".$producteurNameFile);
+                   
+                return PDF::loadView('manager.producteur.pdf-producteur', compact('producteur'))
+                        ->download($producteurNameFile);
+                       // ->save(storage_path(). "/app/public/producteurs-pdf/".$producteurNameFile);
+            }
         return view('manager.producteur.index', compact('pageTitle', 'producteurs', 'localites', 'programmes'));
     }
 
@@ -209,13 +222,7 @@ class ProducteurController extends Controller
         $programmes = Programme::all();
         $certificationAll = Certification::all();
         $certifications = $producteur->certifications->pluck('certification')->all();
-        $producteurNameFile = Str::slug($producteur->nom.$producteur->prenoms.$producteur->codeProd,'-');
-        $producteurNameFile = $producteurNameFile.'.pdf';
-        if(!file_exists(storage_path(). "/app/public/producteurs-pdf")){ 
-            File::makeDirectory(storage_path(). "/app/public/producteurs-pdf", 0777, true);
-          }
-          $pdf = app('dompdf.wrapper');
-          $pdf->setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif'])->loadView('manager.producteur.pdf-producteur', compact('producteur', 'id', 'localites', 'sections', 'certifications','certificationAll','countries','programmes'))->save(storage_path(). "/app/public/producteurs-pdf/".$producteurNameFile);
+       
 
         return view('manager.producteur.showproducteur', compact('pageTitle', 'producteur', 'id', 'localites', 'sections', 'certifications','certificationAll','countries','programmes'));
     }

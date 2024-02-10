@@ -4,291 +4,269 @@
         <div class="col-lg-12 mb-30">
             <div class="card">
                 <div class="card-body">
-                    {!! Form::model($producteur, [
-                        'method' => 'POST',
-                        'route' => ['manager.traca.producteur.update', $producteur->id],
-                        'class' => 'form-horizontal',
-                        'id' => 'flocal',
-                        'enctype' => 'multipart/form-data',
-                    ]) !!}
-                    <input type="hidden" name="id" value="{{ $producteur->id }}">
+                <table class="table table-striped table-bordered">
 
-                    <div class="form-group row">
-                        <?php echo Form::label(__('Accord de consentement du producteur'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('consentement', ['non' => 'Non', 'oui' => 'Oui'], null, ['class' => 'form-control','disabled']); ?>
-                        </div>
-                    </div>
-                    {{-- proprietaire --}}
+<tr>
+    <td>Accord de consentement du producteur
+    </td>
+<td>
+        {{ @$producteur->consentement }}
+		 
+    </td>
+</tr> 
 
-                    <div class="form-group row">
-                        <?php echo Form::label(__('Comment vous vous definissez ?'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('proprietaires', ['Proprietaire' => 'Proprietaire', 'Exploitant' => 'Exploitant', 'Metayer(aboussan)' => 'Metayer(aboussan)', 'Planté-partager' => 'Planté-partager', 'Garantie' => 'Garantie', 'Non Occupant' => 'Non Occupant'], null, ['class' => 'form-control proprietaires', 'required','disabled']); ?>
-                        </div>
-                    </div>
+<tr>
+    <td>Comment vous vous definissez ?
+    </td>
+<td>
+        {{ @$producteur->proprietaires }}
+ 
+    </td>
+</tr>
+<tr>
+    <td>
+    </td>
+<td>
+        {{ @$producteur->plantePartage }}
+ 
+    </td>
+</tr>
+ 
+    <tr>
+        <td>Année de démarrage
+        </td>
+<td>
+            {{ @$producteur->anneeDemarrage }}
+ 
+        </td>
+</tr>
+    <tr>
+        <td>Année de fin
+        </td>
+<td>
+            {{ @$producteur->anneeFin }}
+ 
+        
+    </td>
+</tr>
+<tr>
+    <td>Statut
+    </td>
+<td>
+        {{ @$producteur->statut }}
+ 
+    </td>
+</tr>
+                
+    <tr>
+        <td>Année de certification
+        </td>
+<td>
+            {{ @$producteur->certificat }}
+ 
+        </td>
+</tr>
+    <tr>
+        <td>Code producteur
+        </td>
+<td>
+            {{ @$producteur->codeProd }}
+ 
+        </td>
+</tr>
+   
+    <tr>
+        <td>Certificat
 
-                    <div class="form-group row" id="plantePartager">
-                        <?php echo Form::label(__(''), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::text('plantePartage', null, ['id' => 'plantePartage', 'placeholder' => __('Précision'), 'class' => 'form-control plantePartage','disabled']); ?>
-                        </div>
-                    </div>
+        </td>
+<td>
+            {{ @$producteur->certificats }} 
+        
+    </td>
+</tr>
 
-                    <div id="garantie">
-                        <div class="form-group row">
-                            <?php echo Form::label(__('Année de démarrage'), null, ['class' => 'col-sm-4 control-label']); ?>
-                            <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::text('anneeDemarrage', null, ['placeholder' => 'Ex. 2024', 'pattern' => '[0-9]{4}', 'class' => 'form-control anneeDemarrage', 'id' => 'anneeDemarrage','disabled']); ?>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <?php echo Form::label(__('Année de fin'), null, ['class' => 'col-sm-4 control-label']); ?>
-                            <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::text('anneeFin', null, ['placeholder' => 'Ex. 2024', 'pattern' => '[0-9]{4}', 'class' => 'form-control anneeFin', 'id' => 'anneeFin','disabled']); ?>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <?php echo Form::label(__('Statut'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('statut', ['Candidat' => 'Candidat', 'Certifie' => 'Certifie'], null, ['class' => 'form-control statut', 'required','disabled']); ?>
-                        </div>
-                    </div>
-                    <div id="statutCertifie">
-                        <div class="form-group row">
-                            <?php echo Form::label(__('Année de certification'), null, ['class' => 'col-sm-4 control-label']); ?>
-                            <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::number('certificat', null, ['id' => 'certificat', 'class' => 'form-control certificat', 'min' => '1990','disabled']); ?>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <?php echo Form::label(__('Code producteur'), null, ['class' => 'col-sm-4 control-label']); ?>
-                            <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::text('codeProd', null, ['id' => 'codeProd', 'placeholder' => __('Code producteur'), 'class' => 'form-control codeProd','disabled']); ?>
-                            </div>
-                        </div>
-                        {{-- Selectionner le Certificat --}}
-                        <div class="form-group row">
-                            <?php echo Form::label(__('Certificat'), null, ['class' => 'col-sm-4 control-label']); ?>
+    <tr>
+        <td>Autre Certificat
+        </td>
+<td>
+            {{ @$producteur->autreCertificats }} 
+        
+    </td>
+</tr>
+                  
+<tr>
+<td>
+    Section
+    </td>
+ 
+<td>
+        {{ @$producteur->section }} 
+    </td>
+</tr>
+ 
+<tr>
+<td>
+    Localite
+    </td>
+<td>
+        {{ @$producteur->localite_id }} 
+    </td>
+</tr>
+ 
+<tr>
+	<td>
+    Programme
+    </td>
+<td>
+        {{ @$producteur->programme_id }} 
+    </td>
+</tr> 
+<tr>
+    <td>Habitez-vous dans un campement ou village ?
+    </td>
+<td>
+        {{ @$producteur->habitationProducteur }} 
+    </td>
+</tr> 
+<tr>
+    <td>Nom du producteur
+    </td>
+<td>
+        {{ @$producteur->nom }}
+</td>
+</tr>
 
-                            <div class="col-xs-12 col-sm-8">
-                                <select class="form-control select2-multi-select certificats" name="certificats[]" multiple
-                                    required disabled>
-                                    <option value="">@lang('Selectionner les options')</option>
-                                    @foreach ($certificationAll as $certification)
-                                        <option value="{{ $certification->nom }}"
-                                            {{ in_array($certification->nom, old('certificats', $certifications)) ? 'selected' : '' }}>
-                                            {{ __($certification->nom) }}</option>
-                                    @endforeach
-                                    <option value="Autre"{{ in_array('Autre', $certifications) ? 'selected' : '' }}>Autre
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="autreCertificat">
-                        <div class="form-group row">
-                            <?php echo Form::label(__('Autre Certificat'), null, ['class' => 'col-sm-4 control-label']); ?>
-                            <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::text('autreCertificats', null, ['id' => 'autreCertificats', 'placeholder' => __('Autre certificat'), 'class' => 'form-control autreCertificats','disabled']); ?>
-                            </div>
-                        </div>
-                    </div>
-                    {{-- selection sections --}}
-                    <div class="form-group row">
-                        <label class="col-sm-4 control-label">@lang('Section')</label>
-                        <div class="col-xs-12 col-sm-8">
-                            <select class="form-control" name="section" id="section" required disabled>
-                                <option value="">@lang('Selectionner une option')</option>
-                                @foreach ($sections as $section)
-                                    <option value="{{ $section->id }}" @selected($section->id == $producteur->localite->section->id)>
-                                        {{ __($section->libelle) }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    {{-- selection localite --}}
-                    <div class="form-group row">
-                        <label class="col-sm-4 control-label">@lang('Localite')</label>
-                        <div class="col-xs-12 col-sm-8">
-                            <select class="form-control"  name="localite_id" id="localite_id" required disabled>
-                                <option value="">@lang('Selectionner une option')</option>
-                                @foreach ($localites as $localite)
-                                    <option value="{{ $localite->id }}"
-                                        data-chained="{{ optional($localite->section)->id }}" @selected($localite->id == $producteur->localite_id)>
-                                        {{ __($localite->nom) }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    {{-- programme de durabilité --}}
-                    <div class="form-group row">
-                        <label class="col-sm-4 control-label">@lang('Programme')</label>
-                        <div class="col-xs-12 col-sm-8">
-                            <select class="form-control programme_id" name="programme_id" id="programme_id" required disabled>
-                                <option value="">@lang('Selectionner une option')</option>
-                                @foreach ($programmes as $programme)
-                                    <option value="{{ $programme->id }}" @selected($producteur->programme_id == $programme->id)>
-                                        {{ __($programme->libelle) }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
+<tr>
+    <td>Prenoms du producteur
+    </td>
+<td>
+        {{ @$producteur->prenoms }}
+    </td>
+</tr>
 
-                    {{-- saisie où le producteur habite --}}
-                    <div class="form-group row">
-                        <?php echo Form::label(__('Habitez-vous dans un campement ou village ?'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('habitationProducteur', ['Village' => 'Village', 'Campement' => 'Campement'], null, ['class' => 'form-control habitationProducteur', 'id' => 'habitationProducteur', 'required','disabled']); ?>
-                        </div>
-                    </div>
+<tr>
+    <td>Genre
+    </td>
+<td>
+        {{ @$producteur->sexe }}
+</td>
+</tr>
+                  
+<tr>
+    <td>Statut matrimonial
+    </td>
+<td>
+        {{ @$producteur->statutMatrimonial }} 
+    </td>
+</tr>
 
+<tr>
+    <td>Nationalité
+    </td>
+<td>
+        {{ @$producteur->nationalite }} 
+        </select>
+    </td>
+</tr>
 
+<tr>
+    <td>Date de naissance
+    </td>
+<td>
+        {{ @$producteur->dateNaiss }} 
+    </td>
+</tr>
+<tr>
+    <td>Numero de téléphone
+    </td>
+<td>
+        {{ @$producteur->phone1 }} 
+    </td>
+</tr>
 
-                    <div class="form-group row">
-                        <?php echo Form::label(__('Nom du producteur'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::text('nom', null, ['placeholder' => __('Nom du producteur'), 'class' => 'form-control', 'required','disabled']); ?>
-                        </div>
-                    </div>
+<tr>
+    <td>Avez-vous un proche à contacter pour vous joindre
+    </td>
+<td>
+        {{ @$producteur->autreMembre }} </td>
+</tr> 
+    <tr>
+        <td>
+        </td>
+<td>
+            {{ @$producteur->autrePhone }} 
+        </td>
+</tr>
+    <tr>
+        <td>Numero de téléphone
+        </td>
+<td>
+            {{ @$producteur->phone2 }} 
+        
+    </td>
+</tr>
+<tr>
+   <td> Niveau d'étude 
+    </td>
+<td>
+        {{ @$producteur->niveau_etude }} 
+    </td>
+</tr>
+<tr>
+    <td>Type de pièces
+    </td>
+<td>
+        {{ @$producteur->type_piece }} 
+    </td>
+</tr>
 
-                    <div class="form-group row">
-                        <?php echo Form::label(__('Prenoms du producteur'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::text('prenoms', null, ['placeholder' => __('Prenoms du producteur'), 'class' => 'form-control', 'required','disabled']); ?>
-                        </div>
-                    </div>
+<tr>
+    <td>N° de la pièce
+    </td>
+<td>
+        {{ @$producteur->numPiece }} </td>
+</tr>
+         
 
-                    <div class="form-group row">
-                        <?php echo Form::label(__('Genre'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('sexe', ['Homme' => 'Homme', 'Femme' => 'Femme'], null, ['class' => 'form-control', 'required','disabled']); ?>
-                        </div>
-                    </div>
-                    {{-- situation matrimoniale  --}}
-                    <div class="form-group row">
-                        <?php echo Form::label(__('Statut matrimonial'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('statutMatrimonial', ['Célibataire' => 'Célibataire', 'Concubinage' => 'Concubinage', 'Marié(mariage civil)' => 'Marié(mariage civil)', 'Mariage réligieux' => 'Mariage réligieux', 'Mariage réligieux' => 'Mariage réligieux', 'Divorcé' => 'Divorcé', 'Veuf(ve)' => 'Veuf(ve)'], null, ['class' => 'form-control', 'required','disabled']); ?>
-                        </div>
-                    </div>
+<tr>
+    <td>N° de carte CCC
+    </td>
+<td>
+        {{ @$producteur->num_ccc }} </td>
+</tr>
+                
+<tr>
+    <td>Avez-vous une carte CMU ?
+    </td>
+<td>
+        {{ @$producteur->carteCMU }} </td>
+</tr>
+            
+    <tr>
+        <td>N° de la pièce CMU
+        </td>
+<td>
+            {{ @$producteur->numCMU }}  </td>
+</tr>
 
-                    <div class="form-group row">
-                        <?php echo Form::label(__('Nationalité'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <select class="form-control select2-basic" name="nationalite" id="nationalite" required disabled>
-                                <option value="">@lang('Selectionner une option')</option>
-                                @foreach ($countries as $nationalite)
-                                    <option value="{{ $nationalite->id }}"
-                                        {{ $producteur->nationalite == $nationalite->id ? 'selected' : '' }}>
-                                        {{ __($nationalite->nicename) }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
+<tr>
+    <td>Votre type de carte de sécurité social
+    </td>
+<td>
+        {{ @$producteur->typeCarteSecuriteSociale }} 
+    </td>
+</tr> 
+    <tr>
+        <td>N° de carte de sécurité sociale
+        </td>
+<td>
 
-                    <div class="form-group row">
-                        <?php echo Form::label(__('Date de naissance'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::date('dateNaiss', null, ['class' => 'form-control naiss', 'id' => 'datenais', 'required','disabled']); ?>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <?php echo Form::label(__('Numero de téléphone'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::text('phone1', null, ['class' => 'form-control phone', 'required','disabled']); ?>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <?php echo Form::label(__('Avez-vous un proche à contacter pour vous joindre'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('autreMembre', ['non' => 'Non', 'oui' => 'Oui'], null, ['class' => 'form-control autreMembre','disabled']); ?>
-                        </div>
-                    </div>
-                    <div id="autrePhones">
-                        <div class="form-group row">
-                            <?php echo Form::label(__(''), null, ['class' => 'col-sm-4 control-label']); ?>
-                            <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::select('autrePhone', ['' => null, 'Membre de famille' => 'Membre de famille', 'Délégué' => 'Délégué', 'Autre' => 'Autre'], null, ['id' => 'autrePhone', 'class' => 'form-control autrePhone','disabled']); ?>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <?php echo Form::label(__('Numero de téléphone'), null, ['class' => 'col-sm-4 control-label']); ?>
-                            <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::text('phone2', null, ['id' => 'phone2', 'placeholder' => __('Numéro de téléphone'), 'class' => 'form-control phone2','disabled']); ?>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <?php echo Form::label(__("Niveau d'étude"), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('niveau_etude', ['Primaire' => 'Primaire', 'Collège (6e à 3ème)' => 'Collège (6e à 3ème)', 'Lycée (2nde à Tle)' => 'Lycée (2nde à Tle)', 'Superieur (BAC et Plus)' => 'Superieur (BAC et Plus)', 'Aucun' => 'Aucun'], null, ['placeholder' => __('Selectionner une option'), 'class' => 'form-control', 'required','disabled']); ?>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <?php echo Form::label(__('Type de pièces'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('type_piece', ['CNI' => 'CNI', 'Carte Consulaire' => 'Carte Consulaire', 'Passeport' => 'Passeport', 'Attestation' => 'Attestation', 'Extrait de naissance' => 'Extrait de naissance', 'Permis de conduire' => 'Permis de conduire', 'CMU' => 'CMU', 'Pas Disponible' => 'Pas Disponible'], null, ['placeholder' => __('Selectionner une option'), 'class' => 'form-control', 'required','disabled']); ?>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <?php echo Form::label(__('N° de la pièce'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::text('numPiece', null, ['placeholder' => __('N° de la pièce'), 'class' => 'form-control', 'required','disabled']); ?>
-                        </div>
-                    </div>
-                    {{-- Numero de carte ccc --}}
-
-                    <div class="form-group row">
-                        <?php echo Form::label(__('N° de carte CCC'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::text('num_ccc', null, ['placeholder' => __('N° de carte CCC'), 'class' => 'form-control text11','disabled']); ?>
-                        </div>
-                    </div>
-                    {{-- Avez-vous une carte CMU ? --}}
-                    <div class="form-group row">
-                        <?php echo Form::label(__('Avez-vous une carte CMU ?'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('carteCMU', ['non' => 'Non', 'oui' => 'Oui'], null, ['class' => 'form-control carteCMU','disabled']); ?>
-                        </div>
-                    </div>
-                    <div id="pieceCMU">
-                        <div class="form-group row">
-                            <?php echo Form::label(__('N° de la pièce CMU'), null, ['class' => 'col-sm-4 control-label']); ?>
-                            <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::text('numCMU', null, ['id' => 'numCMU', 'placeholder' => __('N° de la pièce CMU'), 'class' => 'form-control numCMU','disabled']); ?>
-                            </div>
-                        </div>
-                    </div>
-                    {{-- quel est votre carte d'assurance  --}}
-                    <div class="form-group row">
-                        <?php echo Form::label(__('Votre type de carte de sécurité social'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('typeCarteSecuriteSociale', ['AUCUN' => 'AUCUN', 'CNPS' => 'CNPS', 'CMU' => 'CMU'], null, ['class' => 'form-control typeCarteSecuriteSociale', 'required','disabled']); ?>
-                        </div>
-                    </div>
-                    <div id="typeCarteSecuriteSociales">
-                        <div class="form-group row">
-                            <?php echo Form::label(__('N° de carte de sécurité sociale'), null, ['class' => 'col-sm-4 control-label']); ?>
-                            <div class="col-xs-12 col-sm-8">
-
-                                <?php echo Form::text('numSecuriteSociale', null, ['id' => 'numSecuriteSociale', 'placeholder' => __('N° de carte de sécurité sociale'), 'class' => 'form-control numSecuriteSociale','disabled']); ?>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <?php echo Form::label(__('Photo du producteur'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <input type="file" name="picture" accept="image/*" class="form-control dropify-fr"
-                                placeholder="Choisir une image" id="image" disabled>
-                        </div>
-                    </div>
-                    {!! Form::close() !!}
+            {{ @$producteur->numSecuriteSociale }} 
+        
+    </td>
+</tr>
+ 
+</table>
                 </div>
             </div>
         </div>

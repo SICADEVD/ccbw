@@ -168,7 +168,7 @@ return [
         Stevebauman\Location\LocationServiceProvider::class,
         SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
-        Barryvdh\DomPDF\ServiceProvider::class, 
+        Barryvdh\DomPDF\ServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -202,7 +202,7 @@ return [
         'Location' => 'Stevebauman\Location\Facades\Location',
         'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
-        'PDF' => Barryvdh\DomPDF\Facade::class, 
+        'PDF' => Barryvdh\DomPDF\Facade\Pdf::class, 
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'ApiRoute' => \Froiden\RestAPI\Facades\ApiRoute::class, 
     ])->toArray(),

@@ -115,13 +115,14 @@
                                         <td>
                                             <a href="{{ route('manager.traca.producteur.infos', encrypt($producteur->id)) }}"
                                                 class="icon-btn btn--info ml-1">@lang('Infos producteur')</a>
+                                                <a href="{{ route('manager.traca.producteur.index', ['download'=> encrypt($producteur->id)]) }}" class="btn btn-sm btn--danger"><i class="la la-download"></i>@lang('Télécharger')</a>
+                                            <a href="{{ route('manager.traca.producteur.edit', $producteur->id) }}" class="btn btn-sm btn-outline--warning"><i class="la la-pen"></i>@lang('Edit')</a>
                                             <button type="button" class="btn btn-sm btn-outline--primary"
                                                 data-bs-toggle="dropdown" aria-expanded="false"><i
                                                     class="las la-ellipsis-v"></i>@lang('Action')
                                             </button>
                                             <div class="dropdown-menu p-0">
-                                                <a href="{{ route('manager.traca.producteur.edit', $producteur->id) }}"
-                                                    class="dropdown-item"><i class="la la-pen"></i>@lang('Edit')</a>
+                                                
                                                 <a href="{{ route('manager.traca.producteur.showproducteur', $producteur->id) }}" class="dropdown-item"><i class="las la-file-invoice"></i>@lang('Détails')</a>
                                                 @if ($producteur->status == Status::DISABLE)
                                                     <button type="button" class="confirmationBtn  dropdown-item"
