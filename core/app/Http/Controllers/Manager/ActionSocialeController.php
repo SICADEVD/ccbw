@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Manager;
 
+use App\Models\Localite;
 use App\Models\Partenaire;
 use Illuminate\Http\Request;
 use App\Models\ActionSociale;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
+use App\Models\ActionSocialeLocalite;
 use Illuminate\Support\Facades\Storage;
 use Google\Service\CloudLifeSciences\Action;
 
@@ -40,8 +42,9 @@ class ActionSocialeController extends Controller
     {
         $pageTitle = "Ajouter une Action Sociale";
         $manager = auth()->user();
+        $localites = Localite::joinRelationship('section')->where([['cooperative_id', $manager->cooperative_id], ['localites.status', 1]])->orderBy('nom')->get();
 
-        return view('manager.action-sociale.create', compact('pageTitle'));
+        return view('manager.action-sociale.create', compact('pageTitle', 'localites'));
     }
 
     /**
@@ -56,8 +59,8 @@ class ActionSocialeController extends Controller
             'type_projet' => 'required',
             'titre_projet' => 'required',
             'description_projet' => 'required',
-            'beneficiaires_projet' => 'required',
             'niveau_realisation' => 'required',
+            'date_livraison' => 'required',
             'partenaires.*.partenaire' => 'required',
             'partenaires.*.type_partenaire' => 'required',
             'partenaires.*.montant_contribution' => 'required',
@@ -78,7 +81,6 @@ class ActionSocialeController extends Controller
         $action->type_projet = $request->type_projet;
         $action->titre_projet = $request->titre_projet;
         $action->description_projet = $request->description_projet;
-        $action->beneficiaires_projet = $request->beneficiaires_projet;
 
         $action->niveau_realisation = $request->niveau_realisation;
         $action->date_demarrage = $request->date_demarrage;
@@ -135,6 +137,17 @@ class ActionSocialeController extends Controller
                     ];
                 }
             }
+            if($request->beneficiaires_projet != null && !collect($request->beneficiaires_projet)->contains(null)){
+                ActionSocialeLocalite::where('action_sociale_id', $action->id)->delete();
+                $data1 = [];
+                foreach($request->beneficiaires_projet as $beneficiaire){
+                    $data1[] = [
+                        'action_sociale_id' => $action->id,
+                        'localite_id' => $beneficiaire
+                    ];
+                }
+            }
+            ActionSocialeLocalite::insert($data1);
             Partenaire::insert($data);
         }
 

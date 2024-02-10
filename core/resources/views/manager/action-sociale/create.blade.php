@@ -50,10 +50,17 @@
                     <div class="form-group row">
                         <label class="col-sm-4 control-label" for="beneficiaires_projet">Bénéficiaires du projet:</label>
                         <div class="col-xs-12 col-sm-8">
-                            <input type="text" id="beneficiaires_projet" class="form-control" name="beneficiaires_projet"
-                                value="{{ old('beneficiaires_projet') }}" required>
+                            <select class="form-control select2-multi-select" name="beneficiaires_projet[]" id="beneficiaires_projet" required
+                                multiple>
+                                <option value="">@lang('Selectionner une option')</option>
+                                @foreach ($localites as $localite)
+                                    <option value="{{ $localite->id }}" @selected(old('localite'))>
+                                        {{ $localite->nom }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
+                    
 
                     <div class="form-group row">
                         <label class="col-sm-4 control-label" for="niveau_realisation">Niveau de réalisation:</label>
@@ -114,7 +121,8 @@
                                                     <label class="col-sm-4 control-label" for="partenaire">Partenaire
                                                         impliqué:</label>
                                                     <input type="text" id="partenaire-1" class="form-control"
-                                                        name="partenaires[0][partenaire]" placeholder="Partenaire impliqué"
+                                                        name="partenaires[0][partenaire]"
+                                                        placeholder="Partenaire impliqué"
                                                         value="{{ old('partenaire') }}">
                                                 </div>
                                             </div>
@@ -185,8 +193,7 @@
                         <label class="col-sm-4 control-label" for="documents_joints">Documents joints:</label>
                         <div class="col-xs-12 col-sm-8">
                             <input type="file" id="documents_joints1" class="form-control dropify-fr"
-                                name="documents_joints[]" multiple="" class="dropify"
-                                data-height="70">
+                                name="documents_joints[]" multiple="" class="dropify" data-height="70">
                         </div>
 
                         <div id="insertBeforeNew"></div>
@@ -198,7 +205,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="form-group row">
                         <label class="col-sm-4 control-label" for="commentaires">Commentaires:</label>
                         <div class="col-xs-12 col-sm-8">
