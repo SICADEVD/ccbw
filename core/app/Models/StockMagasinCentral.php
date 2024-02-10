@@ -46,6 +46,10 @@ class StockMagasinCentral extends Model
     {
         return $this->belongsTo(Vehicule::class, 'vehicule_id');
     }
+    public function remorque()
+    {
+        return $this->belongsTo(Remorque::class, 'remorque_id');
+    }
 
     public function products()
     {

@@ -26,24 +26,24 @@
 <table id="categories" width="100%">
     <thead>
     <tr>
-        <td>ID</td>
+        <td>ID</td> 
+        <td>Campagne</td> 
+        <td>Cooperative</td>
+        <td>Section</td>
         <td>Localite</td>
-        <td>Campagne</td>
         <td>Nom</td>
         <td>Prenoms</td>
-        <td>Code Prod</td>
-        <td>Parcelle</td> 
+        <td>Code Producteur</td>
+        <td>Code Parcelle</td> 
         <td>Applicateur</td>
-
         <td>Superficie Pulverisee</td>
-<td>Marque Produit Pulverise</td>
-<td>Matieres Actives</td>
-<td>Degre Dangerosite</td>
-<td>Raison Application</td>
-<td>Nom Insectes Cibles</td>
-<td>Delais Reentree</td>
-<td>Zone Tampons</td> 
-<td>Presence Douche</td> 
+<td>delais Reentree</td>
+<td>personne Application</td>
+<td>suivi Formation</td>
+<td>attestion</td>
+<td>bilanSante</td>
+<td>independant Epi</td>
+<td>etat Epi</td>  
 <td>Date Application</td>
 <td>Heure Application</td>
     </tr>
@@ -54,24 +54,25 @@
     ?>
         <tbody>
         <tr>
-            <td><?php echo $c->id; ?></td>
-            <td><?php echo $c->parcelle->producteur->localite->nom; ?></td>
+            <td><?php echo $c->id; ?></td> 
             <td><?php echo $c->campagne->nom; ?></td>
-            <td><?php echo $c->parcelle->producteur->nom; ?></td>
-            <td><?php echo $c->parcelle->producteur->prenoms; ?></td>
-            <td><?php echo $c->parcelle->producteur->codeProd; ?></td>
+            <td><?php echo $c->parcelle->producteur->localite->section->cooperative->name; ?></td>
+            <td><?php echo $c->parcelle->producteur->localite->section->libelle; ?></td>
+            <td><?php echo $c->parcelle->producteur->localite->nom; ?></td>
+            <td><?php echo $c->parcelle->producteur->nom; ?></td> 
+            <td><?php echo $c->parcelle->producteur->prenoms; ?></td> 
+            <td><?php echo $c->parcelle->producteur->codeProd; ?></td>  
             <td><?php echo $c->parcelle->codeParc; ?></td>
             <td><?php echo $c->user->lastname; ?> <?php echo $c->user->firstname; ?></td>
 
             <td><?php echo $c->superficiePulverisee; ?></td>
-<td><?php echo $c->marqueProduitPulverise; ?></td>
-<td><?php echo $c->matieresActives; ?></td>
-<td><?php echo $c->degreDangerosite; ?></td>
-<td><?php echo $c->raisonApplication; ?></td>
-<td><?php echo $c->nomInsectesCibles; ?></td>
 <td><?php echo $c->delaisReentree; ?></td>
-<td><?php echo $c->zoneTampons; ?></td> 
-<td><?php echo $c->presenceDouche; ?></td> 
+<td><?php echo $c->personneApplication; ?></td>
+<td><?php echo $c->suiviFormation; ?></td>
+<td><?php echo $c->attestion; ?></td>
+<td><?php echo $c->bilanSante; ?></td>
+<td><?php echo $c->independantEpi; ?></td>
+<td><?php echo $c->etatEpi; ?></td>  
 <td><?php echo $c->date_application; ?></td>
 <td><?php echo $c->heure_application; ?></td>
         </tr>

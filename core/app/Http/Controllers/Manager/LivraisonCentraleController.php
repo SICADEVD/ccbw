@@ -34,7 +34,9 @@ use App\Models\StockMagasinCentral;
 use App\Models\StockMagasinSection;
 use App\Http\Controllers\Controller;
 use App\Models\ConnaissementProduit;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Models\SuiviConnaissementUsine;
+use App\Exports\ExportStockMagasinCentral;
 use App\Models\LivraisonMagasinCentralProducteur;
 
 class LivraisonCentraleController extends Controller
@@ -494,6 +496,7 @@ class LivraisonCentraleController extends Controller
     }
     public function exportExcel()
     {
-        return (new ExportLivraisons())->download('livraisons.xlsx');
+        $filename = 'stock-magasin-central-' . gmdate('dmYhms') . '.xlsx';
+        return Excel::download(new ExportStockMagasinCentral, $filename);
     }
 }

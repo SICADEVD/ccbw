@@ -2,13 +2,15 @@
 
 namespace App\Exports;
 
-use App\Models\Application;
+use App\Models\LivraisonInfo;
+use App\Models\LivraisonProduct;
+use App\Models\StockMagasinSection;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Concerns\Exportable;
 
-class ApplicationsExport implements FromView, WithTitle
+class StockSectionLivraisonProducteursExport implements FromView, WithTitle
 {
     /**
     * @return \Illuminate\Support\Collection
@@ -18,13 +20,12 @@ class ApplicationsExport implements FromView, WithTitle
     public function view(): View
     {
         // TODO: Implement view() method.
-        return view('manager.application.ApplicationsAllExcel',[
-            'applications' => Application::joinRelationship('parcelle.producteur.localite.section')->where('cooperative_id',auth()->user()->cooperative_id)->get()
+        return view('manager.livraison.LivraisonProducteursExcel',[
+            'producteurs' => LivraisonProduct::joinRelationship('livraisonInfo')->where('sender_cooperative_id',auth()->user()->cooperative_id)->get()
         ]);
     } 
-
     public function title(): string
     {
-        Return "Application";
+        Return "Producteurs";
     }
 }

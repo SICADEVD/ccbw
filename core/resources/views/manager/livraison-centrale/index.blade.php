@@ -112,7 +112,7 @@
 
 @push('breadcrumb-plugins') 
 
-<a href="{{ route('manager.livraison.exportExcel.livraisonAll') }}" class="btn  btn-outline--warning h-45"><i class="las la-cloud-download-alt"></i> Exporter en Excel</a>
+<a href="{{ route('manager.livraison.exportExcel.magcentralAll') }}" class="btn  btn-outline--warning h-45"><i class="las la-cloud-download-alt"></i> Exporter en Excel</a>
 @endpush
 
 @push('style-lib')

@@ -30,18 +30,25 @@
         <td>Cooperative</td>
         <td>Campagne</td>
         <td>Periode</td>
-        <td>Section</td>
-        <td>Magasin Section</td> 
-        <td>Code livraison</td>
+        <td>Magasin Section</td>
+        <td>Magasin Central</td> 
+
+        <td>Entreprise</td>
+        <td>transporteur</td>
+        <td>vehicule</td>
+        <td>remorque</td>
+
+        <td>Code connaissement</td>
         <td>Date livraison</td>
         <td>Quantite livrée</td>
         <td>Quantite sortie</td>
         <td>Quantite restante</td> 
+        
         <td>Date enreg</td> 
     </tr>
     </thead> 
     <?php
-    foreach($stockssection as $c)
+    foreach($stockscentral as $c)
     {
     ?>
         <tbody>
@@ -50,13 +57,19 @@
             <td><?php echo $c->livraisonInfo->senderCooperative->name; ?></td>
             <td><?php echo $c->campagne->nom; ?></td>
             <td><?php echo $c->campagnePeriode->nom; ?></td>
-            <td><?php echo $c->magasinSection->section->libelle; ?></td>
             <td><?php echo $c->magasinSection->nom; ?></td>
-            <td><?php echo $c->livraisonInfo->code; ?></td>
-            <td><?php echo date('d-m-Y', strtotime($c->livraisonInfo->estimate_date)); ?></td>
-            <td><?php echo $c->livraisonInfo->quantity; ?></td>
-            <td><?php echo $c->stocks_sortant; ?></td>
-            <td><?php echo $c->livraisonInfo->quantity - $c->stocks_sortant; ?></td> 
+            <td><?php echo $c->magasinCentral->nom; ?></td>
+
+            <td><?php echo $c->transporteur->entreprise->nom_entreprise;?></td>
+            <td><?php echo $c->transporteur->nom.' '.$c->transporteur->prenoms; ?></td>
+            <td><?php echo $c->vehicule->vehicule_immat; ?></td>
+            <td><?php echo $c->remorque->remorque_immat; ?></td>
+
+            <td><?php echo $c->numero_connaissement; ?></td>
+            <td><?php echo date('d-m-Y', strtotime($c->date_livraison)); ?></td>
+            <td><?php echo $c->stocks_mag_entrant; ?></td>
+            <td><?php echo $c->stocks_mag_sortant; ?></td>
+            <td><?php echo $c->stocks_mag_entrant - $c->stocks_mag_sortant; ?></td> 
             <td><?php echo date('d-m-Y', strtotime($c->created_at)); ?></td>
         </tr>
         </tbody>

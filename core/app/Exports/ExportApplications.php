@@ -10,8 +10,9 @@ class ExportApplications  implements WithMultipleSheets
   public function sheets(): array 
     {    
       $feuilles=array();  
-      $feuilles[] = new InsectesExport();
-      $feuilles[] = new MatieresactivesExport();    
+      $feuilles[] = new ApplicationMaladieExport();
+      $feuilles[] = new ApplicationPesticideExport();    
+      $feuilles[] = new ApplicationMatiereActiveExport();    
 
     $sheets = [ new ApplicationsExport(), ];
     $sheets = array_merge($sheets, $feuilles);

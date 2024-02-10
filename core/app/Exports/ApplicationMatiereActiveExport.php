@@ -2,15 +2,16 @@
 
 namespace App\Exports;
 
+use App\Models\MatiereActive;
 use App\Models\ApplicationInsecte;
-use App\Models\ApplicationMatieresactive;
-use App\Models\SuiviParcellesParasite;
 use Illuminate\Contracts\View\View;
-use Maatwebsite\Excel\Concerns\Exportable;
+use App\Models\SuiviParcellesParasite;
 use Maatwebsite\Excel\Concerns\FromView;
+use App\Models\ApplicationMatieresactive;
 use Maatwebsite\Excel\Concerns\WithTitle;
+use Maatwebsite\Excel\Concerns\Exportable;
 
-class MatieresactivesExport implements FromView, WithTitle
+class ApplicationMatiereActiveExport implements FromView, WithTitle
 {
     /**
     * @return \Illuminate\Support\Collection
@@ -22,12 +23,12 @@ class MatieresactivesExport implements FromView, WithTitle
         // TODO: Implement view() method.
         
         return view('manager.application.MatieresactiveExcel',[
-            'matieresactives' => ApplicationMatieresactive::joinRelationship('application.parcelle.producteur.localite.section')->where('cooperative_id',auth()->user()->cooperative_id)->get()
+            'matieresactives' => MatiereActive::joinRelationship('application.parcelle.producteur.localite.section')->where('cooperative_id',auth()->user()->cooperative_id)->get()
         ]);
     }
 
     public function title(): string
     {
-        Return "Matieresactives";
+        Return "Matieres actives";
     }
 }

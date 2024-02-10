@@ -34,8 +34,10 @@ use Illuminate\Support\Facades\DB;
 use App\Models\StockMagasinCentral;
 use App\Models\StockMagasinSection;
 use App\Http\Controllers\Controller;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Models\LivraisonProductDetail;
 use App\Models\Producteur_certification;
+use App\Exports\ExportStockMagasinSection;
 use App\Models\LivraisonMagasinCentralProducteur;
 
 class LivraisonController extends Controller
@@ -548,10 +550,11 @@ class LivraisonController extends Controller
         $pageTitle           = "Facture";
         $livraisonInfo         = LivraisonInfo::with('payment')->findOrFail($id);
         return view('manager.livraison.invoice', compact('pageTitle', 'livraisonInfo'));
-    }
-
+    } 
+    
     public function exportExcel()
     {
-        return (new ExportLivraisons())->download('livraisons.xlsx');
+        $filename = 'stock-magasin-section-' . gmdate('dmYhms') . '.xlsx';
+        return Excel::download(new ExportStockMagasinSection, $filename);
     }
 }

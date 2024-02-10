@@ -552,6 +552,7 @@ Route::middleware('auth')->group(function () {
             Route::get('magcentral/prime/invoice', [LivraisonCentraleController::class,'primeInvoice'])->name('prime.invoice');
             Route::get('magcentral/usine/suivi/{id}', [LivraisonCentraleController::class,'suiviLivraison'])->name('usine.suivi');
             Route::post('magcentral/suivi/store', [LivraisonCentraleController::class,'suiviStore'])->name('magcentral.suivi.store');
+            Route::get('/export/stock/magasin/central', [LivraisonCentraleController::class,'exportExcel'])->name('exportExcel.magcentralAll');
             Route::resource('magcentral', LivraisonCentraleController::class); 
             Route::get('send', [LivraisonController::class,'create'])->name('create');
             Route::post('store', [LivraisonController::class,'store'])->name('store');
@@ -573,7 +574,7 @@ Route::middleware('auth')->group(function () {
             Route::get('search', [LivraisonController::class,'livraisonSearch'])->name('search');
             Route::get('invoice/{id}', [LivraisonController::class,'invoice'])->name('invoice');
             Route::get('sent', [LivraisonController::class,'sentLivraison'])->name('sent');
-            Route::get('/exportLivraisonsExcel', [LivraisonController::class,'exportExcel'])->name('exportExcel.livraisonAll');
+            Route::get('/export/stock/magasin/section', [LivraisonController::class,'exportExcel'])->name('exportExcel.livraisonAll');
             
         });
  

@@ -35,12 +35,15 @@
         <td>Prenoms</td>
         <td>Code Producteur</td>
         <td>Code Parcelle</td>
-        <td>Nom Pesticide</td>
-        <td>Nom Matiere Active</td> 
+        <td>nom</td> 
+        <td>nom Commercial</td>
+        <td>toxicicologie</td>
+        <td>dose</td>
+        <td>frequence</td>
     </tr>
     </thead> 
     <?php
-    foreach($matieresactives as $c)
+    foreach($pesticides as $c)
     {
     ?>
         <tbody>
@@ -54,8 +57,11 @@
             <td><?php echo $c->application->parcelle->producteur->prenoms; ?></td> 
             <td><?php echo $c->application->parcelle->producteur->codeProd; ?></td>  
             <td><?php echo $c->application->parcelle->codeParc; ?></td>
-            <td><?php echo $c->applicationPesticide->nomCommercial; ?></td>
             <td><?php echo $c->nom; ?></td> 
+            <td><?php echo $c->nomCommercial; ?></td> 
+            <td><?php echo $c->toxicicologie; ?></td> 
+            <td><?php echo $c->dose; ?></td> 
+            <td><?php echo $c->frequence; ?></td> 
         </tr>
         </tbody>
         <?php

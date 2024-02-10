@@ -35,12 +35,11 @@
         <td>Prenoms</td>
         <td>Code Producteur</td>
         <td>Code Parcelle</td>
-        <td>Nom Pesticide</td>
-        <td>Nom Matiere Active</td> 
+        <td>Insecte</td> 
     </tr>
     </thead> 
     <?php
-    foreach($matieresactives as $c)
+    foreach($maladies as $c)
     {
     ?>
         <tbody>
@@ -54,8 +53,7 @@
             <td><?php echo $c->application->parcelle->producteur->prenoms; ?></td> 
             <td><?php echo $c->application->parcelle->producteur->codeProd; ?></td>  
             <td><?php echo $c->application->parcelle->codeParc; ?></td>
-            <td><?php echo $c->applicationPesticide->nomCommercial; ?></td>
-            <td><?php echo $c->nom; ?></td> 
+            <td><?php echo $c->insecte; ?></td> 
         </tr>
         </tbody>
         <?php
