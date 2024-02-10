@@ -150,6 +150,14 @@
                 </div>
             </div>
         </div>
+        <div class="col-xl-4 col-lg-6 mb-30">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Total Formation par Coopérative</h5>
+                    <canvas id="userFormationChart"></canvas>
+                </div>
+            </div>
+        </div>
     </div>
      
 @endsection
@@ -287,6 +295,68 @@
                 labels: @json(Arr::whereNotNull(Arr::pluck(@$producteurByCoop,'name'))),
                 datasets: [{
                     data: @json(Arr::whereNotNull(Arr::pluck(@$producteurByCoop,'total'))),
+                    backgroundColor: [
+                        '#ff7675',
+                        '#6c5ce7',
+                        '#ffa62b',
+                        '#ffeaa7',
+                        '#D980FA',
+                        '#fccbcb',
+                        '#45aaf2',
+                        '#05dfd7',
+                        '#FF00F6',
+                        '#1e90ff',
+                        '#2ed573',
+                        '#eccc68',
+                        '#ff5200',
+                        '#cd84f1',
+                        '#7efff5',
+                        '#7158e2',
+                        '#fff200',
+                        '#ff9ff3',
+                        '#08ffc8',
+                        '#3742fa',
+                        '#1089ff',
+                        '#70FF61',
+                        '#bf9fee',
+                        '#574b90'
+                    ],
+                    borderColor: [
+                        'rgba(231, 80, 90, 0.75)'
+                    ],
+                    borderWidth: 0,
+                }]
+            },
+            options: {
+                aspectRatio: 1,
+                responsive: true,
+                elements: {
+                    line: {
+                        tension: 0 // disables bezier curves
+                    }
+                },
+                scales: {
+                    xAxes: [{
+                        display: true
+                    }],
+                    yAxes: [{
+                        display: true
+                    }]
+                },
+                legend: {
+                    display: false,
+                }
+            }
+        });
+
+              // Donut chart
+              var ctx = document.getElementById('userFormationChart');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: @json(Arr::whereNotNull(Arr::pluck(@$formationByCoop,'name'))),
+                datasets: [{
+                    data: @json(Arr::whereNotNull(Arr::pluck(@$formationByCoop,'total'))),
                     backgroundColor: [
                         '#ff7675',
                         '#6c5ce7',

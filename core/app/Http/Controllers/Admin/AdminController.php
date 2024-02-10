@@ -46,8 +46,10 @@ class AdminController extends Controller
         $localiteByCoop = Localite::joinRelationship('section.cooperative')->select('cooperatives.name', DB::RAW('count(localites.id) as total'))->groupby('cooperative_id')->get();
         
         $producteurByCoop = Producteur::joinRelationship('localite.section.cooperative')->select('cooperatives.name', DB::RAW('count(producteurs.id) as total'))->groupby('cooperative_id')->get();
+
+        $formationByCoop = SuiviFormation::joinRelationship('localite.section.cooperative')->select('cooperatives.name', DB::RAW('count(suivi_formations.id) as total'))->groupby('cooperative_id')->get();
          
-        return view('admin.dashboard', compact('pageTitle', 'cooperativeCount', 'sectionCount', 'localiteCount', 'producteurCount', 'parcelleCount','sectionByCoop','localiteByCoop','formationCount','suiviparcelleCount','producteurByCoop'));
+        return view('admin.dashboard', compact('pageTitle', 'cooperativeCount', 'sectionCount', 'localiteCount', 'producteurCount', 'parcelleCount','sectionByCoop','localiteByCoop','formationCount','suiviparcelleCount','producteurByCoop','formationByCoop'));
     }
 
     public function profile()
