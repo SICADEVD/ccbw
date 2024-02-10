@@ -169,19 +169,36 @@
                     <div class="form-group row">
                         <label class="col-sm-4 control-label" for="photos">Photos:</label>
                         <div class="col-xs-12 col-sm-8">
-                            <input type="file" id="photos" class="form-control dropify-fr" name="photos[]"
-                                accept="image/*" multiple>
+                            <input type="file" id="photos1" class="form-control dropify-fr" name="photos[]"
+                                accept="image/*" multiple="" class="dropify" data-height="70">
+                        </div>
+                        <div id="insertBefore"></div>
+                        <!--  ADD ITEM START-->
+                        <div class="row px-lg-4 px-md-4 px-3 pb-3 pt-0 mb-3  mt-2">
+                            <div class="col-md-12">
+                                <a class="f-15 f-w-500" href="javascript:;" id="add-item"><i
+                                        class="icons icon-plus font-weight-bold mr-1"></i> @lang('app.add')</a>
+                            </div>
                         </div>
                     </div>
-
                     <div class="form-group row">
                         <label class="col-sm-4 control-label" for="documents_joints">Documents joints:</label>
                         <div class="col-xs-12 col-sm-8">
-                            <input type="file" id="documents_joints" class="form-control dropify-fr"
-                                name="documents_joints[]" multiple>
+                            <input type="file" id="documents_joints1" class="form-control dropify-fr"
+                                name="documents_joints[]" multiple="" class="dropify"
+                                data-height="70">
+                        </div>
+
+                        <div id="insertBeforeNew"></div>
+                        <!--  ADD ITEM START-->
+                        <div class="row px-lg-4 px-md-4 px-3 pb-3 pt-0 mb-3  mt-2">
+                            <div class="col-md-12">
+                                <a class="f-15 f-w-500" href="javascript:;" id="add-itemNew"><i
+                                        class="icons icon-plus font-weight-bold mr-1"></i> @lang('app.add')</a>
+                            </div>
                         </div>
                     </div>
-
+                    
                     <div class="form-group row">
                         <label class="col-sm-4 control-label" for="commentaires">Commentaires:</label>
                         <div class="col-xs-12 col-sm-8">
@@ -208,6 +225,55 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/css/daterangepicker.css') }}">
     <script src="{{ asset('assets/vendor/jquery/daterangepicker.min.js') }}"></script>
     <script type="text/javascript">
+        $('.dropify').dropify();
+        $('.dropify-fr').dropify();
+        // Add More Inputs
+        var $insertBefore = $('#insertBefore');
+        var $insertBeforeNew = $('#insertBeforeNew');
+        var $insertBeforeAutre = $('#insertBeforeAutre');
+        var i = 1;
+        var a = 1;
+        var b = 1;
+        $('#add-item').click(function() {
+            i += 1;
+
+            $(`<div id="addMoreBox${i}" class="row pl-20 pr-20 clearfix">
+            <div class="form-group my-3" style="padding: 0px;">  
+            <div class="input-group mb-3"> 
+                            <input name="photos[]" id="photos${i}" type="file" class="dropify" multiple="" data-height="78"/> <button type="button"
+                                        class="btn btn-outline-secondary border-grey"
+                                        data-toggle="tooltip" style="width: 10px;"><a href="javascript:;" class="d-flex align-items-center justify-content-center mt-5 remove-item" data-item-id="${i}" style="position: relative;top: -29px;"><i class="fa fa-times-circle f-20 text-lightest"></i></a></button>
+                                        </div></div> `)
+                .insertBefore($insertBefore);
+
+            $(".dropify").dropify();
+            // Recently Added date picker assign 
+        });
+        // Remove fields
+        $('body').on('click', '.remove-item', function() {
+            var index = $(this).data('item-id');
+            $('#addMoreBox' + index).remove();
+        });
+
+        $('#add-itemNew').click(function() {
+            a += 1;
+
+            $(`<div id="addMoreBoxNew${a}" class="row pl-20 pr-20 clearfix">
+            <div class="form-group my-3" style="padding: 0px;">  
+            <div class="input-group mb-3"> 
+                            <input name="documents_joints[]" id="documents_joints${a}" type="file" class="dropify" multiple="" data-height="78"/> <button type="button"
+                                        class="btn btn-outline-secondary border-grey"
+                                        data-toggle="tooltip" style="width: 10px;"><a href="javascript:;" class="d-flex align-items-center justify-content-center mt-5 remove-itemNew" data-item-id="${a}" style="position: relative;top: -29px;"><i class="fa fa-times-circle f-20 text-lightest"></i></a></button>
+                                        </div></div> `)
+                .insertBefore($insertBeforeNew);
+
+            $(".dropify").dropify();
+            // Recently Added date picker assign 
+        });
+        $('body').on('click', '.remove-itemNew', function() {
+            var index = $(this).data('item-id');
+            $('#addMoreBoxNew' + index).remove();
+        });
         document.getElementById('niveau_realisation').addEventListener('change', function() {
             var dateFinProjet = document.getElementById('date_fin_projet');
             var dateDemarrage = document.getElementById('date_demarrage');
@@ -226,7 +292,7 @@
                 dateDemarrage.required = false; // Rend le champ non requis
             }
         });
-        
+
         $(document).ready(function() {
             //intrants lannee derniere
             var partenairesCount = $("#partenaire_area tr").length;
