@@ -12,7 +12,7 @@ use Illuminate\Support\Str;
                         <div class="d-flex flex-wrap gap-4">
                             <input type="hidden" name="table" value="parcelles" />
                             <div class="flex-grow-1">
-                                <label>@lang('Section')</label>
+                                <label>@lang('Coopérative')</label>
                                 <select name="cooperative" class="form-control" id="cooperative">
                                     <option value="">@lang('Toutes')</option>
                                     @foreach ($cooperatives as $local)
@@ -34,7 +34,7 @@ use Illuminate\Support\Str;
                                 <select name="localite" class="form-control" id="localite">
                                     <option value="">@lang('Toutes')</option>
                                     @foreach ($localites as $local)
-                                        <option value="{{ $local->id }}" data-chained="{{ $local->section_id }}" {{ request()->localite == $local->id ? 'selected' : '' }}>{{ $local->nom }}</option>
+                                        <option value="{{ $local->id }}" {{ request()->localite == $local->id ? 'selected' : '' }}>{{ $local->nom }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -43,7 +43,7 @@ use Illuminate\Support\Str;
                                 <select name="producteur" class="form-control" id="producteur">
                                     <option value="">@lang('Tous')</option>
                                     @foreach ($producteurs as $local)
-                                        <option value="{{ $local->id }}" data-chained="{{ $local->localite_id }}" {{ request()->producteur == $local->id ? 'selected' : '' }}>{{ $local->nom }} {{ $local->prenoms }} ({{ $local->codeProd }})</option>
+                                        <option value="{{ $local->id }}" {{ request()->producteur == $local->id ? 'selected' : '' }}>{{ $local->nom }} {{ $local->prenoms }} ({{ $local->codeProd }})</option>
                                     @endforeach
                                 </select>
                             </div>

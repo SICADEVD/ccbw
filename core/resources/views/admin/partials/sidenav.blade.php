@@ -81,13 +81,13 @@
                                 <span class="menu-title">@lang('Forêts Classées')</span>
                             </a>
                         </li>
-                        <li class="sidebar-menu-item  {{ menuActive(['admin.traca.parcelle.mapping*']) }}">
+                        <li class="sidebar-menu-item  {{ menuActive(['admin.traca.parcelle.mapping']) }}">
                             <a href="{{ route('admin.traca.parcelle.mapping') }}" class="nav-link">
                                 <i class="menu-icon las la-tree"></i>
                                 <span class="menu-title">@lang('Mapping Waypoints Parcelles')</span>
                             </a>
                         </li>
-                        <li class="sidebar-menu-item  {{ menuActive(['admin.traca.parcelle.mapping.polygone*']) }}">
+                        <li class="sidebar-menu-item  {{ menuActive(['admin.traca.parcelle.mapping.polygone']) }}">
                             <a href="{{ route('admin.traca.parcelle.mapping.polygone') }}" class="nav-link">
                                 <i class="menu-icon las la-tree"></i>
                                 <span class="menu-title">@lang('Mapping Polygones Parcelles')</span>
