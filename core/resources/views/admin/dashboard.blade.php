@@ -10,7 +10,7 @@
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col-4">
-                            <i class="lab la-accessible-icon f-size--56"></i>
+                            <i class="las la-university f-size--56"></i>
                         </div>
                         <div class="col-8 text-end">
                             <span class="text-white text--small">@lang("Total Cooperative")</span>
@@ -26,7 +26,7 @@
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col-4">
-                            <i class="las la-dolly-flatbed f-size--56"></i>
+                            <i class="las la-university f-size--56"></i>
                         </div>
                         <div class="col-8 text-end">
                             <span class="text-white text--small">@lang('Total Section')</span>
@@ -42,7 +42,7 @@
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col-4">
-                            <i class="las la-dolly-flatbed f-size--56"></i>
+                            <i class="las la-university f-size--56"></i>
                         </div>
                         <div class="col-8 text-end">
                             <span class="text-white text--small">@lang('Total Localité')</span>
@@ -58,7 +58,7 @@
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col-4">
-                            <i class="las la-university f-size--56"></i>
+                            <i class="las la-users f-size--56"></i>
                         </div>
                         <div class="col-8 text-end">
                             <span class="text-white text--small">@lang('Total Producteur')</span>
@@ -75,7 +75,7 @@
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col-2">
-                            <i class="las la-money-bill-wave f-size--56"></i>
+                            <i class="las la-map f-size--56"></i>
                         </div>
                         <div class="col-10 text-end">
                             <span class="text-white text--small">@lang("Total Parcelle")</span>
@@ -92,7 +92,7 @@
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col-2">
-                            <i class="las la-dolly-flatbed f-size--56"></i>
+                            <i class="las la-graduation-cap f-size--56"></i>
                         </div>
                         <div class="col-10 text-end">
                             <span class="text-white text--small">@lang('Total Formation')</span>
@@ -108,7 +108,7 @@
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col-2">
-                            <i class="las la-money-bill-wave f-size--56"></i>
+                            <i class="las la-map-marker f-size--56"></i>
                         </div>
                         <div class="col-10 text-end">
                             <span class="text-white text--small">@lang("Total Suivi Parcelle")</span>
