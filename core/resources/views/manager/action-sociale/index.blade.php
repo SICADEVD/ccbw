@@ -36,6 +36,7 @@
                             <thead>
                                 <tr> 
                                     <th>@lang('Cooperative')</th> 
+                                    <th>@lang('Code')</th>
                                     <th>@lang('Type projet')</th> 
                                     <th>@lang('Titre')</th> 
                                     <th>@lang('Date demarrage')</th> 
@@ -51,6 +52,9 @@
                                     <tr>
                                         <td>
                                             <span class="fw-bold">{{ $action->cooperative->name }}</span>
+                                        </td>
+                                        <td>
+                                            <span class="fw-bold">{{ $action->code }}</span>
                                         </td>
                                         <td> 
                                             <span class="small">
