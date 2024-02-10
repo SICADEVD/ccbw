@@ -164,7 +164,7 @@
                                             <tr>
                                                 <td class="row">
                                                     <div class="col-xs-12 col-sm-12 bg-success">
-                                                        <badge class="btn  btn-outline--warning h-45 btn-sm">
+                                                        <badge class="btn  btn-outline--warning h-45 btn-sm text-white">
                                                             @lang('Pesticide')
                                                             {{ $index + 1 }}
                                                         </badge>
@@ -283,7 +283,7 @@
                                         <tr>
                                             <td class="row">
                                                 <div class="col-xs-12 col-sm-12 bg-success">
-                                                    <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Pesticide')
+                                                    <badge class="btn  btn-outline--warning h-45 btn-sm text-white">@lang('Pesticide')
                                                     </badge>
                                                 </div>
                                                 <div class="row">
@@ -447,7 +447,7 @@
                 //---> Start create table tr
                 var html_table = '<tr>';
                 html_table +=
-                    '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm">Pesticide ' +
+                    '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm text-white">Pesticide ' +
                     pesticideCount +
                     '</badge></div><div class="col-xs-12 col-sm-4"><div class="form-group row"><label for="" class="">Pesticides</label><select class="form-control" id="pesticides-' +
                     pesticideCount +

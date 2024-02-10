@@ -188,7 +188,7 @@
                                         <tr>
                                             <td class="row">
                                                 <div class="col-xs-12 col-sm-12 bg-success">
-                                                    <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Pesticide')
+                                                    <badge class="btn  btn-outline--warning h-45 btn-sm text-white">@lang('Pesticide')
                                                     </badge>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-4">
@@ -277,7 +277,7 @@
                                         <tr>
                                             <td class="row">
                                                 <div class="col-xs-12 col-sm-12 bg-success">
-                                                    <badge class="btn  btn-outline--warning h-45 btn-sm">
+                                                    <badge class="btn  btn-outline--warning h-45 btn-sm text-white">
                                                         @lang('Intrant')
                                                     </badge>
                                                 </div>
@@ -444,7 +444,7 @@
                                         <tr>
                                             <td class="row">
                                                 <div class="col-xs-12 col-sm-12 bg-success">
-                                                    <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Insectes parasites ou ravageurs')
+                                                    <badge class="btn  btn-outline--warning h-45 btn-sm text-white">@lang('Insectes parasites ou ravageurs')
                                                     </badge>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-6">
@@ -508,7 +508,7 @@
                                         <tr>
                                             <td class="row">
                                                 <div class="col-xs-12 col-sm-12 bg-success">
-                                                    <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Autres insectes parasites ou ravageurs')
+                                                    <badge class="btn  btn-outline--warning h-45 btn-sm text-white">@lang('Autres insectes parasites ou ravageurs')
                                                     </badge>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-6">
@@ -568,7 +568,7 @@
                                         <tr>
                                             <td class="row">
                                                 <div class="col-xs-12 col-sm-12 bg-success">
-                                                    <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Traitement')
+                                                    <badge class="btn  btn-outline--warning h-45 btn-sm text-white">@lang('Traitement')
                                                     </badge>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-4">
@@ -708,7 +708,7 @@
                                         <tr>
                                             <td class="row">
                                                 <div class="col-xs-12 col-sm-12 bg-success">
-                                                    <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Insectes amis')
+                                                    <badge class="btn  btn-outline--warning h-45 btn-sm text-white">@lang('Insectes amis')
                                                     </badge>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-6">
@@ -758,7 +758,7 @@
                                         <tr>
                                             <td class="row">
                                                 <div class="col-xs-12 col-sm-12 bg-success">
-                                                    <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Animal')
+                                                    <badge class="btn  btn-outline--warning h-45 btn-sm text-white">@lang('Animal')
                                                     </badge>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-12">
@@ -846,7 +846,7 @@
                 //---> Start create table tr
                 var html_table = '<tr>';
                 html_table +=
-                    '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm">Arbre agro-forestier ' +
+                    '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm text-white">Arbre agro-forestier ' +
                     agroforestiersCount +
                     '</badge></div><div class="col-xs-12 col-sm-6"><div class="form-group"><label for="agroforestiers" class="">Type</label><input placeholder="Type arbre..." class="form-control" id="agroforestiers-' +
                     agroforestiersCount +
@@ -879,7 +879,7 @@
                 //---> Start create table tr
                 var html_table = '<tr>';
                 html_table +=
-                    '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm">Insectes amis ' +
+                    '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm text-white">Insectes amis ' +
                     insectesAmisCount +
                     '</badge></div><div class="col-xs-12 col-sm-6"><div class="form-group"><label for="insectesAmis" class="">Nom</label><input placeholder="Insecte amis..." class="form-control" id="insectesAmis-' +
                     insectesAmisCount +
@@ -911,7 +911,7 @@
 
                 var html_table = '<tr>';
                 html_table +=
-                    '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm">Insectes parasites ou ravageurs ' +
+                    '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm text-white">Insectes parasites ou ravageurs ' +
                     insectesParasitesCount +
                     '</badge></div><div class="col-xs-12 col-sm-6"><div class="form-group"><label for="insectesParasites" class="">Nom</label><select class="form-control" id="insectesParasites-' +
                     insectesParasitesCount +
@@ -950,7 +950,7 @@
                 var html_table = '<tr>';
                 html_table +=
 
-                    '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm">Autres insectes parasites ou ravageurs ' +
+                    '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm text-white">Autres insectes parasites ou ravageurs ' +
                     presenceAutreInsecteCount +
                     '</badge></div><div class="col-xs-12 col-sm-6"><div class="form-group"><label for="autreInsecteNom" class="">Nom</label><input type="text" placeholder="Nom de l\'insecte ou ravageur" class="form-control" id="autreInsecteNom-' +
                     presenceAutreInsecteCount +
@@ -985,7 +985,7 @@
 
                 var html_table = '<tr>';
                 html_table +=
-                    '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm">traitement ' +
+                    '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm text-white">traitement ' +
                     traitementCount +
                     '</badge></div><div class="col-xs-12 col-sm-4 pr-0"><div class="form-group"><label for="" class="">Nom</label><select class="form-control" id="traitement-' +
                     traitementCount +
@@ -1028,7 +1028,7 @@
 
                 var html_table = '<tr>';
                 html_table +=
-                    '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm">Pesticide ' +
+                    '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm text-white">Pesticide ' +
                     pesticidesCount +
                     '</badge></div><div class="col-xs-12 col-sm-4 pr-0"><div class="form-group"><label for="" class="">Nom</label><select class="form-control" id="pesticidesAnneDerniere-' +
                     pesticidesCount +
@@ -1071,7 +1071,7 @@
 
                 var html_table = '<tr>';
                 html_table +=
-                    '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm">Intrant ' +
+                    '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm text-white">Intrant ' +
                     intrantsCount +
                     '</badge></div><div class="col-xs-12 col-sm-4 pr-0"><div class="form-group"><label for="" class="">Nom</label><select class="form-control" id="intrantsAnneDerniere-' +
                     intrantsCount +
@@ -1112,7 +1112,7 @@
                 //---> Start create table tr
                 var html_table = '<tr>';
                 html_table +=
-                    '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm">Animal ' +
+                    '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm text-white">Animal ' +
                     animauxRencontresCount +
                     '</badge></div><div class="col-xs-12 col-sm-12"><div class="form-group"><label for="animauxRencontres" class="">Animal</label><input placeholder="Nom animal..." class="form-control" id="animauxRencontres-' +
                     animauxRencontresCount +

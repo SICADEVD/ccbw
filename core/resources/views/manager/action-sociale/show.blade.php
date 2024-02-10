@@ -106,7 +106,7 @@
                                             <tr>
                                                 <td class="row">
                                                     <div class="col-xs-12 col-sm-12 bg-success">
-                                                        <badge class="btn  btn-outline--warning h-45 btn-sm">
+                                                        <badge class="btn  btn-outline--warning h-45 btn-sm text-white">
                                                             @lang('Partenaire impliqué') {{ $index + 1 }}
                                                         </badge>
                                                     </div>
@@ -249,7 +249,7 @@
 
                 var html_table = '<tr>';
                 html_table +=
-                    '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm">Partenaire impliqué ' +
+                    '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm text-white">Partenaire impliqué ' +
                     partenairesCount +
                     '</badge></div><div class="col-xs-12 col-sm-4 pr-0"><div class="form-group"><label class="col-sm-4 control-label" for="partenaire">Partenaire impliqué:</label><input type="text" id="partenaire-' +
                     partenairesCount + '" class="form-control"name="partenaires[' + partenairesCount +

@@ -189,7 +189,7 @@
                                                 <tr>
                                                     <td class="row">
                                                         <div class="col-xs-12 col-sm-12 bg-success">
-                                                            <badge class="btn  btn-outline--warning h-45 btn-sm">
+                                                            <badge class="btn  btn-outline--warning h-45 btn-sm text-white">
                                                                 @lang('Pesticide') {{ $index + 1 }}
                                                             </badge>
                                                         </div>
@@ -294,7 +294,7 @@
                                             <tr>
                                                 <td class="row">
                                                     <div class="col-xs-12 col-sm-12 bg-success">
-                                                        <badge class="btn  btn-outline--warning h-45 btn-sm">
+                                                        <badge class="btn  btn-outline--warning h-45 btn-sm text-white">
                                                             @lang('Pesticide')
                                                         </badge>
                                                     </div>
@@ -386,7 +386,7 @@
                                                 <tr>
                                                     <td class="row">
                                                         <div class="col-xs-12 col-sm-12 bg-success">
-                                                            <badge class="btn  btn-outline--warning h-45 btn-sm">
+                                                            <badge class="btn  btn-outline--warning h-45 btn-sm text-white">
                                                                 @lang('Intrant') {{ $index + 1 }}
                                                             </badge>
                                                         </div>
@@ -587,7 +587,7 @@
                                                 <tr>
                                                     <td class="row">
                                                         <div class="col-xs-12 col-sm-12 bg-success">
-                                                            <badge class="btn  btn-outline--warning h-45 btn-sm">
+                                                            <badge class="btn  btn-outline--warning h-45 btn-sm text-white">
                                                                 @lang('Insectes parasites ou ravageurs') {{ $index + 1 }}
                                                             </badge>
                                                         </div>
@@ -671,7 +671,7 @@
                                                 <tr>
                                                     <td class="row">
                                                         <div class="col-xs-12 col-sm-12 bg-success">
-                                                            <badge class="btn  btn-outline--warning h-45 btn-sm">
+                                                            <badge class="btn  btn-outline--warning h-45 btn-sm text-white">
                                                                 @lang('Autres insectes parasites ou ravageurs') {{ $index + 1 }}
                                                             </badge>
                                                         </div>
@@ -739,7 +739,7 @@
                                                 <tr>
                                                     <td class="row">
                                                         <div class="col-xs-12 col-sm-12 bg-success">
-                                                            <badge class="btn  btn-outline--warning h-45 btn-sm">
+                                                            <badge class="btn  btn-outline--warning h-45 btn-sm text-white">
                                                                 @lang('Traitement') {{ $index + 1 }}
                                                             </badge>
                                                         </div>
@@ -938,7 +938,7 @@
                                         <tr>
                                             <td class="row">
                                                 <div class="col-xs-12 col-sm-12 bg-success">
-                                                    <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Insectes amis')
+                                                    <badge class="btn  btn-outline--warning h-45 btn-sm text-white">@lang('Insectes amis')
                                                         <?php echo $a; ?>
                                                     </badge>
                                                 </div>
@@ -985,7 +985,7 @@
                                         <tr>
                                             <td class="row">
                                                 <div class="col-xs-12 col-sm-12 bg-success">
-                                                    <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Insectes amis')
+                                                    <badge class="btn  btn-outline--warning h-45 btn-sm text-white">@lang('Insectes amis')
                                                     </badge>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-6">
@@ -1048,7 +1048,7 @@
                                     <tr>
                                         <td class="row">
                                             <div class="col-xs-12 col-sm-12 bg-success">
-                                                <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Animal')
+                                                <badge class="btn  btn-outline--warning h-45 btn-sm text-white">@lang('Animal')
                                                     <?php echo $a; ?>
                                                 </badge>
                                             </div>

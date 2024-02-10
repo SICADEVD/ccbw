@@ -55,7 +55,7 @@
                                         <tr>
                                             <td class="row">
                                                 <div class="col-xs-12 col-sm-12 bg-success">
-                                                    <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Information de la culture')
+                                                    <badge class="btn  btn-outline--warning h-45 btn-sm text-white">@lang('Information de la culture')
                                                         <?php echo $a; ?></badge>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-12">
@@ -88,7 +88,7 @@
                                         <tr>
                                             <td class="row">
                                                 <div class="col-xs-12 col-sm-12 col-md-12 bg-success">
-                                                    <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Information culture 1')
+                                                    <badge class="btn  btn-outline--warning h-45 btn-sm text-white">@lang('Information culture 1')
                                                     </badge>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-12">
@@ -149,7 +149,7 @@
                                         <tr>
                                             <td class="row">
                                                 <div class="col-xs-12 col-sm-12 bg-success">
-                                                    <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Information Activité')
+                                                    <badge class="btn  btn-outline--warning h-45 btn-sm text-white">@lang('Information Activité')
                                                         <?php echo $a; ?></badge>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-12">
@@ -253,7 +253,7 @@
                                             <tr>
                                                 <td class="row">
                                                     <div class="col-xs-12 col-sm-12 bg-success">
-                                                        <badge class="btn  btn-outline--warning h-45 btn-sm">
+                                                        <badge class="btn  btn-outline--warning h-45 btn-sm text-white">
                                                             @lang('Information mobile monnaie')
                                                             <?php echo $a; ?></badge>
                                                     </div>
@@ -302,7 +302,7 @@
                                             <tr>
                                                 <td class="row">
                                                     <div class="col-xs-12 col-sm-12 bg-success">
-                                                        <badge class="btn  btn-outline--warning h-45 btn-sm">
+                                                        <badge class="btn  btn-outline--warning h-45 btn-sm text-white">
                                                             @lang('Information Activité')
                                                         </badge>
                                                     </div>

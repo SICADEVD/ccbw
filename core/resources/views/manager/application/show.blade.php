@@ -164,7 +164,7 @@
                                             <tr>
                                                 <td class="row">
                                                     <div class="col-xs-12 col-sm-12 bg-success">
-                                                        <badge class="btn  btn-outline--warning h-45 btn-sm">
+                                                        <badge class="btn  btn-outline--warning h-45 btn-sm text-white">
                                                             @lang('Pesticide')
                                                             {{ $index + 1 }}
                                                         </badge>
