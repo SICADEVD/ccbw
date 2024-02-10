@@ -39,15 +39,20 @@
                                         </td>
                                         <td> @php echo $manager->statusBadge; @endphp </td>
                                         <td>
+                                        <a href="{{ route('admin.cooperative.manager.dashboard', $manager->id) }}"
+                                                class="btn btn-sm btn-outline--success" target="_blank"><i
+                                                    class="las la-sign-in-alt"></i>
+                                                @lang('Login')</a>
+                                                <a href="{{ route('admin.cooperative.manager.staff.list', $manager->cooperative_id) }}"
+                                                    class="btn btn-sm btn-outline--warning"><i class="las la-user-friends"></i>
+                                                    @lang('Staff List')</a>
                                             <button type="button" class="btn btn-sm btn-outline--primary" data-bs-toggle="dropdown" aria-expanded="false"><i
                                                     class="las la-ellipsis-v"></i>@lang('Action')
                                              </button>
                                             <div class="dropdown-menu p-0">
                                                 <a href="{{ route('admin.cooperative.manager.edit', $manager->id) }}"
                                                     class="dropdown-item"><i class="la la-pen"></i>@lang('Edit')</a>
-                                                <a href="{{ route('admin.cooperative.manager.staff.list', $manager->cooperative_id) }}"
-                                                    class="dropdown-item"><i class="las la-user-friends"></i>
-                                                    @lang('Staff List')</a>
+                                                
                                                 @if ($manager->status == Status::DISABLE)
                                                     <button type="button" class="confirmationBtn  dropdown-item"
                                                         data-action="{{ route('admin.cooperative.manager.status', $manager->id) }}"
@@ -60,11 +65,7 @@
                                                         data-question="@lang('Are you sure to disable this manager?')">
                                                         <i class="la la-eye-slash"></i> @lang('Désactivé')
                                                     </button>
-                                                @endif
-                                                <a href="{{ route('admin.cooperative.manager.dashboard', $manager->id) }}"
-                                                    class="dropdown-item" target="_blank"><i class="las la-sign-in-alt"></i>
-                                                    @lang('Login')
-                                                </a>
+                                                @endif 
                                             </div>
                                         </td>
                                     </tr>

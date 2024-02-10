@@ -67,6 +67,18 @@ Route::middleware('admin')->group(function () {
         Route::post('status/{id}', 'status')->name('status');
     });
 
+    //Manage Agrodeforestations
+    Route::controller('AgrodeforestationController')->name('agro.deforestation.')->prefix('agro/deforestation')->group(function () {
+        Route::get('polygones', 'index')->name('index');
+        Route::get('waypoints', 'waypoints')->name('waypoints');  
+    });
+
+    //Manage Parcelle
+    Route::controller('ParcelleController')->name('traca.parcelle.')->prefix('parcelle')->group(function () { 
+        Route::get('mapping', 'mapping')->name('mapping');
+        Route::get('mapping/polygone', 'mappingPolygone')->name('mapping.polygone'); 
+    });
+
     //Cooperative Manager
     Route::controller('CooperativeManagerController')->name('cooperative.manager.')->prefix('cooperative-manager')->group(function () {
         Route::get('list', 'index')->name('index');

@@ -67,12 +67,44 @@
                         <span class="menu-title">@lang('Gestion des Certifications')</span>
                     </a>
                 </li>
-                <li class="sidebar-menu-item  {{ menuActive(['admin.foretclassee*']) }}">
-                    <a href="{{ route('admin.foretclassee.index') }}" class="nav-link">
-                        <i class="menu-icon las la-tree"></i>
-                        <span class="menu-title">@lang('Gestion des Forêts Classées')</span>
+                <li class="sidebar-menu-item sidebar-dropdown">
+                    <a href="javascript:void(0)"
+                        class="{{ menuActive(['admin.foretclassee*', 'admin.agro.deforestation*','admin.traca.parcelle.mapping','admin.traca.parcelle.mapping.polygone'], 3) }}">
+                        <i class="menu-icon las la-code-branch"></i>
+                        <span class="menu-title">@lang('Agroforesterie') </span>
                     </a>
+                    <div class="sidebar-submenu {{ menuActive(['admin.foretclassee*', 'admin.agro.deforestation*','admin.traca.parcelle.mapping','admin.traca.parcelle.mapping.polygone'], 2) }} ">
+                        <ul>
+                        <li class="sidebar-menu-item  {{ menuActive(['admin.foretclassee*']) }}">
+                            <a href="{{ route('admin.foretclassee.index') }}" class="nav-link">
+                                <i class="menu-icon las la-tree"></i>
+                                <span class="menu-title">@lang('Forêts Classées')</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-menu-item  {{ menuActive(['admin.traca.parcelle.mapping*']) }}">
+                            <a href="{{ route('admin.traca.parcelle.mapping') }}" class="nav-link">
+                                <i class="menu-icon las la-tree"></i>
+                                <span class="menu-title">@lang('Mapping Waypoints Parcelles')</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-menu-item  {{ menuActive(['admin.traca.parcelle.mapping.polygone*']) }}">
+                            <a href="{{ route('admin.traca.parcelle.mapping.polygone') }}" class="nav-link">
+                                <i class="menu-icon las la-tree"></i>
+                                <span class="menu-title">@lang('Mapping Polygones Parcelles')</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-menu-item  {{ menuActive(['admin.agro.deforestation*']) }}">
+                            <a href="{{ route('admin.agro.deforestation.index') }}" class="nav-link">
+                                <i class="menu-icon las la-tree"></i>
+                                <span class="menu-title">@lang('Risques de déforestation')</span>
+                            </a>
+                        </li>
+ 
+
+                        </ul>
+                    </div>
                 </li>
+               
                 <li class="sidebar-menu-item  {{ menuActive(['admin.livraison.info*', 'admin.livraison.invoice']) }}">
                     <a href="{{ route('admin.livraison.info.index') }}" class="nav-link">
                         <i class="menu-icon las la-fax"></i>

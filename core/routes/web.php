@@ -532,8 +532,7 @@ Route::middleware('auth')->group(function () {
         //Manage Agrodeforestations
         Route::name('agro.deforestation.')->prefix('agro/deforestation')->group(function () {
             Route::get('polygones', [AgrodeforestationController::class,'index'])->name('index');
-            Route::get('waypoints', [AgrodeforestationController::class,'waypoints'])->name('waypoints'); 
-            
+            Route::get('waypoints', [AgrodeforestationController::class,'waypoints'])->name('waypoints');  
         });
 
         //Manage Livraison
