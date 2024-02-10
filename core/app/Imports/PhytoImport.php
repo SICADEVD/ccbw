@@ -2,16 +2,18 @@
 
 namespace App\Imports;
 
+use App\Models\Campagne;
 use App\Models\Parcelle;
 use App\Models\Producteur;
+use App\Models\Application;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\WithValidation;
 
 class PhytoImport implements ToCollection, WithHeadingRow, WithValidation
@@ -22,8 +24,11 @@ class PhytoImport implements ToCollection, WithHeadingRow, WithValidation
     public function rules(): array
     {
         return[
-            'superficie' => 'required', 
             'codeproducteur' => 'required', 
+            'codeparcelle' => 'required', 
+            'personne_application' => 'required', 
+            'superficie_pulverisee' => 'required', 
+            'date_application' => 'required',  
         ];
     }
     public function collection(Collection $collection)
@@ -35,66 +40,46 @@ class PhytoImport implements ToCollection, WithHeadingRow, WithValidation
  
         foreach($collection as $row)
          {
-       
-  $codeProd = $row['codeproducteur']; //Get the user emails
-  $verification = DB::table('producteurs')->orWhere('codeProd',$codeProd)->orWhere('codeProdapp',$codeProd)->first();
+           
+  $codeProd = $row['codeproducteur'];  
+  $codeParc = $row['codeparcelle'];
+  $verification = Parcelle::joinRelationship('producteur')->where([['codeProd',$codeProd],['codeParc',$codeParc]])->first();
+   
 if($verification !=null)
-{
-  if($row['codeparcelle'])
-  {
-    $codeParc = $row['codeparcelle'];
-  }else{
-    $codeProd = $verification->codeProdapp;
-    $codeParc =$this->generecodeparc($verification->id,$codeProd);
-  }
-    
-    $superficie = $row['superficie'];
-    $superficie = Str::before($superficie,' ');
-    if(Str::contains($superficie,","))
-    {
-    $superficie = Str::replaceFirst( ',','.',$superficie);
-    if(Str::contains($superficie,","))
-        {
-        $superficie = Str::replaceFirst( 'm²','',$superficie);
-        } 
-    }
+{ 
+
+  $campagne = Campagne::active()->first();
+        $application = new Application();
+        $application->campagne_id  = $campagne->id;
+        $application->parcelle_id  = $verification->id; 
+        $application->superficiePulverisee = $row['superficie_pulverisee'];
+        $application->delaisReentree = $row['delais_reentree_produit'];
+        $application->personneApplication = $row['personne_application'];
+        
+        $application->date_application = date('Y-m-d', strtotime($row['date_application'])); 
+        $application->userid = auth()->user()->id;
+        $application->save();
  
-      $insert_data = array(  
-  'producteur_id' => $verification->id,
-  'codeParc' => $codeParc,
-  'anneeCreation' => $row['anneecreation'],
-  'typedeclaration' => 'Verbale',
-  'culture' => $row['cultureparcelle'],
-  'superficie' => is_numeric(trim($superficie)) ? round(trim($superficie),2) : trim($superficie),
-  'latitude' => round($row['latitude'],6),
-  'longitude' => round($row['longitude'],6),
-  'userid' => auth()->user()->id,
-  'created_at' => NOW(),
-  'updated_at' => NOW() 
-      );
-      DB::table('parcelles')->insert($insert_data); 
       $j++;
      }else{
-         $k .=$codeProd.' , ';   
-         $notify[] = ['error',"Les Producteurs dont les codes suivent : $k n'existent pas dans la base."];
-      return back()->withNotify($notify); 
+         $k .= "parcelle $codeParc du producteur $codeProd ,";    
     }
 
     }
 
     if(!empty($j))
     {
-      $notify[] = ['success',"$j Parcelles ont été crée avec succès"];
+      $notify[] = ['success',"$j Application(s) ont été crée avec succès"];
       return back()->withNotify($notify); 
      if($k !=''){ 
-        $notify[] = ['error',"Les Producteurs dont les codes suivent : $k n'existent pas dans la base."];
+        $notify[] = ['error',"La $k n'a pas été trouvée."];
       return back()->withNotify($notify); 
      }
      
     }else{
         if($k !=''){
              
-            $notify[] = ['error',"Les Producteurs dont les codes suivent : $k n'existent pas dans la base."];
+            $notify[] = ['error',"La $k n'a pas été trouvée."];
       return back()->withNotify($notify); 
          } 
    } 
@@ -106,63 +91,6 @@ if($verification !=null)
 
     }
 
-
-    private function generecodeparc($idProd,$codeProd)
-    { 
-      if($codeProd)
-      {
-        $action = 'non'; 
-
-        $data = Parcelle::select('codeParc')->where([ 
-          ['producteur_id',$idProd],
-          ['codeParc','!=',null]
-          ])->orderby('id','desc')->first();
-          
-        if($data !=''){
-         
-            $code = $data->codeParc;  
-            
-            if($code !=''){
-              $chaine_number = Str::afterLast($code,'-');
-        $numero = Str::after($chaine_number, 'P');
-        $numero = $numero+1;
-            }else{
-              $numero = 1;
-            } 
-        $codeParc=$codeProd.'-P'.$numero;
-
-        do{
-
-          $verif = Parcelle::select('codeParc')->where('codeParc',$codeParc)->orderby('id','desc')->first(); 
-        if($verif ==null){
-            $action = 'non';
-        }else{
-            $action = 'oui';
-            $code = $data->codeParc;  
-            
-            if($code !=''){
-              $chaine_number = Str::afterLast($code,'-');
-        $numero = Str::after($chaine_number, 'P');
-        $numero = $numero+1;
-            }else{
-              $numero = 1;
-            } 
-        $codeParc=$codeProd.'-P'.$numero;
-
-        }
-
-    }while($action !='non');
-
-        }else{ 
-            $codeParc=$codeProd.'-P1';
-        }
-      }
-      else{
-        $codeParc='';
-      }
-
-        return $codeParc;
-    }
-
+ 
     
 }
