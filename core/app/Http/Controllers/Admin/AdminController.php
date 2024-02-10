@@ -2,21 +2,28 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Constants\Status;
-use App\Http\Controllers\Controller;
-use App\Lib\CurlRequest;
-use App\Models\Admin;
-use App\Models\AdminNotification;
-use App\Models\Cooperative;
-use App\Models\LivraisonInfo;
-use App\Models\LivraisonPayment;
-use App\Models\Language;
-use App\Models\RequestReport;
-use App\Models\User;
-use App\Models\UserLogin;
-use App\Rules\FileTypeValidate;
 use Carbon\Carbon;
+use App\Models\User;
+use App\Models\Admin;
+use App\Models\Section;
+use App\Lib\CurlRequest;
+use App\Models\Language;
+use App\Models\Localite;
+use App\Constants\Status;
+use App\Models\UserLogin;
+use App\Models\Cooperative;
 use Illuminate\Http\Request;
+use App\Models\LivraisonInfo;
+use App\Models\RequestReport;
+use App\Rules\FileTypeValidate;
+use App\Models\LivraisonPayment;
+use App\Models\AdminNotification;
+use App\Http\Controllers\Controller;
+use App\Models\Parcelle;
+use App\Models\Producteur;
+use App\Models\SuiviFormation;
+use App\Models\SuiviParcelle;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
@@ -25,31 +32,22 @@ class AdminController extends Controller
     public function dashboard()
     {
 
-        $pageTitle        = 'Dashboard';
-        $cooperativeCount      = Cooperative::count();
-        $cooperatives         = Cooperative::orderBy('name', 'ASC')->take(5)->get();
-        $livraisonInfoCount = LivraisonInfo::count();
-        $managerCount     = User::manager()->count();
-        $totalIncome      = LivraisonPayment::where('status', Status::PAYE)->sum('final_amount');
-        $sentInQueue      = LivraisonInfo::where('status', Status::COURIER_QUEUE)->count();
-        $shippingLivraison  = LivraisonInfo::where('status', Status::COURIER_DISPATCH)->count();
-        $deliveryInQueue  = LivraisonInfo::where('status', Status::COURIER_DELIVERYQUEUE)->count();
-        $delivered        = LivraisonInfo::where('status', Status::COURIER_DELIVERED)->count();
+        $pageTitle = 'Dashboard';
+        $cooperativeCount = Cooperative::count();
+        $sectionCount = Section::count(); 
+        $localiteCount = Localite::count();
+        $producteurCount = Producteur::count(); 
+        $parcelleCount = Parcelle::count();  
+        $formationCount = SuiviFormation::count();  
+        $suiviparcelleCount = SuiviParcelle::count();  
 
-        // user Browsing, Country, Operating Log
-        $userLoginData = UserLogin::where('created_at', '>=', Carbon::now()->subDay(30))->get(['browser', 'os', 'country']);
-
-        $chart['user_browser_counter'] = $userLoginData->groupBy('browser')->map(function ($item, $key) {
-            return collect($item)->count();
-        });
-        $chart['user_os_counter'] = $userLoginData->groupBy('os')->map(function ($item, $key) {
-            return collect($item)->count();
-        });
-        $chart['user_country_counter'] = $userLoginData->groupBy('country')->map(function ($item, $key) {
-            return collect($item)->count();
-        })->sort()->reverse()->take(5);
-
-        return view('admin.dashboard', compact('pageTitle', 'chart', 'sentInQueue', 'shippingLivraison', 'deliveryInQueue', 'delivered', 'cooperativeCount', 'totalIncome', 'cooperatives', 'managerCount', 'livraisonInfoCount'));
+        $sectionByCoop = Section::joinRelationship('cooperative')->select('cooperatives.name', DB::RAW('count(sections.id) as total'))->groupby('cooperative_id')->get();
+        
+        $localiteByCoop = Localite::joinRelationship('section.cooperative')->select('cooperatives.name', DB::RAW('count(localites.id) as total'))->groupby('cooperative_id')->get();
+        
+        $producteurByCoop = Producteur::joinRelationship('localite.section.cooperative')->select('cooperatives.name', DB::RAW('count(producteurs.id) as total'))->groupby('cooperative_id')->get();
+         
+        return view('admin.dashboard', compact('pageTitle', 'cooperativeCount', 'sectionCount', 'localiteCount', 'producteurCount', 'parcelleCount','sectionByCoop','localiteByCoop','formationCount','suiviparcelleCount','producteurByCoop'));
     }
 
     public function profile()
