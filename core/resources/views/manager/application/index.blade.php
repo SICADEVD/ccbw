@@ -111,6 +111,40 @@
             </div>
         </div>
     </div>
+
+    <div id="typeModel" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">@lang('Importation Application Phyto')</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="las la-times"></i> </button>
+                </div>
+                <form action="{{ route('manager.suivi.application.uploadcontent') }}" method="POST"
+                    enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-body">
+                        <p>Fichier d'exemple à utiliser :<a href="{{ asset('assets/phyto-import-exemple.xlsx') }}"
+                                target="_blank">@lang('phyto-import-exemple.xlsx')</a></p>
+
+                        <div class="form-group row">
+                            {{ Form::label(__('Fichier(.xls, .xlsx)'), null, ['class' => 'control-label col-sm-4']) }}
+                            <div class="col-xs-12 col-sm-8 col-md-8">
+                                <input type="file" name="uploaded_file" accept=".xls, .xlsx"
+                                    class="form-control dropify-fr" placeholder="Choisir une image" id="image" required>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn--primary w-100 h-45 ">@lang('Envoyer')</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
     <x-confirmation-modal />
 @endsection
 
@@ -119,6 +153,7 @@
     <a href="{{ route('manager.suivi.application.create') }}" class="btn  btn-outline--primary h-45 addNewCooperative">
         <i class="las la-plus"></i>@lang("Ajouter nouveau")
     </a>
+    <a class="btn btn-outline--danger h-45 addType"><i class="las la-cloud-upload-alt"></i> Importation Phyto</a>
     <a href="{{ route('manager.suivi.application.exportExcel.applicationAll') }}" class="btn  btn-outline--warning h-45"><i class="las la-cloud-download-alt"></i> Exporter en Excel</a>
 @endpush
 @push('style')
@@ -140,6 +175,10 @@
     <script>
         (function($) {
             "use strict";
+
+            $('.addType').on('click', function() {
+                $('#typeModel').modal('show');
+            });
 
             $('.dates').datepicker({
                 maxDate:new Date(),

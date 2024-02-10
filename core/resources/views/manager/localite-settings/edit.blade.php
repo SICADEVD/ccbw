@@ -93,7 +93,7 @@
                                 <tr>
                                     <td class="row">
                                         <div class="col-xs-12 col-sm-12 bg-success">
-                                            <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Informations sur le centre de centé')
+                                            <badge class="btn  btn-outline--warning h-45 btn-sm text-white">@lang('Informations sur le centre de centé')
                                                 <?php echo $a; ?></badge>
                                         </div>
                                         <div class="col-xs-12 col-sm-12">
@@ -135,7 +135,7 @@
                                 <tr>
                                     <td class="row">
                                         <div class="col-xs-12 col-sm-12 bg-success">
-                                            <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Informations sur le centre de centé 1')
+                                            <badge class="btn  btn-outline--warning h-45 btn-sm text-white">@lang('Informations sur le centre de centé 1')
                                             </badge>
                                             </badge>
                                         </div>
@@ -237,7 +237,7 @@
                                     <tr>
                                         <td class="row">
                                             <div class="col-xs-12 col-sm-12 bg-success">
-                                                <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Informations sur l\'école primaire')
+                                                <badge class="btn  btn-outline--warning h-45 btn-sm text-white">@lang('Informations sur l\'école primaire')
                                                     <?php echo $a; ?></badge>
                                             </div>
                                             <div class="col-xs-12 col-sm-12">
@@ -281,7 +281,7 @@
                                     <tr>
                                         <td class="row">
                                             <div class="col-xs-12 col-sm-12 bg-success">
-                                                <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Informations sur l\'école primaire 1')
+                                                <badge class="btn  btn-outline--warning h-45 btn-sm text-white">@lang('Informations sur l\'école primaire 1')
                                                 </badge>
                                                 </badge>
                                             </div>

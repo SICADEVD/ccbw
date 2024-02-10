@@ -2,26 +2,27 @@
 
 namespace App\Http\Controllers\Manager;
 
-use Excel;
 use App\Models\User;
 use App\Models\Campagne;
-use App\Constants\Status;
 use App\Models\Localite;
 use App\Models\Parcelle;
+use App\Constants\Status;
+use App\Models\Producteur;
 use App\Models\Application;
 use App\Models\Cooperative;
-use App\Models\Producteur;
 use Illuminate\Support\Str;
+use App\Imports\PhytoImport;
 use Illuminate\Http\Request;
+use App\Models\MatiereActive;
 use App\Models\ApplicationInsecte;
+use App\Models\ApplicationMaladie;
 use Illuminate\Support\Facades\DB;
 use App\Exports\ExportApplications;
 use App\Http\Controllers\Controller;
-use App\Models\ApplicationMaladie;
-use Illuminate\Support\Facades\Hash;
-use App\Models\ApplicationMatieresactive;
 use App\Models\ApplicationPesticide;
-use App\Models\MatiereActive;
+use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Models\ApplicationMatieresactive;
 
 class ApplicationController extends Controller
 {
@@ -222,5 +223,11 @@ class ApplicationController extends Controller
     {
         $filename = 'applications-' . gmdate('dmYhms') . '.xlsx';
         return Excel::download(new ExportApplications, $filename);
+    }
+
+    public function  uploadContent(Request $request)
+    {
+        Excel::import(new PhytoImport, $request->file('uploaded_file'));
+        return back();
     }
 }

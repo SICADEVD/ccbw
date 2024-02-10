@@ -72,7 +72,7 @@
                                 <tr>
                                     <td class="row">
                                         <div class="col-xs-12 col-sm-12 bg-success">
-                                            <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Informations sur le centre de centé 1')
+                                            <badge class="btn  btn-outline--warning h-45 btn-sm text-white">@lang('Informations sur le centre de centé 1')
                                             </badge>
                                             </badge>
                                         </div>
@@ -168,7 +168,7 @@
                             <tr>
                                 <td class="row">
                                     <div class="col-xs-12 col-sm-12 bg-success">
-                                        <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Informations sur l\'école primaire 1')
+                                        <badge class="btn  btn-outline--warning h-45 btn-sm text-white">@lang('Informations sur l\'école primaire 1')
                                         </badge>
                                         </badge>
                                     </div>

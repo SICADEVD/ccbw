@@ -55,7 +55,7 @@
                                         <tr>
                                             <td class="row">
                                                 <div class="col-xs-12 col-sm-12 bg-success">
-                                                    <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Information de la culture')
+                                                    <badge class="btn  btn-outline--warning h-45 btn-sm text-white">@lang('Information de la culture')
                                                         <?php echo $a; ?></badge>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-12">
@@ -93,7 +93,7 @@
                                         <tr>
                                             <td class="row">
                                                 <div class="col-xs-12 col-sm-12 col-md-12 bg-success">
-                                                    <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Information culture 1')
+                                                    <badge class="btn  btn-outline--warning h-45 btn-sm text-white">@lang('Information culture 1')
                                                     </badge>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-12">
@@ -159,7 +159,7 @@
                                         <tr>
                                             <td class="row">
                                                 <div class="col-xs-12 col-sm-12 bg-success">
-                                                    <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Information Activité')
+                                                    <badge class="btn  btn-outline--warning h-45 btn-sm text-white">@lang('Information Activité')
                                                         <?php echo $a; ?></badge>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-12">
@@ -189,7 +189,7 @@
                                         <tr>
                                             <td class="row">
                                                 <div class="col-xs-12 col-sm-12 bg-success">
-                                                    <badge class="btn  btn-outline--warning h-45 btn-sm">@lang('Information Activité')
+                                                    <badge class="btn  btn-outline--warning h-45 btn-sm text-white">@lang('Information Activité')
                                                     </badge>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-12">
@@ -298,7 +298,7 @@
                                             <tr>
                                                 <td class="row">
                                                     <div class="col-xs-12 col-sm-12 bg-success">
-                                                        <badge class="btn  btn-outline--warning h-45 btn-sm">
+                                                        <badge class="btn  btn-outline--warning h-45 btn-sm text-white">
                                                             @lang('Information mobile monnaie')
                                                             <?php echo $a; ?></badge>
                                                     </div>
@@ -354,7 +354,7 @@
                                             <tr>
                                                 <td class="row">
                                                     <div class="col-xs-12 col-sm-12 bg-success">
-                                                        <badge class="btn  btn-outline--warning h-45 btn-sm">
+                                                        <badge class="btn  btn-outline--warning h-45 btn-sm text-white">
                                                             @lang('Information Activité')
                                                         </badge>
                                                     </div>
@@ -438,7 +438,7 @@
                     var html_table = '<tr>';
 
                     html_table +=
-                        '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm">Information Culture ' +
+                        '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm text-white">Information Culture ' +
                         productCount +
                         '</badge></div><div class="col-xs-12 col-sm-6"><div class="form-group"><label for="Type de culture" class="control-label">Type de culture</label><input placeholder="Riz, Maïs, Igname, Banane, ..." class="form-control" id="typeculture-' +
                         productCount +
@@ -490,7 +490,7 @@
                     var html_table = '<tr>';
 
                     html_table +=
-                        '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm">Information Activité ' +
+                        '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm text-white">Information Activité ' +
                         productCount +
                         '</badge></div><div class="col-xs-12 col-sm-12"><div class="form-group"><label for="" class="control-label">Type D\'activité</label><input placeholder="Elevage, Commerce, Prestation de service, ..." class="form-control" id="typeactivite-' +
                         productCount +
@@ -536,7 +536,7 @@
                     //---> Start create table tr
                     var html_table = '<tr>';
                     html_table +=
-                        '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm">Information mobile monnaie ' +
+                        '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm text-white">Information mobile monnaie ' +
                         productCount +
                         '</badge></div><div class="col-xs-12 col-sm-12"><div class="form-group row"><label for="Type de culture" class="control-label">Opérateur</label><select name="operateurMM[]" id="operateurMM-' +
                         productCount +

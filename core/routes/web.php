@@ -440,6 +440,7 @@ Route::middleware('auth')->group(function () {
             Route::get('edit/{id}', [ApplicationController::class,'edit'])->name('edit');
             Route::get('show/{id}', [ApplicationController::class,'show'])->name('show');
             Route::post('status/{id}', [ApplicationController::class,'status'])->name('status');
+            Route::post('/uploadcontent', [ApplicationController::class,'uploadContent'])->name('uploadcontent');
             Route::get('/exportApplicationsExcel', [ApplicationController::class,'exportExcel'])->name('exportExcel.applicationAll');
         });
 
