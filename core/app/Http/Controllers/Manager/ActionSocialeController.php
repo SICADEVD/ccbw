@@ -69,6 +69,7 @@ class ActionSocialeController extends Controller
             'documents_joints.*' => 'nullable|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:2048'
         ];
         $request->validate($validationRule);
+        dd($request->all());
 
         if ($request->id) {
             $action = ActionSociale::find($request->id);
@@ -161,6 +162,7 @@ class ActionSocialeController extends Controller
                         'montant' => $partenaire['montant_contribution']
                     ];
                 }
+                Partenaire::insert($data);
             }
             if ($request->beneficiaires_projet != null && !collect($request->beneficiaires_projet)->contains(null)) {
                 ActionSocialeLocalite::where('action_sociale_id', $action->id)->delete();
@@ -171,6 +173,7 @@ class ActionSocialeController extends Controller
                         'localite_id' => $beneficiaire
                     ];
                 }
+                ActionSocialeLocalite::insert($data1);
             }
             if($request->autreBeneficiaire != null && !collect($request->autreBeneficiaire)->contains(null)) {
                 AutreBeneficiaire::where('action_sociale_id', $action->id)->delete();
@@ -181,10 +184,11 @@ class ActionSocialeController extends Controller
                         'libelle' => $beneficiaire
                     ];
                 }
+                AutreBeneficiaire::insert($data2);
             }
-            AutreBeneficiaire::insert($data2);
-            ActionSocialeLocalite::insert($data1);
-            Partenaire::insert($data);
+            
+           
+
         }
 
         $notify[] = ['success', isset($message) ? $message : 'Action Sociale ajoutée avec succès.'];
@@ -224,7 +228,9 @@ class ActionSocialeController extends Controller
         $pageTitle = "Modifier une Action Sociale";
         $actionSociale = ActionSociale::find($id); // Remplacez ActionSociale par le nom de votre modèle
         $partenaires = $actionSociale->partenaires;
-        return view('manager.action-sociale.edit', compact('actionSociale', 'pageTitle', 'partenaires'));
+        $localites = Localite::joinRelationship('section')->where([['cooperative_id', $actionSociale->cooperative_id], ['localites.status', 1]])->orderBy('nom')->get();
+        $dataLocalite = ActionSocialeLocalite::where('action_sociale_id', $id)->pluck('localite_id')->toArray();
+        return view('manager.action-sociale.edit', compact('actionSociale', 'pageTitle', 'partenaires', 'localites', 'dataLocalite'));
     }
 
     /**
