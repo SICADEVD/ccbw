@@ -137,8 +137,9 @@
                         <div class="col-xs-12 col-sm-8">
                             <input type="file" id="photos1" class="form-control dropify-fr" name="photos[]"
                                 accept="image/*" multiple="" class="dropify" data-height="70">
+                                <div id="insertBefore"></div>
                         </div>
-                        <div id="insertBefore"></div>
+                        
                         <!--  ADD ITEM START-->
                         <div class="row px-lg-4 px-md-4 px-3 pb-3 pt-0 mb-3  mt-2">
                             <div class="col-md-12">
@@ -152,9 +153,10 @@
                         <div class="col-xs-12 col-sm-8">
                             <input type="file" id="documents_joints1" class="form-control dropify-fr"
                                 name="documents_joints[]" multiple="" class="dropify" data-height="70">
+                                <div id="insertBeforeNew"></div>
                         </div>
 
-                        <div id="insertBeforeNew"></div>
+                        
                         <!--  ADD ITEM START-->
                         <div class="row px-lg-4 px-md-4 px-3 pb-3 pt-0 mb-3  mt-2">
                             <div class="col-md-12">
@@ -221,12 +223,14 @@
         $('#add-item').click(function() {
             i += 1;
 
-            $(`<div id="addMoreBox${i}" class="row pl-20 pr-20 clearfix">
-            <div class="form-group my-3" style="padding: 0px;">  
-            <div class="input-group mb-3"> 
-                            <input name="photos[]" id="photos${i}" type="file" class="dropify" multiple="" data-height="78"/> <button type="button"
+            $(`<div id="addMoreBox${i}" class="row pl-20 pr-20 clearfix" style="padding-top: 10px;">
+            <div class="col-md-11" style="padding:0px;"> 
+                            <input name="photos[]" id="photos${i}" type="file" class="dropify" multiple="" data-height="78"/> 
+                            </div>
+                            <div class="col-md-1" style="padding:0px;">
+                            <button type="button"
                                         class="btn btn-outline-secondary border-grey"
-                                        data-toggle="tooltip" style="width: 10px;"><a href="javascript:;" class="d-flex align-items-center justify-content-center mt-5 remove-item" data-item-id="${i}" style="position: relative;top: -29px;"><i class="fa fa-times-circle f-20 text-lightest"></i></a></button>
+                                        data-toggle="tooltip" style="height: 91.2px;"><a href="javascript:;" class="d-flex align-items-center justify-content-center mt-5 remove-item" data-item-id="${i}" style="position: relative;top: -29px;"><i class="fa fa-times-circle f-20 text-lightest"></i></a></button>
                                         </div></div> `)
                 .insertBefore($insertBefore);
 
@@ -242,12 +246,14 @@
         $('#add-itemNew').click(function() {
             a += 1;
 
-            $(`<div id="addMoreBoxNew${a}" class="row pl-20 pr-20 clearfix">
-            <div class="form-group my-3" style="padding: 0px;">  
-            <div class="input-group mb-3"> 
-                            <input name="documents_joints[]" id="documents_joints${a}" type="file" class="dropify" multiple="" data-height="78"/> <button type="button"
+            $(`<div id="addMoreBoxNew${a}" class="row pl-20 pr-20 clearfix" style="padding-top: 10px;">
+            <div class="col-md-11" style="padding:0px;"> 
+                            <input name="documents_joints[]" id="documents_joints${a}" type="file" class="dropify" multiple="" data-height="78"/> 
+                            </div>
+                            <div class="col-md-1" style="padding:0px;">
+                            <button type="button"
                                         class="btn btn-outline-secondary border-grey"
-                                        data-toggle="tooltip" style="width: 10px;"><a href="javascript:;" class="d-flex align-items-center justify-content-center mt-5 remove-itemNew" data-item-id="${a}" style="position: relative;top: -29px;"><i class="fa fa-times-circle f-20 text-lightest"></i></a></button>
+                                        data-toggle="tooltip" style="height: 91.2px;"><a href="javascript:;" class="d-flex align-items-center justify-content-center mt-5 remove-itemNew" data-item-id="${a}" style="position: relative;top: -29px;"><i class="fa fa-times-circle f-20 text-lightest"></i></a></button>
                                         </div></div> `)
                 .insertBefore($insertBeforeNew);
 
