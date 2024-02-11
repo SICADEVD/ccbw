@@ -49,7 +49,20 @@ class AdminController extends Controller
 
         $formationByCoop = SuiviFormation::joinRelationship('localite.section.cooperative')->select('cooperatives.name', DB::RAW('count(suivi_formations.id) as total'))->groupby('cooperative_id')->get();
          
-        return view('admin.dashboard', compact('pageTitle', 'cooperativeCount', 'sectionCount', 'localiteCount', 'producteurCount', 'parcelleCount','sectionByCoop','localiteByCoop','formationCount','suiviparcelleCount','producteurByCoop','formationByCoop'));
+        $cooperativeGenderChart = DB::table('cooperatives as c')
+                                    ->join('sections as s', 'c.id', '=', 's.cooperative_id')
+                                    ->join('localites as l', 's.id', '=', 'l.section_id')
+                                    ->join('producteurs as p', 'l.id', '=', 'p.localite_id')
+                                    ->select('c.name as cooperative_name', 'p.sexe as gender', DB::raw('COUNT(p.id) as number_of_producers'))
+                                    ->groupBy('c.name', 'p.sexe')
+                                    ->get();
+ 
+        $parcelleGenderChart = Parcelle::joinRelationship('producteur.localite.section.cooperative')
+                                    ->select('cooperatives.name as cooperative_name','producteurs.sexe as gender', DB::RAW('count(parcelles.id) as total_parcelle'))
+                                    ->groupby('cooperative_id','sexe')
+                                    ->get();
+      
+        return view('admin.dashboard', compact('pageTitle', 'cooperativeCount', 'sectionCount', 'localiteCount', 'producteurCount', 'parcelleCount','sectionByCoop','localiteByCoop','formationCount','suiviparcelleCount','producteurByCoop','formationByCoop','cooperativeGenderChart','parcelleGenderChart'));
     }
 
     public function profile()
