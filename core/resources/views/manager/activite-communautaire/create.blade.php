@@ -25,6 +25,21 @@
                             </select>
                         </div>
                     </div>
+
+                    <div class="form-group row">
+                        <?php echo Form::label(__('Bénéfiniaires'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-12 col-sm-8">
+                            <select class="form-control select2-multi-select" name="producteur[]" id="producteur" multiple
+                                required>
+                                <option value="">@lang('Selectionner une option')</option>
+                                @foreach ($producteurs as $producteur)
+                                    <option value="{{ $producteur->id }}"
+                                        data-chained="{{ $producteur->localite_id ?? '' }}" @selected(old('producteur'))>
+                                        {{ $producteur->nom }} {{ $producteur->prenoms }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
                     <div class="form-group row">
                         <label class="col-sm-4 control-label" for="titre_projet">Titre du projet:</label>
                         <div class="col-xs-12 col-sm-8">
@@ -56,7 +71,7 @@
 
 
 
-                    <div class="form-group row">
+                    {{-- <div class="form-group row">
                         <label class="col-sm-4 control-label" for="beneficiaires_projet">Bénéficiaires du Projet:</label>
                         <div class="col-xs-12 col-sm-8">
                             <select id="beneficiaires_projet" class="form-control" name="beneficiaires_projet" required>
@@ -64,14 +79,9 @@
                                 <option value="Non - Membres">Non - Membres</option>
                             </select>
                         </div>
-                    </div>
+                    </div> --}}
 
-                    <div class="form-group row">
-                        <label class="col-sm-4 control-label" for="liste_beneficiaires">Liste des bénéficiaires:</label>
-                        <div class="col-xs-12 col-sm-8">
-                            <textarea id="liste_beneficiaires" class="form-control" name="liste_beneficiaires" rows="4"></textarea>
-                        </div>
-                    </div>
+
 
                     <div class="form-group row">
                         <label class="col-sm-4 control-label" for="niveau_realisation">Niveau de réalisation:</label>
@@ -109,16 +119,16 @@
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-sm-4 control-label" for="cout_projet">Coûts du projet:</label>
+                        <label class="col-sm-4 control-label" for="cout_projet">Coûts du projet (En FCFA):</label>
                         <div class="col-xs-12 col-sm-8">
-                            <input type="text" id="cout_projet" class="form-control" name="cout_projet" required>
+                            <input type="text" id="cout_projet" class="form-control" name="cout_projet" placeholder="(En FCFA)" required>
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <label class="col-sm-4 control-label" for="date_livraison">Date de la livraison:</label>
                         <div class="col-xs-12 col-sm-8">
-                            <input type="date" id="date_livraison" class="form-control" name="date_livraison">
+                            <input type="date" id="date_livraison" class="form-control" name="date_livraison" required>
                         </div>
                     </div>
 
@@ -248,6 +258,44 @@
             var index = $(this).data('item-id');
             $('#addMoreBoxNew' + index).remove();
         });
+
+        $(document).ready(function() {
+
+            var optionParProducteur = new Object();
+            $("#producteur option").each(function() {
+                //on assigne les producteurs à lobjet optionParProducteur
+                var curreentArray = optionParProducteur[($(this).data('chained'))] ? optionParProducteur[($(
+                        this)
+                    .data('chained'))] : [];
+                curreentArray[$(this).val()] = $(this).text().trim();
+                Object.assign(optionParProducteur, {
+                    [$(this).data('chained')]: curreentArray
+                });
+                $(this).remove();
+            });
+
+            $('#localite').change(function() {
+                var localite = $(this).val();
+                $("#producteur").empty();
+                var optionsHtml2 = "";
+                $(this).find('option:selected').each(function() {
+                    console.log($(this).val());
+                    optionsHtml2 = updateproducteur(optionsHtml2, $(this).val(),
+                        optionParProducteur);
+                })
+            });
+        });
+
+        function updateproducteur(optionsHtml2, id, optionParProducteur) {
+            var optionsHtml = optionsHtml2
+            if (id != '' && optionParProducteur[id]) {
+                optionParProducteur[id].forEach(function(key, element) {
+                    optionsHtml += '<option value="' + id + '-' + element + '">' + key + '</option>';
+                });
+                $("#producteur").html(optionsHtml);
+            }
+            return optionsHtml;
+        }
 
         //     $('input:file').on('change', function(){
         //     allFiles = $(this)[0].files;

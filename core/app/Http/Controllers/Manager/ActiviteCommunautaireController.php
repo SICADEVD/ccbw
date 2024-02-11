@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Manager;
 
 use App\Models\Localite;
+use App\Models\Producteur;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\ActiviteCommunautaire;
 use Illuminate\Support\Facades\Storage;
 use App\Models\ActiviteCommunautaireLocalite;
+use App\Models\BeneficiaireActiviteCommunautaire;
 
 class ActiviteCommunautaireController extends Controller
 {
@@ -39,8 +41,8 @@ class ActiviteCommunautaireController extends Controller
         $pageTitle = "Ajouter une Activité Communautaire";
         $manager = auth()->user(); 
         $localites = Localite::joinRelationship('section')->where([['cooperative_id', $manager->cooperative_id], ['localites.status', 1]])->orderBy('nom')->get();
-       
-        return view('manager.activite-communautaire.create', compact('pageTitle','localites'));
+        $producteurs = Producteur::with('localite')->get();
+        return view('manager.activite-communautaire.create', compact('pageTitle','localites','producteurs'));
     }
 
     /**
@@ -82,17 +84,21 @@ class ActiviteCommunautaireController extends Controller
         $communaute->date_demarrage = $request->date_demarrage;
         $communaute->date_fin_projet = $request->date_fin_projet;
         $communaute->date_demarrage = $request->date_demarrage;
-        $communaute->liste_beneficiaires = $request->liste_beneficiaires;
-        // $communaute->localite_projet = $request->localite_projet;
         if ($request->has('photos')) {
             $paths = [];
             foreach ($request->file('photos') as $photo) {
                 try {
-                    $directory = 'public/ActiviteCommunautaires/photos';
-                    if (!Storage::exists($directory)) {
-                        Storage::makeDirectory($directory);
+                    $originalName = $photo->getClientOriginalName();
+                    $fileName = pathinfo($originalName, PATHINFO_FILENAME);
+                    $extension = pathinfo($originalName, PATHINFO_EXTENSION);
+
+                    $counter = 1;
+                    while (Storage::exists('public/ActionSociales/photos/' . $originalName)) {
+                        $originalName = $fileName . '_' . $counter . '.' . $extension;
+                        $counter++;
                     }
-                    $path = $photo->store($directory);
+
+                    $path = $photo->storeAs('public/ActionSociales/photos', $originalName);
                     $paths[] = $path;
                 } catch (\Exception $exp) {
                     $notify[] = ['error', 'Impossible de télécharger votre image'];
@@ -105,11 +111,17 @@ class ActiviteCommunautaireController extends Controller
             $paths = [];
             foreach ($request->file('documents_joints') as $document) {
                 try {
-                    $directory = 'public/ActiviteCommunautaires/documents';
-                    if (!Storage::exists($directory)) {
-                        Storage::makeDirectory($directory);
+                    $originalName = $document->getClientOriginalName();
+                    $fileName = pathinfo($originalName, PATHINFO_FILENAME);
+                    $extension = pathinfo($originalName, PATHINFO_EXTENSION);
+
+                    $counter = 1;
+                    while (Storage::exists('public/ActionSociales/documents/' . $originalName)) {
+                        $originalName = $fileName . '_' . $counter . '.' . $extension;
+                        $counter++;
                     }
-                    $path = $document->store($directory);
+
+                    $path = $document->storeAs('public/ActionSociales/documents', $originalName);
                     $paths[] = $path;
                 } catch (\Exception $exp) {
                     $notify[] = ['error', 'Impossible de télécharger votre image'];
@@ -118,6 +130,7 @@ class ActiviteCommunautaireController extends Controller
             }
             $communaute->documents_joints = json_encode($paths);
         }
+            
         $communaute->save();
         if($communaute != null){
             $id = $communaute->id;
@@ -129,6 +142,21 @@ class ActiviteCommunautaireController extends Controller
                     $communauteLocalite->localite_id = $localite;
                     $communauteLocalite->save();
                 }
+            }
+            $selectedLocalites = $request->localite;
+            $selectedProducteurs = $request->producteur;
+            if($selectedLocalites != null && $selectedProducteurs != null){
+                BeneficiaireActiviteCommunautaire::where('activite_communautaire_id', $id)->delete();
+                foreach($selectedProducteurs as $producteurId){
+                    list($localiteId, $producteurId) = explode('-', $producteurId);
+                    $data[] = [
+                        'activite_communautaire_id' => $id,
+                        'localite_id' => $localiteId,
+                        'producteur_id' => $producteurId
+                    ];
+                    
+                }
+                BeneficiaireActiviteCommunautaire::insert($data);
             }
         }
         $notify[] = ['success', isset($message) ? $message : 'Activité Communautaire ajoutée avec succès.'];

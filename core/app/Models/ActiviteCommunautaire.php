@@ -15,4 +15,9 @@ class ActiviteCommunautaire extends Model
     {
         return $this->belongsTo(Cooperative::class);
     }
+
+    public function beneficiaires()
+    {
+        return $this->hasMany(BeneficiaireActiviteCommunautaire::class, 'activite_communautaire_id');
+    }
 }
