@@ -6,6 +6,7 @@ use App\Models\Localite;
 use App\Models\Partenaire;
 use Illuminate\Http\Request;
 use App\Models\ActionSociale;
+use App\Models\AutreBeneficiaire;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
@@ -68,12 +69,11 @@ class ActionSocialeController extends Controller
             'documents_joints.*' => 'nullable|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:2048'
         ];
         $request->validate($validationRule);
-        
-        if($request->id){
+
+        if ($request->id) {
             $action = ActionSociale::find($request->id);
             $message = 'Action Sociale modifiée avec succès.';
-        }
-        else{
+        } else {
             $action = new ActionSociale();
             $action->code = $this->generateCode();
             $message = 'Action Sociale ajoutée avec succès.';
@@ -89,15 +89,34 @@ class ActionSocialeController extends Controller
         $action->date_livraison = $request->date_livraison;
         $action->commentaires = $request->commentaires;
         $action->cooperative_id = auth()->user()->cooperative_id;
+        // if ($request->has('photos')) {
+        //     $paths = [];
+        //     foreach ($request->file('photos') as $photo) {
+        //         try {
+        //             $path = $photo->store('public/ActionSociales/photos');
+        //             $paths[] = $path;
+        //         } catch (\Exception $exp) {
+        //             $notify[] = ['error', 'Impossible de télécharger votre image'];
+        //             return back()->withNotify($notify);
+        //         }
+        //     }
+        //     $action->photos = json_encode($paths);
+        // }
         if ($request->has('photos')) {
             $paths = [];
             foreach ($request->file('photos') as $photo) {
                 try {
-                    $directory = 'public/ActionSociales/photos';
-                    if (!Storage::exists($directory)) {
-                        Storage::makeDirectory($directory);
+                    $originalName = $photo->getClientOriginalName();
+                    $fileName = pathinfo($originalName, PATHINFO_FILENAME);
+                    $extension = pathinfo($originalName, PATHINFO_EXTENSION);
+
+                    $counter = 1;
+                    while (Storage::exists('public/ActionSociales/photos/' . $originalName)) {
+                        $originalName = $fileName . '_' . $counter . '.' . $extension;
+                        $counter++;
                     }
-                    $path = $photo->store($directory);
+
+                    $path = $photo->storeAs('public/ActionSociales/photos', $originalName);
                     $paths[] = $path;
                 } catch (\Exception $exp) {
                     $notify[] = ['error', 'Impossible de télécharger votre image'];
@@ -110,11 +129,17 @@ class ActionSocialeController extends Controller
             $paths = [];
             foreach ($request->file('documents_joints') as $document) {
                 try {
-                    $directory = 'public/ActionSociales/documents';
-                    if (!Storage::exists($directory)) {
-                        Storage::makeDirectory($directory);
+                    $originalName = $document->getClientOriginalName();
+                    $fileName = pathinfo($originalName, PATHINFO_FILENAME);
+                    $extension = pathinfo($originalName, PATHINFO_EXTENSION);
+
+                    $counter = 1;
+                    while (Storage::exists('public/ActionSociales/documents/' . $originalName)) {
+                        $originalName = $fileName . '_' . $counter . '.' . $extension;
+                        $counter++;
                     }
-                    $path = $document->store($directory);
+
+                    $path = $document->storeAs('public/ActionSociales/documents', $originalName);
                     $paths[] = $path;
                 } catch (\Exception $exp) {
                     $notify[] = ['error', 'Impossible de télécharger votre image'];
@@ -124,29 +149,40 @@ class ActionSocialeController extends Controller
             $action->documents_joints = json_encode($paths);
         }
         $action->save();
-        if($action != null){
-            if($request->partenaires != null && !collect($request->partenaires)->contains(null)){
+        if ($action != null) {
+            if ($request->partenaires != null && !collect($request->partenaires)->contains(null)) {
                 Partenaire::where('action_sociale_id', $action->id)->delete();
                 $data = [];
-                foreach($request->partenaires as $partenaire){
+                foreach ($request->partenaires as $partenaire) {
                     $data[] = [
                         'action_sociale_id' => $action->id,
                         'partenaire' => $partenaire['partenaire'],
                         'type_partenaire' => $partenaire['type_partenaire'],
-                        'montant'=> $partenaire['montant_contribution']
+                        'montant' => $partenaire['montant_contribution']
                     ];
                 }
             }
-            if($request->beneficiaires_projet != null && !collect($request->beneficiaires_projet)->contains(null)){
+            if ($request->beneficiaires_projet != null && !collect($request->beneficiaires_projet)->contains(null)) {
                 ActionSocialeLocalite::where('action_sociale_id', $action->id)->delete();
                 $data1 = [];
-                foreach($request->beneficiaires_projet as $beneficiaire){
+                foreach ($request->beneficiaires_projet as $beneficiaire) {
                     $data1[] = [
                         'action_sociale_id' => $action->id,
                         'localite_id' => $beneficiaire
                     ];
                 }
             }
+            if($request->autreBeneficiaire != null && !collect($request->autreBeneficiaire)->contains(null)) {
+                AutreBeneficiaire::where('action_sociale_id', $action->id)->delete();
+                $data2 = [];
+                foreach ($request->autreBeneficiaire as $beneficiaire) {
+                    $data2[] = [
+                        'action_sociale_id' => $action->id,
+                        'libelle' => $beneficiaire
+                    ];
+                }
+            }
+            AutreBeneficiaire::insert($data2);
             ActionSocialeLocalite::insert($data1);
             Partenaire::insert($data);
         }
@@ -155,7 +191,8 @@ class ActionSocialeController extends Controller
         return back()->withNotify($notify);
     }
 
-    private function generateCode(){
+    private function generateCode()
+    {
         static $number = 0;
         $number++;
         $year = date('Y');
@@ -173,7 +210,7 @@ class ActionSocialeController extends Controller
         $pageTitle = "Détail Action Sociale";
         $actionSociale = ActionSociale::find($id); // Remplacez ActionSociale par le nom de votre modèle
         $partenaires = $actionSociale->partenaires;
-        return view('manager.action-sociale.show', compact('actionSociale', 'pageTitle','partenaires'));
+        return view('manager.action-sociale.show', compact('actionSociale', 'pageTitle', 'partenaires'));
     }
 
     /**
@@ -187,7 +224,7 @@ class ActionSocialeController extends Controller
         $pageTitle = "Modifier une Action Sociale";
         $actionSociale = ActionSociale::find($id); // Remplacez ActionSociale par le nom de votre modèle
         $partenaires = $actionSociale->partenaires;
-        return view('manager.action-sociale.edit', compact('actionSociale', 'pageTitle','partenaires'));
+        return view('manager.action-sociale.edit', compact('actionSociale', 'pageTitle', 'partenaires'));
     }
 
     /**
@@ -199,7 +236,6 @@ class ActionSocialeController extends Controller
      */
     public function update(Request $request, ActionSociale $action)
     {
-        
     }
 
     /**

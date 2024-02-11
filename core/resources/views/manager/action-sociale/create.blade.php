@@ -60,6 +60,41 @@
                             </select>
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4 control-label" for="beneficiaires_projet"> Autres bénéficiaires du projet:</label>
+                        <div class="col-xs-12 col-sm-8">
+                            <table class="table table-striped table-bordered">
+                                <tbody id="beneficiaire_area">
+                                    <tr>
+                                        <td class="row">
+                                            <div class="col-xs-12 col-sm-12 bg-success">
+                                                <badge class="btn  btn-outline--warning h-45 btn-sm text-white">
+                                                    @lang('Autres bénéficiaires')
+                                                </badge>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-12">
+                                                <div class="form-group row">
+                                                    <input type="text" id="autreBeneficiaire-1" class="form-control mt-3"
+                                                        name="autreBeneficiaire[]"
+                                                        placeholder="Autres bénéficiaires"
+                                                        value="{{ old('partenaire') }}">
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot style="background: #e3e3e3;">
+                                    <tr>
+
+                                        <td colspan="3">
+                                            <button id="addRowBeneficiare" type="button"
+                                                class="btn btn-success btn-sm"><i class="fa fa-plus"></i></button>
+                                        </td>
+                                    <tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
                     
 
                     <div class="form-group row">
@@ -98,10 +133,10 @@
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-sm-4 control-label" for="cout_projet">Coûts du projet:</label>
+                        <label class="col-sm-4 control-label" for="cout_projet">Coûts du projet (En FCFA):</label>
                         <div class="col-xs-12 col-sm-8">
                             <input type="text" id="cout_projet" class="form-control" name="cout_projet"
-                                value="{{ old('cout_projet') }}" required>
+                                value="{{ old('cout_projet') }}" required placeholder="En FCFA">
                         </div>
                     </div>
 
@@ -144,10 +179,10 @@
                                                 <div class="form-group row">
                                                     <label class="col-sm-4 control-label"
                                                         for="montant_contribution-1">Montant de la
-                                                        contribution:</label>
+                                                        contribution (En FCFA):</label>
                                                     <input type="text" id="montant_contribution-1"
                                                         class="form-control" name="partenaires[0][montant_contribution]"
-                                                        placeholder="Montant de la contribution">
+                                                        placeholder="Montant de la contribution (En FCFA)">
                                                 </div>
                                             </div>
                                         </td>
@@ -170,7 +205,7 @@
                         <label class="col-sm-4 control-label" for="date_livraison">Date de la livraison:</label>
                         <div class="col-xs-12 col-sm-8">
                             <input type="date" id="date_livraison" class="form-control" name="date_livraison"
-                                value="{{ old('date_livraison') }}">
+                                value="{{ old('date_livraison') }}" required>
                         </div>
                     </div>
 
@@ -314,9 +349,9 @@
                     partenairesCount + '" class="form-control"name="partenaires[' + partenairesCount +
                     '][partenaire]" placeholder="Partenaire impliqué"></div></div> <div class="col-xs-12 col-sm-4"><div class="form-group row pr-0"><label class="col-sm-4 control-label" for="type_partenariat">Type de partenariat:</label> <select id="type_partenariat-' +
                     partenairesCount + '" class="form-control" name="partenaires[' + partenairesCount +
-                    '][type_partenaire]"><option value="">Selectionner une option</option><option value="Technique">Technique</option><option value="Financier">Financier</option><option value="Technique et Financier">Technique et Financier</option></select></div></div><div class="col-xs-12 col-sm-4 pr-0"><div class="form-group"> <label class="col-sm-4 control-label" for="montant_contribution-1">Montant de la contribution:</label><input type="text" id="montant_contribution-' +
+                    '][type_partenaire]"><option value="">Selectionner une option</option><option value="Technique">Technique</option><option value="Financier">Financier</option><option value="Technique et Financier">Technique et Financier</option></select></div></div><div class="col-xs-12 col-sm-4 pr-0"><div class="form-group"> <label class="col-sm-4 control-label" for="montant_contribution-1">Montant de la contribution (En FCFA):</label><input type="text" id="montant_contribution-' +
                     partenairesCount + '" class="form-control" name="partenaires[' + partenairesCount +
-                    '][montant_contribution]" placeholder="Montant de la contribution"></div></div><div class="col-xs-12 col-sm-8"><button type="button" id="' +
+                    '][montant_contribution]" placeholder="Montant de la contribution(En FCFA)"></div></div><div class="col-xs-12 col-sm-8"><button type="button" id="' +
                     partenairesCount +
                     '" class="removeRowPartenaire btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></td>';
                 html_table += '</tr>';
@@ -333,6 +368,38 @@
                     partenairesCount = parseInt(partenairesCount) - 1;
                 }
             });
+
+            //beneficiaires
+            var beneficiairesCount = $("#beneficiaire_area tr").length + 1;
+            $(document).on('click', '#addRowBeneficiare', function() {
+
+                //---> Start create table tr
+                var html_table = '<tr>';
+                html_table +=
+                    '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm text-white">Autres bénéficiaires ' +
+                   beneficiairesCount+
+                    '</badge></div><div class="col-xs-12 col-sm-12"><div class="form-group"><input placeholder="Autres bénéficiaires" class="form-control" id="autreBeneficiaire-' +
+                   beneficiairesCount+
+                    '" name="autreBeneficiaire[]" type="text"></div></div><div class="col-xs-12 col-sm-12"><button type="button" id="' +
+                   beneficiairesCount+
+                    '" class="removeRowBeneficiaire btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></div></td>';
+
+                html_table += '</tr>';
+                //---> End create table tr
+
+               beneficiairesCount= parseInt(beneficiairesCount) + 1;
+                $('#beneficiaire_area').append(html_table);
+
+            });
+
+            $(document).on('click', '.removeRowBeneficiaire', function() {
+                var row_id = $(this).attr('id');
+                if (row_id == $("#beneficiaire_area tr").length) {
+                    $(this).parents('tr').remove();
+                   beneficiairesCount= parseInt(beneficiairesCount) - 1;
+                }
+            });
+
 
         });
     </script>

@@ -21,4 +21,8 @@ class ActionSociale extends Model
     {
         return $this->hasMany(Partenaire::class, 'action_sociale_id');
     }
+    public function autreBeneficiaires()
+    {
+        return $this->hasMany(AutreBeneficiaire::class, 'action_sociale_id');
+    }   
 }
