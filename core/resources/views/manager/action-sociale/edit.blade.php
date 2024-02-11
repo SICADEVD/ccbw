@@ -270,11 +270,16 @@
                         $photos = json_decode($actionSociale->photos);
                         $a = 1;
                     @endphp
-                    @if ($photos){
+                    @if ($photos)
                         <div class="form-group row">
                             <label class="col-sm-4 control-label" for="photos">Photos:</label>
                             @foreach ($photos as $photo)
                                 <div class="col-xs-12 col-sm-8">
+                                    {{-- <input type="file" id="photos{{ $a }}" class="form-control dropify-fr"
+                                        name="photos[{{ $a }}]" accept="image/*" multiple=""
+                                        class="dropify" data-height="70"
+                                        data-default-file="{{ asset('core/storage/app/' . $photo) }}"
+                                        data-allowed-file-extensions="jpg jpeg png"> --}}
                                     <input type="file" id="photos{{ $a }}" class="form-control dropify-fr"
                                         name="photos[{{ $a }}]" accept="image/*" multiple=""
                                         class="dropify" data-height="70"
@@ -286,41 +291,22 @@
                                     $a++;
                                 @endphp
                             @endforeach
-                            <div id="insertBefore"></div>
-                            <!--  ADD ITEM START-->
+                            {{-- <div id="insertBefore"></div>
                             <div class="row px-lg-4 px-md-4 px-3 pb-3 pt-0 mb-3  mt-2">
                                 <div class="col-md-12">
                                     <a class="f-15 f-w-500" href="javascript:;" id="add-item"><i
                                             class="icons icon-plus font-weight-bold mr-1"></i> @lang('app.add')</a>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
-
-                        }
-                    @else{
-                        <div class="form-group row">
-                            <label class="col-sm-4 control-label" for="photos">Photos:</label>
-                            <div class="col-xs-12 col-sm-8">
-                                <input type="file" id="photos1" class="form-control dropify-fr" name="photos[]"
-                                    accept="image/*" multiple="" class="dropify" data-height="70">
-                            </div>
-                            <div id="insertBefore"></div>
-                            <!--  ADD ITEM START-->
-                            <div class="row px-lg-4 px-md-4 px-3 pb-3 pt-0 mb-3  mt-2">
-                                <div class="col-md-12">
-                                    <a class="f-15 f-w-500" href="javascript:;" id="add-item"><i
-                                            class="icons icon-plus font-weight-bold mr-1"></i> @lang('app.add')</a>
-                                </div>
-                            </div>
-                        </div>
-                        }
-                        @endif
+                   
+                    @endif
 
 
 
 
 
-                        {{-- <div class="form-group row">
+                    {{-- <div class="form-group row">
                         <label class="col-sm-4 control-label" for="photos">Photos:</label>
                         <div class="col-xs-12 col-sm-8">
                             <input type="file" id="photos" class="form-control dropify-fr" name="photos[]"
@@ -336,20 +322,19 @@
                         </div>
                     </div> --}}
 
-                        <div class="form-group row">
-                            <label class="col-sm-4 control-label" for="commentaires">Commentaires:</label>
-                            <div class="col-xs-12 col-sm-8">
-                                <textarea id="commentaires" class="form-control" name="commentaires" rows="4"> {{ $actionSociale->commentaires }} </textarea>
-                            </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4 control-label" for="commentaires">Commentaires:</label>
+                        <div class="col-xs-12 col-sm-8">
+                            <textarea id="commentaires" class="form-control" name="commentaires" rows="4"> {{ $actionSociale->commentaires }} </textarea>
                         </div>
+                    </div>
 
-                        <hr class="panel-wide">
+                    <hr class="panel-wide">
 
-                        <div class="form-group">
-                            <button type="submit"
-                                class="btn btn--primary btn-block h-45 w-100">@lang('Envoyer')</button>
-                        </div>
-                        {!! Form::close() !!}
+                    <div class="form-group">
+                        <button type="submit" class="btn btn--primary btn-block h-45 w-100">@lang('Envoyer')</button>
+                    </div>
+                    {!! Form::close() !!}
                 </div>
             </div>
         </div>

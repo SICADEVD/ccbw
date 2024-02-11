@@ -69,8 +69,6 @@ class ActionSocialeController extends Controller
             'documents_joints.*' => 'nullable|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:2048'
         ];
         $request->validate($validationRule);
-        dd($request->all());
-
         if ($request->id) {
             $action = ActionSociale::find($request->id);
             $message = 'Action Sociale modifiée avec succès.';
