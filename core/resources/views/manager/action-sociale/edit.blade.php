@@ -61,6 +61,7 @@
                         </div>
                     </div>
                     <div class="form-group row">
+                    <label class="col-sm-4 control-label" for="beneficiaires_projet"> Autres bénéficiaires du projet:</label>
                         <div class="col-xs-12 col-sm-12">
                             <table class="table table-striped table-bordered">
                                 <tbody id="beneficiaire_area">
