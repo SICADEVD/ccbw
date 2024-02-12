@@ -61,7 +61,8 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                    <label class="col-sm-4 control-label" for="beneficiaires_projet"> Autres bénéficiaires du projet:</label>
+                        <label class="col-sm-4 control-label" for="beneficiaires_projet"> Autres bénéficiaires du
+                            projet:</label>
                         <div class="col-xs-12 col-sm-12">
                             <table class="table table-striped table-bordered">
                                 <tbody id="beneficiaire_area">
@@ -149,9 +150,11 @@
                             <select id="niveau_realisation" class="form-control" name="niveau_realisation">
                                 <option value="Non démarré"
                                     {{ old('niveau_realisation') == 'Non démarré' ? 'selected' : '' }}>Non démarré</option>
-                                <option value="En Cours" {{ old('niveau_realisation') == 'En Cours' ? 'selected' : '' }}>En
+                                <option value="En Cours" {{ old('niveau_realisation') == 'En Cours' ? 'selected' : '' }}>
+                                    En
                                     Cours</option>
-                                <option value="Achevé" {{ old('niveau_realisation') == 'Achevé' ? 'selected' : '' }}>Achevé
+                                <option value="Achevé" {{ old('niveau_realisation') == 'Achevé' ? 'selected' : '' }}>
+                                    Achevé
                                 </option>
                             </select>
                         </div>
@@ -160,7 +163,8 @@
 
                     <div id="date_demarrage_container" style="display:none;">
                         <div class="form-group row">
-                            <label class="col-sm-4 control-label" for="date_demarrage">Date de démarrage du projet:</label>
+                            <label class="col-sm-4 control-label" for="date_demarrage">Date de démarrage du
+                                projet:</label>
                             <div class="col-xs-12 col-sm-8">
                                 <input type="date" id="date_demarrage" class="form-control" name="date_demarrage"
                                     value="{{ $actionSociale->date_demarrage }}">
@@ -185,7 +189,7 @@
                                 value="{{ $actionSociale->cout_projet }}" required placeholder="En FCFA">
                         </div>
                     </div>
-                   
+
                     <div class="form-group row">
                         <div class="col-xs-12 col-sm-12">
                             <table class="table table-striped table-bordered">
@@ -271,16 +275,12 @@
                         $photos = json_decode($actionSociale->photos);
                         $a = 1;
                     @endphp
+                    <label class="col-sm-4 control-label" for="photos">Photos:</label>
                     @if ($photos)
                         <div class="form-group row">
-                            <label class="col-sm-4 control-label" for="photos">Photos:</label>
                             @foreach ($photos as $photo)
-                                <div class="col-xs-12 col-sm-8">
-                                    {{-- <input type="file" id="photos{{ $a }}" class="form-control dropify-fr"
-                                        name="photos[{{ $a }}]" accept="image/*" multiple=""
-                                        class="dropify" data-height="70"
-                                        data-default-file="{{ asset('core/storage/app/' . $photo) }}"
-                                        data-allowed-file-extensions="jpg jpeg png"> --}}
+                                <div class="col-xs-12 col-sm-4"></div>
+                                <div class="col-xs-12 col-sm-8 mt-3">
                                     <input type="file" id="photos{{ $a }}" class="form-control dropify-fr"
                                         name="photos[{{ $a }}]" accept="image/*" multiple=""
                                         class="dropify" data-height="70"
@@ -300,29 +300,30 @@
                                 </div>
                             </div> --}}
                         </div>
-                   
                     @endif
-
-
-
-
-
-                    {{-- <div class="form-group row">
-                        <label class="col-sm-4 control-label" for="photos">Photos:</label>
-                        <div class="col-xs-12 col-sm-8">
-                            <input type="file" id="photos" class="form-control dropify-fr" name="photos[]"
-                                accept="image/*" multiple>
+                    @php
+                        $documents_joints = json_decode($actionSociale->documents_joints);
+                        $b = 1;
+                    @endphp
+                    <label class="col-sm-4 control-label" for="documents_joints">Documents joints:</label>
+                    @if ($documents_joints)
+                        <div class="form-group row">
+                            @foreach ($documents_joints as $document_joint)
+                                <div class="col-xs-12 col-sm-4"></div>
+                                <div class="col-xs-12 col-sm-8 mt-3">
+                                    <input type="file" id="documents_joints{{ $b }}"
+                                        class="form-control dropify-fr" name="documents_joints[{{ $b }}]"
+                                        accept="application/pdf" multiple="" class="dropify" data-height="70"
+                                        data-default-file="{{ asset('core/storage/app/' . $document_joint) }}"
+                                        data-allowed-file-extensions="pdf">
+                                </div>
+                                <div id="insertBeforeNew"></div>
+                                @php
+                                    $b++;
+                                @endphp
+                            @endforeach
                         </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label class="col-sm-4 control-label" for="documents_joints">Documents joints:</label>
-                        <div class="col-xs-12 col-sm-8">
-                            <input type="file" id="documents_joints" class="form-control dropify-fr"
-                                name="documents_joints[]" multiple>
-                        </div>
-                    </div> --}}
-
+                    @endif
                     <div class="form-group row">
                         <label class="col-sm-4 control-label" for="commentaires">Commentaires:</label>
                         <div class="col-xs-12 col-sm-8">
