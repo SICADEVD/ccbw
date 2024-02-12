@@ -9,11 +9,11 @@ use App\Traits\Searchable;
 use Kirschbaum\PowerJoins\PowerJoins;
 
 
-class BeneficiaireActiviteCommunautaire extends Model
+class ActiviteCommunautaireBeneficiaire extends Model
 {
     use HasFactory, Searchable, GlobalStatus, PowerJoins;
 
-    protected $table = 'beneficiaire_activite_communautaires';
+    protected $table = 'activite_communautaire_beneficiaires';
 
     public function activiteCommunautaire()
     {

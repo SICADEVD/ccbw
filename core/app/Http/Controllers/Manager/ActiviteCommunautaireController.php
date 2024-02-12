@@ -3,13 +3,16 @@
 namespace App\Http\Controllers\Manager;
 
 use App\Models\Localite;
+use PDF;
 use App\Models\Producteur;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
 use App\Models\ActiviteCommunautaire;
 use Illuminate\Support\Facades\Storage;
 use App\Models\ActiviteCommunautaireLocalite;
-use App\Models\BeneficiaireActiviteCommunautaire;
+use App\Models\ActiviteCommunautaireBeneficiaire;
 
 class ActiviteCommunautaireController extends Controller
 {
@@ -27,6 +30,20 @@ class ActiviteCommunautaireController extends Controller
                 $q->where('localite_id', request()->localite);
             }
         })->with('cooperative')->paginate(getPaginate());
+
+        if(request()->download){
+            $activite = ActiviteCommunautaire::find(decrypt(request()->download));
+            $activiteNameFile = Str::slug($activite->titre_projet.'-'.$activite->code,'-');
+            $activiteNameFile = $activiteNameFile.'.pdf';
+            if(!file_exists(storage_path(). "/app/public/activiteCommunautaire-pdf")){  
+                File::makeDirectory(storage_path(). "/app/public/activiteCommunautaire-pdf", 0777, true);
+            }
+            @unlink(storage_path('app/public/activiteCommunautaire-pdf'). "/".$activiteNameFile);
+               
+            return PDF::loadView('manager.activite-communautaire.pdf-activite', compact('activite'))
+                    ->download($activiteNameFile);
+                   // ->save(storage_path(). "/app/public/producteurs-pdf/".$producteurNameFile);
+        }
 
         return view('manager.activite-communautaire.index', compact('pageTitle', 'activites'));
     }
@@ -146,7 +163,7 @@ class ActiviteCommunautaireController extends Controller
             $selectedLocalites = $request->localite;
             $selectedProducteurs = $request->producteur;
             if($selectedLocalites != null && $selectedProducteurs != null){
-                BeneficiaireActiviteCommunautaire::where('activite_communautaire_id', $id)->delete();
+                ActiviteCommunautaireBeneficiaire::where('activite_communautaire_id', $id)->delete();
                 foreach($selectedProducteurs as $producteurId){
                     list($localiteId, $producteurId) = explode('-', $producteurId);
                     $data[] = [
@@ -156,7 +173,7 @@ class ActiviteCommunautaireController extends Controller
                     ];
                     
                 }
-                BeneficiaireActiviteCommunautaire::insert($data);
+                ActiviteCommunautaireBeneficiaire::insert($data);
             }
         }
         $notify[] = ['success', isset($message) ? $message : 'Activité Communautaire ajoutée avec succès.'];

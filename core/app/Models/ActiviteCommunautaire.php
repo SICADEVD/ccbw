@@ -15,9 +15,13 @@ class ActiviteCommunautaire extends Model
     {
         return $this->belongsTo(Cooperative::class);
     }
+    public function localites()
+    {
+        return $this->hasMany(ActiviteCommunautaireLocalite::class, 'activite_communautaire_id');
+    }
 
     public function beneficiaires()
     {
-        return $this->hasMany(BeneficiaireActiviteCommunautaire::class, 'activite_communautaire_id');
+        return $this->hasMany(ActiviteCommunautaireBeneficiaire::class, 'activite_communautaire_id');
     }
 }

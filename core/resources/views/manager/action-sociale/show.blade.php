@@ -98,7 +98,7 @@ Date de livraison:
 Coûts du projet:
  </td>
 <td>
-    {{ number_format($actionSociale->cout_projet,0,'',' ') }}
+    {{ number_format($actionSociale->cout_projet,0,'',' ') }} FCFA
  </td>
 </tr>
 
