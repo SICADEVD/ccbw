@@ -214,9 +214,16 @@ class ActiviteCommunautaireController extends Controller
         $pageTitle = "Modifier une Activité Communautaire";
         $manager = auth()->user(); 
         $communauteSociale = ActiviteCommunautaire::find($id); // Remplacez ActionSociale par le nom de votre modèle
-        $dataLocalite = ActiviteCommunautaireLocalite::where('activite_communautaire_id', $id)->pluck('localite_id')->toArray();
+        // $dataLocalite = ActiviteCommunautaireLocalite::where('activite_communautaire_id', $id)->pluck('localite_id')->toArray();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id', $manager->cooperative_id], ['localites.status', 1]])->orderBy('nom')->get();
-        return view('manager.activite-communautaire.edit', compact('localites','pageTitle','communauteSociale','dataLocalite'));
+        $producteurs = Producteur::with('localite')->get();
+
+        foreach ($communauteSociale->beneficiaires as $item) {
+            $dataLocalite[] = $item->localite_id;
+            $producteursSelected[] = $item->producteur_id;
+        }
+        
+        return view('manager.activite-communautaire.edit', compact('localites','pageTitle','communauteSociale','dataLocalite','producteurs','producteursSelected'));
     }
 
     /**

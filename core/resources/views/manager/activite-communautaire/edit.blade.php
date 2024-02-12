@@ -26,6 +26,20 @@
                         </div>
                     </div>
                     <div class="form-group row">
+                        <?php echo Form::label(__('Bénéfiniaires Membres'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-12 col-sm-8">
+                            <select class="form-control select2-multi-select" name="producteur[]" id="producteur" multiple
+                                required>
+                                <option value="">@lang('Selectionner une option')</option>
+                                @foreach ($producteurs as $producteur)
+                                    <option value="{{ $producteur->id }}"
+                                        data-chained="{{ $producteur->localite_id ?? '' }}" @selected(old('producteur'))>
+                                        {{ $producteur->nom }} {{ $producteur->prenoms }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <label class="col-sm-4 control-label" for="titre_projet">Titre du projet:</label>
                         <div class="col-xs-12 col-sm-8">
                             <input type="text" value= "{{ $communauteSociale->titre_projet }}" id="titre_projet"
@@ -64,12 +78,7 @@
                             </select>
                         </div>
                     </div>
-                    {{-- <div class="form-group row">
-                        <label class="col-sm-4 control-label" for="localite_projet">Localité:</label>
-                        <div class="col-xs-12 col-sm-8">
-                            <input value="{{ $communauteSociale->localite_projet }}" type="text" id="localite_projet" class="form-control" name="localite_projet" required>
-                        </div>
-                    </div> --}}
+                  
                     <div class="form-group row">
                         <label class="col-sm-4 control-label" for="beneficiaires_projet">Bénéficiaires du Projet:</label>
                         <div class="col-xs-12 col-sm-8">
@@ -84,13 +93,6 @@
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-sm-4 control-label" for="liste_beneficiaires">Liste des bénéficiaires:</label>
-                        <div class="col-xs-12 col-sm-8">
-                             <textarea id="liste_beneficiaires" class="form-control" name="liste_beneficiaires" rows="4"> {{ $communauteSociale->liste_beneficiaires  }} </textarea>
-                        </div>
-                    </div>
-
-                     <div class="form-group row">
                         <label class="col-sm-4 control-label" for="niveau_realisation">Niveau de réalisation:</label>
                         <div class="col-xs-12 col-sm-8">
                             <select id="niveau_realisation" class="form-control" name="niveau_realisation">
@@ -128,37 +130,77 @@
                     <div class="form-group row">
                         <label class="col-sm-4 control-label" for="cout_projet">Coûts du projet:</label>
                         <div class="col-xs-12 col-sm-8">
-                           <input type="text" id="cout_projet" value="{{ $communauteSociale->cout_projet }}" class="form-control" name="cout_projet" required>
+                            <input type="text" id="cout_projet" value="{{ $communauteSociale->cout_projet }}"
+                                class="form-control" name="cout_projet" required>
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <label class="col-sm-4 control-label" for="date_livraison">Date de la livraison:</label>
                         <div class="col-xs-12 col-sm-8">
-                            <input type="date" id="date_livraison" value="{{ $communauteSociale->date_livraison }}" class="form-control" name="date_livraison">
+                            <input type="date" id="date_livraison" value="{{ $communauteSociale->date_livraison }}"
+                                class="form-control" name="date_livraison">
                         </div>
                     </div>
 
-                    <div class="form-group row">
-                        <label class="col-sm-4 control-label" for="photos">Photos:</label>
-                        <div class="col-xs-12 col-sm-8">
-                            <input type="file" id="photos" class="form-control dropify-fr" name="photos[]"
-                                accept="image/*" multiple>
+                    @php
+                        $photos = json_decode($communauteSociale->photos);
+                        $a = 1;
+                    @endphp
+                    <label class="col-sm-4 control-label" for="photos">Photos:</label>
+                    @if ($photos)
+                        <div class="form-group row">
+                            @foreach ($photos as $photo)
+                                <div class="col-xs-12 col-sm-4"></div>
+                                <div class="col-xs-12 col-sm-8 mt-3">
+                                    <input type="file" id="photos{{ $a }}" class="form-control dropify-fr"
+                                        name="photos[{{ $a }}]" accept="image/*" multiple=""
+                                        class="dropify" data-height="70"
+                                        data-default-file="{{ asset('core/storage/app/' . $photo) }}"
+                                        data-allowed-file-extensions="jpg jpeg png">
+                                </div>
+                                <div id="insertBefore"></div>
+                                @php
+                                    $a++;
+                                @endphp
+                            @endforeach
+                            {{-- <div id="insertBefore"></div>
+                            <div class="row px-lg-4 px-md-4 px-3 pb-3 pt-0 mb-3  mt-2">
+                                <div class="col-md-12">
+                                    <a class="f-15 f-w-500" href="javascript:;" id="add-item"><i
+                                            class="icons icon-plus font-weight-bold mr-1"></i> @lang('app.add')</a>
+                                </div>
+                            </div> --}}
                         </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label class="col-sm-4 control-label" for="documents_joints">Documents joints:</label>
-                        <div class="col-xs-12 col-sm-8">
-                            <input type="file" id="documents_joints" class="form-control dropify-fr"
-                                name="documents_joints[]" multiple>
+                    @endif
+                    @php
+                        $documents_joints = json_decode($communauteSociale->documents_joints);
+                        $b = 1;
+                    @endphp
+                    <label class="col-sm-4 control-label" for="documents_joints">Documents joints:</label>
+                    @if ($documents_joints)
+                        <div class="form-group row">
+                            @foreach ($documents_joints as $document_joint)
+                                <div class="col-xs-12 col-sm-4"></div>
+                                <div class="col-xs-12 col-sm-8 mt-3">
+                                    <input type="file" id="documents_joints{{ $b }}"
+                                        class="form-control dropify-fr" name="documents_joints[{{ $b }}]"
+                                        accept="application/pdf" multiple="" class="dropify" data-height="70"
+                                        data-default-file="{{ asset('core/storage/app/' . $document_joint) }}"
+                                        data-allowed-file-extensions="pdf">
+                                </div>
+                                <div id="insertBeforeNew"></div>
+                                @php
+                                    $b++;
+                                @endphp
+                            @endforeach
                         </div>
-                    </div>
+                    @endif
 
                     <div class="form-group row">
                         <label class="col-sm-4 control-label" for="commentaires">Commentaires:</label>
                         <div class="col-xs-12 col-sm-8">
-                            <textarea id="commentaires" class="form-control" name="commentaires" rows="4"> {{$communauteSociale->commentaires }} </textarea>
+                            <textarea id="commentaires" class="form-control" name="commentaires" rows="4"> {{ $communauteSociale->commentaires }} </textarea>
                         </div>
                     </div>
                     <hr class="panel-wide">
@@ -189,5 +231,48 @@
                 dateFinProjetContainer.style.display = 'none';
             }
         });
+
+        $(document).ready(function() {
+            var producteursSelected = "{{ implode(',', $producteursSelected) }}";
+            //idée de ce bloque de code c'est de remplire l'objet optionParproducteur avec les producteurs provenant de la base de données
+            var optionParProducteur = new Object();
+            $("#producteur option").each(function() {
+                var curreentArray = optionParProducteur[($(this).data('chained'))] ? optionParProducteur[($(
+                        this)
+                    .data('chained'))] : [];
+                curreentArray[$(this).val()] = $(this).text().trim();
+                Object.assign(optionParProducteur, {
+                    [$(this).data('chained')]: curreentArray
+                });
+
+                if (producteursSelected.split(',').includes($(this).val()) && producteursSelected != "") {
+                    $(this).val($(this).data('chained') + "-" + $(this).val());
+                    $(this).attr('selected', 'selected');
+                } else $(this).remove();
+            });
+            console.log(optionParProducteur);
+
+            $('#localite').change(function() {
+                var localite = $(this).val();
+                $("#producteur").empty();
+                var optionsHtml2 = "";
+                $(this).find('option:selected').each(function() {
+                    //console.log($(this).val());
+                    optionsHtml2 = updateproducteur(optionsHtml2, $(this).val(),
+                        optionParProducteur);
+                })
+            });
+        });
+
+        function updateproducteur(optionsHtml2, id, optionParProducteur) {
+            var optionsHtml = optionsHtml2
+            if (id != '' && optionParProducteur[id]) {
+                optionParProducteur[id].forEach(function(key, element) {
+                    optionsHtml += '<option value="' + id + '-' + element + '">' + key + '</option>';
+                });
+                $("#producteur").html(optionsHtml);
+            }
+            return optionsHtml;
+        }
     </script>
 @endpush
