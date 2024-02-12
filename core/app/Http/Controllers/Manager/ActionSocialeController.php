@@ -3,16 +3,18 @@
 namespace App\Http\Controllers\Manager;
 
 use App\Models\Localite;
-use App\Models\Partenaire;
+use PDF;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\ActionSociale;
-use App\Models\AutreBeneficiaire;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use App\Models\ActionSocialeLocalite;
+use App\Models\ActionSocialePartenaire;
 use Illuminate\Support\Facades\Storage;
 use Google\Service\CloudLifeSciences\Action;
+use App\Models\ActionSocialeAutreBeneficiaire;
 
 class ActionSocialeController extends Controller
 {
@@ -31,6 +33,20 @@ class ActionSocialeController extends Controller
             }
         })->with('cooperative')->paginate(getPaginate());
 
+        if(request()->download){
+            $actionsociale = ActionSociale::find(decrypt(request()->download));
+            $actionsocialeNameFile = Str::slug($actionsociale->titre_projet.'-'.$actionsociale->code,'-');
+            $actionsocialeNameFile = $actionsocialeNameFile.'.pdf';
+            if(!file_exists(storage_path(). "/app/public/actionsociales-pdf")){  
+                File::makeDirectory(storage_path(). "/app/public/actionsociales-pdf", 0777, true);
+            }
+            @unlink(storage_path('app/public/actionsociales-pdf'). "/".$actionsocialeNameFile);
+               
+            return PDF::loadView('manager.action-sociale.pdf-actionsociale', compact('actionsociale'))
+                    ->download($actionsocialeNameFile);
+                   // ->save(storage_path(). "/app/public/producteurs-pdf/".$producteurNameFile);
+        }
+        
         return view('manager.action-sociale.index', compact('pageTitle', 'actions'));
     }
 
@@ -74,6 +90,7 @@ class ActionSocialeController extends Controller
             $message = 'Action Sociale modifiée avec succès.';
         } else {
             $action = new ActionSociale();
+          
             $action->code = $this->generateCode();
             $message = 'Action Sociale ajoutée avec succès.';
         }
@@ -110,12 +127,12 @@ class ActionSocialeController extends Controller
                     $extension = pathinfo($originalName, PATHINFO_EXTENSION);
 
                     $counter = 1;
-                    while (Storage::exists('public/ActionSociales/photos/' . $originalName)) {
+                    while (Storage::exists('public/actionSociales/photos/' . $originalName)) {
                         $originalName = $fileName . '_' . $counter . '.' . $extension;
                         $counter++;
                     }
 
-                    $path = $photo->storeAs('public/ActionSociales/photos', $originalName);
+                    $path = $photo->storeAs('public/actionSociales/photos', $originalName);
                     $paths[] = $path;
                 } catch (\Exception $exp) {
                     $notify[] = ['error', 'Impossible de télécharger votre image'];
@@ -133,12 +150,12 @@ class ActionSocialeController extends Controller
                     $extension = pathinfo($originalName, PATHINFO_EXTENSION);
 
                     $counter = 1;
-                    while (Storage::exists('public/ActionSociales/documents/' . $originalName)) {
+                    while (Storage::exists('public/actionSociales/documents/' . $originalName)) {
                         $originalName = $fileName . '_' . $counter . '.' . $extension;
                         $counter++;
                     }
 
-                    $path = $document->storeAs('public/ActionSociales/documents', $originalName);
+                    $path = $document->storeAs('public/actionSociales/documents', $originalName);
                     $paths[] = $path;
                 } catch (\Exception $exp) {
                     $notify[] = ['error', 'Impossible de télécharger votre image'];
@@ -150,7 +167,7 @@ class ActionSocialeController extends Controller
         $action->save();
         if ($action != null) {
             if ($request->partenaires != null && !collect($request->partenaires)->contains(null)) {
-                Partenaire::where('action_sociale_id', $action->id)->delete();
+                ActionSocialePartenaire::where('action_sociale_id', $action->id)->delete();
                 $data = [];
                 foreach ($request->partenaires as $partenaire) {
                     $data[] = [
@@ -160,7 +177,7 @@ class ActionSocialeController extends Controller
                         'montant' => $partenaire['montant_contribution']
                     ];
                 }
-                Partenaire::insert($data);
+                ActionSocialePartenaire::insert($data);
             }
             if ($request->beneficiaires_projet != null && !collect($request->beneficiaires_projet)->contains(null)) {
                 ActionSocialeLocalite::where('action_sociale_id', $action->id)->delete();
@@ -174,7 +191,7 @@ class ActionSocialeController extends Controller
                 ActionSocialeLocalite::insert($data1);
             }
             if($request->autreBeneficiaire != null && !collect($request->autreBeneficiaire)->contains(null)) {
-                AutreBeneficiaire::where('action_sociale_id', $action->id)->delete();
+                ActionSocialeAutreBeneficiaire::where('action_sociale_id', $action->id)->delete();
                 $data2 = [];
                 foreach ($request->autreBeneficiaire as $beneficiaire) {
                     $data2[] = [
@@ -182,7 +199,7 @@ class ActionSocialeController extends Controller
                         'libelle' => $beneficiaire
                     ];
                 }
-                AutreBeneficiaire::insert($data2);
+                ActionSocialeAutreBeneficiaire::insert($data2);
             }
             
            

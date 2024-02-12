@@ -115,7 +115,7 @@
                                         <td>
                                             <a href="{{ route('manager.traca.producteur.infos', encrypt($producteur->id)) }}"
                                                 class="icon-btn btn--info ml-1">@lang('Infos producteur')</a>
-                                                <a href="{{ route('manager.traca.producteur.index', ['download'=> encrypt($producteur->id)]) }}" class="btn btn-sm btn--danger"><i class="la la-download"></i>@lang('Télécharger')</a>
+                                                <a href="{{ route('manager.traca.producteur.index', ['download'=> encrypt($producteur->id)]) }}" class="btn btn-sm btn--danger"><i class="la la-file-pdf-o"></i>@lang('PDF')</a>
                                             <a href="{{ route('manager.traca.producteur.edit', $producteur->id) }}" class="btn btn-sm btn-outline--warning"><i class="la la-pen"></i>@lang('Edit')</a>
                                             <button type="button" class="btn btn-sm btn-outline--primary"
                                                 data-bs-toggle="dropdown" aria-expanded="false"><i

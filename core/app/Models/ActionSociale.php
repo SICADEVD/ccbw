@@ -17,12 +17,16 @@ class ActionSociale extends Model
     {
         return $this->belongsTo(Cooperative::class);
     }
+    public function beneficiaires()
+    {
+        return $this->hasMany(ActionSocialeLocalite::class, 'action_sociale_id');
+    }
     public function partenaires()
     {
-        return $this->hasMany(Partenaire::class, 'action_sociale_id');
+        return $this->hasMany(ActionSocialePartenaire::class, 'action_sociale_id');
     }
     public function autreBeneficiaires()
     {
-        return $this->hasMany(AutreBeneficiaire::class, 'action_sociale_id');
+        return $this->hasMany(ActionSocialeAutreBeneficiaire::class, 'action_sociale_id');
     }   
 }

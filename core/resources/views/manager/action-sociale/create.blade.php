@@ -96,7 +96,13 @@
                         </div>
                     </div>
                     
-
+                    <div class="form-group row">
+                        <label class="col-sm-4 control-label" for="date_livraison">Date de la livraison:</label>
+                        <div class="col-xs-12 col-sm-8">
+                            <input type="date" id="date_livraison" class="form-control" name="date_livraison"
+                                value="{{ old('date_livraison') }}" required>
+                        </div>
+                    </div>
                     <div class="form-group row">
                         <label class="col-sm-4 control-label" for="niveau_realisation">Niveau de réalisation:</label>
                         <div class="col-xs-12 col-sm-8">
@@ -201,13 +207,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group row">
-                        <label class="col-sm-4 control-label" for="date_livraison">Date de la livraison:</label>
-                        <div class="col-xs-12 col-sm-8">
-                            <input type="date" id="date_livraison" class="form-control" name="date_livraison"
-                                value="{{ old('date_livraison') }}" required>
-                        </div>
-                    </div>
+                    
 
                     <div class="form-group row">
                         <label class="col-sm-4 control-label" for="photos">Photos:</label>
@@ -408,5 +408,18 @@
 
 
         });
+
+        $('#producteurs').change(function() {
+        $.ajax({
+                type: 'GET',
+                url: "{{ route('manager.livraison.magcentral.get.listeproducteur') }}",
+                data: $('#flocal').serialize(),
+                success: function(html) {
+                    $('#listeprod').html(html.results);
+                    $('#poidsnet').val(html.total);
+                    
+                }
+            });
+});
     </script>
 @endpush

@@ -318,11 +318,11 @@
                 </li>
                 @endif
                 <li class="sidebar-menu-item sidebar-dropdown">
-                    <a href="javascript:void(0)" class="{{ menuActive(['manager.communaute.action.sociale.index','manager.communaute.activite.communautaire.index'], 3) }}">
+                    <a href="javascript:void(0)" class="{{ menuActive(['manager.communaute.action.sociale.*','manager.communaute.activite.communautaire.*'], 3) }}">
                         <i class=" menu-icon las la-universal-access"></i>
                         <span class="menu-title">@lang('Communauté résiliente') </span>
                     </a>
-                    <div class="sidebar-submenu {{ menuActive(['manager.communaute.action.sociale.index','manager.communaute.activite.communautaire.index'], 2) }} ">
+                    <div class="sidebar-submenu {{ menuActive(['manager.communaute.action.sociale.*','manager.communaute.activite.communautaire.*'], 2) }} ">
                         <ul>
                         <li class="sidebar-menu-item {{ menuActive('manager.communaute.action.sociale.index') }}">
                                 <a href="{{ route('manager.communaute.action.sociale.index') }}" class="nav-link">

@@ -8,11 +8,11 @@ use App\Traits\GlobalStatus;
 use App\Traits\Searchable;
 use Kirschbaum\PowerJoins\PowerJoins;
 
-class AutreBeneficiaire extends Model
+class ActionSocialeAutreBeneficiaire extends Model
 {
     use HasFactory, Searchable, GlobalStatus, PowerJoins;
 
-    protected $table = 'autre_beneficiaires';
+    protected $table = 'action_sociale_autre_beneficiaires';
 
     public function actionSociale()
     {

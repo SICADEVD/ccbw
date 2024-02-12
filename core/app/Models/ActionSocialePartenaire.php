@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Traits\GlobalStatus;
 use App\Traits\Searchable;
 
-class Partenaire extends Model
+class ActionSocialePartenaire extends Model
 {
     use HasFactory, GlobalStatus, Searchable;
 
