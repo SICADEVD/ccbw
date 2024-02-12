@@ -93,12 +93,12 @@ class ActiviteCommunautaireController extends Controller
                     $extension = pathinfo($originalName, PATHINFO_EXTENSION);
 
                     $counter = 1;
-                    while (Storage::exists('public/ActionSociales/photos/' . $originalName)) {
+                    while (Storage::exists('public/activiteCommunautaire/photos/' . $originalName)) {
                         $originalName = $fileName . '_' . $counter . '.' . $extension;
                         $counter++;
                     }
 
-                    $path = $photo->storeAs('public/ActionSociales/photos', $originalName);
+                    $path = $photo->storeAs('public/activiteCommunautaire/photos', $originalName);
                     $paths[] = $path;
                 } catch (\Exception $exp) {
                     $notify[] = ['error', 'Impossible de télécharger votre image'];
@@ -116,12 +116,12 @@ class ActiviteCommunautaireController extends Controller
                     $extension = pathinfo($originalName, PATHINFO_EXTENSION);
 
                     $counter = 1;
-                    while (Storage::exists('public/ActionSociales/documents/' . $originalName)) {
+                    while (Storage::exists('public/activiteCommunautaire/documents/' . $originalName)) {
                         $originalName = $fileName . '_' . $counter . '.' . $extension;
                         $counter++;
                     }
 
-                    $path = $document->storeAs('public/ActionSociales/documents', $originalName);
+                    $path = $document->storeAs('public/activiteCommunautaire/documents', $originalName);
                     $paths[] = $path;
                 } catch (\Exception $exp) {
                     $notify[] = ['error', 'Impossible de télécharger votre image'];
