@@ -253,7 +253,9 @@ class ActiviteCommunautaireController extends Controller
     {
         $pageTitle = "Ajouter un Non Membre";
         $activite = ActiviteCommunautaire::find($id);
-        return view('manager.activite-communautaire.non-membrecreate', compact('pageTitle', 'id'));
+        $localiteIds = array_unique($activite->beneficiaires->pluck('localite_id')->toArray());
+        $producteurs = Producteur::whereIn('localite_id', $localiteIds)->get();
+        return view('manager.activite-communautaire.non-membrecreate', compact('pageTitle', 'id', 'producteurs', 'activite', 'localiteIds'));
     }
 
     public function storenonmembre(Request $request)
@@ -262,24 +264,26 @@ class ActiviteCommunautaireController extends Controller
             'nom' => 'required',
             'prenom' => 'required',
             'sexe' => 'required',
-            'date_naissance' => 'required',
             'telephone' => 'required',
-            'email' => 'required',
-            'localite_id' => 'required',
-            'profession' => 'required',
-            'adresse' => 'required',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'documents_joints.*' => 'nullable|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:2048'
         ];
         $request->validate($validationRule);
         if ($request->id) {
-            $communaute = ActiviteCommunautaire::find($request->id);
-            $message = "Activité Communautaire modifiée avec succès";
+            $nonmembre = ActiviteCommunautaireNonMembre::find($request->id);
+            $message = "Non Membre modifié avec succès .";
         } else {
-            $communaute = new ActiviteCommunautaire();
-            $communaute->code = $this->generateCode();
-            $message = "Activité Communautaire ajoutée avec succès";
+            $nonmembre = new ActiviteCommunautaireNonMembre();
+            $message = "Non Membre ajouté avec succès .";
         }
+        $nonmembre->nom = $request->nom;
+        $nonmembre->prenom = $request->prenom;
+        $nonmembre->sexe = $request->sexe;
+        $nonmembre->telephone = $request->telephone;
+        $nonmembre->representer = $request->representer;
+        $nonmembre->lien = $request->lien;
+        $nonmembre->producteur_id = $request->producteur;
+        $nonmembre->save();
+        $notify[] = ['success', isset($message) ? $message : 'Non Membre ajouté avec succès.'];
+        return back()->withNotify($notify);
     }
     public function editnonmembre($id)
     {

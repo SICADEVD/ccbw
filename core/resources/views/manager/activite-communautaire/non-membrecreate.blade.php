@@ -48,22 +48,24 @@
                         <div class="form-group row">
                             <?php echo Form::label(__('Producteur'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
-                                {{-- <select class="form-control producteur" name="producteur">
+                                <select class="form-control producteur" name="producteur">
                                     <option value="">@lang('Selectionner une option')</option>
                                     @foreach ($producteurs as $producteur)
                                         <option value="{{ $producteur->id }}" @selected(old('producteur'))>
                                             {{ $producteur->nom }} {{ $producteur->prenoms }}</option>
-                                    @endforeach --}}
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
                         <div class="form-group row">
                             <?php echo Form::label(__('Type de lien '), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::select('lien', ['' => 'Selectionner une option', 'Conjoint' => 'Conjoint', 'Neveu/Niece' => 'Neveu/Nièce', 'Fils/Fille' => 'Fils/Fille', 'Oncle/Tante' => 'Oncle/Tante', 'Frere/Soeur' => 'Frère/Soeur', 'Autre' => 'Autre'], null, ['class' => 'form-control lien', 'required' => 'required']); ?>
+                                <?php echo Form::select('lien', ['' => 'Selectionner une option', 'Conjoint' => 'Conjoint', 'Neveu/Niece' => 'Neveu/Nièce', 'Fils/Fille' => 'Fils/Fille', 'Oncle/Tante' => 'Oncle/Tante', 'Frere/Soeur' => 'Frère/Soeur'], null, ['class' => 'form-control lien', 'required' => 'required']); ?>
                             </div>
                         </div>
                     </div>
+                    <?php echo Form::hidden('activite_communautaire_id', $id, []); ?>
+                    
                     <hr class="panel-wide">
                     <div class="form-group row">
                         <button type="submit" class="btn btn--primary w-100 h-45"> @lang('Envoyer')</button>
@@ -76,7 +78,7 @@
 @endsection
 
 @push('breadcrumb-plugins')
-    <x-back route="{{ route('manager.suivi.formation.visiteur.visiteurs', $id) }}" />
+    <x-back route="{{ route('manager.communaute.nonmembre.nonmembre', $id) }}" />
 @endpush
 
 @push('script')
