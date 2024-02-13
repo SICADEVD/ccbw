@@ -5,7 +5,7 @@
             <div class="card">
                 <div class="card-body">
                     {!! Form::model($nonmembre, [
-                        'route' => ['manager.suivi.formation.visiteur.storevisiteur', $nonmembre->id],
+                        'route' => ['manager.communaute.nonmembre.storenonmembre', $nonmembre->id],
                         'method' => 'POST',
                         'class' => 'form-horizontal',
                         'id' => 'flocal',
