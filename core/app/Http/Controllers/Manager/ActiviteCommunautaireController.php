@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Manager;
 
-use App\Models\Localite;
 use PDF;
+use App\Models\Localite;
 use App\Models\Producteur;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\File;
 use App\Models\ActiviteCommunautaire;
 use Illuminate\Support\Facades\Storage;
 use App\Models\ActiviteCommunautaireLocalite;
+use App\Models\ActiviteCommunautaireNonMembre;
 use App\Models\ActiviteCommunautaireBeneficiaire;
 
 class ActiviteCommunautaireController extends Controller
@@ -24,25 +25,25 @@ class ActiviteCommunautaireController extends Controller
     public function index()
     {
         $pageTitle      = "Gestion des Activités Communautaires";
-        $manager   = auth()->user(); 
+        $manager   = auth()->user();
         $activites = ActiviteCommunautaire::dateFilter()->searchable([])->latest('id')->where('cooperative_id', $manager->cooperative_id)->where(function ($q) {
             if (request()->localite != null) {
                 $q->where('localite_id', request()->localite);
             }
         })->with('cooperative')->paginate(getPaginate());
 
-        if(request()->download){
+        if (request()->download) {
             $activite = ActiviteCommunautaire::find(decrypt(request()->download));
-            $activiteNameFile = Str::slug($activite->titre_projet.'-'.$activite->code,'-');
-            $activiteNameFile = $activiteNameFile.'.pdf';
-            if(!file_exists(storage_path(). "/app/public/activiteCommunautaire-pdf")){  
-                File::makeDirectory(storage_path(). "/app/public/activiteCommunautaire-pdf", 0777, true);
+            $activiteNameFile = Str::slug($activite->titre_projet . '-' . $activite->code, '-');
+            $activiteNameFile = $activiteNameFile . '.pdf';
+            if (!file_exists(storage_path() . "/app/public/activiteCommunautaire-pdf")) {
+                File::makeDirectory(storage_path() . "/app/public/activiteCommunautaire-pdf", 0777, true);
             }
-            @unlink(storage_path('app/public/activiteCommunautaire-pdf'). "/".$activiteNameFile);
-               
+            @unlink(storage_path('app/public/activiteCommunautaire-pdf') . "/" . $activiteNameFile);
+
             return PDF::loadView('manager.activite-communautaire.pdf-activite', compact('activite'))
-                    ->download($activiteNameFile);
-                   // ->save(storage_path(). "/app/public/producteurs-pdf/".$producteurNameFile);
+                ->download($activiteNameFile);
+            // ->save(storage_path(). "/app/public/producteurs-pdf/".$producteurNameFile);
         }
 
         return view('manager.activite-communautaire.index', compact('pageTitle', 'activites'));
@@ -56,10 +57,10 @@ class ActiviteCommunautaireController extends Controller
     public function create()
     {
         $pageTitle = "Ajouter une Activité Communautaire";
-        $manager = auth()->user(); 
+        $manager = auth()->user();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id', $manager->cooperative_id], ['localites.status', 1]])->orderBy('nom')->get();
         $producteurs = Producteur::with('localite')->get();
-        return view('manager.activite-communautaire.create', compact('pageTitle','localites','producteurs'));
+        return view('manager.activite-communautaire.create', compact('pageTitle', 'localites', 'producteurs'));
     }
 
     /**
@@ -80,11 +81,10 @@ class ActiviteCommunautaireController extends Controller
             'documents_joints.*' => 'nullable|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:2048'
         ];
         $request->validate($validationRule);
-        if($request->id){
+        if ($request->id) {
             $communaute = ActiviteCommunautaire::find($request->id);
             $message = "Activité Communautaire modifiée avec succès";
-        }
-        else{
+        } else {
             $communaute = new ActiviteCommunautaire();
             $communaute->code = $this->generateCode();
             $message = "Activité Communautaire ajoutée avec succès";
@@ -147,13 +147,13 @@ class ActiviteCommunautaireController extends Controller
             }
             $communaute->documents_joints = json_encode($paths);
         }
-            
+
         $communaute->save();
-        if($communaute != null){
+        if ($communaute != null) {
             $id = $communaute->id;
             ActiviteCommunautaireLocalite::where('activite_communautaire_id', $id)->delete();
-            if($request->localite != null && !collect($request->localite)->contains(null)){
-                foreach($request->localite as $localite){
+            if ($request->localite != null && !collect($request->localite)->contains(null)) {
+                foreach ($request->localite as $localite) {
                     $communauteLocalite = new ActiviteCommunautaireLocalite();
                     $communauteLocalite->activite_communautaire_id = $id;
                     $communauteLocalite->localite_id = $localite;
@@ -162,25 +162,24 @@ class ActiviteCommunautaireController extends Controller
             }
             $selectedLocalites = $request->localite;
             $selectedProducteurs = $request->producteur;
-            if($selectedLocalites != null && $selectedProducteurs != null){
+            if ($selectedLocalites != null && $selectedProducteurs != null) {
                 ActiviteCommunautaireBeneficiaire::where('activite_communautaire_id', $id)->delete();
-                foreach($selectedProducteurs as $producteurId){
+                foreach ($selectedProducteurs as $producteurId) {
                     list($localiteId, $producteurId) = explode('-', $producteurId);
                     $data[] = [
                         'activite_communautaire_id' => $id,
                         'localite_id' => $localiteId,
                         'producteur_id' => $producteurId
                     ];
-                    
                 }
                 ActiviteCommunautaireBeneficiaire::insert($data);
             }
         }
         $notify[] = ['success', isset($message) ? $message : 'Activité Communautaire ajoutée avec succès.'];
         return back()->withNotify($notify);
-        
     }
-    private function generateCode(){
+    private function generateCode()
+    {
         static $nbr = 0;
         $nbr++;
         $year = date('Y');
@@ -196,11 +195,11 @@ class ActiviteCommunautaireController extends Controller
     public function show($id)
     {
         $pageTitle = "Détails de l'Activité Communautaire";
-        $manager = auth()->user(); 
+        $manager = auth()->user();
         $communauteSociale = ActiviteCommunautaire::find($id); // Remplacez ActionSociale par le nom de votre modèle
         $dataLocalite = ActiviteCommunautaireLocalite::where('activite_communautaire_id', $id)->pluck('localite_id')->toArray();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id', $manager->cooperative_id], ['localites.status', 1]])->orderBy('nom')->get();
-        return view('manager.activite-communautaire.show', compact('pageTitle','communauteSociale','dataLocalite','localites'));
+        return view('manager.activite-communautaire.show', compact('pageTitle', 'communauteSociale', 'dataLocalite', 'localites'));
     }
 
     /**
@@ -212,7 +211,7 @@ class ActiviteCommunautaireController extends Controller
     public function edit($id)
     {
         $pageTitle = "Modifier une Activité Communautaire";
-        $manager = auth()->user(); 
+        $manager = auth()->user();
         $communauteSociale = ActiviteCommunautaire::find($id); // Remplacez ActionSociale par le nom de votre modèle
         // $dataLocalite = ActiviteCommunautaireLocalite::where('activite_communautaire_id', $id)->pluck('localite_id')->toArray();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id', $manager->cooperative_id], ['localites.status', 1]])->orderBy('nom')->get();
@@ -222,20 +221,68 @@ class ActiviteCommunautaireController extends Controller
             $dataLocalite[] = $item->localite_id;
             $producteursSelected[] = $item->producteur_id;
         }
-        
-        return view('manager.activite-communautaire.edit', compact('localites','pageTitle','communauteSociale','dataLocalite','producteurs','producteursSelected'));
+
+        return view('manager.activite-communautaire.edit', compact('localites', 'pageTitle', 'communauteSociale', 'dataLocalite', 'producteurs', 'producteursSelected'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function nonmembre($id)
     {
-        //
+        // $nonmembres = SuiviFormationVisiteur::dateFilter()->searchable(['suivi_formation_visiteurs.nom', 'suivi_formation_visiteurs.prenom'])->latest('suivi_formation_visiteurs.id')->joinRelationship('suiviFormation.localite.section')
+        //     ->where('sections.cooperative_id', $manager->cooperative_id)
+        //     ->where(function ($q) use ($id) {
+        //         if (request()->localite != null) {
+        //             $q->where('localite_id', request()->localite);
+        //         }
+
+        //         if (request()->module != null) {
+        //             $q->where('type_formation_id', request()->module);
+        //         }
+
+        //         if ($id != null) {
+        //             $q->where('suivi_formation_visiteurs.suivi_formation_id', $id);
+        //         }
+        //     })
+        //     ->with('suiviFormation')
+        //     ->paginate(getPaginate());
+        $pageTitle = "Liste des Non Membres";
+        $nonmembres = ActiviteCommunautaireNonMembre::dateFilter()->searchable(['nom', 'prenom'])->latest('id')->paginate(getPaginate());
+        return view('manager.activite-communautaire.non-membre', compact('nonmembres', 'pageTitle', 'id'));
+    }
+
+    public function createnonmembre($id)
+    {
+        $pageTitle = "Ajouter un Non Membre";
+        $activite = ActiviteCommunautaire::find($id);
+        return view('manager.activite-communautaire.non-membrecreate', compact('pageTitle', 'id'));
+    }
+
+    public function storenonmembre(Request $request)
+    {
+        $validationRule = [
+            'nom' => 'required',
+            'prenom' => 'required',
+            'sexe' => 'required',
+            'date_naissance' => 'required',
+            'telephone' => 'required',
+            'email' => 'required',
+            'localite_id' => 'required',
+            'profession' => 'required',
+            'adresse' => 'required',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'documents_joints.*' => 'nullable|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:2048'
+        ];
+        $request->validate($validationRule);
+        if ($request->id) {
+            $communaute = ActiviteCommunautaire::find($request->id);
+            $message = "Activité Communautaire modifiée avec succès";
+        } else {
+            $communaute = new ActiviteCommunautaire();
+            $communaute->code = $this->generateCode();
+            $message = "Activité Communautaire ajoutée avec succès";
+        }
+    }
+    public function editnonmembre($id)
+    {
     }
 
     /**

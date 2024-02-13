@@ -89,7 +89,7 @@
 
                                         <td> @php echo $activite->statusBadge; @endphp </td>
                                         <td>
-                                            <a href="" class="btn btn-sm btn--info ml-1">@lang('Non membre')</a>
+                                            <a href="{{ route('manager.communaute.nonmembre.nonmembre',$activite->id) }}" class="btn btn-sm btn--info ml-1">@lang('Non membre')</a>
                                             <a href="{{ route('manager.communaute.activite.communautaire.index', ['download' => encrypt($activite->id)]) }}"
                                                 class="btn btn-sm btn--danger"><i
                                                     class="la la-file-pdf-o"></i>@lang('PDF')</a>
