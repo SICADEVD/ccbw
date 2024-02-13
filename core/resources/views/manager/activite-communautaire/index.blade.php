@@ -58,7 +58,7 @@
                                         <td>
                                             <span class="fw-bold">{{ $activite->code }}</span>
                                         </td>
-                                        
+
                                         <td>
                                             <span class="small">
                                                 {{ $activite->type_projet }}
@@ -89,18 +89,22 @@
 
                                         <td> @php echo $activite->statusBadge; @endphp </td>
                                         <td>
-                                        <a href="{{ route('manager.communaute.activite.communautaire.index', ['download'=> encrypt($activite->id)]) }}" class="btn btn-sm btn--danger"><i class="la la-file-pdf-o"></i>@lang('PDF')</a>
-                                        <a href="{{ route('manager.communaute.activite.communautaire.show', $activite->id) }}"
-                                                    class="btn btn-sm btn-outline--info"><i
-                                                        class="las la-file-invoice"></i>@lang('Détail')</a>   
-                                        <button type="button" class="btn btn-sm btn-outline--primary"
+                                            <a href="" class="btn btn-sm btn--info ml-1">@lang('Non membre')</a>
+                                            <a href="{{ route('manager.communaute.activite.communautaire.index', ['download' => encrypt($activite->id)]) }}"
+                                                class="btn btn-sm btn--danger"><i
+                                                    class="la la-file-pdf-o"></i>@lang('PDF')</a>
+                                            <a href="{{ route('manager.communaute.activite.communautaire.show', $activite->id) }}"
+                                                class="btn btn-sm btn-outline--info"><i
+                                                    class="las la-file-invoice"></i>@lang('Détail')</a>
+                                            <button type="button" class="btn btn-sm btn-outline--primary"
                                                 data-bs-toggle="dropdown" aria-expanded="false"><i
                                                     class="las la-ellipsis-v"></i>@lang('activite')
                                             </button>
                                             <div class="dropdown-menu p-0">
+
                                                 <a href="{{ route('manager.communaute.activite.communautaire.edit', $activite->id) }}"
                                                     class="dropdown-item"><i class="la la-pen"></i>@lang('Edit')</a>
-                                                
+
                                                 @if ($activite->status == Status::DISABLE)
                                                     <button type="button" class="confirmationBtn  dropdown-item"
                                                         data-activite="{{ route('manager.communaute.activite.communautaire.status', $activite->id) }}"

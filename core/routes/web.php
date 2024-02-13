@@ -526,6 +526,10 @@ Route::middleware('auth')->group(function () {
             Route::get('activite/communautaire/edit/{id}', [ActiviteCommunautaireController::class,'edit'])->name('activite.communautaire.edit');
             Route::get('activite/communautaire/show/{id}', [ActiviteCommunautaireController::class,'show'])->name('activite.communautaire.show');
             Route::post('activite/communautaire/status/{id}', [ActiviteCommunautaireController::class,'status'])->name('activite.communautaire.status');
+            Route::get('non-membre/{id}', [ActiviteCommunautaireController::class,'nonmembre'])->name('nonmembre.nonmembre');
+            Route::get('non-membre/create/{id}', [ActiviteCommunautaireController::class,'createnonmembre'])->name('nonmembre.createnonmembre');
+            Route::post('non-membre/store', [ActiviteCommunautaireController::class,'storenonmembre'])->name('nonmembre.storenonmembre');
+            Route::get('non-membre/edit/{id}', [ActiviteCommunautaireController::class,'editnonmembre'])->name('nonmembre.editnonmembre');
             Route::get('activite/communautaire/exportActiviteCommunautaireExcel', [ActiviteCommunautaireController::class,'exportExcel'])->name('activite.communautaire.exportExcel.activiteCommunautaireAll');
 
         });
