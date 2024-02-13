@@ -281,12 +281,19 @@ class ActiviteCommunautaireController extends Controller
         $nonmembre->representer = $request->representer;
         $nonmembre->lien = $request->lien;
         $nonmembre->producteur_id = $request->producteur;
+        $nonmembre->activite_communautaire_id = $request->activite_communautaire_id;
         $nonmembre->save();
         $notify[] = ['success', isset($message) ? $message : 'Non Membre ajouté avec succès.'];
         return back()->withNotify($notify);
     }
     public function editnonmembre($id)
     {
+        $pageTitle = "Modifier un Non Membre";
+        $nonmembre = ActiviteCommunautaireNonMembre::find($id);
+        $activite = ActiviteCommunautaire::find($nonmembre->activite_communautaire_id);
+        $localiteIds = array_unique($activite->beneficiaires->pluck('localite_id')->toArray());
+        $producteurs = Producteur::whereIn('localite_id', $localiteIds)->get();
+        return view('manager.activite-communautaire.non-membreedit', compact('pageTitle', 'nonmembre', 'producteurs', 'activite', 'localiteIds'));
     }
 
     /**
