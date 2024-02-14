@@ -17,7 +17,7 @@
                         <label class="col-sm-4 control-label" for="type_projet">Type de projet:</label>
                         <div class="col-xs-12 col-sm-8">
                             <select id="type_projet" class="form-control" name="type_projet" required>
-                                <option value="Hydrolique villageoise">Hydrolique villageoise</option>
+                                <option value="Hydraulique villageoise">Hydraulique villageoise</option>
                                 <option value="Education"
                                     {{ old('type_projet') == 'Hydrolique villageois' ? 'selected' : '' }}>Education</option>
                                 <option value="Voirie" {{ old('type_projet') == 'Voirie' ? 'selected' : '' }}>Voirie
