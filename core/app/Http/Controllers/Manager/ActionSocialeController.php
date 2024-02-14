@@ -33,20 +33,20 @@ class ActionSocialeController extends Controller
             }
         })->with('cooperative')->paginate(getPaginate());
 
-        if(request()->download){
+        if (request()->download) {
             $actionsociale = ActionSociale::find(decrypt(request()->download));
-            $actionsocialeNameFile = Str::slug($actionsociale->titre_projet.'-'.$actionsociale->code,'-');
-            $actionsocialeNameFile = $actionsocialeNameFile.'.pdf';
-            if(!file_exists(storage_path(). "/app/public/actionsociales-pdf")){  
-                File::makeDirectory(storage_path(). "/app/public/actionsociales-pdf", 0777, true);
+            $actionsocialeNameFile = Str::slug($actionsociale->titre_projet . '-' . $actionsociale->code, '-');
+            $actionsocialeNameFile = $actionsocialeNameFile . '.pdf';
+            if (!file_exists(storage_path() . "/app/public/actionsociales-pdf")) {
+                File::makeDirectory(storage_path() . "/app/public/actionsociales-pdf", 0777, true);
             }
-            @unlink(storage_path('app/public/actionsociales-pdf'). "/".$actionsocialeNameFile);
-               
+            @unlink(storage_path('app/public/actionsociales-pdf') . "/" . $actionsocialeNameFile);
+
             return PDF::loadView('manager.action-sociale.pdf-actionsociale', compact('actionsociale'))
-                    ->download($actionsocialeNameFile);
-                   // ->save(storage_path(). "/app/public/producteurs-pdf/".$producteurNameFile);
+                ->download($actionsocialeNameFile);
+            // ->save(storage_path(). "/app/public/producteurs-pdf/".$producteurNameFile);
         }
-        
+
         return view('manager.action-sociale.index', compact('pageTitle', 'actions'));
     }
 
@@ -90,7 +90,7 @@ class ActionSocialeController extends Controller
             $message = 'Action Sociale modifiée avec succès.';
         } else {
             $action = new ActionSociale();
-          
+
             $action->code = $this->generateCode($request);
             $message = 'Action Sociale ajoutée avec succès.';
         }
@@ -105,19 +105,7 @@ class ActionSocialeController extends Controller
         $action->date_livraison = $request->date_livraison;
         $action->commentaires = $request->commentaires;
         $action->cooperative_id = auth()->user()->cooperative_id;
-        // if ($request->has('photos')) {
-        //     $paths = [];
-        //     foreach ($request->file('photos') as $photo) {
-        //         try {
-        //             $path = $photo->store('public/ActionSociales/photos');
-        //             $paths[] = $path;
-        //         } catch (\Exception $exp) {
-        //             $notify[] = ['error', 'Impossible de télécharger votre image'];
-        //             return back()->withNotify($notify);
-        //         }
-        //     }
-        //     $action->photos = json_encode($paths);
-        // }
+        
         if ($request->has('photos')) {
             $paths = [];
             foreach ($request->file('photos') as $photo) {
@@ -190,7 +178,7 @@ class ActionSocialeController extends Controller
                 }
                 ActionSocialeLocalite::insert($data1);
             }
-            if($request->autreBeneficiaire != null && !collect($request->autreBeneficiaire)->contains(null)) {
+            if ($request->autreBeneficiaire != null && !collect($request->autreBeneficiaire)->contains(null)) {
                 ActionSocialeAutreBeneficiaire::where('action_sociale_id', $action->id)->delete();
                 $data2 = [];
                 foreach ($request->autreBeneficiaire as $beneficiaire) {
@@ -201,9 +189,6 @@ class ActionSocialeController extends Controller
                 }
                 ActionSocialeAutreBeneficiaire::insert($data2);
             }
-            
-           
-
         }
 
         $notify[] = ['success', isset($message) ? $message : 'Action Sociale ajoutée avec succès.'];
@@ -220,11 +205,33 @@ class ActionSocialeController extends Controller
 
     private function generateCode(Request $request)
     {
-        static $number = 0;
+        $number = ActionSociale::count();
         $number++;
+
         $year = \Carbon\Carbon::parse($request->date_livraison)->year;
+
         return sprintf('CR-AS-%s-%03d', $year, $number);
     }
+
+    // private function generateCode(Request $request)
+    // {
+        
+    //     $code = \App\Models\Code::first();
+
+        
+    //     if ($code === null) {
+    //         $code = new \App\Models\Code;
+    //         $code->last_number = 0;
+    //     }
+
+    //     $code->last_number++;
+
+    //     $code->save();
+
+    //     $year = \Carbon\Carbon::parse($request->date_livraison)->year;
+
+    //     return sprintf('CR-AS-%s-%03d', $year, $code->last_number);
+    // }
 
     /**
      * Display the specified resource.

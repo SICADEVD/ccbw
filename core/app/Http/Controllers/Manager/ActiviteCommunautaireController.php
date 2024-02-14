@@ -178,11 +178,11 @@ class ActiviteCommunautaireController extends Controller
         $notify[] = ['success', isset($message) ? $message : 'Activité Communautaire ajoutée avec succès.'];
         return back()->withNotify($notify);
     }
-    private function generateCode()
+    private function generateCode(Request $request)
     {
-        static $nbr = 0;
+        $nbr = ActiviteCommunautaire::count();
         $nbr++;
-        $year = date('Y');
+        $year = \Carbon\Carbon::parse($request->date_livraison)->year;
         return sprintf('CR-AC-%s-%03d', $year, $nbr);
     }
 
@@ -227,23 +227,6 @@ class ActiviteCommunautaireController extends Controller
 
     public function nonmembre($id)
     {
-        // $nonmembres = SuiviFormationVisiteur::dateFilter()->searchable(['suivi_formation_visiteurs.nom', 'suivi_formation_visiteurs.prenom'])->latest('suivi_formation_visiteurs.id')->joinRelationship('suiviFormation.localite.section')
-        //     ->where('sections.cooperative_id', $manager->cooperative_id)
-        //     ->where(function ($q) use ($id) {
-        //         if (request()->localite != null) {
-        //             $q->where('localite_id', request()->localite);
-        //         }
-
-        //         if (request()->module != null) {
-        //             $q->where('type_formation_id', request()->module);
-        //         }
-
-        //         if ($id != null) {
-        //             $q->where('suivi_formation_visiteurs.suivi_formation_id', $id);
-        //         }
-        //     })
-        //     ->with('suiviFormation')
-        //     ->paginate(getPaginate());
         $pageTitle = "Liste des Non Membres";
         $nonmembres = ActiviteCommunautaireNonMembre::dateFilter()->searchable(['nom', 'prenom'])->latest('id')->paginate(getPaginate());
         return view('manager.activite-communautaire.non-membre', compact('nonmembres', 'pageTitle', 'id'));
