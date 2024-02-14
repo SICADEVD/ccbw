@@ -86,7 +86,7 @@ class ActiviteCommunautaireController extends Controller
             $message = "Activité Communautaire modifiée avec succès";
         } else {
             $communaute = new ActiviteCommunautaire();
-            $communaute->code = $this->generateCode();
+            $communaute->code = $this->generateCode($request);
             $message = "Activité Communautaire ajoutée avec succès";
         }
         $communaute->titre_projet = $request->titre_projet;
