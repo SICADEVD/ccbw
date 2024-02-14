@@ -91,7 +91,7 @@ class ActionSocialeController extends Controller
         } else {
             $action = new ActionSociale();
           
-            $action->code = $this->generateCode();
+            $action->code = $this->generateCode($request);
             $message = 'Action Sociale ajoutée avec succès.';
         }
         $action->type_projet = $request->type_projet;
@@ -209,12 +209,20 @@ class ActionSocialeController extends Controller
         $notify[] = ['success', isset($message) ? $message : 'Action Sociale ajoutée avec succès.'];
         return back()->withNotify($notify);
     }
+    // public function generCode(Request $request)
+    // {
+    //     if ($request->has('date')) {
+    //         $date = \Carbon\Carbon::parse($request->date);
+    //         $year = $date->year;
+    //         return $year;
+    //     }
+    // }
 
-    private function generateCode()
+    private function generateCode(Request $request)
     {
         static $number = 0;
         $number++;
-        $year = date('Y');
+        $year = \Carbon\Carbon::parse($request->date_livraison)->year;
         return sprintf('CR-AS-%s-%03d', $year, $number);
     }
 

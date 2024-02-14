@@ -518,6 +518,8 @@ Route::middleware('auth')->group(function () {
             Route::post('action/sociale/status/{id}', [ActionSocialeController::class,'status'])->name('action.sociale.status');
             Route::get('action/sociale/exportActionSocialeExcel', [ActionSocialeController::class,'exportExcel'])->name('action.sociale.exportExcel.actionSocialeAll');
 
+            Route::post('action/sociale/generCode', [ActionSocialeController::class,'generCode'])->name('action.sociale.generCode');
+
         // Activite communautaire
             Route::get('activite/communautaire/list', [ActiviteCommunautaireController::class,'index'])->name('activite.communautaire.index');
             Route::get('activite/communautaire/create', [ActiviteCommunautaireController::class,'create'])->name('activite.communautaire.create');

@@ -50,8 +50,8 @@
                     <div class="form-group row">
                         <label class="col-sm-4 control-label" for="beneficiaires_projet">Bénéficiaires du projet:</label>
                         <div class="col-xs-12 col-sm-8">
-                            <select class="form-control select2-multi-select" name="beneficiaires_projet[]" id="beneficiaires_projet" required
-                                multiple>
+                            <select class="form-control select2-multi-select" name="beneficiaires_projet[]"
+                                id="beneficiaires_projet" required multiple>
                                 <option value="">@lang('Selectionner une option')</option>
                                 @foreach ($localites as $localite)
                                     <option value="{{ $localite->id }}" @selected(old('localite'))>
@@ -61,7 +61,8 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-4 control-label" for="beneficiaires_projet"> Autres bénéficiaires du projet:</label>
+                        <label class="col-sm-4 control-label" for="beneficiaires_projet"> Autres bénéficiaires du
+                            projet:</label>
                         <div class="col-xs-12 col-sm-8">
                             <table class="table table-striped table-bordered">
                                 <tbody id="beneficiaire_area">
@@ -75,8 +76,7 @@
                                             <div class="col-xs-12 col-sm-12">
                                                 <div class="form-group row">
                                                     <input type="text" id="autreBeneficiaire-1" class="form-control mt-3"
-                                                        name="autreBeneficiaire[]"
-                                                        placeholder="Autres bénéficiaires"
+                                                        name="autreBeneficiaire[]" placeholder="Autres bénéficiaires"
                                                         value="{{ old('partenaire') }}">
                                                 </div>
                                             </div>
@@ -87,15 +87,15 @@
                                     <tr>
 
                                         <td colspan="3">
-                                            <button id="addRowBeneficiare" type="button"
-                                                class="btn btn-success btn-sm"><i class="fa fa-plus"></i></button>
+                                            <button id="addRowBeneficiare" type="button" class="btn btn-success btn-sm"><i
+                                                    class="fa fa-plus"></i></button>
                                         </td>
                                     <tr>
                                 </tfoot>
                             </table>
                         </div>
                     </div>
-                    
+
                     <div class="form-group row">
                         <label class="col-sm-4 control-label" for="date_livraison">Date de la livraison:</label>
                         <div class="col-xs-12 col-sm-8">
@@ -207,16 +207,16 @@
                         </div>
                     </div>
 
-                    
+
 
                     <div class="form-group row">
                         <label class="col-sm-4 control-label" for="photos">Photos:</label>
                         <div class="col-xs-12 col-sm-8">
                             <input type="file" id="photos1" class="form-control dropify-fr" name="photos[]"
                                 accept="image/*" multiple="" class="dropify" data-height="70">
-                                <div id="insertBefore"></div>
+                            <div id="insertBefore"></div>
                         </div>
-                        
+
                         <!--  ADD ITEM START-->
                         <div class="row px-lg-4 px-md-4 px-3 pb-3 pt-0 mb-3  mt-2">
                             <div class="col-md-12">
@@ -230,10 +230,10 @@
                         <div class="col-xs-12 col-sm-8">
                             <input type="file" id="documents_joints1" class="form-control dropify-fr"
                                 name="documents_joints[]" multiple="" class="dropify" data-height="70">
-                                <div id="insertBeforeNew"></div>
+                            <div id="insertBeforeNew"></div>
                         </div>
 
-                        
+
                         <!--  ADD ITEM START-->
                         <div class="row px-lg-4 px-md-4 px-3 pb-3 pt-0 mb-3  mt-2">
                             <div class="col-md-12">
@@ -342,7 +342,7 @@
         });
 
         $(document).ready(function() {
-            //intrants lannee derniere
+
             var partenairesCount = $("#partenaire_area tr").length;
 
             $(document).on('click', '#addRowPartenaire', function() {
@@ -383,17 +383,17 @@
                 var html_table = '<tr>';
                 html_table +=
                     '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm text-white">Autres bénéficiaires ' +
-                   beneficiairesCount+
+                    beneficiairesCount +
                     '</badge></div><div class="col-xs-12 col-sm-12"><div class="form-group"><input placeholder="Autres bénéficiaires" class="form-control" id="autreBeneficiaire-' +
-                   beneficiairesCount+
+                    beneficiairesCount +
                     '" name="autreBeneficiaire[]" type="text"></div></div><div class="col-xs-12 col-sm-12"><button type="button" id="' +
-                   beneficiairesCount+
+                    beneficiairesCount +
                     '" class="removeRowBeneficiaire btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></div></td>';
 
                 html_table += '</tr>';
                 //---> End create table tr
 
-               beneficiairesCount= parseInt(beneficiairesCount) + 1;
+                beneficiairesCount = parseInt(beneficiairesCount) + 1;
                 $('#beneficiaire_area').append(html_table);
 
             });
@@ -402,7 +402,7 @@
                 var row_id = $(this).attr('id');
                 if (row_id == $("#beneficiaire_area tr").length) {
                     $(this).parents('tr').remove();
-                   beneficiairesCount= parseInt(beneficiairesCount) - 1;
+                    beneficiairesCount = parseInt(beneficiairesCount) - 1;
                 }
             });
 
@@ -410,16 +410,16 @@
         });
 
         $('#producteurs').change(function() {
-        $.ajax({
+            $.ajax({
                 type: 'GET',
                 url: "{{ route('manager.livraison.magcentral.get.listeproducteur') }}",
                 data: $('#flocal').serialize(),
                 success: function(html) {
                     $('#listeprod').html(html.results);
                     $('#poidsnet').val(html.total);
-                    
+
                 }
             });
-});
+        });
     </script>
 @endpush
