@@ -403,7 +403,7 @@
                                                                     id="intrantsAnneDerniere-{{ $index }}"
                                                                     class="form-control">
                                                                     <option value="">Selectionner une option</option>
-                                                                    <option value="Herbicides"
+                                                                    <option value="Dechets animaux"
                                                                         {{ $intrant['nom'] == 'Dechets animaux' ? 'selected' : '' }}>
                                                                         Dechets animaux</option>
                                                                     <option value="NPK"
