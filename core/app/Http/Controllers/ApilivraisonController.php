@@ -285,7 +285,7 @@ class ApilivraisonController extends Controller
             ->join('livraison_products', 'livraison_products.livraison_info_id', '=', 'livraison_infos.id')
             ->join('parcelles', 'parcelles.id', '=', 'livraison_products.parcelle_id')
             ->join('producteurs', 'producteurs.id', '=', 'parcelles.producteur_id')
-            ->select('magasin_sections.id as id', 'magasin_sections.section_id as section', 'magasin_sections.staff_id as magasinier', 'magasin_sections.nom as magasinSection', 'magasin_sections.code as codeMagasinSection','livraison_infos.sender_staff_id as Delegue','livraison_products.type_produit as typeProduit','livraison_products.certificat as certificat','livraison_products.qty as quantiteMagasinSection','livraison_products.qty_sortant as quantiteLivreMagCentral ','producteurs.nom','producteurs.prenoms')
+            ->select('magasin_sections.id as id', 'magasin_sections.section_id as section', 'magasin_sections.staff_id as magasinier', 'magasin_sections.nom as magasinSection', 'magasin_sections.code as codeMagasinSection','livraison_infos.sender_staff_id as Delegue','livraison_products.type_produit as typeProduit','livraison_products.certificat as certificat','livraison_products.parcelle_id as parcelle','livraison_products.qty as quantiteMagasinSection','livraison_products.qty_sortant as quantiteLivreMagCentral ','producteurs.nom','producteurs.prenoms')
             ->get();
             return response()->json($magasins, 201);
     }
