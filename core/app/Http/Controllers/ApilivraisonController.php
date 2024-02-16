@@ -212,12 +212,16 @@ class ApilivraisonController extends Controller
         $campagne = Campagne::active()->first();
         $periode = CampagnePeriode::where([['campagne_id', $campagne->id], ['periode_debut', '<=', gmdate('Y-m-d')], ['periode_fin', '>=', gmdate('Y-m-d')]])->latest()->first();
 
+        if ($request->code == null) {
+            $livraison->numero_connaissement = $this->generecodeConnais();
+        }
+
         $livraison->cooperative_id   = $manager->cooperative_id;
         $livraison->campagne_id    = $campagne->id;
         $livraison->campagne_periode_id = $periode->id;
         $livraison->magasin_centraux_id = $request->magasin_central;
         $livraison->magasin_section_id = $request->sender_magasin;
-        $livraison->numero_connaissement = $request->code;
+        //$livraison->numero_connaissement = $request->code;
         $livraison->type_produit = json_encode($request->type);
         $livraison->stocks_mag_entrant = $request->poidsnet;
         $livraison->stocks_mag_sacs_entrant = $request->nombresacs;
@@ -285,7 +289,7 @@ class ApilivraisonController extends Controller
             ->join('livraison_products', 'livraison_products.livraison_info_id', '=', 'livraison_infos.id')
             ->join('parcelles', 'parcelles.id', '=', 'livraison_products.parcelle_id')
             ->join('producteurs', 'producteurs.id', '=', 'parcelles.producteur_id')
-            ->select('magasin_sections.id as id', 'magasin_sections.section_id as section', 'magasin_sections.staff_id as magasinier', 'magasin_sections.nom as magasinSection', 'magasin_sections.code as codeMagasinSection','livraison_infos.sender_staff_id as Delegue','livraison_products.type_produit as typeProduit','livraison_products.certificat as certificat','livraison_products.parcelle_id as parcelle','livraison_products.qty as quantiteMagasinSection','livraison_products.qty_sortant as quantiteLivreMagCentral ','producteurs.nom','producteurs.prenoms')
+            ->select('magasin_sections.id as id', 'magasin_sections.section_id as section', 'magasin_sections.staff_id as magasinier', 'magasin_sections.nom as magasinSection', 'magasin_sections.code as codeMagasinSection','livraison_infos.sender_staff_id as Delegue','livraison_products.type_produit as typeProduit','livraison_products.certificat as certificat','livraison_products.parcelle_id as parcelle','livraison_products.qty as quantiteMagasinSection','livraison_products.qty_sortant as quantiteLivreMagCentral ','producteurs.id as producteur','producteurs.nom','producteurs.prenoms')
             ->get();
             return response()->json($magasins, 201);
     }
@@ -317,6 +321,40 @@ class ApilivraisonController extends Controller
         $remorques = DB::table('remorques')->get();
         return response()->json($remorques, 201);
     }
+
+    private function generecodeConnais()
+    {
+
+        $data = StockMagasinCentral::select('numero_connaissement')->orderby('id', 'desc')->first();
+
+        if ($data != null) {
+            $code = $data->numero_connaissement;
+            $chaine_number = Str::afterLast($code, '-');
+            if ($chaine_number < 10) {
+                $zero = "00000";
+            } else if ($chaine_number < 100) {
+                $zero = "0000";
+            } else if ($chaine_number < 1000) {
+                $zero = "000";
+            } else if ($chaine_number < 10000) {
+                $zero = "00";
+            } else if ($chaine_number < 100000) {
+                $zero = "0";
+            } else {
+                $zero = "";
+            }
+        } else {
+            $zero = "00000";
+            $chaine_number = 0;
+        }
+        if (!$chaine_number) $chaine_number = 0;
+        $sub = 'CMS-';
+        $lastCode = $chaine_number + 1;
+        $codeLiv = $sub . $zero . $lastCode;
+
+        return $codeLiv;
+    }
+
     public function generecodeliv()
     {
 
