@@ -166,12 +166,12 @@ return $contents;
         }
 
         $staff->cooperative_id = $manager->cooperative_id;
-        $staff->firstname = $request->firstname;
-        $staff->lastname  = $request->lastname;
-        $staff->username  = $request->username;
-        $staff->email     = $request->email;
-        $staff->mobile    = $request->mobile;
-        $staff->adresse    = $request->adresse;
+        $staff->firstname = trim($request->firstname);
+        $staff->lastname  = trim($request->lastname);
+        $staff->username  = trim($request->username);
+        $staff->email     = trim($request->email);
+        $staff->mobile    = trim($request->mobile);
+        $staff->adresse    = trim($request->adresse);
         $staff->user_type = 'staff';
         $staff->type_compte = $request->type_compte;
         $staff->password  = $request->password ? Hash::make($request->password) : $staff->password;
