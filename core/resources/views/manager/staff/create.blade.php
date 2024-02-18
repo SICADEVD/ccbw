@@ -20,7 +20,7 @@
                             <div class="form-group col-lg-4">
                                 <label>@lang('Localite')</label>
                                 <input id="chkall2" type="checkbox"> @lang('Selectionner tout')
-                                <select class="form-control select-picker selectAll" id="localite" name="localite[]" multiple
+                                <select class="form-control select2-multi-select selectAll" id="localite" name="localite[]" multiple
                                     required> 
                                 </select>
                             </div>
