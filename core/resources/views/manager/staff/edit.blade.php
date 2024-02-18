@@ -39,18 +39,6 @@
                                     @endforeach
                                 </select>
                             </div>
-
-                            <div class="form-group col-lg-4">
-                                <label>@lang('Type de compte')</label>
-                                <select class="form-control" name="type_compte" required>
-                                    <option value="web" @selected('web' == $staff->type_compte)>Web</option>
-                                    <option value="mobile" @selected('mobile' == $staff->type_compte)>Mobile</option>
-                                    <option value="mobile-web" @selected('mobile-web' == $staff->type_compte)>Mobile & Web</option>
-                                </select>
-                            </div>
-
-                        </div>
-                        <div class="row">
                             <div class="form-group col-lg-4">
                                 <label for="rolePermission" class="form-label">Role</label>
                                 <select class="form-control select-picker" name="role[]" multiple required>
@@ -60,6 +48,18 @@
                                             {{ in_array($role->name, $userRole) ? 'selected' : '' }}>
                                             {{ $role->name }}</option>
                                     @endforeach
+                                </select>
+                            </div>
+                            
+
+                        </div>
+                        <div class="row">
+                        <div class="form-group col-lg-4">
+                                <label>@lang('Type de compte')</label>
+                                <select class="form-control" name="type_compte" required>
+                                    <option value="web" @selected('web' == $staff->type_compte)>Web</option>
+                                    <option value="mobile" @selected('mobile' == $staff->type_compte)>Mobile</option>
+                                    <option value="mobile-web" @selected('mobile-web' == $staff->type_compte)>Mobile & Web</option>
                                 </select>
                             </div>
                             <div class="form-group col-lg-4">
