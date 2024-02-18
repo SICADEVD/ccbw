@@ -23,7 +23,7 @@
                             <div class="form-group col-lg-4">
                                 <label>@lang('Selectionner une Localite')</label>
                                 <input id="chkall2" type="checkbox"> @lang('Selectionner tout')
-                                <select class="form-control select2-multi-select selectAll" id="localite" name="localite[]" multiple
+                                <select class="form-control select-picker selectAll" id="localite" name="localite[]" multiple
                                     required> 
                                     @foreach ($localites as $localite)
                                         @php
@@ -53,7 +53,7 @@
                         <div class="row">
                             <div class="form-group col-lg-4">
                                 <label for="rolePermission" class="form-label">Role</label>
-                                <select class="form-control" name="role" required>
+                                <select class="form-control select-picker" name="role[]" multiple required>
                                     <option value="">Selectionner un rôle</option>
                                     @foreach ($roles as $role)
                                         <option value="{{ $role->id }}"
