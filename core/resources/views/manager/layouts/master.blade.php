@@ -710,7 +710,27 @@ $('.grid').masonry({
 
 
     </script>
-    
+    <script type="text/javascript">
+  $("#chkall").click(function(){
+        if($("#chkall").is(':checked')){
+            $(".selectAll > option").prop("selected", "selected");
+            $(".selectAll").trigger("change");
+        } else {
+            $(".selectAll > option").removeAttr("selected");
+            $(".selectAll").trigger("change");
+        }
+    });
+
+    $("#chkall2").click(function(){
+        if($("#chkall2").is(':checked')){
+            $(".selectAll > option").prop("selected", "selected");
+            $(".selectAll").trigger("change");
+        } else {
+            $(".selectAll > option").removeAttr("selected");
+            $(".selectAll").trigger("change");
+        }
+    });
+</script>
     @stack('script')
 </body>
 

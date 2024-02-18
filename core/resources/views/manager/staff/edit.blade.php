@@ -11,7 +11,8 @@
                         <div class="row">
                             <div class="form-group col-lg-4">
                                 <label>@lang('Section')</label>
-                                <select class="form-control select-picker" name="section[]" id="section" multiple required>
+                                <input id="chkall" type="checkbox"> @lang('Selectionner tout')
+                                <select class="form-control select-picker selectAll" name="section[]" id="section" multiple required>
                                    
                                     @foreach ($sections as $section)
                                         <option value="{{ $section->id }}" @selected(in_array($section->id, $userSection))>
@@ -21,7 +22,8 @@
                             </div>
                             <div class="form-group col-lg-4">
                                 <label>@lang('Selectionner une Localite')</label>
-                                <select class="form-control select2-multi-select" id="localite" name="localite[]" multiple
+                                <input id="chkall2" type="checkbox"> @lang('Selectionner tout')
+                                <select class="form-control select2-multi-select selectAll" id="localite" name="localite[]" multiple
                                     required> 
                                     @foreach ($localites as $localite)
                                         @php
