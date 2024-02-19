@@ -49,7 +49,7 @@ class InspectionController extends Controller
     {
         $pageTitle = "Ajouter une inspection";
         $manager   = auth()->user();
-        $producteurs  = Producteur::with('localite')->get();
+        $producteurs  = Producteur::joinRelationship('localite.section')->where('cooperative_id', $manager->cooperative_id)->with('localite')->get();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->get();
         $staffs  = User::staff()->get();
      
@@ -124,7 +124,7 @@ class InspectionController extends Controller
     {
         $pageTitle = "Mise à jour de l'inspection";
         $manager   = auth()->user();
-        $producteurs  = Producteur::with('localite')->get();
+        $producteurs  = Producteur::joinRelationship('localite.section')->where('cooperative_id', $manager->cooperative_id)->with('localite')->get();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->get();
         $staffs  = User::staff()->get();
         $categoriequestionnaire = CategorieQuestionnaire::with('questions')->get();
