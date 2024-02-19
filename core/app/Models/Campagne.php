@@ -11,7 +11,7 @@ use Kirschbaum\PowerJoins\PowerJoins;
 
 class Campagne extends Model
 {
-    use Searchable, GlobalStatus, PowerJoins, HasCooperative;
+    use Searchable, GlobalStatus, PowerJoins;
 
     public function cooperative()
     {

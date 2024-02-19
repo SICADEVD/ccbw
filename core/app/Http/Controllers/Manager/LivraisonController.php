@@ -91,6 +91,7 @@ class LivraisonController extends Controller
         $pageTitle = 'Enregistrement de livraison';
         $staff = auth()->user();
         $campagne = Campagne::active()->first();
+
         $periode = CampagnePeriode::where([['campagne_id', $campagne->id], ['periode_debut', '<=', gmdate('Y-m-d')], ['periode_fin', '>=', gmdate('Y-m-d')]])->latest()->first();
 
         $cooperatives = Cooperative::active()->orderBy('name')->get();
