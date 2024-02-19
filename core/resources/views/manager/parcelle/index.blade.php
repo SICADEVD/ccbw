@@ -79,9 +79,9 @@
                                 @forelse($parcelles as $parcelle)
                                     <tr>
                                         <td>
-                                            @if ($producteur->localite && $producteur->localite->section)
+                                            @if ($parcelle->producteur && $parcelle->producteur->localite && $parcelle->producteur->localite->section)
                                                 <span
-                                                    class="fw-bold">{{ __($producteur->localite->section->libelle) }}</span>
+                                                    class="fw-bold">{{ $parcelle->producteur->localite->section->libelle }}</span>
                                             @else
                                                 <span class="fw-bold">Pas de section</span>
                                             @endif
