@@ -13,7 +13,7 @@ use Illuminate\Support\Str;
                             <input type="hidden" name="table" value="parcelles" />
                             <div class="flex-grow-1">
                                 <label>@lang('Section')</label>
-                                <select name="section" class="form-control" id="section">
+                                <select name="section" class="form-control select2-basic" id="section">
                                     <option value="">@lang('Toutes')</option>
                                     @foreach ($sections as $local)
                                         <option value="{{ $local->id }}" {{ request()->section == $local->id ? 'selected' : '' }}>{{ $local->libelle }}</option>
@@ -22,7 +22,7 @@ use Illuminate\Support\Str;
                             </div>
                             <div class="flex-grow-1">
                                 <label>@lang('Localité')</label>
-                                <select name="localite" class="form-control" id="localite">
+                                <select name="localite" class="form-control select2-basic" id="localite">
                                     <option value="">@lang('Toutes')</option>
                                     @foreach ($localites as $local)
                                         <option value="{{ $local->id }}" data-chained="{{ $local->section_id }}" {{ request()->localite == $local->id ? 'selected' : '' }}>{{ $local->nom }}</option>
@@ -31,7 +31,7 @@ use Illuminate\Support\Str;
                             </div>
                             <div class="flex-grow-1">
                                 <label>@lang('Producteur')</label>
-                                <select name="producteur" class="form-control" id="producteur">
+                                <select name="producteur" class="form-control select2-basic" id="producteur">
                                     <option value="">@lang('Tous')</option>
                                     @foreach ($producteurs as $local)
                                         <option value="{{ $local->id }}" data-chained="{{ $local->localite_id }}" {{ request()->producteur == $local->id ? 'selected' : '' }}>{{ $local->nom }} {{ $local->prenoms }} ({{ $local->codeProd }})</option>
