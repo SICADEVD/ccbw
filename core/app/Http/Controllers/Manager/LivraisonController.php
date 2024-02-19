@@ -38,6 +38,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Models\LivraisonProductDetail;
 use App\Models\Producteur_certification;
 use App\Exports\ExportStockMagasinSection;
+use App\Models\Estimation;
 use App\Models\LivraisonMagasinCentralProducteur;
 
 class LivraisonController extends Controller
@@ -220,6 +221,21 @@ class LivraisonController extends Controller
                 'type_price'      => $periode->prix_champ,
                 'created_at'      => now(),
             ];
+
+            $estimation = Estimation::where([['campagne_id',$campagne->id],['parcelles_id',$item['parcelle']]])->first();
+
+          if($estimation !=null)
+          {
+            $estima_prod = $estimation->EsP;
+            $production = $estimation->productionAnnuelle + $item['quantity'];
+            if($production>=$estima_prod)
+            {
+             $estimation->etat = 'Atteint';
+            }
+            $estimation->productionAnnuelle = $estimation->productionAnnuelle + $item['quantity'];
+            $estimation->save();  
+
+          }
 
             $product = Producteur::where('id', $item['producteur'])->first();
             if ($product != null) {
