@@ -220,15 +220,21 @@
 
                 });
                 //$('#note').val(sum);
+                console.log('Conforme:'+conforme);
+                console.log('Non Conforme:'+nonconforme);
+                console.log('Non Applicable:'+nonapplicable);
+
                 $('#totalquestionnonconforme').val(nonconforme);
                 $('#totalquestionnonapplicable').val(nonapplicable);
                 totalquestionconforme = $('#totalquestion').val() - $('#totalquestionnonconforme').val();
                  
                 $('#totalquestionconforme').val(totalquestionconforme);
-                var total1= $('#totalquestionconforme').val();
+                //var total1= $('#totalquestionconforme').val();
+                var total1= conforme;
                 var total2 = $('#totalquestion').val() - $('#totalquestionnonapplicable').val();
                 
                 tauxconformite = (total1 / total2)*100;
+                console.log('Taux Conformite:'+tauxconformite)
                 $('#note').val(Math.round(tauxconformite));
                 //just update the total to sum
             }
