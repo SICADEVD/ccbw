@@ -52,12 +52,19 @@ class FormationController extends Controller
     {
         $pageTitle = "Ajouter un formation";
         $manager   = auth()->user();
-        $producteurs  = Producteur::with('localite')->get();
+        $producteurs  = Producteur::joinRelationship('localite.section')->where('cooperative_id', $manager->cooperative_id)->with('localite')->get();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id', $manager->cooperative_id], ['localites.status', 1]])->get();
         $typeformations  = TypeFormation::all();
         $themes  = ThemesFormation::with('typeFormation')->get();
         $sousThemes  = SousThemeFormation::with('themeFormation')->get();
-        $staffs  = User::staff()->get();
+        
+        $staffs = User::whereHas('roles', function ($q) {
+            $q->whereIn('name', ['Inspecteur','ADG']);
+            })
+            ->where('cooperative_id', $manager->cooperative_id)
+            ->select('users.*')
+            ->get();
+            
         return view('manager.formation.create', compact('pageTitle', 'producteurs', 'localites', 'typeformations', 'themes', 'staffs', 'sousThemes'));
     }
 
@@ -179,7 +186,7 @@ class FormationController extends Controller
     {
         $pageTitle = "Mise à jour de la formation";
         $manager   = auth()->user();
-        $producteurs  = Producteur::with('localite')->get();
+        $producteurs  = Producteur::joinRelationship('localite.section')->where('cooperative_id', $manager->cooperative_id)->with('localite')->get();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id', $manager->cooperative_id], ['localites.status', 1]])->get();
         $formation   = SuiviFormation::findOrFail($id);
         $typeformations  = TypeFormation::all();
@@ -203,7 +210,12 @@ class FormationController extends Controller
 
         $themes  = ThemesFormation::with('typeFormation')->get();
         $sousthemes  = SousThemeFormation::with('themeFormation')->get();
-        $staffs  = User::staff()->get();
+        $staffs = User::whereHas('roles', function ($q) {
+            $q->whereIn('name', ['Inspecteur','ADG']);
+            })
+            ->where('cooperative_id', $manager->cooperative_id)
+            ->select('users.*')
+            ->get();
         
         $dataProducteur = $dataVisiteur = $dataTheme = array();
 

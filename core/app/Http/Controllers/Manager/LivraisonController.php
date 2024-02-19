@@ -38,6 +38,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Models\LivraisonProductDetail;
 use App\Models\Producteur_certification;
 use App\Exports\ExportStockMagasinSection;
+use App\Models\Certification;
 use App\Models\Estimation;
 use App\Models\LivraisonMagasinCentralProducteur;
 
@@ -99,17 +100,18 @@ class LivraisonController extends Controller
         $magasins = MagasinSection::join('users', 'magasin_sections.staff_id', '=', 'users.id')->where([['cooperative_id', $staff->cooperative_id], ['magasin_sections.status', 1]])->with('user')->orderBy('nom')->select('magasin_sections.*')->get();
 
         $staffs = User::whereHas('roles', function ($q) {
-            $q->whereIn('name', ['Delegue']);
+            $q->whereIn('name', ['Delegue','Magasinier']);
         })
             ->where('cooperative_id', $staff->cooperative_id)
             ->select('users.*')
             ->get();
 
-        $producteurs  = Producteur::joinRelationship('localite.section')->where('sections.cooperative_id', $staff->cooperative_id)->select('producteurs.*')->orderBy('producteurs.nom')->get();
+        $producteurs  = Producteur::joinRelationship('localite.section')->where('cooperative_id', $staff->cooperative_id)->select('producteurs.*')->orderBy('producteurs.nom')->get();
+        $certification = Producteur_certification::joinRelationship('producteur.localite.section')->where('cooperative_id', $staff->cooperative_id)->groupby('certification')->get();
+        $parcelles  = Parcelle::joinRelationship('producteur.localite.section')->where('cooperative_id', $staff->cooperative_id)->with('producteur')->get();
 
-        $parcelles  = Parcelle::with('producteur')->get();
-
-        return view('manager.livraison.create', compact('pageTitle', 'cooperatives', 'staffs', 'magasins', 'producteurs', 'parcelles', 'campagne', 'periode'));
+        $certification = Producteur_certification::joinRelationship('producteur.localite.section')->where('cooperative_id', $staff->cooperative_id)->groupby('certification')->get();
+        return view('manager.livraison.create', compact('pageTitle', 'cooperatives', 'staffs', 'magasins', 'producteurs', 'parcelles', 'campagne', 'periode','certification'));
     }
 
     public function stockSectionCreate()
@@ -222,7 +224,7 @@ class LivraisonController extends Controller
                 'created_at'      => now(),
             ];
 
-            $estimation = Estimation::where([['campagne_id',$campagne->id],['parcelles_id',$item['parcelle']]])->first();
+            $estimation = Estimation::where([['campagne_id',$campagne->id],['parcelle_id',$item['parcelle']]])->first();
 
           if($estimation !=null)
           {

@@ -171,6 +171,14 @@
                                                         @selected($item['type']=='Ordinaire')>{{ __('Ordinaire') }}</option>
                                                 </select> 
                                             </div>
+                                            <div class="col-md-2">
+                                            <select class="form-control" name="items[{{ $loop->index}}][certificat]" required>
+                                                     @foreach($certification $data) 
+                                                        <option value="{{ $data->certification }}"
+                                                        @selected($item['certificat']==$data->certification)>{{ $data->certification }}</option>
+                                                    @endforeach 
+                                                </select> 
+                                            </div>
                                                 <div class="col-md-2">
                                                     <div class="input-group mb-3">
                                                         <input type="number" class="form-control quantity" value="{{$item['quantity']}}"  name="items[{{ $loop->index }}][quantity]"  required>
