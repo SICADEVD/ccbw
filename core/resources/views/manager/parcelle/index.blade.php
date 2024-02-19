@@ -16,7 +16,9 @@
                                 <select name="section" class="form-control" id="section">
                                     <option value="">@lang('Toutes')</option>
                                     @foreach ($sections as $local)
-                                        <option value="{{ $local->id }}" {{ request()->section == $local->id ? 'selected' : '' }}>{{ $local->libelle }}</option>
+                                        <option value="{{ $local->id }}"
+                                            {{ request()->section == $local->id ? 'selected' : '' }}>{{ $local->libelle }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -25,7 +27,9 @@
                                 <select name="localite" class="form-control" id="localite">
                                     <option value="">@lang('Toutes')</option>
                                     @foreach ($localites as $local)
-                                        <option value="{{ $local->id }}" data-chained="{{ $local->section_id }}" {{ request()->localite == $local->id ? 'selected' : '' }}>{{ $local->nom }}</option>
+                                        <option value="{{ $local->id }}" data-chained="{{ $local->section_id }}"
+                                            {{ request()->localite == $local->id ? 'selected' : '' }}>{{ $local->nom }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -34,7 +38,9 @@
                                 <select name="producteur" class="form-control" id="producteur">
                                     <option value="">@lang('Tous')</option>
                                     @foreach ($producteurs as $local)
-                                        <option value="{{ $local->id }}" data-chained="{{ $local->localite_id }}" {{ request()->producteur == $local->id ? 'selected' : '' }}>{{ $local->nom }} {{ $local->prenoms }} ({{ $local->codeProd }})</option>
+                                        <option value="{{ $local->id }}" data-chained="{{ $local->localite_id }}"
+                                            {{ request()->producteur == $local->id ? 'selected' : '' }}>
+                                            {{ $local->nom }} {{ $local->prenoms }} ({{ $local->codeProd }})</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -73,7 +79,12 @@
                                 @forelse($parcelles as $parcelle)
                                     <tr>
                                         <td>
-                                            <span class="fw-bold">{{ $parcelle->producteur->localite->section->libelle }}</span>
+                                            @if ($producteur->localite && $producteur->localite->section)
+                                                <span
+                                                    class="fw-bold">{{ __($producteur->localite->section->libelle) }}</span>
+                                            @else
+                                                <span class="fw-bold">Pas de section</span>
+                                            @endif
                                         </td>
                                         <td>
                                             <span class="fw-bold">{{ $parcelle->producteur->localite->nom }}</span>
@@ -88,7 +99,7 @@
                                                 {{ $parcelle->producteur->nom }} {{ $parcelle->producteur->prenoms }}
                                             </span>
                                         </td>
-                                       
+
                                         <td>
                                             <span>{{ $parcelle->typeDoc }}</span>
                                         </td>
@@ -113,7 +124,8 @@
                                                 <a href="{{ route('manager.traca.parcelle.edit', $parcelle->id) }}"
                                                     class="dropdown-item"><i class="la la-pen"></i>@lang('Edit')</a>
                                                 <a href="{{ route('manager.traca.parcelle.show', $parcelle->id) }}"
-                                                    class="dropdown-item"><i class="las la-file-invoice"></i>@lang('Détail')</a>
+                                                    class="dropdown-item"><i
+                                                        class="las la-file-invoice"></i>@lang('Détail')</a>
                                                 @if ($parcelle->status == Status::DISABLE)
                                                     <button type="button" class="confirmationBtn  dropdown-item"
                                                         data-action="{{ route('manager.traca.parcelle.status', $parcelle->id) }}"
@@ -169,7 +181,8 @@
                             {{ Form::label(__('Fichier(.xls, .xlsx)'), null, ['class' => 'control-label col-sm-4']) }}
                             <div class="col-xs-12 col-sm-8 col-md-8">
                                 <input type="file" name="uploaded_file" accept=".xls, .xlsx"
-                                    class="form-control dropify-fr" placeholder="Choisir une image" id="image" required>
+                                    class="form-control dropify-fr" placeholder="Choisir une image" id="image"
+                                    required>
                             </div>
                         </div>
 
@@ -190,19 +203,18 @@
         <i class="las la-plus"></i>@lang('Ajouter nouveau')
     </a>
     <a class="btn btn-outline--info h-45 addType"><i class="las la-cloud-upload-alt"></i> Importer des Parcelles</a>
-    <a href="{{ route('manager.traca.parcelle.uploadkml') }}" class="btn btn-danger h-45"><i class="las la-cloud-upload-alt"></i> Importer un Fichier KML</a>
+    <a href="{{ route('manager.traca.parcelle.uploadkml') }}" class="btn btn-danger h-45"><i
+            class="las la-cloud-upload-alt"></i> Importer un Fichier KML</a>
     <a href="{{ route('manager.traca.parcelle.exportExcel.parcelleAll') }}" class="btn  btn-outline--warning h-45"><i
             class="las la-cloud-download-alt"></i> Exporter en Excel</a>
-            <button type="button" class="btn btn-outline--primary h-45"
-                                                data-bs-toggle="dropdown" aria-expanded="false"><i
-                                                    class="las la-map-marker"></i>Voir Mapping
-                                            </button>
-                                            <div class="dropdown-menu p-0"> 
-       <a class="dropdown-item" href="{{ route('manager.traca.parcelle.mapping') }}">Waypoints</a>
-      <a class="dropdown-item" href="{{ route('manager.traca.parcelle.mapping.polygone') }}">Polygones</a> 
+    <button type="button" class="btn btn-outline--primary h-45" data-bs-toggle="dropdown" aria-expanded="false"><i
+            class="las la-map-marker"></i>Voir Mapping
+    </button>
+    <div class="dropdown-menu p-0">
+        <a class="dropdown-item" href="{{ route('manager.traca.parcelle.mapping') }}">Waypoints</a>
+        <a class="dropdown-item" href="{{ route('manager.traca.parcelle.mapping.polygone') }}">Polygones</a>
 
-                                            </div>
-
+    </div>
 @endpush
 @push('style')
     <style>
@@ -217,7 +229,7 @@
 @push('script')
     <script src="{{ asset('assets/fcadmin/js/vendor/datepicker.min.js') }}"></script>
     <script src="{{ asset('assets/fcadmin/js/vendor/datepicker.fr.js') }}"></script>
-<script src="{{ asset('assets/fcadmin/js/vendor/datepicker.en.js') }}"></script>
+    <script src="{{ asset('assets/fcadmin/js/vendor/datepicker.en.js') }}"></script>
 @endpush
 @push('script')
     <script>
@@ -248,8 +260,8 @@
 
         })(jQuery)
 
-        $('form select').on('change', function(){
-    $(this).closest('form').submit();
-});
+        $('form select').on('change', function() {
+            $(this).closest('form').submit();
+        });
     </script>
 @endpush
