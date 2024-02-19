@@ -16,7 +16,9 @@
                                 <select name="localite" class="form-control">
                                     <option value="">@lang('Toutes')</option>
                                     @foreach ($localites as $local)
-                                        <option value="{{ $local->id }}" {{ request()->localite == $local->id ? 'selected' : '' }}>{{ $local->nom }}</option>
+                                        <option value="{{ $local->id }}"
+                                            {{ request()->localite == $local->id ? 'selected' : '' }}>{{ $local->nom }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -25,7 +27,9 @@
                                 <select name="programme" class="form-control">
                                     <option value="">@lang('Tous')</option>
                                     @foreach ($programmes as $local)
-                                        <option value="{{ $local->id }}" {{ request()->programme == $local->id ? 'selected' : '' }}>{{ $local->libelle }}</option>
+                                        <option value="{{ $local->id }}"
+                                            {{ request()->programme == $local->id ? 'selected' : '' }}>{{ $local->libelle }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -33,8 +37,10 @@
                                 <label>@lang('Statut')</label>
                                 <select name="status" class="form-control">
                                     <option value="">@lang('Tous')</option>
-                                    <option value="Candidat"  {{ request()->status == 'Candidat' ? 'selected' : '' }}>Candidat</option>
-                                    <option value="Certifie"  {{ request()->localite == 'Certifie' ? 'selected' : '' }}>Certifie</option>
+                                    <option value="Candidat" {{ request()->status == 'Candidat' ? 'selected' : '' }}>
+                                        Candidat</option>
+                                    <option value="Certifie" {{ request()->localite == 'Certifie' ? 'selected' : '' }}>
+                                        Certifie</option>
                                 </select>
                             </div>
                             <div class="flex-grow-1">
@@ -59,7 +65,7 @@
                                     {{-- <th>@lang('Photo')</th> --}}
                                     <th>@lang('Section')</th>
                                     <th>@lang('Localite')</th>
-                                    
+
                                     <th>@lang('Nom')</th>
                                     <th>@lang('Prenoms')</th>
                                     <th>@lang('Sexe')</th>
@@ -82,7 +88,12 @@
                                             @endif
                                         </td> --}}
                                         <td>
-                                            <span class="fw-bold">{{ __($producteur->localite->section->libelle) }}</span>
+                                            @if ($producteur->localite && $producteur->localite->section)
+                                                <span
+                                                    class="fw-bold">{{ __($producteur->localite->section->libelle) }}</span>
+                                            @else
+                                                <span class="fw-bold">Pas de section</span>
+                                            @endif
                                         </td>
                                         <td>
                                             <span class="fw-bold">{{ __($producteur->localite->nom) }}</span>
@@ -115,15 +126,21 @@
                                         <td>
                                             <a href="{{ route('manager.traca.producteur.infos', encrypt($producteur->id)) }}"
                                                 class="icon-btn btn--info ml-1">@lang('Infos producteur')</a>
-                                                <a href="{{ route('manager.traca.producteur.index', ['download'=> encrypt($producteur->id)]) }}" class="btn btn-sm btn--danger"><i class="la la-file-pdf-o"></i>@lang('PDF')</a>
-                                            <a href="{{ route('manager.traca.producteur.edit', $producteur->id) }}" class="btn btn-sm btn-outline--warning"><i class="la la-pen"></i>@lang('Edit')</a>
+                                            <a href="{{ route('manager.traca.producteur.index', ['download' => encrypt($producteur->id)]) }}"
+                                                class="btn btn-sm btn--danger"><i
+                                                    class="la la-file-pdf-o"></i>@lang('PDF')</a>
+                                            <a href="{{ route('manager.traca.producteur.edit', $producteur->id) }}"
+                                                class="btn btn-sm btn-outline--warning"><i
+                                                    class="la la-pen"></i>@lang('Edit')</a>
                                             <button type="button" class="btn btn-sm btn-outline--primary"
                                                 data-bs-toggle="dropdown" aria-expanded="false"><i
                                                     class="las la-ellipsis-v"></i>@lang('Action')
                                             </button>
                                             <div class="dropdown-menu p-0">
-                                                
-                                                <a href="{{ route('manager.traca.producteur.showproducteur', $producteur->id) }}" class="dropdown-item"><i class="las la-file-invoice"></i>@lang('Détails')</a>
+
+                                                <a href="{{ route('manager.traca.producteur.showproducteur', $producteur->id) }}"
+                                                    class="dropdown-item"><i
+                                                        class="las la-file-invoice"></i>@lang('Détails')</a>
                                                 @if ($producteur->status == Status::DISABLE)
                                                     <button type="button" class="confirmationBtn  dropdown-item"
                                                         data-action="{{ route('manager.traca.producteur.status', $producteur->id) }}"
@@ -185,7 +202,7 @@
                                     ou COACHS, DELEGUES,...</li>
                             </ul>
                         </div>
-                       
+
 
                         <div class="form-group row">
                             {{ Form::label(__('Fichier(.xls, .xlsx)'), null, ['class' => 'control-label col-sm-4']) }}
@@ -225,11 +242,11 @@
 @endpush
 @push('style-lib')
     <link rel="stylesheet" href="{{ asset('assets/fcadmin/css/vendor/datepicker.min.css') }}">
-@endpush 
+@endpush
 @push('script')
-<script src="{{ asset('assets/fcadmin/js/vendor/datepicker.min.js') }}"></script>
+    <script src="{{ asset('assets/fcadmin/js/vendor/datepicker.min.js') }}"></script>
     <script src="{{ asset('assets/fcadmin/js/vendor/datepicker.fr.js') }}"></script>
-<script src="{{ asset('assets/fcadmin/js/vendor/datepicker.en.js') }}"></script>
+    <script src="{{ asset('assets/fcadmin/js/vendor/datepicker.en.js') }}"></script>
     <script>
         (function($) {
             "use strict";
@@ -255,8 +272,8 @@
 
         })(jQuery)
 
-        $('form select').on('change', function(){
-    $(this).closest('form').submit();
-});
+        $('form select').on('change', function() {
+            $(this).closest('form').submit();
+        });
     </script>
 @endpush
