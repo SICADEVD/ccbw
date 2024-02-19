@@ -88,7 +88,7 @@ Route::middleware('admin')->group(function () {
 
         Route::get('staff/{id}', 'staffList')->name('staff.list');
         Route::post('status/{id}', 'status')->name('status');
-        Route::get('dashboard/{id}', 'login')->name('dashboard');
+        Route::get('dashboard/{id}', 'login')->name('dashboard'); 
         Route::get('manager/{id}', 'cooperativeManager')->name('list');
     });
 

@@ -47,7 +47,7 @@
 
                                         </td>
                                         <td>
-                                            <a href="{{ route('admin.cooperative.manager.staff', $staff->id) }}"
+                                            <a href="{{ route('admin.cooperative.manager.dashboard', $staff->id) }}"
                                                 class="btn btn-sm btn-outline--success" target="_blank"><i
                                                     class="las la-sign-in-alt"></i>
                                                 @lang('Login')</a>
