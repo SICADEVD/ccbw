@@ -9,7 +9,8 @@
                         <div class="row">
                             <div class="form-group col-lg-4">
                                 <label>@lang('Section')</label>
-                                <select class="form-control select-picker" name="section[]" id="section" multiple required> 
+                                <input id="chkall" type="checkbox"> @lang('Selectionner tout')
+                                <select class="form-control select-picker selectAll" name="section[]" id="section" multiple required> 
                                     @foreach ($sections as $section)
                                         <option value="{{ $section->id }}" @selected(old('section'))>
                                             {{ __($section->libelle) }}</option>
@@ -18,13 +19,14 @@
                             </div>
                             <div class="form-group col-lg-4">
                                 <label>@lang('Localite')</label>
-                                <select class="form-control select2-multi-select" id="localite" name="localite[]" multiple
+                                <input id="chkall2" type="checkbox"> @lang('Selectionner tout')
+                                <select class="form-control select2-multi-select selectAll" id="localite" name="localite[]" multiple
                                     required> 
                                 </select>
                             </div>
                             <div class="form-group col-lg-4">
                                 <label for="rolePermission" class="form-label">Role</label>
-                                <select class="form-control" name="role" required>
+                                <select class="form-control select-picker" name="role[]" multiple required>
                                     <option value="">Selectionner un rôle</option>
                                     @foreach ($roles as $role)
                                         <option value="{{ $role->id }}">{{ $role->name }}</option>

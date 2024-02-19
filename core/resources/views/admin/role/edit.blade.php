@@ -35,9 +35,10 @@
             ?>
                                 @forelse($permissions as $permission)
                                 <?php
-             if(!in_array(Str::before($permission->name,"."),$existe)) {
+                                $permissionName = Str::replaceFirst('manager.', '', $permission->name);
+             if(!in_array(Str::before($permissionName,"."),$existe)) {
                echo "<tr style='background:#C1C1C1'>";
-               echo '<td>'.strtoupper(Str::before($permission->name,".")).'</td></tr>';
+               echo '<td>'.strtoupper(Str::before($permissionName,".")).'</td></tr>';
               }
              ?>     
                   <tr> 
@@ -48,13 +49,13 @@
                                             class='permission'
                                              name="permission[{{ $permission->name }}]" {{ in_array($permission->name, $rolePermissions) ? 'checked' : '' }}
                                             >
-								            <label for="products-index">{{ Str::after($permission->name,".") }}</label>
+								            <label for="products-index">{{ Str::after($permissionName,".") }}</label>
 							            	</div>
 						            	</div>
 						            </td>
                                     </tr>
                                 <?php
-              $existe[] = Str::before($permission->name,".");
+              $existe[] = Str::before($permissionName,".");
                ?>
 						        
                                 @empty

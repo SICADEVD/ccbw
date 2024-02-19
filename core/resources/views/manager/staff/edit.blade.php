@@ -11,7 +11,8 @@
                         <div class="row">
                             <div class="form-group col-lg-4">
                                 <label>@lang('Section')</label>
-                                <select class="form-control select-picker" name="section[]" id="section" multiple required>
+                                <input id="chkall" type="checkbox"> @lang('Selectionner tout')
+                                <select class="form-control select-picker selectAll" name="section[]" id="section" multiple required>
                                    
                                     @foreach ($sections as $section)
                                         <option value="{{ $section->id }}" @selected(in_array($section->id, $userSection))>
@@ -21,7 +22,8 @@
                             </div>
                             <div class="form-group col-lg-4">
                                 <label>@lang('Selectionner une Localite')</label>
-                                <select class="form-control select2-multi-select" id="localite" name="localite[]" multiple
+                                <input id="chkall2" type="checkbox"> @lang('Selectionner tout')
+                                <select class="form-control select2-multi-select selectAll" id="localite" name="localite[]" multiple
                                     required> 
                                     @foreach ($localites as $localite)
                                         @php
@@ -37,27 +39,27 @@
                                     @endforeach
                                 </select>
                             </div>
-
-                            <div class="form-group col-lg-4">
-                                <label>@lang('Type de compte')</label>
-                                <select class="form-control" name="type_compte" required>
-                                    <option value="web" @selected('web' == $staff->type_compte)>Web</option>
-                                    <option value="mobile" @selected('mobile' == $staff->type_compte)>Mobile</option>
-                                    <option value="mobile-web" @selected('mobile-web' == $staff->type_compte)>Mobile & Web</option>
-                                </select>
-                            </div>
-
-                        </div>
-                        <div class="row">
                             <div class="form-group col-lg-4">
                                 <label for="rolePermission" class="form-label">Role</label>
-                                <select class="form-control" name="role" required>
+                                <select class="form-control select-picker" name="role[]" multiple required>
                                     <option value="">Selectionner un rôle</option>
                                     @foreach ($roles as $role)
                                         <option value="{{ $role->id }}"
                                             {{ in_array($role->name, $userRole) ? 'selected' : '' }}>
                                             {{ $role->name }}</option>
                                     @endforeach
+                                </select>
+                            </div>
+                            
+
+                        </div>
+                        <div class="row">
+                        <div class="form-group col-lg-4">
+                                <label>@lang('Type de compte')</label>
+                                <select class="form-control" name="type_compte" required>
+                                    <option value="web" @selected('web' == $staff->type_compte)>Web</option>
+                                    <option value="mobile" @selected('mobile' == $staff->type_compte)>Mobile</option>
+                                    <option value="mobile-web" @selected('mobile-web' == $staff->type_compte)>Mobile & Web</option>
                                 </select>
                             </div>
                             <div class="form-group col-lg-4">

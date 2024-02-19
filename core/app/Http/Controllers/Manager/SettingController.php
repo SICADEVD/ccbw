@@ -6,11 +6,12 @@ use App\Models\Unit;
 use App\Models\User;
 use App\Models\Marque;
 use App\Models\Section;
+use App\Models\Campagne;
 use App\Models\Countrie;
 use App\Models\Instance;
+use App\Models\Remorque;
 use App\Models\Vehicule;
 use App\Constants\Status;
-use App\Models\Campagne;
 use App\Models\ArretEcole;
 use App\Models\Department;
 use App\Models\Entreprise;
@@ -20,11 +21,13 @@ use App\Models\Cooperative;
 use App\Models\CourierInfo;
 use App\Models\Designation;
 use App\Models\TypeArchive;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use App\Models\NiveauxEtude;
 use App\Models\Transporteur;
 use App\Models\UserLocalite;
 use Illuminate\Http\Request;
+use App\Models\Certification;
 use App\Models\Questionnaire;
 use App\Models\TravauxLegers;
 use App\Models\TypeFormation;
@@ -44,8 +47,6 @@ use App\Http\Controllers\Controller;
 use App\Models\ModuleFormationStaff;
 use App\Models\DocumentAdministratif;
 use App\Models\CategorieQuestionnaire;
-use App\Models\Certification;
-use App\Models\Remorque;
 use Google\Service\Blogger\UserLocale;
 
 class SettingController extends Controller
@@ -586,13 +587,18 @@ class SettingController extends Controller
         $pageTitle = "Manage des Magasins de Section";
         $manager = auth()->user();
         $activeSettingMenu = 'magasinSection_settings';
-        $sections = UserLocalite::get();
+         
         $users = User::whereHas('roles', function ($q) {
             $q->where('name', 'Magasinier');
         })
             ->where('cooperative_id', $manager->cooperative_id)
             ->select('id', DB::raw("CONCAT(lastname,' ', firstname) as nom"))
             ->get();
+         
+        
+        $usersId  = Arr::whereNotNull(Arr::pluck($users,'id'));
+        $sections = UserLocalite::whereIn('user_id',$usersId)->get();
+   
         $magasinSections     = MagasinSection::orderBy('id', 'desc')->paginate(getPaginate());
         $codemag = $this->generecodemagasin();
         return view('manager.config.magasinSection', compact('pageTitle', 'magasinSections', 'activeSettingMenu', 'users', 'sections', 'codemag'));

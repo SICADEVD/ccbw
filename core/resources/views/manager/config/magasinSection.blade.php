@@ -128,6 +128,7 @@
                                 </div>
                             </div> 
                             <div class="form-group row">
+                               
                                 <label class="col-sm-4 control-label">@lang('Section')</label>
                                 <div class="col-xs-12 col-sm-8">
                                 <select class="form-control" name="section" id="section" required>
