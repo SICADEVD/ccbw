@@ -585,7 +585,8 @@ class SettingController extends Controller
     {
 
         $pageTitle = "Manage des Magasins de Section";
-        $manager = auth()->user(); 
+        $manager = auth()->user();
+        $activeSettingMenu = 'magasinSection_settings';
          
         $users = User::whereHas('roles', function ($q) {
             $q->where('name', 'Magasinier');
