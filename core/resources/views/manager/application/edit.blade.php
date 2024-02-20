@@ -216,7 +216,7 @@
                                                                     id="matiereActive-{{ $index + 1 }}"
                                                                     class="form-control"
                                                                     placeholder="matière active 1, matière active 2 ...."
-                                                                    value="{{  implode(",", $applicationPesticide->matieresActives->toArray()) }}">
+                                                                    value="{{ implode(',', $applicationPesticide->matieresActives->toArray()) }}">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -253,10 +253,23 @@
                                                         <div class="col-xs-12 col-sm-4">
                                                             <div class="form-group row">
                                                                 <label>Dose</label>
-                                                                <input name="pesticides[{{ $index }}][dose]"
-                                                                    id="dose-{{ $index + 1 }}" class="form-control"
-                                                                    placeholder="L/Ha"
-                                                                    value="{{ $applicationPesticide->dose }}">
+                                                                <select name="pesticides[{{ $index }}][dose]"
+                                                                    id="dose-{{ $index + 1 }}" class="form-control">
+                                                                    <option value="">Selectionner une option
+                                                                    </option>
+                                                                    <option value="L/HA"
+                                                                        {{ $applicationPesticide->dose == 'L/HA' ? 'selected' : '' }}>
+                                                                        L/HA</option>
+                                                                    <option value="mL/HA"
+                                                                        {{ $applicationPesticide->dose == 'mL/HA' ? 'selected' : '' }}>
+                                                                        mL/HA</option>
+                                                                    <option value="Kg/HA"
+                                                                        {{ $applicationPesticide->dose == 'Kg/HA' ? 'selected' : '' }}>
+                                                                        Kg/HA</option>
+                                                                    <option value="g/HA"
+                                                                        {{ $applicationPesticide->dose == 'g/HA' ? 'selected' : '' }}>
+                                                                        g/HA</option>
+                                                                </select>
                                                             </div>
                                                         </div>
                                                         <div class="col-xs-12 col-sm-4">
@@ -269,13 +282,39 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                        @if (($index +1) > 1)
-                                                            <div class="col-xs-12 col-sm-8">
-                                                                <button type="button" id="{{ $index + 1 }}"
-                                                                    class="removeRowPesticide btn btn-danger btn-sm"><i
-                                                                        class="fa fa-minus"></i></button>
-                                                            </div>  
-                                                        @endif       
+                                                    <div class="row mt-3">
+                                                        <div class="col-xs-12 col-sm-4">
+                                                            <div class="form-group row">
+                                                                <label>Quantité Utilisée</label>
+                                                                <select name="pesticides[{{ $index }}][quantite]"
+                                                                    id="quantite-{{ $index + 1 }}"
+                                                                    class="form-control">
+                                                                    <option value="">Selectionner une option
+                                                                    </option>
+                                                                    <option value="Kg"
+                                                                        {{ $applicationPesticide->quantite == 'Kg' ? 'selected' : '' }}>
+                                                                        Kg</option>
+                                                                    <option value="g"
+                                                                        {{ $applicationPesticide->quantite == 'g' ? 'selected' : '' }}>
+                                                                        g</option>
+                                                                    <option value="L"
+                                                                        {{ $applicationPesticide->quantite == 'L' ? 'selected' : '' }}>
+                                                                        L</option>
+                                                                    <option value="mL"
+                                                                        {{ $applicationPesticide->quantite == 'mL' ? 'selected' : '' }}>
+                                                                        mL</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    @if ($index + 1 > 1)
+                                                        <div class="col-xs-12 col-sm-8">
+                                                            <button type="button" id="{{ $index + 1 }}"
+                                                                class="removeRowPesticide btn btn-danger btn-sm"><i
+                                                                    class="fa fa-minus"></i></button>
+                                                        </div>
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -283,7 +322,8 @@
                                         <tr>
                                             <td class="row">
                                                 <div class="col-xs-12 col-sm-12 bg-success">
-                                                    <badge class="btn  btn-outline--warning h-45 btn-sm text-white">@lang('Pesticide')
+                                                    <badge class="btn  btn-outline--warning h-45 btn-sm text-white">
+                                                        @lang('Pesticide')
                                                     </badge>
                                                 </div>
                                                 <div class="row">
@@ -341,8 +381,15 @@
                                                     <div class="col-xs-12 col-sm-4">
                                                         <div class="form-group row">
                                                             <label>Dose</label>
-                                                            <input name="pesticides[0][dose]" id="dose-1"
-                                                                class="form-control" placeholder="L/Ha">
+                                                            <select name="pesticides[0][dose]" id="dose-1"
+                                                                class="form-control">
+                                                                <option value="">Selectionner une option
+                                                                </option>
+                                                                <option value="L/HA">L/HA</option>
+                                                                <option value="mL/HA">mL/HA</option>
+                                                                <option value="Kg/HA">Kg/HA</option>
+                                                                <option value="g/HA">g/HA</option>
+                                                            </select>
                                                         </div>
                                                     </div>
                                                     <div class="col-xs-12 col-sm-4">
@@ -350,6 +397,21 @@
                                                             <label>Fréquence</label>
                                                             <input name="pesticides[0][frequence]" id="frequence-1"
                                                                 class="form-control" placeholder="Fréquence">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row mt-3">
+                                                    <div class="col-xs-12 col-sm-4">
+                                                        <div class="form-group row">
+                                                            <label>Quantité Utilisée</label>
+                                                            <select name="pesticides[0][quantite]" id="quantite-1"
+                                                                class="form-control">
+                                                                <option value="">Sélectionnez une option</option>
+                                                                <option value="Kg">Kg</option>
+                                                                <option value="g">g</option>
+                                                                <option value="L">L</option>
+                                                                <option value="mL">mL</option>
+                                                            </select>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -375,10 +437,15 @@
                             <select class="form-control select2-multi-select protections" name="maladies[]" multiple
                                 required>
                                 <option value="">@lang('Selectionner les protections')</option>
-                                <option value="Mirides" {{ in_array('Mirides',$applicationMaladies) ? 'selected' : ''}}>Mirides</option>
-                                <option value="Punaises" {{ in_array('Punaises',$applicationMaladies)? 'selected' : ''}}>Punaises</option>
-                                <option value="Foreurs" {{ in_array('Foreurs',$applicationMaladies)? 'selected' : ''}} >Foreurs</option>
-                                <option value="Chenilles" {{ in_array('Chenilles',$applicationMaladies)? 'selected' : ''}}>Chenilles</option>
+                                <option value="Mirides" {{ in_array('Mirides', $applicationMaladies) ? 'selected' : '' }}>
+                                    Mirides</option>
+                                <option value="Punaises"
+                                    {{ in_array('Punaises', $applicationMaladies) ? 'selected' : '' }}>
+                                    Punaises</option>
+                                <option value="Foreurs" {{ in_array('Foreurs', $applicationMaladies) ? 'selected' : '' }}>
+                                    Foreurs</option>
+                                <option value="Chenilles"
+                                    {{ in_array('Chenilles', $applicationMaladies) ? 'selected' : '' }}>Chenilles</option>
                             </select>
                         </div>
                     </div>
@@ -452,7 +519,7 @@
                     '</badge></div><div class="col-xs-12 col-sm-4"><div class="form-group row"><label for="" class="">Pesticides</label><select class="form-control" id="pesticides-' +
                     pesticideCount +
                     '" name="pesticides[' + pesticideCount +
-                    '][nom]"><option value="">Selectionner une option</option><option value="Herbicides">Herbicides</option><option value="Fongicides">Fongicides</option><option value="Nematicides">Nematicides</option><option value="Insecticides">Insecticides</option><option value="Acaricides">Acaricides</option><option value="Pesticides">Pesticides</option></select></div></div><div class="col-xs-12 col-sm-4"><div class="form-group row"><label> Nom commercial</label><input type="text" name="pesticides[' +
+                    '][nom]"><option value="">Selectionner une option</option><option value="Herbicides">Herbicides</option><option value="Fongicides">Fongicides</option><option value="Nematicide">Nematicide</option><option value="Insecticide">Insecticide</option><option value="Acaricides">Acaricides</option><option value="Pesticides">Pesticides</option></select></div></div><div class="col-xs-12 col-sm-4"><div class="form-group row"><label> Nom commercial</label><input type="text" name="pesticides[' +
                     pesticideCount +
                     '][nomCommercial]" id="nomCommercial' +
                     pesticideCount +
@@ -470,11 +537,16 @@
                     pesticideCount +
                     '][frequence]" id="frequence' +
                     pesticideCount +
-                    '" class="form-control" placeholder="Fréquence"></div></div></di><div class="col-xs-12 col-sm-8"><button type="button" id="' +
+                    '" class="form-control" placeholder="Fréquence"></div></div></div><div class="row mt-3"><div class="col-xs-12 col-sm-4 ml-3"><div class="form-group row"><label>Quantité Utilisée</label><select  name="pesticides[' +
+                    pesticideCount +
+                    '][quantite]" id="quantite-' +
+                    pesticideCount +
+                    '" class="form-control"><option value="">Sélectionnez une option</option><option value="Kg">Kg</option><option value="g">g</option><option value="L">L</option><option value="mL">mL</option></select></div></div></div><div class="col-xs-12 col-sm-4"><button type="button" id="' +
                     pesticideCount +
                     '" class="removeRowPesticide btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></div></td>';
 
                 html_table += '</tr>';
+                //---> End create table tr
                 //---> End create table tr
 
                 pesticideCount = parseInt(pesticideCount) + 1;
