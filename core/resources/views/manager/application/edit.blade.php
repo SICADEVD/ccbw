@@ -463,11 +463,10 @@
                     '" class="form-control" placeholder="matière active 1, matière active 2 ...."></div></div><di class="row mt-3"><div class="col-xs-12 col-sm-4"><div class="form-group row"><label class="control-label">Toxicicologie</label><select class="form-control" id="toxicicologie-' +
                     pesticideCount +
                     '" name="pesticides[' + pesticideCount +
-                    '][toxicicologie]"> <option value="">Selectionner une option</option><option value="I">I</option><option value="IA">IA</option><option value="IB">IB</option><option value="II">II</option><option value="III">III</option><option value="IV">IV</option></select></div></div><div class="col-xs-12 col-sm-4"><div class="form-group row"><label>Dose</label><input type="text" name="pesticides[' +
+                    '][toxicicologie]"> <option value="">Selectionner une option</option><option value="I">I</option><option value="IA">IA</option><option value="IB">IB</option><option value="II">II</option><option value="III">III</option><option value="IV">IV</option></select></div></div><div class="col-xs-12 col-sm-4"><div class="form-group row"><label>Dose</label><select class="form-control" id="dose-' +
                     pesticideCount +
-                    '][dose]" id="dose' +
-                    pesticideCount +
-                    '" class="form-control" placeholder="L/Ha"></div></div><div class="col-xs-12 col-sm-4"><div class="form-group row"><label>Fréquence</label><input type="text" name="pesticides[' +
+                    '" name="pesticides[' + pesticideCount +
+                    '][dose]"> <option value="">Selectionner une option</option><option value="L/HA">L/HA</option><option value="mL/HA">mL/HA</option><option value="Kg/HA">Kg/HA</option><option value="g/HA">g/HA</option></select></div></div><div class="col-xs-12 col-sm-4"><div class="form-group row"><label>Fréquence</label><input type="text" name="pesticides[' +
                     pesticideCount +
                     '][frequence]" id="frequence' +
                     pesticideCount +

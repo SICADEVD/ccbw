@@ -75,7 +75,6 @@ class ApplicationController extends Controller
         $validationRule = [
             'pesticides.*.nom' => 'required|string',
             'pesticides.*.nomCommercial' => 'required|string',
-            'pesticides.*.dose' => 'required|integer',
             'pesticides.*.toxicicologie' => 'required|string',
             'pesticides.*.frequence' => 'required|integer',
         ];
