@@ -468,7 +468,7 @@
                     <hr class="panel-wide">
 
                     <div class="form-group row">
-                        <?php echo Form::label(__('Heure d\'application'), null, ['class' => 'col-sm-4 control-label required']); ?>
+                        <?php echo Form::label(__('Durée d\'application'), null, ['class' => 'col-sm-4 control-label required']); ?>
                         <div class="col-xs-12 col-sm-8 bootstrap-timepicker timepicker">
                             <?php echo Form::text('heure_application', null, ['class' => 'form-control', 'required' => 'required', 'placeholder' => 'Ex : 04:10']); ?>
                         </div>
