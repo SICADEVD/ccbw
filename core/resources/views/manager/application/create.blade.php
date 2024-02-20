@@ -167,7 +167,8 @@
                                     <tr>
                                         <td class="row">
                                             <div class="col-xs-12 col-sm-12 bg-success">
-                                                <badge class="btn  btn-outline--warning h-45 btn-sm text-white">@lang('Pesticide')
+                                                <badge class="btn  btn-outline--warning h-45 btn-sm text-white">
+                                                    @lang('Pesticide')
                                                 </badge>
                                             </div>
                                             <div class="row">
@@ -239,6 +240,16 @@
                                                         <label>Fréquence</label>
                                                         <input name="pesticides[0][frequence]" id="frequence-1"
                                                             class="form-control" placeholder="Fréquence">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row mt-3">
+                                                <div class="col-xs-12 col-sm-4">
+                                                    <div class="form-group row">
+                                                        <label>Quantité Utilisée</label>
+                                                        <input name="pesticides[0][quantite]" id="quantite-1"
+                                                            class="form-control"
+                                                            placeholder="Quantité de produit utilisé (Kg, g, L,mL)">
                                                     </div>
                                                 </div>
                                             </div>
@@ -364,9 +375,10 @@
                     pesticideCount +
                     '][frequence]" id="frequence' +
                     pesticideCount +
-                    '" class="form-control" placeholder="Fréquence"></div></div></di><div class="col-xs-12 col-sm-8"><button type="button" id="' +
+                    '" class="form-control" placeholder="Fréquence"></div></div></div><div class="row mt-3"><div class="col-xs-12 col-sm-4 ml-3"><div class="form-group row"><label>Quantité Utilisée</label><input name="pesticides[' + pesticideCount +
+                    '][quantite]" id="quantite-' +
                     pesticideCount +
-                    '" class="removeRowPesticide btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></div></td>';
+                    '" class="form-control" placeholder="Quantité de produit utilisé (Kg, g, L,mL)"></div></div></div></td>';
 
                 html_table += '</tr>';
                 //---> End create table tr
