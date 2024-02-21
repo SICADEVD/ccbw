@@ -195,11 +195,11 @@ $contents .='<tr><td colspan="3"><strong>'. $catquest->titre.'</strong></td></tr
             <td>'. $q->certificat.'
             </td>
             <td><select class="form-control" class="notation" id="reponse-'. $q->id.'" name="reponse['. $q->id.']" required>
-                    <option value="0"> </option>';
+                    <option value=""> </option>';
                           $a = 1;             
                         foreach($notations as $not)
                         { 
-                            $contents .= '<option value="'. $not->point.'" class="colorSelect_'.$a.'">'. $not->nom.'</option>';
+                            $contents .= '<option value="'. $not->nom.'" class="colorSelect_'.$a.'">'. $not->nom.'</option>';
                            $a++;
                         } 
                         $contents .='</select>

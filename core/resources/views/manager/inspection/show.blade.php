@@ -58,7 +58,7 @@
                           foreach($notations as $not)
                           { 
                                ?>
-                               @if($not->point==$q->pivot->notation)
+                               @if($not->nom==$q->pivot->notation)
                                  <span class="badge @if($not->nom=='Conforme')badge-success @endif @if($not->nom=='Pas Conforme')badge-danger @endif @if($not->nom=='Non Applicable')badge-info @endif"><?php echo $not->nom; ?></span>
                                @endif 
                                             <?php

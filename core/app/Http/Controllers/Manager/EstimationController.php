@@ -117,7 +117,7 @@ class EstimationController extends Controller
         $pageTitle = "Mise à jour de la estimation";
         $manager = auth()->user();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->get();
-        $producteurs  = Producteur::with('localite')->get();
+        $producteurs  = Producteur::active()->with('localite')->get();
         $estimation   = Estimation::findOrFail($id);
         return view('manager.estimation.edit', compact('pageTitle', 'localites', 'estimation','producteurs'));
     } 

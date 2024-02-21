@@ -128,9 +128,9 @@
                         <div class="form-group row">
                             {{ Form::label(__("Date d'évaluation"), null, ['class' => 'col-sm-4 control-label']) }}
                             <div class="col-xs-12 col-sm-8">
-                                {!! Form::date('date_evaluation', null, [
+                                {!! Form::text('date_evaluation', null, [
                                     'placeholder' => __("Date d'évaluation"),
-                                    'class' => 'form-control',
+                                    'class' => 'form-control dates',
                                     'id' => 'anneeCreation-1',
                                     'required',
                                 ]) !!}
@@ -152,8 +152,14 @@
     @push('breadcrumb-plugins')
         <x-back route="{{ route('manager.suivi.inspection.index') }}" />
     @endpush
-
+    @push('style-lib')
+    <link rel="stylesheet" href="{{ asset('assets/fcadmin/css/vendor/datepicker.min.css') }}">
+@endpush
     @push('script')
+    <script src="{{asset('assets/fcadmin/js/vendor/datepicker.min.js')}}"></script>
+    <script src="{{asset('assets/fcadmin/js/vendor/datepicker.fr.js')}}"></script> 
+    <script src="{{asset('assets/fcadmin/js/vendor/datepicker.en.js')}}"></script> 
+
         <script type="text/javascript">
             $(document).ready(function() {
 
@@ -205,17 +211,17 @@
                 $('#myTable > tbody  > tr').each(function() {
                     var qty = $(this).find('option:selected').val();
 
-                    if (qty == "-1" || qty == "0" || qty == "1" || qty == "2") {
-                        sum = parseFloat(sum) + parseFloat(qty);
+                    // if (qty == "-1" || qty == "0" || qty == "1" || qty == "2") {
+                    //     sum = parseFloat(sum) + parseFloat(qty);
+                    // }
+                    if (qty == "Pas Conforme") {
+                        nonconforme += 1;
                     }
-                    if (qty == "-1") {
-                        nonconforme = parseFloat(nonconforme) + 1;
+                    if (qty == "Non Applicable") {
+                        nonapplicable += 1;
                     }
-                    if (qty == "0") {
-                        nonapplicable = parseFloat(nonapplicable) + 1;
-                    }
-                    if (qty == "1") {
-                        conforme = parseFloat(conforme) + 1;
+                    if (qty == "Conforme") {
+                        conforme += 1;
                     }
 
                 });
@@ -226,11 +232,10 @@
 
                 $('#totalquestionnonconforme').val(nonconforme);
                 $('#totalquestionnonapplicable').val(nonapplicable);
-                totalquestionconforme = $('#totalquestion').val() - $('#totalquestionnonconforme').val();
+                //totalquestionconforme = $('#totalquestion').val() - $('#totalquestionnonconforme').val();
                  
-                $('#totalquestionconforme').val(totalquestionconforme);
-                //var total1= $('#totalquestionconforme').val();
-                var total1= conforme;
+                $('#totalquestionconforme').val(conforme);
+                var total1= $('#totalquestionconforme').val(); 
                 var total2 = $('#totalquestion').val() - $('#totalquestionnonapplicable').val();
                 
                 tauxconformite = (total1 / total2)*100;
@@ -240,6 +245,12 @@
             }
 
             $("#producteur").chained("#localite");
+            
+        $('.dates').datepicker({
+                maxDate: new Date(),
+                dateFormat: 'yyyy-mm-dd',
+                language: 'fr'
+            });
         </script>
     @endpush
 
