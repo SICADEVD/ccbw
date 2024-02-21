@@ -77,8 +77,10 @@ class ApplicationController extends Controller
             'pesticides.*.nomCommercial' => 'required|string',
             'pesticides.*.toxicicologie' => 'required|string',
             'pesticides.*.frequence' => 'required|integer',
-            'pesticides.*.dose' => 'required|string',
-            'pesticides.*.quantite' => 'required|string',
+            'pesticides.*.dosage' => 'required|integer',
+            'pesticides.*.doseUnite' => 'required|string',
+            'pesticides.*.quantite' => 'required|integer',
+            'pesticides.*.quantiteUnite' => 'required|string',
         ];
 
 
@@ -138,7 +140,9 @@ class ApplicationController extends Controller
                     $applicationPesticide->application_id = $id;
                     $applicationPesticide->nom = $pesticide['nom'];
                     $applicationPesticide->nomCommercial = $pesticide['nomCommercial'];
-                    $applicationPesticide->dose = $pesticide['dose'];
+                    $applicationPesticide->dosage = $pesticide['dosage'];
+                    $applicationPesticide->doseUnite = $pesticide['dose'];
+                    $applicationPesticide->quantiteUnite = $pesticide['quantiteUnite'];
                     $applicationPesticide->quantite = $pesticide['quantite'];
                     $applicationPesticide->toxicicologie = $pesticide['toxicicologie'];
                     $applicationPesticide->frequence = $pesticide['frequence'];
