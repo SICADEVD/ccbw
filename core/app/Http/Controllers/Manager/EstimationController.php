@@ -58,7 +58,6 @@ class EstimationController extends Controller
             'EsP'  => 'required|max:255', 
             'date_estimation'  => 'required|max:255', 
         ];
- 
 
         $request->validate($validationRule);
 
@@ -125,9 +124,10 @@ class EstimationController extends Controller
     public function show($id){
         $pageTitle = "Détails de la estimation";
         $manager = auth()->user();
+        $estimation   = Estimation::findOrFail($id);
         $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->get();
         $producteurs  = Producteur::with('localite')->get();
-        $estimation   = Estimation::findOrFail($id);
+        
         return view('manager.estimation.show', compact('pageTitle', 'localites', 'estimation','producteurs'));
     }
 
