@@ -33,7 +33,8 @@ class InspectionController extends Controller
             ->where('cooperative_id', $manager->cooperative_id)
             ->select('users.*')
             ->get();
-        $producteurs  = Producteur::active()->with('localite')->get();
+        $producteurs  = Producteur::joinRelationship('localite.section')
+        ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->with('localite')->get();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->get();
         $inspections = Inspection::dateFilter()->searchable([])->latest('id')->joinRelationship('producteur.localite.section')->where('sections.cooperative_id',$manager->cooperative_id)->where(function ($q) {
             if(request()->localite != null){
@@ -54,7 +55,7 @@ class InspectionController extends Controller
     {
         $pageTitle = "Ajouter une inspection";
         $manager   = auth()->user();
-        $producteurs  = Producteur::joinRelationship('localite.section')->where('cooperative_id', $manager->cooperative_id)->with('localite')->get();
+        $producteurs  = Producteur::joinRelationship('localite.section')->where([['cooperative_id', $manager->cooperative_id],['producteurs.status',1]])->with('localite')->get();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->get();
         $staffs = User::whereHas('roles', function ($q) {
             $q->whereIn('name', ['Inspecteur','ADG','Coach']);
@@ -134,7 +135,7 @@ class InspectionController extends Controller
     {
         $pageTitle = "Mise à jour de l'inspection";
         $manager   = auth()->user();
-        $producteurs  = Producteur::joinRelationship('localite.section')->where('cooperative_id', $manager->cooperative_id)->with('localite')->get();
+        $producteurs  = Producteur::joinRelationship('localite.section')->where([['cooperative_id', $manager->cooperative_id],['producteurs.status',1]])->with('localite')->get();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->get();
         $staffs  = User::staff()->get();
         $categoriequestionnaire = CategorieQuestionnaire::with('questions')->get();
@@ -146,7 +147,8 @@ class InspectionController extends Controller
     {
         $pageTitle = "Détails de l'inspection";
         $manager   = auth()->user();
-        $producteurs  = Producteur::with('localite')->get();
+        $producteurs  = Producteur::joinRelationship('localite.section')
+        ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->with('localite')->get();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->get();
         $staffs  = User::staff()->get();
         $categoriequestionnaire = CategorieQuestionnaire::with('questions')->get();

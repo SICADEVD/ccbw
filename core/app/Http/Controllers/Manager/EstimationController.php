@@ -41,7 +41,8 @@ class EstimationController extends Controller
     {
         $pageTitle = "Ajouter une estimation";
         $manager   = auth()->user();
-        $producteurs  = Producteur::with('localite')->get();
+        $producteurs  = Producteur::joinRelationship('localite.section')
+        ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->with('localite')->get();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->get();
         $campagnes = Campagne::active()->pluck('nom','id');
         $parcelles  = Parcelle::with('producteur')->get();
@@ -117,7 +118,8 @@ class EstimationController extends Controller
         $pageTitle = "Mise à jour de la estimation";
         $manager = auth()->user();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->get();
-        $producteurs  = Producteur::active()->with('localite')->get();
+        $producteurs  = Producteur::joinRelationship('localite.section')
+        ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->with('localite')->get();
         $estimation   = Estimation::findOrFail($id);
         return view('manager.estimation.edit', compact('pageTitle', 'localites', 'estimation','producteurs'));
     } 
@@ -126,7 +128,8 @@ class EstimationController extends Controller
         $manager = auth()->user();
         $estimation   = Estimation::findOrFail($id);
         $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->get();
-        $producteurs  = Producteur::with('localite')->get();
+        $producteurs  = Producteur::joinRelationship('localite.section')
+        ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->with('localite')->get();
         
         return view('manager.estimation.show', compact('pageTitle', 'localites', 'estimation','producteurs'));
     }

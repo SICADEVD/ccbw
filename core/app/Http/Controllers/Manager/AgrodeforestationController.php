@@ -35,7 +35,7 @@ class AgrodeforestationController extends Controller
                                 })
                                 ->get(); 
         $producteurs = Producteur::joinRelationship('localite.section')
-                                    ->where('cooperative_id', $manager->cooperative_id)
+                                    ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status',1]])
                                     ->when(request()->localite, function ($query, $localite) {
                                         $query->where('localite_id', $localite);
                                     }) 
@@ -79,7 +79,7 @@ class AgrodeforestationController extends Controller
                                 })
                                 ->get(); 
         $producteurs = Producteur::joinRelationship('localite.section')
-                                    ->where('cooperative_id', $manager->cooperative_id)
+                                    ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status',1]])
                                     ->when(request()->localite, function ($query, $localite) {
                                         $query->where('localite_id', $localite);
                                     })

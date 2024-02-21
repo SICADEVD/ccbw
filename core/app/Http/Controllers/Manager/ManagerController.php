@@ -39,7 +39,7 @@ class ManagerController extends Controller
                                 ->where('cooperative_id', auth()->user()->cooperative_id)
                                 ->sum('superficie');  
         $nbproducteur = Producteur::joinRelationship('localite.section')
-                                ->where('cooperative_id', auth()->user()->cooperative_id)
+                                ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])
                                 ->count(); 
         $nbinspection = Inspection::joinRelationship('producteur.localite.section')
                                 ->where('cooperative_id', auth()->user()->cooperative_id)
@@ -48,7 +48,7 @@ class ManagerController extends Controller
                                 ->sum('quantite');
         //Producteurs par Genre
         $genre = Producteur::joinRelationship('localite.section')
-                            ->where('cooperative_id', auth()->user()->cooperative_id)
+                            ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])
                             ->select('sexe',DB::raw('count(producteurs.id) as nombre'))
                             ->groupBy('sexe')
                             ->get();
@@ -63,7 +63,7 @@ class ManagerController extends Controller
 
 //Producteurs inscrits par Date
         $producteurbydays = Producteur::joinRelationship('localite.section')
-                                        ->where('cooperative_id', auth()->user()->cooperative_id)
+                                        ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])
                                         ->select(DB::raw('DATE_FORMAT(producteurs.created_at,"%Y-%m-%d") as date'),DB::raw('count(producteurs.id) as nombre'))
                                         ->groupBy('date')
                                         ->get();  

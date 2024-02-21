@@ -47,7 +47,8 @@ class SsrteclmrsController extends Controller
             return $localite->active();
         });
         $sections = $cooperative->sections;
-        $producteurs  = Producteur::with('localite')->get();
+        $producteurs  = Producteur::joinRelationship('localite.section')
+        ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->with('localite')->get();
         $lienParente = DB::table('lien_parente')->pluck('nom', 'nom')->all();
         $raisonArretEcole = DB::table('arret_ecoles')->get();
         $travauxDangereux = DB::table('travaux_dangereux')->pluck('nom', 'nom')->all();
@@ -70,7 +71,8 @@ class SsrteclmrsController extends Controller
         $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
             return $localite->active();
         });
-        $producteurs  = Producteur::with('localite')->get();
+        $producteurs  = Producteur::joinRelationship('localite.section')
+        ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->with('localite')->get();
         $niveauEtudeAvant = NiveauxEtude::pluck('nom', 'nom')->all();
         $niveauEtude = NiveauxEtude::all();
         $classes = ClasseEtude::with('niveau')->get();
@@ -92,7 +94,8 @@ class SsrteclmrsController extends Controller
         $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
             return $localite->active();
         });
-        $producteurs  = Producteur::with('localite')->get();
+        $producteurs  = Producteur::joinRelationship('localite.section')
+        ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->with('localite')->get();
         $niveauEtudeAvant = NiveauxEtude::pluck('nom', 'nom')->all();
         $niveauEtude = NiveauxEtude::all();
         $classes = ClasseEtude::with('niveau')->get();

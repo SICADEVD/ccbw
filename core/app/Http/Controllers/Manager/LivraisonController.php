@@ -106,7 +106,7 @@ class LivraisonController extends Controller
             ->select('users.*')
             ->get();
 
-        $producteurs  = Producteur::joinRelationship('localite.section')->where('cooperative_id', $staff->cooperative_id)->select('producteurs.*')->orderBy('producteurs.nom')->get();
+        $producteurs  = Producteur::joinRelationship('localite.section')->where([['cooperative_id', $staff->cooperative_id],['producteurs.status',1]])->select('producteurs.*')->orderBy('producteurs.nom')->get();
         $certification = Producteur_certification::joinRelationship('producteur.localite.section')->where('cooperative_id', $staff->cooperative_id)->groupby('certification')->get();
         $parcelles  = Parcelle::joinRelationship('producteur.localite.section')->where('cooperative_id', $staff->cooperative_id)->with('producteur')->get();
 
@@ -125,7 +125,7 @@ class LivraisonController extends Controller
 
         $transporteurs = Transporteur::where([['cooperative_id', $staff->cooperative_id]])->with('cooperative', 'entreprise')->get();
         $vehicules = Vehicule::with('marque')->get();
-        $producteurs  = Producteur::joinRelationship('localite.section')->where('sections.cooperative_id', $staff->cooperative_id)->select('producteurs.*')->orderBy('producteurs.nom')->get();
+        $producteurs  = Producteur::joinRelationship('localite.section')->where([['sections.cooperative_id', $staff->cooperative_id],['producteurs.status',1]])->select('producteurs.*')->orderBy('producteurs.nom')->get();
 
         $campagne = Campagne::active()->first();
         $campagne = CampagnePeriode::where([['campagne_id', $campagne->id], ['periode_debut', '<=', gmdate('Y-m-d')], ['periode_fin', '>=', gmdate('Y-m-d')]])->latest()->first();
@@ -239,7 +239,8 @@ class LivraisonController extends Controller
 
           }
 
-            $product = Producteur::where('id', $item['producteur'])->first();
+            $product = Producteur::joinRelationship('localite.section')
+            ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->where('producteurs.id', $item['producteur'])->first();
             if ($product != null) {
                 $programme = $product->programme_id;
 

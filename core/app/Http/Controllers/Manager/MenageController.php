@@ -62,7 +62,8 @@ class MenageController extends Controller
         $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
             return $localite->active();
         });
-        $producteurs = Producteur::with('localite')->get();
+        $producteurs = Producteur::joinRelationship('localite.section')
+        ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->with('localite')->get();
 
         return view('manager.menage.create', compact('pageTitle', 'producteurs', 'sections', 'localites'));
     }
@@ -270,7 +271,8 @@ class MenageController extends Controller
         $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
             return $localite->active();
         });
-        $producteurs  = Producteur::with('localite')->get();
+        $producteurs  = Producteur::joinRelationship('localite.section')
+        ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->with('localite')->get();
         $sections = $cooperative->sections;
         $menage   = Menage::findOrFail($id);
         $ordures = $menage->menage_ordure->pluck('ordure_menagere')->toArray();
@@ -285,7 +287,8 @@ class MenageController extends Controller
         $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
             return $localite->active();
         });
-        $producteurs  = Producteur::with('localite')->get();
+        $producteurs  = Producteur::joinRelationship('localite.section')
+        ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->with('localite')->get();
         $sections = $cooperative->sections;
         $menage   = Menage::findOrFail($id);
         $ordures = $menage->menage_ordure->pluck('ordure_menagere')->toArray();

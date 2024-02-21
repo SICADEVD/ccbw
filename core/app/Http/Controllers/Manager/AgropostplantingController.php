@@ -56,7 +56,8 @@ class AgropostplantingController extends Controller
                 $producteurDist[] = $data->producteur_id;
             }
         }
-        $producteurs = Producteur::whereIn('id',$producteurDist)->get();
+        $producteurs = Producteur::joinRelationship('localite.section')
+        ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->whereIn('producteurs.id',$producteurDist)->get();
          
         $sections = Section::get();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id', $manager->cooperative_id], ['localites.status', 1]])->orderBy('nom')->get();

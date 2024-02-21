@@ -59,7 +59,8 @@ class ActiviteCommunautaireController extends Controller
         $pageTitle = "Ajouter une Activité Communautaire";
         $manager = auth()->user();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id', $manager->cooperative_id], ['localites.status', 1]])->orderBy('nom')->get();
-        $producteurs = Producteur::with('localite')->get();
+        $producteurs = Producteur::joinRelationship('localite.section')
+        ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->with('localite')->get();
         return view('manager.activite-communautaire.create', compact('pageTitle', 'localites', 'producteurs'));
     }
 
@@ -215,7 +216,8 @@ class ActiviteCommunautaireController extends Controller
         $communauteSociale = ActiviteCommunautaire::find($id); // Remplacez ActionSociale par le nom de votre modèle
         // $dataLocalite = ActiviteCommunautaireLocalite::where('activite_communautaire_id', $id)->pluck('localite_id')->toArray();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id', $manager->cooperative_id], ['localites.status', 1]])->orderBy('nom')->get();
-        $producteurs = Producteur::with('localite')->get();
+        $producteurs = Producteur::joinRelationship('localite.section')
+        ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->with('localite')->get();
 
         foreach ($communauteSociale->beneficiaires as $item) {
             $dataLocalite[] = $item->localite_id;
@@ -235,9 +237,11 @@ class ActiviteCommunautaireController extends Controller
     public function createnonmembre($id)
     {
         $pageTitle = "Ajouter un Non Membre";
+        $manager   = auth()->user(); 
         $activite = ActiviteCommunautaire::find($id);
         $localiteIds = array_unique($activite->beneficiaires->pluck('localite_id')->toArray());
-        $producteurs = Producteur::whereIn('localite_id', $localiteIds)->get();
+        $producteurs = Producteur::joinRelationship('localite.section')
+        ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->whereIn('localite_id', $localiteIds)->get();
         return view('manager.activite-communautaire.non-membrecreate', compact('pageTitle', 'id', 'producteurs', 'activite', 'localiteIds'));
     }
 
@@ -272,10 +276,12 @@ class ActiviteCommunautaireController extends Controller
     public function editnonmembre($id)
     {
         $pageTitle = "Modifier un Non Membre";
+        $manager = auth()->user();
         $nonmembre = ActiviteCommunautaireNonMembre::find($id);
         $activite = ActiviteCommunautaire::find($nonmembre->activite_communautaire_id);
         $localiteIds = array_unique($activite->beneficiaires->pluck('localite_id')->toArray());
-        $producteurs = Producteur::whereIn('localite_id', $localiteIds)->get();
+        $producteurs = Producteur::joinRelationship('localite.section')
+        ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->whereIn('localite_id', $localiteIds)->get();
         return view('manager.activite-communautaire.non-membreedit', compact('pageTitle', 'nonmembre', 'producteurs', 'activite', 'localiteIds'));
     }
 

@@ -47,7 +47,8 @@ class ApplicationController extends Controller
         $pageTitle = "Ajouter une application";
         $manager = auth()->user();
 
-        $producteurs = Producteur::with('localite')->get();
+        $producteurs = Producteur::joinRelationship('localite.section')
+        ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->with('localite')->get();
 
         $cooperative = Cooperative::with('sections.localites.section')->find($manager->cooperative_id);
 
@@ -174,7 +175,8 @@ class ApplicationController extends Controller
     {
         $pageTitle = "Mise à jour de la application";
         $manager   = auth()->user();
-        $producteurs  = Producteur::with('localite')->get();
+        $producteurs  = Producteur::joinRelationship('localite.section')
+        ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->with('localite')->get();
         $parcelles = Parcelle::with('producteur')->get();
         $staffs = User::whereHas('roles', function($q){ $q->whereIn('name', ['Applicateur']); });
         $campagnes = Campagne::active()->pluck('nom', 'id');
@@ -198,7 +200,8 @@ class ApplicationController extends Controller
     public function show($id){
         $pageTitle = "Détails de la application";
         $manager   = auth()->user();
-        $producteurs  = Producteur::with('localite')->get();
+        $producteurs  = Producteur::joinRelationship('localite.section')
+        ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->with('localite')->get();
         $parcelles = Parcelle::with('producteur')->get();
         $staffs = User::whereHas('roles', function($q){ $q->whereIn('name', ['Applicateur']); });
         $campagnes = Campagne::active()->pluck('nom', 'id');

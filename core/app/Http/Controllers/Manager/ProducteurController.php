@@ -109,9 +109,10 @@ class ProducteurController extends Controller
         try {
 
             $request->validated();
+$manager = auth()->user();
 
-
-            $producteur = Producteur::where('id', $request->producteur_id)->first();
+            $producteur = Producteur::joinRelationship('localite.section')
+            ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->where('producteurs.id', $request->producteur_id)->first();
 
             if ($producteur->status == Status::NO) {
                 $notify[] = ['error', 'Ce producteur est désactivé'];
@@ -214,7 +215,9 @@ class ProducteurController extends Controller
     public function showproducteur($id)
     {
         $pageTitle = "Informations du producteur";
-        $producteur = Producteur::findOrFail($id);
+        $manager = auth()->user();
+        $producteur = Producteur::joinRelationship('localite.section')
+        ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->findOrFail($id);
         $manager   = auth()->user();
         $sections = Section::with('cooperative')->where('cooperative_id', $manager->cooperative_id)->get();
         $localites = Localite::active()->with('section')->get();

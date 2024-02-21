@@ -149,7 +149,7 @@ class LivraisonCentraleController extends Controller
         $transporteurs = Transporteur::where([['cooperative_id', $staff->cooperative_id]])->with('cooperative', 'entreprise')->get();
         $vehicules = Vehicule::with('marque')->get();
         $remorques = Remorque::all();
-        $producteurs  = Producteur::joinRelationship('localite.section')->where('sections.cooperative_id', $staff->cooperative_id)->select('producteurs.*')->orderBy('producteurs.nom')->get();
+        $producteurs  = Producteur::joinRelationship('localite.section')->where([['sections.cooperative_id', $staff->cooperative_id],['producteurs.status',1]])->select('producteurs.*')->orderBy('producteurs.nom')->get();
 
         $campagne = Campagne::active()->first();
         $nomCamp = $campagne->nom;

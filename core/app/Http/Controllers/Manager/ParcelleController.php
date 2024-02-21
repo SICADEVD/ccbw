@@ -48,7 +48,7 @@ class ParcelleController extends Controller
         $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
             return $localite->active();
         });
-        $producteurs = Producteur::joinRelationship('localite.section')->where('cooperative_id', $manager->cooperative_id)->get();
+        $producteurs = Producteur::joinRelationship('localite.section')->where([['cooperative_id', $manager->cooperative_id],['producteurs.status',1]])->get();
 
         $parcelles = Parcelle::dateFilter()->searchable(['codeParc'])
             ->latest('id')
@@ -81,7 +81,7 @@ class ParcelleController extends Controller
             })
             ->get();
         $producteurs = Producteur::joinRelationship('localite.section')
-            ->where('cooperative_id', $manager->cooperative_id)
+            ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status',1]])
             ->when(request()->localite, function ($query, $localite) {
                 $query->where('localite_id', $localite);
             })
@@ -119,7 +119,7 @@ class ParcelleController extends Controller
             })
             ->get();
         $producteurs = Producteur::joinRelationship('localite.section')
-            ->where('cooperative_id', $manager->cooperative_id)
+            ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status',1]])
             ->when(request()->localite, function ($query, $localite) {
                 $query->where('localite_id', $localite);
             })
@@ -153,7 +153,8 @@ class ParcelleController extends Controller
         $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
             return $localite->active();
         });
-        $producteurs  = Producteur::with('localite')->get();
+        $producteurs  = Producteur::joinRelationship('localite.section')
+        ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->with('localite')->get();
         $arbres = Agroespecesarbre::all();
         return view('manager.parcelle.create', compact('pageTitle', 'producteurs', 'localites', 'sections', 'arbres'));
     }
@@ -174,7 +175,8 @@ class ParcelleController extends Controller
 
             foreach ($dataPolygones as $index => $data) {
 
-                $producteur = Producteur::where('codeProd', $data['codeProducteur'])->first();
+                $producteur = Producteur::joinRelationship('localite.section')
+                ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->where('codeProd', $data['codeProducteur'])->first();
                 if ($producteur == null) {
                     $producteur = new Producteur();
                 }
@@ -595,6 +597,7 @@ class ParcelleController extends Controller
             'erosion' => 'érosion',
         ];
         $request->validate($validationRule, $messages, $attributes);
+        $manager = auth()->user();
         $localite = Localite::where('id', $request->localite)->first();
 
         if ($localite->status == Status::NO) {
@@ -606,7 +609,8 @@ class ParcelleController extends Controller
             $parcelle = Parcelle::findOrFail($request->id);
             $codeParc = $parcelle->codeParc;
             if ($codeParc == '') {
-                $produc = Producteur::select('codeProdapp')->find($request->producteur_id);
+                $produc = Producteur::joinRelationship('localite.section')
+                ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->select('codeProdapp')->find($request->producteur_id);
                 if ($produc != null) {
                     $codeProd = $produc->codeProdapp;
                 } else {
@@ -617,7 +621,8 @@ class ParcelleController extends Controller
             $message = "La parcelle a été mise à jour avec succès";
         } else {
             $parcelle = new Parcelle();
-            $produc = Producteur::select('codeProdapp')->find($request->producteur_id);
+            $produc = Producteur::joinRelationship('localite.section')
+            ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->select('codeProdapp')->find($request->producteur_id);
             if ($produc != null) {
                 $codeProd = $produc->codeProdapp;
             } else {
@@ -758,7 +763,8 @@ class ParcelleController extends Controller
         $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
             return $localite->active();
         });
-        $producteurs  = Producteur::with('localite')->get();
+        $producteurs  = Producteur::joinRelationship('localite.section')
+        ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->with('localite')->get();
         $protections = $parcelle->parcelleTypeProtections->pluck('typeProtection')->all();
         $arbres = Agroespecesarbre::all();
         $agroespeceabreParcelle = agroespeceabre_parcelle::where('parcelle_id', $id)->get();
@@ -776,7 +782,8 @@ class ParcelleController extends Controller
         $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
             return $localite->active();
         });
-        $producteurs  = Producteur::with('localite')->get();
+        $producteurs  = Producteur::joinRelationship('localite.section')
+        ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->with('localite')->get();
         $protections = $parcelle->parcelleTypeProtections->pluck('typeProtection')->all();
         $arbres = Agroespecesarbre::all();
         $agroespeceabreParcelle = agroespeceabre_parcelle::where('parcelle_id', $id)->get();

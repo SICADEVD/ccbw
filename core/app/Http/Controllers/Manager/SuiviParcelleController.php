@@ -62,7 +62,8 @@ class SuiviParcelleController extends Controller
     {
         $pageTitle = "Ajouter un suivi parcelle";
         $manager   = auth()->user();
-        $producteurs  = Producteur::with('localite')->get();
+        $producteurs  = Producteur::joinRelationship('localite.section')
+        ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->with('localite')->get();
         $cooperative = Cooperative::with('sections.localites', 'sections.localites.section')->find($manager->cooperative_id);
         $sections = $cooperative->sections;
         $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
@@ -347,7 +348,8 @@ class SuiviParcelleController extends Controller
     {
         $pageTitle = "Mise à jour du suivi parcelle";
         $manager   = auth()->user();
-        $producteurs  = Producteur::with('localite')->get();
+        $producteurs  = Producteur::joinRelationship('localite.section')
+        ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->with('localite')->get();
         $cooperative = Cooperative::with('sections.localites', 'sections.localites.section')->find($manager->cooperative_id);
         $sections = $cooperative->sections;
         $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
@@ -372,7 +374,8 @@ class SuiviParcelleController extends Controller
     public function show($id){
         $pageTitle = "Détails du suivi parcelle";
         $manager   = auth()->user();
-        $producteurs  = Producteur::with('localite')->get();
+        $producteurs  = Producteur::joinRelationship('localite.section')
+        ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->with('localite')->get();
         $cooperative = Cooperative::with('sections.localites', 'sections.localites.section')->find($manager->cooperative_id);
         $sections = $cooperative->sections;
         $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {

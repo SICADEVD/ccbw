@@ -60,7 +60,7 @@ class AgroevaluationController extends Controller
                 $dataProd[] = $data->producteur_id;
             }
         }
-        $producteurs = Producteur::joinRelationship('localite.section')->where('cooperative_id', $manager->cooperative_id)->whereNotIn('producteurs.id', $dataProd)->get();
+        $producteurs = Producteur::joinRelationship('localite.section')->where([['cooperative_id', $manager->cooperative_id],['producteurs.status',1]])->whereNotIn('producteurs.id', $dataProd)->get();
 
         return view('manager.agroevaluation.create', compact('pageTitle', 'producteurs', 'localites', 'campagnes', 'especesarbres'));
     }
@@ -133,7 +133,8 @@ class AgroevaluationController extends Controller
         $localites = Localite::joinRelationship('section')->where([['cooperative_id', $manager->cooperative_id], ['localites.status', 1]])->orderBy('nom')->get();
 
         $evaluation   = Agroevaluation::findOrFail($id);
-        $producteurs  = Producteur::where('id', $evaluation->producteur_id)->first();
+        $producteurs  = Producteur::joinRelationship('localite.section')
+        ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->where('producteurs.id', $evaluation->producteur_id)->first();
         $especesarbres  = Agroespecesarbre::orderby('strate', 'asc')->orderby('nom', 'asc')->get();
         $agroevaluationEspece  = AgroevaluationEspece::where('agroevaluation_id', $evaluation->id)->get();
         $dataEspece = $dataQuantite = array();
@@ -152,7 +153,8 @@ class AgroevaluationController extends Controller
         $localites = Localite::joinRelationship('section')->where([['cooperative_id', $manager->cooperative_id], ['localites.status', 1]])->orderBy('nom')->get();
 
         $evaluation   = Agroevaluation::findOrFail($id);
-        $producteurs  = Producteur::where('id', $evaluation->producteur_id)->first();
+        $producteurs  = Producteur::joinRelationship('localite.section')
+        ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->where('producteurs.id', $evaluation->producteur_id)->first();
         $especesarbres  = Agroespecesarbre::orderby('strate', 'asc')->orderby('nom', 'asc')->get();
         $agroevaluationEspece  = AgroevaluationEspece::where('agroevaluation_id', $evaluation->id)->get();
         $dataEspece = $dataQuantite = array();

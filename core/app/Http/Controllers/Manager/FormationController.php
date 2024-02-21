@@ -52,7 +52,7 @@ class FormationController extends Controller
     {
         $pageTitle = "Ajouter un formation";
         $manager   = auth()->user();
-        $producteurs  = Producteur::joinRelationship('localite.section')->where('cooperative_id', $manager->cooperative_id)->with('localite')->get();
+        $producteurs  = Producteur::joinRelationship('localite.section')->where([['cooperative_id', $manager->cooperative_id],['producteurs.status',1]])->with('localite')->get();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id', $manager->cooperative_id], ['localites.status', 1]])->get();
         $typeformations  = TypeFormation::all();
         $themes  = ThemesFormation::with('typeFormation')->get();
@@ -186,7 +186,7 @@ class FormationController extends Controller
     {
         $pageTitle = "Mise à jour de la formation";
         $manager   = auth()->user();
-        $producteurs  = Producteur::joinRelationship('localite.section')->where('cooperative_id', $manager->cooperative_id)->with('localite')->get();
+        $producteurs  = Producteur::joinRelationship('localite.section')->where([['cooperative_id', $manager->cooperative_id],['producteurs.status',1]])->with('localite')->get();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id', $manager->cooperative_id], ['localites.status', 1]])->get();
         $formation   = SuiviFormation::findOrFail($id);
         $typeformations  = TypeFormation::all();
@@ -224,7 +224,8 @@ class FormationController extends Controller
     public function show($id){
         $pageTitle = "Détails de la formation";
         $manager   = auth()->user();
-        $producteurs  = Producteur::with('localite')->get();
+        $producteurs  = Producteur::joinRelationship('localite.section')
+        ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->with('localite')->get();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id', $manager->cooperative_id], ['localites.status', 1]])->get();
         $formation   = SuiviFormation::findOrFail($id);
         $typeformations  = TypeFormation::all();
@@ -287,19 +288,23 @@ class FormationController extends Controller
     public function createvisiteur($id)
     {
         $pageTitle = "Ajouter un visiteur";
+        $manager = auth()->user();
         $formation   = SuiviFormation::findOrFail($id);
         $localite = Localite::where('id', $formation->localite_id)->first();
         $idLocalite = $localite->id;
-        $producteurs = Producteur::where('localite_id', $localite->id)->get();
+        $producteurs = Producteur::joinRelationship('localite.section')
+        ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->where('localite_id', $localite->id)->get();
         return view('manager.formation.visiteurcreate', compact('pageTitle', 'producteurs', 'id', 'idLocalite'));
     }
     public function editvisiteur($id)
     {
         $pageTitle = "Mise à jour du visiteur";
+        $manager=auth()->user();
         $visiteur   = SuiviFormationVisiteur::findOrFail(request()->id);
         $localite = Localite::where('id', $visiteur->suiviFormation->localite_id)->first();
         $idLocalite = $localite->id;
-        $producteurs = Producteur::where('localite_id', $localite->id)->get();
+        $producteurs = Producteur::joinRelationship('localite.section')
+        ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->where('localite_id', $localite->id)->get();
         return view('manager.formation.visiteuredit', compact('pageTitle', 'producteurs', 'idLocalite', 'visiteur'));
     }
     public function storevisiteur(Request $request)
