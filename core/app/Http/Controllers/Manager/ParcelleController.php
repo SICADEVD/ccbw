@@ -38,7 +38,7 @@ class ParcelleController extends Controller
                 $query->where('section_id', $section);
             })
             ->get();
-        $producteurs = Producteur::joinRelationship('localite.section')
+        $producteurs = Producteur::joinRelationship('localite.section')->where([['cooperative_id', $manager->cooperative_id],['producteurs.status',1]])
             ->where('cooperative_id', $manager->cooperative_id)
             ->when(request()->localite, function ($query, $localite) {
                 $query->where('localite_id', $localite);
