@@ -64,7 +64,7 @@ class ProducteurController extends Controller
                 }
             })
             ->with('localite.section')
-            ->where('cooperative_id', $manager->cooperative_id)
+            ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status',1]])
             ->paginate(getPaginate());
 
             if(request()->download){
