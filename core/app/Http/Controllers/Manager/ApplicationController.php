@@ -141,7 +141,7 @@ class ApplicationController extends Controller
                     $applicationPesticide->nom = $pesticide['nom'];
                     $applicationPesticide->nomCommercial = $pesticide['nomCommercial'];
                     $applicationPesticide->dosage = $pesticide['dosage'];
-                    $applicationPesticide->doseUnite = $pesticide['dose'];
+                    $applicationPesticide->doseUnite = $pesticide['doseUnite'];
                     $applicationPesticide->quantiteUnite = $pesticide['quantiteUnite'];
                     $applicationPesticide->quantite = $pesticide['quantite'];
                     $applicationPesticide->toxicicologie = $pesticide['toxicicologie'];
