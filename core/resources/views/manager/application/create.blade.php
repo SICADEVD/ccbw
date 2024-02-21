@@ -225,9 +225,8 @@
                                                 <div class="col-xs-12 col-sm-6">
                                                     <div class="form-group row">
                                                         <label>Dose</label>
-                                                        <div type="number" name="pesticides[0][dosage]"
-                                                            class="input-group mb-3">
-                                                            <input type="text" class="form-control" placeholder="Dose"
+                                                        <div class="input-group mb-3">
+                                                            <input  type="number" name="pesticides[0][dosage]" class="form-control" placeholder="Dose"
                                                                 aria-label="Texte">
                                                             <div class="input-group-append">
                                                                 <select name="pesticides[0][doseUnite]" id="doseUnite-1"
@@ -241,9 +240,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
-
-
                                             </div>
                                             <div class="row mt-3">
 
@@ -251,8 +247,7 @@
 
                                                     <div class="form-group row">
                                                         <label>Dose</label>
-                                                        <div type="number" name="pesticides[0][dosage]"
-                                                            class="input-group mb-3">
+                                                        <div class="input-group mb-3">
                                                             <input type="number" name="pesticides[0][quantite]"
                                                                 id="quantite-1" class="form-control"
                                                                 placeholder="Quantité" aria-label="Texte">
@@ -392,17 +387,13 @@
                     pesticideCount +
                     '][matiereActive]" id="matiereActive' +
                     pesticideCount +
-                    '" class="form-control" placeholder="matière active 1, matière active 2 ...."></div></div><di class="row mt-3"><div class="col-xs-12 col-sm-4"><div class="form-group row"><label class="control-label">Toxicicologie</label><select class="form-control" id="toxicicologie-' +
+                    '" class="form-control" placeholder="matière active 1, matière active 2 ...."></div></div><di class="row mt-3"><div class="col-xs-12 col-sm-6"><div class="form-group row"><label class="control-label">Toxicicologie</label><select class="form-control" id="toxicicologie-' +
                     pesticideCount +
                     '" name="pesticides[' + pesticideCount +
-                    '][toxicicologie]"> <option value="">Selectionner une option</option><option value="I">I</option><option value="IA">IA</option><option value="IB">IB</option><option value="II">II</option><option value="III">III</option><option value="IV">IV</option></select></div></div><div class="col-xs-12 col-sm-4"><div class="form-group row"><label>Dose</label><input name="pesticides[' +
+                    '][toxicicologie]"> <option value="">Selectionner une option</option><option value="I">I</option><option value="IA">IA</option><option value="IB">IB</option><option value="II">II</option><option value="III">III</option><option value="IV">IV</option></select></div></div><div class="col-xs-12 col-sm-6"><div class="form-group row"><label>Dose</label><div class="input-group mb-3"><input  type="number" name="pesticides[0][dosage]" class="form-control" placeholder="Dose" aria-label="Texte"><div class="input-group-append"><select name="pesticides[' + pesticideCount +
+                    '][doseUnite]" id="doseUnite-' +
                     pesticideCount +
-                    '][dosage]" id="dosage-' +
-                    pesticideCount +
-                    '"class="form-control" placeholder="Dose"></div></div><div class="col-xs-12 col-sm-4"><div class="form-group row"><label>Unité de Dose</label><select class="form-control" id="doseUnite-' +
-                    pesticideCount +
-                    '" name="pesticides[' + pesticideCount +
-                    '][doseUnite]"><option value="L/HA">L/HA</option><option value="mL/HA">mL/HA</option><option value="Kg/HA">Kg/HA</option><option value="g/HA">g/HA</option></select></div></div></div><div class="row mt-3"><div class="col-xs-12 col-sm-4"><div class="form-group row"><label>Quantité</label><input name="pesticides[' +
+                    '" class="form-control"><option value="L/HA">L/HA</option><option value="mL/HA">mL/HA</option><option value="Kg/HA">Kg/HA</option><option value="g/HA">g/HA</option></select></div></div></div></div><div class="row mt-3"><div class="col-xs-12 col-sm-4"><div class="form-group row"><label>Quantité</label><input name="pesticides[' +
                     pesticideCount +
                     '][quantite]" id="quantite-' +
                     pesticideCount +
