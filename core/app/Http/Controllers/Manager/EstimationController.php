@@ -62,18 +62,22 @@ class EstimationController extends Controller
 
         $request->validate($validationRule);
 
-        $localite = Localite::where('id', $request->localite)->first();
+        // $localite = Localite::where('id', $request->localite)->first();
 
-        if ($localite->status == Status::NO) {
-            $notify[] = ['error', 'Cette localité est désactivée'];
-            return back()->withNotify($notify)->withInput();
-        }
+        // if ($localite->status == Status::NO) {
+        //     $notify[] = ['error', 'Cette localité est désactivée'];
+        //     return back()->withNotify($notify)->withInput();
+        // }
         
         if($request->id) {
             $estimation = Estimation::findOrFail($request->id);
             $message = "L'estimation a été mise à jour avec succès";
         } else {
-            $estimation = new Estimation();  
+            $estimation = Estimation::where([['campagne_id',$request->campagne],['parcelle_id',$request->parcelle]])->first();
+            if($estimation ==null){
+                $estimation = new Estimation(); 
+            }
+             
         } 
         
         $estimation->parcelle_id  = $request->parcelle;  
