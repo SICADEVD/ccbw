@@ -404,7 +404,9 @@
                     pesticideCount +
                     '][frequence]" id="frequence' +
                     pesticideCount +
-                    '" class="form-control" placeholder="Fréquence"></div></div></div></div></td>';
+                    '" class="form-control" placeholder="Fréquence"></div></div></div></div><div class="col-xs-12 col-sm-4"><button type="button" id="' +
+                    pesticideCount +
+                    '" class="removeRowPesticide btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></div></td>';
 
                 html_table += '</tr>';
                 //---> End create table tr
