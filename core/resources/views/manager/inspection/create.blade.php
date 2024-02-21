@@ -205,17 +205,17 @@
                 $('#myTable > tbody  > tr').each(function() {
                     var qty = $(this).find('option:selected').val();
 
-                    if (qty == "-1" || qty == "0" || qty == "1" || qty == "2") {
-                        sum = parseFloat(sum) + parseFloat(qty);
+                    // if (qty == "-1" || qty == "0" || qty == "1" || qty == "2") {
+                    //     sum = parseFloat(sum) + parseFloat(qty);
+                    // }
+                    if (qty == "Pas Conforme") {
+                        nonconforme += 1;
                     }
-                    if (qty == "-1") {
-                        nonconforme = parseFloat(nonconforme) + 1;
+                    if (qty == "Non Applicable") {
+                        nonapplicable += 1;
                     }
-                    if (qty == "0") {
-                        nonapplicable = parseFloat(nonapplicable) + 1;
-                    }
-                    if (qty == "1") {
-                        conforme = parseFloat(conforme) + 1;
+                    if (qty == "Conforme") {
+                        conforme += 1;
                     }
 
                 });
@@ -226,11 +226,10 @@
 
                 $('#totalquestionnonconforme').val(nonconforme);
                 $('#totalquestionnonapplicable').val(nonapplicable);
-                totalquestionconforme = $('#totalquestion').val() - $('#totalquestionnonconforme').val();
+                //totalquestionconforme = $('#totalquestion').val() - $('#totalquestionnonconforme').val();
                  
-                $('#totalquestionconforme').val(totalquestionconforme);
-                //var total1= $('#totalquestionconforme').val();
-                var total1= conforme;
+                $('#totalquestionconforme').val(conforme);
+                var total1= $('#totalquestionconforme').val(); 
                 var total2 = $('#totalquestion').val() - $('#totalquestionnonapplicable').val();
                 
                 tauxconformite = (total1 / total2)*100;
