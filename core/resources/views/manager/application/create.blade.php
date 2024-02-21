@@ -225,7 +225,7 @@
                                                 <div class="col-xs-12 col-sm-4">
                                                     <div class="form-group row">
                                                         <label>Dose</label>
-                                                        <input name="pesticides[0][dosage]" id="dosage-1"
+                                                        <input type="number" name="pesticides[0][dosage]" id="dosage-1"
                                                             class="form-control" placeholder="Dose">
                                                     </div>
                                                 </div>
@@ -235,7 +235,6 @@
                                                         <label>Unité de Dose</label>
                                                         <select name="pesticides[0][doseUnite]" id="doseUnite-1"
                                                             class="form-control">
-                                                            <option value="">Selectionner une option</option>
                                                             <option value="L/HA">L/HA</option>
                                                             <option value="mL/HA">mL/HA</option>
                                                             <option value="Kg/HA">Kg/HA</option>
@@ -248,7 +247,7 @@
                                                 <div class="col-xs-12 col-sm-4">
                                                     <div class="form-group row">
                                                         <label>Quantité</label>
-                                                        <input name="pesticides[0][quantite]" id="quantite-1"
+                                                        <input type="number" name="pesticides[0][quantite]" id="quantite-1"
                                                             class="form-control" placeholder="Quantité">
                                                     </div>
                                                 </div>
@@ -257,7 +256,6 @@
                                                         <label>Unité de quantité</label>
                                                         <select name="pesticides[0][quantiteUnite]" id="quantiteUnite-1"
                                                             class="form-control">
-                                                            <option value="">Sélectionnez une option</option>
                                                             <option value="Kg">Kg</option>
                                                             <option value="g">g</option>
                                                             <option value="L">L</option>
@@ -268,7 +266,7 @@
                                                 <div class="col-xs-12 col-sm-4">
                                                     <div class="form-group row">
                                                         <label>Fréquence</label>
-                                                        <input name="pesticides[0][frequence]" id="frequence-1"
+                                                        <input type="number" name="pesticides[0][frequence]" id="frequence-1"
                                                             class="form-control" placeholder="Fréquence">
                                                     </div>
                                                 </div>
@@ -394,7 +392,7 @@
                     '"class="form-control" placeholder="Dose"></div></div><div class="col-xs-12 col-sm-4"><div class="form-group row"><label>Unité de Dose</label><select class="form-control" id="doseUnite-' +
                     pesticideCount +
                     '" name="pesticides[' + pesticideCount +
-                    '][doseUnite]"> <option value="">Selectionner une option</option><option value="L/HA">L/HA</option><option value="mL/HA">mL/HA</option><option value="Kg/HA">Kg/HA</option><option value="g/HA">g/HA</option></select></div></div></div><div class="row mt-3"><div class="col-xs-12 col-sm-4"><div class="form-group row"><label>Quantité</label><input name="pesticides[' +
+                    '][doseUnite]"><option value="L/HA">L/HA</option><option value="mL/HA">mL/HA</option><option value="Kg/HA">Kg/HA</option><option value="g/HA">g/HA</option></select></div></div></div><div class="row mt-3"><div class="col-xs-12 col-sm-4"><div class="form-group row"><label>Quantité</label><input name="pesticides[' +
                     pesticideCount +
                     '][quantite]" id="quantite-' +
                     pesticideCount +
@@ -402,7 +400,7 @@
                     pesticideCount +
                     '][quantiteUnite]" id="quantiteUnite-' +
                     pesticideCount +
-                    '" class="form-control"><option value="">Sélectionnez une option</option><option value="Kg">Kg</option><option value="g">g</option><option value="L">L</option><option value="mL">mL</option></select></div></div><div class="col-xs-12 col-sm-4"><div class="form-group row"><label>Fréquence</label><input type="text" name="pesticides[' +
+                    '" class="form-control"><option value="Kg">Kg</option><option value="g">g</option><option value="L">L</option><option value="mL">mL</option></select></div></div><div class="col-xs-12 col-sm-4"><div class="form-group row"><label>Fréquence</label><input type="text" name="pesticides[' +
                     pesticideCount +
                     '][frequence]" id="frequence' +
                     pesticideCount +
