@@ -29,7 +29,7 @@
         <td>ID</td>  
         <td>Categorie</td>
         <td>Question</td>
-        <td>Point</td>
+        <td>Notation</td>
     </tr>
     </thead> 
     <?php

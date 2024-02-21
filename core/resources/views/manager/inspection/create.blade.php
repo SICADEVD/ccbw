@@ -128,9 +128,9 @@
                         <div class="form-group row">
                             {{ Form::label(__("Date d'évaluation"), null, ['class' => 'col-sm-4 control-label']) }}
                             <div class="col-xs-12 col-sm-8">
-                                {!! Form::date('date_evaluation', null, [
+                                {!! Form::text('date_evaluation', null, [
                                     'placeholder' => __("Date d'évaluation"),
-                                    'class' => 'form-control',
+                                    'class' => 'form-control dates',
                                     'id' => 'anneeCreation-1',
                                     'required',
                                 ]) !!}
@@ -152,8 +152,14 @@
     @push('breadcrumb-plugins')
         <x-back route="{{ route('manager.suivi.inspection.index') }}" />
     @endpush
-
+    @push('style-lib')
+    <link rel="stylesheet" href="{{ asset('assets/fcadmin/css/vendor/datepicker.min.css') }}">
+@endpush
     @push('script')
+    <script src="{{asset('assets/fcadmin/js/vendor/datepicker.min.js')}}"></script>
+    <script src="{{asset('assets/fcadmin/js/vendor/datepicker.fr.js')}}"></script> 
+    <script src="{{asset('assets/fcadmin/js/vendor/datepicker.en.js')}}"></script> 
+
         <script type="text/javascript">
             $(document).ready(function() {
 
@@ -239,6 +245,12 @@
             }
 
             $("#producteur").chained("#localite");
+            
+        $('.dates').datepicker({
+                maxDate: new Date(),
+                dateFormat: 'yyyy-mm-dd',
+                language: 'fr'
+            });
         </script>
     @endpush
 
