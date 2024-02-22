@@ -108,7 +108,10 @@ class ApiapplicationController extends Controller
                     $applicationPesticide->application_id = $id;
                     $applicationPesticide->nom = $pesticide['nom'];
                     $applicationPesticide->nomCommercial = $pesticide['nomCommercial'];
-                    $applicationPesticide->dose = $pesticide['dose'];
+                    $applicationPesticide->dosage = $pesticide['dosage'];
+                    $applicationPesticide->doseUnite = $pesticide['doseUnite'];
+                    $applicationPesticide->quantiteUnite = $pesticide['quantiteUnite'];
+                    $applicationPesticide->quantite = $pesticide['quantite'];
                     $applicationPesticide->toxicicologie = $pesticide['toxicicologie'];
                     $applicationPesticide->frequence = $pesticide['frequence'];
                     $applicationPesticide->save();
