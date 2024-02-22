@@ -26,9 +26,6 @@ class PhytoImport implements ToCollection, WithHeadingRow, WithValidation
         return[
             'codeproducteur' => 'required', 
             'codeparcelle' => 'required', 
-            'personne_application' => 'required', 
-            'superficie_pulverisee' => 'required', 
-            'date_application' => 'required',  
         ];
     }
     public function collection(Collection $collection)
@@ -40,9 +37,29 @@ class PhytoImport implements ToCollection, WithHeadingRow, WithValidation
  
         foreach($collection as $row)
          {
-           
+          dd($row); 
   $codeProd = $row['codeproducteur'];  
   $codeParc = $row['codeparcelle'];
+    $donnee = $row['qui_a_realise_lapplication'];
+    $donnee = $row['applicateur'];
+    $donnee = $row['a_t_il_suivi_une_formation'];
+    $donnee = $row['a_t_il_une_attestation'];
+    $donnee = $row['a_t_il_fait_un_bilan_de_sante'];
+    $donnee = $row['possede_t_il_un_epi'];
+    $donnee = $row['pesticides'];
+    $donnee = $row['nom_commercial'];
+    $donnee = $row['matieres_actives'];
+    $donnee = $row['toxicicologie'];
+    $donnee = $row['dose'];
+    $donnee = $row['unite_dose'];
+    $donnee = $row['quantite'];
+    $donnee = $row['unite_quantite'];
+    $donnee = $row['frequence'];
+    $donnee = $row['maladies_observees_dans_la_parcelle'];
+    $superficie_pulverisee = $row['superficie_pulverisee'];
+    $donnee = $row['delais_de_reentree_du_produit_en_jours'];
+    $duree_dapplication = $row['duree_dapplication'];
+    $date_dapplication = $row['date_dapplication'];
   $verification = Parcelle::joinRelationship('producteur')->where([['codeProd',$codeProd],['codeParc',$codeParc]])->first();
    
 if($verification !=null)
