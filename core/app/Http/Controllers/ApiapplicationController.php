@@ -49,9 +49,12 @@ class ApiapplicationController extends Controller
         $validationRule = [
             'pesticides.*.nom' => 'required|string',
             'pesticides.*.nomCommercial' => 'required|string',
-            'pesticides.*.dose' => 'required|integer',
             'pesticides.*.toxicicologie' => 'required|string',
             'pesticides.*.frequence' => 'required|integer',
+            'pesticides.*.dosage' => 'required|integer',
+            'pesticides.*.doseUnite' => 'required|string',
+            'pesticides.*.quantite' => 'required|integer',
+            'pesticides.*.quantiteUnite' => 'required|string',
         ];
 
 
