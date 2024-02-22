@@ -6,7 +6,12 @@
                 <div class="card-body" id="printFacture"> 
          {!! Form::model($inspection, ['method' => 'POST','route' => ['manager.suivi.inspection.store', $inspection->id],'class'=>'form-horizontal', 'id'=>'flocal', 'enctype'=>'multipart/form-data']) !!}
                         <input type="hidden" name="id" value="{{ $inspection->id }}"> 
-                        
+                        <div class="form-group row">
+                                <label class="col-sm-4 control-label">@lang('Campagne')</label>
+                                <div class="col-xs-12 col-sm-8">
+                                {{ $inspection->campagne->nom }} 
+                                </div>
+                            </div> 
                         <div class="form-group row">
                                 <label class="col-sm-4 control-label">@lang('Localite')</label>
                                 <div class="col-xs-12 col-sm-8">
