@@ -207,7 +207,7 @@
                                             </div>
 
                                             <div class="row mt-3">
-                                                <div class="col-xs-12 col-sm-6">
+                                                <div class="col-xs-12 col-sm-3">
                                                     <div class="form-group row">
                                                         <label class="control-label">Toxicicologie</label>
                                                         <select name="pesticides[0][toxicicologie]" id="toxicicologie-1"
@@ -222,7 +222,7 @@
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <div class="col-xs-12 col-sm-6">
+                                                <div class="col-xs-12 col-sm-3">
                                                     <div class="form-group row">
                                                         <label>Dose</label>
                                                         <div class="input-group mb-3">
@@ -240,10 +240,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="row mt-3">
 
-                                                <div class="col-xs-12 col-sm-6">
+                                                <div class="col-xs-12 col-sm-3">
 
                                                     <div class="form-group row">
                                                         <label>Quantité</label>
@@ -263,7 +261,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-xs-12 col-sm-6">
+                                                <div class="col-xs-12 col-sm-3">
                                                     <div class="form-group row">
                                                         <label>Fréquence</label>
                                                         <input type="number" name="pesticides[0][frequence]"
