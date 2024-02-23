@@ -27,7 +27,7 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-sm-4 control-label">@lang('Encadreur')</label>
+                                <label class="col-sm-4 control-label">@lang('Inspecteur')</label>
                                 <div class="col-xs-12 col-sm-8">
                                 {{ $inspection->user->lastname }} {{ $inspection->user->firstname }} 
                                  
