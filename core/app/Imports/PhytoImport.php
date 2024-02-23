@@ -9,6 +9,7 @@ use App\Models\Application;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\ApplicationMaladie;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -85,21 +86,14 @@ if($verification !=null)
         $application->save();
         if ($application != null) {
           $id = $application->id;
-          if ($request->maladies != null) {
-              ApplicationMaladie::where('application_id', $id)->delete();
-              $data = [];
-              foreach ($request->maladies as $maladie) {
-                  $data[] = [
-                      'application_id' => $id,
-                      'nom' => $maladie,
-                  ];
-              }
-              ApplicationMaladie::insert($data);
+          if ($maladies != null) {
+            $appMaladie = new ApplicationMaladie();
+            $appMaladie->application_id = $id;
+            $appMaladie->maladie = $maladies;
+            $appMaladie->save(); 
           }
-          if($request->pesticides != null){
-              ApplicationPesticide::where('application_id', $id)->delete();
-              MatiereActive::where('application_id', $id)->delete();
-              foreach ($request->pesticides as $pesticide) {
+          if($nom != null){
+               
                   $applicationPesticide = new ApplicationPesticide();
                   $applicationPesticide->application_id = $id;
                   $applicationPesticide->nom = $pesticide['nom'];
@@ -124,7 +118,7 @@ if($verification !=null)
                           $applicationMatieresactive->save();
                       }
                   }
-              }
+               
           }
          
       }
