@@ -308,4 +308,7 @@ class ApiAgroEvaluationContoller extends Controller
 
         return response()->json($distribution, 201);
     }
+    public function getdistributionproducteur(){
+        
+    }
 }
