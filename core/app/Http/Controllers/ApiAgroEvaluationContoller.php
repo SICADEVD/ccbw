@@ -11,9 +11,11 @@ use Illuminate\Http\Request;
 use App\Models\Agroevaluation;
 use App\Models\Agrodistribution;
 use App\Models\Agroespecesarbre;
+use App\Models\Agropostplanting;
 use Illuminate\Support\Facades\DB;
 use App\Models\AgroevaluationEspece;
 use App\Models\AgrodistributionEspece;
+use App\Models\AgropostplantingEspece;
 use App\Models\AgroapprovisionnementSectionEspece;
 
 class ApiAgroEvaluationContoller extends Controller
@@ -120,12 +122,12 @@ class ApiAgroEvaluationContoller extends Controller
 
         $producteurDistri = array();
         $producteurs  = Producteur::joinRelationship('localite.section')
-        ->join('agroevaluations', 'agroevaluations.producteur_id', '=', 'producteurs.id')
-        ->join('agroevaluation_especes', 'agroevaluation_especes.agroevaluation_id', '=', 'agroevaluations.id')
-        ->where('cooperative_id', $manager->cooperative_id)
-        ->select('producteurs.id as producteur_id', 'agroevaluation_especes.agroespecesarbre_id', 'agroevaluation_especes.total')
-        ->get();
-        
+            ->join('agroevaluations', 'agroevaluations.producteur_id', '=', 'producteurs.id')
+            ->join('agroevaluation_especes', 'agroevaluation_especes.agroevaluation_id', '=', 'agroevaluations.id')
+            ->where('cooperative_id', $manager->cooperative_id)
+            ->select('producteurs.id as producteur_id', 'agroevaluation_especes.agroespecesarbre_id', 'agroevaluation_especes.total')
+            ->get();
+
         $produc = Agrodistribution::select('producteur_id')->get();
         if ($produc) {
             foreach ($produc as $data) {
@@ -134,8 +136,8 @@ class ApiAgroEvaluationContoller extends Controller
         }
 
         $producteurs2 = [];
-        foreach($producteurs as $producteur){
-            if(in_array($producteur->producteur_id,$producteurDistri) == false){
+        foreach ($producteurs as $producteur) {
+            if (in_array($producteur->producteur_id, $producteurDistri) == false) {
                 $producteurs2[] = $producteur;
             }
         }
@@ -232,5 +234,78 @@ class ApiAgroEvaluationContoller extends Controller
     {
         $approvisionnements = DB::table('agroapprovisionnement_sections')->get();
         return response()->json($approvisionnements, 201);
+    }
+    public function storePostPlanting(Request $request)
+    {
+        $validationRule = [
+            'quantite' => 'required|array',
+        ];
+
+
+        $request->validate($validationRule);
+
+        if ($request->id) {
+            $distribution = Agropostplanting::findOrFail($request->id);
+            $message = "La distribution a été mise à jour avec succès";
+        } else {
+            $distribution = new Agropostplanting();
+        }
+        $manager   = User::where('id', $request->userid)->first();
+        $campagne = Campagne::active()->first();
+        $distribution->cooperative_id = $manager->cooperative_id;
+        $distribution->producteur_id = $request->producteur;
+        $distribution->quantite =  $request->total;
+        $distribution->quantitePlantee =  $request->qteplante;
+        $distribution->quantiteSurvecue =  $request->qtesurvecue;
+        $distribution->date_planting =  $request->date_planting;
+        $distribution->save();
+
+        $datas = [];
+        $k = 0;
+        $i = 0;
+        $nb = 0;
+
+        if ($distribution->id) {
+
+            $distributionID = $distribution->id;
+            $quantiterecue = $request->quantiterecue;
+            $quantiteplantee = $request->quantite;
+            $quantitesurvecuee = $request->quantitesurvecuee;
+            $commentaire = $request->commentaire;
+
+            foreach ($request->quantite as $producteurid => $agroespeces) {
+
+                $agroespeces = array_filter($agroespeces);
+
+                foreach ($agroespeces as $agroespecesarbresid => $total) {
+
+                    $find = AgropostplantingEspece::where([
+                        ['agropostplanting_id', $distributionID],
+                        ['agroespecesarbre_id', $agroespecesarbresid]
+                    ])->first();
+                    if ($find == null) {
+
+                        if ($total != null) {
+                            AgropostplantingEspece::insert([
+                                'Agropostplanting_id' => $distributionID,
+                                'agroespecesarbre_id' => $agroespecesarbresid,
+                                'total' => $quantiterecue[$producteurid][$agroespecesarbresid],
+                                'total_plante' => $quantiteplantee[$producteurid][$agroespecesarbresid],
+                                'total_survecue' => $quantitesurvecuee[$producteurid][$agroespecesarbresid],
+                                'commentaire' => $commentaire[$producteurid][$agroespecesarbresid],
+                                'created_at' => NOW()
+                            ]);
+                            $i++;
+                        } else {
+                            $k++;
+                        }
+                    } else {
+                        $k++;
+                    }
+                }
+            }
+        }
+
+        return response()->json($distribution, 201);
     }
 }
