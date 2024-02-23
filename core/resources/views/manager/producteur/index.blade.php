@@ -64,10 +64,10 @@
                                 <tr>
                                     {{-- <th>@lang('Photo')</th> --}}
                                     <th>@lang('Section')</th>
-                                    <th>@lang('Localite')</th>
-
+                                    <th>@lang('Localite')</th> 
                                     <th>@lang('Nom')</th>
                                     <th>@lang('Prenoms')</th>
+                                    <th>@lang('Code Producteur')</th> 
                                     <th>@lang('Sexe')</th>
                                     <th>@lang('Nationalite')</th>
                                     <th>@lang('Telephone')</th>
@@ -108,6 +108,9 @@
                                         </td>
                                         <td>
                                             <span>{{ $producteur->prenoms }}</span>
+                                        </td>
+                                        <td>
+                                            <span>{{ $producteur->codeProd }}</span>
                                         </td>
                                         <td>
                                             <span>{{ $producteur->sexe }}</span>
