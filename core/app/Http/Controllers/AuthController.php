@@ -116,6 +116,7 @@ class AuthController extends Controller
                     $permissionsrolesName=Str::replace("manager.suivi.","",$permissionsrolesName);
                     $permissionsrolesName=Str::replace("manager.traca.","",$permissionsrolesName);
                     //ajout de agro
+                    $permissionsrolesName=Str::replace("agro.","",$permissionsrolesName);
                     $permissionsrolesName=Str::replace("manager.","",$permissionsrolesName);
                     
                     $permissionsroles[]=Str::before($permissionsrolesName,".");
@@ -126,6 +127,7 @@ class AuthController extends Controller
                 
                 $nolisting = array(
                     "localites",
+                    "postplanting", 
                     "producteur",
                     "parcelle", //parcelle
                     "livraison",
