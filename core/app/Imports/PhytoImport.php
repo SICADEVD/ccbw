@@ -40,26 +40,27 @@ class PhytoImport implements ToCollection, WithHeadingRow, WithValidation
           dd($row); 
   $codeProd = $row['codeproducteur'];  
   $codeParc = $row['codeparcelle'];
-    $donnee = $row['qui_a_realise_lapplication'];
-    $donnee = $row['applicateur'];
-    $donnee = $row['a_t_il_suivi_une_formation'];
-    $donnee = $row['a_t_il_une_attestation'];
-    $donnee = $row['a_t_il_fait_un_bilan_de_sante'];
-    $donnee = $row['possede_t_il_un_epi'];
-    $donnee = $row['pesticides'];
-    $donnee = $row['nom_commercial'];
-    $donnee = $row['matieres_actives'];
-    $donnee = $row['toxicicologie'];
-    $donnee = $row['dose'];
-    $donnee = $row['unite_dose'];
-    $donnee = $row['quantite'];
-    $donnee = $row['unite_quantite'];
-    $donnee = $row['frequence'];
-    $donnee = $row['maladies_observees_dans_la_parcelle'];
-    $superficie_pulverisee = $row['superficie_pulverisee'];
-    $donnee = $row['delais_de_reentree_du_produit_en_jours'];
-    $duree_dapplication = $row['duree_dapplication'];
-    $date_dapplication = $row['date_dapplication'];
+    $personneApplication = $row['qui_a_realise_lapplication'];
+    $applicateur = $row['applicateur'];
+    $suiviFormation = $row['a_t_il_suivi_une_formation'];
+    $attestion = $row['a_t_il_une_attestation'];
+    $bilanSante = $row['a_t_il_fait_un_bilan_de_sante'];
+    $independantEpi = $row['possede_t_il_un_epi'];
+    $etatEpi = $row['est_il_en_bon_etat'];
+    $nom = $row['pesticides'];
+    $nomCommercial = $row['nom_commercial'];
+    $matiereActive = $row['matieres_actives'];
+    $toxicicologie = $row['toxicicologie'];
+    $dosage = $row['dose'];
+    $doseUnite = $row['unite_dose'];
+    $quantite = $row['quantite'];
+    $quantiteUnite = $row['unite_quantite'];
+    $frequence = $row['frequence'];
+    $maladies = $row['maladies_observees_dans_la_parcelle'];
+    $superficiePulverisee = $row['superficie_pulverisee'];
+    $delaisReentree = $row['delais_de_reentree_du_produit_en_jours'];
+    $heure_application = $row['duree_dapplication'];
+    $date_application = $row['date_dapplication'];
   $verification = Parcelle::joinRelationship('producteur')->where([['codeProd',$codeProd],['codeParc',$codeParc]])->first();
    
 if($verification !=null)
@@ -68,14 +69,65 @@ if($verification !=null)
   $campagne = Campagne::active()->first();
         $application = new Application();
         $application->campagne_id  = $campagne->id;
-        $application->parcelle_id  = $verification->id; 
-        $application->superficiePulverisee = $row['superficie_pulverisee'];
-        $application->delaisReentree = $row['delais_reentree_produit'];
-        $application->personneApplication = $row['personne_application'];
-        
-        $application->date_application = date('Y-m-d', strtotime($row['date_application'])); 
+        $application->parcelle_id  = $verification->id;  
+        $application->applicateur_id  = $applicateur; 
+        $application->suiviFormation = $suiviFormation;
+        $application->attestion = $attestion;
+        $application->bilanSante = $bilanSante;
+        $application->independantEpi = $independantEpi;
+        $application->etatEpi = $etatEpi;
+        $application->superficiePulverisee = $superficiePulverisee;
+        $application->delaisReentree = $delaisReentree;
+        $application->personneApplication = $personneApplication;
+        $application->date_application = date('Y-m-d', strtotime($date_application));
+        $application->heure_application = $heure_application;   
         $application->userid = auth()->user()->id;
         $application->save();
+        if ($application != null) {
+          $id = $application->id;
+          if ($request->maladies != null) {
+              ApplicationMaladie::where('application_id', $id)->delete();
+              $data = [];
+              foreach ($request->maladies as $maladie) {
+                  $data[] = [
+                      'application_id' => $id,
+                      'nom' => $maladie,
+                  ];
+              }
+              ApplicationMaladie::insert($data);
+          }
+          if($request->pesticides != null){
+              ApplicationPesticide::where('application_id', $id)->delete();
+              MatiereActive::where('application_id', $id)->delete();
+              foreach ($request->pesticides as $pesticide) {
+                  $applicationPesticide = new ApplicationPesticide();
+                  $applicationPesticide->application_id = $id;
+                  $applicationPesticide->nom = $pesticide['nom'];
+                  $applicationPesticide->nomCommercial = $pesticide['nomCommercial'];
+                  $applicationPesticide->dosage = $pesticide['dosage'];
+                  $applicationPesticide->doseUnite = $pesticide['doseUnite'];
+                  $applicationPesticide->quantiteUnite = $pesticide['quantiteUnite'];
+                  $applicationPesticide->quantite = $pesticide['quantite'];
+                  $applicationPesticide->toxicicologie = $pesticide['toxicicologie'];
+                  $applicationPesticide->frequence = $pesticide['frequence'];
+                  $applicationPesticide->save();
+
+                  if($applicationPesticide != null){
+                      MatiereActive::where('application_pesticide_id', $applicationPesticide->id)->delete();
+                      $idApplicationPesticide = $applicationPesticide->id;
+                      $matiereActive = explode(',',$pesticide['matiereActive']);
+                      foreach ($matiereActive as $matiere) {
+                          $applicationMatieresactive = new MatiereActive();
+                          $applicationMatieresactive->application_id = $id;
+                          $applicationMatieresactive->application_pesticide_id = $idApplicationPesticide;
+                          $applicationMatieresactive->nom = trim($matiere);
+                          $applicationMatieresactive->save();
+                      }
+                  }
+              }
+          }
+         
+      }
  
       $j++;
      }else{
