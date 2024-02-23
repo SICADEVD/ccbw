@@ -109,10 +109,13 @@ if($verification !=null)
           $id = $application->id;
           
           if ($maladies != null) {
+            $maladies = explode(',',$maladies);
+            foreach ($maladies as $maladie) {
             $appMaladie = new ApplicationMaladie();
             $appMaladie->application_id = $id;
-            $appMaladie->nom = $maladies;
+            $appMaladie->nom = $maladie;
             $appMaladie->save(); 
+            }
           }
           if($nom != null){
                
