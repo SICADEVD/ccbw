@@ -96,7 +96,7 @@ class LivraisonController extends Controller
 
         $periode = CampagnePeriode::where([['campagne_id', $campagne->id], ['periode_debut', '<=', gmdate('Y-m-d')], ['periode_fin', '>=', gmdate('Y-m-d')]])->latest()->first();
 
-        $cooperatives = Cooperative::active()->orderBy('name')->get();
+        $cooperatives = Cooperative::active()->where('id', $staff->cooperative_id)->orderBy('name')->get();
         $magasins = MagasinSection::join('users', 'magasin_sections.staff_id', '=', 'users.id')->where([['cooperative_id', $staff->cooperative_id], ['magasin_sections.status', 1]])->with('user')->orderBy('nom')->select('magasin_sections.*')->get();
 
         $staffs = User::whereHas('roles', function ($q) {
@@ -107,10 +107,10 @@ class LivraisonController extends Controller
             ->get();
 
         $producteurs  = Producteur::joinRelationship('localite.section')->where([['cooperative_id', $staff->cooperative_id],['producteurs.status',1]])->select('producteurs.*')->orderBy('producteurs.nom')->get();
+
         $certification = Producteur_certification::joinRelationship('producteur.localite.section')->where('cooperative_id', $staff->cooperative_id)->groupby('certification')->get();
         $parcelles  = Parcelle::joinRelationship('producteur.localite.section')->where('cooperative_id', $staff->cooperative_id)->with('producteur')->get();
 
-        $certification = Producteur_certification::joinRelationship('producteur.localite.section')->where('cooperative_id', $staff->cooperative_id)->groupby('certification')->get();
         return view('manager.livraison.create', compact('pageTitle', 'cooperatives', 'staffs', 'magasins', 'producteurs', 'parcelles', 'campagne', 'periode','certification'));
     }
 
@@ -118,8 +118,8 @@ class LivraisonController extends Controller
     {
 
         $staff = auth()->user();
-        // $cooperatives = Cooperative::active()->where('id', '!=', auth()->user()->cooperative_id)->orderBy('name')->get();
-        $cooperatives = Cooperative::active()->orderBy('name')->get();
+       $cooperatives = Cooperative::active()->where('id', auth()->user()->cooperative_id)->orderBy('name')->get();
+        //$cooperatives = Cooperative::active()->orderBy('name')->get();
         $magCentraux = MagasinCentral::where([['cooperative_id', $staff->cooperative_id]])->with('user')->orderBy('nom')->get();
         $magSections = MagasinSection::joinRelationship('section')->where([['cooperative_id', $staff->cooperative_id]])->with('user')->orderBy('nom')->get();
 

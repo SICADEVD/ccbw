@@ -18,6 +18,7 @@
                         </div>
                         
                     </div>
+ 
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="card border--primary mt-3">
@@ -71,6 +72,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="col-lg-6">
                             <div class="card border--primary mt-3">
                                 <h5 class="card-header bg--primary  text-white">@lang('Information Destinataire(Magasin de Section)')</h5>
@@ -134,71 +136,7 @@
                                 </h5>
                                 <div class="card-body">
                                     <div class="row" id="addedField">
-                                    <?php $i=0; ?>
-                                        @if(old('items'))
-                                            @foreach (old('items') as $item)
-                                            <div class="row single-item gy-2">
-                                                <div class="col-md-3">
-                                                    <select class="form-control selected_type select2" name="items[{{ $loop->index}}][producteur]"
-                                                    id='producteur-<?php echo $i; ?>' onchange=getParcelle(<?php echo $i; ?>) required>
-                                                        <option disabled selected value="">@lang('Producteurs')</option>
-                                                        @foreach($producteurs as $producteur)
-                                                            <option value="{{$producteur->id}}" @selected($item['producteur']==$producteur->id)
-                                                            data-id="{{$producteur->id}}"
-                                                                 data-price="{{ $periode->prix_champ}}"  >
-                                                                {{__($producteur->nom)}} 
-                                                                {{__($producteur->prenom)}}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <select class="form-control" name="items[{{ $loop->index}}][parcelle]" id="parcelle-<?php echo $i; ?>" required>
-                                                        <option disabled selected value="">@lang('Parcelles')</option>
-                                                        @foreach($parcelles as $parcelle)
-                                                            <option value="{{$parcelle->id}}" @selected($item['parcelle']==$parcelle->id) >{{ __('Parcelle')}} 
-                                                                {{__($parcelle->codeParc)}}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                             <div class="col-md-2">
-                                            <select class="form-control selected_type" name="items[{{ $loop->index}}][type]" required>
-                                                    <option disabled selected value="">@lang('Type')</option> 
-                                                        <option value="{{ __('Certifie') }}"
-                                                        @selected($item['type']=='Certifie')>{{ __('Certifie') }}</option>
-                                                        <option value="{{ __('Ordinaire') }}"
-                                                        @selected($item['type']=='Ordinaire')>{{ __('Ordinaire') }}</option>
-                                                </select> 
-                                            </div>
-                                            <div class="col-md-2">
-                                            <select class="form-control" name="items[{{ $loop->index}}][certificat]" required>
-                                                     @foreach($certification $data) 
-                                                        <option value="{{ $data->certification }}"
-                                                        @selected($item['certificat']==$data->certification)>{{ $data->certification }}</option>
-                                                    @endforeach 
-                                                </select> 
-                                            </div>
-                                                <div class="col-md-2">
-                                                    <div class="input-group mb-3">
-                                                        <input type="number" class="form-control quantity" value="{{$item['quantity']}}"  name="items[{{ $loop->index }}][quantity]"  required>
-                                                        <span class="input-group-text unit">Kg</i></span>
-                                                    </div>
-                                                </div> 
-                                                <div class="col-md-3">
-                                                    <div class="input-group">
-                                                        <input type="text"  class="form-control single-item-amount" value="{{$item['amount']}}"  name="items[{{ $loop->index }}][amount]" required readonly>
-                                                        <span class="input-group-text">{{__($general->cur_text)}}</span>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-1">
-                                                    <button class="btn btn--danger w-100 removeBtn w-100 h-45" type="button">
-                                                        <i class="fa fa-times"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            @endforeach
-                                        @endif
+                                     
                                     </div>
                                     <div class="border-line-area">
                                         <h6 class="border-line-title">@lang('Resume')</h6>
