@@ -154,7 +154,7 @@ class LivraisonController extends Controller
             'estimate_date'    => 'required|date|date_format:Y-m-d',
         ]);
         
-
+        $manager = auth()->user();
         $campagne = Campagne::active()->first();
         $periode = CampagnePeriode::where([['campagne_id', $campagne->id], ['periode_debut', '<=', gmdate('Y-m-d')], ['periode_fin', '>=', gmdate('Y-m-d')]])->latest()->first();
 
@@ -301,8 +301,8 @@ class LivraisonController extends Controller
             'estimate_date'    => 'required|date|date_format:Y-m-d',
         ]);
 
-        $manager                      = auth()->user();
-        $livraison                     = new StockMagasinCentral();
+        $manager = auth()->user();
+        $livraison = new StockMagasinCentral();
         $campagne = Campagne::active()->first();
         $periode = CampagnePeriode::where([['campagne_id', $campagne->id], ['periode_debut', '<=', gmdate('Y-m-d')], ['periode_fin', '>=', gmdate('Y-m-d')]])->latest()->first();
 
