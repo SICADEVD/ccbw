@@ -39,7 +39,7 @@ class EstimationImport implements ToCollection, WithHeadingRow, WithValidation
   $superficie = $row['superficie'];
   $codeProd = $row['codeproducteur']; 
   //Get the user emails
- 
+  $superficie=is_numeric(trim($superficie)) ? round(trim($superficie),2) : trim($superficie);
   $verification = DB::table('parcelles as pa')->join('producteurs as p','pa.producteur_id','=','p.id')->orWhere('p.codeProd',$codeProd)->orWhere('p.codeProdapp',$codeProd)->where('pa.superficie',$superficie)->select('pa.*','p.codeProdapp','p.codeProd')->first();
 
 if($verification !=null)
