@@ -29,7 +29,7 @@
                                 @forelse($magasinSections as $magasin)
                                     <tr>
                                     <td>
-                                            <span>{{ $magasin->section->libelle }}</span>
+                                           <span>{{ $magasin->section ? $magasin->section->libelle : 'Section non disponible' }}</span>
                                         </td> 
                                     <td>
                                             <span>{{  $magasin->user->lastname }} {{  $magasin->user->firstname }}</span>
