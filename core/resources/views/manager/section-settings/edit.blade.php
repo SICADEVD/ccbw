@@ -39,15 +39,15 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <?php echo Form::label(__('Sous Préfecture'), null, ['class' => 'control-label col-xs-12 col-sm-4']); ?>
+                        <?php echo Form::label(__('Région'), null, ['class' => 'control-label col-xs-12 col-sm-4']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::text('region', null, ['placeholder' => __('Sous préfecture'), 'class' => 'form-control', 'required']); ?>
+                            <?php echo Form::text('region', null, ['placeholder' => __('Région'), 'class' => 'form-control']); ?>
                         </div>
                     </div>
                     <div class="form-group row">
                         <?php echo Form::label(__('Sous Préfecture'), null, ['class' => 'control-label col-xs-12 col-sm-4']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::text('sousPrefecture', null, ['placeholder' => __('Sous préfecture'), 'class' => 'form-control', 'required']); ?>
+                            <?php echo Form::text('sousPrefecture', null, ['placeholder' => __('Sous préfecture'), 'class' => 'form-control']); ?>
                         </div>
                     </div>
                     <div class="form-group">
