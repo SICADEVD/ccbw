@@ -343,7 +343,7 @@ class ParcelleController extends Controller
                 'region' => $region,
                 'prenoms' => $prenoms,
                 'nom' => $nom,
-                'genre' => $genre,
+                'genre' => ucfirst($genre),
                 'certification' => $certification,
                 'programme' => $programme
             );
