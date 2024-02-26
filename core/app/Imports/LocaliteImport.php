@@ -4,6 +4,7 @@ namespace App\Imports;
 
 use App\Models\Localite;
 use App\Models\Producteur;
+use App\Models\Section;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -36,6 +37,10 @@ class LocaliteImport implements ToCollection, WithHeadingRow, WithValidation
 
                 $nom = $this->verifylocalite($row['nom']);
                 $codeLocal = $this->generelocalitecode($nom);
+                if($row['section'] !=null){
+                    $section = Section::where([['libelle',$row['section']],['cooperative_id',auth()->user()->cooperative_id]])->first();
+                    $section = $section->id;
+                }
 
                 $insert_data = array(
                     'section_id' => $section,
