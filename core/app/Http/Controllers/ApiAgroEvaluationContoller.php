@@ -129,6 +129,8 @@ class ApiAgroEvaluationContoller extends Controller
             'evaluations' => $producteurs2,
         ], 201);
     }
+
+
     public function producteursDistribues(Request $request)
     {
         $manager = User::where('id', $request->userid)->get()->first();
@@ -137,7 +139,7 @@ class ApiAgroEvaluationContoller extends Controller
             ->join('agroevaluations', 'agroevaluations.producteur_id', '=', 'producteurs.id')
             ->join('agroevaluation_especes', 'agroevaluation_especes.agroevaluation_id', '=', 'agroevaluations.id')
             ->where('cooperative_id', $manager->cooperative_id)
-            ->select('producteurs.id as producteur_id', 'agroevaluation_especes.agroespecesarbre_id', 'agroevaluation_especes.total')
+            ->select('producteurs.id as producteur_id', 'producteurs.nom', 'producteurs.prenoms', 'agroevaluation_especes.agroespecesarbre_id as id_arbre', 'agroevaluation_especes.total as quantite')
             ->get();
 
         $produc = Agrodistribution::select('producteur_id')->get();
@@ -150,12 +152,21 @@ class ApiAgroEvaluationContoller extends Controller
         $producteursDistribues = [];
         foreach ($producteurs as $producteur) {
             if (in_array($producteur->producteur_id, $producteurDistri)) {
-                $producteursDistribues[] = $producteur;
+                if (!isset($producteursDistribues[$producteur->producteur_id])) {
+                    $producteursDistribues[$producteur->producteur_id] = [
+                        'nom' => $producteur->nom,
+                        'prenoms' => $producteur->prenoms,
+                        'id' => $producteur->producteur_id,
+                        'arbres' => []
+                    ];
+                }
+                $producteursDistribues[$producteur->producteur_id]['arbres'][] = [
+                    'id_arbre' => $producteur->id_arbre,
+                    'quantite' => $producteur->quantite
+                ];
             }
         }
-        return response()->json([
-            'evaluations' => $producteursDistribues,
-        ], 200);
+        return response()->json(array_values($producteursDistribues), 200);
     }
     public function store_distribution(Request $request)
     {
