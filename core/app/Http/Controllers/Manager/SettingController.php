@@ -667,7 +667,7 @@ class SettingController extends Controller
 
         if ($data != null) {
             $code = $data->code;
-            $chaine_number = Str::afterLast($code, '-');
+            $chaine_number = intval(Str::afterLast($code, '-'));
             if ($chaine_number < 10) {
                 $zero = "00000";
             } else if ($chaine_number < 100) {
