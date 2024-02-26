@@ -90,6 +90,7 @@ Route::match(['POST'],'apiagroevaluation', [ApiAgroEvaluationContoller::class, '
 Route::match(['POST'],'getbesoinsproducteurs', [ApiAgroEvaluationContoller::class, 'getproducteursBesoin']);
 Route::match(['POST'],'apidistribution', [ApiAgroEvaluationContoller::class, 'store_distribution']);
 Route::match(['POST'],'getbesoinprod', [ApiAgroEvaluationContoller::class, 'besoinproducteur']);
+Route::match(['POST'],'getproducteursdistribues', [ApiAgroEvaluationContoller::class, 'producteursDistribues']);
 Route::match(['POST'],'getapprovisionnementsection', [ApiAgroEvaluationContoller::class, 'getApprovisionnementSection']);
 // route pour post planting
     Route::match(['POST'],'postplanting', [ApiAgroEvaluationContoller::class, 'storePostPlanting']);
