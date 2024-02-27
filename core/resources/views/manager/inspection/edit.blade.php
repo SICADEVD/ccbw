@@ -63,7 +63,7 @@
               foreach($categoriequestionnaire as $catquest){
                 ?>
                                 <tr>
-                                    <td colspan="2"><strong><?php echo $catquest->titre; ?></strong></td>
+                                    <td colspan="3"><strong><?php echo $catquest->titre; ?></strong></td>
                                 </tr>
                                 <?php 
                
@@ -92,6 +92,9 @@
                           }
                          ?>
                                         </select>
+                                        </td>
+                                        <td>
+                                            {{ $q->commentaire }}
                                     </td>
                                 </tr>
 

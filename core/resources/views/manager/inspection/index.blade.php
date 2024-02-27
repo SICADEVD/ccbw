@@ -100,13 +100,13 @@
                                         <td> @php echo $inspection->statusBadge; @endphp </td>
                                         <td>
                                         <a href="{{ route('manager.suivi.inspection.exportExcel.inspectionAll',['id'=>encrypt($inspection->id)]) }}" class="btn  btn-outline--info ml-1"><i class="las la-cloud-download-alt"></i> Exporter</a>
-
+                                        <a href="{{ route('manager.suivi.inspection.show', $inspection->id) }}"
+                                                    class="btn btn-outline--warning ml-1"><i class="la la-file"></i>@lang('Details')</a>
                                             <button type="button" class="btn btn-sm btn-outline--primary" data-bs-toggle="dropdown" aria-expanded="false"><i
                                                     class="las la-ellipsis-v"></i>@lang('Action')
                                              </button>
                                             <div class="dropdown-menu p-0">
-                                                <a href="{{ route('manager.suivi.inspection.show', $inspection->id) }}"
-                                                    class="dropdown-item"><i class="la la-file"></i>@lang('Details')</a> 
+                                                
                                                 @if ($inspection->status == Status::DISABLE)
                                                     <button type="button" class="confirmationBtn  dropdown-item"
                                                         data-action="{{ route('manager.suivi.inspection.status', $inspection->id) }}"

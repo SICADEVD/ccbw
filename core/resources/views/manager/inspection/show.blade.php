@@ -42,40 +42,29 @@
 
               $note = 0;
               $total=0;
-              foreach($categoriequestionnaire as $catquest){
+             $themeArray=array();
+
+              foreach($inspection->reponsesInspection as $reponse){
+                
                 ?>
-<tr><td colspan="3"><strong><?php echo $catquest->titre; ?></strong></td></tr>
-              <?php 
-               
-              foreach($inspection->reponses as $q) {
-                if($q->categorie_questionnaire_id == $catquest->id)
-                {
-                   ?>
-
-
+                @if(!in_array($reponse->questionnaire->categorieQuestion->titre,$themeArray))
+<tr><td colspan="4"><strong><?php echo $reponse->questionnaire->categorieQuestion->titre; ?></strong></td></tr>
+@php
+$themeArray[] = $reponse->questionnaire->categorieQuestion->titre;
+@endphp
+@endif
+              
                    <tr>
-                   <td><?php echo $q->nom; ?>
+                   <td><?php echo $reponse->questionnaire->nom; ?>
               </td> 
-              <td><?php echo $q->certificat; ?>
+              <td><?php echo $reponse->questionnaire->certificat; ?>
               </td> 
               <td>
-              <?php
-                          foreach($notations as $not)
-                          { 
-                               ?>
-                               @if($not->nom==$q->pivot->notation)
-                                 <span class="badge @if($not->nom=='Conforme')badge-success @endif @if($not->nom=='Pas Conforme')badge-danger @endif @if($not->nom=='Non Applicable')badge-info @endif"><?php echo $not->nom; ?></span>
-                               @endif 
-                                            <?php
-                          }
-                         ?>
+              <span class="badge @if($reponse->notation=='Conforme')badge-success @endif @if($reponse->notation=='Pas Conforme')badge-danger @endif @if($reponse->notation=='Non Applicable')badge-info @endif"><?php echo $reponse->notation; ?></span>
                    </td>
-                   </tr>
-
-
-                   <?php 
-                  } 
-                }
+                   <td> {{ $reponse->commentaire }}  </td>
+                   </tr> 
+                   <?php  
               }
               ?>
               </tbody>

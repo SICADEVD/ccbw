@@ -162,7 +162,7 @@
 
         <script type="text/javascript">
             $(document).ready(function() {
-
+              
                 update_amounts();
                 $('#flocal').change(function() {
                     update_amounts();
@@ -216,12 +216,19 @@
                     // }
                     if (qty == "Pas Conforme") {
                         nonconforme += 1;
+                        $(this).find('.comment').show();
+                        $(this).find('.comment').attr('required','required');
                     }
                     if (qty == "Non Applicable") {
                         nonapplicable += 1;
+                        $(this).find('.comment').show();
+                        $(this).find('.comment').attr('required','required');
                     }
                     if (qty == "Conforme") {
                         conforme += 1;
+                        $(this).find('.comment').val("");
+                        $(this).find('.comment').hide();
+                        
                     }
 
                 });

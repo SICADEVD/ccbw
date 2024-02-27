@@ -45,7 +45,7 @@
         <tbody>
         <tr>
             <td><?php echo $c->id; ?></td>
-            <td><?php echo $c->certificat; ?></td>
+            <td><?php echo implode(',',json_decode($c->certificat)); ?></td>
             <td><?php echo $c->producteur->localite->nom; ?></td>
             <td><?php echo $c->campagne->nom; ?></td>
             <td><?php echo $c->producteur->nom; ?></td>

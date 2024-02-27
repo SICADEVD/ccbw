@@ -30,6 +30,7 @@
         <td>Categorie</td>
         <td>Question</td>
         <td>Notation</td>
+        <td>Commentaire</td>
     </tr>
     </thead> 
     <?php
@@ -42,6 +43,7 @@
             <td><?php echo $c->questionnaire->categorieQuestion->titre; ?></td>
             <td><?php echo $c->questionnaire->nom; ?></td>
             <td><?php echo $c->notation; ?></td>
+            <td><?php echo $c->commentaire; ?></td>
         </tr>
         </tbody>
         <?php

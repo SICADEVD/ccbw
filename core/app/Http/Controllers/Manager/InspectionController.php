@@ -113,6 +113,7 @@ class InspectionController extends Controller
             $datas = []; 
            
             if(count($request->reponse)) { 
+                $commentaire = $request->commentaire;
                 InspectionQuestionnaire::where('inspection_id',$id)->delete();
                 $i=0; 
                 foreach($request->reponse as $key=>$value){
@@ -120,7 +121,8 @@ class InspectionController extends Controller
                         $datas[] = [
                         'inspection_id' => $id, 
                         'questionnaire_id' => $key, 
-                        'notation' => $value, 
+                        'notation' => $value,
+                        'commentaire' => $commentaire[$key],  
                     ];  
                 } 
             }
@@ -184,7 +186,7 @@ class InspectionController extends Controller
             $note = 0;
            
             foreach($categoriequestionnaire as $catquest){ 
-$contents .='<tr><td colspan="3"><strong>'. $catquest->titre.'</strong></td></tr>';
+$contents .='<tr><td colspan="4"><strong>'. $catquest->titre.'</strong></td></tr>';
            
             foreach($catquest->questions as $q) { 
                 if(!in_array($q->certificat, $request->certificat)){
@@ -205,6 +207,9 @@ $contents .='<tr><td colspan="3"><strong>'. $catquest->titre.'</strong></td></tr
                            $a++;
                         } 
                         $contents .='</select>
+                 </td>
+                 <td>
+                 <textarea class="comment" name="commentaire['. $q->id.']" cols="10" style="display:none;"></textarea>
                  </td>
                  </tr>';
  

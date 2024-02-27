@@ -24,7 +24,9 @@ class Inspection extends Model
     {
         return $this->belongsTo(User::class,'formateur_id');
     }
-    
+    public function reponsesInspection(){
+        return $this->hasMany(InspectionQuestionnaire::class,'inspection_id');
+    }
     public function reponses(){
         return $this->belongsToMany(Questionnaire::class,'inspection_questionnaires')->withPivot('notation');
     }
