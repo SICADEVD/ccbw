@@ -180,7 +180,7 @@ class ParcelleController extends Controller
                 if ($producteur == null) {
                     $producteur = new Producteur();
                 }
-                $cooperative = Cooperative::where('name', $data['cooperative'])->first();
+                //$cooperative = Cooperative::where('name', $data['cooperative'])->first();
                 $section = Section::where([['cooperative_id', $manager->cooperative_id], ['libelle', $data['section']]])->first();
                 if ($section == null) {
                     $section = new Section();
@@ -229,7 +229,7 @@ class ParcelleController extends Controller
                 $prodcertif->certification = $certification->nom;
                 $prodcertif->save();
 
-                $parcelle = Parcelle::where([['producteur_id', $producteur->id]])->first();
+                $parcelle = Parcelle::where([['producteur_id', $producteur->id],['codeParc',$data['codeParcelle']]])->first();
                 if ($parcelle == null) {
                     $parcelle = new Parcelle();
                 }
@@ -300,6 +300,7 @@ class ParcelleController extends Controller
             $cooperative = (string)$placemark->ExtendedData->SchemaData->SimpleData[2];
             $codeCCC = (string)$placemark->ExtendedData->SchemaData->SimpleData[3];
             $codeProducteur = Str::before((string)$placemark->ExtendedData->SchemaData->SimpleData[4]," ");
+            $codeParcelle = Str::before((string)$placemark->ExtendedData->SchemaData->SimpleData[5]," ");
             $section = (string)$placemark->ExtendedData->SchemaData->SimpleData[6];
             $localite = (string)$placemark->ExtendedData->SchemaData->SimpleData[7];
             $sousPrefecture = (string)$placemark->ExtendedData->SchemaData->SimpleData[8];
@@ -336,13 +337,14 @@ class ParcelleController extends Controller
                 'cooperative' => $cooperative,
                 'codeCCC' => $codeCCC,
                 'codeProducteur' => $codeProducteur,
+                'codeParcelle' => $codeParcelle,
                 'section' => $section,
                 'localite' => $localite,
                 'sousPrefecture' => $sousPrefecture,
                 'departement' => $departement,
                 'region' => htmlentities($region, ENT_QUOTES | ENT_IGNORE, "UTF-8"),
-                'prenoms' => $prenoms,
-                'nom' => $nom,
+                'prenoms' => htmlentities($prenoms, ENT_QUOTES | ENT_IGNORE, "UTF-8"),
+                'nom' => htmlentities($nom, ENT_QUOTES | ENT_IGNORE, "UTF-8"),
                 'genre' => ucfirst($genre),
                 'certification' => $certification,
                 'programme' => $programme
