@@ -116,16 +116,14 @@ return $contents;
 
         if ($request->id) {
             $validationRule = array_merge($validationRule, [
-                'username' => 'required|max:40|unique:users,username,' . $request->id,
-                'mobile'   => 'required|max:40|unique:users,mobile,' . $request->id,
+                'username' => 'required|max:40|unique:users,username,' . $request->id, 
                 'password' => 'nullable|confirmed|min:4',
                 'role'   => 'required|max:40',
                 'type_compte'   => 'required|max:40',
             ]);
         } else {
             $validationRule = array_merge($validationRule, [
-                'username' => 'required|max:40|unique:users',
-                'mobile'   => 'required|max:40|unique:users',
+                'username' => 'required|max:40|unique:users', 
                 'password' => 'required|confirmed|min:4',
                 'role'   => 'required|max:40',
                 'type_compte'   => 'required|max:40',
