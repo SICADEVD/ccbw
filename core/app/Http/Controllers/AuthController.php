@@ -123,7 +123,7 @@ class AuthController extends Controller
                     $permissionsroles[]=Str::replace(".","_", Str::beforeLast($permissionsrolesName,"."));
                    
                 }
-                // dd($permissionsroles);
+                //dd($permissionsroles);
                 
                 $nolisting = array(
                     "localites",
@@ -140,8 +140,8 @@ class AuthController extends Controller
                     "menage",
                     "formation_visiteur",
                     "livraison_magcentral",
-                    "agro_evaluation",
-                    "agro_distribution",
+                    "evaluation",
+                    "distribution",
                     "application", //designant suivi d'application
                 );
                 
