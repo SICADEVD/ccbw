@@ -9,7 +9,7 @@
                         <div class="form-group row">
                                 <label class="col-sm-4 control-label">@lang('Campagne')</label>
                                 <div class="col-xs-12 col-sm-8">
-                                {{ $inspection->campagne->nom }} 
+                                {{ Str::replace('Campagne ','',$inspection->campagne->nom) }} 
                                 </div>
                             </div> 
                         <div class="form-group row">
