@@ -231,6 +231,7 @@ class ParcelleController extends Controller
                 $prodcertif->save();
 
                 $parcelle = Parcelle::where([['producteur_id', $producteur->id],['codeParc',$data['codeParcelle']]])->first();
+                 
                 if ($parcelle == null) {
                     $parcelle = new Parcelle();
                 }
@@ -238,7 +239,9 @@ class ParcelleController extends Controller
                 //$aire = $this->calculatePolygonArea($data['coordinates']);
 
                 $parcelle->producteur_id  = $producteur->id;
+                $parcelle->codeParc  = isset($data['codeParcelle']) ? $data['codeParcelle'] : null;
                 $parcelle->typedeclaration  = 'GPS';
+                $parcelle->culture  = 'CACAO';
                 $parcelle->superficie = is_numeric(trim($data['supHa'])) ? round(trim($data['supHa']),2) : trim($data['supHa']);
                 $parcelle->latitude = round($centroid['lat'], 6);
                 $parcelle->longitude = round($centroid['lng'], 6);
@@ -334,11 +337,11 @@ class ParcelleController extends Controller
                 'fieldName' => $fieldName,
                 'size' => $size,
                 'nOrdre' => $nOrdre,
-                'supHa' => $supHa, 
-                'cooperative' => $cooperative,
-                'codeCCC' => $codeCCC,
-                'codeProducteur' => $codeProducteur,
-                'codeParcelle' => $codeParcelle,
+                'supHa' => trim($supHa), 
+                'cooperative' => trim($cooperative),
+                'codeCCC' => trim($codeCCC),
+                'codeProducteur' => trim($codeProducteur),
+                'codeParcelle' => trim($codeParcelle),
                 'section' => trim(enleveaccents($section)),
                 'localite' => trim(enleveaccents($localite)),
                 'sousPrefecture' => trim(enleveaccents($sousPrefecture)),
