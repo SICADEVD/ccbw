@@ -40,7 +40,7 @@ class ProducteurImport implements ToCollection, WithHeadingRow, WithValidation
         foreach($collection as $row)
          {
           
-      $local_nom = $row['localites']; //Get user names
+      $local_nom = trim($row['localites']); //Get user names
   $localite = DB::table('localites')->where('nom',$local_nom)->first();
   if($localite !=null)
   {
