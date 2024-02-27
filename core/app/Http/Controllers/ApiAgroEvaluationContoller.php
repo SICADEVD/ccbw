@@ -131,42 +131,46 @@ class ApiAgroEvaluationContoller extends Controller
     }
 
 
+    // public function producteursDistribues(Request $request)
+    // {
+    //     $manager = User::where('id', $request->userid)->get()->first();
+    //     $producteurs  = Producteur::joinRelationship('localite.section')
+    //         ->join('agrodistributions', 'agrodistributions.producteur_id', '=', 'producteurs.id')
+    //         ->join('agrodistribution_especes', 'agrodistribution_especes.agrodistribution_id', '=', 'agrodistributions.id')
+    //         ->where('agrodistributions.cooperative_id', $manager->cooperative_id)
+    //         ->select('producteurs.id as producteur_id','producteurs.nom','producteurs.prenoms', 'agrodistribution_especes.agroespecesarbre_id', 'agrodistribution_especes.total')
+    //         ->get();
+
+
+    //     return response()->json($producteurs, 200);
+    // }
     public function producteursDistribues(Request $request)
     {
         $manager = User::where('id', $request->userid)->get()->first();
-        $producteurDistri = array();
         $producteurs  = Producteur::joinRelationship('localite.section')
-            ->join('agroevaluations', 'agroevaluations.producteur_id', '=', 'producteurs.id')
-            ->join('agroevaluation_especes', 'agroevaluation_especes.agroevaluation_id', '=', 'agroevaluations.id')
-            ->where('cooperative_id', $manager->cooperative_id)
-            ->select('producteurs.id as producteur_id', 'producteurs.nom', 'producteurs.prenoms', 'agroevaluation_especes.agroespecesarbre_id as id_arbre', 'agroevaluation_especes.total as quantite')
+            ->join('agrodistributions', 'agrodistributions.producteur_id', '=', 'producteurs.id')
+            ->join('agrodistribution_especes', 'agrodistribution_especes.agrodistribution_id', '=', 'agrodistributions.id')
+            ->where('agrodistributions.cooperative_id', $manager->cooperative_id)
+            ->select('producteurs.id as producteur_id', 'producteurs.nom', 'producteurs.prenoms', 'agrodistribution_especes.agroespecesarbre_id', 'agrodistribution_especes.total')
             ->get();
 
-        $produc = Agrodistribution::select('producteur_id')->get();
-        if ($produc) {
-            foreach ($produc as $data) {
-                $producteurDistri[] = $data->producteur_id;
-            }
-        }
-
-        $producteursDistribues = [];
+        $formattedProducteurs = [];
         foreach ($producteurs as $producteur) {
-            if (in_array($producteur->producteur_id, $producteurDistri)) {
-                if (!isset($producteursDistribues[$producteur->producteur_id])) {
-                    $producteursDistribues[$producteur->producteur_id] = [
-                        'nom' => $producteur->nom,
-                        'prenoms' => $producteur->prenoms,
-                        'id' => $producteur->producteur_id,
-                        'arbres' => []
-                    ];
-                }
-                $producteursDistribues[$producteur->producteur_id]['arbres'][] = [
-                    'id_arbre' => $producteur->id_arbre,
-                    'quantite' => $producteur->quantite
+            if (!isset($formattedProducteurs[$producteur->producteur_id])) {
+                $formattedProducteurs[$producteur->producteur_id] = [
+                    'nom' => $producteur->nom,
+                    'prenoms' => $producteur->prenoms,
+                    'id' => $producteur->producteur_id,
+                    'arbres' => []
                 ];
             }
+            $formattedProducteurs[$producteur->producteur_id]['arbres'][] = [
+                'id_arbre' => $producteur->agroespecesarbre_id,
+                'quantite' => $producteur->total
+            ];
         }
-        return response()->json(array_values($producteursDistribues), 200);
+
+        return response()->json(array_values($formattedProducteurs), 200);
     }
     public function store_distribution(Request $request)
     {
