@@ -87,7 +87,7 @@
                                             <span>{{ $inspection->user->lastname }} {{ $inspection->user->firstname }}</span>
                                         </td>
                                         <td>
-                                            <span>{{ $inspection->note }}</span>
+                                            <span>{{ $inspection->note }}%</span>
                                         </td>
                                         <td>
                                         <span class="d-block">{{ showDateTime($inspection->created_at) }}</span>
