@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document id="root_doc">
+<Schema name="polygone_cpi_final" id="polygone_cpi_final">
+	<SimpleField name="gpxtrkx_Tr" type="float"></SimpleField>
+	<SimpleField name="Sup_Ha" type="float"></SimpleField>
+	<SimpleField name="N°" type="float"></SimpleField>
+	<SimpleField name="T_CPI — Feuil3_Cooperative" type="string"></SimpleField>
+	<SimpleField name="T_CPI — Feuil3_Code_CCC" type="string"></SimpleField>
+	<SimpleField name="T_CPI — Feuil3_Code_Plantation" type="string"></SimpleField>
+	<SimpleField name="T_CPI — Feuil3_Code_Producteur2" type="string"></SimpleField>
+	<SimpleField name="T_CPI — Feuil3_Section" type="string"></SimpleField>
+	<SimpleField name="T_CPI — Feuil3_Localite" type="string"></SimpleField>
+	<SimpleField name="T_CPI — Feuil3_Sous-Prefecture" type="string"></SimpleField>
+	<SimpleField name="T_CPI — Feuil3_Departement" type="string"></SimpleField>
+	<SimpleField name="T_CPI — Feuil3_Region " type="string"></SimpleField>
+	<SimpleField name="T_CPI — Feuil3_Nom" type="string"></SimpleField>
+	<SimpleField name="T_CPI — Feuil3_Prenoms" type="string"></SimpleField>
+	<SimpleField name="T_CPI — Feuil3_Genre" type="string"></SimpleField>
+	<SimpleField name="T_CPI — Feuil3_Certification" type="string"></SimpleField>
+	<SimpleField name="T_CPI — Feuil3_Programme" type="string"></SimpleField>
+	<SimpleField name="T_CPI — Feuil3_Size_Ha" type="string"></SimpleField>
+</Schema>
+<Folder><name>polygone_cpi_final</name>
+  <Placemark>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#polygone_cpi_final">
+		<SimpleData name="Sup_Ha">1.342036</SimpleData>
+		<SimpleData name="N°">1</SimpleData>
+		<SimpleData name="T_CPI — Feuil3_Cooperative">SCOOPS CPI</SimpleData>
+		<SimpleData name="T_CPI — Feuil3_Code_CCC">SC090712</SimpleData>
+		<SimpleData name="T_CPI — Feuil3_Code_Plantation">DIG-0192</SimpleData>
+		<SimpleData name="T_CPI — Feuil3_Code_Producteur2">DIG-0192-P1</SimpleData>
+		<SimpleData name="T_CPI — Feuil3_Section">DIGBEUGNOA</SimpleData>
+		<SimpleData name="T_CPI — Feuil3_Localite">DIGBEUGNOA</SimpleData>
+		<SimpleData name="T_CPI — Feuil3_Sous-Prefecture">GAGNOA</SimpleData>
+		<SimpleData name="T_CPI — Feuil3_Departement">Gagnoa</SimpleData>
+		<SimpleData name="T_CPI — Feuil3_Region ">Région du GÔH</SimpleData>
+		<SimpleData name="T_CPI — Feuil3_Nom">ABLY</SimpleData>
+		<SimpleData name="T_CPI — Feuil3_Prenoms">DJOUROU THOMAS</SimpleData>
+		<SimpleData name="T_CPI — Feuil3_Genre">homme</SimpleData>
+		<SimpleData name="T_CPI — Feuil3_Certification">Rainforest Alliance</SimpleData>
+		<SimpleData name="T_CPI — Feuil3_Programme">Bandama</SimpleData>
+		<SimpleData name="T_CPI — Feuil3_Size_Ha">1.342036</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><Polygon><outerBoundaryIs><LinearRing><coordinates>-6.0745057929,6.1338996235,224.12 -6.0744668171,6.1338794231,225.57 -6.0744401626,6.133875316,224.61 -6.07429178136212,6.13380487758182,224.61 -6.0742198862,6.1337636691,224.61 -6.0742117558,6.133727124,225.09 -6.0742332973,6.1336814426,225.09 -6.0742354766,6.133550182,225.57 -6.0742042121,6.1333679594,226.05 -6.0742125101,6.1333470885,226.05 -6.0742372368,6.1332183424,226.05 -6.0742937308,6.1331180111,227.49 -6.074370509,6.1330423225,227.49 -6.0744280927,6.1330233794,227.01 -6.0745882709,6.1330961343,227.01 -6.074627582,6.1331000738,227.49 -6.0747477785,6.1332133133,226.53 -6.0749062803,6.1332017463,226.53 -6.0749678873,6.1332035065,225.09 -6.0750795342,6.1332377046,224.12 -6.0752174165,6.1333170813,223.16 -6.0752256308,6.133325547,223.16 -6.0753770918,6.1334695481,222.68 -6.0754948575,6.1335279699,220.28 -6.0755355097,6.1335768364,220.28 -6.0755241942,6.1337035708,220.28 -6.0755044129,6.1337814387,220.28 -6.0754859727,6.1339032277,220.28 -6.0755825322,6.1339981109,220.28 -6.0755355936,6.1340529285,220.76 -6.0753979627,6.1341777351,221.24 -6.0753404628,6.1342315469,221.24 -6.0752081964,6.134312097,221.72 -6.0751529597,6.1343128514,222.2 -6.0749875009,6.1341896374,223.16 -6.0748172645,6.1340819299,224.12 -6.0746252351,6.1339624878,224.12 -6.0745402426,6.1339131184,224.12 -6.0745057929,6.1338996235,224.12</coordinates></LinearRing></outerBoundaryIs></Polygon></MultiGeometry>
+  </Placemark> 
+</Folder>
+</Document></kml>

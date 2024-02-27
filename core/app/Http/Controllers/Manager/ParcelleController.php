@@ -181,7 +181,7 @@ class ParcelleController extends Controller
                     $producteur = new Producteur();
                 }
                 $cooperative = Cooperative::where('name', $data['cooperative'])->first();
-                $section = Section::where([['cooperative_id', $cooperative->id], ['libelle', $data['section']]])->first();
+                $section = Section::where([['cooperative_id', $manager->cooperative_id], ['libelle', $data['section']]])->first();
                 if ($section == null) {
                     $section = new Section();
                     $data['section'] = $this->verifysection($data['section']);
@@ -296,18 +296,18 @@ class ParcelleController extends Controller
             $fieldName="";
             $size="";
             $nOrdre="";
-            $supHa = (string)$placemark->ExtendedData->SchemaData->SimpleData[1];
-            $cooperative = (string)$placemark->ExtendedData->SchemaData->SimpleData[4];
-            $codeCCC = (string)$placemark->ExtendedData->SchemaData->SimpleData[5];
-            $codeProducteur = Str::before((string)$placemark->ExtendedData->SchemaData->SimpleData[6]," ");
-            $section = (string)$placemark->ExtendedData->SchemaData->SimpleData[7];
-            $localite = (string)$placemark->ExtendedData->SchemaData->SimpleData[8];
-            $sousPrefecture = (string)$placemark->ExtendedData->SchemaData->SimpleData[9];
-            $departement = (string)$placemark->ExtendedData->SchemaData->SimpleData[10];
-            $region = (string)$placemark->ExtendedData->SchemaData->SimpleData[11];
-            $prenoms = (string)$placemark->ExtendedData->SchemaData->SimpleData[12];
-            $nom = (string)$placemark->ExtendedData->SchemaData->SimpleData[13];
-            $genre = (string)$placemark->ExtendedData->SchemaData->SimpleData[14];
+            $supHa = (string)$placemark->ExtendedData->SchemaData->SimpleData[0];
+            $cooperative = (string)$placemark->ExtendedData->SchemaData->SimpleData[2];
+            $codeCCC = (string)$placemark->ExtendedData->SchemaData->SimpleData[3];
+            $codeProducteur = Str::before((string)$placemark->ExtendedData->SchemaData->SimpleData[4]," ");
+            $section = (string)$placemark->ExtendedData->SchemaData->SimpleData[6];
+            $localite = (string)$placemark->ExtendedData->SchemaData->SimpleData[7];
+            $sousPrefecture = (string)$placemark->ExtendedData->SchemaData->SimpleData[8];
+            $departement = (string)$placemark->ExtendedData->SchemaData->SimpleData[9];
+            $region = (string)$placemark->ExtendedData->SchemaData->SimpleData[10];
+            $prenoms = (string)$placemark->ExtendedData->SchemaData->SimpleData[11];
+            $nom = (string)$placemark->ExtendedData->SchemaData->SimpleData[12];
+            $genre = (string)$placemark->ExtendedData->SchemaData->SimpleData[13];
             $certification = "Rainforest Alliance";
             $programme = "Bandama";
 
@@ -340,7 +340,7 @@ class ParcelleController extends Controller
                 'localite' => $localite,
                 'sousPrefecture' => $sousPrefecture,
                 'departement' => $departement,
-                'region' => $region,
+                'region' => htmlentities($region, ENT_QUOTES | ENT_IGNORE, "UTF-8"),
                 'prenoms' => $prenoms,
                 'nom' => $nom,
                 'genre' => ucfirst($genre),
