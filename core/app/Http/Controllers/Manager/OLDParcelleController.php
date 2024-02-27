@@ -186,25 +186,24 @@ class ParcelleController extends Controller
                     $section = new Section();
                     $data['section'] = $this->verifysection($data['section']);
                 }
-                $section->cooperative_id = $manager->cooperative_id;
                 $section->region = $data['region'];
                 $section->departement = $data['departement'];
                 $section->sousPrefecture = $data['sousPrefecture'];
                 $section->libelle = $data['section'];
                 $section->save();
 
-                $localite = Localite::joinRelationship('section')->where([['cooperative_id', $manager->cooperative_id], ['nom', $data['localite']]])->first();
-                if($localite == null) { 
+                $localite = Localite::where([['section_id', $section->id], ['nom', $data['localite']]])->first();
+                if ($localite == null) {
+                    $nomLocal = $this->verifylocalite($data['localite']);
+                    $codeLocal = $this->generelocalitecode($nomLocal);
                     $localite = new Localite();
-                    $data['localite'] = $this->verifylocalite($data['localite']);
-                    $localite->codeLocal = $this->generelocalitecode($data['localite']); 
+                    $localite->nom = $nomLocal;
+                    $localite->section_id = $section->id;
+                    $localite->codeLocal = $codeLocal;
+                    $localite->save();
                 }
-                $localite->nom = $data['localite'];
-                $localite->section_id = $section->id;
-                $localite->codeLocal = $localite->codeLocal;
-                $localite->save();
+                $programme = Programme::where('libelle', $data['programme'])->first();
 
-                $programme = Programme::where('libelle', $data['programme'])->first(); 
 
                 $producteur->nom = utf8_encode($data['nom']);
                 $producteur->prenoms = utf8_encode($data['prenoms']);
@@ -339,13 +338,13 @@ class ParcelleController extends Controller
                 'codeCCC' => $codeCCC,
                 'codeProducteur' => $codeProducteur,
                 'codeParcelle' => $codeParcelle,
-                'section' => trim(enleveaccents($section)),
-                'localite' => trim(enleveaccents($localite)),
-                'sousPrefecture' => trim(enleveaccents($sousPrefecture)),
-                'departement' => trim(enleveaccents($departement)),
-                'region' => trim(enleveaccents($region)),
-                'prenoms' => trim(enleveaccents($prenoms)),
-                'nom' => trim(enleveaccents($nom)),
+                'section' => $section,
+                'localite' => $localite,
+                'sousPrefecture' => $sousPrefecture,
+                'departement' => $departement,
+                'region' => htmlentities($region, ENT_QUOTES | ENT_IGNORE, "UTF-8"),
+                'prenoms' => htmlentities($prenoms, ENT_QUOTES | ENT_IGNORE, "UTF-8"),
+                'nom' => htmlentities($nom, ENT_QUOTES | ENT_IGNORE, "UTF-8"),
                 'genre' => ucfirst($genre),
                 'certification' => $certification,
                 'programme' => $programme
