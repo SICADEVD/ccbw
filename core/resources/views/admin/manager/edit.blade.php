@@ -22,7 +22,7 @@
                                 <label for="rolePermission" class="form-label">Role</label>
                                 <select class="form-control" name="role" required> 
                                     @foreach ($roles as $role)
-                                        <option value="{{ $role->id }}">{{ $role->name }}</option>
+                                        <option value="{{ $role->id }}" {{ in_array($role->name, $userRole) ? 'selected' : '' }}>{{ $role->name }}</option>
                                     @endforeach
                                 </select>
                             </div>

@@ -99,8 +99,9 @@ class CooperativeManagerController extends Controller
                 'password' => $request->password,
             ]);
         }else{
+            
             DB::table('model_has_roles')->where('model_id', $request->id)->delete();
-            $manager->syncRoles($request->get('role'));
+           $manager->syncRoles($request->get('role'));
         }
 
         $notify[] = ['success', isset($message) ? $message : 'Le gestionnaire a été ajouté avec succès'];
@@ -112,7 +113,7 @@ class CooperativeManagerController extends Controller
         $pageTitle = "Mise à jour du gestionnaire de coopérative"; 
         $manager   = User::findOrFail($id);
         $cooperatives = Cooperative::where('status', Status::YES)->orderBy('name')->get();
-        $userRole = $manager->roles->pluck('name')->toArray();
+        $userRole = $manager->roles->pluck('name')->toArray(); 
         $roles = Role::latest()->get();
         return view('admin.manager.edit', compact('pageTitle', 'cooperatives', 'manager','userRole', 'roles'));
     }
