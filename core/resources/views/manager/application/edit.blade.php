@@ -478,9 +478,24 @@
                                     Foreurs</option>
                                 <option value="Chenilles"
                                     {{ in_array('Chenilles', $applicationMaladies) ? 'selected' : '' }}>Chenilles</option>
-                                    <option value="Autres"
-                                    {{ in_array('Autre', $applicationMaladies) ? 'selected' : '' }}>Autre</option>
+                                <option value="Pourriture brune"
+                                    {{ in_array('Pourriture brune', $applicationMaladies) ? 'selected' : '' }}>Pourriture
+                                    brune</option>
                             </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <?php echo Form::label(__('Avez d\' autres maladies/Ravageur ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-12 col-sm-8">
+                            <?php echo Form::select('reponse', ['' => 'Selectionner une option', 'non' => __('non'), 'oui' => __('oui')], null, ['class' => 'form-control reponse']); ?>
+                        </div>
+                    </div>
+                    <div id="autreMaladie">
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Autre Maladie/Ravageur'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::text('autreMaladie', null, ['placeholder' => __('Autre Maladie/Ravageur'), 'class' => 'form-control autreMaladie']); ?>
+                            </div>
                         </div>
                     </div>
 
@@ -609,8 +624,6 @@
             });
             $('#applicateurs,#infosIndependant,#etatEpis,#autreMaladie').hide();
 
-
-
             $('.personneApplication').change(function() {
                 var personneApplication = $('.personneApplication').val();
                 if (personneApplication == 'Independant') {
@@ -644,27 +657,28 @@
                 $('.attestion').attr('required', false);
                 $('.bilanSante').attr('required', false);
             }
-            $('.maladies').change(function() {
-                var maladies = $('.maladies').val();
-                if (maladies.includes('Autre')) {
+            $('.reponse').change(function() {
+                var reponse = $('.reponse').val();
+                if (reponse == 'oui') {
                     $('#autreMaladie').show('slow');
                     $('.autreMaladie').show('slow');
                     $('.autreMaladie').attr('required', true);
                 } else {
                     $('#autreMaladie').hide('slow');
-                    $('.autreMaladie').attr('required', false);
                     $('.autreMaladie').val('');
+                    $('.autreMaladie').attr('required', false);
                 }
             });
-            if ($('.maladies').val().includes('Autre')) {
+            if ($('.reponse').val() == 'oui') {
                 $('#autreMaladie').show('slow');
                 $('.autreMaladie').show('slow');
                 $('.autreMaladie').attr('required', true);
             } else {
                 $('#autreMaladie').hide('slow');
-                $('.autreMaladie').attr('required', false);
                 $('.autreMaladie').val('');
+                $('.autreMaladie').attr('required', false);
             }
+
             $('.independantEpi').change(function() {
                 var independantEpi = $('.independantEpi').val();
                 if (independantEpi == 'oui') {

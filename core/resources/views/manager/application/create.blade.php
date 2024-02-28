@@ -299,8 +299,14 @@
                                 <option value="Punaises">Punaises</option>
                                 <option value="Foreurs">Foreurs</option>
                                 <option value="Chenilles">Chenilles</option>
-                                <option value="Autre">Autre</option>
+                                <option value="Pourriture brune">Pourriture brune</option>
                             </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <?php echo Form::label(__('Avez d\' autres maladies/Ravageur ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-12 col-sm-8">
+                            <?php echo Form::select('reponse', ['' => 'Selectionner une option', 'non' => __('non'), 'oui' => __('oui')], null, ['class' => 'form-control reponse']); ?>
                         </div>
                     </div>
                     <div id="autreMaladie">
@@ -472,19 +478,18 @@
                     $('.etatEpi').attr('required', false);
                 }
             });
-            $('.maladies').change(function() {
-                var maladies = $('.maladies').val();
-                if (maladies.includes('Autre')) {
+            $('.reponse').change(function() {
+                var reponse = $('.reponse').val();
+                if (reponse == 'oui') {
                     $('#autreMaladie').show('slow');
                     $('.autreMaladie').show('slow');
                     $('.autreMaladie').attr('required', true);
                 } else {
                     $('#autreMaladie').hide('slow');
-                    $('.autreMaladie').attr('required', false);
                     $('.autreMaladie').val('');
+                    $('.autreMaladie').attr('required', false);
                 }
             });
-            
         });
         $('#localite').chained("#section")
         $("#producteur").chained("#localite");

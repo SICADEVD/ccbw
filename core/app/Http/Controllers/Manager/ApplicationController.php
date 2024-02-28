@@ -48,7 +48,7 @@ class ApplicationController extends Controller
         $manager = auth()->user();
 
         $producteurs = Producteur::joinRelationship('localite.section')
-        ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->with('localite')->get();
+            ->where([['cooperative_id', $manager->cooperative_id], ['producteurs.status', 1]])->with('localite')->get();
 
         $cooperative = Cooperative::with('sections.localites.section')->find($manager->cooperative_id);
 
@@ -63,11 +63,13 @@ class ApplicationController extends Controller
         $campagnes = Campagne::active()->pluck('nom', 'id');
         $parcelles = Parcelle::with('producteur')->get();
 
-        $staffs = User::whereHas('roles', function($q){ $q->whereIn('name', ['Applicateur']); })
-        ->where('cooperative_id', $manager->cooperative_id)
-        ->select('users.*')
-        ->get(); 
-       
+        $staffs = User::whereHas('roles', function ($q) {
+            $q->whereIn('name', ['Applicateur']);
+        })
+            ->where('cooperative_id', $manager->cooperative_id)
+            ->select('users.*')
+            ->get();
+
         return view('manager.application.create', compact('pageTitle', 'producteurs', 'localites', 'parcelles', 'staffs', 'sections', 'campagnes'));
     }
 
@@ -115,16 +117,14 @@ class ApplicationController extends Controller
         $application->personneApplication = $request->personneApplication;
         $application->date_application = $request->date_application;
         $application->heure_application = $request->heure_application;
+        $application->reponse = $request->reponse;
         $application->userid = auth()->user()->id;
         $application->save();
-
-       
 
         if ($application != null) {
             $id = $application->id;
             if ($request->maladies != null) {
                 ApplicationMaladie::where('application_id', $id)->delete();
-                $data = [];
                 foreach ($request->maladies as $maladie) {
                     $data[] = [
                         'application_id' => $id,
@@ -133,7 +133,7 @@ class ApplicationController extends Controller
                 }
                 ApplicationMaladie::insert($data);
             }
-            if($request->pesticides != null){
+            if ($request->pesticides != null) {
                 ApplicationPesticide::where('application_id', $id)->delete();
                 MatiereActive::where('application_id', $id)->delete();
                 foreach ($request->pesticides as $pesticide) {
@@ -149,10 +149,10 @@ class ApplicationController extends Controller
                     $applicationPesticide->frequence = $pesticide['frequence'];
                     $applicationPesticide->save();
 
-                    if($applicationPesticide != null){
+                    if ($applicationPesticide != null) {
                         MatiereActive::where('application_pesticide_id', $applicationPesticide->id)->delete();
                         $idApplicationPesticide = $applicationPesticide->id;
-                        $matiereActive = explode(',',$pesticide['matiereActive']);
+                        $matiereActive = explode(',', $pesticide['matiereActive']);
                         foreach ($matiereActive as $matiere) {
                             $applicationMatieresactive = new MatiereActive();
                             $applicationMatieresactive->application_id = $id;
@@ -163,7 +163,12 @@ class ApplicationController extends Controller
                     }
                 }
             }
-           
+            if ($request->autreMaladie != null) {
+                ApplicationMaladie::insert([
+                    'application_id' => $id,
+                    'nom' => $request->autreMaladie,
+                ]);
+            }
         }
         $notify[] = ['success', isset($message) ? $message : "L'application a été crée avec succès."];
         return back()->withNotify($notify);
@@ -176,9 +181,11 @@ class ApplicationController extends Controller
         $pageTitle = "Mise à jour de la application";
         $manager   = auth()->user();
         $producteurs  = Producteur::joinRelationship('localite.section')
-        ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->with('localite')->get();
+            ->where([['cooperative_id', $manager->cooperative_id], ['producteurs.status', 1]])->with('localite')->get();
         $parcelles = Parcelle::with('producteur')->get();
-        $staffs = User::whereHas('roles', function($q){ $q->whereIn('name', ['Applicateur']); });
+        $staffs = User::whereHas('roles', function ($q) {
+            $q->whereIn('name', ['Applicateur']);
+        });
         $campagnes = Campagne::active()->pluck('nom', 'id');
         $cooperative = Cooperative::with('sections.localites', 'sections.localites.section')->find($manager->cooperative_id);
         $sections = $cooperative->sections;
@@ -194,16 +201,19 @@ class ApplicationController extends Controller
             return $applicationPesticide->matieresActives = $matieresActives->where('application_pesticide_id', $applicationPesticide->id)->pluck('nom');
         })->all();
         $applicationMaladies = $application->applicationMaladies->pluck('nom')->all();
-       
+
         return view('manager.application.edit', compact('pageTitle', 'application', 'producteurs', 'localites', 'parcelles', 'staffs', 'sections', 'campagnes', 'applicationPesticides', 'applicationMaladies'));
     }
-    public function show($id){
+    public function show($id)
+    {
         $pageTitle = "Détails de la application";
         $manager   = auth()->user();
         $producteurs  = Producteur::joinRelationship('localite.section')
-        ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->with('localite')->get();
+            ->where([['cooperative_id', $manager->cooperative_id], ['producteurs.status', 1]])->with('localite')->get();
         $parcelles = Parcelle::with('producteur')->get();
-        $staffs = User::whereHas('roles', function($q){ $q->whereIn('name', ['Applicateur']); });
+        $staffs = User::whereHas('roles', function ($q) {
+            $q->whereIn('name', ['Applicateur']);
+        });
         $campagnes = Campagne::active()->pluck('nom', 'id');
         $cooperative = Cooperative::with('sections.localites', 'sections.localites.section')->find($manager->cooperative_id);
         $sections = $cooperative->sections;
@@ -219,7 +229,7 @@ class ApplicationController extends Controller
             return $applicationPesticide->matieresActives = $matieresActives->where('application_pesticide_id', $applicationPesticide->id)->pluck('nom');
         })->all();
         $applicationMaladies = $application->applicationMaladies->pluck('nom')->all();
-       
+
         return view('manager.application.show', compact('pageTitle', 'application', 'producteurs', 'localites', 'parcelles', 'staffs', 'sections', 'campagnes', 'applicationPesticides', 'applicationMaladies'));
     }
 
