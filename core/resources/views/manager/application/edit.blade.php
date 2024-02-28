@@ -495,6 +495,7 @@
                             <?php echo Form::label(__('Autre Maladie/Ravageur'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
                                 <?php echo Form::text('autreMaladie', null, ['placeholder' => __('Autre Maladie/Ravageur'), 'class' => 'form-control autreMaladie']); ?>
+                                <input type="text" name="autreMaladie" value=" " class="autreMaladie form-control autreMaladie">
                             </div>
                         </div>
                     </div>
