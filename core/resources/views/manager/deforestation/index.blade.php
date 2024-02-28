@@ -126,14 +126,14 @@ if(isset($parcelles) && count($parcelles)){
             $proprietaire = 'Coopérative:'. $cooperative.'<br>Section:'. $section.'<br>Localite:'. $localite.'<br>Producteur : '.$producteur.'<br>Code producteur:'. $code.'<br>Code Parcelle:'. $parcelle.'<br>Année creation:'. $annee.'<br>Latitude:'. $lat.'<br>Longitude:'. $long.'<br>Superficie:'. $superficie.' ha';
      $polygon ='';
 
-        $coords = explode(',0', $data->waypoints);
-        $coords = Arr::where($coords, function ($value, $key) {
-            if($value !="")
-            {
-                return  $value;
-            }
+        $coords = explode(" ", $data->waypoints);
+        // $coords = Arr::where($coords, function ($value, $key) {
+        //     if($value !="")
+        //     {
+        //         return  $value;
+        //     }
             
-        });
+        // });
          
          
          $nombre = count($coords); 
@@ -186,15 +186,15 @@ if(isset($foretclassees) && count($foretclassees)){
   $superficie= round(htmlentities($data->superficie, ENT_QUOTES | ENT_IGNORE, "UTF-8")*0.0001,2);
    $polygon ='';
 
-      $coords = explode(' ', $data->waypoints);
+      $coords = explode(" ", $data->waypoints);
       
-      $coords = Arr::where($coords, function ($value, $key) {
-          if($value !="")
-          {
-              return  $value;
-          }
+    //   $coords = Arr::where($coords, function ($value, $key) {
+    //       if($value !="")
+    //       {
+    //           return  $value;
+    //       }
           
-      });
+    //   });
       
  
        $nombre = count($coords); 

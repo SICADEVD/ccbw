@@ -106,14 +106,14 @@ if(isset($parcelles) && count($parcelles)){
             $pointsCoordinates = "['".$proprietaire."',".$long.",".$lat."]";
      $polygon ='';
 
-        $coords = explode(',0', $data->waypoints);
-        $coords = Arr::where($coords, function ($value, $key) {
-            if($value !="")
-            {
-                return  $value;
-            }
+        $coords = explode(" ", $data->waypoints);
+        // $coords = Arr::where($coords, function ($value, $key) {
+        //     if($value !="")
+        //     {
+        //         return  $value;
+        //     }
             
-        });
+        // });
          
          
          $nombre = count($coords); 

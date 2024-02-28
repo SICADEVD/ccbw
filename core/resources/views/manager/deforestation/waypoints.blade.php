@@ -158,15 +158,15 @@ if(isset($foretclassees) && count($foretclassees)){
   $superficie= round(htmlentities($data->superficie, ENT_QUOTES | ENT_IGNORE, "UTF-8")*0.0001,2);
    $polygon ='';
 
-      $coords = explode(' ', $data->waypoints);
+      $coords = explode(" ", $data->waypoints);
       
-      $coords = Arr::where($coords, function ($value, $key) {
-          if($value !="")
-          {
-              return  $value;
-          }
+    //   $coords = Arr::where($coords, function ($value, $key) {
+    //       if($value !="")
+    //       {
+    //           return  $value;
+    //       }
           
-      });
+    //   });
       
  
        $nombre = count($coords); 
