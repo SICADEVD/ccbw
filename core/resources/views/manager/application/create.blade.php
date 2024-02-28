@@ -290,16 +290,25 @@
                     </div>
 
                     <div class="form-group row mt-3">
-                        <label class="col-sm-4 control-label">@lang('Maladies observées dans la parcelle')</label>
+                        <label class="col-sm-4 control-label">@lang('Quelles sont les maladies/Ravageurs observés dans la parcelle ?')</label>
                         <div class="col-xs-12 col-sm-8">
-                            <select class="form-control select2-multi-select protections" name="maladies[]" multiple
+                            <select class="form-control select2-multi-select maladies" name="maladies[]" multiple
                                 required>
-                                <option value="">@lang('Selectionner les protections')</option>
+                                <option value="">@lang('Selectionner les maladies')</option>
                                 <option value="Mirides">Mirides</option>
                                 <option value="Punaises">Punaises</option>
                                 <option value="Foreurs">Foreurs</option>
                                 <option value="Chenilles">Chenilles</option>
+                                <option value="Autre">Autre</option>
                             </select>
+                        </div>
+                    </div>
+                    <div id="autreMaladie">
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Autre Maladie/Ravageur'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::text('autreMaladie', null, ['placeholder' => __('Autre Maladie/Ravageur'), 'class' => 'form-control autreMaladie']); ?>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -430,7 +439,7 @@
                 }
             });
 
-            $('#applicateurs,#infosIndependant,#etatEpis').hide();
+            $('#applicateurs,#infosIndependant,#etatEpis,#autreMaladie').hide();
 
             $('.personneApplication').change(function() {
                 var personneApplication = $('.personneApplication').val();
@@ -463,6 +472,19 @@
                     $('.etatEpi').attr('required', false);
                 }
             });
+            $('.maladies').change(function() {
+                var maladies = $('.maladies').val();
+                if (maladies.includes('Autre')) {
+                    $('#autreMaladie').show('slow');
+                    $('.autreMaladie').show('slow');
+                    $('.autreMaladie').attr('required', true);
+                } else {
+                    $('#autreMaladie').hide('slow');
+                    $('.autreMaladie').attr('required', false);
+                    $('.autreMaladie').val('');
+                }
+            });
+            
         });
         $('#localite').chained("#section")
         $("#producteur").chained("#localite");

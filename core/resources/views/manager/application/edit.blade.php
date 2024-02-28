@@ -464,7 +464,7 @@
                         </div>
                     </div>
                     <div class="form-group row mt-3">
-                        <label class="col-sm-4 control-label">@lang('Maladies observées dans la parcelle')</label>
+                        <label class="col-sm-4 control-label">@lang('Quelles sont les maladies/Ravageurs observés dans la parcelle ?')</label>
                         <div class="col-xs-12 col-sm-8">
                             <select class="form-control select2-multi-select protections" name="maladies[]" multiple
                                 required>
@@ -478,6 +478,8 @@
                                     Foreurs</option>
                                 <option value="Chenilles"
                                     {{ in_array('Chenilles', $applicationMaladies) ? 'selected' : '' }}>Chenilles</option>
+                                    <option value="Autres"
+                                    {{ in_array('Autre', $applicationMaladies) ? 'selected' : '' }}>Autre</option>
                             </select>
                         </div>
                     </div>
@@ -605,6 +607,7 @@
                     pesticideCount = parseInt(pesticideCount) - 1;
                 }
             });
+            $('#applicateurs,#infosIndependant,#etatEpis,#autreMaladie').hide();
 
 
 
@@ -640,6 +643,27 @@
                 $('.suiviFormation').attr('required', false);
                 $('.attestion').attr('required', false);
                 $('.bilanSante').attr('required', false);
+            }
+            $('.maladies').change(function() {
+                var maladies = $('.maladies').val();
+                if (maladies.includes('Autre')) {
+                    $('#autreMaladie').show('slow');
+                    $('.autreMaladie').show('slow');
+                    $('.autreMaladie').attr('required', true);
+                } else {
+                    $('#autreMaladie').hide('slow');
+                    $('.autreMaladie').attr('required', false);
+                    $('.autreMaladie').val('');
+                }
+            });
+            if ($('.maladies').val().includes('Autre')) {
+                $('#autreMaladie').show('slow');
+                $('.autreMaladie').show('slow');
+                $('.autreMaladie').attr('required', true);
+            } else {
+                $('#autreMaladie').hide('slow');
+                $('.autreMaladie').attr('required', false);
+                $('.autreMaladie').val('');
             }
             $('.independantEpi').change(function() {
                 var independantEpi = $('.independantEpi').val();
