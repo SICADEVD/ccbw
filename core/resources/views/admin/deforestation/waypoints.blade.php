@@ -169,13 +169,13 @@ if(isset($foretclassees) && count($foretclassees)){
 
       $coords = explode(' ', $data->waypoints);
       
-      $coords = Arr::where($coords, function ($value, $key) {
-          if($value !="")
-          {
-              return  $value;
-          }
+    //   $coords = Arr::where($coords, function ($value, $key) {
+    //       if($value !="")
+    //       {
+    //           return  $value;
+    //       }
           
-      });
+    //   });
       
  
        $nombre = count($coords); 
