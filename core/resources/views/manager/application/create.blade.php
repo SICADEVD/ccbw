@@ -304,7 +304,7 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <?php echo Form::label(__('Avez d\' autres maladies/Ravageur ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <?php echo Form::label(__('Avez-vous d\' autres maladies/Ravageur ?'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
                             <?php echo Form::select('reponse', ['' => 'Selectionner une option', 'non' => __('non'), 'oui' => __('oui')], null, ['class' => 'form-control reponse']); ?>
                         </div>

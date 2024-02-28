@@ -4,15 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\Campagne;
 use App\Models\Localite;
+use App\Constants\Status;
 use App\Models\Application;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\MatiereActive;
-use Illuminate\Support\Str;
 use App\Models\ApplicationMaladie;
 use Illuminate\Support\Facades\DB;
 use App\Models\ApplicationPesticide;
 use Illuminate\Support\Facades\File;
-use App\Constants\Status;
+use App\Models\ApplicationAutreMaladie;
 
 class ApiapplicationController extends Controller
 {
@@ -87,14 +88,15 @@ class ApiapplicationController extends Controller
         $application->delaisReentree = $request->delaisReentree;
         $application->personneApplication = $request->personneApplication;
         $application->date_application = $request->date_application;
-        $application->userid = $request->userid;
+        $application->heure_application = $request->heure_application;
+        $application->reponse = $request->reponse;
+        $application->userid = auth()->user()->id;
         $application->save();
 
         if ($application != null) {
             $id = $application->id;
             if ($request->maladies != null) {
                 ApplicationMaladie::where('application_id', $id)->delete();
-                $data = [];
                 foreach ($request->maladies as $maladie) {
                     $data[] = [
                         'application_id' => $id,
@@ -132,6 +134,16 @@ class ApiapplicationController extends Controller
                         }
                     }
                 }
+            }
+            if ($request->autreMaladie != null) {
+                ApplicationAutreMaladie::where('application_id', $id)->delete();
+                foreach ($request->autreMaladie as $maladie) {
+                    $data1[] = [
+                        'application_id' => $id,
+                        'libelle' => $maladie,
+                    ];
+                }
+                ApplicationAutreMaladie::insert($data1);
             }
         }
         return response()->json($application, 201);
