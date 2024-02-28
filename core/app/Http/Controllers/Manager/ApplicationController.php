@@ -198,6 +198,7 @@ class ApplicationController extends Controller
             return $localite->active();
         });
         $application   = Application::findOrFail($id);
+        $autreMaladies = ApplicationAutreMaladie::where('application_id', $id)->get();
 
         $applicationPesticides = $application->applicationPesticides;
         $matieresActives = MatiereActive::where('application_id', $id)->get();
@@ -207,7 +208,7 @@ class ApplicationController extends Controller
         })->all();
         $applicationMaladies = $application->applicationMaladies->pluck('nom')->all();
 
-        return view('manager.application.edit', compact('pageTitle', 'application', 'producteurs', 'localites', 'parcelles', 'staffs', 'sections', 'campagnes', 'applicationPesticides', 'applicationMaladies'));
+        return view('manager.application.edit', compact('pageTitle', 'application', 'producteurs', 'localites', 'parcelles', 'staffs', 'sections', 'campagnes', 'applicationPesticides', 'applicationMaladies', 'autreMaladies'));
     }
     public function show($id)
     {

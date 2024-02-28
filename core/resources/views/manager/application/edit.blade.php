@@ -494,12 +494,18 @@
                         <div class="form-group row">
                             <?php echo Form::label(__('Autre Maladie/Ravageur'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::text('autreMaladie', null, ['placeholder' => __('Autre Maladie/Ravageur'), 'class' => 'form-control autreMaladie']); ?>
-                                <input type="text" name="autreMaladie" value=" " class="autreMaladie form-control autreMaladie">
+                                <select name="autreMaladie[]" id="autreMaladies"
+                                    class="form-control select2-auto-tokenize autreMaladies" multiple>
+                                     @if (@$autreMaladies->count())
+                                    @foreach ($autreMaladies as $autreMaladie)
+                                        <option value="{{$autreMaladie->libelle }}" selected>{{ __($autreMaladie->libelle) }}
+                                        </option>
+                                    @endforeach
+                                @endif
+                                </select>
                             </div>
                         </div>
                     </div>
-
                     <div class="form-group row">
                         <?php echo Form::label(__('Superficie Pulvérisée'), null, ['class' => 'col-sm-4 control-label required']); ?>
                         <div class="col-xs-12 col-sm-8">
