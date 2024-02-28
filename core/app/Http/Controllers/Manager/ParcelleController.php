@@ -136,7 +136,7 @@ class ParcelleController extends Controller
             })
             ->when(request()->producteur, function ($query, $producteur) {
                 $query->where('producteur_id', $producteur);
-            })
+            })  
             ->with(['producteur.localite.section'])
             ->get();
         $total = count($parcelles);
