@@ -19,6 +19,7 @@ use App\Models\ApplicationMaladie;
 use Illuminate\Support\Facades\DB;
 use App\Exports\ExportApplications;
 use App\Http\Controllers\Controller;
+use App\Models\ApplicationAutreMaladie;
 use App\Models\ApplicationPesticide;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
@@ -164,10 +165,14 @@ class ApplicationController extends Controller
                 }
             }
             if ($request->autreMaladie != null) {
-                ApplicationMaladie::insert([
-                    'application_id' => $id,
-                    'nom' => $request->autreMaladie,
-                ]);
+               ApplicationAutreMaladie::where('application_id', $id)->delete();
+                foreach ($request->autreMaladie as $maladie) {
+                    $data1[] = [
+                        'application_id' => $id,
+                        'libelle' => $maladie,
+                    ];
+                }
+                ApplicationAutreMaladie::insert($data1);
             }
         }
         $notify[] = ['success', isset($message) ? $message : "L'application a été crée avec succès."];

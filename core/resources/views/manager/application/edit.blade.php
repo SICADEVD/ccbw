@@ -658,26 +658,21 @@
                 $('.attestion').attr('required', false);
                 $('.bilanSante').attr('required', false);
             }
+
             $('.reponse').change(function() {
                 var reponse = $('.reponse').val();
                 if (reponse == 'oui') {
                     $('#autreMaladie').show('slow');
-                    $('.autreMaladie').show('slow');
-                    $('.autreMaladie').attr('required', true);
                 } else {
                     $('#autreMaladie').hide('slow');
-                    $('.autreMaladie').val('');
-                    $('.autreMaladie').attr('required', false);
+                    $('#autreMaladies').val(null).trigger('change'); // Ajouté cette ligne
                 }
             });
             if ($('.reponse').val() == 'oui') {
                 $('#autreMaladie').show('slow');
-                $('.autreMaladie').show('slow');
-                $('.autreMaladie').attr('required', true);
             } else {
                 $('#autreMaladie').hide('slow');
-                $('.autreMaladie').val('');
-                $('.autreMaladie').attr('required', false);
+                $('#autreMaladies').val(null).trigger('change'); // Ajouté cette ligne
             }
 
             $('.independantEpi').change(function() {

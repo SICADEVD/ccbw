@@ -313,7 +313,10 @@
                         <div class="form-group row">
                             <?php echo Form::label(__('Autre Maladie/Ravageur'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::text('autreMaladie', null, ['placeholder' => __('Autre Maladie/Ravageur'), 'class' => 'form-control autreMaladie']); ?>
+                                <select name="autreMaladie[]" id="autreMaladies"
+                                    class="form-control select2-auto-tokenize autreMaladies" multiple>
+                                    <option value="null" disabled>@lang('Entrer les maladies/ravageurs')</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -482,12 +485,9 @@
                 var reponse = $('.reponse').val();
                 if (reponse == 'oui') {
                     $('#autreMaladie').show('slow');
-                    $('.autreMaladie').show('slow');
-                    $('.autreMaladie').attr('required', true);
                 } else {
                     $('#autreMaladie').hide('slow');
-                    $('.autreMaladie').val('');
-                    $('.autreMaladie').attr('required', false);
+                    $('#autreMaladies').val(null).trigger('change'); // Ajouté cette ligne
                 }
             });
         });
