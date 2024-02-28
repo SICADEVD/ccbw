@@ -2,7 +2,6 @@
 <kml xmlns="http://www.opengis.net/kml/2.2">
 <Document id="root_doc">
 <Schema name="polygone_cpi_final" id="polygone_cpi_final">
-	<SimpleField name="gpxtrkx_Tr" type="float"></SimpleField>
 	<SimpleField name="Sup_Ha" type="float"></SimpleField>
 	<SimpleField name="N°" type="float"></SimpleField>
 	<SimpleField name="T_CPI — Feuil3_Cooperative" type="string"></SimpleField>
@@ -6695,7 +6694,6 @@
   <Placemark>
 	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
 	<ExtendedData><SchemaData schemaUrl="#polygone_cpi_final">
-		<SimpleData name="gpxtrkx_Tr">0</SimpleData>
 		<SimpleData name="Sup_Ha">1.654912</SimpleData>
 		<SimpleData name="N°">291</SimpleData>
 		<SimpleData name="T_CPI — Feuil3_Cooperative">SCOOPS CPI</SimpleData>
@@ -7202,7 +7200,6 @@
   <Placemark>
 	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
 	<ExtendedData><SchemaData schemaUrl="#polygone_cpi_final">
-		<SimpleData name="gpxtrkx_Tr">0</SimpleData>
 		<SimpleData name="Sup_Ha">1.339891</SimpleData>
 		<SimpleData name="N°">313</SimpleData>
 		<SimpleData name="T_CPI — Feuil3_Cooperative">SCOOPS CPI</SimpleData>
@@ -18289,7 +18286,6 @@
   <Placemark>
 	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
 	<ExtendedData><SchemaData schemaUrl="#polygone_cpi_final">
-		<SimpleData name="gpxtrkx_Tr">0</SimpleData>
 		<SimpleData name="Sup_Ha">0.193167</SimpleData>
 		<SimpleData name="N°">795</SimpleData>
 		<SimpleData name="T_CPI — Feuil3_Cooperative">SCOOPS CPI</SimpleData>
@@ -18313,7 +18309,6 @@
   <Placemark>
 	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
 	<ExtendedData><SchemaData schemaUrl="#polygone_cpi_final">
-		<SimpleData name="gpxtrkx_Tr">0</SimpleData>
 		<SimpleData name="Sup_Ha">0.207673</SimpleData>
 		<SimpleData name="N°">796</SimpleData>
 		<SimpleData name="T_CPI — Feuil3_Cooperative">SCOOPS CPI</SimpleData>
@@ -19924,7 +19919,6 @@
   <Placemark>
 	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
 	<ExtendedData><SchemaData schemaUrl="#polygone_cpi_final">
-		<SimpleData name="gpxtrkx_Tr">0</SimpleData>
 		<SimpleData name="Sup_Ha">2.032606</SimpleData>
 		<SimpleData name="N°">866</SimpleData>
 		<SimpleData name="T_CPI — Feuil3_Cooperative">SCOOPS CPI</SimpleData>
@@ -19994,7 +19988,6 @@
   <Placemark>
 	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
 	<ExtendedData><SchemaData schemaUrl="#polygone_cpi_final">
-		<SimpleData name="gpxtrkx_Tr">0</SimpleData>
 		<SimpleData name="Sup_Ha">2.923626</SimpleData>
 		<SimpleData name="N°">869</SimpleData>
 		<SimpleData name="T_CPI — Feuil3_Cooperative">SCOOPS CPI</SimpleData>
@@ -21950,7 +21943,6 @@
   <Placemark>
 	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
 	<ExtendedData><SchemaData schemaUrl="#polygone_cpi_final">
-		<SimpleData name="gpxtrkx_Tr">0</SimpleData>
 		<SimpleData name="Sup_Ha">5.489948</SimpleData>
 		<SimpleData name="N°">954</SimpleData>
 		<SimpleData name="T_CPI — Feuil3_Cooperative">SCOOPS CPI</SimpleData>

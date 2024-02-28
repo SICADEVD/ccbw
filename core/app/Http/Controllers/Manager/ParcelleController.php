@@ -164,6 +164,8 @@ class ParcelleController extends Controller
         $pageTitle = "Importation de fichier KML";
         $manager   = auth()->user();
         $i = 0;
+        $k = 0;
+        $parcel="";
         if ($request->file('fichier_kml') != null) {
             $file = $request->file('fichier_kml');
             @unlink(public_path('upload/kml/'));
@@ -232,9 +234,8 @@ class ParcelleController extends Controller
 
                 $parcelle = Parcelle::where([['producteur_id', $producteur->id],['codeParc',$data['codeParcelle']]])->first();
                  
-                if ($parcelle == null) {
-                    $parcelle = new Parcelle();
-                }
+                if($parcelle != null) {
+                     
                 $centroid = $this->calculateCentroid($data['coordinates']);
                 //$aire = $this->calculatePolygonArea($data['coordinates']);
 
@@ -248,9 +249,14 @@ class ParcelleController extends Controller
                 $parcelle->waypoints = $data['coordinates'];
                 $parcelle->save();
                 $i++;
+                }else{
+                    $k++;
+                    $parcel .=$data['codeParcelle'].',';
+                }
+                
             }
 
-            $notify[] = ['success', "$i Polygones ont été importés avec succès"];
+            $notify[] = ['success', "$i Polygones ont été importés avec succès et $k Polygones avec pour codes parcelles: $parcel n'ont importé."];
 
             return back()->withNotify($notify);
         }
