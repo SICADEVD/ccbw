@@ -4,7 +4,7 @@
         <div class="col-lg-12 mb-30">
             <div class="card">
                 <div class="card-body" id="printFacture"> 
-         {!! Form::model($inspection, ['method' => 'POST','route' => ['manager.suivi.inspection.store', $inspection->id],'class'=>'form-horizontal', 'id'=>'flocal', 'enctype'=>'multipart/form-data']) !!}
+         {!! Form::model($inspection, ['method' => 'POST','route' => ['manager.suivi.inspection.suiviStore', $inspection->id],'class'=>'form-horizontal', 'id'=>'flocal', 'enctype'=>'multipart/form-data']) !!}
                         <input type="hidden" name="id" value="{{ $inspection->id }}"> 
                         <div class="form-group row">
                                 <label class="col-sm-4 control-label">@lang('Campagne')</label>
@@ -36,26 +36,35 @@
 
     <hr class="panel-wide">
     <div class="form-group row">
-    <table class="table-bordered table-striped"  id="myTable">
+    <table class="table-bordered table-striped table-responsive"  id="myTable">
 <tbody>
               <?php
 
               $note = 0;
               $total=0;
+              $i=1;
              $themeArray=array();
 
               foreach($inspection->reponsesInspection as $reponse){
                 
                 ?>
                 @if(!in_array($reponse->questionnaire->categorieQuestion->titre,$themeArray))
-<tr><td colspan="4"><strong><?php echo $reponse->questionnaire->categorieQuestion->titre; ?></strong></td></tr>
+<tr>
+<td @if($i==1) colspan="4" @else colspan="8" @endif style="max-width: 300px !important;text-wrap: wrap;"><strong><?php echo $reponse->questionnaire->categorieQuestion->titre; ?></strong></td>
+@if($i==1)
+<td>Recommandations</td>
+<td>Délai d'exécution</td>
+<td>Date de vérification</td>
+<td>Statut</td>
+@endif
+</tr>
 @php
 $themeArray[] = $reponse->questionnaire->categorieQuestion->titre;
 @endphp
 @endif
               
                    <tr>
-                   <td><?php echo $reponse->questionnaire->nom; ?>
+                   <td style="max-width: 300px !important;text-wrap: wrap;"><?php echo $reponse->questionnaire->nom; ?>
               </td> 
               <td><?php echo $reponse->questionnaire->certificat; ?>
               </td> 
@@ -63,8 +72,17 @@ $themeArray[] = $reponse->questionnaire->categorieQuestion->titre;
               <span class="badge @if($reponse->notation=='Conforme')badge-success @endif @if($reponse->notation=='Pas Conforme')badge-danger @endif @if($reponse->notation=='Non Applicable')badge-info @endif"><?php echo $reponse->notation; ?></span>
                    </td>
                    <td> {{ $reponse->commentaire }}  </td>
+                   <td> @if($reponse->notation=='Pas Conforme') <textarea cols="15" class="recommandation" name="recommandations[{{$reponse->id}}]">{{$reponse->recommandations}}</textarea> @endif</td>
+                   <td>@if($reponse->notation=='Pas Conforme') <input type="date" class="delai" name="delai[{{ $reponse->id }}]" value="{{ $reponse->delai }}" min="{{ gmdate('Y-m-d') }}" /> @endif</td>
+                   <td>@if($reponse->notation=='Pas Conforme') <input type="date" class="verification" name="date_verification[{{ $reponse->id }}]" value="{{ $reponse->date_verification }}" max="{{ gmdate('Y-m-d') }}" /> @endif</td> 
+                   <td>@if($reponse->notation=='Pas Conforme')  <select class="statut" name="statuts[{{$reponse->id}}]" class="form-control"> 
+                                    <option value="En cours" {{ $reponse->statuts == 'En cours' ? 'selected' : '' }}>En cours</option>
+                                    <option value="Réalisé" {{ $reponse->statuts == 'Réalisé' ? 'selected' : '' }}>Réalisé</option>
+                                    <option value="Non Réalisé" {{ $reponse->statuts == 'Non Réalisé' ? 'selected' : '' }}>Non Réalisé</option>
+                                </select> @endif</td>
                    </tr> 
                    <?php  
+                   $i++;
               }
               ?>
               </tbody>
@@ -140,7 +158,17 @@ $themeArray[] = $reponse->questionnaire->categorieQuestion->titre;
 @push('script')
 <script type="text/javascript">
       $(document).ready(function(){
-
+        $('.recommandation,.delai,.verification,.statut').change('keyup change blur',function() {
+    
+    $.ajax({
+                 type:'POST',
+                 url: "{{ route('manager.suivi.inspection.suiviStore')}}",
+                 data: $('#flocal').serialize(),
+                 success:function(html){ 
+                   //$('input[name=lastname]').val(html.lastname).attr("readonly",'readonly'); 
+                 }
+             });
+   });
  
 $('#flocal').change(function() {
     update_amounts();

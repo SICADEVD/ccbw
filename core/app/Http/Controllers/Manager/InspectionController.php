@@ -122,7 +122,8 @@ class InspectionController extends Controller
                         'inspection_id' => $id, 
                         'questionnaire_id' => $key, 
                         'notation' => $value,
-                        'commentaire' => $commentaire[$key],  
+                        'commentaire' => $commentaire[$key], 
+                        'statuts' => 'En cours', 
                     ];  
                 } 
             }
@@ -159,6 +160,29 @@ class InspectionController extends Controller
         return view('manager.inspection.show', compact('pageTitle', 'localites', 'inspection','producteurs','staffs','categoriequestionnaire','notations'));
     } 
 
+    public function suiviStore(Request $request)
+    {
+         
+        $recommandations = $request->recommandations;
+        $delai = $request->delai;
+        $date_verification = $request->date_verification;
+        $statuts = $request->statuts;
+    
+        foreach($recommandations as $key => $recomm){
+            if($recomm==null){
+                continue;
+            }
+        $suivi = InspectionQuestionnaire::where('id', $key)->first();  
+        $suivi->recommandations = $recomm;
+        $suivi->delai = isset($delai[$key]) ? $delai[$key] : null;
+        $suivi->date_verification = isset($date_verification[$key]) ? $date_verification[$key] : null;
+        $suivi->statuts = $statuts[$key]; 
+        $suivi->save();
+        }
+       
+
+        return $suivi;
+    }
 
     public function getCertificat(Request $request){
         $content='<option value="">Selectionner un certificat</option>';

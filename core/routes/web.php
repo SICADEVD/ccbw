@@ -430,6 +430,7 @@ Route::middleware('auth')->group(function () {
             Route::post('status/{id}', [InspectionController::class,'status'])->name('status');
             Route::get('certificat', [InspectionController::class,'getCertificat'])->name('getcertificat');
             Route::get('questionnaire', [InspectionController::class,'getQuestionnaire'])->name('getquestionnaire');
+            Route::post('questionnaire/suivi', [InspectionController::class,'suiviStore'])->name('suiviStore');
             Route::get('/exportInspectionsExcel', [InspectionController::class,'exportExcel'])->name('exportExcel.inspectionAll');
         });
         //Manage Suivi Application
