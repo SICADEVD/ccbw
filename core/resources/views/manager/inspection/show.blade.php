@@ -110,8 +110,26 @@ $themeArray[] = $reponse->questionnaire->categorieQuestion->titre;
     </div>
     <div class="form-group row">
         <?php echo Form::label(__("Total question Non Conforme"), null, ['class' => 'col-sm-4 control-label']); ?>
-        <div class="col-xs-12 col-sm-8" >
+        <div class="col-xs-12 col-sm-4" >
         {{ $inspection->total_question_non_conforme }} 
+        </div>
+        <div class="col-xs-12 col-sm-4 pull-right" >
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <td>En cours</td>
+                        <td>Non Réalisé</td>
+                        <td>Réalisé</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td id="nbEncours">0</td>
+                        <td id="nbNonRealise">0</td>
+                        <td id="nbRealise">0</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
     <div class="form-group row">
@@ -158,6 +176,8 @@ $themeArray[] = $reponse->questionnaire->categorieQuestion->titre;
 @push('script')
 <script type="text/javascript">
       $(document).ready(function(){
+        update_amounts(); 
+
         $('.recommandation,.delai,.verification,.statut').change('keyup change blur',function() {
     
     $.ajax({
@@ -168,29 +188,37 @@ $themeArray[] = $reponse->questionnaire->categorieQuestion->titre;
                    //$('input[name=lastname]').val(html.lastname).attr("readonly",'readonly'); 
                  }
              });
+    update_amounts();   
+
    });
  
-$('#flocal').change(function() {
-    update_amounts();
-});
-
 });
 
 function update_amounts()
 {
-    var sum = 0;
+    var encours = nnrealise = realise = 0;
+             $('#myTable > tbody  > tr').each(function() {
+        var statut = $(this).find('option:selected').val();
 
-    $('#myTable > tbody  > tr').each(function() {
-        var qty = $(this).find('option:selected').val();
-
-          if(qty =="-1" || qty =="0" || qty =="1" || qty =="2")
-         {
-            sum = parseFloat(sum)+parseFloat(qty);
-         }
+                    if (statut == "En cours") {
+                        encours += 1; 
+                    }
+                    if (statut == "Non Réalisé") {
+                        nnrealise += 1; 
+                    }
+                    if (statut == "Réalisé") {
+                        realise += 1; 
+                        
+                    }
 
     });
-    $('#note').val(sum);
-    //just update the total to sum
+
+    console.log('En cours: '+encours);
+                console.log('Non Réalisé: '+nnrealise);
+                console.log('Réalisé: '+realise);
+                $('#nbEncours').text(encours);
+                $('#nbNonRealise').text(nnrealise);
+                $('#nbRealise').text(realise);
 }
 
     $("#producteur").chained("#localite");

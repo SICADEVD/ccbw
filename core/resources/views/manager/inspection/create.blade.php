@@ -233,9 +233,7 @@
 
                 });
                 //$('#note').val(sum);
-                console.log('Conforme:'+conforme);
-                console.log('Non Conforme:'+nonconforme);
-                console.log('Non Applicable:'+nonapplicable);
+                
 
                 $('#totalquestionnonconforme').val(nonconforme);
                 $('#totalquestionnonapplicable').val(nonapplicable);
