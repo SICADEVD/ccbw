@@ -8,9 +8,10 @@ use App\Constants\Status;
 use App\Models\Evaluation;
 use App\Models\Inspection;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str; 
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use App\Models\InspectionQuestionnaire;
+use Illuminate\Support\Facades\Validator;
 
 class ApievaluationController extends Controller
 {
@@ -21,7 +22,7 @@ class ApievaluationController extends Controller
      */
     public function index()
     {
-	
+
         //
     }
 
@@ -32,7 +33,7 @@ class ApievaluationController extends Controller
      */
     public function create()
     {
-	
+
         //
     }
 
@@ -42,29 +43,90 @@ class ApievaluationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    // public function store(Request $request)
+    // {
+    // 	$validationRule = [
+    //         'producteur'    => 'required|exists:producteurs,id',
+    //         'encadreur' => 'required|exists:users,id', 
+    //         'note'  => 'required|max:255',
+    //         'date_evaluation'  => 'required|max:255', 
+    //     ];
+    //     $request->validate($validationRule);
+    //     $localite = Localite::where('id', $request->localite)->first();
+
+    //     if ($localite->status == Status::NO) {
+    //         $notify[] = ['error', 'Cette localité est désactivé'];
+    //         return back()->withNotify($notify)->withInput();
+    //     }
+
+    //     if($request->id) {
+    //         $inspection = Inspection::findOrFail($request->id); 
+    //         $message = "L'inspection a été mise à jour avec succès";
+
+    //     } else {
+    //         $inspection = new Inspection();  
+    //     } 
+    //     $campagne = Campagne::active()->first();
+    //     $inspection->producteur_id  = $request->producteur;
+    //     $inspection->campagne_id  = $campagne->id;
+    //     $inspection->formateur_id  = $request->encadreur;
+    //     $inspection->certificat  = json_encode($request->certificat);
+    //     $inspection->note  = $request->note;
+    //     $inspection->total_question  = $request->total_question;
+    //     $inspection->total_question_conforme  = $request->total_question_conforme;
+    //     $inspection->total_question_non_conforme  = $request->total_question_non_conforme;
+    //     $inspection->total_question_non_applicable  = $request->total_question_non_applicable;
+    //     $inspection->date_evaluation     = $request->date_evaluation; 
+    //     $inspection->production = $request->production;
+    //     $inspection->save();
+    //     if($inspection !=null ){
+    //         $id = $inspection->id;
+    //         $datas = []; 
+
+    //         if(count($request->reponse)) { 
+    //             InspectionQuestionnaire::where('inspection_id',$id)->delete();
+    //             $i=0; 
+    //             foreach($request->reponse as $key=>$value){
+
+    //                     $datas[] = [
+    //                     'inspection_id' => $id, 
+    //                     'questionnaire_id' => $key, 
+    //                     'notation' => $value, 
+    //                 ];  
+    //             } 
+    //         }
+    //         InspectionQuestionnaire::insert($datas);
+    //     }
+    //     return response()->json($inspection, 201);
+    // }
+
     public function store(Request $request)
     {
-		$validationRule = [
+        $validationRule = [
             'producteur'    => 'required|exists:producteurs,id',
-            'encadreur' => 'required|exists:users,id', 
+            'encadreur' => 'required|exists:users,id',
             'note'  => 'required|max:255',
-            'date_evaluation'  => 'required|max:255', 
+            'date_evaluation'  => 'required|max:255',
         ];
-        $request->validate($validationRule);
+
+        $validator = Validator::make($request->all(), $validationRule);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
         $localite = Localite::where('id', $request->localite)->first();
 
         if ($localite->status == Status::NO) {
-            $notify[] = ['error', 'Cette localité est désactivé'];
-            return back()->withNotify($notify)->withInput();
+            return response()->json(['error' => 'Cette localité est désactivé'], 400);
         }
-        
-        if($request->id) {
-            $inspection = Inspection::findOrFail($request->id); 
-            $message = "L'inspection a été mise à jour avec succès";
 
+        if ($request->id) {
+            $inspection = Inspection::findOrFail($request->id);
+            $message = "L'inspection a été mise à jour avec succès";
         } else {
-            $inspection = new Inspection();  
-        } 
+            $inspection = new Inspection();
+        }
         $campagne = Campagne::active()->first();
         $inspection->producteur_id  = $request->producteur;
         $inspection->campagne_id  = $campagne->id;
@@ -75,55 +137,65 @@ class ApievaluationController extends Controller
         $inspection->total_question_conforme  = $request->total_question_conforme;
         $inspection->total_question_non_conforme  = $request->total_question_non_conforme;
         $inspection->total_question_non_applicable  = $request->total_question_non_applicable;
-        $inspection->date_evaluation     = $request->date_evaluation; 
         $inspection->production = $request->production;
+
+        $inspection->date_evaluation     = $request->date_evaluation;
+
         $inspection->save();
-        if($inspection !=null ){
+        if ($inspection != null) {
             $id = $inspection->id;
-            $datas = []; 
-           
-            if(count($request->reponse)) { 
-                InspectionQuestionnaire::where('inspection_id',$id)->delete();
-                $i=0; 
-                foreach($request->reponse as $key=>$value){
-                     
-                        $datas[] = [
-                        'inspection_id' => $id, 
-                        'questionnaire_id' => $key, 
-                        'notation' => $value, 
-                    ];  
-                } 
+            $datas = [];
+
+            if (count($request->reponse)) {
+                $commentaire = $request->commentaire;
+                InspectionQuestionnaire::where('inspection_id', $id)->delete();
+                $i = 0;
+                foreach ($request->reponse as $key => $value) {
+
+                    $datas[] = [
+                        'inspection_id' => $id,
+                        'questionnaire_id' => $key,
+                        'notation' => $value,
+                        'commentaire' => $commentaire[$key],
+                        'statuts' => 'En cours',
+                    ];
+                }
             }
             InspectionQuestionnaire::insert($datas);
         }
-        return response()->json($inspection, 201);
+
+        return response()->json([
+            'success' => isset($message) ? $message : 'L\'inspection a été crée avec succès.',
+            'inspection' => $inspection
+        ], 201);
     }
 
-    public function getQuestionnaire(){
+
+    public function getQuestionnaire()
+    {
         $categoriequestionnaire = DB::table('categorie_questionnaires')->get();
         $donnees = DB::table('questionnaires')->get();
         $questionnaires = array();
-        $gestlist =array();
-        foreach($categoriequestionnaire as $categquest)
-        {
- 
-            foreach($donnees as $data){
-                if($data->categorie_questionnaire_id==$categquest->id){
-                    $gestlist[] = array('id'=>$data->id, 'libelle'=>$data->nom,'certificat'=>$data->certificat);
-                    
+        $gestlist = array();
+        foreach ($categoriequestionnaire as $categquest) {
+
+            foreach ($donnees as $data) {
+                if ($data->categorie_questionnaire_id == $categquest->id) {
+                    $gestlist[] = array('id' => $data->id, 'libelle' => $data->nom, 'certificat' => $data->certificat);
                 }
             }
-            $questionnaires[] = array('titre'=>$categquest->titre, "questionnaires"=>$gestlist); 
-             
-             $gestlist =array(); 
+            $questionnaires[] = array('titre' => $categquest->titre, "questionnaires" => $gestlist);
+
+            $gestlist = array();
         }
-        
-            
-        return response()->json($questionnaires , 201);
+
+
+        return response()->json($questionnaires, 201);
     }
-    public function getNotation(){
+    public function getNotation()
+    {
         $donnees = DB::table('notations')->get();
-        return response()->json($donnees , 201);
+        return response()->json($donnees, 201);
     }
     /**
      * Display the specified resource.
@@ -133,7 +205,7 @@ class ApievaluationController extends Controller
      */
     public function show($id)
     {
-	
+
         //
     }
 
@@ -145,7 +217,7 @@ class ApievaluationController extends Controller
      */
     public function edit($id)
     {
-	
+
         //
     }
 
@@ -158,7 +230,7 @@ class ApievaluationController extends Controller
      */
     public function update(Request $request, $id)
     {
-	
+
         //
     }
 
@@ -170,7 +242,7 @@ class ApievaluationController extends Controller
      */
     public function destroy($id)
     {
-	
+
         //
     }
 }
