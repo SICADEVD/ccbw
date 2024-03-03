@@ -36,6 +36,7 @@
         <td>Encadreur</td> 
         <td>Note</td>
         <td>Date Inspection</td> 
+        <td>Etat approbation</td> 
     </tr>
     </thead> 
     <?php
@@ -54,6 +55,19 @@
             <td><?php echo $c->user->lastname; ?> <?php echo $c->user->firstname; ?></td>
             <td><?php echo $c->note; ?></td> 
             <td><?php echo $c->date_evaluation; ?></td>
+            <td>
+                <?php
+            if($c->approbation==1){
+                echo 'Approuvé';
+            } 
+            if($c->approbation==2){
+                echo 'Non Approuvé';
+            }
+            if($c->approbation==3){
+                echo 'Exclu';
+            }
+            ?>       
+        </td>
         </tr>
         </tbody>
         <?php

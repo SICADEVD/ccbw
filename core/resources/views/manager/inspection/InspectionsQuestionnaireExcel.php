@@ -31,6 +31,10 @@
         <td>Question</td>
         <td>Notation</td>
         <td>Commentaire</td>
+        <td>Recommandations</td>
+        <td>Délai d'exécution</td>
+        <td>Date de vérification</td>
+        <td>Statut</td>
     </tr>
     </thead> 
     <?php
@@ -44,6 +48,10 @@
             <td><?php echo $c->questionnaire->nom; ?></td>
             <td><?php echo $c->notation; ?></td>
             <td><?php echo $c->commentaire; ?></td>
+            <td><?php echo $c->recommandations; ?></td>
+            <td><?php echo date('d-m-Y', strtotime($c->delai)); ?></td>
+            <td><?php echo date('d-m-Y', strtotime($c->date_verification)); ?></td>
+            <td><?php echo $c->statuts; ?></td>
         </tr>
         </tbody>
         <?php
