@@ -1,5 +1,10 @@
 @extends('manager.layouts.app')
 @section('panel')
+<style type="text/css">
+@page {
+size: landscape;
+}
+</style>
     <div class="row mb-none-30">
         <div class="col-lg-12 mb-30">
             <div class="card">
@@ -53,9 +58,9 @@
 <td @if($i==1) colspan="4" @else colspan="8" @endif style="max-width: 300px !important;text-wrap: wrap;"><strong><?php echo $reponse->questionnaire->categorieQuestion->titre; ?></strong></td>
 @if($i==1)
 <td>Recommandations</td>
-<td>Délai d'exécution</td>
-<td>Date de vérification</td>
-<td>Statut</td>
+<td class="text-center">Délai d'exécution</td>
+<td class="text-center">Date de vérification</td>
+<td class="text-center">Statut</td>
 @endif
 </tr>
 @php
@@ -64,9 +69,9 @@ $themeArray[] = $reponse->questionnaire->categorieQuestion->titre;
 @endif
               
                    <tr>
-                   <td style="max-width: 300px !important;text-wrap: wrap;"><?php echo $reponse->questionnaire->nom; ?>
+                   <td style="min-width: 300px !important;max-width: 300px !important;text-wrap: wrap;"><?php echo $reponse->questionnaire->nom; ?>
               </td> 
-              <td><?php echo $reponse->questionnaire->certificat; ?>
+              <td ><?php echo $reponse->questionnaire->certificat; ?>
               </td> 
               <td>
               <span class="badge @if($reponse->notation=='Conforme')badge-success @endif @if($reponse->notation=='Pas Conforme')badge-danger @endif @if($reponse->notation=='Non Applicable')badge-info @endif"><?php echo $reponse->notation; ?></span>
@@ -213,7 +218,7 @@ $themeArray[] = $reponse->questionnaire->categorieQuestion->titre;
     <script>
         "use strict";
         $('.printFacture').click(function() {
-            $('#printFacture').printThis();
+           $('#printFacture').printThis(); 
         });
     </script>
 @endpush
@@ -275,10 +280,10 @@ function update_amounts()
     font-size: 0.8125rem;
     color: #5b6e88; 
     font-weight: 500;
-    padding: 15px 25px;
+    padding: 5px 5px;
     vertical-align: middle;  
     border: 1px solid #f4f4f4;
-    min-width: 200px;
+    min-width: 100px;
 }
 </style>
  

@@ -397,7 +397,7 @@
     <script src="{{ asset('assets/vendor/jquery/daterangepicker.min.js') }}" defer=""></script>
     <script src="{{ asset('assets/vendor/jquery/datepicker.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/jquery/bootstrap-select.js') }}"></script>
-    <script src="{{ asset('assets/global/js/masonry.pkgd.js') }}"></script>
+    <script src="{{ asset('assets/global/js/masonry.pkgd.js') }}"></script> 
     <script src="{{ asset('assets/js/main.js') }}"></script>
     <script src="{{ asset('assets/fcadmin/js/app.js') }}"></script>
 
