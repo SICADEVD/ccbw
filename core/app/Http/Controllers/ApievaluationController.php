@@ -162,11 +162,37 @@ class ApievaluationController extends Controller
                 }
             }
             InspectionQuestionnaire::insert($datas);
+
+            $inspectionQuestionnaireNonConformes = InspectionQuestionnaire::where('inspection_id', $inspection->id)
+                ->where('notation', "Non Applicable")->select('id','questionnaire_id')
+                ->get();
+            $inspectionQuestionnaireNonApplicables = InspectionQuestionnaire::where('inspection_id', $inspection->id)->where('notation', "Non Applicable")->select('id','questionnaire_id')->get();
         }
 
+
+        // return response()->json([
+        //     'inspection' => $inspection,
+        //     'reponse_non_conforme' => $inspectionQuestionnaireNonConformes,
+        //     'reponse_non_applicale' => $inspectionQuestionnaireNonApplicables
+        // ], 201);
+
         return response()->json([
-            'success' => isset($message) ? $message : 'L\'inspection a été crée avec succès.',
-            'inspection' => $inspection
+            'producteur_id' => $inspection->producteur_id,
+            'campagne_id' => $inspection->campagne_id,
+            'formateur_id' => $inspection->formateur_id,
+            'certificat' => $inspection->certificat,
+            'note' => $inspection->note,
+            'total_question' => $inspection->total_question,
+            'total_question_conforme' => $inspection->total_question_conforme,
+            'total_question_non_conforme' => $inspection->total_question_non_conforme,
+            'total_question_non_applicable' => $inspection->total_question_non_applicable,
+            'production' => $inspection->production,
+            'date_evaluation' => $inspection->date_evaluation,
+            'updated_at' => $inspection->updated_at,
+            'created_at' => $inspection->created_at,
+            'id' => $inspection->id,
+            'reponse_non_conforme' => $inspectionQuestionnaireNonConformes,
+            'reponse_non_applicale' => $inspectionQuestionnaireNonApplicables
         ], 201);
     }
 
