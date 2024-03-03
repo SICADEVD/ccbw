@@ -16,7 +16,7 @@ $listePolygon = ['Parcelles Producteurs'=>'PP','Forets classées'=>'FC','Zones T
                         <div class="d-flex flex-wrap gap-4">
                             <input type="hidden" name="table" value="parcelles" />
                             <div class="flex-grow-1">
-                                <label>@lang('Section')</label>
+                                <label>@lang('Coopératives')</label>
                                 <select name="cooperative" class="form-control select2-basic" id="cooperative">
                                     <option value="">@lang('Toutes')</option>
                                     @foreach ($cooperatives as $local)
@@ -110,14 +110,23 @@ $total = 0;
 $mappingparcellle ='';
 $pointsPolygon = array();
 $seriescoordonates=array();
+$seriescoord= $pointsPol = $pointsWay=  array();
+$seriescoordonates= $nombreTotal = $pointsPolygon = array();
 $a=1;
 
 if(isset($parcelles) && count($parcelles)){
 
     $total = count($parcelles);
+    foreach($cooperatives as $coop){
+        
+        $nb = 0;
 
     foreach ($parcelles as $data) {
-        
+
+        if($coop->id != $data->producteur->localite->section->cooperative_id)
+            {
+                continue;
+            }
          
         if($data->waypoints !=null)
         {
@@ -160,14 +169,17 @@ if(isset($parcelles) && count($parcelles)){
         }
         
         $polygonCoordinates ='['.$polygon.']';
-        
-        }
-        $seriescoordonates[]= $polygonCoordinates;
-        $pointsPolygon[] = "['".$proprietaire."']";
+        $nb++;
+        } 
+        $seriescoord[]= $polygonCoordinates;
+        $pointsPol[] = "['".$proprietaire."']";
     }
-   
-$pointsPolygon = Str::replace('"','',json_encode($pointsPolygon));
- $pointsPolygon = Str::replace("''","'Non Disponible'",$pointsPolygon);
+    $nombreTotal[$coop->id] = $nb; 
+     $seriescoordonates[$coop->id] = $seriescoord;  
+     $pointsPolygon[$coop->id] = $pointsPol;
+     $seriescoord = $pointsPol = array();
+}
+    
   
 }
 
@@ -339,10 +351,7 @@ if(isset(request()->typepolygone) && (in_array('PP',request()->typepolygone)))
     <script>  
     let map;
 let infoWindow;
-@if(!is_array($pointsPolygon))
-var locations = <?php echo $pointsPolygon; ?>;
-var total = <?php echo $total; ?>;
-@endif
+ 
 
 @if(!is_array($pointsPolygonF))
 var locationsF = <?php echo $pointsPolygonF; ?>;
@@ -357,35 +366,37 @@ window.onload = function () {
   map = new google.maps.Map(document.getElementById("map"), {
     zoom: 7,
     center: { lat: 6.881703, lng: -5.500461 },
-    mapTypeId: "hybrid",
+    mapTypeId: "terrain",
   });
 
   // Affichage parcelles des producteurs
   @if(($fc==null && $zt==null && $pp==null) || $pp==1)
-  const triangleCoords = <?php echo Str::replace('"','',json_encode($seriescoordonates)); ?>; 
-  const polygons = [];
+
+  @foreach($cooperatives as $coopera) 
+
+var locations<?php echo $coopera->id; ?> = <?php echo Str::replace('"','',json_encode($pointsPolygon[$coopera->id])); ?>;
+  var total = <?php echo $nombreTotal[$coopera->id]; ?>;
+  const triangleCoords<?php echo $coopera->id; ?> = <?php echo Str::replace('"','',json_encode($seriescoordonates[$coopera->id])); ?>; 
+  const polygons<?php echo $coopera->id; ?> = [];
+   
 // Construct polygons
 for (let i = 0; i < total; i++) { 
-    const arrayColor = ["#622F22","#5C3317","#644117","#654321","#704214","#804A00","#6F4E37","#835C3B","#7F5217","#7F462C","#A0522D","#8B4513","#8A4117","#7E3817","#7E3517","#954535","#9E4638","#C34A2C","#B83C08","#C04000","#EB5406","#C35817","#B86500","#B5651D","#B76734","#C36241","#CB6D51","#C47451","#D2691E","#CC6600","#E56717","#E66C2C","#FF6700","#FF5F1F","#FE632A","#F87217","#FF7900","#F88017","#FF8C00","#F87431","#FF7722","#E67451","#FF8040","#FF7F50","#F88158","#F9966B","#FFA07A","#F89880","#E9967A","#E78A61","#DA8A67","#FF8674","#FA8072","#F98B88","#F08080","#F67280","#E77471","#F75D59","#E55451","#CD5C5C","#FF6347","#E55B3C","#FF4500","#FF0000","#FD1C03","#FF2400","#F62217","#F70D1A","#F62817","#E42217","#E41B17","#DC381F","#C24641","#C11B17","#B22222","#B21807","#A52A2A","#A70D2A","#9F000F","#931314","#990000","#990012","#8B0000","#8F0B0B","#800000","#8C001A","#7E191B","#800517","#733635","#660000","#551606","#560319","#550A35","#810541","#7D0541","#7D0552","#872657","#7E354D","#E56E94","#DB7093","#D16587","#C25A7C","#C25283","#E75480","#F660AB","#FF69B4","#FC6C85","#F6358A","#F52887","#FF007F","#FF1493","#F535AA","#FF33AA","#FD349C","#E45E9D","#E759AC","#E3319D","#DA1884","#E4287C","#FA2A55","#E30B5D","#DC143C","#C32148","#C21E56","#C12869","#C12267","#CA226B","#CC338B","#C71585","#C12283","#B3446C","#B93B8F","#FF00FF","#E238EC"];
-    
-const randomColor = getRandomElement(arrayColor);
-
     const polygon = new google.maps.Polygon({
-        paths: triangleCoords[i],
-        strokeColor: "#FF0000",
+        paths: triangleCoords<?php echo $coopera->id; ?>[i],
+        strokeColor: "<?php echo $coopera->color; ?>",
         strokeOpacity: 0.8,
         strokeWeight: 3,
-        fillColor: "#FF0000",
+        fillColor: "<?php echo $coopera->color; ?>",
         fillOpacity: 0.35,
         clickable: true
     });
 
-    polygons.push(polygon);
+    polygons<?php echo $coopera->id; ?>.push(polygon);
 
     // Event listener for each polygon
     google.maps.event.addListener(polygon, 'click', function (event) {
         const infoWindow = new google.maps.InfoWindow({
-            content: getInfoWindowContent(locations[i])
+            content: getInfoWindowContent(locations<?php echo $coopera->id; ?>[i])
         });
 
         infoWindow.setPosition(event.latLng);
@@ -394,6 +405,7 @@ const randomColor = getRandomElement(arrayColor);
 
     polygon.setMap(map);
 }
+@endforeach
 @endif
 
 
@@ -438,10 +450,10 @@ for (let i = 0; i < totalZT; i++) {
     const polygon = new google.maps.Polygon({
         paths: triangleCoordsZT[i],
         strokeColor: "#FFFFFF",
-        strokeOpacity: 0.2,
+        strokeOpacity: 0.4,
         strokeWeight: 2,
         fillColor: "#FFFFFF",
-        fillOpacity: 0.2,
+        fillOpacity: 0.4,
         clickable: false
     });
 

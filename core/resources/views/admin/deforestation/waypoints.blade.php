@@ -16,7 +16,7 @@ $listePolygon = ['Parcelles Producteurs'=>'PP','Forets classées'=>'FC','Zones T
                         <div class="d-flex flex-wrap gap-4">
                             <input type="hidden" name="table" value="parcelles" />
                             <div class="flex-grow-1">
-                                <label>@lang('Section')</label>
+                                <label>@lang('Coopératives')</label>
                                 <select name="cooperative" class="form-control select2-basic" id="cooperative">
                                     <option value="">@lang('Toutes')</option>
                                     @foreach ($cooperatives as $local)
