@@ -144,6 +144,22 @@ $themeArray[] = $reponse->questionnaire->categorieQuestion->titre;
                 {{ $inspection->date_evaluation }} 
         </div>
     </div>
+    <div class="form-group row">
+            {{ Form::label(__("Etat d'approbation"), null, ['class' => 'col-sm-4 control-label']) }}
+            <div class="col-xs-12 col-sm-8">
+            @if($inspection->approbation==1)
+            <span class="badge badge-success">Approuvé</span>
+            @endif
+
+            @if($inspection->approbation==2)
+            <span class="badge badge-info">Non Approuvé</span>
+            @endif
+
+            @if($inspection->approbation==3)
+            <span class="badge badge-danger">Exclu</span>
+            @endif
+        </div>
+    </div>
 <hr class="panel-wide">
 
  
@@ -153,7 +169,35 @@ $themeArray[] = $reponse->questionnaire->categorieQuestion->titre;
         </div>
     </div>
     <div class="row no-print">
-                <div class="col-sm-12">
+
+    @if($inspection->approbation==2 || $inspection->approbation==null)
+            <div class="col-sm-3">
+                    <div class="float-sm-end">
+                       <a href="{{ route('manager.suivi.inspection.approbation', ['id'=>$inspection->id,'statut'=>1]) }}"> <button class="btn btn-outline--primary"><i
+                                class="las la-check"></i></i>@lang('Approuvé')</button></a>
+                    </div>
+                </div>
+        @endif
+        @if($inspection->approbation==null)
+                <div class="col-sm-3">
+                    <div class="float-sm-end">
+                    <a href="{{ route('manager.suivi.inspection.approbation', ['id'=>$inspection->id,'statut'=>2]) }}">
+                        <button class="btn btn-outline--info"><i
+                                class="las la-times"></i></i>@lang('Non Approuvé')</button>
+                    </a>
+                    </div>
+                </div>
+
+                <div class="col-sm-3">
+                    <div class="float-sm-end">
+                    <a href="{{ route('manager.suivi.inspection.approbation', ['id'=>$inspection->id,'statut'=>3]) }}">
+                        <button class="btn btn-outline--danger"><i
+                                class="las la-trash"></i></i>@lang('Exclu')</button>
+                    </a>
+                    </div>
+                </div>
+        @endif
+                <div class="col-sm-3">
                     <div class="float-sm-end">
                         <button class="btn btn-outline--primary  printFacture"><i
                                 class="las la-download"></i></i>@lang('Imprimer')</button>

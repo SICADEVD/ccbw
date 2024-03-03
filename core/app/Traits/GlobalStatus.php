@@ -17,7 +17,28 @@ trait GlobalStatus
 		} else {
 			$query->status = Status::ENABLE;
 		}
-		$message       = $column . ' changed successfully';
+		$message       = $column . ' a été changé avec succès!';
+
+		$query->save();
+		$notify[] = ['success', $message];
+		return back()->withNotify($notify);
+	}
+
+	public static function changeApprobation($id, $etat)
+	{
+		$modelName = get_class();
+
+		$query     = $modelName::findOrFail($id);
+		if ($etat == 1) {
+			$query->approbation = 1;
+			$message = "L'inspection a été approuvée avec succès!";
+		} elseif($etat==2) {
+			$query->approbation = 2;
+			$message = "L'inspection a été non approuvée!";
+		}else{
+			$query->approbation = 3;
+			$message = "Le producteur a été exclu!";
+		} 
 
 		$query->save();
 		$notify[] = ['success', $message];

@@ -251,7 +251,10 @@ $contents .='<tr><td colspan="4"><strong>'. $catquest->titre.'</strong></td></tr
     {
         return Inspection::changeStatus($id);
     }
- 
+    public function approbation()
+    {
+        return Inspection::changeApprobation(request()->id,request()->statut);
+    }
     public function exportExcel()
     {
         $filename = 'inspections-' . gmdate('dmYhms') . '.xlsx';

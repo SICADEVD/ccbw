@@ -60,9 +60,9 @@
                                     <th>@lang('Producteur')</th>
                                     <th>@lang('Formateur')</th>
                                     <th>@lang('Note')</th>
-                                    <th>@lang('Date_evaluation')</th>  
-                                    <th>@lang('Ajoutée le')</th>
-                                    <th>@lang('Status')</th>
+                                    <th>@lang('Date_evaluation')</th> 
+                                    <th>@lang('Approbation')</th> 
+                                    <th>@lang('Ajoutée le')</th> 
                                     <th>@lang('Action')</th>
                                 </tr>
                             </thead>
@@ -90,38 +90,31 @@
                                             <span>{{ $inspection->note }}%</span>
                                         </td>
                                         <td>
-                                        <span class="d-block">{{ showDateTime($inspection->created_at) }}</span>
+                                        <span class="d-block">{{ date('d-m-Y', strtotime($inspection->created_at)) }}</span>
                                             <span>{{ diffForHumans($inspection->created_at) }}</span>
                                         </td> 
+                                        <td>  @if($inspection->approbation==1)
+                                                <span class="badge badge-success">Approuvé</span>
+                                                @endif
+
+                                                @if($inspection->approbation==2)
+                                                <span class="badge badge-info">Non Approuvé</span>
+                                                @endif
+
+                                                @if($inspection->approbation==3)
+                                                <span class="badge badge-danger">Exclu</span>
+                                                @endif
+                                        </td>
                                         <td>
-                                            <span class="d-block">{{ showDateTime($inspection->date_evaluation) }}</span>
+                                            <span class="d-block">{{ date('d-m-Y', strtotime($inspection->date_evaluation)) }}</span>
                                             <span>{{ diffForHumans($inspection->date_evaluation) }}</span>
                                         </td>
-                                        <td> @php echo $inspection->statusBadge; @endphp </td>
+                                        
                                         <td>
                                         <a href="{{ route('manager.suivi.inspection.exportExcel.inspectionAll',['id'=>encrypt($inspection->id)]) }}" class="btn  btn-outline--info ml-1"><i class="las la-cloud-download-alt"></i> Exporter</a>
                                         <a href="{{ route('manager.suivi.inspection.show', $inspection->id) }}"
                                                     class="btn btn-outline--warning ml-1"><i class="la la-file"></i>@lang('Details')</a>
-                                            <button type="button" class="btn btn-sm btn-outline--primary" data-bs-toggle="dropdown" aria-expanded="false"><i
-                                                    class="las la-ellipsis-v"></i>@lang('Action')
-                                             </button>
-                                            <div class="dropdown-menu p-0">
-                                                
-                                                @if ($inspection->status == Status::DISABLE)
-                                                    <button type="button" class="confirmationBtn  dropdown-item"
-                                                        data-action="{{ route('manager.suivi.inspection.status', $inspection->id) }}"
-                                                        data-question="@lang('Are you sure to enable this inspection?')">
-                                                        <i class="la la-eye"></i> @lang('Activé')
-                                                    </button>
-                                                @else
-                                                    <button type="button" class="confirmationBtn dropdown-item"
-                                                        data-action="{{ route('manager.suivi.inspection.status', $inspection->id) }}"
-                                                        data-question="@lang('Are you sure to disable this inspection?')">
-                                                        <i class="la la-eye-slash"></i> @lang('Désactivé')
-                                                    </button>
-                                                @endif 
-                                                
-                                            </div>
+                                           
                                         </td>
                                     </tr>
                                 @empty
