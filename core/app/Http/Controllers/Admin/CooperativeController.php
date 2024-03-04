@@ -31,6 +31,7 @@ class CooperativeController extends Controller
             'address' => 'required|max:255',
             'web' => 'required|max:255',
             'mobile' => 'required|max:255',
+            'color' => 'required|max:255',
         ]);
         
         if ($request->id) {
@@ -40,7 +41,7 @@ class CooperativeController extends Controller
             $cooperative  = new Cooperative();
             $message = "La coopérative a été ajoutée avec succès";
         }
-
+ 
         $cooperative->codeCoop    = $request->codeCoop;
         $cooperative->name    = $request->name;
         $cooperative->email   = $request->email;
@@ -48,6 +49,7 @@ class CooperativeController extends Controller
         $cooperative->address = $request->address;
         $cooperative->web = $request->web;
         $cooperative->mobile = $request->mobile;
+        $cooperative->color = '#'.$request->color;
         $cooperative->codeApp   = isset($request->codeApp) ? $request->codeApp : $this->generecodeapp($request->name); 
         $cooperative->save();
 

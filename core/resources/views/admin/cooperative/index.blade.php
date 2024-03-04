@@ -59,6 +59,7 @@
                                                 data-address="{{ $cooperative->address }}"
                                                 data-mobile="{{ $cooperative->mobile }}"
                                                 data-web="{{ $cooperative->web }}"
+                                                data-color="{{ Str::replace('#','',$cooperative->color) }}"
                                                  ><i
                                                     class="las la-pen"></i>@lang('Edit')</button>
 
@@ -145,6 +146,17 @@
                             <label>@lang('Utilisateurs Web')</label>
                             <input type="number" class="form-control" name="web" required>
                         </div>
+                        <div class="form-group">
+                                <label> @lang('Couleur')</label>
+                                <div class="input-group">
+                                    <span class="input-group-text p-0 border-0">
+                                        <input type='text' class="form-control colorPicker"
+                                            value="" />
+                                    </span>
+                                    <input type="text" class="form-control colorCode" name="color"
+                                        value="" required/>
+                                </div>
+                            </div>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn--primary w-100 h-45">@lang('Envoyer')</button>
@@ -182,6 +194,7 @@
                 let address = $(this).data('address');
                 let web = $(this).data('web');
                 let mobile = $(this).data('mobile');
+                let color = $(this).data('color');
                 modal.find('.modal-title').text(title)
                 modal.find('input[name=codeCoop]').val(codecoop);
                 modal.find('input[name=codeApp]').val(codeapp);
@@ -192,9 +205,41 @@
                 modal.find('input[name=address]').val(address);
                 modal.find('input[name=web]').val(web);
                 modal.find('input[name=mobile]').val(mobile);
+                modal.find('input[name=color]').val(color);
                 modal.modal('show');
             });
 
+        })(jQuery);
+    </script>
+@endpush
+
+@push('script-lib')
+    <script src="{{ asset('assets/fcadmin/js/spectrum.js') }}"></script>
+@endpush
+
+@push('style-lib')
+    <link rel="stylesheet" href="{{ asset('assets/fcadmin/css/spectrum.css') }}">
+@endpush
+
+@push('script')
+    <script>
+        (function($) {
+            "use strict";
+            $('.colorPicker').spectrum({
+                color: $(this).data('color'),  
+                showButtons: false,
+                move: function(color) {
+                    $(this).parent().siblings('.colorCode').val(color.toHexString().replace(/^#?/, ''));
+                }
+            });
+
+            $('.colorCode').on('input', function() {
+                var clr = $(this).val(); 
+                $(this).parents('.input-group').find('.colorPicker').spectrum({
+                    color: clr,
+                });
+            });
+ 
         })(jQuery);
     </script>
 @endpush
