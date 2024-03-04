@@ -43,63 +43,6 @@ class ApievaluationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    // public function store(Request $request)
-    // {
-    // 	$validationRule = [
-    //         'producteur'    => 'required|exists:producteurs,id',
-    //         'encadreur' => 'required|exists:users,id', 
-    //         'note'  => 'required|max:255',
-    //         'date_evaluation'  => 'required|max:255', 
-    //     ];
-    //     $request->validate($validationRule);
-    //     $localite = Localite::where('id', $request->localite)->first();
-
-    //     if ($localite->status == Status::NO) {
-    //         $notify[] = ['error', 'Cette localité est désactivé'];
-    //         return back()->withNotify($notify)->withInput();
-    //     }
-
-    //     if($request->id) {
-    //         $inspection = Inspection::findOrFail($request->id); 
-    //         $message = "L'inspection a été mise à jour avec succès";
-
-    //     } else {
-    //         $inspection = new Inspection();  
-    //     } 
-    //     $campagne = Campagne::active()->first();
-    //     $inspection->producteur_id  = $request->producteur;
-    //     $inspection->campagne_id  = $campagne->id;
-    //     $inspection->formateur_id  = $request->encadreur;
-    //     $inspection->certificat  = json_encode($request->certificat);
-    //     $inspection->note  = $request->note;
-    //     $inspection->total_question  = $request->total_question;
-    //     $inspection->total_question_conforme  = $request->total_question_conforme;
-    //     $inspection->total_question_non_conforme  = $request->total_question_non_conforme;
-    //     $inspection->total_question_non_applicable  = $request->total_question_non_applicable;
-    //     $inspection->date_evaluation     = $request->date_evaluation; 
-    //     $inspection->production = $request->production;
-    //     $inspection->save();
-    //     if($inspection !=null ){
-    //         $id = $inspection->id;
-    //         $datas = []; 
-
-    //         if(count($request->reponse)) { 
-    //             InspectionQuestionnaire::where('inspection_id',$id)->delete();
-    //             $i=0; 
-    //             foreach($request->reponse as $key=>$value){
-
-    //                     $datas[] = [
-    //                     'inspection_id' => $id, 
-    //                     'questionnaire_id' => $key, 
-    //                     'notation' => $value, 
-    //                 ];  
-    //             } 
-    //         }
-    //         InspectionQuestionnaire::insert($datas);
-    //     }
-    //     return response()->json($inspection, 201);
-    // }
-
     public function store(Request $request)
     {
         $validationRule = [
@@ -168,14 +111,6 @@ class ApievaluationController extends Controller
                 ->get();
             $inspectionQuestionnaireNonApplicables = InspectionQuestionnaire::where('inspection_id', $inspection->id)->where('notation', "Non Applicable")->select('id','questionnaire_id')->get();
         }
-
-
-        // return response()->json([
-        //     'inspection' => $inspection,
-        //     'reponse_non_conforme' => $inspectionQuestionnaireNonConformes,
-        //     'reponse_non_applicale' => $inspectionQuestionnaireNonApplicables
-        // ], 201);
-
         return response()->json([
             'producteur_id' => $inspection->producteur_id,
             'campagne_id' => $inspection->campagne_id,
@@ -214,7 +149,6 @@ class ApievaluationController extends Controller
 
             $gestlist = array();
         }
-
 
         return response()->json($questionnaires, 201);
     }
