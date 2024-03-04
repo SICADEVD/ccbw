@@ -95,12 +95,20 @@ use Illuminate\Support\Str;
 var lgt='-5.5004615';
     var ltt='6.8817026';
     var z=8; 
-    var locations = [    <?php
-    if(count($parcelles))
+    <?php
+    $nombreTotal = array();
+    foreach($cooperatives as $coop)
     {
-    $total = count($parcelles);  
+        $nb = 0;
+        ?>
+    var locations<?php echo $coop->id; ?> = [    <?php
+  
 $i=1;
 foreach ($parcelles as  $data) {
+    if($coop->id != $data->producteur->localite->section->cooperative_id)
+            {
+                continue;
+            }
     $lat = isset($data->latitude) ? htmlentities($data->latitude, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
     $long= isset($data->longitude) ? htmlentities($data->longitude, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible'; 
     $producteur = isset($data->producteur->nom) ? htmlentities($data->producteur->nom, ENT_QUOTES | ENT_IGNORE, "UTF-8").' '.htmlentities($data->producteur->prenoms, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
@@ -114,40 +122,60 @@ foreach ($parcelles as  $data) {
     $superficie= isset($data->superficie) ? htmlentities($data->superficie, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
     $proprietaire = 'Coopérative:'. $cooperative.'<br>Section:'. $section.'<br>Localite:'. $localite.'<br>Producteur : '.$producteur.'<br>Code producteur:'. $code.'<br>Code Parcelle:'. $parcelle.'<br>Année creation:'. $annee.'<br>Latitude:'. $lat.'<br>Longitude:'. $long.'<br>Superficie:'. $superficie.' ha';
  ?>
-  ['<?php echo $proprietaire; ?>', <?php echo $long; ?>, <?php echo $lat; ?>, 7]
+  ['<?php echo $proprietaire; ?>', <?php echo $long; ?>, <?php echo $lat; ?>, 7],
   
  <?php
-  if($total>$i){echo ',';}
+//   if($total>$i){echo ',';}
  $i++;
+ $nb++;
 }
+$nombreTotal[$coop->id] = $nb; 
+?>
+];
+<?php
 }
  
-?>];
+?>
 
     var map = new google.maps.Map(document.getElementById('googleMap'), {
       zoom: z,
       center: new google.maps.LatLng(ltt,lgt), 
-      mapTypeId: google.maps.MapTypeId.HYBRID
+      mapTypeId: google.maps.MapTypeId.TERRAIN
     });
 
     var infowindow = new google.maps.InfoWindow();
 
     var marker, i;
+    @foreach($cooperatives as $coopera)
 
-    for (i = 0; i < locations.length; i++) { 
+var total = <?php echo $nombreTotal[$coopera->id]; ?>;
+var svgIcon = {
+            path: "M8 0C3.58 0 0 3.58 0 8s8 16 8 16 8-12.92 8-16-3.58-8-8-8zm0 11c-1.11 0-2-.89-2-2s.89-2 2-2 2 .89 2 2-.89 2-2 2z",
+            fillColor: "<?php echo $coopera->color; ?>",
+            fillOpacity: 0.6,
+            strokeWeight: 2,
+            strokeColor: "<?php echo $coopera->color; ?>", // Changer cette couleur pour le contour
+            strokeOpacity: 1,
+            strokeWeight: 2,
+            scale: 2 // Ajustez la taille du SVG selon vos besoins
+        };
+    for (i = 0; i < total; i++) { 
+
+// Créer une icône personnalisée avec la couleur spécifiée 
       marker = new google.maps.Marker({
-        position: new google.maps.LatLng(locations[i][2],locations[i][1]),
+        position: new google.maps.LatLng(locations<?php echo $coopera->id; ?>[i][2],locations<?php echo $coopera->id; ?>[i][1]),
         map: map, 
+        icon: svgIcon
       });
 
       google.maps.event.addListener(marker, 'click', (function(marker, i) {
         return function() {
-          infowindow.setContent(locations[i][0]);
+          infowindow.setContent(locations<?php echo $coopera->id; ?>[i][0]);
           infowindow.open(map, marker);
         }
       })(marker, i));
     } 
-    
+    @endforeach
 $('form select').on('change', function(){
     $(this).closest('form').submit();
 });

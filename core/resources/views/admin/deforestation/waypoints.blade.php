@@ -108,16 +108,22 @@ $lat = '';
 $long = '';
 $total = 0;
 $mappingparcellle ='';
-$pointsPolygon = array();
-$seriescoordonates=array();
+ 
+$seriescoordonates=$nombreTotal=$pointsPolygon=$pointsPol=array();
 $a=1;
 
 if(isset($parcelles) && count($parcelles)){
 
-    $total = count($parcelles);
+    foreach($cooperatives as $coop)
+    {
+        $nb = 0;
 
     foreach ($parcelles as $data) {
-        
+
+        if($coop->id != $data->producteur->localite->section->cooperative_id)
+            {
+                continue;
+            }
          
         if(($data->longitude !=null) && ($data->latitude !=null))
         {
@@ -136,12 +142,15 @@ if(isset($parcelles) && count($parcelles)){
      
  
         $polygonCoordinates = "['".$proprietaire."',".$long.",".$lat."]";
-         
+         $nb++;
     }
-    $pointsPolygon[] = $polygonCoordinates;
+    $pointsPol[] = $polygonCoordinates;
 }
-$pointsPolygon = Str::replace('"','',json_encode($pointsPolygon));
- $pointsPolygon = Str::replace("''","'Non Disponible'",$pointsPolygon);
+$nombreTotal[$coop->id] = $nb;  
+$pointsPolygon[$coop->id] = $pointsPol;
+$pointsPol = array();
+}
+ 
 }
 // Chargement des forets classées
 $lat = '';
@@ -312,10 +321,7 @@ if(isset(request()->typepolygone) && (in_array('PP',request()->typepolygone)))
     <script>  
     let map;
 let infoWindow;
-@if(!is_array($pointsPolygon))
-var locations = <?php echo $pointsPolygon; ?>;
-var total = <?php echo $total; ?>;
-@endif
+ 
 
 @if(!is_array($pointsPolygonF))
 var locationsF = <?php echo $pointsPolygonF; ?>;
@@ -331,7 +337,7 @@ window.onload = function () {
   map = new google.maps.Map(document.getElementById("map"), {
     zoom: 7,
     center: { lat: 6.881703, lng: -5.500461 },
-    mapTypeId: "hybrid",
+    mapTypeId: "terrain",
   });
  
 // Affichage des waypoints
@@ -339,20 +345,37 @@ window.onload = function () {
 var infowindow = new google.maps.InfoWindow();
 
     var marker, i;
+    @foreach($cooperatives as $coopera) 
+
+var locations<?php echo $coopera->id; ?> = <?php echo Str::replace('"','',json_encode($pointsPolygon[$coopera->id])); ?>;
+  var total = <?php echo $nombreTotal[$coopera->id]; ?>;
+  var svgIcon = {
+            path: "M8 0C3.58 0 0 3.58 0 8s8 16 8 16 8-12.92 8-16-3.58-8-8-8zm0 11c-1.11 0-2-.89-2-2s.89-2 2-2 2 .89 2 2-.89 2-2 2z",
+            fillColor: "<?php echo $coopera->color; ?>",
+            fillOpacity: 0.6,
+            strokeWeight: 2,
+            strokeColor: "<?php echo $coopera->color; ?>", // Changer cette couleur pour le contour
+            strokeOpacity: 1,
+            strokeWeight: 2,
+            scale: 2 // Ajustez la taille du SVG selon vos besoins
+        };
 
     for (i = 0; i < total; i++) { 
       marker = new google.maps.Marker({
-        position: new google.maps.LatLng(locations[i][2],locations[i][1]),
+        position: new google.maps.LatLng(locations<?php echo $coopera->id; ?>[i][2],locations<?php echo $coopera->id; ?>[i][1]),
         map: map, 
+        icon: svgIcon
       });
 
       google.maps.event.addListener(marker, 'click', (function(marker, i) {
         return function() {
-          infowindow.setContent(locations[i][0]);
+          infowindow.setContent(locations<?php echo $coopera->id; ?>[i][0]);
           infowindow.open(map, marker);
         }
       })(marker, i));
     } 
+    @endforeach
+
 @endif
 
 // Afichage Forets Classées
@@ -394,10 +417,10 @@ for (let i = 0; i < totalZT; i++) {
     const polygon = new google.maps.Polygon({
         paths: triangleCoordsZT[i],
         strokeColor: "#FFFFFF",
-        strokeOpacity: 0.2,
+        strokeOpacity: 0.4,
         strokeWeight: 2,
         fillColor: "#FFFFFF",
-        fillOpacity: 0.2,
+        fillOpacity: 0.4,
         clickable: false
     });
 
