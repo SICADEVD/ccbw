@@ -107,9 +107,9 @@ class ApievaluationController extends Controller
             InspectionQuestionnaire::insert($datas);
 
             $inspectionQuestionnaireNonConformes = InspectionQuestionnaire::where('inspection_id', $inspection->id)
-                ->where('notation', "Non Applicable")->select('id','questionnaire_id')
+                ->where('notation', "Pas Conforme")->select('id', 'questionnaire_id')
                 ->get();
-            $inspectionQuestionnaireNonApplicables = InspectionQuestionnaire::where('inspection_id', $inspection->id)->where('notation', "Non Applicable")->select('id','questionnaire_id')->get();
+            $inspectionQuestionnaireNonApplicables = InspectionQuestionnaire::where('inspection_id', $inspection->id)->where('notation', "Non Applicable")->select('id', 'questionnaire_id')->get();
         }
         return response()->json([
             'producteur_id' => $inspection->producteur_id,
@@ -129,6 +129,42 @@ class ApievaluationController extends Controller
             'reponse_non_conforme' => $inspectionQuestionnaireNonConformes,
             'reponse_non_applicale' => $inspectionQuestionnaireNonApplicables
         ], 201);
+    }
+    // public function getInspectionsNonApplicableEtNonConforme()
+    // {
+    //     $nonConformingInspections = Inspection::whereHas('reponsesInspection', function ($query) {
+    //         $query->where('notation', 'Non Conforme');
+    //     })->get();
+
+    //     $nonApplicableInspections = Inspection::whereHas('reponsesInspection', function ($query) {
+    //         $query->where('notation', 'Non Applicable');
+    //     })->get();
+
+    //     $inspections = $nonConformingInspections->concat($nonApplicableInspections);
+
+    //     $inspections = $inspections->unique('id');
+
+    //     return response()->json($inspections);
+    // }
+    public function getInspectionsNonApplicableEtNonConforme()
+    {
+        $inspections = Inspection::whereHas('reponsesInspection', function ($query) {
+            $query->whereIn('notation', ['Pas Conforme', 'Non Applicable']);
+        })->get();
+
+        $inspections->each(function ($inspection) {
+            $inspection->reponse_non_conforme = InspectionQuestionnaire::where('inspection_id', $inspection->id)
+                ->where('notation', 'Pas Conforme')
+                ->select('id', 'questionnaire_id')
+                ->get();
+
+            $inspection->reponse_non_applicale = InspectionQuestionnaire::where('inspection_id', $inspection->id)
+                ->where('notation', 'Non Applicable')
+                ->select('id', 'questionnaire_id')
+                ->get();
+        });
+
+        return response()->json($inspections);
     }
 
 
