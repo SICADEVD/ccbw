@@ -90,7 +90,7 @@ class ApiapplicationController extends Controller
         $application->date_application = $request->date_application;
         $application->heure_application = $request->heure_application;
         $application->reponse = $request->reponse;
-        $application->userid = auth()->user()->id;
+        $application->userid = $request->userid;
         $application->save();
 
         if ($application != null) {
