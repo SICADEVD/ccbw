@@ -79,6 +79,7 @@ Route::match(['POST'],'apiniveauxclasse', [ApissrteclrmsController::class, 'getN
 Route::match(['POST'],'apiapplication', [ApiapplicationController::class, 'store']); 
 Route::match(['POST'],'apievaluation', [ApievaluationController::class, 'store']); 
 Route::match(['POST'],'getinspections', [ApievaluationController::class, 'getInspectionsNonApplicableEtNonConforme']); 
+Route::match(['POST'],'updateinspection', [ApievaluationController::class, 'updateInspection']);
 Route::match(['POST'],'getquestionnaire', [ApievaluationController::class, 'getQuestionnaire']); 
 Route::match(['POST'],'getnotation', [ApievaluationController::class, 'getNotation']); 
 Route::match(['POST'],'getcampagne', [AuthController::class, 'getCampagne']);

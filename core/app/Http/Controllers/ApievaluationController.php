@@ -12,6 +12,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use App\Models\InspectionQuestionnaire;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Response;
 
 class ApievaluationController extends Controller
 {
@@ -130,22 +131,7 @@ class ApievaluationController extends Controller
             'reponse_non_applicale' => $inspectionQuestionnaireNonApplicables
         ], 201);
     }
-    // public function getInspectionsNonApplicableEtNonConforme()
-    // {
-    //     $nonConformingInspections = Inspection::whereHas('reponsesInspection', function ($query) {
-    //         $query->where('notation', 'Non Conforme');
-    //     })->get();
 
-    //     $nonApplicableInspections = Inspection::whereHas('reponsesInspection', function ($query) {
-    //         $query->where('notation', 'Non Applicable');
-    //     })->get();
-
-    //     $inspections = $nonConformingInspections->concat($nonApplicableInspections);
-
-    //     $inspections = $inspections->unique('id');
-
-    //     return response()->json($inspections);
-    // }
     public function getInspectionsNonApplicableEtNonConforme()
     {
         $inspections = Inspection::whereHas('reponsesInspection', function ($query) {
@@ -155,18 +141,85 @@ class ApievaluationController extends Controller
         $inspections->each(function ($inspection) {
             $inspection->reponse_non_conforme = InspectionQuestionnaire::where('inspection_id', $inspection->id)
                 ->where('notation', 'Pas Conforme')
+                ->where('statuts', 'En cours')
                 ->select('id', 'questionnaire_id')
                 ->get();
 
             $inspection->reponse_non_applicale = InspectionQuestionnaire::where('inspection_id', $inspection->id)
                 ->where('notation', 'Non Applicable')
+                ->where('statuts', 'En cours')
                 ->select('id', 'questionnaire_id')
                 ->get();
         });
 
         return response()->json($inspections);
     }
+    // public function updateInspection(Request $request)
+    // {
+    //     $recommandations = $request->recommandations;
+    //     $delai = $request->delai;
+    //     $date_verification = $request->date_verification;
+    //     $statuts = $request->statuts;
 
+    //     foreach ($recommandations as $key => $recomm) {
+    //         if ($recomm == null) {
+    //             continue;
+    //         }
+    //         $suivi = InspectionQuestionnaire::where('id', $key)->first();
+    //         $suivi->recommandations = $recomm;
+    //         $suivi->delai = isset($delai[$key]) ? $delai[$key] : null;
+    //         $suivi->date_verification = isset($date_verification[$key]) ? $date_verification[$key] : null;
+    //         $suivi->statuts = $statuts[$key];
+    //         $suivi->save();
+    //     }
+
+    //     return Response::json([
+    //         'data' => $suivi
+    //     ], 200);
+    // }
+    public function updateInspection(Request $request)
+    {
+        $reponse_non_conforme = $request->input('reponse_non_conforme', []);
+        $reponse_non_conformeObj = (object)$reponse_non_conforme;
+        $recommandations = $reponse_non_conformeObj->recommandations;
+        $delais = $reponse_non_conformeObj->delai;
+        $date_verifications = $reponse_non_conformeObj->date_verification;
+        $statuts = $reponse_non_conformeObj->statuts;
+        $approbation = $request->input('approbation');
+        //dd(json_encode($request->all()));
+        
+        foreach ($recommandations as $key => $recomm) {
+            if ($recomm == null) {
+                continue;
+            }
+            $suivi = InspectionQuestionnaire::where('id', $key)->first();
+            $suivi->recommandations = $recomm;
+            $suivi->delai = isset($delais[$key]) ? $delais[$key] : null;
+            $suivi->date_verification = isset($date_verifications[$key]) ? $date_verifications[$key] : null;
+            $suivi->statuts = $statuts[$key];
+            $suivi->save();
+        }
+
+        Inspection::changeApprobation($request->input('id'), $approbation);
+
+        $inspection = Inspection::where("id", $request->input('id'))->whereHas('reponsesInspection', function ($query) {
+            $query->whereIn('notation', ['Pas Conforme', 'Non Applicable']);
+        })->get()->first();
+
+        $inspection->reponse_non_conforme = InspectionQuestionnaire::where('inspection_id', $inspection->id)
+            ->where('notation', 'Pas Conforme')
+            ->where('statuts', 'En cours')
+            ->select('id', 'questionnaire_id')
+            ->get();
+
+        $inspection->reponse_non_applicale = InspectionQuestionnaire::where('inspection_id', $inspection->id)
+            ->where('notation', 'Non Applicable')
+            ->where('statuts', 'En cours')
+            ->select('id', 'questionnaire_id')
+            ->get();
+
+        return response()->json($inspection);
+    }
 
     public function getQuestionnaire()
     {
