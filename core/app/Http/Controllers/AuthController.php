@@ -96,9 +96,11 @@ class AuthController extends Controller
             }
             
             $user = User::active()->where('username', $request->input('username'))->first();
+            $cooperative = null;
 
             if($user)
             {
+                $cooperative = $user->cooperative()->first();
                 // dd($user->getAllPermissions()->map (function ($item, $key) {
                 //     return $item->name;
                 // })->toArray());
@@ -171,7 +173,8 @@ class AuthController extends Controller
             
             return response()->json([
                 'menu' =>$menuliste,
-                'results' => $user, 
+                'results' => $user,
+                'cooperative' => $cooperative, 
             'status_code' => 200,
             'access_token' => $tokenResult,
             'token_type' => 'Jularis',
