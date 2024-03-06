@@ -9,7 +9,7 @@ use App\Models\Section;
 use App\Models\Countrie;
 use PDF;
 use App\Constants\Status;
-use App\Models\Localite; 
+use App\Models\Localite;
 use App\Models\Programme;
 use App\Models\Producteur;
 use App\Models\Cooperative;
@@ -64,22 +64,22 @@ class ProducteurController extends Controller
                 }
             })
             ->with('localite.section')
-            ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status',1]])
+            ->where([['cooperative_id', $manager->cooperative_id], ['producteurs.status', 1]])
             ->paginate(getPaginate());
 
-            if(request()->download){
-                $producteur = Producteur::find(decrypt(request()->download));
-                $producteurNameFile = Str::slug($producteur->nom.$producteur->prenoms.$producteur->codeProd,'-');
-                $producteurNameFile = $producteurNameFile.'.pdf';
-                if(!file_exists(storage_path(). "/app/public/producteurs-pdf")){  
-                    File::makeDirectory(storage_path(). "/app/public/producteurs-pdf", 0777, true);
-                }
-                @unlink(storage_path('app/public/producteurs-pdf'). "/".$producteurNameFile);
-                   
-                return PDF::loadView('manager.producteur.pdf-producteur', compact('producteur'))
-                        ->download($producteurNameFile);
-                       // ->save(storage_path(). "/app/public/producteurs-pdf/".$producteurNameFile);
+        if (request()->download) {
+            $producteur = Producteur::find(decrypt(request()->download));
+            $producteurNameFile = Str::slug($producteur->nom . $producteur->prenoms . $producteur->codeProd, '-');
+            $producteurNameFile = $producteurNameFile . '.pdf';
+            if (!file_exists(storage_path() . "/app/public/producteurs-pdf")) {
+                File::makeDirectory(storage_path() . "/app/public/producteurs-pdf", 0777, true);
             }
+            @unlink(storage_path('app/public/producteurs-pdf') . "/" . $producteurNameFile);
+
+            return PDF::loadView('manager.producteur.pdf-producteur', compact('producteur'))
+                ->download($producteurNameFile);
+            // ->save(storage_path(). "/app/public/producteurs-pdf/".$producteurNameFile);
+        }
         return view('manager.producteur.index', compact('pageTitle', 'producteurs', 'localites', 'programmes'));
     }
 
@@ -109,10 +109,10 @@ class ProducteurController extends Controller
         try {
 
             $request->validated();
-$manager = auth()->user();
+            $manager = auth()->user();
 
             $producteur = Producteur::joinRelationship('localite.section')
-            ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->where('producteurs.id', $request->producteur_id)->first();
+                ->where([['cooperative_id', $manager->cooperative_id], ['producteurs.status', 1]])->where('producteurs.id', $request->producteur_id)->first();
 
             if ($producteur->status == Status::NO) {
                 $notify[] = ['error', 'Ce producteur est désactivé'];
@@ -217,7 +217,7 @@ $manager = auth()->user();
         $pageTitle = "Informations du producteur";
         $manager = auth()->user();
         $producteur = Producteur::joinRelationship('localite.section')
-        ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->findOrFail($id);
+            ->where([['cooperative_id', $manager->cooperative_id], ['producteurs.status', 1]])->findOrFail($id);
         $manager   = auth()->user();
         $sections = Section::with('cooperative')->where('cooperative_id', $manager->cooperative_id)->get();
         $localites = Localite::active()->with('section')->get();
@@ -225,9 +225,9 @@ $manager = auth()->user();
         $programmes = Programme::all();
         $certificationAll = Certification::all();
         $certifications = $producteur->certifications->pluck('certification')->all();
-       
 
-        return view('manager.producteur.showproducteur', compact('pageTitle', 'producteur', 'id', 'localites', 'sections', 'certifications','certificationAll','countries','programmes'));
+
+        return view('manager.producteur.showproducteur', compact('pageTitle', 'producteur', 'id', 'localites', 'sections', 'certifications', 'certificationAll', 'countries', 'programmes'));
     }
 
     public function create()
@@ -239,7 +239,7 @@ $manager = auth()->user();
         $programmes = Programme::all();
         $certifications = Certification::all();
         $countries = Pays::all();
-        return view('manager.producteur.create', compact('pageTitle', 'localites', 'sections', 'programmes','certifications','countries'));
+        return view('manager.producteur.create', compact('pageTitle', 'localites', 'sections', 'programmes', 'certifications', 'countries'));
     }
 
     public function store(StoreProducteurRequest $request)
@@ -312,7 +312,7 @@ $manager = auth()->user();
                     if (!empty($certificats)) {
                         Producteur_certification::where('producteur_id', $id)->delete();
                         foreach ($certificats as $certificat) {
-                            if($certificat=='Autre'){
+                            if ($certificat == 'Autre') {
                                 $autre = new Certification();
                                 $autre->nom = $request->autreCertificats;
                                 $autre->save();
@@ -399,7 +399,7 @@ $manager = auth()->user();
             'num_ccc.regex' => 'numéro du conseil café cacao doit contenir 11 chiffres',
         ];
         $request->validate($validationRule, $messages);
-        
+
         $producteur->proprietaires = $request->proprietaires;
         $producteur->statutMatrimonial = $request->statutMatrimonial;
         $producteur->programme_id = $request->programme_id;
@@ -459,7 +459,7 @@ $manager = auth()->user();
                 if (!empty($certificats)) {
                     Producteur_certification::where('producteur_id', $id)->delete();
                     foreach ($certificats as $certificat) {
-                        if($certificat=='Autre'){
+                        if ($certificat == 'Autre') {
                             $autre = new Certification();
                             $autre->nom = $request->autreCertificats;
                             $autre->save();
@@ -469,7 +469,6 @@ $manager = auth()->user();
                             'producteur_id' => $id,
                             'certification' => $certificat,
                         ];
-                        
                     }
                     Producteur_certification::insert($datas);
                 }
@@ -494,7 +493,7 @@ $manager = auth()->user();
         $producteur   = Producteur::findOrFail($id);
         $certificationAll = Certification::all();
         $certifications = $producteur->certifications->pluck('certification')->all();
-        return view('manager.producteur.edit', compact('pageTitle', 'localites', 'producteur', 'programmes', 'sections', 'certifications','certificationAll','countries'));
+        return view('manager.producteur.edit', compact('pageTitle', 'localites', 'producteur', 'programmes', 'sections', 'certifications', 'certificationAll', 'countries'));
     }
 
     private function generecodeProdApp($nom, $prenoms, $codeApp)

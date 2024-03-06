@@ -4,269 +4,269 @@
         <div class="col-lg-12 mb-30">
             <div class="card">
                 <div class="card-body">
-                <table class="table table-striped table-bordered">
+                    <table class="table table-striped table-bordered">
 
-<tr>
-    <td>Accord de consentement du producteur
-    </td>
-<td>
-        {{ @$producteur->consentement }}
-		 
-    </td>
-</tr> 
+                        <tr>
+                            <td>Accord de consentement du producteur
+                            </td>
+                            <td>
+                                {{ @$producteur->consentement }}
 
-<tr>
-    <td>Comment vous vous definissez ?
-    </td>
-<td>
-        {{ @$producteur->proprietaires }}
- 
-    </td>
-</tr>
-<tr>
-    <td>
-    </td>
-<td>
-        {{ @$producteur->plantePartage }}
- 
-    </td>
-</tr>
- 
-    <tr>
-        <td>Année de démarrage
-        </td>
-<td>
-            {{ @$producteur->anneeDemarrage }}
- 
-        </td>
-</tr>
-    <tr>
-        <td>Année de fin
-        </td>
-<td>
-            {{ @$producteur->anneeFin }}
- 
-        
-    </td>
-</tr>
-<tr>
-    <td>Statut
-    </td>
-<td>
-        {{ @$producteur->statut }}
- 
-    </td>
-</tr>
-                
-    <tr>
-        <td>Année de certification
-        </td>
-<td>
-            {{ @$producteur->certificat }}
- 
-        </td>
-</tr>
-    <tr>
-        <td>Code producteur
-        </td>
-<td>
-            {{ @$producteur->codeProd }}
- 
-        </td>
-</tr>
-   
-    <tr>
-        <td>Certificat
+                            </td>
+                        </tr>
 
-        </td>
-<td>
-            {{ @$producteur->certificats }} 
-        
-    </td>
-</tr>
+                        <tr>
+                            <td>Comment vous vous definissez ?
+                            </td>
+                            <td>
+                                {{ @$producteur->proprietaires }}
 
-    <tr>
-        <td>Autre Certificat
-        </td>
-<td>
-            {{ @$producteur->autreCertificats }} 
-        
-    </td>
-</tr>
-                  
-<tr>
-<td>
-    Section
-    </td>
- 
-<td>
-        {{ @$producteur->section }} 
-    </td>
-</tr>
- 
-<tr>
-<td>
-    Localite
-    </td>
-<td>
-        {{ @$producteur->localite_id }} 
-    </td>
-</tr>
- 
-<tr>
-	<td>
-    Programme
-    </td>
-<td>
-        {{ @$producteur->programme_id }} 
-    </td>
-</tr> 
-<tr>
-    <td>Habitez-vous dans un campement ou village ?
-    </td>
-<td>
-        {{ @$producteur->habitationProducteur }} 
-    </td>
-</tr> 
-<tr>
-    <td>Nom du producteur
-    </td>
-<td>
-        {{ @$producteur->nom }}
-</td>
-</tr>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                            </td>
+                            <td>
+                                {{ @$producteur->plantePartage }}
 
-<tr>
-    <td>Prenoms du producteur
-    </td>
-<td>
-        {{ @$producteur->prenoms }}
-    </td>
-</tr>
+                            </td>
+                        </tr>
 
-<tr>
-    <td>Genre
-    </td>
-<td>
-        {{ @$producteur->sexe }}
-</td>
-</tr>
-                  
-<tr>
-    <td>Statut matrimonial
-    </td>
-<td>
-        {{ @$producteur->statutMatrimonial }} 
-    </td>
-</tr>
+                        <tr>
+                            <td>Année de démarrage
+                            </td>
+                            <td>
+                                {{ @$producteur->anneeDemarrage }}
 
-<tr>
-    <td>Nationalité
-    </td>
-<td>
-        {{ @$producteur->nationalite }} 
-        </select>
-    </td>
-</tr>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Année de fin
+                            </td>
+                            <td>
+                                {{ @$producteur->anneeFin }}
 
-<tr>
-    <td>Date de naissance
-    </td>
-<td>
-        {{ @$producteur->dateNaiss }} 
-    </td>
-</tr>
-<tr>
-    <td>Numero de téléphone
-    </td>
-<td>
-        {{ @$producteur->phone1 }} 
-    </td>
-</tr>
 
-<tr>
-    <td>Avez-vous un proche à contacter pour vous joindre
-    </td>
-<td>
-        {{ @$producteur->autreMembre }} </td>
-</tr> 
-    <tr>
-        <td>
-        </td>
-<td>
-            {{ @$producteur->autrePhone }} 
-        </td>
-</tr>
-    <tr>
-        <td>Numero de téléphone
-        </td>
-<td>
-            {{ @$producteur->phone2 }} 
-        
-    </td>
-</tr>
-<tr>
-   <td> Niveau d'étude 
-    </td>
-<td>
-        {{ @$producteur->niveau_etude }} 
-    </td>
-</tr>
-<tr>
-    <td>Type de pièces
-    </td>
-<td>
-        {{ @$producteur->type_piece }} 
-    </td>
-</tr>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Statut
+                            </td>
+                            <td>
+                                {{ @$producteur->statut }}
 
-<tr>
-    <td>N° de la pièce
-    </td>
-<td>
-        {{ @$producteur->numPiece }} </td>
-</tr>
-         
+                            </td>
+                        </tr>
 
-<tr>
-    <td>N° de carte CCC
-    </td>
-<td>
-        {{ @$producteur->num_ccc }} </td>
-</tr>
-                
-<tr>
-    <td>Avez-vous une carte CMU ?
-    </td>
-<td>
-        {{ @$producteur->carteCMU }} </td>
-</tr>
-            
-    <tr>
-        <td>N° de la pièce CMU
-        </td>
-<td>
-            {{ @$producteur->numCMU }}  </td>
-</tr>
+                        <tr>
+                            <td>Année de certification
+                            </td>
+                            <td>
+                                {{ @$producteur->certificat }}
 
-<tr>
-    <td>Votre type de carte de sécurité social
-    </td>
-<td>
-        {{ @$producteur->typeCarteSecuriteSociale }} 
-    </td>
-</tr> 
-    <tr>
-        <td>N° de carte de sécurité sociale
-        </td>
-<td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Code producteur
+                            </td>
+                            <td>
+                                {{ @$producteur->codeProd }}
 
-            {{ @$producteur->numSecuriteSociale }} 
-        
-    </td>
-</tr>
- 
-</table>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Certificat
+
+                            </td>
+                            <td>
+                                {{ @$producteur->certificats }}
+
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Autre Certificat
+                            </td>
+                            <td>
+                                {{ @$producteur->autreCertificats }}
+
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                Section
+                            </td>
+
+                            <td>
+                                {{ @$producteur->section }}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                Localite
+                            </td>
+                            <td>
+                                {{ @$producteur->localite_id }}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                Programme
+                            </td>
+                            <td>
+                                {{ @$producteur->programme_id }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Habitez-vous dans un campement ou village ?
+                            </td>
+                            <td>
+                                {{ @$producteur->habitationProducteur }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Nom du producteur
+                            </td>
+                            <td>
+                                {{ @$producteur->nom }}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Prenoms du producteur
+                            </td>
+                            <td>
+                                {{ @$producteur->prenoms }}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Genre
+                            </td>
+                            <td>
+                                {{ @$producteur->sexe }}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Statut matrimonial
+                            </td>
+                            <td>
+                                {{ @$producteur->statutMatrimonial }}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Nationalité
+                            </td>
+                            <td>
+                                {{ @$producteur->nationalite }}
+                                </select>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Date de naissance
+                            </td>
+                            <td>
+                                {{ @$producteur->dateNaiss }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Numero de téléphone
+                            </td>
+                            <td>
+                                {{ @$producteur->phone1 }}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Avez-vous un proche à contacter pour vous joindre
+                            </td>
+                            <td>
+                                {{ @$producteur->autreMembre }} </td>
+                        </tr>
+                        <tr>
+                            <td>
+                            </td>
+                            <td>
+                                {{ @$producteur->autrePhone }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Numero de téléphone
+                            </td>
+                            <td>
+                                {{ @$producteur->phone2 }}
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td> Niveau d'étude
+                            </td>
+                            <td>
+                                {{ @$producteur->niveau_etude }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Type de pièces
+                            </td>
+                            <td>
+                                {{ @$producteur->type_piece }}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>N° de la pièce
+                            </td>
+                            <td>
+                                {{ @$producteur->numPiece }} </td>
+                        </tr>
+
+
+                        <tr>
+                            <td>N° de carte CCC
+                            </td>
+                            <td>
+                                {{ @$producteur->num_ccc }} </td>
+                        </tr>
+
+                        <tr>
+                            <td>Avez-vous une carte CMU ?
+                            </td>
+                            <td>
+                                {{ @$producteur->carteCMU }} </td>
+                        </tr>
+
+                        <tr>
+                            <td>N° de la pièce CMU
+                            </td>
+                            <td>
+                                {{ @$producteur->numCMU }} </td>
+                        </tr>
+
+                        <tr>
+                            <td>Votre type de carte de sécurité social
+                            </td>
+                            <td>
+                                {{ @$producteur->typeCarteSecuriteSociale }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>N° de carte de sécurité sociale
+                            </td>
+                            <td>
+
+                                {{ @$producteur->numSecuriteSociale }}
+
+                            </td>
+                        </tr>
+
+                    </table>
                 </div>
             </div>
         </div>

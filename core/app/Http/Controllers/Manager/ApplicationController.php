@@ -165,7 +165,7 @@ class ApplicationController extends Controller
                 }
             }
             if ($request->autreMaladie != null) {
-               ApplicationAutreMaladie::where('application_id', $id)->delete();
+                ApplicationAutreMaladie::where('application_id', $id)->delete();
                 foreach ($request->autreMaladie as $maladie) {
                     $data1[] = [
                         'application_id' => $id,
