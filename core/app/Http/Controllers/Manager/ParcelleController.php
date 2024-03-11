@@ -3,24 +3,24 @@
 namespace App\Http\Controllers\Manager;
 
 use SimpleXMLElement;
-use App\Models\Section; 
+use App\Models\Section;
 use App\Models\Localite;
 use App\Models\Parcelle;
 use App\Constants\Status;
 use App\Models\Programme;
 use App\Models\Producteur;
-use App\Models\Cooperative; 
+use App\Models\Cooperative;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Models\Certification; 
-use App\Imports\ParcelleImport; 
+use App\Models\Certification;
+use App\Imports\ParcelleImport;
 use App\Exports\ExportParcelles;
-use App\Models\Agroespecesarbre;  
-use App\Http\Controllers\Controller; 
+use App\Models\Agroespecesarbre;
+use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\agroespeceabre_parcelle;
 use App\Models\Parcelle_type_protection;
-use App\Models\Producteur_certification; 
+use App\Models\Producteur_certification;
 
 class ParcelleController extends Controller
 {
@@ -38,7 +38,7 @@ class ParcelleController extends Controller
                 $query->where('section_id', $section);
             })
             ->get();
-        $producteurs = Producteur::joinRelationship('localite.section')->where([['cooperative_id', $manager->cooperative_id],['producteurs.status',1]])
+        $producteurs = Producteur::joinRelationship('localite.section')->where([['cooperative_id', $manager->cooperative_id], ['producteurs.status', 1]])
             ->where('cooperative_id', $manager->cooperative_id)
             ->when(request()->localite, function ($query, $localite) {
                 $query->where('localite_id', $localite);
@@ -48,7 +48,7 @@ class ParcelleController extends Controller
         $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
             return $localite->active();
         });
-        $producteurs = Producteur::joinRelationship('localite.section')->where([['cooperative_id', $manager->cooperative_id],['producteurs.status',1]])->get();
+        $producteurs = Producteur::joinRelationship('localite.section')->where([['cooperative_id', $manager->cooperative_id], ['producteurs.status', 1]])->get();
 
         $parcelles = Parcelle::dateFilter()->searchable(['codeParc'])
             ->latest('id')
@@ -61,7 +61,7 @@ class ParcelleController extends Controller
             })
             ->with(['producteur.localite.section']) // Charger les relations nécessaires
             ->paginate(getPaginate());
-         
+
         return view('manager.parcelle.index', compact('pageTitle', 'sections', 'parcelles', 'localites', 'producteurs'));
     }
 
@@ -81,7 +81,7 @@ class ParcelleController extends Controller
             })
             ->get();
         $producteurs = Producteur::joinRelationship('localite.section')
-            ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status',1]])
+            ->where([['cooperative_id', $manager->cooperative_id], ['producteurs.status', 1]])
             ->when(request()->localite, function ($query, $localite) {
                 $query->where('localite_id', $localite);
             })
@@ -119,7 +119,7 @@ class ParcelleController extends Controller
             })
             ->get();
         $producteurs = Producteur::joinRelationship('localite.section')
-            ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status',1]])
+            ->where([['cooperative_id', $manager->cooperative_id], ['producteurs.status', 1]])
             ->when(request()->localite, function ($query, $localite) {
                 $query->where('localite_id', $localite);
             })
@@ -136,7 +136,7 @@ class ParcelleController extends Controller
             })
             ->when(request()->producteur, function ($query, $producteur) {
                 $query->where('producteur_id', $producteur);
-            })  
+            })
             ->with(['producteur.localite.section'])
             ->get();
         $total = count($parcelles);
@@ -154,7 +154,7 @@ class ParcelleController extends Controller
             return $localite->active();
         });
         $producteurs  = Producteur::joinRelationship('localite.section')
-        ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->with('localite')->get();
+            ->where([['cooperative_id', $manager->cooperative_id], ['producteurs.status', 1]])->with('localite')->get();
         $arbres = Agroespecesarbre::all();
         return view('manager.parcelle.create', compact('pageTitle', 'producteurs', 'localites', 'sections', 'arbres'));
     }
@@ -165,7 +165,7 @@ class ParcelleController extends Controller
         $manager   = auth()->user();
         $i = 0;
         $k = 0;
-        $parcel="";
+        $parcel = "";
         if ($request->file('fichier_kml') != null) {
             $file = $request->file('fichier_kml');
             @unlink(public_path('upload/kml/'));
@@ -178,11 +178,11 @@ class ParcelleController extends Controller
             foreach ($dataPolygones as $index => $data) {
 
                 $producteur = Producteur::joinRelationship('localite.section')
-                ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->where('codeProd', $data['codeProducteur'])->first();
+                    ->where([['cooperative_id', $manager->cooperative_id], ['producteurs.status', 1]])->where('codeProd', $data['codeProducteur'])->first();
                 if ($producteur == null) {
                     $producteur = new Producteur();
                 }
-               
+
                 $section = Section::where([['cooperative_id', $manager->cooperative_id], ['libelle', $data['section']]])->first();
                 if ($section == null) {
                     $section = new Section();
@@ -196,22 +196,23 @@ class ParcelleController extends Controller
                 $section->save();
 
                 $localite = Localite::joinRelationship('section')->where([['cooperative_id', $manager->cooperative_id], ['nom', $data['localite']]])->first();
-                if($localite == null) { 
+                if ($localite == null) {
                     $localite = new Localite();
                     $data['localite'] = $this->verifylocalite($data['localite']);
-                    $localite->codeLocal = $this->generelocalitecode($data['localite']); 
+                    $localite->codeLocal = $this->generelocalitecode($data['localite']);
                 }
                 $localite->nom = $data['localite'];
                 $localite->section_id = $section->id;
                 $localite->codeLocal = $localite->codeLocal;
                 $localite->save();
 
-                $programme = Programme::where('libelle', $data['programme'])->first(); 
+                $programme = Programme::where('libelle', $data['programme'])->first();
 
                 $producteur->nom = utf8_encode($data['nom']);
                 $producteur->prenoms = utf8_encode($data['prenoms']);
                 $producteur->num_ccc = $data['codeCCC'];
                 $producteur->sexe = $data['genre'];
+                $producteur->statut = $data['candidat'];
                 $producteur->codeProd = $data['codeProducteur'];
                 $producteur->programme_id = $programme->id;
                 $producteur->localite_id = $localite->id;
@@ -222,38 +223,39 @@ class ParcelleController extends Controller
                     $certification = new Certification();
                     $certification->nom = $data['certification'];
                     $certification->fullname = $data['certification'];
+
                     $certification->save();
+                    $prodcertif = Producteur_certification::where([['producteur_id', $producteur->id], ['certification', $certification->nom]])->first();
+                    if ($prodcertif == null) {
+                        $prodcertif = new Producteur_certification();
+                    }
+                    $prodcertif->producteur_id = $producteur->id;
+                    $prodcertif->certification = $certification->nom;
+                    $prodcertif->save();
                 }
-                $prodcertif = Producteur_certification::where([['producteur_id', $producteur->id], ['certification', $certification->nom]])->first();
-                if ($prodcertif == null) {
-                    $prodcertif = new Producteur_certification();
-                }
-                $prodcertif->producteur_id = $producteur->id;
-                $prodcertif->certification = $certification->nom;
-                $prodcertif->save();
 
-                $parcelle = Parcelle::where([['producteur_id', $producteur->id],['codeParc',$data['codeParcelle']]])->first();
-                 
-                if($parcelle != null) {
-                     
-                $centroid = $this->calculateCentroid($data['coordinates']);
-                //$aire = $this->calculatePolygonArea($data['coordinates']);
 
-                $parcelle->producteur_id  = $producteur->id;
-                $parcelle->codeParc  = isset($data['codeParcelle']) ? $data['codeParcelle'] : null;
-                $parcelle->typedeclaration  = 'GPS';
-                $parcelle->culture  = 'CACAO';
-                $parcelle->superficie = is_numeric(trim($data['supHa'])) ? round(trim($data['supHa']),2) : trim($data['supHa']);
-                $parcelle->latitude = round($centroid['lat'], 6);
-                $parcelle->longitude = round($centroid['lng'], 6);
-                $parcelle->waypoints = $data['coordinates'];
-                $parcelle->save();
-                $i++;
-                }else{
+                $parcelle = Parcelle::where([['producteur_id', $producteur->id], ['codeParc', $data['codeParcelle']]])->first();
+
+                if ($parcelle != null) {
+
+                    $centroid = $this->calculateCentroid($data['coordinates']);
+                    //$aire = $this->calculatePolygonArea($data['coordinates']);
+
+                    $parcelle->producteur_id  = $producteur->id;
+                    $parcelle->codeParc  = isset($data['codeParcelle']) ? $data['codeParcelle'] : null;
+                    $parcelle->typedeclaration  = 'GPS';
+                    $parcelle->culture  = 'CACAO';
+                    $parcelle->superficie = is_numeric(trim($data['supHa'])) ? round(trim($data['supHa']), 2) : trim($data['supHa']);
+                    $parcelle->latitude = round($centroid['lat'], 6);
+                    $parcelle->longitude = round($centroid['lng'], 6);
+                    $parcelle->waypoints = $data['coordinates'];
+                    $parcelle->save();
+                    $i++;
+                } else {
                     $k++;
-                    $parcel .=$data['codeParcelle'].',';
+                    $parcel .= $data['codeParcelle'] . ',';
                 }
-                
             }
 
             $notify[] = ['success', "$i Polygones ont été importés avec succès et $k Polygones avec pour codes parcelles: $parcel n'ont importé."];
@@ -300,37 +302,38 @@ class ParcelleController extends Controller
             // $genre = (string)$placemark->ExtendedData->SchemaData->SimpleData[17];
             // $certification = (string)$placemark->ExtendedData->SchemaData->SimpleData[22];
             // $programme = (string)$placemark->ExtendedData->SchemaData->SimpleData[23];
-            $fieldID="";
-            $farmerID="";
-            $farmerName="";
-            $fieldName="";
-            $size="";
-            $nOrdre="";
-            $supHa = (string)$placemark->ExtendedData->SchemaData->SimpleData[0];
-            $cooperative = (string)$placemark->ExtendedData->SchemaData->SimpleData[2];
-            $codeCCC = (string)$placemark->ExtendedData->SchemaData->SimpleData[3];
-            $codeProducteur = Str::before((string)$placemark->ExtendedData->SchemaData->SimpleData[4]," ");
-            $codeParcelle = Str::before((string)$placemark->ExtendedData->SchemaData->SimpleData[5]," ");
-            $section = (string)$placemark->ExtendedData->SchemaData->SimpleData[6];
-            $localite = (string)$placemark->ExtendedData->SchemaData->SimpleData[7];
-            $sousPrefecture = (string)$placemark->ExtendedData->SchemaData->SimpleData[8];
-            $departement = (string)$placemark->ExtendedData->SchemaData->SimpleData[9];
-            $region = (string)$placemark->ExtendedData->SchemaData->SimpleData[10];
+            $fieldID = "";
+            $farmerID = "";
+            $farmerName = "";
+            $fieldName = "";
+            $size = "";
+            $nOrdre = "";
+            //$supHa = (string)$placemark->ExtendedData->SchemaData->SimpleData[0];
+            $supHa = 0;
+            $cooperative = (string)$placemark->ExtendedData->SchemaData->SimpleData[1];
+            $codeCCC = (string)$placemark->ExtendedData->SchemaData->SimpleData[2];
+            $codeProducteur = Str::before((string)$placemark->ExtendedData->SchemaData->SimpleData[3], " ");
+            $codeParcelle = Str::before((string)$placemark->ExtendedData->SchemaData->SimpleData[4], " ");
+            $section = (string)$placemark->ExtendedData->SchemaData->SimpleData[5];
+            $localite = (string)$placemark->ExtendedData->SchemaData->SimpleData[6];
+            $sousPrefecture = (string)$placemark->ExtendedData->SchemaData->SimpleData[7];
+            $departement = (string)$placemark->ExtendedData->SchemaData->SimpleData[8];
+            $region = (string)$placemark->ExtendedData->SchemaData->SimpleData[9];
             $prenoms = (string)$placemark->ExtendedData->SchemaData->SimpleData[11];
-            $nom = (string)$placemark->ExtendedData->SchemaData->SimpleData[12];
-            $genre = (string)$placemark->ExtendedData->SchemaData->SimpleData[13];
-            $certification = "Rainforest Alliance";
+            $nom = (string)$placemark->ExtendedData->SchemaData->SimpleData[10];
+            $genre = (string)$placemark->ExtendedData->SchemaData->SimpleData[12];
+            $candidat = (string)$placemark->ExtendedData->SchemaData->SimpleData[14];
+            //$certification = "Rainforest Alliance";
+            $certification = "";
             $programme = "Bandama";
 
-            $supHa = Str::before($supHa,' ');
-    if(Str::contains($supHa,","))
-    {
-    $supHa = Str::replaceFirst( ',','.',$supHa);
-    if(Str::contains($supHa,","))
-        {
-        $supHa = Str::replaceFirst( 'm²','',$supHa);
-        } 
-    }
+            $supHa = Str::before($supHa, ' ');
+            if (Str::contains($supHa, ",")) {
+                $supHa = Str::replaceFirst(',', '.', $supHa);
+                if (Str::contains($supHa, ",")) {
+                    $supHa = Str::replaceFirst('m²', '', $supHa);
+                }
+            }
             //Récupérer les coordonnées de la balise
 
             // Ajouter les données au tableau
@@ -343,7 +346,7 @@ class ParcelleController extends Controller
                 'fieldName' => $fieldName,
                 'size' => $size,
                 'nOrdre' => $nOrdre,
-                'supHa' => trim($supHa), 
+                'supHa' => trim($supHa),
                 'cooperative' => trim($cooperative),
                 'codeCCC' => trim($codeCCC),
                 'codeProducteur' => trim($codeProducteur),
@@ -357,6 +360,7 @@ class ParcelleController extends Controller
                 'nom' => addslashes(trim(enleveaccents($nom))),
                 'genre' => ucfirst($genre),
                 'certification' => $certification,
+                'candidat' => $candidat,
                 'programme' => $programme
             );
         }
@@ -622,7 +626,7 @@ class ParcelleController extends Controller
             $codeParc = $parcelle->codeParc;
             if ($codeParc == '') {
                 $produc = Producteur::joinRelationship('localite.section')
-                ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->select('codeProdapp')->find($request->producteur_id);
+                    ->where([['cooperative_id', $manager->cooperative_id], ['producteurs.status', 1]])->select('codeProdapp')->find($request->producteur_id);
                 if ($produc != null) {
                     $codeProd = $produc->codeProdapp;
                 } else {
@@ -634,7 +638,7 @@ class ParcelleController extends Controller
         } else {
             $parcelle = new Parcelle();
             $produc = Producteur::joinRelationship('localite.section')
-            ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->select('codeProdapp')->find($request->producteur_id);
+                ->where([['cooperative_id', $manager->cooperative_id], ['producteurs.status', 1]])->select('codeProdapp')->find($request->producteur_id);
             if ($produc != null) {
                 $codeProd = $produc->codeProdapp;
             } else {
@@ -776,7 +780,7 @@ class ParcelleController extends Controller
             return $localite->active();
         });
         $producteurs  = Producteur::joinRelationship('localite.section')
-        ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->with('localite')->get();
+            ->where([['cooperative_id', $manager->cooperative_id], ['producteurs.status', 1]])->with('localite')->get();
         $protections = $parcelle->parcelleTypeProtections->pluck('typeProtection')->all();
         $arbres = Agroespecesarbre::all();
         $agroespeceabreParcelle = agroespeceabre_parcelle::where('parcelle_id', $id)->get();
@@ -795,7 +799,7 @@ class ParcelleController extends Controller
             return $localite->active();
         });
         $producteurs  = Producteur::joinRelationship('localite.section')
-        ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->with('localite')->get();
+            ->where([['cooperative_id', $manager->cooperative_id], ['producteurs.status', 1]])->with('localite')->get();
         $protections = $parcelle->parcelleTypeProtections->pluck('typeProtection')->all();
         $arbres = Agroespecesarbre::all();
         $agroespeceabreParcelle = agroespeceabre_parcelle::where('parcelle_id', $id)->get();
@@ -808,7 +812,7 @@ class ParcelleController extends Controller
         return Parcelle::changeStatus($id);
     }
 
-    
+
     public function exportExcel()
     {
         $filename = 'parcelles-' . gmdate('dmYhms') . '.xlsx';
