@@ -15,6 +15,7 @@
                                     <th>@lang('Email-Contact')</th>
                                     <th>@lang('Utilisateurs Mobile')</th>
                                     <th>@lang('Utilisateurs Web')</th>
+                                    <th>@lang('Couleur')</th>
                                     <th>@lang('Status')</th>
                                     <th>@lang('Creations Date')</th>
                                     <th>@lang('Action')</th>
@@ -42,6 +43,9 @@
                                         </td>
                                         <td>
                                             <span class="d-block">{{ $cooperative->web }}</span> 
+                                        </td>
+                                        <td>
+                                            <span class="badge " style="background:{{ $cooperative->color }}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> 
                                         </td>
                                         <td>  @php echo $cooperative->statusBadge; @endphp </td>
                                         <td>
