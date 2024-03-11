@@ -113,10 +113,10 @@
                                                 <option value="En cours"
                                                     {{ $reponse->statuts == 'En cours' ? 'selected' : '' }}>En cours
                                                 </option>
-                                                <option value="Réalisé"
-                                                    {{ $reponse->statuts == 'Réalisé' ? 'selected' : '' }}>Réalisé</option>
-                                                <option value="Non Réalisé"
-                                                    {{ $reponse->statuts == 'Non Réalisé' ? 'selected' : '' }}>Non Réalisé
+                                                <option value="Achevé"
+                                                    {{ $reponse->statuts == 'Achevé' ? 'selected' : '' }}>Achevé</option>
+                                                <option value="Non Débuté"
+                                                    {{ $reponse->statuts == 'Non Débuté' ? 'selected' : '' }}>Non Débuté
                                                 </option>
                                             </select>
                                         @endif
@@ -159,8 +159,8 @@
                                 <thead>
                                     <tr>
                                         <td>En cours</td>
-                                        <td>Non Réalisé</td>
-                                        <td>Réalisé</td>
+                                        <td>Non Débuté</td>
+                                        <td>Achevé</td>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -286,10 +286,10 @@
                 if (statut == "En cours") {
                     encours += 1;
                 }
-                if (statut == "Non Réalisé") {
+                if (statut == "Non Débuté") {
                     nnrealise += 1;
                 }
-                if (statut == "Réalisé") {
+                if (statut == "Achevé") {
                     realise += 1;
 
                 }
@@ -297,8 +297,8 @@
             });
 
             console.log('En cours: ' + encours);
-            console.log('Non Réalisé: ' + nnrealise);
-            console.log('Réalisé: ' + realise);
+            console.log('Non Débuté: ' + nnrealise);
+            console.log('Achevé: ' + realise);
             $('#nbEncours').text(encours);
             $('#nbNonRealise').text(nnrealise);
             $('#nbRealise').text(realise);

@@ -123,7 +123,7 @@ class InspectionController extends Controller
                         'questionnaire_id' => $key, 
                         'notation' => $value,
                         'commentaire' => $commentaire[$key], 
-                        'statuts' => 'En cours', 
+                        'statuts' => 'Non Débuté', 
                     ];  
                 } 
             }
