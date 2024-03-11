@@ -34,13 +34,23 @@
                                 </select>
                             </div>
                             <div class="flex-grow-1">
+                                <label>@lang('Etat certification')</label>
+                                <select name="etat" class="form-control">
+                                    <option value="">@lang('Tous')</option>
+                                    <option value="Candidat" {{ request()->etat == 'Candidat' ? 'selected' : '' }}>
+                                        Candidat</option>
+                                    <option value="Certifie" {{ request()->etat == 'Certifie' ? 'selected' : '' }}>
+                                        Certifie</option>
+                                </select>
+                            </div>
+                            <div class="flex-grow-1">
                                 <label>@lang('Statut')</label>
                                 <select name="status" class="form-control">
                                     <option value="">@lang('Tous')</option>
-                                    <option value="Candidat" {{ request()->status == 'Candidat' ? 'selected' : '' }}>
-                                        Candidat</option>
-                                    <option value="Certifie" {{ request()->localite == 'Certifie' ? 'selected' : '' }}>
-                                        Certifie</option>
+                                    <option value="2" {{ request()->status == '2' ? 'selected' : '' }}>
+                                    Désactivé</option>
+                                    <option value="1" {{ request()->status == '1' ? 'selected' : '' }}>
+                                        Activé</option>
                                 </select>
                             </div>
                             <div class="flex-grow-1">
@@ -147,13 +157,13 @@
                                                 @if ($producteur->status == Status::DISABLE)
                                                     <button type="button" class="confirmationBtn  dropdown-item"
                                                         data-action="{{ route('manager.traca.producteur.status', $producteur->id) }}"
-                                                        data-question="@lang('Are you sure to enable this producteur?')">
+                                                        data-question="@lang('Etes-vous sûr de vouloir activer ce producteur?')">
                                                         <i class="la la-eye"></i> @lang('Activé')
                                                     </button>
                                                 @else
                                                     <button type="button" class="confirmationBtn dropdown-item"
                                                         data-action="{{ route('manager.traca.producteur.status', $producteur->id) }}"
-                                                        data-question="@lang('Are you sure to disable this producteur?')">
+                                                        data-question="@lang('Etes-vous sûr de vouloir désactiver ce producteur?')">
                                                         <i class="la la-eye-slash"></i> @lang('Désactivé')
                                                     </button>
                                                 @endif

@@ -51,20 +51,22 @@ class ProducteurController extends Controller
         $producteurs = Producteur::dateFilter()
             ->searchable(["nationalite", "type_piece", "codeProd", "codeProdapp", "producteurs.nom", "prenoms", "sexe", "dateNaiss", "phone1", "niveau_etude", "numPiece", "consentement", "statut", "certificat"])
             ->latest('id')
-            ->joinRelationship('localite.section')
-            ->where(function ($q) {
-                if (request()->localite != null) {
-                    $q->where('producteurs.localite_id', request()->localite);
-                }
-                if (request()->status != null) {
-                    $q->where('producteurs.statut', request()->status);
-                }
-                if (request()->programme != null) {
-                    $q->where('producteurs.programme_id', request()->programme);
-                }
+            ->joinRelationship('localite.section') 
+            ->when(request()->localite, function ($query, $localite) {
+                $query->where('producteurs.localite_id', $localite);
+            })
+            ->when(request()->status, function ($query, $status){
+                if($status==2) $status = 0;
+                $query->where('producteurs.status', $status);
+            }) 
+            ->when(request()->etat, function ($query, $etat){
+                $query->where('producteurs.statut', $etat);
+            }) 
+            ->when(request()->programme, function ($query, $programme){
+                $$query->where('producteurs.programme_id', $programme);
             })
             ->with('localite.section')
-            ->where([['cooperative_id', $manager->cooperative_id], ['producteurs.status', 1]])
+            ->where([['cooperative_id', $manager->cooperative_id]])
             ->paginate(getPaginate());
 
         if (request()->download) {
