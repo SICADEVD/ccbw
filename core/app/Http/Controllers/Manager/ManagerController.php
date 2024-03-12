@@ -42,7 +42,7 @@ class ManagerController extends Controller
                                 ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])
                                 ->count(); 
         $nbinspection = Inspection::joinRelationship('producteur.localite.section')
-                                ->where('cooperative_id', auth()->user()->cooperative_id)
+                                ->where([['cooperative_id', auth()->user()->cooperative_id],['producteurs.status', 1]])
                                 ->count(); 
         $nbarbredistribue = Agrodistribution::where('cooperative_id', auth()->user()->cooperative_id)
                                 ->sum('quantite');
@@ -56,7 +56,7 @@ class ManagerController extends Controller
     
 //Mapping des parcelles
     $parcelle = Parcelle::joinRelationship('producteur.localite.section')
-                            ->where('cooperative_id', auth()->user()->cooperative_id)
+                            ->where([['cooperative_id', auth()->user()->cooperative_id],['producteurs.status', 1]])
                             ->select('typedeclaration',DB::raw('count(parcelles.id) as nombre'))
                             ->groupBy('typedeclaration')
                             ->get(); 
@@ -100,18 +100,18 @@ class ManagerController extends Controller
         tf.type_formation_id, p.sexe'); 
         // Nombre de parcelles
         $parcellespargenre = Parcelle::joinRelationship('producteur.localite.section')
-        ->where('cooperative_id', auth()->user()->cooperative_id)->select('producteurs.sexe as genre',DB::raw('count(parcelles.id) as nombre'))->groupBy('producteurs.sexe')->get();
+        ->where([['cooperative_id', auth()->user()->cooperative_id],['producteurs.status', 1]])->select('producteurs.sexe as genre',DB::raw('count(parcelles.id) as nombre'))->groupBy('producteurs.sexe')->get();
        
         $producteurparcertification = Producteur_certification::joinRelationship('producteur.programme')
                                 ->joinRelationship('producteur.localite.section')
-                                ->where('cooperative_id', auth()->user()->cooperative_id) 
+                                ->where([['cooperative_id', auth()->user()->cooperative_id],['producteurs.status', 1]]) 
                                 ->select('producteur_certifications.certification',DB::raw('count(producteur_certifications.id) as nombre')) 
                                 ->groupBy('producteur_certifications.certification')
                                 ->get();
         
 $producteurparGenreCertification = Producteur_certification::joinRelationship('producteur.programme')
                                 ->joinRelationship('producteur.localite.section')
-                                ->where('cooperative_id', auth()->user()->cooperative_id) 
+                                ->where([['cooperative_id', auth()->user()->cooperative_id],['producteurs.status', 1]]) 
                                 ->select('producteur_certifications.certification','producteurs.sexe as genre',DB::raw('count(producteur_certifications.id) as nombre')) 
                                 ->groupBy('producteur_certifications.certification','producteurs.sexe')
                                 ->get();

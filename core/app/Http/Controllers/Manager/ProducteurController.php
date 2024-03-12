@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers\Manager;
 
-use Excel;
+use PDF;
 use App\Models\Pays;
 use App\Models\Product;
 use App\Models\Section;
 use App\Models\Countrie;
-use PDF;
-use App\Constants\Status;
 use App\Models\Localite;
+use App\Constants\Status;
 use App\Models\Programme;
 use App\Models\Producteur;
 use App\Models\Cooperative;
@@ -24,7 +23,9 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Requests\StoreInfoRequest;
+use App\Imports\ProducteurUpdateImport;
 use App\Models\Producteur_infos_mobile;
 use App\Models\Producteur_certification;
 use App\Models\Producteur_infos_typeculture;
@@ -350,7 +351,8 @@ class ProducteurController extends Controller
             'sexe'  => 'required|max:255',
             'nationalite'  => 'required|max:255',
             'dateNaiss'  => 'required|max:255',
-            'phone1'  => ['required', 'regex:/^\d{10}$/', 'unique:producteurs,phone1,' . $request->id],
+            'phone1'  => 'required',
+            // 'phone1'  => ['required', 'regex:/^\d{10}$/', 'unique:producteurs,phone1,' . $request->id],
             'niveau_etude'  => 'required|max:255',
             'type_piece'  => 'required|max:255',
             'num_ccc' => ['nullable', 'regex:/^\d{11}$/', 'unique:producteurs,num_ccc,' . $request->id],
@@ -364,7 +366,8 @@ class ProducteurController extends Controller
             'autrePhone' => 'required_if:autreMembre,==,oui',
             'numCMU' => 'required_if:carteCMU,==,oui',
             'phone2' => Rule::when($request->autreMembre == 'oui', function () use ($id) {
-                return ['required', 'regex:/^\d{10}$/', Rule::unique('producteurs', 'phone2')->ignore($id)];
+                // return ['required', 'regex:/^\d{10}$/', Rule::unique('producteurs', 'phone2')->ignore($id)];
+                return ['required'];
             }),
             //'phone2' => 'required_if:autreMembre,oui|regex:/^\d{10}$/|unique:producteurs,phone2,' . $request->id,
         ];
@@ -382,8 +385,8 @@ class ProducteurController extends Controller
             'nationalite.required' => 'La nationalité est obligatoire',
             'dateNaiss.required' => 'La date de naissance est obligatoire',
             'phone1.required' => 'Le numéro de téléphone est obligatoire',
-            'phone1.regex' => 'Le numéro de téléphone doit contenir exactement 10 chiffres.',
-            'phone1.unique' => 'Ce numéro de téléphone est déjà utilisé.',
+            // 'phone1.regex' => 'Le numéro de téléphone doit contenir exactement 10 chiffres.',
+            // 'phone1.unique' => 'Ce numéro de téléphone est déjà utilisé.',
             'niveau_etude.required' => 'Le niveau d\'étude est obligatoire',
             'type_piece.required' => 'Le type de pièce est obligatoire',
             'numPiece.required' => 'Le numéro de pièce est obligatoire',
@@ -395,8 +398,8 @@ class ProducteurController extends Controller
             'codeProdapp.required_if' => 'Le code Prodapp est obligatoire',
             'certificat.required_if' => 'Le certificat est obligatoire',
             'phone2.required_if' => 'Le numéro de téléphone est obligatoire',
-            'phone2.regex' => 'Le numéro de téléphone doit contenir exactement 10 chiffres.',
-            'phone2.unique' => 'Ce numéro de téléphone est déjà utilisé.',
+            // 'phone2.regex' => 'Le numéro de téléphone doit contenir exactement 10 chiffres.',
+            // 'phone2.unique' => 'Ce numéro de téléphone est déjà utilisé.',
             'autrePhone.required_if' => 'Le champ membre de famille est obligatoire',
             'num_ccc.regex' => 'numéro du conseil café cacao doit contenir 11 chiffres',
         ];
@@ -557,8 +560,13 @@ class ProducteurController extends Controller
     }
 
     public function  uploadContent(Request $request)
-    {
+    { 
         Excel::import(new ProducteurImport, $request->file('uploaded_file'));
+        return back();
+    }
+    public function  updateUploadContent(Request $request)
+    { 
+        Excel::import(new ProducteurUpdateImport, $request->file('uploaded_file_update'));
         return back();
     }
 }
