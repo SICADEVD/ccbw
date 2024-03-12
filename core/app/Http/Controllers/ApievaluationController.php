@@ -185,7 +185,7 @@ class ApievaluationController extends Controller
         $delais = $reponse_non_conformeObj->delai;
         $date_verifications = $reponse_non_conformeObj->date_verification;
         $statuts = $reponse_non_conformeObj->statuts;
-        $approbation = $request->input('approbation');
+        // $approbation = $request->input('approbation');
         //dd(json_encode($request->all()));
         
         foreach ($recommandations as $key => $recomm) {
@@ -200,7 +200,7 @@ class ApievaluationController extends Controller
             $suivi->save();
         }
 
-        Inspection::changeApprobation($request->input('id'), $approbation);
+        //Inspection::changeApprobation($request->input('id'), $approbation);
 
         $inspection = Inspection::where("id", $request->input('id'))->whereHas('reponsesInspection', function ($query) {
             $query->whereIn('notation', ['Pas Conforme', 'Non Applicable']);
