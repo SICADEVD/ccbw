@@ -54,7 +54,7 @@
                     <div class="form-group row">
                         <label for="" class="col-sm-4 control-label">@lang('Certificat')</label>
                         <div class="col-xs-12 col-sm-8">
-                            <select class="form-control select2-multi-select" name="certificat[]" id="certificat"
+                            <select class="form-control select2-multi-select" name="certificat[]" id="certificat" required
                                 multiple>
                                 <option value="">@lang('Selectionner un certificat')</option>
 

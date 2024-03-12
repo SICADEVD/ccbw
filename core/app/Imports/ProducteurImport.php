@@ -105,7 +105,8 @@ $nationalite = Country::where('iso',$nationalite)->first();
       $producteur->consentement = $row['consentement'];
       $producteur->statut = $row['statut']; 
       $producteur->certificat = $row['anneecertification'];
-      $producteur->numPiece = $row['numpiece']; 
+      $producteur->numPiece = $row['numpiece'];
+      $producteur->nationalite = $nationalite;
       $producteur->programme_id = $programme;
       $producteur->save();
 
