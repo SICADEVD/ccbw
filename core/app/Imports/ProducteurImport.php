@@ -102,22 +102,22 @@ class ProducteurImport implements ToCollection, WithHeadingRow, WithValidation
               $producteur->programme_id = $programme;
               $producteur->save();
 
-              // if ($producteur != null) {
-              //   $certification = Certification::where('nom', $row['certification'])->first();
-              //   $prodcertif = new Producteur_certification();
-              //   $prodcertif->producteur_id = $producteur->id;
-              //   $prodcertif->certification = $certification->nom;
-              //   $prodcertif->save();
-              // }
               if ($producteur != null) {
                 $certification = Certification::where('nom', $row['certification'])->first();
-                if ($certification != null) {
-                  $prodcertif = new Producteur_certification();
-                  $prodcertif->producteur_id = $producteur->id;
-                  $prodcertif->certification = $certification->nom;
-                  $prodcertif->save();
-                }
+                $prodcertif = new Producteur_certification();
+                $prodcertif->producteur_id = $producteur->id;
+                $prodcertif->certification = $certification->nom;
+                $prodcertif->save();
               }
+              // if ($producteur != null) {
+              //   $certification = Certification::where('nom', $row['certification'])->first();
+              //   if ($certification != null) {
+              //     $prodcertif = new Producteur_certification();
+              //     $prodcertif->producteur_id = $producteur->id;
+              //     $prodcertif->certification = $certification->nom;
+              //     $prodcertif->save();
+              //   }
+              // }
               $j++;
             } else {
 
@@ -139,23 +139,23 @@ class ProducteurImport implements ToCollection, WithHeadingRow, WithValidation
               $producteur->programme_id = $programme;
               $producteur->userid = auth()->user()->id;
               $producteur->save();
-              // if($producteur !=null)
-              // {
-              //   $certification = Certification::where('nom', $row['certification'])->first();
-              //   $prodcertif = new Producteur_certification();
-              //   $prodcertif->producteur_id = $producteur->id;
-              //   $prodcertif->certification = $certification->nom;
-              //   $prodcertif->save();
-              // }
-              if ($producteur != null) {
+              if($producteur !=null)
+              {
                 $certification = Certification::where('nom', $row['certification'])->first();
-                if ($certification != null) {
-                  $prodcertif = new Producteur_certification();
-                  $prodcertif->producteur_id = $producteur->id;
-                  $prodcertif->certification = $certification->nom;
-                  $prodcertif->save();
-                }
+                $prodcertif = new Producteur_certification();
+                $prodcertif->producteur_id = $producteur->id;
+                $prodcertif->certification = $certification->nom;
+                $prodcertif->save();
               }
+              // if ($producteur != null) {
+              //   $certification = Certification::where('nom', $row['certification'])->first();
+              //   if ($certification != null) {
+              //     $prodcertif = new Producteur_certification();
+              //     $prodcertif->producteur_id = $producteur->id;
+              //     $prodcertif->certification = $certification->nom;
+              //     $prodcertif->save();
+              //   }
+              // }
               $j++;
             }
           } else {
