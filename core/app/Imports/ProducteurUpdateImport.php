@@ -35,14 +35,17 @@ class ProducteurUpdateImport implements ToCollection, WithHeadingRow, WithValida
         $j=0;
         $k='';
         if(count($collection)){
- dd($collection);
+ 
         foreach($collection as $row)
          {
  
-$producteur = DB::table('producteurs')->where('codeProd',$row['code_producteur'])->first();
+$producteur = Producteur::where('codeProd',$row['code_producteur'])->first();
 if($producteur !=null)
 {  
-     
+  $nationalite = Country::where('nicename',$row['nationalite'])->Orwhere('nationalite',$row['nationalite'])->first();
+  if($nationalite !=null){
+    $nationalite = $nationalite->id;
+  }
       $producteur->codeProd = $row['code_producteur']; 
       $producteur->nom = $row['nom'];
       $producteur->prenoms = $row['prenoms'];
@@ -51,7 +54,7 @@ if($producteur !=null)
       $producteur->dateNaiss = date('Y-m-d', strtotime($row['date_naissance'])); 
       $producteur->phone1 = $row['phone1'];
       $producteur->phone2 = $row['phone2'];
-      $producteur->nationalite = $row['nationalite'];  
+      $producteur->nationalite = $nationalite;  
       $producteur->autreMembre = $row['autre_membre'];
       $producteur->autrePhone = $row['autre_phone'];
       $producteur->niveau_etude = $row['niveau_etude'];
@@ -65,7 +68,7 @@ if($producteur !=null)
       $producteur->anneeFin = $row['annee_fin'];
       $producteur->anneeDemarrage = $row['annee_demarrage'];
       $producteur->num_ccc = $row['numero_ccc'];
-      $producteur->numero_cmu = $row['numero_cmu'];
+      $producteur->numCMU = $row['numero_cmu'];
       $producteur->carteCMU = $row['carte_cmu'];
       $producteur->numSecuriteSociale = $row['numero_securite_sociale'];
       $producteur->typeCarteSecuriteSociale = $row['type_carte_securite_sociale'];
@@ -73,17 +76,17 @@ if($producteur !=null)
       $producteur->certificat = $row['annee_certification'];
       $producteur->userid = auth()->user()->id; 
       $producteur->save();
-      if($producteur !=null)
-      {
-        $certification = Certification::where('nom', $row['certification'])->first();
-        $prodcertif = new Producteur_certification();
-        $prodcertif->producteur_id = $producteur->id;
-        $prodcertif->certification = $certification->nom;
-        $prodcertif->save();
-      }
+      // if($producteur !=null)
+      // {
+      //   $certification = Certification::where('nom', $row['certification'])->first();
+      //   $prodcertif = new Producteur_certification();
+      //   $prodcertif->producteur_id = $producteur->id;
+      //   $prodcertif->certification = $certification->nom;
+      //   $prodcertif->save();
+      // }
       $j++; 
  }else{
-  $k .=$row['codeproducteur'].' , ';  
+  $k .=$row['code_producteur'].' , ';  
  }
  
   }
