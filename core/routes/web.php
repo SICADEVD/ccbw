@@ -348,6 +348,7 @@ Route::middleware('auth')->group(function () {
             Route::post('status/{id}', [ProducteurController::class,'status'])->name('status');
             Route::get('/exportProducteursExcel', [ProducteurController::class,'exportExcel'])->name('exportExcel.producteurAll');
             Route::post('/uploadcontent', [ProducteurController::class,'uploadContent'])->name('uploadcontent');
+            Route::post('/update/upload/content', [ProducteurController::class,'updateUploadContent'])->name('update.uploadcontent');
         });
 
         //Manage Parcelle
