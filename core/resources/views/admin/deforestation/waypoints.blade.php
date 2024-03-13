@@ -126,7 +126,11 @@ if(isset($parcelles) && count($parcelles)){
         if (isset($data->producteur) && isset($data->producteur->localite) && isset($data->producteur->localite->section)) {
             if(!isset($data->producteur->localite->section->cooperative_id)) {
                 continue;
-            }
+            }else{
+                if($coop->id !=$data->producteur->localite->section->cooperative_id) {
+                 continue;
+                }
+             }
         } 
         
          
