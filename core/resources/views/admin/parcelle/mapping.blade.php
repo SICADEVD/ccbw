@@ -97,16 +97,21 @@ var lgt='-5.5004615';
     var z=8; 
     <?php
     $nombreTotal = array();
+     
     foreach($cooperatives as $coop)
     {
         $nb = 0;
+        
         ?>
     var locations<?php echo $coop->id; ?> = [    <?php
   
 $i=1;
-foreach ($parcelles as  $data) {
+foreach($parcelles as  $data) {
     if($coop->id != $data->producteur->localite->section->cooperative_id)
             {
+                continue;
+            }
+            if($data->latitude==0 || $data->latitude==null || $data->latitude==1){
                 continue;
             }
     $lat = isset($data->latitude) ? htmlentities($data->latitude, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';

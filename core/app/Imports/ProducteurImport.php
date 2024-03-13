@@ -111,11 +111,14 @@ $nationalite = Country::where('iso',$nationalite)->first();
 
       if($producteur !=null)
       {
+        if($row['statut'] !='Candidat'){
         $certification = Certification::where('nom', $row['certification'])->first();
+
         $prodcertif = new Producteur_certification();
         $prodcertif->producteur_id = $producteur->id;
         $prodcertif->certification = $certification->nom;
         $prodcertif->save();
+        }
       }
       $j++; 
   }else{
@@ -140,11 +143,14 @@ $nationalite = Country::where('iso',$nationalite)->first();
       $producteur->save();
       if($producteur !=null)
       {
-        $certification = Certification::where('nom', $row['certification'])->first();
-        $prodcertif = new Producteur_certification();
-        $prodcertif->producteur_id = $producteur->id;
-        $prodcertif->certification = $certification->nom;
-        $prodcertif->save();
+        if($row['statut'] !='Candidat'){
+          $certification = Certification::where('nom', $row['certification'])->first();
+          $prodcertif = new Producteur_certification();
+          $prodcertif->producteur_id = $producteur->id;
+          $prodcertif->certification = $certification->nom;
+          $prodcertif->save();
+        }
+       
       }
       $j++;
   }
