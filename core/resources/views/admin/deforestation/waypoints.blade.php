@@ -118,12 +118,18 @@ if(isset($parcelles) && count($parcelles)){
     {
         $nb = 0;
 
-    foreach ($parcelles as $data) {
+    foreach($parcelles as $data) {
 
-        if($coop->id != $data->producteur->localite->section->cooperative_id)
-            {
+        if($data->latitude==0 || $data->latitude==null || $data->latitude==1){
+            continue;
+        }
+        if (isset($data->producteur) && isset($data->producteur->localite) && isset($data->producteur->localite->section)) {
+            if(!isset($data->producteur->localite->section->cooperative_id)) {
                 continue;
             }
+        } 
+        
+         
          
         if(($data->longitude !=null) && ($data->latitude !=null))
         {
