@@ -207,14 +207,15 @@ class ParcelleController extends Controller
                 $localite->save();
 
                 $programme = Programme::where('libelle', $data['programme'])->first();
-
+                if($programme !=null){
+                    $producteur->programme_id = $programme->id;
+                }
                 $producteur->nom = utf8_encode($data['nom']);
                 $producteur->prenoms = utf8_encode($data['prenoms']);
                 $producteur->num_ccc = $data['codeCCC'];
                 $producteur->sexe = $data['genre'];
                 $producteur->statut = $data['candidat'];
-                $producteur->codeProd = $data['codeProducteur'];
-                $producteur->programme_id = $programme->id;
+                $producteur->codeProd = $data['codeProducteur']; 
                 $producteur->localite_id = $localite->id;
                 $producteur->save();
 
