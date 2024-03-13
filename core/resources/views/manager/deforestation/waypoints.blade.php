@@ -109,9 +109,9 @@ if(isset($parcelles) && count($parcelles)){
 
     foreach ($parcelles as $data) {
         
-         
-        if(($data->longitude !=null) && ($data->latitude !=null))
-        {
+        if($data->latitude==0 || $data->latitude==null || $data->latitude==1){
+            continue;
+        }
             $lat = isset($data->latitude) ? htmlentities($data->latitude, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
             $long= isset($data->longitude) ? htmlentities($data->longitude, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible'; 
             $producteur = isset($data->producteur->nom) ? htmlentities($data->producteur->nom, ENT_QUOTES | ENT_IGNORE, "UTF-8").' '.htmlentities($data->producteur->prenoms, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
@@ -126,9 +126,7 @@ if(isset($parcelles) && count($parcelles)){
             $proprietaire = 'Coopérative:'. $cooperative.'<br>Section:'. $section.'<br>Localite:'. $localite.'<br>Producteur : '.$producteur.'<br>Code producteur:'. $code.'<br>Code Parcelle:'. $parcelle.'<br>Année creation:'. $annee.'<br>Latitude:'. $lat.'<br>Longitude:'. $long.'<br>Superficie:'. $superficie.' ha';
      
  
-        $polygonCoordinates = "['".$proprietaire."',".$long.",".$lat."]";
-         
-    }
+        $polygonCoordinates = "['".$proprietaire."',".$long.",".$lat."]"; 
     $pointsPolygon[] = $polygonCoordinates;
 }
 $pointsPolygon = Str::replace('"','',json_encode($pointsPolygon));

@@ -94,6 +94,10 @@ var lgt='-5.5004615';
     $total = count($parcelles);  
 $i=1;
 foreach ($parcelles as  $data) {
+    
+    if($data->latitude==0 || $data->latitude==null || $data->latitude==1){
+        continue;
+    }
     $lat = isset($data->latitude) ? htmlentities($data->latitude, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
     $long= isset($data->longitude) ? htmlentities($data->longitude, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible'; 
     $producteur = isset($data->producteur->nom) ? htmlentities($data->producteur->nom, ENT_QUOTES | ENT_IGNORE, "UTF-8").' '.htmlentities($data->producteur->prenoms, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';

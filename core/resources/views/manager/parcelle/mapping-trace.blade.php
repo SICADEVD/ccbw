@@ -78,6 +78,9 @@ if(isset($parcelles) && count($parcelles)){
 
     foreach ($parcelles as $data) {
         
+        if($data->latitude==0 || $data->latitude==null || $data->latitude==1){
+            continue;
+        }
          
         if($data->waypoints !=null)
         {
