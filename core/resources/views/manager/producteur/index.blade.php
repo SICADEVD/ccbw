@@ -248,15 +248,13 @@
                     enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
-                        <p>Fichier d'exemple à utiliser :<a href="{{ asset('assets/producteur-update-import-exemple.xlsx') }}"
-                                target="_blank">@lang('producteur-update-import-exemple.xlsx')</a></p>
+                       
                         <div class="alert alert-warning">
                             <p><i class="las la-exclamation-triangle"></i> Consignes à respecter avant de charger le
                                 fichier
                                 :</p>
                             <ul>
-                                <li>Assurez-vous que les Producteurs qui sont dans le fichier sont déjà enregistrées dans la
-                                    plateforme avant de faire une mise à jour.</li> 
+                                <li>Télécharger la liste de tous les Producteurs en cliquant sur le bouton "Exporter en  Excel". Apportez vos modification puis importer le fichier modifié. Aucun nouveau producteur ne sera prise en compte lors de cette mise à jour.</li> 
                             </ul>
                         </div>
 
