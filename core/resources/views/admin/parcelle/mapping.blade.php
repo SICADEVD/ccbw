@@ -164,11 +164,11 @@ var svgIcon = {
             path: "M8 0C3.58 0 0 3.58 0 8s8 16 8 16 8-12.92 8-16-3.58-8-8-8zm0 11c-1.11 0-2-.89-2-2s.89-2 2-2 2 .89 2 2-.89 2-2 2z",
             fillColor: "<?php echo $coopera->color; ?>",
             fillOpacity: 0.6,
-            strokeWeight: 2,
-            strokeColor: "<?php echo $coopera->color; ?>", // Changer cette couleur pour le contour
+            strokeWeight: 1,
+            strokeColor: "#FFFFFF", // Changer cette couleur pour le contour
             strokeOpacity: 1,
-            strokeWeight: 2,
-            scale: 2 // Ajustez la taille du SVG selon vos besoins
+            strokeWeight: 1,
+            scale: 1 // Ajustez la taille du SVG selon vos besoins
         };
     for (i = 0; i < total; i++) { 
 
