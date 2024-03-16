@@ -242,7 +242,6 @@ class ParcelleController extends Controller
 
                     $centroid = $this->calculateCentroid($data['coordinates']);
                     $superficie = substr($this->calculatePolygonArea($data['coordinates']),0,5);
-                  
 
                     $parcelle->producteur_id  = $producteur->id;
                     $parcelle->codeParc  = isset($data['codeParcelle']) ? $data['codeParcelle'] : null;
