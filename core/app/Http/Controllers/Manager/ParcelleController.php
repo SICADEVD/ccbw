@@ -241,13 +241,15 @@ class ParcelleController extends Controller
                 if ($parcelle != null) {
 
                     $centroid = $this->calculateCentroid($data['coordinates']);
-                    //$aire = $this->calculatePolygonArea($data['coordinates']);
+                    $superficie = substr($this->calculatePolygonArea($data['coordinates']),0,5);
+                  
 
                     $parcelle->producteur_id  = $producteur->id;
                     $parcelle->codeParc  = isset($data['codeParcelle']) ? $data['codeParcelle'] : null;
                     $parcelle->typedeclaration  = 'GPS';
-                    $parcelle->culture  = 'CACAO';
-                    $parcelle->superficie = is_numeric(trim($data['supHa'])) ? round(trim($data['supHa']), 2) : trim($data['supHa']);
+                    $parcelle->culture  = 'CACAO'; 
+                    $parcelle->superficie = round($superficie, 2);
+                    //dd($parcelle->superficie);
                     $parcelle->latitude = round($centroid['lat'], 6);
                     $parcelle->longitude = round($centroid['lng'], 6);
                     $parcelle->waypoints = $data['coordinates'];
