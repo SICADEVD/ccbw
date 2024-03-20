@@ -133,7 +133,7 @@ class CooperativeManagerController extends Controller
     public function login($id)
     {
         User::manager()->where('id', $id)->firstOrFail();
-        auth()->loginUsingId($id);
+        auth()->loginUsingId($id, $remember = true);
         return to_route('manager.dashboard');
     }
 
