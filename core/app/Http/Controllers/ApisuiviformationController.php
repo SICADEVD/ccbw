@@ -7,7 +7,7 @@ use App\Models\Localite;
 use App\Constants\Status;
 use App\Models\SousThemeFormation;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str; 
+use Illuminate\Support\Str;
 use App\Models\SuiviFormation;
 use App\Models\ThemeSousTheme;
 use App\Models\Suivi_formation;
@@ -27,7 +27,7 @@ class ApisuiviformationController extends Controller
      */
     public function index()
     {
-	
+
         //
     }
 
@@ -38,7 +38,7 @@ class ApisuiviformationController extends Controller
      */
     public function create()
     {
-	
+
         //
     }
 
@@ -50,10 +50,9 @@ class ApisuiviformationController extends Controller
      */
     public function store(Request $request)
     {
-		 
-        if(!file_exists(storage_path(). "/app/public/formations"))
-        { 
-            File::makeDirectory(storage_path(). "/app/public/formations", 0777, true);
+
+        if (!file_exists(storage_path() . "/app/public/formations")) {
+            File::makeDirectory(storage_path() . "/app/public/formations", 0777, true);
         }
         $validationRule = [
             'localite'    => 'required|exists:localites,id',
@@ -86,7 +85,7 @@ class ApisuiviformationController extends Controller
         $formation->userid = $request->userid;
 
         $photo_fileNameExtension = Str::afterLast($request->photo_filename, '.');
-        $rapport_fileNameExtension = Str::afterLast($request->rapport_filename,'.');
+        $rapport_fileNameExtension = Str::afterLast($request->rapport_filename, '.');
 
 
         if ($request->photo_formation) {
@@ -99,7 +98,7 @@ class ApisuiviformationController extends Controller
             $formation->photo_formation = $photo_formations;
         }
 
-        if($request->rapport_formation){
+        if ($request->rapport_formation) {
             $rapport_formation = $request->rapport_formation;
             $rapport_formation = Str::after($rapport_formation, 'base64,');
             $rapport_formation = str_replace(' ', '+', $rapport_formation);
@@ -110,7 +109,7 @@ class ApisuiviformationController extends Controller
             $formation->rapport_formation = $rapport_formation;
         }
 
-       
+
         $formation->save();
 
 
@@ -146,9 +145,8 @@ class ApisuiviformationController extends Controller
                     ];
                     TypeFormationTheme::insert($datas3);
                 }
-    
             }
-            
+
             $selectedSousThemes = $request->sous_theme;
             if ($selectedSousThemes != null) {
                 ThemeSousTheme::where('suivi_formation_id', $id)->delete();
@@ -167,12 +165,13 @@ class ApisuiviformationController extends Controller
 
         return response()->json($formation, 201);
     }
-    public function getsousthemes(){
-        $sousthemes = SousThemeFormation::get(); 
-         
-        return response()->json($sousthemes , 201);
+    public function getsousthemes()
+    {
+        $sousthemes = SousThemeFormation::get();
+
+        return response()->json($sousthemes, 201);
     }
-    
+
     public function getvisiteurs(Request $request)
     {
         $suivi_formation_id = $request->suivi_formation_id;
@@ -180,7 +179,8 @@ class ApisuiviformationController extends Controller
         return response()->json($visiteurs);
     }
 
-    public function storeVisiteur(Request $request){
+    public function storeVisiteur(Request $request)
+    {
         $validationRule = [
             'nom'  => 'required|max:255',
             'prenom'  => 'required|max:255',
@@ -206,53 +206,84 @@ class ApisuiviformationController extends Controller
         return response()->json($visiteur, 201);
     }
 
-    public function getTypethemeformation(){
-        $typeformations = DB::table('type_formations')->select('nom','id')->get();
+    public function getTypethemeformation()
+    {
+        $typeformations = DB::table('type_formations')->select('nom', 'id')->get();
         $donnees = DB::table('themes_formations')->get();
         $type_formations_theme = array();
-        foreach($typeformations as $res)
-        {
- 
-            foreach($donnees as $data){
-                if($data->type_formation_id==$res->id){
-                    $gestlist[] = array('id'=>$data->id, 'libelle'=>$data->nom);
-                    
+        foreach ($typeformations as $res) {
+
+            foreach ($donnees as $data) {
+                if ($data->type_formation_id == $res->id) {
+                    $gestlist[] = array('id' => $data->id, 'libelle' => $data->nom);
                 }
             }
             $type_formations_theme[] = array(
-                'titretype'=>$res->nom,
-                'idtype'=>$res->id,
-                 "theme"=>$gestlist); 
-             
-             $gestlist =array(); 
+                'titretype' => $res->nom,
+                'idtype' => $res->id,
+                "theme" => $gestlist
+            );
+
+            $gestlist = array();
         }
-        return response()->json($type_formations_theme , 201);
+        return response()->json($type_formations_theme, 201);
     }
 
-    public function getTypeformation(){
+    public function getTypeformation()
+    {
 
-        $typeformations = DB::table('type_formations')->get(); 
-         
-        return response()->json($typeformations , 201);
+        $typeformations = DB::table('type_formations')->get();
+
+        return response()->json($typeformations, 201);
     }
-    public function getThemes(){
-        
-        $themes = DB::table('themes_formations')->get(); 
-         
-        return response()->json($themes , 201);
+    public function getThemes()
+    {
+
+        $themes = DB::table('themes_formations')->get();
+
+        return response()->json($themes, 201);
     }
 
-     /**
+    /**
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    public function getformationsByUser(Request $request)
+    {
+        $request->validate([
+            'userid' => 'required|integer|exists:users,id',
+        ]);
 
-    public function getformationsByUser(Request $request){  
         $userid = $request->userid;
-        $formations = DB::table('suivi_formations')->where('userid',$userid)->get();
 
-    //    $formations = DB::table('suivi_formations')->where('status',1)->get();
+        $formations = SuiviFormation::where('userid', $userid)
+            ->with([
+                'formationProducteur' => function ($query) {
+                    $query->select('producteur_id', 'suivi_formation_id');
+                },
+                'typeFormationTheme' => function ($query) {
+                    $query->select('type_formation_id', 'suivi_formation_id', 'theme_formation_id');
+                },
+                'themeSousTheme' => function ($query) {
+                    $query->select('sous_theme_id', 'suivi_formation_id');
+                },
+            ])
+            ->get();
+
+        foreach ($formations as $formation) {
+            $formation->producteurs_ids = $formation->formationProducteur->pluck('producteur_id');
+            unset($formation->formationProducteur);
+
+            $formation->type_formation_ids = $formation->typeFormationTheme->pluck('type_formation_id');
+            unset($formation->typeFormationTheme);
+
+            $formation->theme_ids = $formation->typeFormationTheme->pluck('theme_formation_id');
+            unset($formation->typeFormationTheme);
+
+            $formation->sous_themes_ids = $formation->themeSousTheme->pluck('sous_theme_id');
+            unset($formation->themeSousTheme);
+        }
 
         return response()->json($formations, 201);
     }
@@ -264,7 +295,7 @@ class ApisuiviformationController extends Controller
      */
     public function show($id)
     {
-	
+
         //
     }
 
@@ -276,7 +307,7 @@ class ApisuiviformationController extends Controller
      */
     public function edit($id)
     {
-	
+
         //
     }
 
@@ -289,7 +320,7 @@ class ApisuiviformationController extends Controller
      */
     public function update(Request $request, $id)
     {
-	
+
         //
     }
 
@@ -301,7 +332,7 @@ class ApisuiviformationController extends Controller
      */
     public function destroy($id)
     {
-	
+
         //
     }
 }
