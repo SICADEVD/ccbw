@@ -24,6 +24,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ExportProducteursAll;
 use App\Http\Requests\StoreInfoRequest;
 use App\Imports\ProducteurUpdateImport;
 use App\Models\Producteur_infos_mobile;
@@ -559,6 +560,11 @@ class ProducteurController extends Controller
         return Excel::download(new ExportProducteurs, $filename);
     }
 
+    public function exportExcelAllList()
+    {
+        $filename = 'producteurs-all-liste-' . gmdate('dmYhms') . '.xlsx';
+        return Excel::download(new ExportProducteursAll, $filename);
+    }
     public function  uploadContent(Request $request)
     { 
         Excel::import(new ProducteurImport, $request->file('uploaded_file'));
