@@ -346,6 +346,7 @@ Route::middleware('auth')->group(function () {
             Route::get('infos/edit/{id}', [ProducteurController::class,'editinfo'])->name('editinfo');
             Route::get('edit/{id}', [ProducteurController::class,'edit'])->name('edit');
             Route::post('status/{id}', [ProducteurController::class,'status'])->name('status');
+            Route::post('delete/{id}', [ProducteurController::class, 'delete'])->name('delete');
             Route::get('/exportProducteursExcel', [ProducteurController::class,'exportExcel'])->name('exportExcel.producteurAll');
             Route::post('/uploadcontent', [ProducteurController::class,'uploadContent'])->name('uploadcontent');
             Route::post('/update/upload/content', [ProducteurController::class,'updateUploadContent'])->name('update.uploadcontent');
@@ -359,6 +360,7 @@ Route::middleware('auth')->group(function () {
             Route::get('edit/{id}', [ParcelleController::class,'edit'])->name('edit');
             Route::get('show/{id}', [ParcelleController::class,'show'])->name('show');
             Route::post('status/{id}', [ParcelleController::class,'status'])->name('status');
+            Route::post('delete/{id}', [ParcelleController::class, 'delete'])->name('delete');
             Route::get('/exportParcellesExcel', [ParcelleController::class,'exportExcel'])->name('exportExcel.parcelleAll');
             Route::get('mapping', [ParcelleController::class,'mapping'])->name('mapping');
             Route::get('mapping/polygone', [ParcelleController::class,'mappingPolygone'])->name('mapping.polygone');
@@ -375,6 +377,7 @@ Route::middleware('auth')->group(function () {
             Route::get('edit/{id}', [EstimationController::class,'edit'])->name('edit');
             Route::get('show/{id}', [EstimationController::class,'show'])->name('show');
             Route::post('status/{id}', [EstimationController::class,'status'])->name('status');
+            Route::post('delete/{id}', [EstimationController::class, 'delete'])->name('delete');
             Route::get('/exportEstimationsExcel', [EstimationController::class,'exportExcel'])->name('exportExcel.estimationAll');
             Route::post('/uploadcontent', [EstimationController::class,'uploadContent'])->name('uploadcontent');
         });
@@ -387,6 +390,7 @@ Route::middleware('auth')->group(function () {
             Route::get('edit/{id}', [MenageController::class,'edit'])->name('edit');
             Route::get('show/{id}', [MenageController::class,'show'])->name('show');
             Route::post('status/{id}', [MenageController::class,'status'])->name('status');
+            Route::post('delete/{id}', [MenageController::class, 'delete'])->name('delete');
             Route::get('/exportMenagesExcel', [MenageController::class,'exportExcel'])->name('exportExcel.menageAll');
         });
 
@@ -399,6 +403,7 @@ Route::middleware('auth')->group(function () {
             Route::get('edit/{id}', [SuiviParcelleController::class,'edit'])->name('edit');
             Route::get('show/{id}', [SuiviParcelleController::class,'show'])->name('show');
             Route::post('status/{id}', [SuiviParcelleController::class,'status'])->name('status');
+            Route::post('delete/{id}', [SuiviParcelleController::class, 'delete'])->name('delete');
             Route::get('/exportSuiviParcellesExcel', [SuiviParcelleController::class,'exportExcel'])->name('exportExcel.suiviParcelleAll');
         });
 
@@ -411,7 +416,7 @@ Route::middleware('auth')->group(function () {
             Route::get('show/{id}', [FormationController::class,'show'])->name('show');
             Route::post('status/{id}', [FormationController::class,'status'])->name('status');
             Route::get('/exportFormationsExcel', [FormationController::class,'exportExcel'])->name('exportExcel.formationAll');
-
+            Route::post('delete/{id}', [FormationController::class, 'delete'])->name('delete');
 
             Route::get('visiteur/{id}', [FormationController::class,'visiteur'])->name('visiteur.visiteurs');
             Route::get('visiteur/create/{id}', [FormationController::class,'createvisiteur'])->name('visiteur.createvisiteur');
@@ -433,6 +438,7 @@ Route::middleware('auth')->group(function () {
             Route::get('certificat', [InspectionController::class,'getCertificat'])->name('getcertificat');
             Route::get('questionnaire', [InspectionController::class,'getQuestionnaire'])->name('getquestionnaire');
             Route::post('questionnaire/suivi', [InspectionController::class,'suiviStore'])->name('suiviStore');
+            Route::post('delete/{id}', [InspectionController::class, 'delete'])->name('delete');
             Route::get('/exportInspectionsExcel', [InspectionController::class,'exportExcel'])->name('exportExcel.inspectionAll');
         });
         //Manage Suivi Application
@@ -444,6 +450,7 @@ Route::middleware('auth')->group(function () {
             Route::get('show/{id}', [ApplicationController::class,'show'])->name('show');
             Route::post('status/{id}', [ApplicationController::class,'status'])->name('status');
             Route::post('/uploadcontent', [ApplicationController::class,'uploadContent'])->name('uploadcontent');
+            Route::post('delete/{id}', [ApplicationController::class, 'delete'])->name('delete');
             Route::get('/exportApplicationsExcel', [ApplicationController::class,'exportExcel'])->name('exportExcel.applicationAll');
         });
 
@@ -455,6 +462,7 @@ Route::middleware('auth')->group(function () {
             Route::get('edit/{id}', [SsrteclmrsController::class,'edit'])->name('edit');
             Route::get('show/{id}', [SsrteclmrsController::class,'show'])->name('show');
             Route::post('status/{id}', [SsrteclmrsController::class,'status'])->name('status');
+            Route::post('delete/{id}', [SsrteclmrsController::class, 'delete'])->name('delete');
             Route::get('/exportSsrteclmrsExcel', [SsrteclmrsController::class,'exportExcel'])->name('exportExcel.ssrteclmrsAll');
         });
 
@@ -469,6 +477,7 @@ Route::middleware('auth')->group(function () {
             Route::post('store-section', [AgroapprovisionnementController::class,'store_section'])->name('store-section');
             Route::get('edit-section/{id}', [AgroapprovisionnementController::class,'edit_section'])->name('edit-section');
             Route::post('status/{id}', [AgroapprovisionnementController::class,'status'])->name('status');
+            Route::post('delete/{id}', [AgroapprovisionnementController::class, 'delete'])->name('delete');
             Route::get('/exportApprovisionnementExcel', [AgroapprovisionnementController::class,'exportExcel'])->name('exportExcel.approvisionnementAll');
         });
 
@@ -480,6 +489,7 @@ Route::middleware('auth')->group(function () {
             Route::post('update', [AgrodistributionController::class,'update'])->name('update');
             Route::get('edit/{id}', [AgrodistributionController::class,'edit'])->name('edit');
             Route::post('status/{id}', [AgrodistributionController::class,'status'])->name('status');
+            Route::post('delete/{id}', [AgrodistributionController::class, 'delete'])->name('delete');
             Route::get('/exportDistributionsExcel', [AgrodistributionController::class,'exportExcel'])->name('exportExcel.distributionAll');
             Route::post('/get/agroparcelles/arbres', [AgrodistributionController::class,'getAgroParcellesArbres'])->name('getAgroParcellesArbres');
         });
@@ -492,6 +502,7 @@ Route::middleware('auth')->group(function () {
             Route::post('update', [AgropostplantingController::class,'update'])->name('update');
             Route::get('edit/{id}', [AgropostplantingController::class,'edit'])->name('edit');
             Route::post('status/{id}', [AgropostplantingController::class,'status'])->name('status');
+            Route::post('delete/{id}', [AgropostplantingController::class, 'delete'])->name('delete');
             Route::get('/exportPostplantingsExcel', [AgropostplantingController::class,'exportExcel'])->name('exportExcel.postplantingAll');
             Route::get('/get/agroparcelles/arbres', [AgropostplantingController::class,'getAgroParcellesArbres'])->name('getAgroParcellesArbres');
         });
@@ -505,6 +516,7 @@ Route::middleware('auth')->group(function () {
             Route::get('edit/{id}', [AgroevaluationController::class,'edit'])->name('edit');
             Route::get('show/{id}', [AgroevaluationController::class,'show'])->name('show');
             Route::post('status/{id}', [AgroevaluationController::class,'status'])->name('status');
+            Route::post('delete/{id}', [AgroevaluationController::class, 'delete'])->name('delete');
             Route::get('/exportEvaluationsExcel', [AgroevaluationController::class,'exportExcel'])->name('exportExcel.evaluationsAll');
         });
 
@@ -520,7 +532,7 @@ Route::middleware('auth')->group(function () {
             Route::get('action/sociale/show/{id}', [ActionSocialeController::class,'show'])->name('action.sociale.show');
             Route::post('action/sociale/status/{id}', [ActionSocialeController::class,'status'])->name('action.sociale.status');
             Route::get('action/sociale/exportActionSocialeExcel', [ActionSocialeController::class,'exportExcel'])->name('action.sociale.exportExcel.actionSocialeAll');
-
+            Route::post('delete/{id}', [ActionSocialeController::class, 'delete'])->name('delete');
             Route::post('action/sociale/generCode', [ActionSocialeController::class,'generCode'])->name('action.sociale.generCode');
 
         // Activite communautaire
@@ -536,7 +548,7 @@ Route::middleware('auth')->group(function () {
             Route::post('non-membre/store', [ActiviteCommunautaireController::class,'storenonmembre'])->name('nonmembre.storenonmembre');
             Route::get('non-membre/edit/{id}', [ActiviteCommunautaireController::class,'editnonmembre'])->name('nonmembre.editnonmembre');
             Route::get('activite/communautaire/exportActiviteCommunautaireExcel', [ActiviteCommunautaireController::class,'exportExcel'])->name('activite.communautaire.exportExcel.activiteCommunautaireAll');
-
+            Route::post('delete/{id}', [ActiviteCommunautaireController::class, 'delete'])->name('delete');
         });
 
         //Manage Agrodeforestations

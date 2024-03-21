@@ -139,8 +139,8 @@ class CooperativeManagerController extends Controller
 
     public function staffLogin($id)
     {
-        User::staff()->where('id', $id)->firstOrFail();
-        auth()->loginUsingId($id);
+        $user = User::staff()->where('id', $id)->firstOrFail();
+        auth()->loginUsingId($user->id);
         return to_route('staff.dashboard');
     }
 

@@ -76,7 +76,7 @@ class ManagerController extends Controller
                                         ->groupBy('type_formation_id')
                                         ->get();
  
- 
+ $coop_id = auth()->user()->cooperative_id;
 //Producteurs formés par Module
         $modules = DB::select('SELECT 
         tyf.nom AS module,
@@ -88,6 +88,12 @@ class ManagerController extends Controller
         suivi_formations s
         ON sf.suivi_formation_id = s.id
     INNER JOIN 
+        localites lo
+        ON s.localite_id = lo.id
+    INNER JOIN 
+        sections sec
+        ON lo.section_id = sec.id
+    INNER JOIN 
         type_formation_themes tf
         ON s.id = tf.suivi_formation_id
     INNER JOIN 
@@ -96,6 +102,7 @@ class ManagerController extends Controller
     INNER JOIN 
     producteurs p
     ON sf.producteur_id = p.id
+    WHERE sec.cooperative_id = '.$coop_id.'
     GROUP BY 
         tf.type_formation_id, p.sexe'); 
         // Nombre de parcelles
