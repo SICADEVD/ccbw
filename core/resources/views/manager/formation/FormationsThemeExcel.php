@@ -38,7 +38,7 @@
     ?>
         <tbody>
         <tr>
-            <td></td> 
+            <td><?php echo @$c->suivi_formation_id; ?></td> 
             <td><?php echo $c->typeFormation->nom; ?></td> 
             <td><?php echo $c->themeFormation->nom; ?></td>   
         </tr>
