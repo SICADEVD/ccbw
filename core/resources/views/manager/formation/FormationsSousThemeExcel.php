@@ -38,8 +38,8 @@
     ?>
         <tbody>
         <tr>
-            <td><?php echo @$c->id; ?></td>
-            <td><?php echo $c->typeFormation->nom; ?></td> 
+            <td><?php echo @$c->suivi_formation_id; ?></td> 
+            <td><?php echo $c->themeFormation->typeFormation->nom; ?></td> 
             <td><?php echo $c->themeFormation->nom; ?></td>
             <td><?php echo $c->sousThemeFormation->nom; ?></td>     
         </tr>

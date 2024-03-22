@@ -25,7 +25,7 @@ class SuiviFormationThemeSousThemeExport implements FromView, WithTitle
         return view('manager.formation.FormationsSousThemeExcel',[
             'sousthemes' => ThemeSousTheme::joinRelationship('suiviFormation.localite.section')->where('cooperative_id',auth()->user()->cooperative_id)
             ->when(request()->id, function ($query, $id) {
-                $query->where('suivi_formations.suivi_formation_id',decrypt($id)); 
+                $query->where('theme_sous_themes.suivi_formation_id',decrypt($id)); 
            })
             ->get()
         ]);

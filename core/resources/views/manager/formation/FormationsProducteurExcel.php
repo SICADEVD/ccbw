@@ -38,7 +38,7 @@
     ?>
         <tbody>
         <tr>
-            <td><?php echo @$c->id; ?></td>
+            <td><?php echo @$c->suivi_formation_id; ?></td> 
             <td><?php echo $c->producteur->nom; ?></td> 
             <td><?php echo $c->producteur->prenoms; ?></td> 
             <td><?php echo $c->producteur->codeProd; ?></td>  
