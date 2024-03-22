@@ -289,11 +289,16 @@
     </button>
     <div class="dropdown-menu p-0">
         <a class="dropdown-item addType">Importer des Producteurs</a>
-        <a class="dropdown-item updateType">Importer Mise à jour des Producteurs</a>
-
+        <a class="dropdown-item updateType">Importer Mise à jour des Producteurs</a> 
     </div>
-    <a href="{{ route('manager.traca.producteur.exportExcel.producteurAll') }}" class="btn  btn-outline--warning h-45"><i
-            class="las la-cloud-download-alt"></i> Exporter en Excel</a>
+    <button type="button" class="btn btn-outline--warning h-45" data-bs-toggle="dropdown" aria-expanded="false"><i
+            class="las la-cloud-download-alt"></i>Exportation
+    </button>
+    <div class="dropdown-menu p-0"> 
+        <a href="{{ route('manager.traca.producteur.exportExcel.producteurAll') }}" class="btn  btn-outline--warning h-45"> Uniquement liste Producteurs</a> 
+        <a href="{{ route('manager.traca.producteur.exportExcel.producteurAllList') }}" class="btn  btn-outline--warning h-45"> Tous les Producteurs avec autres Infos</a> 
+    </div>
+    
 @endpush
 @push('style')
     <style>

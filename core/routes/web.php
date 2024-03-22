@@ -347,7 +347,8 @@ Route::middleware('auth')->group(function () {
             Route::get('edit/{id}', [ProducteurController::class,'edit'])->name('edit');
             Route::post('status/{id}', [ProducteurController::class,'status'])->name('status');
             Route::post('delete/{id}', [ProducteurController::class, 'delete'])->name('delete');
-            Route::get('/exportProducteursExcel', [ProducteurController::class,'exportExcel'])->name('exportExcel.producteurAll');
+            Route::get('/export/producteurs/excel', [ProducteurController::class,'exportExcel'])->name('exportExcel.producteurAll');
+            Route::get('/export/producteurs/excel/all/liste', [ProducteurController::class,'exportExcelAllList'])->name('exportExcel.producteurAllList');
             Route::post('/uploadcontent', [ProducteurController::class,'uploadContent'])->name('uploadcontent');
             Route::post('/update/upload/content', [ProducteurController::class,'updateUploadContent'])->name('update.uploadcontent');
         });

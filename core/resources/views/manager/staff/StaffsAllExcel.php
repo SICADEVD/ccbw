@@ -28,7 +28,9 @@
     <tr>
         <td>ID</td>
         <td>Cooperative</td>
-        <td>Username</td>
+        <td>Role</td>
+        <td>Type de compte</td>
+        <td>Username</td> 
         <td>Nom</td>
         <td>Prenoms</td> 
         <td>Email</td> 
@@ -45,6 +47,18 @@
         <tr>
             <td><?php echo $c->id; ?></td>
             <td><?php echo $c->cooperative->name; ?></td>
+            <td><?php 
+            if(!empty($c->getRoleNames()))
+            {
+                $roles = array();
+            foreach($c->getRoleNames() as $v)
+                {
+                    $roles[] = $v; 
+                }
+                echo implode(', ',$roles);
+            }
+            ?></td>
+            <td><?php echo $c->type_compte; ?></td>
             <td><?php echo $c->username; ?></td>
             <td><?php echo $c->lastname; ?></td>
             <td><?php echo $c->firstname; ?></td>

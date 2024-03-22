@@ -70,10 +70,10 @@
         <tbody>
         <tr>
             <td><?php echo $c->id; ?></td>
-            <td><?php echo $c->localite->section->cooperative->name; ?></td>
-            <td><?php echo $c->localite->section->libelle; ?></td>
-            <td><?php echo $c->localite->nom; ?></td>
-            <td><?php echo $c->programme->libelle; ?></td>
+            <td><?php echo @$c->localite->section->cooperative->name; ?></td>
+            <td><?php echo @$c->localite->section->libelle; ?></td>
+            <td><?php echo @$c->localite->nom; ?></td>
+            <td><?php echo @$c->programme->libelle; ?></td>
             <td><?php echo $c->nom; ?></td>
             <td><?php echo $c->prenoms; ?></td>
             <td><?php echo $c->codeProd; ?></td>

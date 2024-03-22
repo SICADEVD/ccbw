@@ -16,9 +16,9 @@ class ExportStaffs implements FromView
 
     public function view(): View
     {
+        $manager = auth()->user();
+       $staffs = User::active()->where([['user_type','staff'],['cooperative_id', $manager->cooperative_id]])->get();
         // TODO: Implement view() method.
-        return view('manager.staff.StaffsAllExcel',[
-            'staffs' => User::all()->where('user_type','staff')
-        ]);
+        return view('manager.staff.StaffsAllExcel',compact('staffs'));
     } 
 }
