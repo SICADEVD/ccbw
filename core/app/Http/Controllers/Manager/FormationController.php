@@ -224,36 +224,20 @@ class FormationController extends Controller
     public function show($id){
         $pageTitle = "Détails de la formation";
         $manager   = auth()->user();
-        $producteurs  = Producteur::joinRelationship('localite.section')
-        ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->with('localite')->get();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id', $manager->cooperative_id], ['localites.status', 1]])->get();
         $formation   = SuiviFormation::findOrFail($id);
+        $localite = Localite::where('id', $formation->localite_id)->first();
         $typeformations  = TypeFormation::all();
-
-        $modules = array();
-        $themesSelected = array();
-        $sousThemesSelected = array();
-        $producteursSelected = array();
-        
-        foreach ($formation->formationProducteur as $item) {
-            $producteursSelected[] = $item->producteur_id;
-        }
-        foreach ($formation->typeFormationTheme as $item) {
-            $modules[] = $item->type_formation_id; 
-            $themesSelected[] = $item->theme_formation_id;
-        }
-        
-        foreach ($formation->themeSousTheme as $item) {
-            $sousThemesSelected[] = $item->sous_theme_id;
-        }
-
-        $themes  = ThemesFormation::with('typeFormation')->get();
-        $sousthemes  = SousThemeFormation::with('themeFormation')->get();
-        $staffs  = User::staff()->get();
-        
-        $dataProducteur = $dataVisiteur = $dataTheme = array();
-
-        return view('manager.formation.show', compact('pageTitle', 'localites', 'formation', 'producteurs', 'typeformations', 'themes', 'staffs', 'dataProducteur', 'dataTheme', 'modules', 'themesSelected', 'sousthemes', 'sousThemesSelected', 'producteursSelected'));
+        $idProducteurs = $formation->formationProducteur->pluck('producteur_id')->toArray();
+        $producteurs = Producteur::whereIn('id', $idProducteurs)->get(['nom', 'prenoms']);
+        $typeformationsId = $formation->typeFormationTheme->pluck('type_formation_id')->toArray();
+        $typeformations = TypeFormation::whereIn('id', $typeformationsId)->get(['nom']);
+        $themesId = $formation->typeFormationTheme->pluck('theme_formation_id')->toArray();
+        $themes = ThemesFormation::whereIn('id', $themesId)->get(['nom']);
+        $sousThemesId = $formation->themeSousTheme->pluck('sous_theme_id')->toArray();
+        $sousThemes = SousThemeFormation::whereIn('id', $sousThemesId)->get(['nom']);
+        $staffs = User::where('id', $formation->user_id)->get(['firstname', 'lastname']);
+        return view('manager.formation.show', compact('pageTitle', 'localite', 'formation', 'producteurs', 'typeformations', 'themes', 'sousThemes', 'staffs'));
     }
 
     public function visiteur($id)
