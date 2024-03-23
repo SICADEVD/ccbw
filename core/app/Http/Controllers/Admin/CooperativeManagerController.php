@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class CooperativeManagerController extends Controller
@@ -132,8 +133,15 @@ class CooperativeManagerController extends Controller
 
     public function login($id)
     {
+        Auth::logout();
+       
+        // if(auth()->user() !=null){ 
+        //     Auth::logoutUsingId($id); 
+        // } 
+         
         User::manager()->where('id', $id)->firstOrFail();
-        auth()->loginUsingId($id, $remember = true);
+        auth()->loginUsingId($id);
+        
         return to_route('manager.dashboard');
     }
 
