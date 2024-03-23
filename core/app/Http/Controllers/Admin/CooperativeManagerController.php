@@ -11,6 +11,7 @@ use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 
 class CooperativeManagerController extends Controller
 {
@@ -133,12 +134,8 @@ class CooperativeManagerController extends Controller
 
     public function login($id)
     {
+        Session::flush(); 
         Auth::logout();
-       
-        // if(auth()->user() !=null){ 
-        //     Auth::logoutUsingId($id); 
-        // } 
-         
         User::manager()->where('id', $id)->firstOrFail();
         auth()->loginUsingId($id);
         
