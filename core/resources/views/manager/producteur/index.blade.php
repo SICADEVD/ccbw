@@ -98,13 +98,7 @@
                                             @endif
                                         </td> --}}
                                         <td>
-                                            @dd($producteur->localite->section)
-                                            @if ($producteur->localite && $producteur->localite->section)
-                                                <span
-                                                    class="fw-bold">{{ __($producteur->localite->section->libelle) }}</span>
-                                            @else
-                                                <span class="fw-bold">Pas de section</span>
-                                            @endif
+                                        <span class="fw-bold">{{ __($producteur->localite->section->libelle) }}</span>
                                         </td>
                                         <td>
                                             <span class="fw-bold">{{ __($producteur->localite->nom) }}</span>
