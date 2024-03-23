@@ -98,6 +98,7 @@
                                             @endif
                                         </td> --}} 
                                         <td>
+                                         
                                         @if ($producteur->localite && $producteur->localite->section)
                                         <span class="fw-bold">{{ __($producteur->localite->section->libelle) }}</span>
                                             @else

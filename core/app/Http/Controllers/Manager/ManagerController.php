@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Language;
 use App\Models\Parcelle;
 use App\Constants\Status;
+use App\Models\Inspection;
 use App\Models\Producteur;
 use App\Models\Cooperative;
 use Illuminate\Support\Arr;
@@ -17,15 +18,16 @@ use App\Models\FormationStaff;
 use App\Models\SuiviFormation;
 use App\Models\SupportMessage; 
 use App\Rules\FileTypeValidate;
+use App\Models\Agrodistribution;
 use App\Models\LivraisonPayment; 
 use App\Models\TypeFormationTheme;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\Agrodistribution;
-use App\Models\Inspection;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Hash;   
-use App\Models\SuiviFormationProducteur; 
 use App\Models\Producteur_certification;
+use App\Models\SuiviFormationProducteur; 
 
 class ManagerController extends Controller
 {
@@ -33,7 +35,7 @@ class ManagerController extends Controller
     public function dashboard()
     {
         $manager = auth()->user();
-        $pageTitle = "Manager Dashboard";  
+        $pageTitle = "Tableau de bord";  
         $nbcoop = Cooperative::count();
         $nbparcelle = Parcelle::joinRelationship('producteur.localite.section')
                                 ->where('cooperative_id', auth()->user()->cooperative_id)
