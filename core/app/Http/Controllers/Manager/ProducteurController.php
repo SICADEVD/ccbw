@@ -43,11 +43,9 @@ class ProducteurController extends Controller
     public function index()
     {
         $pageTitle      = "Gestion des producteurs";
-        $manager   = auth()->user();
-        $cooperative = Cooperative::with('sections.localites')->find($manager->cooperative_id);
-        $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
-            return $localite->active();
-        });
+        $manager   = auth()->user(); 
+        $localites = Localite::joinRelationship('section')->where([['cooperative_id', $manager->cooperative_id]])->get();
+        
         $programmes = Programme::all();
 
         $producteurs = Producteur::dateFilter()
@@ -65,7 +63,7 @@ class ProducteurController extends Controller
                 $query->where('producteurs.statut', $etat);
             }) 
             ->when(request()->programme, function ($query, $programme){
-                $$query->where('producteurs.programme_id', $programme);
+                $query->where('producteurs.programme_id', $programme);
             })
             ->with('localite.section')
             ->where([['cooperative_id', $manager->cooperative_id]])

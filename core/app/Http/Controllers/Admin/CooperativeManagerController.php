@@ -134,9 +134,10 @@ class CooperativeManagerController extends Controller
 
     public function login($id)
     {
-        Session::flush(); 
-        Auth::logout();
-        User::manager()->where('id', $id)->firstOrFail();
+        Auth::guard('web')->logout();
+        request()->session()->forget('guard.web');
+        request()->session()->regenerateToken();
+        User::where('id', $id)->firstOrFail();
         auth()->loginUsingId($id);
         
         return to_route('manager.dashboard');
