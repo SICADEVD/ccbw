@@ -81,7 +81,7 @@
                                          @endphp
                                                     @foreach($modules as $v)
                                                     
-                                                        <span class="badge badge--success">{{ $v->typeFormation->nom }}</span>
+                                                        <span class="badge badge--success">{{ Str::remove("\r\n",utf8_decode(Str::between($v->typeFormation->nom,"(",")")))  }}</span>
                                                     @endforeach
                                                 @endif
                                         </td>
