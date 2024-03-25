@@ -82,8 +82,9 @@
                                          @endphp
                                                     @foreach($modules as $v)
                                                     $listeModules[] = Str::remove("\r\n",utf8_decode(Str::between($v->typeFormation->nom,"(",")")))
+
                                                     @if(in_array(Str::remove("\r\n",utf8_decode(Str::between($v->typeFormation->nom,"(",")"))), $listeModules))
-                                                        continue;
+                                                       @php continue; @endphp
                                                     @endif
                                                         <span class="badge badge--success">{{ Str::remove("\r\n",utf8_decode(Str::between($v->typeFormation->nom,"(",")")))  }}</span>
                                                         @php
