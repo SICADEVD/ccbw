@@ -51,6 +51,7 @@
                                     <th>@lang('Localite')</th>
                                     <th>@lang('Formateur')</th>
                                     <th>@lang('Lieu')</th>
+                                    <th> Modules</th>
                                     <th>@lang('Date formation')</th>
                                     <th>@lang('Ajoutée le')</th>
                                     <th>@lang('Status')</th>
@@ -72,6 +73,13 @@
                                         
                                         <td>
                                             <span>{{ $formation->lieu_formation }}</span>
+                                        </td>
+                                        <td>
+                                        @if (!empty($formation->typeFormationTheme()))
+                                                    @foreach ($formation->typeFormationTheme() as $v)
+                                                        <span class="badge badge--success">{{ $v->typeFormation->nom }}</span>
+                                                    @endforeach
+                                                @endif
                                         </td>
                                         <td>
                                             <span class="d-block">{{ showDateTime($formation->date_formation) }}</span>
