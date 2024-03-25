@@ -76,8 +76,10 @@
                                         </td>
                                         <td>
                                         @if (!empty($formation->typeFormationTheme()))
-                                        @dd($formation->typeFormationTheme()->get())
-                                                    @foreach($formation->typeFormationTheme() as $v)
+                                         @php
+                                            $modules = $formation->typeFormationTheme()->get();
+                                         @endphp
+                                                    @foreach($modules as $v)
                                                     
                                                         <span class="badge badge--success">{{ $v->typeFormation->nom }}</span>
                                                     @endforeach
