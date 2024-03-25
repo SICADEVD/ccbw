@@ -426,6 +426,17 @@
                     $('#niveauPente').prop('required', false);
                 }
             });
+            if ($('.existePente').val() == 'oui') {
+                $('#niveauPentes').show('slow');
+                $('.niveauPente').show('slow');
+                $('#niveauPente').prop('required', true);
+
+            } else {
+                $('#niveauPentes').hide('slow');
+                $('.niveauPente').hide('slow');
+                $('.niveauPente').val('');
+                $('#niveauPente').prop('required', false);
+            }
             $('.existeMesureProtection').change(function() {
                 var existeMesureProtection = $('.existeMesureProtection').val();
                 if (existeMesureProtection == 'oui') {
