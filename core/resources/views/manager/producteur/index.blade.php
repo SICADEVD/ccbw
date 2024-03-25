@@ -96,17 +96,18 @@
                                                 <img src="{{ asset('assets/images/default.png') }}"
                                                     alt="image" style = " width: 100px;">
                                             @endif
-                                        </td> --}}
+                                        </td> --}} 
                                         <td>
-                                            @dd($producteur->localite->section)
-                                            @if ($producteur->localite && $producteur->localite->section)
-                                                <span
-                                                    class="fw-bold">{{ __($producteur->localite->section->libelle) }}</span>
+                                         
+                                        @if ($producteur->localite && $producteur->localite->section)
+                                        <span class="fw-bold">{{ __($producteur->localite->section->libelle) }}</span>
                                             @else
                                                 <span class="fw-bold">Pas de section</span>
                                             @endif
+                                        
                                         </td>
                                         <td>
+                                            
                                             <span class="fw-bold">{{ __($producteur->localite->nom) }}</span>
                                         </td>
 

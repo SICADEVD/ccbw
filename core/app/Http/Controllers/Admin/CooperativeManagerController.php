@@ -11,6 +11,9 @@ use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Session;
 
 class CooperativeManagerController extends Controller
 {
@@ -133,16 +136,14 @@ class CooperativeManagerController extends Controller
 
     public function login($id)
     {
-        Auth::logout();
-       
-        // if(auth()->user() !=null){ 
-        //     Auth::logoutUsingId($id); 
-        // } 
-         
-        User::manager()->where('id', $id)->firstOrFail();
+        Auth::guard('web')->logout();
+        request()->session()->forget('guard.web');
+        request()->session()->regenerateToken(); 
+        
+        User::where('id', $id)->firstOrFail();
         auth()->loginUsingId($id);
         
-        return to_route('manager.dashboard');
+      return to_route('manager.dashboard');
     }
 
     public function staffLogin($id)
