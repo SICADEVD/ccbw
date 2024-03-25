@@ -77,6 +77,7 @@
                                         <td>
                                         @if (!empty($formation->typeFormationTheme()))
                                                     @foreach ($formation->typeFormationTheme() as $v)
+                                                    @dd($v)
                                                         <span class="badge badge--success">{{ $v->typeFormation->nom }}</span>
                                                     @endforeach
                                                 @endif
