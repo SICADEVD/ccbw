@@ -48,12 +48,11 @@ class FormationStaffController extends Controller
     {
         $pageTitle = "Ajouter une formation aux staffs";
         $manager   = auth()->user();
-
         $ModuleFormationStaffs  = ModuleFormationStaff::all();
         $themes  = ThemeFormationStaff::with('ModuleFormationStaff')->get();
         $entreprises = Entreprise::all();
         $formateurs = FormateurStaff::with('entreprise')->get();
-        $staffs  = User::get();
+        $staffs  = User::where('cooperative_id', $manager->cooperative_id)->get();
         return view('manager.formation-staff.create', compact('pageTitle', 'ModuleFormationStaffs', 'themes', 'staffs', 'entreprises', 'formateurs'));
     }
 
