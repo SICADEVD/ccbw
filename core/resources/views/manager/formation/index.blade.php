@@ -80,8 +80,7 @@
                                          $listeModules = array();
                                             $modules = $formation->typeFormationTheme()->get();
                                          @endphp
-                                                    @foreach($modules as $v)
-                                                    $listeModules[] = Str::remove("\r\n",utf8_decode(Str::between($v->typeFormation->nom,"(",")")))
+                                                    @foreach($modules as $v) 
 
                                                     @if(in_array(Str::remove("\r\n",utf8_decode(Str::between($v->typeFormation->nom,"(",")"))), $listeModules))
                                                        @php continue; @endphp
