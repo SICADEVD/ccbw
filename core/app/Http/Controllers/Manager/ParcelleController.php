@@ -793,19 +793,13 @@ class ParcelleController extends Controller
     public function show($id)
     {
         $pageTitle = "Détails de la parcelle";
-        $parcelle   = Parcelle::findOrFail($id);
-        $manager   = auth()->user();
-        $cooperative = Cooperative::with('sections.localites', 'sections.localites.section')->find($manager->cooperative_id);
-        $sections = $cooperative->sections;
-        $localites = $cooperative->sections->flatMap->localites->filter(function ($localite) {
-            return $localite->active();
-        });
-        $producteurs  = Producteur::joinRelationship('localite.section')
-            ->where([['cooperative_id', $manager->cooperative_id], ['producteurs.status', 1]])->with('localite')->get();
-        $protections = $parcelle->parcelleTypeProtections->pluck('typeProtection')->all();
-        $arbres = Agroespecesarbre::all();
-        $agroespeceabreParcelle = agroespeceabre_parcelle::where('parcelle_id', $id)->get();
-        return view('manager.parcelle.show', compact('pageTitle', 'localites', 'parcelle', 'producteurs', 'sections', 'protections', 'arbres', 'agroespeceabreParcelle'));
+        $parcelle   = Parcelle::with('agroespeceabre_parcelles.agroespeceabre')->find($id);
+        $section = $parcelle->producteur->localite->section;
+        $localite = $parcelle->producteur->localite;
+        $producteur = $parcelle->producteur;
+        $arbres = $parcelle->agroespeceabre_parcelles;
+        // $arbres = $parcelle->agroespeceabre_parcelles->all();
+        return view('manager.parcelle.show', compact('pageTitle', 'localite', 'parcelle', 'producteur', 'section', 'arbres'));
     }
 
 
