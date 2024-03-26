@@ -115,17 +115,19 @@
                                         </td>
                                         <td> @php echo $parcelle->statusBadge; @endphp </td>
                                         <td>
+                                        <a href="{{ route('manager.traca.parcelle.show', $parcelle->id) }}"
+                                                    class="btn btn-sm btn-outline--info"><i
+                                                        class="las la-file-invoice"></i>@lang('Détail')</a>
+                                        <a href="{{ route('manager.traca.parcelle.edit', $parcelle->id) }}"
+                                                    class="btn btn-sm btn-outline--danger"><i class="la la-pen"></i>@lang('Edit')</a>
+                                                
 
                                             <button type="button" class="btn btn-sm btn-outline--primary"
                                                 data-bs-toggle="dropdown" aria-expanded="false"><i
                                                     class="las la-ellipsis-v"></i>@lang('Action')
                                             </button>
                                             <div class="dropdown-menu p-0">
-                                                <a href="{{ route('manager.traca.parcelle.edit', $parcelle->id) }}"
-                                                    class="dropdown-item"><i class="la la-pen"></i>@lang('Edit')</a>
-                                                <a href="{{ route('manager.traca.parcelle.show', $parcelle->id) }}"
-                                                    class="dropdown-item"><i
-                                                        class="las la-file-invoice"></i>@lang('Détail')</a>
+                                            
                                                 @if ($parcelle->status == Status::DISABLE)
                                                     <button type="button" class="confirmationBtn  dropdown-item"
                                                         data-action="{{ route('manager.traca.parcelle.status', $parcelle->id) }}"
