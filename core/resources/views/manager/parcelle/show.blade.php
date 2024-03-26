@@ -179,6 +179,7 @@
     </div>
     <?php
     use Illuminate\Support\Str;
+    use Illuminate\Support\Arr;
 $arrData = '';
 $newCoord = '';
 $lat = '';
@@ -207,8 +208,19 @@ if(isset($parcelle)){
             $proprietaire = 'Coopérative:'. $cooperative.'<br>Section:'. $section.'<br>Localite:'. $localite.'<br>Producteur : '.$producteur.'<br>Code producteur:'. $code.'<br>Code Parcelle:'. $codeparcelle.'<br>Année creation:'. $annee.'<br>Latitude:'. $lat.'<br>Longitude:'. $long.'<br>Superficie:'. $superficie.' ha';
            
             $pointsCoordinates = "['".$proprietaire."',".$long.",".$lat."]";
-     $polygon =''; 
-        $coords = explode(" ", $parcelle->waypoints);
+     $polygon ='';
+     // $coords = explode(',0', $data->waypoints);
+        // $coords = Arr::where($coords, function ($value, $key) {
+        //     if($value !="")
+        //     {
+        //         return  $value;
+        //     }
+            
+        // });
+     $coords = Str::replace(",0,",",0 ",$parcelle->waypoints);
+     
+        $coords = explode(" ", $coords);
+      
          $nombre = count($coords); 
 
          $i=0;
