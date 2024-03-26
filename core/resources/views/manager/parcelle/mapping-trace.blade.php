@@ -174,18 +174,20 @@ $pointsPolygon = Str::replace('"','',json_encode($pointsPolygon));
 @endpush
 @push('script')
     <script>  
-    let map;
-let infoWindow;
-var locations = <?php echo $pointsPolygon; ?>;
-var locationsWaypoints = <?php echo $pointsWaypoints; ?>;
-var total = <?php echo $total; ?>;
+
 window.onload = function () {
   map = new google.maps.Map(document.getElementById("map"), {
     zoom: 8,
     center: { lat: 6.8817026, lng: -5.5004615 },
-    mapTypeId: "hybrid",
+    mapTypeId: "terrain",
   });
+  @if(count($seriescoordonates))
 
+  let map;
+let infoWindow;
+var locations = <?php echo $pointsPolygon; ?>;
+var locationsWaypoints = <?php echo $pointsWaypoints; ?>;
+var total = <?php echo $total; ?>;
   // Define the LatLng coordinates for the polygon.
   const triangleCoords = <?php echo Str::replace('"','',json_encode($seriescoordonates)); ?>;
   const polygons = [];
@@ -216,7 +218,7 @@ for (let i = 0; i < total; i++) {
 
     polygon.setMap(map);
 }
-
+@endif
 // Affichage des waypoints
 // var infowindow2 = new google.maps.InfoWindow();
 
