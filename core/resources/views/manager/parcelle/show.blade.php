@@ -194,6 +194,7 @@ if(isset($parcelle)){
          
         if($parcelle->waypoints !=null)
         {
+            
             $lat = isset($parcelle->latitude) ? htmlentities($parcelle->latitude, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
             $long= isset($parcelle->longitude) ? htmlentities($parcelle->longitude, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible'; 
             $producteur = isset($parcelle->producteur->nom) ? htmlentities($parcelle->producteur->nom, ENT_QUOTES | ENT_IGNORE, "UTF-8").' '.htmlentities($parcelle->producteur->prenoms, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
@@ -248,6 +249,7 @@ $pointsPolygon = Str::replace('"','',json_encode($pointsPolygon));
  $pointsWaypoints = Str::replace('"','',json_encode($pointsWaypoints));
  $pointsWaypoints = Str::replace("''","'Non Disponible'",$pointsWaypoints);
 }
+
 } 
  
 ?>
@@ -263,11 +265,7 @@ $pointsPolygon = Str::replace('"','',json_encode($pointsPolygon));
 @endpush
 @push('script')
     <script>  
-    let map;
-let infoWindow;
-var locations = <?php echo $pointsPolygon; ?>;
-var locationsWaypoints = <?php echo $pointsWaypoints; ?>;
-var total = 1;
+
 window.onload = function () {
   map = new google.maps.Map(document.getElementById("map"), {
     zoom: 9,
@@ -275,6 +273,12 @@ window.onload = function () {
     mapTypeId: "terrain",
   });
 
+let map;
+let infoWindow;
+@if(count($seriescoordonates))
+var locations = <?php echo $pointsPolygon; ?>;
+var locationsWaypoints = <?php echo $pointsWaypoints; ?>;
+var total = 1;
   // Define the LatLng coordinates for the polygon.
   const triangleCoords = <?php echo Str::replace('"','',json_encode($seriescoordonates)); ?>;
   const polygons = [];
@@ -305,7 +309,7 @@ for (let i = 0; i < total; i++) {
 
     polygon.setMap(map);
 }
-
+@endif
 } 
 function getInfoWindowContent(location) {
         return `${location[0]}`;
