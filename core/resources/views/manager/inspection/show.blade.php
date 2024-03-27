@@ -181,7 +181,7 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        {{ Form::label(__("Date d'évaluation"), null, ['class' => 'col-sm-4 control-label']) }}
+                        {{ Form::label(__("Date d'inspection"), null, ['class' => 'col-sm-4 control-label']) }}
                         <div class="col-xs-12 col-sm-8">
                             {{ $inspection->date_evaluation }}
                         </div>
@@ -200,6 +200,12 @@
                             @if ($inspection->approbation == 3)
                                 <span class="badge badge-danger">Exclu</span>
                             @endif
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        {{ Form::label(__("Date d'approbation"), null, ['class' => 'col-sm-4 control-label']) }}
+                        <div class="col-xs-12 col-sm-8">
+                            {{ $inspection->date_approbation }}
                         </div>
                     </div>
                     <hr class="panel-wide">

@@ -39,7 +39,7 @@ trait GlobalStatus
 			$query->approbation = 3;
 			$message = "Le producteur a été exclu!";
 		} 
-
+		$query->date_approbation = gmdate('d-m-Y');
 		$query->save();
 		$notify[] = ['success', $message];
 		return back()->withNotify($notify);
