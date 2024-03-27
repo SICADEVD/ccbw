@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Localite;
 use App\Models\Parcelle;
 use App\Constants\Status;
 use App\Models\Producteur;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Models\Parcelle_type_protection;
-use App\Models\agroespeceabre_parcelle;
 use Illuminate\Support\Facades\DB;
+use App\Models\agroespeceabre_parcelle;
+use App\Models\Parcelle_type_protection;
 
 class ApiparcelleController extends Controller
 {
@@ -22,11 +23,18 @@ class ApiparcelleController extends Controller
   public function index(Request $request)
   {
     $userid = $request->userid;
-    $donnees = Parcelle::where('userid', $userid)->get();
+    $staff = User::where('id', $userid)->first();
 
-    //$donnees = Parcelle::where('userid', )->get();
+    $parcelles = Parcelle::join('producteurs', 'parcelles.producteur_id', '=', 'producteurs.id')
+      ->join('localites', 'producteurs.localite_id', '=', 'localites.id')
+      ->join('sections', 'localites.section_id', '=', 'sections.id')
+      ->join('cooperatives', 'sections.cooperative_id', '=', 'cooperatives.id')
+      ->join('users', 'cooperatives.id', '=', 'users.cooperative_id')
+      ->where('users.id', $staff->id)
+      ->select('parcelles.*') // éviter les conflits de colonnes
+      ->get();
 
-    return response()->json($donnees, 201);
+    return response()->json($parcelles, 200);
   }
 
   /**
