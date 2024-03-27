@@ -152,7 +152,8 @@ if(isset($parcelles) && count($parcelles)){
             $proprietaire = 'Coopérative:'. $cooperative.'<br>Section:'. $section.'<br>Localite:'. $localite.'<br>Producteur : '.$producteur.'<br>Code producteur:'. $code.'<br>Code Parcelle:'. $parcelle.'<br>Année creation:'. $annee.'<br>Latitude:'. $lat.'<br>Longitude:'. $long.'<br>Superficie:'. $superficie.' ha';
      $polygon ='';
 
-        $coords = explode(" ", $data->waypoints);
+     $coords = Str::replace(",0,",",0 ", $data->waypoints);
+     $coords = explode(" ", $coords);
         // $coords = Arr::where($coords, function ($value, $key) {
         //     if($value !="")
         //     {

@@ -122,7 +122,8 @@ if(isset($parcelles) && count($parcelles)){
             $pointsCoordinates = "['".$proprietaire."',".$long.",".$lat."]";
      $polygon ='';
 
-        $coords = explode(" ", $data->waypoints);
+     $coords = Str::replace(",0,",",0 ", $data->waypoints);
+     $coords = explode(" ", $coords);
         // $coords = Arr::where($coords, function ($value, $key) {
         //     if($value !="")
         //     {
