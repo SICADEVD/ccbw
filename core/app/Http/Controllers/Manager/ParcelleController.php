@@ -108,8 +108,8 @@ class ParcelleController extends Controller
 
         $manager   = auth()->user();
 
-        $cooperative = Cooperative::with('sections.localites')->find($manager->cooperative_id);
-
+        $cooperatives = Cooperative::where('id',$manager->cooperative_id)->get();
+         
         $sections = Section::where('cooperative_id', $manager->cooperative_id)->with('cooperative')->get();
 
         $localites = Localite::joinRelationship('section')
@@ -141,7 +141,7 @@ class ParcelleController extends Controller
             ->get();
         $total = count($parcelles);
         $pageTitle  = "Gestion de mapping des parcelles($total)";
-        return view('manager.parcelle.mapping-trace', compact('pageTitle', 'sections', 'parcelles', 'localites', 'producteurs'));
+        return view('manager.parcelle.mapping-trace', compact('pageTitle', 'sections', 'parcelles', 'localites', 'producteurs','cooperatives'));
     }
 
     public function create()
@@ -793,13 +793,15 @@ class ParcelleController extends Controller
     public function show($id)
     {
         $pageTitle = "Détails de la parcelle";
+        $manager   = auth()->user();
+        $cooperatives = Cooperative::where('id',$manager->cooperative_id)->get();
         $parcelle   = Parcelle::with('agroespeceabre_parcelles.agroespeceabre')->find($id);
         $section = $parcelle->producteur->localite->section;
         $localite = $parcelle->producteur->localite;
         $producteur = $parcelle->producteur;
         $arbres = $parcelle->agroespeceabre_parcelles;
         // $arbres = $parcelle->agroespeceabre_parcelles->all();
-        return view('manager.parcelle.show', compact('pageTitle', 'localite', 'parcelle', 'producteur', 'section', 'arbres'));
+        return view('manager.parcelle.show', compact('pageTitle', 'localite', 'parcelle', 'producteur', 'section', 'arbres','cooperatives'));
     }
 
 

@@ -328,7 +328,7 @@ if(isset(request()->typepolygone) && (in_array('PP',request()->typepolygone)))
 @endpush
 @push('script')
 <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
- <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_VVwtAhchqsINCTqin22MG1AzMn7d6gk" ></script>  
+ <script async src="https://maps.googleapis.com/maps/api/js?key={{env('GOOGLE_MAPS_KEY')}}" ></script>  
 @endpush
 @push('script')
     <script>  

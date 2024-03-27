@@ -179,81 +179,99 @@
     </div>
     <?php
     use Illuminate\Support\Str;
-    use Illuminate\Support\Arr;
-$arrData = '';
-$newCoord = '';
-$lat = '';
-$long = '';
-$total = 0;
-$mappingparcellle ='';
-$pointsPolygon = $pointsWaypoints = array();
-$seriescoordonates=array();
-$a=1;
-
-if(isset($parcelle)){ 
-         
-        if($parcelle->waypoints !=null)
-        {
-            
-            $lat = isset($parcelle->latitude) ? htmlentities($parcelle->latitude, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
-            $long= isset($parcelle->longitude) ? htmlentities($parcelle->longitude, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible'; 
-            $producteur = isset($parcelle->producteur->nom) ? htmlentities($parcelle->producteur->nom, ENT_QUOTES | ENT_IGNORE, "UTF-8").' '.htmlentities($parcelle->producteur->prenoms, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
-            $code= isset($parcelle->producteur->codeProd) ? htmlentities($parcelle->producteur->codeProd, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non defini';
-            $codeparcelle = isset($parcelle->codeParc) ? htmlentities($parcelle->codeParc, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
-            $localite=isset($parcelle->producteur->localite->nom) ? htmlentities($parcelle->producteur->localite->nom, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
-            $section=isset($parcelle->producteur->localite->section->libelle) ? htmlentities($parcelle->producteur->localite->section->libelle, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
-            $cooperative=isset($parcelle->producteur->localite->section->cooperative->name) ? htmlentities($parcelle->producteur->localite->section->cooperative->name, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
-            $annee = isset($parcelle->anneeCreation) ? htmlentities($parcelle->anneeCreation, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
-            $culture= isset($parcelle->culture) ? htmlentities($parcelle->culture, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
-            $superficie= isset($parcelle->superficie) ? htmlentities($parcelle->superficie, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
-            $proprietaire = 'Coopérative:'. $cooperative.'<br>Section:'. $section.'<br>Localite:'. $localite.'<br>Producteur : '.$producteur.'<br>Code producteur:'. $code.'<br>Code Parcelle:'. $codeparcelle.'<br>Année creation:'. $annee.'<br>Latitude:'. $lat.'<br>Longitude:'. $long.'<br>Superficie:'. $superficie.' ha';
-           
-            $pointsCoordinates = "['".$proprietaire."',".$long.",".$lat."]";
-     $polygon ='';
-     // $coords = explode(',0', $data->waypoints);
-        // $coords = Arr::where($coords, function ($value, $key) {
-        //     if($value !="")
-        //     {
-        //         return  $value;
-        //     }
-            
-        // });
-     $coords = Str::replace(",0,",",0 ",$parcelle->waypoints);
-     
-        $coords = explode(" ", $coords);
-      
-         $nombre = count($coords); 
-
-         $i=0;
-        foreach($coords as $data2) {
-             
-                $i++;
-                $coords2 = explode(',', $data2); 
-                
-                if($i==$nombre){
-                    $polygon .='{ lat: ' . $coords2[1] . ', lng: ' . $coords2[0] . ' }';
-                }else{
-                    $polygon .='{ lat: ' . $coords2[1] . ', lng: ' . $coords2[0] . ' },';
-                } 
-            
-        }
-        
-        $polygonCoordinates =$polygon; 
-       
-        $seriescoordonates[]= $polygonCoordinates;
-        $pointsPolygon[] = "['".$proprietaire."']";
-        $pointsWaypoints[] = $pointsCoordinates;
+    use Illuminate\Support\Arr; 
+    $arrData = '';
+    $newCoord = '';
+    $lat = '';
+    $long = '';
+    $total = 0;
+    $mappingparcellle ='';
+    $seriescoord= $pointsPol = $pointsWay=  array();
+    $seriescoordonates= $nombreTotal = $pointsPolygon = $pointsWaypoints = array();
+    $a=1;
     
-   
-$pointsPolygon = Str::replace('"','',json_encode($pointsPolygon));
- $pointsPolygon = Str::replace("''","'Non Disponible'",$pointsPolygon);
- $pointsWaypoints = Str::replace('"','',json_encode($pointsWaypoints));
- $pointsWaypoints = Str::replace("''","'Non Disponible'",$pointsWaypoints);
-}
-
-} 
- 
-?>
+    if(isset($parcelle)){
+     
+        
+        foreach($cooperatives as $coop){
+            
+            $nb = 0; 
+    
+            if($parcelle->latitude==0 || $parcelle->latitude==null || $parcelle->latitude==1){
+                continue;
+            }
+            if (isset($parcelle->producteur) && isset($parcelle->producteur->localite) && isset($parcelle->producteur->localite->section)) {
+                if(!isset($parcelle->producteur->localite->section->cooperative_id)) {
+                    continue;
+                }else{
+                    if($coop->id !=$parcelle->producteur->localite->section->cooperative_id) {
+                     continue;
+                    }
+                 }
+            } 
+            
+            if($parcelle->waypoints !=null)
+            {
+                 
+                $lat = isset($parcelle->latitude) ? htmlentities($parcelle->latitude, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
+                $long= isset($parcelle->longitude) ? htmlentities($parcelle->longitude, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible'; 
+                $producteur = isset($parcelle->producteur->nom) ? htmlentities($parcelle->producteur->nom, ENT_QUOTES | ENT_IGNORE, "UTF-8").' '.htmlentities($parcelle->producteur->prenoms, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
+                $code= isset($parcelle->producteur->codeProd) ? htmlentities($parcelle->producteur->codeProd, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non defini';
+                $codeparcelle = isset($parcelle->codeParc) ? htmlentities($parcelle->codeParc, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
+                $localite=isset($parcelle->producteur->localite->nom) ? htmlentities($parcelle->producteur->localite->nom, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
+                $section=isset($parcelle->producteur->localite->section->libelle) ? htmlentities($parcelle->producteur->localite->section->libelle, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
+                $cooperative=isset($parcelle->producteur->localite->section->cooperative->name) ? htmlentities($parcelle->producteur->localite->section->cooperative->name, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
+                $annee = isset($parcelle->anneeCreation) ? htmlentities($parcelle->anneeCreation, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
+                $culture= isset($parcelle->culture) ? htmlentities($parcelle->culture, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
+                $superficie= isset($parcelle->superficie) ? htmlentities($parcelle->superficie, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
+                $proprietaire = 'Coopérative:'. $cooperative.'<br>Section:'. $section.'<br>Localite:'. $localite.'<br>Producteur : '.$producteur.'<br>Code producteur:'. $code.'<br>Code Parcelle:'. $codeparcelle.'<br>Année creation:'. $annee.'<br>Latitude:'. $lat.'<br>Longitude:'. $long.'<br>Superficie:'. $superficie.' ha';
+               
+                $pointsCoordinates = "['".$proprietaire."',".$long.",".$lat."]";
+         $polygon =''; 
+         $coords = Str::replace(",0,",",0 ", $parcelle->waypoints);
+            $coords = explode(" ", $coords);
+            // $coords = Arr::where($coords, function ($value, $key) {
+            //     if($value !="")
+            //     {
+            //         return  $value;
+            //     }
+                
+            // });
+             
+             
+             $nombre = count($coords); 
+             $i=0;
+            foreach($coords as $data2) {
+                 
+                    $i++;
+                    $coords2 = explode(',', $data2); 
+                    if($i==$nombre){
+                        $polygon .='{ lat: ' . $coords2[1] . ', lng: ' . $coords2[0] . ' }';
+                    }else{
+                        $polygon .='{ lat: ' . $coords2[1] . ', lng: ' . $coords2[0] . ' },';
+                    } 
+                
+            }
+            
+            $polygonCoordinates ='['.$polygon.']';
+             $nb++;
+            }
+            $seriescoord[]= $polygonCoordinates;
+            $pointsPol[] = "['".$proprietaire."']";
+            $pointsWay[] = $pointsCoordinates; 
+             
+         $nombreTotal[$coop->id] = $nb; 
+         $seriescoordonates[$coop->id] = $seriescoord; 
+         $pointsWaypoints[$coop->id] = $pointsWay;
+         $pointsPolygon[$coop->id] = $pointsPol;
+         $seriescoord = $pointsPol = $pointsWay = array();
+        
+    }
+        
+    
+    } 
+    
+    ?>
 @endsection
 
 @push('breadcrumb-plugins')
@@ -266,44 +284,43 @@ $pointsPolygon = Str::replace('"','',json_encode($pointsPolygon));
 @endpush
 @push('script')
     <script>  
+    let map;
+let infoWindow; 
+//var locationsWaypoints = <?php //echo $pointsWaypoints; ?>;
 
 window.onload = function () {
   map = new google.maps.Map(document.getElementById("map"), {
-    zoom: 9,
-    center: { lat: 6.0192856, lng: -5.3603858 },
+    zoom: 10,
+    center: { lat: 5.901176, lng: -4.837113 },
     mapTypeId: "terrain",
   });
-
-let map;
-let infoWindow;
-
-@if(count($seriescoordonates))
- 
-var locations = <?php echo $pointsPolygon; ?>;
-var locationsWaypoints = <?php echo $pointsWaypoints; ?>;
-var total = 1;
+  
   // Define the LatLng coordinates for the polygon.
-  const triangleCoords = <?php echo Str::replace('"','',json_encode($seriescoordonates)); ?>;
-  const polygons = [];
+@foreach($cooperatives as $coopera) 
+
+var locations<?php echo $coopera->id; ?> = <?php echo Str::replace('"','',json_encode($pointsPolygon[$coopera->id])); ?>;
+  var total = <?php echo $nombreTotal[$coopera->id]; ?>;
+  const triangleCoords<?php echo $coopera->id; ?> = <?php echo Str::replace('"','',json_encode($seriescoordonates[$coopera->id])); ?>; 
+  const polygons<?php echo $coopera->id; ?> = [];
 // Construct polygons
 for (let i = 0; i < total; i++) {  
 
     const polygon = new google.maps.Polygon({
-        paths: triangleCoords[i],
-        strokeColor: "#FF0000",
+        paths: triangleCoords<?php echo $coopera->id; ?>[i],
+        strokeColor: "<?php echo $coopera->color; ?>",
         strokeOpacity: 0.8,
         strokeWeight: 3,
-        fillColor: "#FF0000",
+        fillColor: "<?php echo $coopera->color; ?>",
         fillOpacity: 0.35,
         clickable: true
     });
 
-    polygons.push(polygon);
+    polygons<?php echo $coopera->id; ?>.push(polygon);
 
-    // Event listener for each polygon
+     
     google.maps.event.addListener(polygon, 'click', function (event) {
         const infoWindow = new google.maps.InfoWindow({
-            content: getInfoWindowContent(locations[i])
+            content: getInfoWindowContent(locations<?php echo $coopera->id; ?>[i])
         });
 
         infoWindow.setPosition(event.latLng);
@@ -312,17 +329,14 @@ for (let i = 0; i < total; i++) {
 
     polygon.setMap(map);
 }
-@endif
+
+@endforeach
+ 
+
 } 
 function getInfoWindowContent(location) {
         return `${location[0]}`;
     }
-
-function getRandomElement(array) {
-    return array[Math.floor(Math.random() * array.length)];
-  }
-
-
  
 $('form select').on('change', function(){
     $(this).closest('form').submit();

@@ -318,7 +318,7 @@
 @endpush
 
 @push('script')
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_VVwtAhchqsINCTqin22MG1AzMn7d6gk"></script> 
+<script src="https://maps.googleapis.com/maps/api/js?key={{env('GOOGLE_MAPS_KEY')}}"></script> 
     <script type="text/javascript">
         $("#localite").chained("#section");
         $("#producteur_id").chained("#localite");

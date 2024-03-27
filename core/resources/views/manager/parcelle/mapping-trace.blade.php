@@ -68,22 +68,35 @@ $lat = '';
 $long = '';
 $total = 0;
 $mappingparcellle ='';
-$pointsPolygon = $pointsWaypoints = array();
-$seriescoordonates=array();
+$seriescoord= $pointsPol = $pointsWay=  array();
+$seriescoordonates= $nombreTotal = $pointsPolygon = $pointsWaypoints = array();
 $a=1;
 
 if(isset($parcelles) && count($parcelles)){
 
     $total = count($parcelles);
-
-    foreach ($parcelles as $data) {
+    
+    foreach($cooperatives as $coop){
         
+        $nb = 0;
+    foreach($parcelles as $data) {
+
         if($data->latitude==0 || $data->latitude==null || $data->latitude==1){
             continue;
         }
-         
+        if (isset($data->producteur) && isset($data->producteur->localite) && isset($data->producteur->localite->section)) {
+            if(!isset($data->producteur->localite->section->cooperative_id)) {
+                continue;
+            }else{
+                if($coop->id !=$data->producteur->localite->section->cooperative_id) {
+                 continue;
+                }
+             }
+        } 
+        
         if($data->waypoints !=null)
         {
+             
             $lat = isset($data->latitude) ? htmlentities($data->latitude, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
             $long= isset($data->longitude) ? htmlentities($data->longitude, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible'; 
             $producteur = isset($data->producteur->nom) ? htmlentities($data->producteur->nom, ENT_QUOTES | ENT_IGNORE, "UTF-8").' '.htmlentities($data->producteur->prenoms, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
@@ -100,7 +113,7 @@ if(isset($parcelles) && count($parcelles)){
             $pointsCoordinates = "['".$proprietaire."',".$long.",".$lat."]";
      $polygon ='';
 
-        // $coords = explode(',0', $data->waypoints);
+        $coords = explode(" ", $data->waypoints);
         // $coords = Arr::where($coords, function ($value, $key) {
         //     if($value !="")
         //     {
@@ -109,9 +122,8 @@ if(isset($parcelles) && count($parcelles)){
             
         // });
          
-        $coords = explode(" ", $data->waypoints);
+         
          $nombre = count($coords); 
-
          $i=0;
         foreach($coords as $data2) {
              
@@ -126,29 +138,24 @@ if(isset($parcelles) && count($parcelles)){
         }
         
         $polygonCoordinates ='['.$polygon.']';
-            
-            // $lignes = explode(" ", $data->waypoints); 
-            // foreach ($lignes as $ligne) { 
-            // $points = explode(",", $ligne);
-            // $lat = floatval($points[0]);
-            // $lng = floatval($points[1]);
-            // $point = array($lat, $lng); 
-            // $seriescoordonates[] = $point;
-            // }
-        
+         $nb++;
         }
-        $seriescoordonates[]= $polygonCoordinates;
-        $pointsPolygon[] = "['".$proprietaire."']";
-        $pointsWaypoints[] = $pointsCoordinates;
+        $seriescoord[]= $polygonCoordinates;
+        $pointsPol[] = "['".$proprietaire."']";
+        $pointsWay[] = $pointsCoordinates; 
+        
     }
-   
-$pointsPolygon = Str::replace('"','',json_encode($pointsPolygon));
- $pointsPolygon = Str::replace("''","'Non Disponible'",$pointsPolygon);
- $pointsWaypoints = Str::replace('"','',json_encode($pointsWaypoints));
- $pointsWaypoints = Str::replace("''","'Non Disponible'",$pointsWaypoints);
-  
+     $nombreTotal[$coop->id] = $nb; 
+     $seriescoordonates[$coop->id] = $seriescoord; 
+     $pointsWaypoints[$coop->id] = $pointsWay;
+     $pointsPolygon[$coop->id] = $pointsPol;
+     $seriescoord = $pointsPol = $pointsWay = array();
+    
+}
+    
+
 } 
- 
+
 ?>
     <x-confirmation-modal />
 @endsection
@@ -170,10 +177,13 @@ $pointsPolygon = Str::replace('"','',json_encode($pointsPolygon));
 @endpush
 @push('script')
 <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
- <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_VVwtAhchqsINCTqin22MG1AzMn7d6gk" ></script>  
+ <script async src="https://maps.googleapis.com/maps/api/js?key={{env('GOOGLE_MAPS_KEY')}}" ></script>  
 @endpush
 @push('script')
     <script>  
+    let map;
+let infoWindow; 
+//var locationsWaypoints = <?php //echo $pointsWaypoints; ?>;
 
 window.onload = function () {
   map = new google.maps.Map(document.getElementById("map"), {
@@ -181,35 +191,33 @@ window.onload = function () {
     center: { lat: 6.8817026, lng: -5.5004615 },
     mapTypeId: "terrain",
   });
-  @if(count($seriescoordonates))
 
-  let map;
-let infoWindow;
-var locations = <?php echo $pointsPolygon; ?>;
-var locationsWaypoints = <?php echo $pointsWaypoints; ?>;
-var total = <?php echo $total; ?>;
   // Define the LatLng coordinates for the polygon.
-  const triangleCoords = <?php echo Str::replace('"','',json_encode($seriescoordonates)); ?>;
-  const polygons = [];
+@foreach($cooperatives as $coopera) 
+
+var locations<?php echo $coopera->id; ?> = <?php echo Str::replace('"','',json_encode($pointsPolygon[$coopera->id])); ?>;
+  var total = <?php echo $nombreTotal[$coopera->id]; ?>;
+  const triangleCoords<?php echo $coopera->id; ?> = <?php echo Str::replace('"','',json_encode($seriescoordonates[$coopera->id])); ?>; 
+  const polygons<?php echo $coopera->id; ?> = [];
 // Construct polygons
 for (let i = 0; i < total; i++) {  
 
     const polygon = new google.maps.Polygon({
-        paths: triangleCoords[i],
-        strokeColor: "#FF0000",
+        paths: triangleCoords<?php echo $coopera->id; ?>[i],
+        strokeColor: "<?php echo $coopera->color; ?>",
         strokeOpacity: 0.8,
         strokeWeight: 3,
-        fillColor: "#FF0000",
+        fillColor: "<?php echo $coopera->color; ?>",
         fillOpacity: 0.35,
         clickable: true
     });
 
-    polygons.push(polygon);
+    polygons<?php echo $coopera->id; ?>.push(polygon);
 
-    // Event listener for each polygon
+     
     google.maps.event.addListener(polygon, 'click', function (event) {
         const infoWindow = new google.maps.InfoWindow({
-            content: getInfoWindowContent(locations[i])
+            content: getInfoWindowContent(locations<?php echo $coopera->id; ?>[i])
         });
 
         infoWindow.setPosition(event.latLng);
@@ -218,36 +226,14 @@ for (let i = 0; i < total; i++) {
 
     polygon.setMap(map);
 }
-@endif
-// Affichage des waypoints
-// var infowindow2 = new google.maps.InfoWindow();
 
-//     var marker, i;
-     
-//     for (i = 0; i < total; i++) { 
-//       marker = new google.maps.Marker({
-//         position: new google.maps.LatLng(locationsWaypoints[i][2],locationsWaypoints[i][1]),  
-//         map: map, 
-//       });
-
-//       google.maps.event.addListener(marker, 'click', (function(marker, i) {
-//         return function() {
-//         infowindow2.setContent(locationsWaypoints[i][0]);
-//           infowindow2.open(map, marker);
-//         }
-//       })(marker, i));
-//     } 
+@endforeach
+ 
 
 } 
 function getInfoWindowContent(location) {
         return `${location[0]}`;
     }
-
-function getRandomElement(array) {
-    return array[Math.floor(Math.random() * array.length)];
-  }
-
-
  
 $('form select').on('change', function(){
     $(this).closest('form').submit();
