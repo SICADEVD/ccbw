@@ -66,7 +66,7 @@
                                             style="max-width: 300px !important;text-wrap: wrap;">
                                             <strong><?php echo $reponse->questionnaire->categorieQuestion->titre; ?></strong></td>
                                         @if ($i == 1)
-                                            <td>Recommandations</td>
+                                            <td style="max-width: 300px !important;text-wrap: wrap;">Recommandations</td>
                                             <td class="text-center">Délai d'exécution</td>
                                             <td class="text-center">Date de vérification</td>
                                             <td class="text-center">Statut</td>
@@ -87,7 +87,7 @@
                                         <span
                                             class="badge @if ($reponse->notation == 'Conforme') badge-success @endif @if ($reponse->notation == 'Pas Conforme') badge-danger @endif @if ($reponse->notation == 'Non Applicable') badge-info @endif"><?php echo $reponse->notation; ?></span>
                                     </td>
-                                    <td> {{ $reponse->commentaire }} </td>
+                                    <td style="min-width: 300px !important;max-width: 300px !important;text-wrap: wrap;"> {{ $reponse->commentaire }} </td>
                                     <td>
                                         @if ($reponse->notation == 'Pas Conforme')
                                             <textarea cols="15" class="recommandation" name="recommandations[{{ $reponse->id }}]">{{ $reponse->recommandations }}</textarea>
@@ -154,7 +154,8 @@
                         <div class="col-xs-12 col-sm-4">
                             {{ $inspection->total_question_non_conforme }}
                         </div>
-                        <div class="col-xs-12 col-sm-4 pull-right">
+                        <div class="col-xs-12 col-sm-4 pull-right" style="text-align:center;">
+                            <h3 style="font-weight:bold;">Suivi des mesures correctives</h3>
                             <table class="table table-striped table-bordered">
                                 <thead>
                                     <tr>
