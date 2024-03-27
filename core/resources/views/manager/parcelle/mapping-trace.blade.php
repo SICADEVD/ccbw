@@ -113,7 +113,8 @@ if(isset($parcelles) && count($parcelles)){
             $pointsCoordinates = "['".$proprietaire."',".$long.",".$lat."]";
      $polygon ='';
 
-        $coords = explode(" ", $data->waypoints);
+     $coords = Str::replace(",0,",",0 ", $data->waypoints);
+     $coords = explode(" ", $coords);
         // $coords = Arr::where($coords, function ($value, $key) {
         //     if($value !="")
         //     {
@@ -204,10 +205,10 @@ for (let i = 0; i < total; i++) {
 
     const polygon = new google.maps.Polygon({
         paths: triangleCoords<?php echo $coopera->id; ?>[i],
-        strokeColor: "<?php echo $coopera->color; ?>",
+        strokeColor: "#DD160B",
         strokeOpacity: 0.8,
         strokeWeight: 3,
-        fillColor: "<?php echo $coopera->color; ?>",
+        fillColor: "#DD160B",
         fillOpacity: 0.35,
         clickable: true
     });

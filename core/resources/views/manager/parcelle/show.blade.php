@@ -230,6 +230,7 @@
          $polygon =''; 
          $coords = Str::replace(",0,",",0 ", $parcelle->waypoints);
             $coords = explode(" ", $coords);
+            
             // $coords = Arr::where($coords, function ($value, $key) {
             //     if($value !="")
             //     {
@@ -246,9 +247,9 @@
                     $i++;
                     $coords2 = explode(',', $data2); 
                     if($i==$nombre){
-                        $polygon .='{ lat: ' . $coords2[1] . ', lng: ' . $coords2[0] . ' }';
+                        $polygon .='{ lat: ' . round($coords2[1], 6) . ', lng: ' . round($coords2[0], 6) . ' }';
                     }else{
-                        $polygon .='{ lat: ' . $coords2[1] . ', lng: ' . $coords2[0] . ' },';
+                        $polygon .='{ lat: ' . round($coords2[1], 6) . ', lng: ' . round($coords2[0], 6) . ' },';
                     } 
                 
             }
@@ -307,10 +308,10 @@ for (let i = 0; i < total; i++) {
 
     const polygon = new google.maps.Polygon({
         paths: triangleCoords<?php echo $coopera->id; ?>[i],
-        strokeColor: "<?php echo $coopera->color; ?>",
+        strokeColor: "#DD160B",
         strokeOpacity: 0.8,
         strokeWeight: 3,
-        fillColor: "<?php echo $coopera->color; ?>",
+        fillColor: "#DD160B",
         fillOpacity: 0.35,
         clickable: true
     });
