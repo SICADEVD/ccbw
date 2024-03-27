@@ -342,4 +342,11 @@ class AgrodistributionController extends Controller
     {
         return (new ExportAgrodistributions())->download('distributions.xlsx');
     }
+
+    public function delete($id)
+    { 
+        Agrodistribution::where('id', decrypt($id))->delete();
+        $notify[] = ['success', 'Le contenu supprimé avec succès'];
+        return back()->withNotify($notify);
+    }
 }

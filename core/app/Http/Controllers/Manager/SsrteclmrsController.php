@@ -292,4 +292,11 @@ class SsrteclmrsController extends Controller
         $filename = 'ssrteclmrs-' . gmdate('dmYhms') . '.xlsx';
         return Excel::download(new ExportSsrteclmrs, $filename);
     }
+
+    public function delete($id)
+    { 
+        Ssrteclmrs::where('id', decrypt($id))->delete();
+        $notify[] = ['success', 'Le contenu supprimé avec succès'];
+        return back()->withNotify($notify);
+    }
 }

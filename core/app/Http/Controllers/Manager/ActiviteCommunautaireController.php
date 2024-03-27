@@ -295,4 +295,10 @@ class ActiviteCommunautaireController extends Controller
     {
         //
     }
+    public function delete($id)
+    { 
+        ActiviteCommunautaire::where('id', decrypt($id))->delete();
+        $notify[] = ['success', 'Le contenu supprimé avec succès'];
+        return back()->withNotify($notify);
+    }
 }

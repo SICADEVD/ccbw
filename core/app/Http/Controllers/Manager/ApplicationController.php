@@ -255,4 +255,11 @@ class ApplicationController extends Controller
         Excel::import(new PhytoImport, $request->file('uploaded_file'));
         return back();
     }
+
+    public function delete($id)
+    { 
+        Application::where('id', decrypt($id))->delete();
+        $notify[] = ['success', 'Le contenu supprimé avec succès'];
+        return back()->withNotify($notify);
+    }
 }

@@ -368,4 +368,11 @@ class AgropostplantingController extends Controller
     {
         return (new ExportAgropostplantings())->download('distributions.xlsx');
     }
+
+    public function delete($id)
+    { 
+        Agropostplanting::where('id', decrypt($id))->delete();
+        $notify[] = ['success', 'Le contenu supprimé avec succès'];
+        return back()->withNotify($notify);
+    }
 }

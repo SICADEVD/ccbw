@@ -577,4 +577,11 @@ class LivraisonController extends Controller
         $filename = 'stock-magasin-section-' . gmdate('dmYhms') . '.xlsx';
         return Excel::download(new ExportStockMagasinSection, $filename);
     }
+
+    public function delete($id)
+    { 
+        LivraisonInfo::where('id', decrypt($id))->delete();
+        $notify[] = ['success', 'Le contenu supprimé avec succès'];
+        return back()->withNotify($notify);
+    }
 }

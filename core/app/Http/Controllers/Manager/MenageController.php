@@ -305,4 +305,11 @@ class MenageController extends Controller
     {
         return (new ExportMenages())->download('menages.xlsx');
     }
+
+    public function delete($id)
+    { 
+        Menage::where('id', decrypt($id))->delete();
+        $notify[] = ['success', 'Le contenu supprimé avec succès'];
+        return back()->withNotify($notify);
+    }
 }

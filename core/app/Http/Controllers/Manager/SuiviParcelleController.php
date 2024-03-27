@@ -410,4 +410,10 @@ class SuiviParcelleController extends Controller
         $filename = 'suiviparcelles-' . gmdate('dmYhms') . '.xlsx';
         return Excel::download(new ExportSuiviParcelles, $filename);
     }
+    public function delete($id)
+    { 
+        SuiviParcelle::where('id', decrypt($id))->delete();
+        $notify[] = ['success', 'Le contenu supprimé avec succès'];
+        return back()->withNotify($notify);
+    }
 }

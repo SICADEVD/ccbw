@@ -185,4 +185,11 @@ class AgroevaluationController extends Controller
     {
         return (new ExportAgroevaluations())->download('agroevaluations.xlsx');
     }
+
+    public function delete($id)
+    { 
+        Agroevaluation::where('id', decrypt($id))->delete();
+        $notify[] = ['success', 'Le contenu supprimé avec succès'];
+        return back()->withNotify($notify);
+    }
 }

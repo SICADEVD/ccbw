@@ -229,6 +229,7 @@ if(isset($parcelle)){
              
                 $i++;
                 $coords2 = explode(',', $data2); 
+                
                 if($i==$nombre){
                     $polygon .='{ lat: ' . $coords2[1] . ', lng: ' . $coords2[0] . ' }';
                 }else{
@@ -237,7 +238,7 @@ if(isset($parcelle)){
             
         }
         
-        $polygonCoordinates ='['.$polygon.']'; 
+        $polygonCoordinates =$polygon; 
        
         $seriescoordonates[]= $polygonCoordinates;
         $pointsPolygon[] = "['".$proprietaire."']";
@@ -261,7 +262,7 @@ $pointsPolygon = Str::replace('"','',json_encode($pointsPolygon));
 
 @push('script')
 <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
- <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_VVwtAhchqsINCTqin22MG1AzMn7d6gk" ></script>  
+ <script async src="https://maps.googleapis.com/maps/api/js?key={{env('GOOGLE_MAPS_KEY')}}" ></script>  
 @endpush
 @push('script')
     <script>  
@@ -275,7 +276,9 @@ window.onload = function () {
 
 let map;
 let infoWindow;
+
 @if(count($seriescoordonates))
+ 
 var locations = <?php echo $pointsPolygon; ?>;
 var locationsWaypoints = <?php echo $pointsWaypoints; ?>;
 var total = 1;

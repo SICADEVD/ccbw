@@ -573,4 +573,10 @@ class ProducteurController extends Controller
         Excel::import(new ProducteurUpdateImport, $request->file('uploaded_file_update'));
         return back();
     }
+    public function delete($id)
+    { 
+        Producteur::where('id', decrypt($id))->delete();
+        $notify[] = ['success', 'Le contenu supprimé avec succès'];
+        return back()->withNotify($notify);
+    }
 }

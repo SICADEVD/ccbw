@@ -345,4 +345,11 @@ class FormationController extends Controller
         $filename = 'formations-' . gmdate('dmYhms') . '.xlsx';
         return Excel::download(new ExportFormations, $filename);
     }
+
+    public function delete($id)
+    { 
+        SuiviFormation::where('id', decrypt($id))->delete();
+        $notify[] = ['success', 'Le contenu supprimé avec succès'];
+        return back()->withNotify($notify);
+    }
 }

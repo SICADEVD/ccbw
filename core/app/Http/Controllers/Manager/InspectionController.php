@@ -260,4 +260,11 @@ $contents .='<tr><td colspan="4"><strong>'. $catquest->titre.'</strong></td></tr
         $filename = 'inspections-' . gmdate('dmYhms') . '.xlsx';
         return Excel::download(new ExportInspections, $filename);
     }
+
+    public function delete($id)
+    { 
+        Inspection::where('id', decrypt($id))->delete();
+        $notify[] = ['success', 'Le contenu supprimé avec succès'];
+        return back()->withNotify($notify);
+    }
 }

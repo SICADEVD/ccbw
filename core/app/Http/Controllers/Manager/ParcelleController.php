@@ -820,4 +820,11 @@ class ParcelleController extends Controller
         Excel::import(new ParcelleImport, $request->file('uploaded_file'));
         return back();
     }
+
+    public function delete($id)
+    { 
+        Parcelle::where('id', decrypt($id))->delete();
+        $notify[] = ['success', 'Le contenu supprimé avec succès'];
+        return back()->withNotify($notify);
+    }
 }

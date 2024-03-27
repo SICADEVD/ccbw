@@ -281,4 +281,10 @@ class AgroapprovisionnementController extends Controller
         Excel::import(new AgroapprovisionnementImport, $request->file('uploaded_file'));
         return back();
     }
+    public function delete($id)
+    { 
+        Agroapprovisionnement::where('id', decrypt($id))->delete();
+        $notify[] = ['success', 'Le contenu supprimé avec succès'];
+        return back()->withNotify($notify);
+    }
 }

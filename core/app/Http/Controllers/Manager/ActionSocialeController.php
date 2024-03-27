@@ -284,4 +284,10 @@ class ActionSocialeController extends Controller
     {
         //
     }
+    public function delete($id)
+    { 
+        ActionSociale::where('id', decrypt($id))->delete();
+        $notify[] = ['success', 'Le contenu supprimé avec succès'];
+        return back()->withNotify($notify);
+    }
 }
