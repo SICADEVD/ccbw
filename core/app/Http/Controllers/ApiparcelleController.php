@@ -19,9 +19,12 @@ class ApiparcelleController extends Controller
    *
    * @return \Illuminate\Http\Response
    */
-  public function index()
+  public function index(Request $request)
   {
-    $donnees = Parcelle::get();
+    $userid = $request->userid;
+    $donnees = Parcelle::where('userid', $userid)->get();
+
+    //$donnees = Parcelle::where('userid', )->get();
 
     return response()->json($donnees, 201);
   }
