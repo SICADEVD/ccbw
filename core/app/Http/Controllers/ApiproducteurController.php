@@ -40,7 +40,7 @@ class ApiproducteurController extends Controller
   public function getproducteurs(Request $request)
   {
     $userid = $request->userid;
-   
+
     /**
      * Retrieve producteurs with their associated localites and certifications.
      *
@@ -507,8 +507,6 @@ class ApiproducteurController extends Controller
 
   public function getproducteurUpdate(Request $request)
   {
-
-
     $input = $request->all();
     if ($request->userid) {
       $userid = $input['userid'];
@@ -543,28 +541,9 @@ class ApiproducteurController extends Controller
           $image = Str::after($image, 'base64,');
           $image = str_replace(' ', '+', $image);
           $imageName = (string) Str::uuid() . '.' . 'jpg';
-          File::put(storage_path() . "/app/public/producteurs/pieces/" . $imageName, base64_decode($image));
-          $picture = "public/producteurs/pieces/$imageName";
+          File::put(storage_path() . "/app/public/producteurs/" . $imageName, base64_decode($image));
+          $picture = "public/producteurs/$imageName";
           $input['picture'] = $picture;
-        }
-        if ($request->copiecarterecto) {
-          $image = $request->copiecarterecto;
-          $image = Str::after($image, 'base64,');
-          $image = str_replace(' ', '+', $image);
-          $imageName = (string) Str::uuid() . '.' . 'jpg';
-          File::put(storage_path() . "/app/public/producteurs/pieces/" . $imageName, base64_decode($image));
-          $copiecarterecto = "public/producteurs/pieces/$imageName";
-          $input['copiecarterecto'] = $copiecarterecto;
-        }
-        if ($request->copiecarteverso) {
-
-          $image = $request->copiecarteverso;
-          $image = Str::after($image, 'base64,');
-          $image = str_replace(' ', '+', $image);
-          $imageName = (string) Str::uuid() . '.' . 'jpg';
-          File::put(storage_path() . "/app/public/producteurs/pieces/" . $imageName, base64_decode($image));
-          $copiecarteverso = "public/producteurs/pieces/$imageName";
-          $input['copiecarteverso'] = $copiecarteverso;
         }
         if ($request->esignature) {
 
@@ -577,9 +556,34 @@ class ApiproducteurController extends Controller
 
           $input['esignature'] = $esignature;
         }
-
         $producteur = Producteur::find($input['id']);
         $producteur->update($input);
+        if ($producteur != null) {
+          $id = $producteur->id;
+          if ($producteur != null) {
+            $id = $producteur->id;
+            $datas  = [];
+            if ($request->certificats != null) {
+              $certificats = array_filter($request->certificats);
+              if (!empty($certificats)) {
+                Producteur_certification::where('producteur_id', $id)->delete();
+                foreach ($certificats as $certificat) {
+                  if ($certificat == 'Autre') {
+                    $autre = new Certification();
+                    $autre->nom = $request->autreCertificats;
+                    $autre->save();
+                    $certificat = $request->autreCertificats;
+                  }
+                  $datas[] = [
+                    'producteur_id' => $id,
+                    'certification' => $certificat,
+                  ];
+                }
+                Producteur_certification::insert($datas);
+              }
+            }
+          }
+        }
 
         $producteur = Producteur::find($input['id']);
       }
