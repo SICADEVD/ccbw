@@ -59,19 +59,18 @@ class ApiparcelleController extends Controller
    */
   public function store(Request $request)
   {
- 
     if ($request->id) {
       $parcelle = Parcelle::find($request->id);
-      $parcelle->codeParc = $parcelle->codeParc;
-      if ($parcelle->codeParc == '') {
-        $produc = Producteur::select('codeProdapp')->find($request->producteur);
-        if ($produc != null) {
-          $codeProd = $produc->codeProdapp;
-        } else {
-          $codeProd = '';
-        }
-        $parcelle->codeParc  =  $this->generecodeparc($request->producteur, $codeProd);
-      }
+      // $parcelle->codeParc = $parcelle->codeParc;
+      // if ($parcelle->codeParc == '') {
+      //   $produc = Producteur::select('codeProdapp')->find($request->producteur);
+      //   if ($produc != null) {
+      //     $codeProd = $produc->codeProdapp;
+      //   } else {
+      //     $codeProd = '';
+      //   }
+      //   $parcelle->codeParc  =  $this->generecodeparc($request->producteur, $codeProd);
+      // }
     } else {
       $parcelle = new Parcelle();
       $produc = Producteur::select('codeProdapp')->find($request->producteur_id);
