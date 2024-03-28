@@ -24,17 +24,17 @@ class ApiparcelleController extends Controller
   {
     $userid = $request->userid;
     $staff = User::where('id', $userid)->first();
-    
-    $parcelles = Parcelle::joinRelationship('producteur.localite.section.cooperative')->where([['cooperative_id', $staff->cooperative_id], ['producteurs.status',1]])
-    ->where(function ($query){ 
-        $query->where('typedeclaration', '!=','GPS')
-              ->orWhereNull('anneeCreation')
-              ->orWhereNull('typedeclaration')
-              ->orWhereNull('parcelles.latitude')
-              ->orWhereNull('parcelles.longitude')
-              ->orWhereNull('codeParc');
+
+    $parcelles = Parcelle::joinRelationship('producteur.localite.section.cooperative')->where([['cooperative_id', $staff->cooperative_id], ['producteurs.status', 1]])
+      ->where(function ($query) {
+        $query->where('typedeclaration', '!=', 'GPS')
+          ->orWhereNull('anneeCreation')
+          ->orWhereNull('typedeclaration')
+          ->orWhereNull('parcelles.latitude')
+          ->orWhereNull('parcelles.longitude')
+          ->orWhereNull('codeParc');
       })
-      ->select('parcelles.*','producteurs.nom','producteurs.prenoms','producteurs.codeProd','localites.nom as localite','sections.libelle as section','cooperatives.name as cooperative') 
+      ->select('parcelles.*', 'producteurs.nom', 'producteurs.prenoms', 'producteurs.codeProd', 'localites.nom as localite', 'sections.libelle as section', 'cooperatives.name as cooperative')
       ->get();
 
     return response()->json($parcelles, 200);
@@ -61,21 +61,21 @@ class ApiparcelleController extends Controller
   {
     if ($request->id) {
       $parcelle = Parcelle::find($request->id);
-      // $parcelle->codeParc = $parcelle->codeParc;
-      // if ($parcelle->codeParc == '') {
-      //   $produc = Producteur::select('codeProdapp')->find($request->producteur);
-      //   if ($produc != null) {
-      //     $codeProd = $produc->codeProdapp;
-      //   } else {
-      //     $codeProd = '';
-      //   }
-      //   $parcelle->codeParc  =  $this->generecodeparc($request->producteur, $codeProd);
-      // }
+      $parcelle->codeParc = $parcelle->codeParc;
+      if ($parcelle->codeParc == '') {
+        $produc = Producteur::select('codeProdapp')->find($request->producteur);
+        if ($produc != null) {
+          $codeProd = $produc->codeProdapp;
+        } else {
+          $codeProd = '';
+        }
+        $parcelle->codeParc  =  $this->generecodeparc($request->producteur, $codeProd);
+      }
     } else {
       $parcelle = new Parcelle();
-      $produc = Producteur::select('codeProdapp')->find($request->producteur_id);
+      $produc = Producteur::select('codeProd')->find($request->producteur_id);
       if ($produc != null) {
-        $codeProd = $produc->codeProdapp;
+        $codeProd = $produc->codeProd;
       } else {
         $codeProd = '';
       }
@@ -164,41 +164,19 @@ class ApiparcelleController extends Controller
   {
     if ($codeProd) {
       $action = 'non';
-
-      $data = Parcelle::select('codeParc')->where([
-        ['producteur_id', $idProd],
-        ['codeParc', '!=', null]
-      ])->orderby('id', 'desc')->first();
-
+      $data = Parcelle::where('producteur_id', $idProd)->get();
       if ($data != '') {
-
-        $code = $data->codeParc;
-
-        if ($code != '') {
-          $chaine_number = Str::afterLast($code, '-');
-          $numero = Str::after($chaine_number, 'P');
-          $numero = $numero + 1;
-        } else {
-          $numero = 1;
-        }
+        $nombreParcelles = $data->count();
+        $numero = $nombreParcelles + 1;
+        $codeProd = Str::beforeLast($codeProd, '-');
         $codeParc = $codeProd . '-P' . $numero;
-
         do {
-
           $verif = Parcelle::select('codeParc')->where('codeParc', $codeParc)->orderby('id', 'desc')->first();
           if ($verif == null) {
             $action = 'non';
           } else {
             $action = 'oui';
-            $code = $data->codeParc;
-
-            if ($code != '') {
-              $chaine_number = Str::afterLast($code, '-');
-              $numero = Str::after($chaine_number, 'P');
-              $numero = $numero + 1;
-            } else {
-              $numero = 1;
-            }
+            $numero++;
             $codeParc = $codeProd . '-P' . $numero;
           }
         } while ($action != 'non');
@@ -208,7 +186,6 @@ class ApiparcelleController extends Controller
     } else {
       $codeParc = '';
     }
-
     return $codeParc;
   }
 

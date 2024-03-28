@@ -108,8 +108,8 @@ class ParcelleController extends Controller
 
         $manager   = auth()->user();
 
-        $cooperatives = Cooperative::where('id',$manager->cooperative_id)->get();
-         
+        $cooperatives = Cooperative::where('id', $manager->cooperative_id)->get();
+
         $sections = Section::where('cooperative_id', $manager->cooperative_id)->with('cooperative')->get();
 
         $localites = Localite::joinRelationship('section')
@@ -141,7 +141,7 @@ class ParcelleController extends Controller
             ->get();
         $total = count($parcelles);
         $pageTitle  = "Gestion de mapping des parcelles($total)";
-        return view('manager.parcelle.mapping-trace', compact('pageTitle', 'sections', 'parcelles', 'localites', 'producteurs','cooperatives'));
+        return view('manager.parcelle.mapping-trace', compact('pageTitle', 'sections', 'parcelles', 'localites', 'producteurs', 'cooperatives'));
     }
 
     public function create()
@@ -207,7 +207,7 @@ class ParcelleController extends Controller
                 $localite->save();
 
                 $programme = Programme::where('libelle', $data['programme'])->first();
-                if($programme !=null){
+                if ($programme != null) {
                     $producteur->programme_id = $programme->id;
                 }
                 $producteur->nom = utf8_encode($data['nom']);
@@ -215,7 +215,7 @@ class ParcelleController extends Controller
                 $producteur->num_ccc = $data['codeCCC'];
                 $producteur->sexe = $data['genre'];
                 $producteur->statut = $data['candidat'];
-                $producteur->codeProd = $data['codeProducteur']; 
+                $producteur->codeProd = $data['codeProducteur'];
                 $producteur->localite_id = $localite->id;
                 $producteur->save();
 
@@ -241,12 +241,12 @@ class ParcelleController extends Controller
                 if ($parcelle != null) {
 
                     $centroid = $this->calculateCentroid($data['coordinates']);
-                    $superficie = substr($this->calculatePolygonArea($data['coordinates']),0,5);
+                    $superficie = substr($this->calculatePolygonArea($data['coordinates']), 0, 5);
 
                     $parcelle->producteur_id  = $producteur->id;
                     $parcelle->codeParc  = isset($data['codeParcelle']) ? $data['codeParcelle'] : null;
                     $parcelle->typedeclaration  = 'GPS';
-                    $parcelle->culture  = 'CACAO'; 
+                    $parcelle->culture  = 'CACAO';
                     $parcelle->superficie = round($superficie, 2);
                     //dd($parcelle->superficie);
                     $parcelle->latitude = round($centroid['lat'], 6);
@@ -628,9 +628,9 @@ class ParcelleController extends Controller
             $codeParc = $parcelle->codeParc;
             if ($codeParc == '') {
                 $produc = Producteur::joinRelationship('localite.section')
-                    ->where([['cooperative_id', $manager->cooperative_id], ['producteurs.status', 1]])->select('codeProdapp')->find($request->producteur_id);
+                    ->where([['cooperative_id', $manager->cooperative_id], ['producteurs.status', 1]])->select('codeProd')->find($request->producteur_id);
                 if ($produc != null) {
-                    $codeProd = $produc->codeProdapp;
+                    $codeProd = $produc->codeProd;
                 } else {
                     $codeProd = '';
                 }
@@ -640,9 +640,9 @@ class ParcelleController extends Controller
         } else {
             $parcelle = new Parcelle();
             $produc = Producteur::joinRelationship('localite.section')
-                ->where([['cooperative_id', $manager->cooperative_id], ['producteurs.status', 1]])->select('codeProdapp')->find($request->producteur_id);
+                ->where([['cooperative_id', $manager->cooperative_id], ['producteurs.status', 1]])->select('codeProd')->find($request->producteur_id);
             if ($produc != null) {
-                $codeProd = $produc->codeProdapp;
+                $codeProd = $produc->codeProd;
             } else {
                 $codeProd = '';
             }
@@ -718,45 +718,74 @@ class ParcelleController extends Controller
         $notify[] = ['success', isset($message) ? $message : 'Le parcelle a été crée avec succès.'];
         return back()->withNotify($notify);
     }
+    // private function generecodeparc($idProd, $codeProd)
+    // {
+    //     if ($codeProd) {
+    //         $action = 'non';
+
+    //         $data = Parcelle::select('codeParc')->where([
+    //             ['producteur_id', $idProd],
+    //             ['codeParc', '!=', null]
+    //         ])->orderby('id', 'desc')->first();
+
+    //         if ($data != '') {
+
+    //             $code = $data->codeParc;
+
+    //             if ($code != '') {
+    //                 $chaine_number = Str::afterLast($code, '-');
+    //                 $numero = Str::after($chaine_number, 'P');
+    //                 $numero = $numero + 1;
+    //             } else {
+    //                 $numero = 1;
+    //             }
+    //             $codeParc = $codeProd . '-P' . $numero;
+
+    //             do {
+
+    //                 $verif = Parcelle::select('codeParc')->where('codeParc', $codeParc)->orderby('id', 'desc')->first();
+    //                 if ($verif == null) {
+    //                     $action = 'non';
+    //                 } else {
+    //                     $action = 'oui';
+    //                     $code = $data->codeParc;
+
+    //                     if ($code != '') {
+    //                         $chaine_number = Str::afterLast($code, '-');
+    //                         $numero = Str::after($chaine_number, 'P');
+    //                         $numero = $numero + 1;
+    //                     } else {
+    //                         $numero = 1;
+    //                     }
+    //                     $codeParc = $codeProd . '-P' . $numero;
+    //                 }
+    //             } while ($action != 'non');
+    //         } else {
+    //             $codeParc = $codeProd . '-P1';
+    //         }
+    //     } else {
+    //         $codeParc = '';
+    //     }
+
+    //     return $codeParc;
+    // }
     private function generecodeparc($idProd, $codeProd)
     {
         if ($codeProd) {
             $action = 'non';
-
-            $data = Parcelle::select('codeParc')->where([
-                ['producteur_id', $idProd],
-                ['codeParc', '!=', null]
-            ])->orderby('id', 'desc')->first();
-
+            $data = Parcelle::where('producteur_id', $idProd)->get();
             if ($data != '') {
-
-                $code = $data->codeParc;
-
-                if ($code != '') {
-                    $chaine_number = Str::afterLast($code, '-');
-                    $numero = Str::after($chaine_number, 'P');
-                    $numero = $numero + 1;
-                } else {
-                    $numero = 1;
-                }
+                $nombreParcelles = $data->count();
+                $numero = $nombreParcelles + 1;
+                $codeProd = Str::beforeLast($codeProd, '-');
                 $codeParc = $codeProd . '-P' . $numero;
-
                 do {
-
                     $verif = Parcelle::select('codeParc')->where('codeParc', $codeParc)->orderby('id', 'desc')->first();
                     if ($verif == null) {
                         $action = 'non';
                     } else {
                         $action = 'oui';
-                        $code = $data->codeParc;
-
-                        if ($code != '') {
-                            $chaine_number = Str::afterLast($code, '-');
-                            $numero = Str::after($chaine_number, 'P');
-                            $numero = $numero + 1;
-                        } else {
-                            $numero = 1;
-                        }
+                        $numero++;
                         $codeParc = $codeProd . '-P' . $numero;
                     }
                 } while ($action != 'non');
@@ -766,7 +795,6 @@ class ParcelleController extends Controller
         } else {
             $codeParc = '';
         }
-
         return $codeParc;
     }
 
@@ -794,14 +822,14 @@ class ParcelleController extends Controller
     {
         $pageTitle = "Détails de la parcelle";
         $manager   = auth()->user();
-        $cooperatives = Cooperative::where('id',$manager->cooperative_id)->get();
+        $cooperatives = Cooperative::where('id', $manager->cooperative_id)->get();
         $parcelle   = Parcelle::with('agroespeceabre_parcelles.agroespeceabre')->find($id);
         $section = $parcelle->producteur->localite->section;
         $localite = $parcelle->producteur->localite;
         $producteur = $parcelle->producteur;
         $arbres = $parcelle->agroespeceabre_parcelles;
         // $arbres = $parcelle->agroespeceabre_parcelles->all();
-        return view('manager.parcelle.show', compact('pageTitle', 'localite', 'parcelle', 'producteur', 'section', 'arbres','cooperatives'));
+        return view('manager.parcelle.show', compact('pageTitle', 'localite', 'parcelle', 'producteur', 'section', 'arbres', 'cooperatives'));
     }
 
 
@@ -824,7 +852,7 @@ class ParcelleController extends Controller
     }
 
     public function delete($id)
-    { 
+    {
         Parcelle::where('id', decrypt($id))->delete();
         $notify[] = ['success', 'Le contenu supprimé avec succès'];
         return back()->withNotify($notify);
