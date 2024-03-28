@@ -91,8 +91,7 @@
                                             <span>{{ $inspection->note }}%</span>
                                         </td>
                                         <td>
-                                        <span class="d-block">{{ date('d/m/Y', strtotime($inspection->created_at)) }}</span>
-                                            <span>{{ diffForHumans($inspection->created_at) }}</span>
+                                        <span class="d-block">{{ date('d/m/Y', strtotime($inspection->date_evaluation)) }}</span> 
                                         </td> 
                                         <td>  @if($inspection->approbation==1)
                                                 <span class="badge badge-success">Approuvé</span>
@@ -107,11 +106,11 @@
                                                 @endif
                                         </td>
                                         <td>
-                                        <span class="d-block">{{ date('d/m/Y', strtotime($inspection->date_approbation)) }}</span> 
+                                        <span class="d-block">{{ $inspection->date_approbation }}</span> 
                                         </td> 
                                         <td>
-                                            <span class="d-block">{{ date('d-m-Y', strtotime($inspection->date_evaluation)) }}</span>
-                                            <span>{{ diffForHumans($inspection->date_evaluation) }}</span>
+                                            <span class="d-block">{{ date('d-m-Y', strtotime($inspection->created_at)) }}</span>
+                                            <span>{{ diffForHumans($inspection->created_at) }}</span>
                                         </td>
                                         
                                         <td>

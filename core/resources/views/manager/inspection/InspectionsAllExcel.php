@@ -69,7 +69,7 @@
             }
             ?>       
         </td>
-        <td><?php echo date('d/m/Y', strtotime($c->date_approbation)); ?></td>
+        <td><?php echo $c->date_approbation; ?></td>
         </tr>
         </tbody>
         <?php
