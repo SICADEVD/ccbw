@@ -59,71 +59,11 @@ class ApiparcelleController extends Controller
    */
   public function store(Request $request)
   {
-
-    $validationRule = [
-      'producteur_id' => 'required',
-      'anneeCreation' => 'required',
-      'ageMoyenCacao' => 'required',
-      'parcelleRegenerer' => 'required',
-      'anneeRegenerer' => 'required_if:parcelleRegenerer,==,oui',
-      'superficieConcerne' => 'required_if:parcelleRegenerer,==,oui',
-      'typedeclaration' => 'required',
-      'typeDoc' => 'required',
-      'presenceCourDeau' => 'required',
-      'courDeau' => 'required_if:presenceCourDeau,==,oui',
-      'autreCourDeau' => 'required_if:courDeau,==,Autre',
-      'existeMesureProtection' => 'required',
-      'existePente' => 'required',
-      'superficie' => 'required',
-      'nbCacaoParHectare' => 'required|numeric',
-      'erosion' => 'required',
-      'items.*.arbre'     => 'required|integer',
-      'items.*.nombre'     => 'required|integer',
-      'longitude' => 'numeric|nullable',
-      'latitude' => 'numeric|nullable',
-    ];
-    $messages = [
-      'section.required' => 'Le champ section est obligatoire',
-      'localite.required' => 'Le champ localité est obligatoire',
-      'producteur_id.required' => 'Le champ producteur est obligatoire',
-      'anneeCreation.required' => 'Le champ année de création est obligatoire',
-      'ageMoyenCacao.required' => 'Le champ age moyen du cacao est obligatoire',
-      'parcelleRegenerer.required' => 'Le champ parcelle à regénérer est obligatoire',
-      'anneeRegenerer.required_if' => 'Le champ année de régénération est obligatoire',
-      'superficieRegenerer.required_if' => 'Le champ superficie de régénération est obligatoire',
-      'typeDoc.required' => 'Le champ type de document est obligatoire',
-      'presenceCourDeau.required' => 'Le champ présence de cours d\'eau est obligatoire',
-      'courDeau.required_if' => 'Le champ cours d\'eau est obligatoire',
-      'existeMesureProtection.required' => 'Le champ existence de mesure de protection est obligatoire',
-      'existePente.required' => 'Le champ existence de pente est obligatoire',
-      'superficie.required' => 'Le champ superficie est obligatoire',
-      'nbCacaoParHectare.required' => 'Le champ nombre de cacao par hectare est obligatoire',
-      'superficieConcerne.required_if' => 'Le champ superficie concerné est obligatoire',
-    ];
-    $attributes = [
-      'section' => 'section',
-      'localite' => 'localité',
-      'producteur_id' => 'producteur',
-      'anneeCreation' => 'année de création',
-      'ageMoyenCacao' => 'age moyen du cacao',
-      'parcelleRegenerer' => 'parcelle regénéré',
-      'anneeRegenerer' => 'L\'année de régénération',
-      'superficieRegenerer' => 'superficie de régénérer',
-      'typeDoc' => 'type de document',
-      'presenceCourDeau' => 'présence de cours d\'eau',
-      'courDeau' => 'cours d\'eau',
-      'existeMesureProtection' => 'existence de mesure de protection',
-      'existePente' => 'existence de pente',
-      'superficie' => 'superficie',
-      'nbCacaoParHectare' => 'nombre de cacao par hectare',
-      'superficieConcerne' => 'superficie concerné',
-    ];
-    $request->validate($validationRule, $messages, $attributes);
-
+ 
     if ($request->id) {
       $parcelle = Parcelle::find($request->id);
-      $codeParc = $parcelle->codeParc;
-      if ($codeParc == '') {
+      $parcelle->codeParc = $parcelle->codeParc;
+      if ($parcelle->codeParc == '') {
         $produc = Producteur::select('codeProdapp')->find($request->producteur);
         if ($produc != null) {
           $codeProd = $produc->codeProdapp;
