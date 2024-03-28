@@ -30,8 +30,8 @@ class ApiparcelleController extends Controller
         $query->where('typedeclaration', '!=','GPS')
               ->orWhereNull('anneeCreation')
               ->orWhereNull('typedeclaration')
-              ->orWhereNull('latitude')
-              ->orWhereNull('longitude')
+              ->orWhereNull('parcelles.latitude')
+              ->orWhereNull('parcelles.longitude')
               ->orWhereNull('codeParc');
       })
       ->select('parcelles.*','producteurs.nom','producteurs.prenoms','producteurs.codeProd','localites.nom','sections.libelle','cooperatives.name') 
