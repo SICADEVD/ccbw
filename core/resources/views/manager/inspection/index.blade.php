@@ -58,10 +58,11 @@
                                 <th>@lang('Type inspection')</th>
                                     <th>@lang('Localite')</th>  
                                     <th>@lang('Producteur')</th>
-                                    <th>@lang('Formateur')</th>
+                                    <th>@lang('Inspecteur')</th>
                                     <th>@lang('Note')</th>
-                                    <th>@lang('Date_evaluation')</th> 
+                                    <th>@lang('Date d\'inspection')</th> 
                                     <th>@lang('Approbation')</th> 
+                                    <th>@lang('Date d\'approbation')</th> 
                                     <th>@lang('Ajoutée le')</th> 
                                     <th>@lang('Action')</th>
                                 </tr>
@@ -90,7 +91,7 @@
                                             <span>{{ $inspection->note }}%</span>
                                         </td>
                                         <td>
-                                        <span class="d-block">{{ date('d-m-Y', strtotime($inspection->created_at)) }}</span>
+                                        <span class="d-block">{{ date('d/m/Y', strtotime($inspection->created_at)) }}</span>
                                             <span>{{ diffForHumans($inspection->created_at) }}</span>
                                         </td> 
                                         <td>  @if($inspection->approbation==1)
@@ -105,6 +106,9 @@
                                                 <span class="badge badge-danger">Exclu</span>
                                                 @endif
                                         </td>
+                                        <td>
+                                        <span class="d-block">{{ date('d/m/Y', strtotime($inspection->date_approbation)) }}</span> 
+                                        </td> 
                                         <td>
                                             <span class="d-block">{{ date('d-m-Y', strtotime($inspection->date_evaluation)) }}</span>
                                             <span>{{ diffForHumans($inspection->date_evaluation) }}</span>

@@ -183,7 +183,7 @@
                     <div class="form-group row">
                         {{ Form::label(__("Date d'inspection"), null, ['class' => 'col-sm-4 control-label']) }}
                         <div class="col-xs-12 col-sm-8">
-                            {{ $inspection->date_evaluation }}
+                            {{ date('d/m/Y', strtotime($inspection->date_evaluation)) }}
                         </div>
                     </div>
                     <div class="form-group row">

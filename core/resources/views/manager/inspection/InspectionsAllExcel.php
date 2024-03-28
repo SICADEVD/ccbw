@@ -33,10 +33,11 @@
         <td>Nom</td>
         <td>Prenoms</td>
         <td>Code Prod</td>
-        <td>Encadreur</td> 
+        <td>Inspecteur</td> 
         <td>Note</td>
         <td>Date Inspection</td> 
         <td>Etat approbation</td> 
+        <td>Date approbation</td> 
     </tr>
     </thead> 
     <?php
@@ -54,7 +55,7 @@
             <td><?php echo $c->producteur->codeProd; ?></td>
             <td><?php echo $c->user->lastname; ?> <?php echo $c->user->firstname; ?></td>
             <td><?php echo $c->note; ?></td> 
-            <td><?php echo $c->date_evaluation; ?></td>
+            <td><?php echo date('d/m/Y', strtotime($c->date_evaluation)); ?></td>
             <td>
                 <?php
             if($c->approbation==1){
@@ -68,6 +69,7 @@
             }
             ?>       
         </td>
+        <td><?php echo date('d/m/Y', strtotime($c->date_approbation)); ?></td>
         </tr>
         </tbody>
         <?php
