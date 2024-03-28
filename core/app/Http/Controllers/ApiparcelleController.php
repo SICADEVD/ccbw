@@ -34,7 +34,7 @@ class ApiparcelleController extends Controller
               ->orWhereNull('parcelles.longitude')
               ->orWhereNull('codeParc');
       })
-      ->select('parcelles.*','producteurs.nom','producteurs.prenoms','producteurs.codeProd','localites.nom','sections.libelle','cooperatives.name') 
+      ->select('parcelles.*','producteurs.nom','producteurs.prenoms','producteurs.codeProd','localites.nom as loclaite','sections.libelle as section','cooperatives.name as cooperative') 
       ->get();
 
     return response()->json($parcelles, 200);
