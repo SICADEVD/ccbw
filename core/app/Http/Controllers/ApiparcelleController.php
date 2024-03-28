@@ -24,13 +24,16 @@ class ApiparcelleController extends Controller
   {
     $userid = $request->userid;
     $staff = User::where('id', $userid)->first();
-
-    $parcelles = Parcelle::join('producteurs', 'parcelles.producteur_id', '=', 'producteurs.id')
-      ->join('localites', 'producteurs.localite_id', '=', 'localites.id')
-      ->join('sections', 'localites.section_id', '=', 'sections.id')
-      ->join('cooperatives', 'sections.cooperative_id', '=', 'cooperatives.id')
-      ->join('users', 'cooperatives.id', '=', 'users.cooperative_id')
-      ->where('users.id', $staff->id)
+    
+    $parcelles = Parcelle::joinRelationship('localite.section')->where([['cooperative_id', $staff->cooperative_id], ['producteurs.status',1]])
+    ->where(function ($query){ 
+        $query->where('typedeclaration', '!=','GPS')
+              ->orWhereNull('anneeCreation')
+              ->orWhereNull('typedeclaration')
+              ->orWhereNull('latitude')
+              ->orWhereNull('longitude')
+              ->orWhereNull('codeParc');
+      })
       ->select('parcelles.*') // éviter les conflits de colonnes
       ->get();
 
