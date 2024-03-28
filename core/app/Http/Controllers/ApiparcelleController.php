@@ -25,7 +25,7 @@ class ApiparcelleController extends Controller
     $userid = $request->userid;
     $staff = User::where('id', $userid)->first();
     
-    $parcelles = Parcelle::joinRelationship('localite.section')->where([['cooperative_id', $staff->cooperative_id], ['producteurs.status',1]])
+    $parcelles = Parcelle::joinRelationship('producteur.localite.section')->where([['cooperative_id', $staff->cooperative_id], ['producteurs.status',1]])
     ->where(function ($query){ 
         $query->where('typedeclaration', '!=','GPS')
               ->orWhereNull('anneeCreation')
@@ -34,7 +34,7 @@ class ApiparcelleController extends Controller
               ->orWhereNull('longitude')
               ->orWhereNull('codeParc');
       })
-      ->select('parcelles.*') // éviter les conflits de colonnes
+      ->select('parcelles.*','producteurs.nom','producteurs.prenoms','producteurs.codeProd') // éviter les conflits de colonnes
       ->get();
 
     return response()->json($parcelles, 200);
