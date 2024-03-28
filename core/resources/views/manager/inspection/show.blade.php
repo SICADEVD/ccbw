@@ -220,7 +220,7 @@
 
         @if ($inspection->approbation == 2 || $inspection->approbation == null)
             <div class="col-sm-3">
-                <div class="float-sm-end">
+                <div class="float-sm-end" id="showApprob">
                     <a href="{{ route('manager.suivi.inspection.approbation', ['id' => $inspection->id, 'statut' => 1]) }}">
                         <button class="btn btn-outline--primary"><i
                                 class="las la-check"></i></i>@lang('Approuvé')</button></a>
@@ -267,6 +267,7 @@
 @push('script')
     <script type="text/javascript">
         $(document).ready(function() {
+            $('#showApprob').hide();
             update_amounts();
 
             $('.recommandation,.delai,.verification,.statut').change('keyup change blur', function() {
@@ -309,6 +310,11 @@
             $('#nbEncours').text(encours);
             $('#nbNonRealise').text(nnrealise);
             $('#nbRealise').text(realise);
+            if(encours==0 && nnrealise==0){
+                $('#showApprob').show();
+            }else{
+                $('#showApprob').hide();
+            }
         }
 
         $("#producteur").chained("#localite");
