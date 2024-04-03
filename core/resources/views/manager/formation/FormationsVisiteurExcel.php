@@ -41,7 +41,8 @@
         <tbody>
         <tr>
             <td><?php echo $c->suivi_formation_id; ?></td> 
-           
+            <td><?php echo $c->nom ; ?></td>  
+            
         </tr>
         </tbody>
         <?php
