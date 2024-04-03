@@ -36,14 +36,31 @@ class FormationController extends Controller
         $manager   = auth()->user();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id', $manager->cooperative_id], ['localites.status', 1]])->get();
         $modules = TypeFormation::active()->get();
-        $formations = SuiviFormation::dateFilter()->searchable(['lieu_formation'])->latest('id')->joinRelationship('localite.section')->where('sections.cooperative_id', $manager->cooperative_id)->where(function ($q) {
-            if (request()->localite != null) {
-                $q->where('localite_id', request()->localite);
-            }
-            if (request()->module != null) {
-                $q->where('type_formation_id', request()->module);
-            }
-        })->with('localite', 'campagne', 'typeFormation', 'user')->paginate(getPaginate());
+        // $formations = SuiviFormation::dateFilter()->searchable(['lieu_formation'])->latest('id')->joinRelationship('localite.section')->where('sections.cooperative_id', $manager->cooperative_id)->where(function ($q) {
+        //     if (request()->localite != null) {
+        //         $q->where('localite_id', request()->localite);
+        //     }
+        //     if (request()->module != null) {
+        //         $q->where('type_formation_id', request()->module);
+        //     }
+        // })->with('localite', 'campagne', 'typeFormation', 'user')->paginate(getPaginate());
+        $formations = SuiviFormation::dateFilter()
+            ->searchable(['lieu_formation'])
+            ->latest('id')
+            ->joinRelationship('localite.section')
+            ->where('sections.cooperative_id', $manager->cooperative_id)
+            ->where(function ($q) {
+                if (request()->localite != null) {
+                    $q->where('localite_id', request()->localite);
+                }
+                if (request()->module != null) {
+                    $q->whereHas('typeFormationTheme.typeFormation', function ($q) {
+                        $q->where('id', request()->module);
+                    });
+                }
+            })
+            ->with('localite', 'campagne', 'typeFormationTheme.typeFormation', 'user')
+            ->paginate(getPaginate());
 
         return view('manager.formation.index', compact('pageTitle', 'formations', 'localites', 'modules'));
     }
@@ -52,19 +69,19 @@ class FormationController extends Controller
     {
         $pageTitle = "Ajouter un formation";
         $manager   = auth()->user();
-        $producteurs  = Producteur::joinRelationship('localite.section')->where([['cooperative_id', $manager->cooperative_id],['producteurs.status',1]])->with('localite')->get();
+        $producteurs  = Producteur::joinRelationship('localite.section')->where([['cooperative_id', $manager->cooperative_id], ['producteurs.status', 1]])->with('localite')->get();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id', $manager->cooperative_id], ['localites.status', 1]])->get();
         $typeformations  = TypeFormation::all();
         $themes  = ThemesFormation::with('typeFormation')->get();
         $sousThemes  = SousThemeFormation::with('themeFormation')->get();
-        
+
         $staffs = User::whereHas('roles', function ($q) {
-            $q->whereIn('name', ['Inspecteur','ADG']);
-            })
+            $q->whereIn('name', ['Inspecteur', 'ADG']);
+        })
             ->where('cooperative_id', $manager->cooperative_id)
             ->select('users.*')
             ->get();
-            
+
         return view('manager.formation.create', compact('pageTitle', 'producteurs', 'localites', 'typeformations', 'themes', 'staffs', 'sousThemes'));
     }
 
@@ -125,7 +142,7 @@ class FormationController extends Controller
             }
         }
 
-       
+
 
         $formation->save();
 
@@ -161,9 +178,8 @@ class FormationController extends Controller
                     ];
                     TypeFormationTheme::insert($datas3);
                 }
-    
             }
-            
+
             $selectedSousThemes = $request->sous_theme;
             if ($selectedSousThemes != null) {
                 ThemeSousTheme::where('suivi_formation_id', $id)->delete();
@@ -186,7 +202,7 @@ class FormationController extends Controller
     {
         $pageTitle = "Mise à jour de la formation";
         $manager   = auth()->user();
-        $producteurs  = Producteur::joinRelationship('localite.section')->where([['cooperative_id', $manager->cooperative_id],['producteurs.status',1]])->with('localite')->get();
+        $producteurs  = Producteur::joinRelationship('localite.section')->where([['cooperative_id', $manager->cooperative_id], ['producteurs.status', 1]])->with('localite')->get();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id', $manager->cooperative_id], ['localites.status', 1]])->get();
         $formation   = SuiviFormation::findOrFail($id);
         $typeformations  = TypeFormation::all();
@@ -195,15 +211,15 @@ class FormationController extends Controller
         $themesSelected = array();
         $sousThemesSelected = array();
         $producteursSelected = array();
-        
+
         foreach ($formation->formationProducteur as $item) {
             $producteursSelected[] = $item->producteur_id;
         }
         foreach ($formation->typeFormationTheme as $item) {
-            $modules[] = $item->type_formation_id; 
+            $modules[] = $item->type_formation_id;
             $themesSelected[] = $item->theme_formation_id;
         }
-        
+
         foreach ($formation->themeSousTheme as $item) {
             $sousThemesSelected[] = $item->sous_theme_id;
         }
@@ -211,17 +227,18 @@ class FormationController extends Controller
         $themes  = ThemesFormation::with('typeFormation')->get();
         $sousthemes  = SousThemeFormation::with('themeFormation')->get();
         $staffs = User::whereHas('roles', function ($q) {
-            $q->whereIn('name', ['Inspecteur','ADG']);
-            })
+            $q->whereIn('name', ['Inspecteur', 'ADG']);
+        })
             ->where('cooperative_id', $manager->cooperative_id)
             ->select('users.*')
             ->get();
-        
+
         $dataProducteur = $dataVisiteur = $dataTheme = array();
 
         return view('manager.formation.edit', compact('pageTitle', 'localites', 'formation', 'producteurs', 'typeformations', 'themes', 'staffs', 'dataProducteur', 'dataTheme', 'modules', 'themesSelected', 'sousthemes', 'sousThemesSelected', 'producteursSelected'));
     }
-    public function show($id){
+    public function show($id)
+    {
         $pageTitle = "Détails de la formation";
         $manager   = auth()->user();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id', $manager->cooperative_id], ['localites.status', 1]])->get();
@@ -277,18 +294,18 @@ class FormationController extends Controller
         $localite = Localite::where('id', $formation->localite_id)->first();
         $idLocalite = $localite->id;
         $producteurs = Producteur::joinRelationship('localite.section')
-        ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->where('localite_id', $localite->id)->get();
+            ->where([['cooperative_id', $manager->cooperative_id], ['producteurs.status', 1]])->where('localite_id', $localite->id)->get();
         return view('manager.formation.visiteurcreate', compact('pageTitle', 'producteurs', 'id', 'idLocalite'));
     }
     public function editvisiteur($id)
     {
         $pageTitle = "Mise à jour du visiteur";
-        $manager=auth()->user();
+        $manager = auth()->user();
         $visiteur   = SuiviFormationVisiteur::findOrFail(request()->id);
         $localite = Localite::where('id', $visiteur->suiviFormation->localite_id)->first();
         $idLocalite = $localite->id;
         $producteurs = Producteur::joinRelationship('localite.section')
-        ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->where('localite_id', $localite->id)->get();
+            ->where([['cooperative_id', $manager->cooperative_id], ['producteurs.status', 1]])->where('localite_id', $localite->id)->get();
         return view('manager.formation.visiteuredit', compact('pageTitle', 'producteurs', 'idLocalite', 'visiteur'));
     }
     public function storevisiteur(Request $request)
@@ -347,7 +364,7 @@ class FormationController extends Controller
     }
 
     public function delete($id)
-    { 
+    {
         SuiviFormation::where('id', decrypt($id))->delete();
         $notify[] = ['success', 'Le contenu supprimé avec succès'];
         return back()->withNotify($notify);
