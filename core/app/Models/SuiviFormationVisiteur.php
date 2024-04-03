@@ -15,6 +15,4 @@ class SuiviFormationVisiteur extends Model
     {
         return $this->belongsTo(SuiviFormation::class);
     } 
-     
-     
 }
