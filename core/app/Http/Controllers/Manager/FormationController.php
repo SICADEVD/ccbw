@@ -36,15 +36,8 @@ class FormationController extends Controller
         $manager   = auth()->user();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id', $manager->cooperative_id], ['localites.status', 1]])->get();
         $modules = TypeFormation::active()->get();
-        // $formations = SuiviFormation::dateFilter()->searchable(['lieu_formation'])->latest('id')->joinRelationship('localite.section')->where('sections.cooperative_id', $manager->cooperative_id)->where(function ($q) {
-        //     if (request()->localite != null) {
-        //         $q->where('localite_id', request()->localite);
-        //     }
-        //     if (request()->module != null) {
-        //         $q->where('type_formation_id', request()->module);
-        //     }
-        // })->with('localite', 'campagne', 'typeFormation', 'user')->paginate(getPaginate());
-        $formations = SuiviFormation::dateFilter()
+        $formations = SuiviFormation::with('typeFormationTheme.typeFormation')
+            ->dateFilter()
             ->searchable(['lieu_formation'])
             ->latest('id')
             ->joinRelationship('localite.section')
@@ -59,9 +52,8 @@ class FormationController extends Controller
                     });
                 }
             })
-            ->with('localite', 'campagne', 'typeFormationTheme.typeFormation', 'user')
+            ->with('localite', 'campagne', 'user')
             ->paginate(getPaginate());
-
         return view('manager.formation.index', compact('pageTitle', 'formations', 'localites', 'modules'));
     }
 
