@@ -11,7 +11,7 @@
                                 <label>@lang('Recherche par Mot(s) clé(s)')</label>
                                 <input type="text" name="search" value="{{ request()->search }}" class="form-control">
                             </div>
-                            <div class="flex-grow-1">
+                            {{-- <div class="flex-grow-1">
                                 <label>@lang('Localité')</label>
                                 <select name="localite" class="form-control">
                                     <option value="">@lang('Toutes')</option>
@@ -33,7 +33,7 @@
                                 <label>@lang('Date')</label>
                                 <input name="date" type="text" class="dates form-control"
                                     placeholder="@lang('Date de début - Date de fin')" autocomplete="off" value="{{ request()->date }}">
-                            </div>
+                            </div> --}}
                             <div class="flex-grow-1 align-self-end">
                                 <button class="btn btn--primary w-100 h-45"><i class="fas fa-filter"></i>
                                     @lang('Filter')</button>
