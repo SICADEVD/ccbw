@@ -43,8 +43,8 @@
             <td><?php echo $c->suivi_formation_id; ?></td> 
             <td><?php echo $c->nom ; ?></td>  
             <td><?php echo $c->prenom ; ?></td>
-            
-            <td></td><?php echo $c->telephone ; ?></td>
+            <td><?php echo $c->sexe ; ?></td>
+            <td><?php echo $c->telephone ; ?></td>
         </tr>
         </tbody>
         <?php
