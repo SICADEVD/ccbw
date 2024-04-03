@@ -12,7 +12,7 @@
                                 <input type="text" name="search" value="{{ request()->search }}" class="form-control">
                             </div>
                             <div class="flex-grow-1">
-                                <label>@lang('Localité')</label>
+                                <label>@lang('Localités')</label>
                                 <select name="localite" class="form-control">
                                     <option value="">@lang('Toutes')</option>
                                     @foreach ($localites as $local)
@@ -21,7 +21,7 @@
                                 </select>
                             </div>
                             <div class="flex-grow-1">
-                                <label>@lang('Localité')</label>
+                                <label>@lang('Modules')</label>
                                 <select name="module" class="form-control">
                                     <option value="">@lang('Tous')</option>
                                     @foreach ($modules as $module)
