@@ -84,7 +84,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">@lang('Ajouter un Espèce Arbre')</h5>
+                    <h5 class="modal-title">@lang('Ajouter un type archive')</h5>
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <i class="las la-times"></i> </button>
                 </div>
@@ -96,7 +96,7 @@
         <div class="form-group row">
             {{ Form::label(__('Nom du Espèce Arbre'), null, ['class' => 'control-label col-sm-4']) }}
             <div class="col-xs-12 col-sm-8 col-md-8">
-            {!! Form::text('nom', null, array('placeholder' => __('Nom du Espèce Arbre'),'class' => 'form-control','required')) !!}
+            {!! Form::text('nom', null, array('placeholder' => __('Type Archive'),'class' => 'form-control','required')) !!}
         </div>
     </div> 
  
