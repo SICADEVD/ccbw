@@ -73,14 +73,13 @@ class LivraisonController extends Controller
     public function stockSection()
     {
         $staff = auth()->user();
-        $stocks = StockMagasinSection::dateFilter()->joinRelationship('livraisonInfo')
+        $stocks = StockMagasinSection::dateFilterWithTable()->joinRelationship('livraisonInfo')
             ->where([['sender_cooperative_id', $staff->cooperative_id]])
             ->when(request()->magasin, function ($query, $magasin) {
                 $query->where('magasin_section_id', $magasin);
             })
             ->with('campagne', 'campagnePeriode', 'magasinSection')
             ->orderBy('stock_magasin_sections.id', 'desc')->paginate(getPaginate());
-
         $total = $stocks->sum('stocks_entrant');
         $pageTitle    = "Stock des Magasins de Section (" . showAmount($total) . ") Kg";
         $magasins  = MagasinSection::joinRelationship('section')->where('cooperative_id', $staff->cooperative_id)->get();
@@ -100,32 +99,32 @@ class LivraisonController extends Controller
         $magasins = MagasinSection::join('users', 'magasin_sections.staff_id', '=', 'users.id')->where([['cooperative_id', $staff->cooperative_id], ['magasin_sections.status', 1]])->with('user')->orderBy('nom')->select('magasin_sections.*')->get();
 
         $staffs = User::whereHas('roles', function ($q) {
-            $q->whereIn('name', ['Delegue','Magasinier']);
+            $q->whereIn('name', ['Delegue', 'Magasinier']);
         })
             ->where('cooperative_id', $staff->cooperative_id)
             ->select('users.*')
             ->get();
 
-        $producteurs  = Producteur::joinRelationship('localite.section')->where([['cooperative_id', $staff->cooperative_id],['producteurs.status',1]])->select('producteurs.*')->orderBy('producteurs.nom')->get();
+        $producteurs  = Producteur::joinRelationship('localite.section')->where([['cooperative_id', $staff->cooperative_id], ['producteurs.status', 1]])->select('producteurs.*')->orderBy('producteurs.nom')->get();
 
         $certification = Producteur_certification::joinRelationship('producteur.localite.section')->where('cooperative_id', $staff->cooperative_id)->groupby('certification')->get();
         $parcelles  = Parcelle::joinRelationship('producteur.localite.section')->where('cooperative_id', $staff->cooperative_id)->with('producteur')->get();
 
-        return view('manager.livraison.create', compact('pageTitle', 'cooperatives', 'staffs', 'magasins', 'producteurs', 'parcelles', 'campagne', 'periode','certification'));
+        return view('manager.livraison.create', compact('pageTitle', 'cooperatives', 'staffs', 'magasins', 'producteurs', 'parcelles', 'campagne', 'periode', 'certification'));
     }
 
     public function stockSectionCreate()
     {
 
         $staff = auth()->user();
-       $cooperatives = Cooperative::active()->where('id', auth()->user()->cooperative_id)->orderBy('name')->get();
+        $cooperatives = Cooperative::active()->where('id', auth()->user()->cooperative_id)->orderBy('name')->get();
         //$cooperatives = Cooperative::active()->orderBy('name')->get();
         $magCentraux = MagasinCentral::where([['cooperative_id', $staff->cooperative_id]])->with('user')->orderBy('nom')->get();
         $magSections = MagasinSection::joinRelationship('section')->where([['cooperative_id', $staff->cooperative_id]])->with('user')->orderBy('nom')->get();
 
         $transporteurs = Transporteur::where([['cooperative_id', $staff->cooperative_id]])->with('cooperative', 'entreprise')->get();
         $vehicules = Vehicule::with('marque')->get();
-        $producteurs  = Producteur::joinRelationship('localite.section')->where([['sections.cooperative_id', $staff->cooperative_id],['producteurs.status',1]])->select('producteurs.*')->orderBy('producteurs.nom')->get();
+        $producteurs  = Producteur::joinRelationship('localite.section')->where([['sections.cooperative_id', $staff->cooperative_id], ['producteurs.status', 1]])->select('producteurs.*')->orderBy('producteurs.nom')->get();
 
         $campagne = Campagne::active()->first();
         $campagne = CampagnePeriode::where([['campagne_id', $campagne->id], ['periode_debut', '<=', gmdate('Y-m-d')], ['periode_fin', '>=', gmdate('Y-m-d')]])->latest()->first();
@@ -153,7 +152,7 @@ class LivraisonController extends Controller
             'items.*.amount'   => 'required|numeric|gt:0',
             'estimate_date'    => 'required|date|date_format:Y-m-d',
         ]);
-        
+
         $manager = auth()->user();
         $campagne = Campagne::active()->first();
         $periode = CampagnePeriode::where([['campagne_id', $campagne->id], ['periode_debut', '<=', gmdate('Y-m-d')], ['periode_fin', '>=', gmdate('Y-m-d')]])->latest()->first();
@@ -224,23 +223,20 @@ class LivraisonController extends Controller
                 'created_at'      => now(),
             ];
 
-            $estimation = Estimation::where([['campagne_id',$campagne->id],['parcelle_id',$item['parcelle']]])->first();
+            $estimation = Estimation::where([['campagne_id', $campagne->id], ['parcelle_id', $item['parcelle']]])->first();
 
-          if($estimation !=null)
-          {
-            $estima_prod = $estimation->EsP;
-            $production = $estimation->productionAnnuelle + $item['quantity'];
-            if($production>=$estima_prod)
-            {
-             $estimation->etat = 'Atteint';
+            if ($estimation != null) {
+                $estima_prod = $estimation->EsP;
+                $production = $estimation->productionAnnuelle + $item['quantity'];
+                if ($production >= $estima_prod) {
+                    $estimation->etat = 'Atteint';
+                }
+                $estimation->productionAnnuelle = $estimation->productionAnnuelle + $item['quantity'];
+                $estimation->save();
             }
-            $estimation->productionAnnuelle = $estimation->productionAnnuelle + $item['quantity'];
-            $estimation->save();  
-
-          }
 
             $product = Producteur::joinRelationship('localite.section')
-            ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->where('producteurs.id', $item['producteur'])->first();
+                ->where([['cooperative_id', $manager->cooperative_id], ['producteurs.status', 1]])->where('producteurs.id', $item['producteur'])->first();
             if ($product != null) {
                 $programme = $product->programme_id;
 
@@ -570,8 +566,8 @@ class LivraisonController extends Controller
         $pageTitle           = "Facture";
         $livraisonInfo         = LivraisonInfo::with('payment')->findOrFail($id);
         return view('manager.livraison.invoice', compact('pageTitle', 'livraisonInfo'));
-    } 
-    
+    }
+
     public function exportExcel()
     {
         $filename = 'stock-magasin-section-' . gmdate('dmYhms') . '.xlsx';
@@ -579,7 +575,7 @@ class LivraisonController extends Controller
     }
 
     public function delete($id)
-    { 
+    {
         LivraisonInfo::where('id', decrypt($id))->delete();
         $notify[] = ['success', 'Le contenu supprimé avec succès'];
         return back()->withNotify($notify);
