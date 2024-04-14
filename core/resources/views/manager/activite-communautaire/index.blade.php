@@ -70,14 +70,14 @@
                                             </span>
                                         </td>
                                         <td>
-                                            <span>{{ diffForHumans($activite->date_demarrage) }}</span>
+                                            <span>{{ $activite->date_demarrage }}</span>
                                         </td>
                                         <td>
                                             <span>{{ diffForHumans($activite->date_fin_projet) }}</span>
                                         </td>
                                         <td>
                                             <span class="small">
-                                                {{ $activite->cout_projet }}
+                                                {{ number_format($activite->cout_projet, 0, ',', ' ') }}
                                             </span>
                                         </td>
                                         <td>
