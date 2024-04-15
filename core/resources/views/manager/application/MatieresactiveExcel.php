@@ -45,7 +45,7 @@
     ?>
         <tbody>
         <tr>
-            <td><?php echo $loop->iteration; ?></td> 
+            <td><?php echo $c->id; ?></td>
             <td><?php echo $c->application->campagne->nom; ?></td>
             <td><?php echo $c->application->parcelle->producteur->localite->section->cooperative->name; ?></td>
             <td><?php echo $c->application->parcelle->producteur->localite->section->libelle; ?></td>

@@ -35,11 +35,14 @@
         <td>Prenoms</td>
         <td>Code Producteur</td>
         <td>Code Parcelle</td>
-        <td>nom</td> 
-        <td>nom Commercial</td>
-        <td>toxicicologie</td>
-        <td>dose</td>
-        <td>frequence</td>
+        <td>Nom</td> 
+        <td>Nom Commercial</td>
+        <td>Toxicicologie</td>
+        <td>Dose Unite</td>
+        <td>Dosage</td>
+        <td>Quantité unité</td>
+        <td>Quantité</td>
+        <td>Fréquence</td>
     </tr>
     </thead> 
     <?php
@@ -48,7 +51,7 @@
     ?>
         <tbody>
         <tr>
-            <td><?php echo $loop->iteration; ?></td> 
+            <td><?php echo $c->id; ?></td>
             <td><?php echo $c->application->campagne->nom; ?></td>
             <td><?php echo $c->application->parcelle->producteur->localite->section->cooperative->name; ?></td>
             <td><?php echo $c->application->parcelle->producteur->localite->section->libelle; ?></td>
@@ -59,9 +62,12 @@
             <td><?php echo $c->application->parcelle->codeParc; ?></td>
             <td><?php echo $c->nom; ?></td> 
             <td><?php echo $c->nomCommercial; ?></td> 
-            <td><?php echo $c->toxicicologie; ?></td> 
-            <td><?php echo $c->dose; ?></td> 
-            <td><?php echo $c->frequence; ?></td> 
+            <td><?php echo $c->toxicicologie; ?></td>
+            <td><?php echo $c->doseUnite; ?></td>
+            <td><?php echo $c->dosage; ?></td>
+            <td><?php echo $c->quantiteUnite; ?></td>
+            <td><?php echo $c->quantite; ?></td>
+            <td><?php echo $c->frequence; ?></td>
         </tr>
         </tbody>
         <?php
