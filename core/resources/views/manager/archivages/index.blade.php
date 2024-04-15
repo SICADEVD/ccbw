@@ -92,7 +92,7 @@
                                             </button>
                                             <div class="dropdown-menu p-0">
                                                 <a href="{{ route('manager.archivages.edit', $archivage->id) }}"
-                                                    class="dropdown-item"><i class="la la-pen"></i>@lang('Edit')</a>
+                                                    class="dropdown-item"><i class="la la-pen"></i>@lang('Editer')</a>
                                                 @if ($archivage->status == Status::DISABLE)
                                                     <button type="button" class="confirmationBtn  dropdown-item"
                                                         data-action="{{ route('manager.archivages.status', $archivage->id) }}"

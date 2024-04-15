@@ -146,7 +146,7 @@
                                                     class="la la-file-pdf-o"></i>@lang('PDF')</a>
                                             <a href="{{ route('manager.traca.producteur.edit', $producteur->id) }}"
                                                 class="btn btn-sm btn-outline--warning"><i
-                                                    class="la la-pen"></i>@lang('Edit')</a>
+                                                    class="la la-pen"></i>@lang('Editer')</a>
                                             <button type="button" class="btn btn-sm btn-outline--primary"
                                                 data-bs-toggle="dropdown" aria-expanded="false"><i
                                                     class="las la-ellipsis-v"></i>@lang('Action')

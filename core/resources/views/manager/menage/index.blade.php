@@ -79,7 +79,7 @@
                                             </button>
                                             <div class="dropdown-menu p-0">
                                                 <a href="{{ route('manager.suivi.menage.edit', $menage->id) }}"
-                                                    class="dropdown-item"><i class="la la-pen"></i>@lang('Edit')</a>
+                                                    class="dropdown-item"><i class="la la-pen"></i>@lang('Editer')</a>
                                                 <a href="{{ route('manager.suivi.menage.show', $menage->id) }}"
                                                     class="dropdown-item"><i class="las la-file-invoice"></i>@lang('Détail')</a>
                                                 @if ($menage->status == Status::DISABLE)

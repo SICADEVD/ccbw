@@ -119,7 +119,7 @@
                                                     class="btn btn-sm btn-outline--info"><i
                                                         class="las la-file-invoice"></i>@lang('Détail')</a>
                                         <a href="{{ route('manager.traca.parcelle.edit', $parcelle->id) }}"
-                                                    class="btn btn-sm btn-outline--danger"><i class="la la-pen"></i>@lang('Edit')</a>
+                                                    class="btn btn-sm btn-outline--danger"><i class="la la-pen"></i>@lang('Editer')</a>
                                                     @if ($parcelle->status == Status::DISABLE)
                                                     <button type="button" class="btn btn-sm btn-outline--success confirmationBtn"
                                                         data-action="{{ route('manager.traca.parcelle.status', $parcelle->id) }}"

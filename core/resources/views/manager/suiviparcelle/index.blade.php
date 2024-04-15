@@ -75,7 +75,7 @@
                                              </button>
                                             <div class="dropdown-menu p-0">
                                                 <a href="{{ route('manager.suivi.parcelles.edit', $suiviparcelle->id) }}"
-                                                    class="dropdown-item"><i class="la la-pen"></i>@lang('Edit')</a> 
+                                                    class="dropdown-item"><i class="la la-pen"></i>@lang('Editer')</a> 
                                                 <a href="{{ route('manager.suivi.parcelles.show', $suiviparcelle->id) }}"
                                                     class="dropdown-item"><i class="las la-file-invoice"></i>@lang('Détail')</a>
                                                     @if ($suiviparcelle->status == Status::DISABLE)

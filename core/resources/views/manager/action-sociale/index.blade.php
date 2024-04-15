@@ -101,7 +101,7 @@
                                             </button>
                                             <div class="dropdown-menu p-0">
                                                 <a href="{{ route('manager.communaute.action.sociale.edit', $action->id) }}"
-                                                    class="dropdown-item"><i class="la la-pen"></i>@lang('Edit')</a>
+                                                    class="dropdown-item"><i class="la la-pen"></i>@lang('Editer')</a>
 
                                                 @if ($action->status == Status::DISABLE)
                                                     <button type="button" class="confirmationBtn  dropdown-item"

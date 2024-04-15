@@ -61,7 +61,7 @@
                                                     class="las la-home"></i>@lang('Magasins')</a>
                                             <a href="{{ route('manager.staff.edit', encrypt($staff->id)) }}"
                                                 class="btn btn-sm btn-outline--primary"><i
-                                                    class="las la-pen"></i>@lang('Edit')</a>
+                                                    class="las la-pen"></i>@lang('Editer')</a>
                                             @if ($staff->status == Status::BAN_USER)
                                                 <button type="button"
                                                     class="btn btn-sm btn-outline--success confirmationBtn"
@@ -82,12 +82,12 @@
                                                 data-action="{{ route('manager.staff.delete', encrypt($staff->id)) }}"
                                                 data-question="@lang('Êtes-vous sûr de supprimer ce staff?')"
                                                 ><i
-                                                    class="las la-trash"></i>@lang('Del')</a>
+                                                    class="las la-trash"></i>@lang('Supprimer')</a>
                                             <a href="{{ route('manager.staff.stafflogin', $staff->id) }}"
                                                 class="btn btn-sm btn-outline--success " 
                                                 target="_blank"><i
                                                     class="las la-sign-in-alt"></i>
-                                                @lang('Login')</a>
+                                                @lang('Connexion')</a>
                                         </td>
                                     </tr>
                                 @empty
