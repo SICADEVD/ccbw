@@ -52,7 +52,7 @@ use Illuminate\Support\Str;
             </div>
             <div class="card b-radius--10 ">
                 <div class="card-body  p-0">
-                    <div class="table-responsive--sm table-responsive" id="googleMap" style="height: 800px;">
+                    <div class="table-responsive--sm table-responsive" id="map" style="height: 800px;">
                          
                     </div>
                 </div>
@@ -60,7 +60,48 @@ use Illuminate\Support\Str;
             </div>
         </div>
     </div>
+    <?php
+$arrData = '';
+$newCoord = '';
+$lat = '';
+$long = '';
+$total = 0;
+$mappingparcellle ='';
+$pointsPolygon = array();
+$seriescoordonates=array();
+$a=1;
+
+if(isset($parcelles) && count($parcelles)){
+
+    $total = count($parcelles);
+
+    foreach ($parcelles as $data) {
+        
+        if($data->latitude==0 || $data->latitude==null || $data->latitude==1){
+            continue;
+        }
+            $lat = isset($data->latitude) ? htmlentities($data->latitude, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
+            $long= isset($data->longitude) ? htmlentities($data->longitude, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible'; 
+            $producteur = isset($data->producteur->nom) ? htmlentities($data->producteur->nom, ENT_QUOTES | ENT_IGNORE, "UTF-8").' '.htmlentities($data->producteur->prenoms, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
+            $code= isset($data->producteur->codeProd) ? htmlentities($data->producteur->codeProd, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non defini';
+            $parcelle = isset($data->codeParc) ? htmlentities($data->codeParc, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
+            $localite=isset($data->producteur->localite->nom) ? htmlentities($data->producteur->localite->nom, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
+            $section=isset($data->producteur->localite->section->libelle) ? htmlentities($data->producteur->localite->section->libelle, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
+            $cooperative=isset($data->producteur->localite->section->cooperative->name) ? htmlentities($data->producteur->localite->section->cooperative->name, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
+            $annee = isset($data->anneeCreation) ? htmlentities($data->anneeCreation, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
+            $culture= isset($data->culture) ? htmlentities($data->culture, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
+            $superficie= isset($data->superficie) ? htmlentities($data->superficie, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
+            $proprietaire = 'Coopérative:'. $cooperative.'<br>Section:'. $section.'<br>Localite:'. $localite.'<br>Producteur : '.$producteur.'<br>Code producteur:'. $code.'<br>Code Parcelle:'. $parcelle.'<br>Année creation:'. $annee.'<br>Latitude:'. $lat.'<br>Longitude:'. $long.'<br>Superficie:'. $superficie.' ha';
      
+ 
+        $polygonCoordinates = "['".$proprietaire."',".$long.",".$lat."]"; 
+    $pointsPolygon[] = $polygonCoordinates;
+}
+$pointsPolygon = Str::replace('"','',json_encode($pointsPolygon));
+ $pointsPolygon = Str::replace("''","'Non Disponible'",$pointsPolygon);
+}
+
+?>
     <x-confirmation-modal />
 @endsection
 
@@ -79,72 +120,46 @@ use Illuminate\Support\Str;
 @push('style-lib')
     <link rel="stylesheet" href="{{ asset('assets/fcadmin/css/vendor/datepicker.min.css') }}">
 @endpush
-@push('script')  
+@push('script') 
+ <script async src="https://maps.googleapis.com/maps/api/js?key={{env('GOOGLE_MAPS_KEY')}}" ></script>  
 @endpush
 @push('script') 
 <script type="text/javascript">
  $("#localite").chained("#section");
  $("#producteur").chained("#localite");
-var lgt='-5.5004615';
-    var ltt='6.8817026';
-    var z=8; 
-    var locations = [    <?php
-    if(count($parcelles))
-    {
-    $total = count($parcelles);  
-$i=1;
-foreach ($parcelles as  $data) {
-    
-    if($data->latitude==0 || $data->latitude==null || $data->latitude==1){
-        continue;
+
+let map;
+let infoWindow;
+@if(!is_array($pointsPolygon))
+var locations = <?php echo $pointsPolygon; ?>;
+var total = <?php echo $total; ?>;
+@endif
+window.onload = function () {
+  map = new google.maps.Map(document.getElementById("map"), {
+    zoom: 7,
+    center: { lat: 6.881703, lng: -5.500461 },
+    mapTypeId: "hybrid",
+  });
+  var infowindow = new google.maps.InfoWindow();
+
+var marker, i;
+
+for (i = 0; i < total; i++) { 
+  marker = new google.maps.Marker({
+    position: new google.maps.LatLng(locations[i][2],locations[i][1]),
+    map: map, 
+  });
+
+  google.maps.event.addListener(marker, 'click', (function(marker, i) {
+    return function() {
+      infowindow.setContent(locations[i][0]);
+      infowindow.open(map, marker);
     }
-    $lat = isset($data->latitude) ? htmlentities($data->latitude, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
-    $long= isset($data->longitude) ? htmlentities($data->longitude, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible'; 
-    $producteur = isset($data->producteur->nom) ? htmlentities($data->producteur->nom, ENT_QUOTES | ENT_IGNORE, "UTF-8").' '.htmlentities($data->producteur->prenoms, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
-    $code= isset($data->producteur->codeProd) ? htmlentities($data->producteur->codeProd, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non defini';
-    $parcelle = isset($data->codeParc) ? htmlentities($data->codeParc, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
-    $localite=isset($data->producteur->localite->nom) ? htmlentities($data->producteur->localite->nom, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
-    $section=isset($data->producteur->localite->section->libelle) ? htmlentities($data->producteur->localite->section->libelle, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
-    $cooperative=isset($data->producteur->localite->section->cooperative->name) ? htmlentities($data->producteur->localite->section->cooperative->name, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
-    $annee = isset($data->anneeCreation) ? htmlentities($data->anneeCreation, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
-    $culture= isset($data->culture) ? htmlentities($data->culture, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
-    $superficie= isset($data->superficie) ? htmlentities($data->superficie, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
-    $proprietaire = 'Coopérative:'. $cooperative.'<br>Section:'. $section.'<br>Localite:'. $localite.'<br>Producteur : '.$producteur.'<br>Code producteur:'. $code.'<br>Code Parcelle:'. $parcelle.'<br>Année creation:'. $annee.'<br>Latitude:'. $lat.'<br>Longitude:'. $long.'<br>Superficie:'. $superficie.' ha';
- ?>
-  ['<?php echo $proprietaire; ?>', <?php echo $long; ?>, <?php echo $lat; ?>, 7]
-  
- <?php
-  if($total>$i){echo ',';}
- $i++;
-}
-}
- 
-?>];
+  })(marker, i));
+} 
 
-    var map = new google.maps.Map(document.getElementById('googleMap'), {
-      zoom: z,
-      center: new google.maps.LatLng(ltt,lgt), 
-      mapTypeId: google.maps.MapTypeId.HYBRID
-    });
+} 
 
-    var infowindow = new google.maps.InfoWindow();
-
-    var marker, i;
-
-    for (i = 0; i < locations.length; i++) { 
-      marker = new google.maps.Marker({
-        position: new google.maps.LatLng(locations[i][2],locations[i][1]),
-        map: map, 
-      });
-
-      google.maps.event.addListener(marker, 'click', (function(marker, i) {
-        return function() {
-          infowindow.setContent(locations[i][0]);
-          infowindow.open(map, marker);
-        }
-      })(marker, i));
-    } 
-    
 $('form select').on('change', function(){
     $(this).closest('form').submit();
 });
