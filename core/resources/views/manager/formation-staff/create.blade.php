@@ -83,7 +83,7 @@
                                         {{ $entreprise->nom_entreprise }}</option>
                                 @endforeach
                             </select>
-                            <button type="button" class="btn btn-outline-secondary border-grey add-formateur"
+                            <button type="button" class="btn btn-outline-secondary border-grey add-entreprise"
                                 data-toggle="tooltip" data-original-title="Ajouter un formateur"><i class="las la-plus"></i>
                             </button>
                         </div>
