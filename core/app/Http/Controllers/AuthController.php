@@ -154,10 +154,13 @@ class AuthController extends Controller
                     // if(in_array($res,$nolisting)){
                         
                     // }
-                    $menuliste[] = strtoupper($res);
+                     if($res !=""){
+                        $menuliste[] = strtoupper($res);
+                     }
+                    
                 }
-                //dd($nolisting);
-                $permissionsroles = Arr::flatten($permissionsroles);
+                
+                
                 
             }
             // $menuliste = array("LOCALITES",
@@ -175,7 +178,7 @@ class AuthController extends Controller
             asort($menuliste);
             $user = User::where('id',$user->id)->first();
             return response()->json([
-                'menu' =>$menuliste,
+                'menu' =>array_values(Arr::whereNotNull($menuliste)),
                 'results' => $user,
                 'cooperative' => $cooperative, 
             'status_code' => 200,
