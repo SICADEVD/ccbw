@@ -115,13 +115,14 @@ class AuthController extends Controller
                 foreach($user->getAllPermissions() as $v)
                 {
                     $permissionsrolesName=Str::replace("manager.staff.","",$v->name);
+                    
                     $permissionsrolesName=Str::replace("manager.suivi.","",$permissionsrolesName);
                     $permissionsrolesName=Str::replace("manager.traca.","",$permissionsrolesName);
                     //ajout de agro
                     $permissionsrolesName=Str::replace("agro.","",$permissionsrolesName);
-                    $permissionsrolesName=Str::replace("manager.","",$permissionsrolesName);
-                    
+                    $permissionsrolesName=Str::replace("manager.","",$permissionsrolesName);  
                     $permissionsroles[]=Str::before($permissionsrolesName,".");
+
                     $permissionsroles[]=Str::replace(".","_", Str::beforeLast($permissionsrolesName,"."));
                    
                 }
@@ -131,10 +132,10 @@ class AuthController extends Controller
                     "localites",
                     "postplanting", 
                     "producteur",
-                    "parcelle", //parcelle
+                    "parcelle", 
                     "livraison",
-                    "parcelles", //designant suivi de parcelles
-                    "formation", //designant suivi de formation
+                    "parcelles", 
+                    "formation", 
                     "estimation",
                     "evaluation",
                     "inspection",
@@ -144,18 +145,20 @@ class AuthController extends Controller
                     "livraison_magcentral",
                     "evaluation",
                     "distribution",
-                    "application", //designant suivi d'application
+                    "application",  
                 );
                 
 
                 $permissionsroles = array_unique($permissionsroles); 
+                $permissionsroles = Arr::flatten($permissionsroles);
                 foreach($permissionsroles as $res){
-                    if(in_array($res,$nolisting)){
-                        $menuliste[] = strtoupper($res);
-                    }
+                    // if(in_array($res,$nolisting)){
+                        
+                    // }
+                    $menuliste[] = strtoupper($res);
                 }
                 //dd($nolisting);
-                $permissionsroles = Arr::flatten($permissionsroles);
+                //$permissionsroles = Arr::flatten($permissionsroles);
                 
             }
             // $menuliste = array("LOCALITES",
@@ -170,7 +173,7 @@ class AuthController extends Controller
             // "MENAGES",
             // "SUIVIAPPLICATIONS"
             //     );
-            
+            asort($menuliste);
             return response()->json([
                 'menu' =>$menuliste,
                 'results' => $user,

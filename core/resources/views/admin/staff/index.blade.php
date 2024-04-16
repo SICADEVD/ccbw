@@ -9,6 +9,8 @@
                             <thead>
                                 <tr>
                                     <th>@lang('Cooperative')</th>
+                                    <th>@lang('Role')</th>
+                                    <th>@lang('Type de compte')</th>
                                     <th>@lang('Staff')</th>
                                     <th>@lang('Email')</th>
                                     <th>@lang('Ajouté le')</th>
@@ -30,7 +32,16 @@
                                                 <span>@</span>{{ $staff->username }}
                                             </span>
                                         </td>
-
+                                        <td>
+                                            @if (!empty($staff->getRoleNames()))
+                                                    @foreach ($staff->getRoleNames() as $v)
+                                                        <span class="badge badge--success">{{ $v }}</span>
+                                                    @endforeach
+                                                @endif
+                                        </td>
+                                        <td>
+                                            <span>{{ $staff->type_compte }}</span>
+                                        </td>
                                         <td>
                                             <span class="fw-bold">{{ $staff->email }}<br>{{ $staff->mobile }}</span>
                                         </td>
