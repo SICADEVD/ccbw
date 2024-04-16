@@ -256,7 +256,7 @@
                         </tr>
                     </tbody>
                 </table>
-                <h3 class="mt-5">Performance financière</h3>
+                {{-- <h3 class="mt-5">Performance financière</h3> --}}
                 {{-- <table class="table table-striped table-bordered">
                     <thead class="bg--primary ">
                         <tr>
