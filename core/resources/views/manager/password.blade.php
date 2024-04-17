@@ -35,7 +35,7 @@
         <div class="col-lg-9 col-md-9 mb-30">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title mb-50 border-bottom pb-2">@lang('Change Password')</h5>
+                    <h5 class="card-title mb-50 border-bottom pb-2">@lang('Modification du mot de passe')</h5>
 
                     <form action="{{ route('manager.password.update.data') }}" method="POST" enctype="multipart/form-data">
                         @csrf
@@ -46,12 +46,12 @@
                         </div>
 
                         <div class="form-group">
-                            <label>@lang('New Password')</label>
+                            <label>@lang('Nouveau mot de passe')</label>
                             <input class="form-control" type="password" name="password" required>
                         </div>
 
                         <div class="form-group">
-                            <label>@lang('Confirm Password')</label>
+                            <label>@lang('Confirmer le mot de passe')</label>
                             <input class="form-control" type="password" name="password_confirmation" required>
                         </div>
                         <button type="submit" class="btn btn--primary w-100 btn-lg h-45">@lang('Envoyer')</button>
