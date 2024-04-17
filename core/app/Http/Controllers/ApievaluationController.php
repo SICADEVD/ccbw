@@ -47,6 +47,7 @@ class ApievaluationController extends Controller
     public function store(Request $request)
     {
         $validationRule = [
+            'parcelle'    => 'required|exists:parcelles,id',
             'producteur'    => 'required|exists:producteurs,id',
             'encadreur' => 'required|exists:users,id',
             'note'  => 'required|max:255',
@@ -72,6 +73,7 @@ class ApievaluationController extends Controller
             $inspection = new Inspection();
         }
         $campagne = Campagne::active()->first();
+        $inspection->parcelle_id  = $request->parcelle;
         $inspection->producteur_id  = $request->producteur;
         $inspection->campagne_id  = $campagne->id;
         $inspection->formateur_id  = $request->encadreur;
@@ -101,7 +103,7 @@ class ApievaluationController extends Controller
                         'questionnaire_id' => $key,
                         'notation' => $value,
                         'commentaire' => $commentaire[$key],
-                        'statuts' => 'En cours',
+                        'statuts' => 'Non Débuté',
                     ];
                 }
             }
@@ -113,6 +115,7 @@ class ApievaluationController extends Controller
             $inspectionQuestionnaireNonApplicables = InspectionQuestionnaire::where('inspection_id', $inspection->id)->where('notation', "Non Applicable")->select('id', 'questionnaire_id')->get();
         }
         return response()->json([
+            'parcelle_id' => $inspection->parcelle_id,
             'producteur_id' => $inspection->producteur_id,
             'campagne_id' => $inspection->campagne_id,
             'formateur_id' => $inspection->formateur_id,
@@ -141,13 +144,13 @@ class ApievaluationController extends Controller
         $inspections->each(function ($inspection) {
             $inspection->reponse_non_conforme = InspectionQuestionnaire::where('inspection_id', $inspection->id)
                 ->where('notation', 'Pas Conforme')
-                ->where('statuts', 'En cours')
+                ->where('statuts', 'Non Débuté')
                 ->select('id', 'questionnaire_id')
                 ->get();
 
             $inspection->reponse_non_applicale = InspectionQuestionnaire::where('inspection_id', $inspection->id)
                 ->where('notation', 'Non Applicable')
-                ->where('statuts', 'En cours')
+                ->where('statuts', 'Non Débuté')
                 ->select('id', 'questionnaire_id')
                 ->get();
         });
@@ -208,13 +211,13 @@ class ApievaluationController extends Controller
 
         $inspection->reponse_non_conforme = InspectionQuestionnaire::where('inspection_id', $inspection->id)
             ->where('notation', 'Pas Conforme')
-            ->where('statuts', 'En cours')
+            ->where('statuts', 'Non Débuté')
             ->select('id', 'questionnaire_id')
             ->get();
 
         $inspection->reponse_non_applicale = InspectionQuestionnaire::where('inspection_id', $inspection->id)
             ->where('notation', 'Non Applicable')
-            ->where('statuts', 'En cours')
+            ->where('statuts', 'Non Débuté')
             ->select('id', 'questionnaire_id')
             ->get();
 
