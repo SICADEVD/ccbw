@@ -58,6 +58,7 @@
                                 <th>@lang('Type inspection')</th>
                                     <th>@lang('Localite')</th>  
                                     <th>@lang('Producteur')</th>
+                                    <th>@lang('Parcelle')</th>
                                     <th>@lang('Inspecteur')</th>
                                     <th>@lang('Note')</th>
                                     <th>@lang('Date d\'inspection')</th> 
@@ -79,11 +80,15 @@
                                             <span class="fw-bold">{{ $inspection->producteur->localite->nom }}</span>
                                         </td> 
                                         
+                                        
                                         <td> 
                                             <span class="small">
                                             {{ $inspection->producteur->nom }} {{ $inspection->producteur->prenoms }}
                                             </span>
                                         </td>
+                                        <td>
+                                            <span class="fw-bold">{{ $inspection->parcelle->codeParc ?? null }}</span>
+                                        </td> 
                                         <td>
                                             <span>{{ $inspection->user->lastname }} {{ $inspection->user->firstname }}</span>
                                         </td>

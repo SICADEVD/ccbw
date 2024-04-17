@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Manager;
 use App\Models\User;
 use App\Models\Campagne;
 use App\Models\Notation;
+use App\Models\Parcelle;
 use App\Constants\Status;
 use App\Models\Localite; 
 use App\Models\Inspection;
@@ -63,13 +64,14 @@ class InspectionController extends Controller
             ->where('cooperative_id', $manager->cooperative_id)
             ->select('users.*')
             ->get();
-     
-        return view('manager.inspection.create', compact('pageTitle', 'producteurs','localites','staffs'));
+            $parcelles  = Parcelle::with('producteur')->get();
+        return view('manager.inspection.create', compact('pageTitle', 'producteurs','localites','staffs','parcelles'));
     }
 
     public function store(Request $request)
     {
         $validationRule = [
+            'parcelle'    => 'required|exists:parcelles,id',
             'producteur'    => 'required|exists:producteurs,id',
             'encadreur' => 'required|exists:users,id', 
             'note'  => 'required|max:255',
@@ -94,6 +96,8 @@ class InspectionController extends Controller
             $inspection = new Inspection();  
         } 
         $campagne = Campagne::active()->first();
+        
+        $inspection->parcelle_id  = $request->parcelle; 
         $inspection->producteur_id  = $request->producteur;  
         $inspection->campagne_id  = $campagne->id;
         $inspection->formateur_id  = $request->encadreur;

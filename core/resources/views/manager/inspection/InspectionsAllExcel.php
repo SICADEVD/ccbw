@@ -33,6 +33,7 @@
         <td>Nom</td>
         <td>Prenoms</td>
         <td>Code Prod</td>
+        <td>Parcelle</td>
         <td>Inspecteur</td> 
         <td>Note</td>
         <td>Date Inspection</td> 
@@ -53,6 +54,7 @@
             <td><?php echo $c->producteur->nom; ?></td>
             <td><?php echo $c->producteur->prenoms; ?></td>
             <td><?php echo $c->producteur->codeProd; ?></td>
+            <td><?php echo $c->parcelle->codeParc ?? null; ?></td>
             <td><?php echo $c->user->lastname; ?> <?php echo $c->user->firstname; ?></td>
             <td><?php echo $c->note; ?></td> 
             <td><?php echo date('d/m/Y', strtotime($c->date_evaluation)); ?></td>

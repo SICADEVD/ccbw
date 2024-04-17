@@ -15,6 +15,10 @@ class Inspection extends Model
     {
         return $this->belongsTo(Producteur::class);
     }
+    public function parcelle()
+    {
+        return $this->belongsTo(Parcelle::class);
+    }
     public function campagne()
     {
         return $this->belongsTo(Campagne::class);
