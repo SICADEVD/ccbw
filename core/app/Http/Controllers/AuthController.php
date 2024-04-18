@@ -176,7 +176,7 @@ class AuthController extends Controller
             // "SUIVIAPPLICATIONS"
             //     );
             asort($menuliste);
-            $user = User::where('id',$user->id)->first();
+            // $user = User::where('id',$user->id)->first();
             return response()->json([
                 'menu' =>array_values(Arr::whereNotNull($menuliste)),
                 'results' => $user,
