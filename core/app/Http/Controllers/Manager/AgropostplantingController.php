@@ -46,7 +46,7 @@ class AgropostplantingController extends Controller
 
     public function create()
     {
-        $pageTitle = "Ajouter une distribution";
+        $pageTitle = "Ajouter une évaluation post-planting des arbres à ombres";
         $manager   = auth()->user();
         $producteurDist = array();
 
