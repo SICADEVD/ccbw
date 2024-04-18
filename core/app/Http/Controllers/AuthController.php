@@ -123,7 +123,7 @@ class AuthController extends Controller
                     $permissionsrolesName=Str::replace("manager.","",$permissionsrolesName);  
                     $permissionsroles[]=Str::before($permissionsrolesName,".");
 
-                    $permissionsroles[]=Str::replace(".","_", Str::beforeLast($permissionsrolesName,"."));
+                    //$permissionsroles[]=Str::replace(".","_", Str::beforeLast($permissionsrolesName,"."));
                    
                 }
                 //dd($permissionsroles);
