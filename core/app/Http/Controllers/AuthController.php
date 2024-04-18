@@ -121,12 +121,34 @@ class AuthController extends Controller
                     //ajout de agro
                     $permissionsrolesName=Str::replace("agro.","",$permissionsrolesName);
                     $permissionsrolesName=Str::replace("manager.","",$permissionsrolesName);  
+                    $permissionsrolesName=Str::before($permissionsrolesName,".exportExcel");
+                    $permissionsrolesName=Str::before($permissionsrolesName,".code");
+                    $permissionsrolesName=Str::before($permissionsrolesName,".verify");
+                    $permissionsrolesName=Str::before($permissionsrolesName,".reset");
+                    $permissionsrolesName=Str::before($permissionsrolesName,".attendance-settings");
+                    $permissionsrolesName=Str::before($permissionsrolesName,".leaves-settings");
+                    $permissionsrolesName=Str::before($permissionsrolesName,".cooperative-settings");
+                    $permissionsrolesName=Str::before($permissionsrolesName,".durabilite-settings");
+                    $permissionsrolesName=Str::before($permissionsrolesName,".section-settings");
+                    $permissionsrolesName=Str::before($permissionsrolesName,".localite-settings");
+                    $permissionsrolesName=Str::before($permissionsrolesName,".campagne");
+                    $permissionsrolesName=Str::before($permissionsrolesName,".travauxDangereux");
+                    $permissionsrolesName=Str::before($permissionsrolesName,".travauxLegers");
+                    $permissionsrolesName=Str::before($permissionsrolesName,".arretEcole");
+                    $permissionsrolesName=Str::before($permissionsrolesName,".get");
+                    $permissionsrolesName=Str::before($permissionsrolesName,".mapping");
+                    $permissionsrolesName=Str::before($permissionsrolesName,".update");
+                    $permissionsrolesName=Str::before($permissionsrolesName,".usine");
+                    $permissionsrolesName=Str::before($permissionsrolesName,".magcentral");
+                    $permissionsrolesName=Str::before($permissionsrolesName,".section");
+                    $permissionsrolesName=Str::before($permissionsrolesName,".stock"); 
+                    
                     $permissionsroles[]=Str::before($permissionsrolesName,".");
 
-                    //$permissionsroles[]=Str::replace(".","_", Str::beforeLast($permissionsrolesName,"."));
+                    $permissionsroles[]=Str::replace(".","_", Str::beforeLast($permissionsrolesName,".")); 
                    
                 }
-                //dd($permissionsroles);
+            //dd($permissionsroles);
                 
                 $nolisting = array(
                     "localites",
