@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\Manager;
 
-use App\Models\Localite;
 use PDF;
+use App\Models\Localite;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\ActionSociale;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ExportActionSociales;
 use App\Models\ActionSocialeLocalite;
 use App\Models\ActionSocialePartenaire;
 use Illuminate\Support\Facades\Storage;
@@ -262,27 +264,10 @@ class ActionSocialeController extends Controller
         $dataLocalite = ActionSocialeLocalite::where('action_sociale_id', $id)->pluck('localite_id')->toArray();
         return view('manager.action-sociale.edit', compact('actionSociale', 'pageTitle', 'partenaires', 'localites', 'dataLocalite'));
     }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, ActionSociale $action)
+    public function exportExcel()
     {
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        $filename = 'actionSociale-' . gmdate('dmYhms') . '.xlsx';
+        return Excel::download(new ExportActionSociales, $filename);
     }
     public function delete($id)
     { 

@@ -33,29 +33,24 @@
         <tr>
             <td>ID</td>
             <td>COOPERATIVE</td>
-            <td>CODE</td>
-            <td>TYPE DE PROJET</td>
-            <td>NIVEAU DE REALISATION</td>
-            <td>DATE DE DEMARRAGE</td>
-            <td>DATE DE FIN</td>
-            <td>COUT DU PROJET</td>
-            <td>DATE DE LIVRAISON</td>
+            <td>CODE ACTION SOCIALE</td>
+            <td>PARTENAIRE</td>
+            <td>TYPE DE PARTENARIAT</td>
+            <td>MONTANT</td>
         </tr>
-    </thead>
-    <tbody>
         <?php
-        foreach ($actions as $c) {
-        ?>
+        foreach ($partenaires as $c) { ?>
             <tr>
                 <td><?php echo $c->id; ?></td>
-                <td><?php echo $c->cooperative->name; ?></td>
-                <td><?php echo $c->code; ?></td>
-                <td><?php echo $c->type_projet; ?></td>
-                <td><?php echo $c->niveau_realisation; ?></td>
-                <td><?php echo $c->date_demarrage; ?></td>
-                <td><?php echo $c->date_fin_projet; ?></td>
-                <td><?php echo $c->cout_projet; ?></td>
-                <td><?php echo $c->date_livraison; ?></td>
+                <td><?php echo $c->actionSociale->cooperative->name; ?></td>
+                <td><?php echo $c->actionSociale->code; ?></td>
+                <td><?php echo $c->partenaire; ?></td>
+                <td><?php echo $c->type_partenaire; ?></td>
+                <td><?php echo $c->montant; ?></td>
             </tr>
         <?php } ?>
+       
+    </thead>
+    <tbody>
+
 </table>
