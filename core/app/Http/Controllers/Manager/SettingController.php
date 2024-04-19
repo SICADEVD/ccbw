@@ -586,6 +586,7 @@ class SettingController extends Controller
 
         $pageTitle = "Manage des Magasins de Section";
         $manager = auth()->user();
+        
         $activeSettingMenu = 'magasinSection_settings';
          
         $users = User::whereHas('roles', function ($q) {
@@ -599,7 +600,8 @@ class SettingController extends Controller
         $usersId  = Arr::whereNotNull(Arr::pluck($users,'id'));
         $sections = UserLocalite::whereIn('user_id',$usersId)->get();
    
-        $magasinSections     = MagasinSection::orderBy('id', 'desc')->paginate(getPaginate());
+        //$magasinSections     = MagasinSection::orderBy('id', 'desc')->paginate(getPaginate());
+        $magasinSections = MagasinSection::joinRelationship('section')->where('cooperative_id', $manager->cooperative_id)->paginate(getPaginate());
         $codemag = $this->generecodemagasin();
         return view('manager.config.magasinSection', compact('pageTitle', 'magasinSections', 'activeSettingMenu', 'users', 'sections', 'codemag'));
     }
