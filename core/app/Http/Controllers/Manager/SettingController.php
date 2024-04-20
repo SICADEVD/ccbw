@@ -701,6 +701,7 @@ class SettingController extends Controller
         $activeSettingMenu = 'magasinCentral_settings';
         $users = User::whereHas('roles', function ($q) {
             $q->where('name', 'Magasinier');
+            $q->Orwhere('name', 'Magasinier Central');
         })
             ->where('cooperative_id', $manager->cooperative_id)
             ->select('id', DB::raw("CONCAT(lastname,' ', firstname) as nom"))
