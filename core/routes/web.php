@@ -248,7 +248,6 @@ Route::middleware('auth')->group(function () {
             Route::get('entreprises/',[SettingController::class, 'entrepriseIndex'])->name('entreprise.index');
             Route::post('entreprise/store', [SettingController::class, 'entrepriseStore'])->name('entreprise.store');
             Route::post('entreprise/status/{id}', [SettingController::class, 'entrepriseStatus'])->name('entreprise.status');
-            
         });
 
         Route::resource('employee-files', EmployeeFileController::class);
