@@ -15,14 +15,9 @@
                         <table class="table table--light style--two">
                             <thead>
                                 <tr>
-<<<<<<< HEAD
-                                    <th>@lang('Cooperative')</th>
-                                    <th>@lang('Photo')</th>
-=======
                                 <th>@lang('Cooperative')</th> 
                                 <th>@lang('Entreprise')</th>
                                 <th>@lang('Photo')</th>
->>>>>>> a5578d16ed2df909be1c3c3f5a52c9cb758cf3bd
                                     <th>@lang('Nom')</th>
                                     <th>@lang('Prenom')</th>
                                     <th>@lang('Sexe')</th>
