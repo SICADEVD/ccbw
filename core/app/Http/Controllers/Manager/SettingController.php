@@ -485,9 +485,14 @@ class SettingController extends Controller
             'nom_entreprise'  => 'required',
             'telephone_entreprise'  => 'required',
             'adresse_entreprise'  => 'required',
-            'mail_entreprise'  => 'required|email|unique:entreprises,mail_entreprise',
+            'mail_entreprise'  => 'required',
         ]);
-        $entreprise = new Entreprise();
+      
+        if ($request->id) {
+            $entreprise    = Entreprise::findOrFail($request->id); 
+        } else {
+            $entreprise = new Entreprise();
+        }
         $entreprise->cooperative_id = auth()->user()->cooperative_id;
         $entreprise->nom_entreprise = trim($request->nom_entreprise);
         $entreprise->mail_entreprise = trim($request->mail_entreprise);
