@@ -474,6 +474,7 @@ class SettingController extends Controller
             'mail_entreprise'  => 'required|email|unique:entreprises,mail_entreprise',
         ]);
         $entreprise = new Entreprise();
+        $entreprise->cooperative_id = auth()->user()->cooperative_id;
         $entreprise->nom_entreprise = trim($request->nom_entreprise);
         $entreprise->mail_entreprise = trim($request->mail_entreprise);
         $entreprise->telephone_entreprise = trim($request->telephone_entreprise);
@@ -805,7 +806,7 @@ class SettingController extends Controller
     public function transporteurModalIndex()
     {
         $pageTitle = "Ajouter un transporteur";
-        $entreprises = Entreprise::get();
+        $entreprises = Entreprise::where('cooperative_id',auth()->user()->cooperative_id)->get();
         $countries = Countrie::get();
         $niveaux = NiveauxEtude::get();
         return view('manager.config.create-transporteur-modal', compact('pageTitle', 'entreprises', 'countries', 'niveaux'));
@@ -816,10 +817,10 @@ class SettingController extends Controller
         $pageTitle = "Manage des Transporteurs";
         $manager = auth()->user();
         $activeSettingMenu = 'transporteur_settings';
-        $transporteurs = Transporteur::orderBy('id', 'desc')->paginate(getPaginate());
+        $transporteurs = Transporteur::where('cooperative_id',auth()->user()->cooperative_id)->orderBy('id', 'desc')->paginate(getPaginate());
         $countries = Countrie::get();
         $niveaux = NiveauxEtude::get();
-        $entreprises = Entreprise::get();
+        $entreprises = Entreprise::where('cooperative_id',auth()->user()->cooperative_id)->get();
         return view('manager.config.transporteur', compact('pageTitle', 'transporteurs', 'activeSettingMenu', 'countries', 'niveaux', 'entreprises'));
     }
     public function transporteurStore(Request $request)
