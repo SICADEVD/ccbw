@@ -32,20 +32,7 @@
                                 @forelse($transporteurs as $transporteur)
                                     <tr>
                                         <td>
-<<<<<<< HEAD
-                                            <span>{{ $transporteur->cooperative->name }}</span>
-                                        </td>
-                                        <td>
-                                            <img class=""
-                                                src="{{ asset('core/storage/app/transporteur/' . $transporteur->photo) }}"
-                                                alt="" width="200px">
-                                        </td>
-                                        <td>
-                                            <span>{{ $transporteur->nom }}</span>
-                                        </td>
-
-=======
-                                            <span>{{ $transporteur->entreprise->nom_entreprise }}</span>
+                                            <span>{{ $transporteur->entreprise->nom_entreprise ?? "" }}</span>
                                         </td> 
                                         <td>
                                         <img class="" src="{{ asset('core/storage/app/transporteur/' .$transporteur->photo) }}" alt="" width="200px">
@@ -54,7 +41,6 @@
                                             <span>{{  $transporteur->nom }}</span>
                                         </td> 
                                         
->>>>>>> a5578d16ed2df909be1c3c3f5a52c9cb758cf3bd
                                         <td>
                                             <span>{{ __($transporteur->prenoms) }}</span>
                                         </td>
@@ -80,13 +66,9 @@
 
                                         <td>
                                             <button type="button" class="btn btn-sm btn-outline--primary  updateType"
-<<<<<<< HEAD
-                                                data-id="{{ $transporteur->id }}" data-nom="{{ $transporteur->nom }}"
-=======
                                                 data-id="{{ $transporteur->id }}" 
                                                 data-entreprise="{{ $transporteur->entreprise_id }}"
                                                 data-nom="{{ $transporteur->nom }}"
->>>>>>> a5578d16ed2df909be1c3c3f5a52c9cb758cf3bd
                                                 data-prenoms="{{ $transporteur->prenoms }}"
                                                 data-sexe = "{{ $transporteur->sexe }}"
                                                 data-datenaiss = "{{ $transporteur->date_naiss }}"
@@ -203,7 +185,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <?php echo Form::label(__('Nationalité'), null, ['class' => 'col-sm-4 control-label required']); ?>
+                            <?php echo Form::label(__('Pays'), null, ['class' => 'col-sm-4 control-label required']); ?>
                             <div class="col-xs-12 col-sm-8">
                                 <select name="nationalite" id="nationalite" class="form-control nationalite select-picker"
                                     data-live-search="true" required>
