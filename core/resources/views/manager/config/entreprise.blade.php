@@ -40,11 +40,11 @@
                                         <td>
                                             <span>{{ __($entreprise->adresse_entreprise) }}</span>
                                         </td>
-                                        {{-- <td>
+                                       <td>
                                             @php
                                                 echo $entreprise->statusBadge;
                                             @endphp
-                                        </td> --}}
+                                        </td>  
 
                                         <td>
                                             <span class="d-block">{{ showDateTime($entreprise->updated_at) }}</span>
@@ -101,7 +101,56 @@
             </div>
         </div>
     </x-setting-card>
-    
+    <div id="typeModel" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">@lang('Ajouter un Magasin de Section')</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="las la-times"></i> </button>
+                </div>
+                <form action="{{ route('manager.settings.entreprise.store') }}" method="POST">
+                    @csrf
+                    <div class="modal-body"> 
+                    <input type="hidden" name='id'>
+                    <div class="row">
+                <input type="hidden" value="true" name="page_reload" id="page_reload">
+                <div class="col-lg-12">
+                    <x-forms.text :fieldLabel="__('Nom de l\'entreprise')" :fieldPlaceholder="__('Nom de l\'entreprise')" fieldName="nom_entreprise"
+                        fieldId="nom_entreprise" fieldValue="" :fieldRequired="true" />
+                </div>
+            </div>
+
+            <div class="row">
+                <input type="hidden" value="true" name="page_reload" id="page_reload">
+                <div class="col-lg-12">
+                    <x-forms.text :fieldLabel="__('Adresse mail de l\'entreprise')" :fieldPlaceholder="__('Adresse mail de l\'entreprise')" fieldName="mail_entreprise"
+                        fieldId="mail_entreprise" fieldValue="" :fieldRequired="true" />
+                </div>
+            </div>
+
+            <div class="row">
+                <input type="hidden" value="true" name="page_reload" id="page_reload">
+                <div class="col-lg-12">
+                    <x-forms.number :fieldLabel="__('Téléphone de l\'entreprise')" :fieldPlaceholder="__('Téléphone de l\'entreprise')" fieldName="telephone_entreprise"
+                        fieldId="telephone_entreprise" fieldValue="" :fieldRequired="true" />
+                </div>
+            </div>
+            <div class="row">
+                <input type="hidden" value="true" name="page_reload" id="page_reload">
+                <div class="col-lg-12">
+                    <x-forms.text :fieldLabel="__('Adresse de l\'entreprise')" :fieldPlaceholder="__('Adresse de l\'entreprise')" fieldName="adresse_entreprise"
+                        fieldId="adresse_entreprise" fieldValue="" :fieldRequired="true" />
+                </div>
+            </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn--primary w-100 h-45 ">@lang('Enregistrer')</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <x-confirmation-modal />
 @endsection
 

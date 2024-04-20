@@ -494,7 +494,13 @@ class SettingController extends Controller
         $entreprise->telephone_entreprise = trim($request->telephone_entreprise);
         $entreprise->adresse_entreprise = trim($request->adresse_entreprise);
         $entreprise->save();
-        return Reply::successWithData(__('L\'entreprise a été ajouté avec succès.'), ['page_reload' => $request->page_reload]);
+        if(!request()->ajax()) {
+            $notify[] = ['success', 'Le contenu a été ajouté avec succès.'];
+        return back()->withNotify($notify);
+        }else{
+            return Reply::successWithData(__('L\'entreprise a été ajouté avec succès.'), ['page_reload' => $request->page_reload]);
+        }
+        
     }
 
     public function formateurStaffIndex()
@@ -1011,5 +1017,9 @@ class SettingController extends Controller
     public function remorqueStatus($id)
     {
         return Remorque::changeStatus($id);
+    }
+    public function entrepriseStatus($id)
+    {
+        return Entreprise::changeStatus($id);
     }
 }
