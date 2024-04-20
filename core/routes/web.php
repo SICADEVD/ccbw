@@ -244,7 +244,8 @@ Route::middleware('auth')->group(function () {
             Route::post('transporteur/modal/store', [SettingController::class, 'transporteurModalStore'])->name('transporteurModal.store');
             Route::post('transporteur/status/{id}', [SettingController::class, 'transporteurStatus'])->name('transporteur.status');
             
-            Route::get('entreprise/', [SettingController::class, 'entrepriseIndex'])->name('entreprise.index');
+            Route::get('entreprise/modal', [SettingController::class, 'entrepriseModalIndex'])->name('entrepriseModal.index');
+            Route::get('entreprises/',[SettingController::class, 'entrepriseIndex'])->name('entreprise.index');
             Route::post('entreprise/store', [SettingController::class, 'entrepriseStore'])->name('entreprise.store');
         });
 

@@ -460,10 +460,21 @@ class SettingController extends Controller
 
         return Reply::successWithData(__('Le contenu a été ajouté avec succès.'), ['page_reload' => $request->page_reload]);
     }
-    public function entrepriseIndex()
+    public function entrepriseModalIndex()
     {
         $pageTitle = "Ajouter une entreprise";
         return view('manager.config.create-entreprise-modal', compact('pageTitle'));
+    }
+    public function entrepriseIndex(){
+        $pageTitle = "Manage des Transporteurs";
+        $manager = auth()->user();
+        $activeSettingMenu = 'entreprise_settings';
+        // $transporteurs = Entreprise::orderBy('id', 'desc')->paginate(getPaginate());
+        // $countries = Countrie::get();
+        // $niveaux = NiveauxEtude::get();
+        $entreprises = Entreprise::orderBy('id','desc')->paginate(getPaginate());
+        return view('manager.config.entreprise', compact('pageTitle', 'activeSettingMenu', 'entreprises'));
+
     }
     public function entrepriseStore(Request $request)
     {

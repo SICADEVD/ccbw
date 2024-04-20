@@ -24,6 +24,7 @@
     <x-setting-menu-item :active="$activeMenu" menu="localite_settings" :href="route('manager.settings.localite-settings.index')" :text="__('Localite')"/>
     <x-setting-menu-item :active="$activeMenu" menu="departement_settings" :href="route('manager.settings.departements.index')" :text="__('Départements')"/> 
     <x-setting-menu-item :active="$activeMenu" menu="designation_settings" :href="route('manager.settings.designations.index')" :text="__('Désignations')"/> 
+    <x-setting-menu-item :active="$activeMenu" menu="entreprise_settings" :href="route('manager.settings.entreprise.index')" :text="__('Entreprise')"/> 
     <x-setting-menu-item :active="$activeMenu" menu="magasinSection_settings" :href="route('manager.settings.magasinSection.index')" :text="__('Magasins Sections')"/> 
     <x-setting-menu-item :active="$activeMenu" menu="magasinCentral_settings" :href="route('manager.settings.magasinCentral.index')" :text="__('Magasins Centraux')"/>
     <x-setting-menu-item :active="$activeMenu" menu="transporteur_settings" :href="route('manager.settings.transporteur.index')" :text="__('Transporteurs')"/> 

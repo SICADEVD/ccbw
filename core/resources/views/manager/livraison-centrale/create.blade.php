@@ -321,7 +321,7 @@
             $(MODAL_XL).modal('show');
         });
         $('body').on('click', '.add-entreprise', function() {
-            var url = "{{ route('manager.settings.entreprise.index') }}";
+            var url = "{{ route('settings.entrepriseModal.index') }}";
 
             $(MODAL_XL + ' ' + MODAL_HEADING).html('...');
             $.ajaxModal(MODAL_XL, url);
