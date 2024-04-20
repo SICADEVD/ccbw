@@ -30,7 +30,7 @@ class HolidayController extends AccountBaseController
     public function index()
     {
          
-
+        $this->activeSettingMenu = 'holidays_settings';
         if (request('start') && request('end')) {
             $holidayArray = array();
 

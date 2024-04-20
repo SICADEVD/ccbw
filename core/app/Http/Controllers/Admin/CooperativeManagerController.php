@@ -44,15 +44,15 @@ class CooperativeManagerController extends Controller
 
         if ($request->id) {
             $validationRule = array_merge($validationRule, [
-                'email'    => 'required|email|max:40|unique:users,email,' . $request->id,
+                'email'    => 'required',
                 'username' => 'required|max:40|unique:users,username,' . $request->id,
-                'mobile'   => 'required|max:40|unique:users,mobile,' . $request->id,
+                'mobile'   => 'required',
             ]);
         } else {
             $validationRule = array_merge($validationRule, [
-                'email'    => 'required|email|max:40|unique:users',
+                'email'    => 'required',
                 'username' => 'required|max:40|unique:users',
-                'mobile'   => 'required|max:40|unique:users',
+                'mobile'   => 'required',
                 'password' => 'required|confirmed|min:4',
 
             ]);

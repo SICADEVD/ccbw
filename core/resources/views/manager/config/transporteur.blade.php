@@ -15,8 +15,14 @@
                         <table class="table table--light style--two">
                             <thead>
                                 <tr>
+<<<<<<< HEAD
                                     <th>@lang('Cooperative')</th>
                                     <th>@lang('Photo')</th>
+=======
+                                <th>@lang('Cooperative')</th> 
+                                <th>@lang('Entreprise')</th>
+                                <th>@lang('Photo')</th>
+>>>>>>> a5578d16ed2df909be1c3c3f5a52c9cb758cf3bd
                                     <th>@lang('Nom')</th>
                                     <th>@lang('Prenom')</th>
                                     <th>@lang('Sexe')</th>
@@ -31,6 +37,7 @@
                                 @forelse($transporteurs as $transporteur)
                                     <tr>
                                         <td>
+<<<<<<< HEAD
                                             <span>{{ $transporteur->cooperative->name }}</span>
                                         </td>
                                         <td>
@@ -42,6 +49,17 @@
                                             <span>{{ $transporteur->nom }}</span>
                                         </td>
 
+=======
+                                            <span>{{ $transporteur->entreprise->nom_entreprise }}</span>
+                                        </td> 
+                                        <td>
+                                        <img class="" src="{{ asset('core/storage/app/transporteur/' .$transporteur->photo) }}" alt="" width="200px">
+                                        </td> 
+                                    <td>
+                                            <span>{{  $transporteur->nom }}</span>
+                                        </td> 
+                                        
+>>>>>>> a5578d16ed2df909be1c3c3f5a52c9cb758cf3bd
                                         <td>
                                             <span>{{ __($transporteur->prenoms) }}</span>
                                         </td>
@@ -67,7 +85,13 @@
 
                                         <td>
                                             <button type="button" class="btn btn-sm btn-outline--primary  updateType"
+<<<<<<< HEAD
                                                 data-id="{{ $transporteur->id }}" data-nom="{{ $transporteur->nom }}"
+=======
+                                                data-id="{{ $transporteur->id }}" 
+                                                data-entreprise="{{ $transporteur->entreprise_id }}"
+                                                data-nom="{{ $transporteur->nom }}"
+>>>>>>> a5578d16ed2df909be1c3c3f5a52c9cb758cf3bd
                                                 data-prenoms="{{ $transporteur->prenoms }}"
                                                 data-sexe = "{{ $transporteur->sexe }}"
                                                 data-datenaiss = "{{ $transporteur->date_naiss }}"
@@ -280,6 +304,7 @@
             });
 
             $('.updateType').on('click', function() {
+<<<<<<< HEAD
                 var modal = $('#typeModel');
                 modal.find('input[name=id]').val($(this).data('id'));
                 modal.find('input[name=nom]').val($(this).data('nom'));
@@ -293,6 +318,22 @@
                 modal.find('select[name=type_piece]').val($(this).data('typepiece'));
                 modal.find('input[name=num_piece]').val($(this).data('numpiece'));
                 modal.find('input[name=num_permis]').val($(this).data('numpermis'));
+=======
+                var modal = $('#typeModel'); 
+                modal.find('input[name=id]').val($(this).data('id')); 
+                modal.find('select[name=entreprise_id]').val($(this).data('entreprise')); 
+                modal.find('input[name=nom]').val($(this).data('nom'));  
+                modal.find('input[name=prenoms]').val($(this).data('prenoms'));  
+                modal.find('input[name=sexe]').val($(this).data('sexe')); 
+                modal.find('input[name=date_naiss]').val($(this).data('datenaiss')); 
+                modal.find('input[name=phone1]').val($(this).data('phone1')); 
+                modal.find('input[name=phone2]').val($(this).data('phone2')); 
+                modal.find('select[name=nationalite]').val($(this).data('nationalite')); 
+                modal.find('select[name=niveau_etude]').val($(this).data('niveauetude')); 
+                modal.find('select[name=type_piece]').val($(this).data('typepiece')); 
+                modal.find('input[name=num_piece]').val($(this).data('numpiece')); 
+                modal.find('input[name=num_permis]').val($(this).data('numpermis'));  
+>>>>>>> a5578d16ed2df909be1c3c3f5a52c9cb758cf3bd
                 modal.modal('show');
             });
         })(jQuery);

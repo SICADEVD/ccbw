@@ -269,12 +269,12 @@
                         Auth::user()->can('manager.archivages.index'))
                     <li class="sidebar-menu-item sidebar-dropdown">
                         <a href="javascript:void(0)"
-                            class="{{ menuActive(['manager.hr.*', 'manager.employees.index', 'manager.holidays.*', 'manager.departments.*', 'manager.designations.*', 'manager.holidays.*', 'manager.leaves.*', 'manager.archivages.*', 'manager.formation-staff.*', 'presentation-coop.*'], 3) }}">
+                            class="{{ menuActive(['manager.hr.*', 'manager.employees.index', 'manager.departments.*', 'manager.designations.*', 'manager.leaves.*', 'manager.archivages.*', 'manager.formation-staff.*', 'presentation-coop.*'], 3) }}">
                             <i class="menu-icon las la-users"></i>
                             <span class="menu-title">@lang('Gouvernance Ameliorée') </span>
                         </a>
                         <div
-                            class="sidebar-submenu {{ menuActive(['manager.hr.*', 'manager.employees.*', 'manager.holidays.*', 'manager.departments.*', 'manager.designations.*', 'manager.holidays.*', 'manager.leaves.*', 'manager.archivages.*', 'manager.formation-staff.*', 'presentation-coop.*'], 2) }} ">
+                            class="sidebar-submenu {{ menuActive(['manager.hr.*', 'manager.employees.*', 'manager.departments.*', 'manager.designations.*', 'manager.leaves.*', 'manager.archivages.*', 'manager.formation-staff.*', 'presentation-coop.*'], 2) }} ">
                             <ul>
                                 @can('manager.presentation-coop.index')
                                     <li class="sidebar-menu-item {{ menuActive('manager.presentation-coop.index') }}">
@@ -307,15 +307,7 @@
                                             <span class="menu-title">@lang('Congés')</span>
                                         </a>
                                     </li>
-                                @endcan
-                                @can('manager.holidays.index')
-                                    <li class="sidebar-menu-item {{ menuActive('manager.holidays.index') }}">
-                                        <a href="{{ route('manager.holidays.index') }}" class="nav-link">
-                                            <i class="menu-icon las la-dot-circle"></i>
-                                            <span class="menu-title">@lang('Jours Fériés')</span>
-                                        </a>
-                                    </li>
-                                @endcan
+                                @endcan 
                                 @can('manager.formation-staff.index')
                                     <li class="sidebar-menu-item {{ menuActive('manager.formation-staff.*') }}">
                                         <a href="{{ route('manager.formation-staff.index') }}" class="nav-link">
@@ -379,7 +371,7 @@
                         </li>
                     @endcan
                     @can('manager.settings.cooperative-settings.index')
-                        <li class="sidebar-menu-item {{ menuActive('manager.settings.*') }}">
+                        <li class="sidebar-menu-item {{ menuActive(['manager.settings.*', 'manager.holidays.*']) }}">
                             <a href="{{ route('manager.settings.cooperative-settings.index') }}" class="nav-link">
                                 <i class="menu-icon las la-cogs"></i>
                                 <span class="menu-title">@lang('Paramètres')</span>

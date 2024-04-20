@@ -101,7 +101,7 @@
     });
 
     $('#save-leave-setting').click(function() {
-        console.log($('#createLeave').serialize())
+       // console.log($('#createLeave').serialize())
         $.easyAjax({
             container: '#createLeave',
             type: "POST",

@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Exports\ExportStaffs;
 use App\Models\User_localite;
+use App\Models\EmployeeDetail;
 use App\Models\MagasinSection;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
@@ -178,6 +179,20 @@ return $contents;
 
         if (!$request->id) {
 
+            if($staff->id) {
+                $lastEmployeeID = EmployeeDetail::where('cooperative_id', auth()->user()->cooperative_id)->count();
+                 if($lastEmployeeID){
+                        $lastEmployeeID = $lastEmployeeID+1;
+                    $employeeid = 'EMP-'.$lastEmployeeID;
+                    }else{
+                        $employeeid ="EMP-1";
+                    }
+                $employee = new EmployeeDetail();
+                $employee->user_id = $staff->id; 
+                $employee->employee_id =  $employeeid;
+                $employee->cooperative_id = $staff->cooperative_id; 
+                $employee->save(); 
+            }
             $staff->syncRoles($request->role);
 
             $id = $staff->id;
@@ -215,6 +230,7 @@ return $contents;
                     $i++;
                 }
             }
+
         }
 
         if (!$request->id) {

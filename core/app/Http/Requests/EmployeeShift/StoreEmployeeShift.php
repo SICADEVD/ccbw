@@ -27,8 +27,7 @@ class StoreEmployeeShift extends FormRequest
         $data = [];
         $data['office_start_time'] = 'required';
         $data['office_end_time'] = 'required';
-        $data['shift_short_code'] = 'required';
-        $data['color'] = 'required';
+        $data['shift_short_code'] = 'required'; 
         $data['late_mark_duration'] = 'required | integer | min:0';
         $data['clockin_in_day'] = 'required | integer | min:0';
 

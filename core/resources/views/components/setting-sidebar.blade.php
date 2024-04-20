@@ -23,15 +23,20 @@
     <x-setting-menu-item :active="$activeMenu" menu="section_settings" :href="route('manager.settings.section-settings.index')" :text="__('Section')"/>
     <x-setting-menu-item :active="$activeMenu" menu="localite_settings" :href="route('manager.settings.localite-settings.index')" :text="__('Localite')"/>
     <x-setting-menu-item :active="$activeMenu" menu="departement_settings" :href="route('manager.settings.departements.index')" :text="__('Départements')"/> 
+<<<<<<< HEAD
     <x-setting-menu-item :active="$activeMenu" menu="designation_settings" :href="route('manager.settings.designations.index')" :text="__('Désignations')"/> 
     <x-setting-menu-item :active="$activeMenu" menu="entreprise_settings" :href="route('manager.settings.entreprise.index')" :text="__('Entreprise')"/> 
+=======
+    <x-setting-menu-item :active="$activeMenu" menu="designation_settings" :href="route('manager.settings.designations.index')" :text="__('Postes occupés')"/> 
+    <x-setting-menu-item :active="$activeMenu" menu="attendance_settings" :href="route('manager.settings.attendance-settings.index')" :text="__('Présences')"/>
+    <x-setting-menu-item :active="$activeMenu" menu="leave_settings" :href="route('manager.settings.leaves-settings.index')" :text="__('Congés')"/>
+    <x-setting-menu-item :active="$activeMenu" menu="holidays_settings" :href="route('manager.holidays.index')" :text="__('Jours Fériés')"/>
+>>>>>>> a5578d16ed2df909be1c3c3f5a52c9cb758cf3bd
     <x-setting-menu-item :active="$activeMenu" menu="magasinSection_settings" :href="route('manager.settings.magasinSection.index')" :text="__('Magasins Sections')"/> 
     <x-setting-menu-item :active="$activeMenu" menu="magasinCentral_settings" :href="route('manager.settings.magasinCentral.index')" :text="__('Magasins Centraux')"/>
     <x-setting-menu-item :active="$activeMenu" menu="transporteur_settings" :href="route('manager.settings.transporteur.index')" :text="__('Transporteurs')"/> 
     <x-setting-menu-item :active="$activeMenu" menu="vehicule_settings" :href="route('manager.settings.vehicule.index')" :text="__('Véhicules')"/>
     <x-setting-menu-item :active="$activeMenu" menu="remorque_settings" :href="route('manager.settings.remorque.index')" :text="__('Remorques')"/>  
-    <x-setting-menu-item :active="$activeMenu" menu="attendance_settings" :href="route('manager.settings.attendance-settings.index')" :text="__('Présence')"/>
-    <x-setting-menu-item :active="$activeMenu" menu="leave_settings" :href="route('manager.settings.leaves-settings.index')" :text="__('Congé')"/>
     <x-setting-menu-item :active="$activeMenu" menu="travauxDangereux_settings" :href="route('manager.settings.travauxDangereux.index')" :text="__('Travaux Dangereux')"/>
     <x-setting-menu-item :active="$activeMenu" menu="travauxLegers_settings" :href="route('manager.settings.travauxLegers.index')" :text="__('Travaux Legers')"/>
     <x-setting-menu-item :active="$activeMenu" menu="arretEcole_settings" :href="route('manager.settings.arretEcole.index')" :text="__('Arrets Ecole')"/>

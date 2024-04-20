@@ -485,6 +485,7 @@ class SettingController extends Controller
             'mail_entreprise'  => 'required|email|unique:entreprises,mail_entreprise',
         ]);
         $entreprise = new Entreprise();
+        $entreprise->cooperative_id = auth()->user()->cooperative_id;
         $entreprise->nom_entreprise = trim($request->nom_entreprise);
         $entreprise->mail_entreprise = trim($request->mail_entreprise);
         $entreprise->telephone_entreprise = trim($request->telephone_entreprise);
@@ -531,7 +532,7 @@ class SettingController extends Controller
     {
         $pageTitle = "Manage Départements";
         $activeSettingMenu = 'departement_settings';
-        $departements     = Department::orderBy('id', 'desc')->paginate(getPaginate());
+        $departements     = Department::where('cooperative_id',auth()->user()->cooperative_id)->orderBy('id', 'desc')->paginate(getPaginate());
         return view('manager.config.departement', compact('pageTitle', 'departements', 'activeSettingMenu'));
     }
     public function departementStore(Request $request)
@@ -557,8 +558,8 @@ class SettingController extends Controller
     {
         $pageTitle = "Manage Désignations";
         $activeSettingMenu = 'designation_settings';
-        $departements = Department::get();
-        $designations     = Designation::orderBy('id', 'desc')->paginate(getPaginate());
+        $departements = Department::where('cooperative_id',auth()->user()->cooperative_id)->get();
+        $designations     = Designation::where('cooperative_id',auth()->user()->cooperative_id)->orderBy('id', 'desc')->paginate(getPaginate());
         return view('manager.config.designation', compact('pageTitle', 'departements', 'designations', 'activeSettingMenu'));
     }
     public function designationStore(Request $request)
@@ -578,16 +579,16 @@ class SettingController extends Controller
         $designation->name = trim($request->nom);
         $designation->parent_id = trim($request->departement_id);
         $designation->save();
-        if ($designation != null) {
-            if ($request->id) {
-                $role = Role::where('name', $request->nom)->first();
-                if ($role == null) {
-                    $role = Role::create(['name' => trim($request->nom)]);
-                }
-            } else {
-                $role = Role::create(['name' => trim($request->nom)]);
-            }
-        }
+        // if($designation != null) {
+        //     if ($request->id) {
+        //         $role = Role::where('name', $request->nom)->first();
+        //         if ($role == null) {
+        //             $role = Role::create(['name' => trim($request->nom)]);
+        //         }
+        //     } else {
+        //         $role = Role::create(['name' => trim($request->nom)]);
+        //     }
+        // }
         $notify[] = ['success', isset($message) ? $message  : 'Le contenu a été ajouté avec succès.'];
         return back()->withNotify($notify);
     }
@@ -712,6 +713,7 @@ class SettingController extends Controller
         $activeSettingMenu = 'magasinCentral_settings';
         $users = User::whereHas('roles', function ($q) {
             $q->where('name', 'Magasinier');
+            $q->Orwhere('name', 'Magasinier Central');
         })
             ->where('cooperative_id', $manager->cooperative_id)
             ->select('id', DB::raw("CONCAT(lastname,' ', firstname) as nom"))
@@ -815,7 +817,7 @@ class SettingController extends Controller
     public function transporteurModalIndex()
     {
         $pageTitle = "Ajouter un transporteur";
-        $entreprises = Entreprise::get();
+        $entreprises = Entreprise::where('cooperative_id',auth()->user()->cooperative_id)->get();
         $countries = Countrie::get();
         $niveaux = NiveauxEtude::get();
         return view('manager.config.create-transporteur-modal', compact('pageTitle', 'entreprises', 'countries', 'niveaux'));
@@ -826,10 +828,10 @@ class SettingController extends Controller
         $pageTitle = "Manage des Transporteurs";
         $manager = auth()->user();
         $activeSettingMenu = 'transporteur_settings';
-        $transporteurs = Transporteur::orderBy('id', 'desc')->paginate(getPaginate());
+        $transporteurs = Transporteur::where('cooperative_id',auth()->user()->cooperative_id)->orderBy('id', 'desc')->paginate(getPaginate());
         $countries = Countrie::get();
         $niveaux = NiveauxEtude::get();
-        $entreprises = Entreprise::get();
+        $entreprises = Entreprise::where('cooperative_id',auth()->user()->cooperative_id)->get();
         return view('manager.config.transporteur', compact('pageTitle', 'transporteurs', 'activeSettingMenu', 'countries', 'niveaux', 'entreprises'));
     }
     public function transporteurStore(Request $request)

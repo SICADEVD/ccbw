@@ -77,13 +77,13 @@ class EmployeeController extends AccountBaseController
      */
     public function index(EmployeesDataTable $dataTable)
     {  
-        
-        
-        if (!request()->ajax()) {
-            $this->employees = User::with('employeeDetail')->get();
+       
+        if(!request()->ajax()) {
+
+            $this->employees = User::where('cooperative_id',auth()->user()->cooperative_id)->with('employeeDetail')->get();
             $this->skills = Skill::all();
-            $this->departments = Department::all();
-            $this->designations = Designation::allDesignations();
+            $this->departments = Department::where('cooperative_id',auth()->user()->cooperative_id)->get();
+            $this->designations = Designation::where('cooperative_id',auth()->user()->cooperative_id)->get();
             
             $this->totalEmployees = 0; 
          
@@ -158,14 +158,15 @@ class EmployeeController extends AccountBaseController
             }
 
             
-            $lastEmployeeID = EmployeeDetail::count();
+            $lastEmployeeID = EmployeeDetail::where('cooperative_id', auth()->user()->cooperative_id)->count();
         // $this->checkifExistEmployeeId =  EmployeeDetail::select('id')->where('employee_id', ($lastEmployeeID + 1))->first();
-        if($lastEmployeeID){
-            $lastEmployeeID = $lastEmployeeID+1;
-           $employeeid = 'EMP-'.$lastEmployeeID;
-        }else{
-            $employeeid ="EMP-1";
-        }
+        
+            if($lastEmployeeID){
+                $lastEmployeeID = $lastEmployeeID+1;
+            $employeeid = 'EMP-'.$lastEmployeeID;
+            }else{
+                $employeeid ="EMP-1";
+            }
   
             $user->save();
             

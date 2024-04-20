@@ -34,10 +34,10 @@
                                 href="{{ route('manager.settings.leaves-settings.index') }}?tab=type" role="tab" aria-controls="nav-type"
                                 aria-selected="true">@lang($pageTitle)</a>
 
-                            <a class="nav-item nav-link f-15 general" data-toggle="tab"
+                            <!-- <a class="nav-item nav-link f-15 general" data-toggle="tab"
                                 href="{{ route('manager.settings.leaves-settings.index') }}?tab=general" role="tab"
                                 aria-controls="nav-general"
-                                aria-selected="false">@lang('app.menu.leaveGeneralSettings')</a>
+                                aria-selected="false">@lang('app.menu.leaveGeneralSettings')</a> -->
 
                         </div>
                     </nav>

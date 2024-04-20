@@ -55,8 +55,8 @@ class AttendanceController extends AccountBaseController
         $now = now();
         $this->year = $now->format('Y');
         $this->month = $now->format('m');
-        $this->departments = Department::all();
-        $this->designations = Designation::all();
+        $this->departments = Department::where('cooperative_id',auth()->user()->cooperative_id)->get();
+        $this->designations = Designation::where('cooperative_id',auth()->user()->cooperative_id)->get();
          
 
         return view('manager.attendances.index', $this->data);
@@ -702,13 +702,13 @@ class AttendanceController extends AccountBaseController
     public function create()
     {
          
-        $this->employees = User::with('employeeDetail')->get();
+        $this->employees = User::where('cooperative_id',auth()->user()->cooperative_id)->with('employeeDetail')->get();
         
-        $this->departments = Department::get();
+        $this->departments = Department::where('cooperative_id',auth()->user()->cooperative_id)->get();
         $this->pageTitle = __('modules.attendance.markAttendance');
         $this->year = now()->format('Y');
         $this->month = now()->format('m');
-        $this->location = CooperativeAddress::all();
+        $this->location = CooperativeAddress::where('cooperative_id',auth()->user()->cooperative_id)->get();
 
         if (request()->ajax()) {
             $html = view('manager.attendances.ajax.create', $this->data)->render();
