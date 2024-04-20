@@ -169,7 +169,7 @@
             $('.updateType').on('click', function() {
                 var modal = $('#typeModel');
                 modal.find('input[name=id]').val($(this).data('id'));
-                modal.find('input[name=marque]').val($(this).data('marque'));
+                modal.find('select[name=marque]').val($(this).data('marque'));
                 modal.find('input[name=matricule]').val($(this).data('matricule'));
                 //modal.find('input[name=remorque]').val($(this).data('remorque'));
                 modal.modal('show');
