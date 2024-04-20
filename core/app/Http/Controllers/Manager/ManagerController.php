@@ -14,6 +14,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\LivraisonInfo;
 use App\Models\TypeFormation;
+use App\Models\EmployeeDetail;
 use App\Models\FormationStaff;
 use App\Models\SuiviFormation;
 use App\Models\SupportMessage; 
@@ -125,6 +126,27 @@ $producteurparGenreCertification = Producteur_certification::joinRelationship('p
                                 ->groupBy('producteur_certifications.certification','producteurs.sexe')
                                 ->get();
  
+    $staffs = User::where('cooperative_id', auth()->user()->cooperative_id)->get();
+    foreach($staffs as $staff){
+        if($staff->id) {
+            $employee = EmployeeDetail::where('user_id',$staff->id)->first();
+            if($employee ==null){
+                $lastEmployeeID = EmployeeDetail::where('cooperative_id', auth()->user()->cooperative_id)->count();
+                if($lastEmployeeID){
+                       $lastEmployeeID = $lastEmployeeID+1;
+                   $employeeid = 'EMP-'.$lastEmployeeID;
+                   }else{
+                       $employeeid ="EMP-1";
+                   }
+               $employee = new EmployeeDetail();
+               $employee->user_id = $staff->id; 
+               $employee->employee_id =  $employeeid;
+               $employee->cooperative_id = $staff->cooperative_id; 
+               $employee->save(); 
+            }
+            
+        }
+    }
 
         return view('manager.dashboard', compact('pageTitle','nbproducteur','nbparcelle','nbinspection','nbarbredistribue', 'genre','parcelle','formation','modules','parcellespargenre','producteurparcertification','producteurparGenreCertification'));
     }
