@@ -155,8 +155,8 @@ Route::middleware('auth')->group(function () {
  
 
         Route::name('settings.')->prefix('settings')->group(function () {
-            Route::resource('attendance-settings', AttendanceSettingController::class);
-            Route::resource('leaves-settings', LeaveSettingController::class);
+            Route::resource('attendance-settings', AttendanceSettingController::class); 
+            Route::resource('leaves-settings', LeaveSettingController::class); 
             Route::resource('cooperative-settings', CooperativeSettingController::class);
             Route::resource('durabilite-settings', ProgrammeSettingController::class);
             Route::post('/uploadcontent/section', [SectionSettingController::class,'uploadContent'])->name('section-settings.uploadcontent');

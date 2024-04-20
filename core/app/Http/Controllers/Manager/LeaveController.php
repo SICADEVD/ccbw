@@ -27,7 +27,7 @@ class LeaveController extends AccountBaseController
     public function __construct()
     {
         parent::__construct();
-        $this->pageTitle = 'Leaves'; 
+        $this->pageTitle = 'Congés'; 
     }
 
     /**

@@ -31,7 +31,7 @@ class EmployeeShiftController extends AccountBaseController
         $setting = new EmployeeShift();
         $setting->shift_name = $request->shift_name;
         $setting->shift_short_code = $request->shift_short_code;
-        $setting->color = $request->color;
+        $setting->color = $request->color ?? '#99C7F1';
         $setting->office_start_time = Carbon::createFromFormat('H:i', $request->office_start_time);
         $setting->office_end_time = Carbon::createFromFormat('H:i', $request->office_end_time);
         $setting->halfday_mark_time = Carbon::createFromFormat('H:i', $request->halfday_mark_time);
@@ -46,8 +46,10 @@ class EmployeeShiftController extends AccountBaseController
 
     public function edit($id)
     {
-        $this->employeeShift = EmployeeShift::findOrFail($id);
-        $this->openDays = json_decode($this->employeeShift->office_open_days);
+        $employeeShift = EmployeeShift::findOrFail($id);
+         $this->employeeShift = $employeeShift;
+        
+        $this->openDays = json_decode($employeeShift->office_open_days);
         return view('manager.employee-shifts.edit', $this->data);
     }
 
@@ -70,20 +72,23 @@ class EmployeeShiftController extends AccountBaseController
 
     public function update(StoreEmployeeShift $request, $id)
     {
+        
         $setting = EmployeeShift::findOrFail($id);
         $setting->shift_name = $request->shift_name;
         $setting->shift_short_code = $request->shift_short_code;
-        $setting->color = $request->color;
+        $setting->color = $request->color ?? '#99C7F1';
         $setting->office_start_time = Carbon::createFromFormat('H:i', $request->office_start_time);
         $setting->office_end_time = Carbon::createFromFormat('H:i', $request->office_end_time);
-        $setting->halfday_mark_time = Carbon::createFromFormat('H:i', $request->halfday_mark_time);
+        $setting->halfday_mark_time = isset($request->halfday_mark_time) ? Carbon::createFromFormat('H:i', $request->halfday_mark_time) : $setting->halfday_mark_time;
         $setting->late_mark_duration = $request->late_mark_duration;
         $setting->clockin_in_day = $request->clockin_in_day;
         $setting->office_open_days = json_encode($request->office_open_days);
         $setting->early_clock_in = $request->early_clock_in;
         $setting->save();
         session()->forget('attendance_setting');
-        return Reply::success(__('messages.updateSuccess'));
+        $notify[] = ['success', "L'horaire de travail a été crée avec succès."];
+        return back()->withNotify($notify);
+       //return Reply::success(__('messages.updateSuccess'));
     }
 
     public function index()

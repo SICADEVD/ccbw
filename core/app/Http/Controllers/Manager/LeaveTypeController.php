@@ -43,9 +43,11 @@ class LeaveTypeController extends AccountBaseController
      */
     public function store(StoreLeaveType $request)
     {
+         
         $leaveType = new LeaveType();
         $leaveType->type_name = $request->type_name;
-        $leaveType->color = $request->color;
+        $leaveType->cooperative_id = auth()->user()->cooperative_id;
+        $leaveType->color = $request->color ?? '#000000';
         $leaveType->paid = $request->paid;
         $leaveType->no_of_leaves = $request->leave_number;
         $leaveType->monthly_limit = $request->monthly_limit;
@@ -65,8 +67,9 @@ class LeaveTypeController extends AccountBaseController
         $leaveTypes = LeaveType::get();
 
         $options = BaseModel::options($leaveTypes, $leaveType, 'type_name');
-
-        return Reply::successWithData(__('messages.leaveTypeAdded'), ['data' => $options, 'page_reload' => $request->page_reload]);
+        $notify[] = ['success', 'Le congé a été crée avec succès.'];
+        return back()->withNotify($notify);
+        // return Reply::successWithData(__('messages.leaveTypeAdded'), ['data' => $options, 'page_reload' => $request->page_reload]);
     }
 
     /**

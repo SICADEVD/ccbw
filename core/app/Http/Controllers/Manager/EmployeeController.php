@@ -77,13 +77,13 @@ class EmployeeController extends AccountBaseController
      */
     public function index(EmployeesDataTable $dataTable)
     {  
-        
-        
+       
         if (!request()->ajax()) {
-            $this->employees = User::with('employeeDetail')->get();
+
+            $this->employees = User::where('cooperative_id',auth()->user()->cooperative_id)->with('employeeDetail')->get();
             $this->skills = Skill::all();
-            $this->departments = Department::all();
-            $this->designations = Designation::allDesignations();
+            $this->departments = Department::where('cooperative_id',auth()->user()->cooperative_id)->get();
+            $this->designations = Designation::where('cooperative_id',auth()->user()->cooperative_id)->get();
             
             $this->totalEmployees = 0; 
          

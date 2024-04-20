@@ -148,9 +148,9 @@ class CooperativeController extends Controller
         $employeeShift->saveQuietly();
 
         $employeeShift = new EmployeeShift();
-        $employeeShift->shift_name = 'General Shift';
+        $employeeShift->shift_name = 'Horaires de Travail';
         $employeeShift->cooperative_id = $cooperative->id;
-        $employeeShift->shift_short_code = 'GS';
+        $employeeShift->shift_short_code = 'HT';
         $employeeShift->color = '#99C7F1';
         $employeeShift->office_start_time = '08:00:00';
         $employeeShift->office_end_time = '18:00:00';
@@ -182,8 +182,7 @@ class CooperativeController extends Controller
             ['type_name' => 'Maladie', 'color' => '#DB1313', 'cooperative_id' => $cooperative->id, 'gender' => json_encode($gender), 'marital_status' => json_encode($maritalstatus), 'role' => ''],
             ['type_name' => 'Deuil', 'color' => '#B078C6', 'cooperative_id' => $cooperative->id, 'gender' => json_encode($gender), 'marital_status' => json_encode($maritalstatus), 'role' => ''],
             ['type_name' => 'Maternite', 'color' => '#B078C6', 'cooperative_id' => $cooperative->id, 'gender' => json_encode($gender), 'marital_status' => json_encode($maritalstatus), 'role' => ''],
-            ['type_name' => 'Parternite', 'color' => '#B078C6', 'cooperative_id' => $cooperative->id, 'gender' => json_encode($gender), 'marital_status' => json_encode($maritalstatus), 'role' => ''], 
-            ['type_name' => 'Compensation', 'color' => '#B078C6', 'cooperative_id' => $cooperative->id, 'gender' => json_encode($gender), 'marital_status' => json_encode($maritalstatus), 'role' => '']
+            ['type_name' => 'Parternite', 'color' => '#B078C6', 'cooperative_id' => $cooperative->id, 'gender' => json_encode($gender), 'marital_status' => json_encode($maritalstatus), 'role' => '']
         ];
 
         LeaveType::insert($status);

@@ -16,6 +16,7 @@
                             <thead>
                                 <tr>
                                 <th>@lang('Cooperative')</th> 
+                                <th>@lang('Entreprise')</th>
                                 <th>@lang('Photo')</th>
                                     <th>@lang('Nom')</th>
                                     <th>@lang('Prenom')</th>
@@ -32,6 +33,9 @@
                                     <tr>
                                     <td>
                                             <span>{{ $transporteur->cooperative->name }}</span>
+                                        </td> 
+                                        <td>
+                                            <span>{{ $transporteur->entreprise->nom_entreprise }}</span>
                                         </td> 
                                         <td>
                                         <img class="" src="{{ asset('core/storage/app/transporteur/' .$transporteur->photo) }}" alt="" width="200px">
@@ -66,6 +70,7 @@
                                         <td>
                                             <button type="button" class="btn btn-sm btn-outline--primary  updateType"
                                                 data-id="{{ $transporteur->id }}" 
+                                                data-entreprise="{{ $transporteur->entreprise_id }}"
                                                 data-nom="{{ $transporteur->nom }}"
                                                 data-prenoms="{{ $transporteur->prenoms }}"
                                                 data-sexe = "{{ $transporteur->sexe }}"
@@ -272,6 +277,7 @@
             $('.updateType').on('click', function() {
                 var modal = $('#typeModel'); 
                 modal.find('input[name=id]').val($(this).data('id')); 
+                modal.find('select[name=entreprise_id]').val($(this).data('entreprise')); 
                 modal.find('input[name=nom]').val($(this).data('nom'));  
                 modal.find('input[name=prenoms]').val($(this).data('prenoms'));  
                 modal.find('input[name=sexe]').val($(this).data('sexe')); 

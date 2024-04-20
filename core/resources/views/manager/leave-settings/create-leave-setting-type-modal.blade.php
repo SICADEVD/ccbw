@@ -5,7 +5,9 @@
 </div>
 <div class="modal-body">
     <div class="portlet-body">
-        <x-form id="createLeave" method="POST" class="ajax-form">
+        <!-- <x-form id="createLeave" method="POST" class="ajax-form"> -->
+        <form action="{{route('manager.leaveType.store')}}" method="POST">
+        @csrf
             <div class="tabs border-bottom-grey">
                 <div class="nav" id="nav-tab">
                     <a class="nav-item nav-link f-15 type active" data-toggle="tab" href="#personal" role="tab" aria-controls="nav-type" aria-selected="true">@lang('app.general')</a>
@@ -50,7 +52,7 @@
             
                             <div class="col-lg-4">
                                 <div class="form-group my-3">
-                                    <x-forms.label fieldId="colorselector" fieldRequired="true"
+                                    <x-forms.label fieldId="colorselector"  
                                         :fieldLabel="__('modules.sticky.colors')">
                                     </x-forms.label>
                                     <x-forms.input-group id="colorpicker">
@@ -140,8 +142,8 @@
                                     </x-forms.label>
                                     &nbsp;<i class="fa fa-question-circle text-dark-grey" data-toggle="popover" data-placement="top" data-html="true"
                                             data-content="{{__('messages.leave.gender')}}" data-trigger="hover"></i>
-                                    <select class="form-control multiple-option select-picker" multiple name="gender[]"
-                                        id="gender" data-live-search="true" data-size="8">
+                                    <select class="form-control" multiple name="gender[]"
+                                        id="gender">
                                         <option value="Homme" selected>@lang('app.male')</option>
                                         <option value="Femme" selected>@lang('app.female')</option> 
                                 </select>
@@ -153,8 +155,8 @@
                                     </x-forms.label>
                                     &nbsp;<i class="fa fa-question-circle text-dark-grey" data-toggle="popover" data-placement="top" data-html="true"
                                             data-content="{{__('messages.leave.maritalStatus')}}" data-trigger="hover"></i>
-                                    <select class="form-control multiple-option select-picker" multiple name="marital_status[]"
-                                        id="marital_status" data-live-search="true" data-size="8">
+                                    <select class="form-control" multiple name="marital_status[]"
+                                        id="marital_status">
                                         <option value="married" selected>@lang('modules.leaves.married')</option>
                                         <option value="unmarried" selected>@lang('modules.leaves.unmarried')</option>
                                     </select>
@@ -166,8 +168,8 @@
                                     </x-forms.label>
                                     &nbsp;<i class="fa fa-question-circle text-dark-grey" data-toggle="popover" data-placement="top" data-html="true"
                                             data-content="{{__('messages.leave.department')}}" data-trigger="hover"></i>
-                                    <select class="form-control multiple-option select-picker" multiple name="department[]"
-                                            id="department" data-live-search="true" data-size="8">
+                                    <select class="form-control" multiple name="department[]"
+                                            id="department">
                                         @foreach ($teams as $team)
                                             <option value="{{ $team->id }}" selected>{{ $team->department }}</option>
                                         @endforeach
@@ -180,8 +182,8 @@
                                     </x-forms.label>
                                     &nbsp;<i class="fa fa-question-circle text-dark-grey" data-toggle="popover" data-placement="top" data-html="true"
                                             data-content="{{__('messages.leave.designation')}}" data-trigger="hover"></i>
-                                    <select class="form-control multiple-option select-picker" multiple name="designation[]"
-                                            id="designation" data-live-search="true" data-size="8">
+                                    <select class="form-control" multiple name="designation[]"
+                                            id="designation">
                                         @foreach ($designations as $designation)
                                             <option value="{{ $designation->id }}" selected>{{ $designation->name }}</option>
                                         @endforeach
@@ -193,13 +195,18 @@
                     </div>
 
             </div>
-        </x-form>
-       
-    </div>
-</div>
-<div class="modal-footer">
+            <div class="modal-footer">
  
     <x-forms.button-cancel data-dismiss="modal" class="border-0 mr-3">@lang('app.cancel')</x-forms.button-cancel>
-    <x-forms.button-primary id="save-leave-setting" icon="check">@lang('app.save')</x-forms.button-primary>
+    <!-- <x-forms.button-primary id="save-leave-setting" icon="check">@lang('app.save')</x-forms.button-primary> -->
+    <button type="submit" class="btn-primary rounded f-14 p-2" >
+            <svg class="svg-inline--fa fa-check fa-w-16 mr-1" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="check" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"></path></svg><!-- <i class="fa fa-check mr-1"></i> Font Awesome fontawesome.com -->
+        Enregistrer
+</button>
+</div>
+        </form>
+        <!-- </x-form> -->
+       
+    </div>
 </div>
  

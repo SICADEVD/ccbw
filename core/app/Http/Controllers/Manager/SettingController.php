@@ -567,16 +567,16 @@ class SettingController extends Controller
         $designation->name = trim($request->nom);
         $designation->parent_id = trim($request->departement_id);
         $designation->save();
-        if ($designation != null) {
-            if ($request->id) {
-                $role = Role::where('name', $request->nom)->first();
-                if ($role == null) {
-                    $role = Role::create(['name' => trim($request->nom)]);
-                }
-            } else {
-                $role = Role::create(['name' => trim($request->nom)]);
-            }
-        }
+        // if($designation != null) {
+        //     if ($request->id) {
+        //         $role = Role::where('name', $request->nom)->first();
+        //         if ($role == null) {
+        //             $role = Role::create(['name' => trim($request->nom)]);
+        //         }
+        //     } else {
+        //         $role = Role::create(['name' => trim($request->nom)]);
+        //     }
+        // }
         $notify[] = ['success', isset($message) ? $message  : 'Le contenu a été ajouté avec succès.'];
         return back()->withNotify($notify);
     }
