@@ -299,21 +299,6 @@
             });
 
             $('.updateType').on('click', function() {
-<<<<<<< HEAD
-                var modal = $('#typeModel');
-                modal.find('input[name=id]').val($(this).data('id'));
-                modal.find('input[name=nom]').val($(this).data('nom'));
-                modal.find('input[name=prenoms]').val($(this).data('prenoms'));
-                modal.find('input[name=sexe]').val($(this).data('sexe'));
-                modal.find('input[name=date_naiss]').val($(this).data('datenaiss'));
-                modal.find('input[name=phone1]').val($(this).data('phone1'));
-                modal.find('input[name=phone2]').val($(this).data('phone2'));
-                modal.find('select[name=nationalite]').val($(this).data('nationalite'));
-                modal.find('select[name=niveau_etude]').val($(this).data('niveauetude'));
-                modal.find('select[name=type_piece]').val($(this).data('typepiece'));
-                modal.find('input[name=num_piece]').val($(this).data('numpiece'));
-                modal.find('input[name=num_permis]').val($(this).data('numpermis'));
-=======
                 var modal = $('#typeModel'); 
                 modal.find('input[name=id]').val($(this).data('id')); 
                 modal.find('select[name=entreprise_id]').val($(this).data('entreprise')); 
@@ -328,7 +313,6 @@
                 modal.find('select[name=type_piece]').val($(this).data('typepiece')); 
                 modal.find('input[name=num_piece]').val($(this).data('numpiece')); 
                 modal.find('input[name=num_permis]').val($(this).data('numpermis'));  
->>>>>>> a5578d16ed2df909be1c3c3f5a52c9cb758cf3bd
                 modal.modal('show');
             });
         })(jQuery);
