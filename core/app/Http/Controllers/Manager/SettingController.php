@@ -466,13 +466,16 @@ class SettingController extends Controller
         return view('manager.config.create-entreprise-modal', compact('pageTitle'));
     }
     public function entrepriseIndex(){
-        $pageTitle = "Manage des Transporteurs";
+        $manager = auth()->user();
+        $pageTitle = "Manage des Entreprises";
         $manager = auth()->user();
         $activeSettingMenu = 'entreprise_settings';
         // $transporteurs = Entreprise::orderBy('id', 'desc')->paginate(getPaginate());
         // $countries = Countrie::get();
         // $niveaux = NiveauxEtude::get();
-        $entreprises = Entreprise::orderBy('id','desc')->paginate(getPaginate());
+        //$entreprises = Entreprise::orderBy('id','desc')->paginate(getPaginate());
+        $entreprises = Entreprise::joinRelationship('cooperative')->where('cooperative_id', $manager->cooperative_id)->paginate(getPaginate());
+
         return view('manager.config.entreprise', compact('pageTitle', 'activeSettingMenu', 'entreprises'));
 
     }
