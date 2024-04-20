@@ -110,7 +110,7 @@
                         <div class="form-group row">
                             <label class="col-sm-4 control-label">@lang('Marque de Véhicule')</label>
                             <div class="col-xs-12 col-sm-8">
-                                <select class="form-control select-picker" data-live-search="true" name="marque"
+                                <select class="form-control" data-live-search="true" name="marque"
                                     id="marque" required>
                                     <option value="">@lang('Selectionner une option')</option>
                                     @foreach ($marques as $marque)
