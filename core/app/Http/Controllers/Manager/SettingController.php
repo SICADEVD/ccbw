@@ -521,7 +521,7 @@ class SettingController extends Controller
     {
         $pageTitle = "Manage Départements";
         $activeSettingMenu = 'departement_settings';
-        $departements     = Department::orderBy('id', 'desc')->paginate(getPaginate());
+        $departements     = Department::where('cooperative_id',auth()->user()->cooperative_id)->orderBy('id', 'desc')->paginate(getPaginate());
         return view('manager.config.departement', compact('pageTitle', 'departements', 'activeSettingMenu'));
     }
     public function departementStore(Request $request)
@@ -547,8 +547,8 @@ class SettingController extends Controller
     {
         $pageTitle = "Manage Désignations";
         $activeSettingMenu = 'designation_settings';
-        $departements = Department::get();
-        $designations     = Designation::orderBy('id', 'desc')->paginate(getPaginate());
+        $departements = Department::where('cooperative_id',auth()->user()->cooperative_id)->get();
+        $designations     = Designation::where('cooperative_id',auth()->user()->cooperative_id)->orderBy('id', 'desc')->paginate(getPaginate());
         return view('manager.config.designation', compact('pageTitle', 'departements', 'designations', 'activeSettingMenu'));
     }
     public function designationStore(Request $request)
