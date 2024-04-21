@@ -246,11 +246,14 @@
                  
                     $i++;
                     $coords2 = explode(',', $data2); 
-                    if($i==$nombre){
-                        $polygon .='{ lat: ' . round($coords2[1], 6) . ', lng: ' . round($coords2[0], 6) . ' }';
-                    }else{
-                        $polygon .='{ lat: ' . round($coords2[1], 6) . ', lng: ' . round($coords2[0], 6) . ' },';
-                    } 
+                    if(is_numeric($coords2) && is_numeric($coords2[0]))
+                    {
+                        if($i==$nombre){
+                            $polygon .='{ lat: ' . round($coords2[1], 6) . ', lng: ' . round($coords2[0], 6) . ' }';
+                        }else{
+                            $polygon .='{ lat: ' . round($coords2[1], 6) . ', lng: ' . round($coords2[0], 6) . ' },';
+                        } 
+                    }
                 
             }
             
