@@ -129,18 +129,20 @@ $producteurparGenreCertification = Producteur_certification::joinRelationship('p
     $staffs = User::where('cooperative_id', auth()->user()->cooperative_id)->get();
     foreach($staffs as $staff){
         if($staff->id) {
+              
             $employee = EmployeeDetail::where('user_id',$staff->id)->first();
             if($employee ==null){
                 $lastEmployeeID = EmployeeDetail::where('cooperative_id', auth()->user()->cooperative_id)->count();
-                if($lastEmployeeID){
-                       $lastEmployeeID = $lastEmployeeID+1;
-                   $employeeid = 'EMP-'.$lastEmployeeID;
-                   }else{
-                       $employeeid ="EMP-1";
-                   }
+               
+                // if($lastEmployeeID){ 
+                //        $lastEmployeeID = $lastEmployeeID+1;
+                //    $employeeid = cooperative()->codeApp.'-'.$lastEmployeeID;
+                //    }else{
+                //        $employeeid =cooperative()->codeApp."-1";
+                //    }
                $employee = new EmployeeDetail();
                $employee->user_id = $staff->id; 
-               $employee->employee_id =  $employeeid;
+               $employee->employee_id =  null;
                $employee->cooperative_id = $staff->cooperative_id; 
                $employee->save(); 
             }
