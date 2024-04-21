@@ -228,29 +228,44 @@
                
                 $pointsCoordinates = "['".$proprietaire."',".$long.",".$lat."]";
          $polygon =''; 
-         $coords = Str::replace(",0,",",0 ", $parcelle->waypoints);
-            $coords = explode(" ", $coords);
-            
-            // $coords = Arr::where($coords, function ($value, $key) {
-            //     if($value !="")
-            //     {
-            //         return  $value;
-            //     }
-                
-            // });
-             
+
+         $dataArray = explode(",", $parcelle->waypoints); 
+         // Initialise la chaîne de sortie
+         $outputString = "0 "; 
+         // Parcours chaque élément et ajoute le format souhaité
+         for ($i = 0; $i < count($dataArray); $i += 3) {
+            $outputString .= trim($dataArray[$i]) . "," . trim($dataArray[$i + 1]) . "," . trim($dataArray[$i + 2]) . " ";
+        }
+        $coords = rtrim($outputString, ", ");
+        //  dd($outputString);
+        //  $coords = Str::replace(",0,",",0 ", $parcelle->waypoints);
+         
+            $coords = explode(" ", $coords); 
              
              $nombre = count($coords); 
              $i=0;
+             
             foreach($coords as $data2) {
-                 
+                
                     $i++;
-                    $coords2 = explode(',', $data2); 
-                    if($i==$nombre){
-                        $polygon .='{ lat: ' . round($coords2[1], 6) . ', lng: ' . round($coords2[0], 6) . ' }';
-                    }else{
-                        $polygon .='{ lat: ' . round($coords2[1], 6) . ', lng: ' . round($coords2[0], 6) . ' },';
-                    } 
+                    $coords2 = explode(',', $data2);
+                    
+                    if(count($coords2)==3) 
+                    {
+                        
+                        $coordo1 = isset($coords2[1]) ? $coords2[1] : null;
+                        $coordo2 = isset($coords2[0]) ? $coords2[0] : null;
+                        if($i==$nombre){
+                            $polygon .='{ lat: ' . $coordo1 . ', lng: ' . $coordo2 . ' }';
+                        }else{
+                            $polygon .='{ lat: ' . $coordo1 . ', lng: ' . $coordo2 . ' },';
+                        } 
+                    }
+                    // if($i==$nombre){
+                    //     $polygon .='{ lat: ' . round($coords2[1], 6) . ', lng: ' . round($coords2[0], 6) . ' }';
+                    // }else{
+                    //     $polygon .='{ lat: ' . round($coords2[1], 6) . ', lng: ' . round($coords2[0], 6) . ' },';
+                    // } 
                 
             }
             

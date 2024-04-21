@@ -113,15 +113,13 @@ if(isset($parcelles) && count($parcelles)){
             $pointsCoordinates = "['".$proprietaire."',".$long.",".$lat."]";
      $polygon ='';
 
-     $coords = Str::replace(",0,",",0 ", $data->waypoints);
-     $coords = explode(" ", $coords);
-        // $coords = Arr::where($coords, function ($value, $key) {
-        //     if($value !="")
-        //     {
-        //         return  $value;
-        //     }
-            
-        // });
+     $dataArray = explode(",", $data->waypoints);  
+     $outputString = "0 ";  
+     for ($i = 0; $i < count($dataArray); $i += 3) {
+        $outputString .= trim($dataArray[$i]) . "," . trim($dataArray[$i + 1]) . "," . trim($dataArray[$i + 2]) . " ";
+    }
+    $coords = rtrim($outputString, ", ");
+    $coords = explode(" ", $coords); 
          
          
          $nombre = count($coords); 
@@ -130,11 +128,17 @@ if(isset($parcelles) && count($parcelles)){
              
                 $i++;
                 $coords2 = explode(',', $data2); 
-                if($i==$nombre){
-                    $polygon .='{ lat: ' . $coords2[1] . ', lng: ' . $coords2[0] . ' }';
-                }else{
-                    $polygon .='{ lat: ' . $coords2[1] . ', lng: ' . $coords2[0] . ' },';
-                } 
+                if(count($coords2)==3) 
+                    {
+                        
+                        $coordo1 = isset($coords2[1]) ? $coords2[1] : null;
+                        $coordo2 = isset($coords2[0]) ? $coords2[0] : null;
+                        if($i==$nombre){
+                            $polygon .='{ lat: ' . $coordo1 . ', lng: ' . $coordo2 . ' }';
+                        }else{
+                            $polygon .='{ lat: ' . $coordo1 . ', lng: ' . $coordo2 . ' },';
+                        } 
+                    }
             
         }
         
