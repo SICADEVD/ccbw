@@ -230,6 +230,7 @@
          $polygon =''; 
          $coords = Str::replace(", 0,",",0,", $parcelle->waypoints);
          $coords = Str::replace(" ","", $coords);
+         dd($coords);
          $coords = Str::replace(",0,",",0 ", $parcelle->waypoints);
          dd($coords);
             $coords = explode(" ", $coords);
