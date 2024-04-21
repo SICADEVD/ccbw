@@ -228,8 +228,9 @@
                
                 $pointsCoordinates = "['".$proprietaire."',".$long.",".$lat."]";
          $polygon =''; 
-         dd($parcelle->waypoints);
+         
          $coords = Str::replace(",0,",",0 ", $parcelle->waypoints);
+         dd($coords);
             $coords = explode(" ", $coords);
             
             // $coords = Arr::where($coords, function ($value, $key) {
