@@ -228,7 +228,7 @@
                
                 $pointsCoordinates = "['".$proprietaire."',".$long.",".$lat."]";
          $polygon =''; 
-         
+         $coords = Str::replace(", 0,",",0,", $parcelle->waypoints);
          $coords = Str::replace(",0,",",0 ", $parcelle->waypoints);
          dd($coords);
             $coords = explode(" ", $coords);
