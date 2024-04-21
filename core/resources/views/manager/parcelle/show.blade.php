@@ -227,8 +227,7 @@
                 $proprietaire = 'Coopérative:'. $cooperative.'<br>Section:'. $section.'<br>Localite:'. $localite.'<br>Producteur : '.$producteur.'<br>Code producteur:'. $code.'<br>Code Parcelle:'. $codeparcelle.'<br>Année creation:'. $annee.'<br>Latitude:'. $lat.'<br>Longitude:'. $long.'<br>Superficie:'. $superficie.' ha';
                
                 $pointsCoordinates = "['".$proprietaire."',".$long.",".$lat."]";
-         $polygon =''; 
-         $coords = Str::replace(" ","", $parcelle->waypoints);
+         $polygon ='';  
          $coords = Str::replace(", 0,",",0,", $parcelle->waypoints);
          dd($coords);
          $coords = Str::replace(",0,",",0 ", $parcelle->waypoints);
