@@ -13,7 +13,7 @@
                             </div>
                             <div class="flex-grow-1">
                                 <label>@lang('Section')</label>
-                                <select name="section" class="form-control" id="section">
+                                <select name="section" class="form-control select2-basic" data-live-search="true" id="section">
                                     <option value="">@lang('Toutes')</option>
                                     @foreach ($sections as $local)
                                         <option value="{{ $local->id }}"
@@ -24,7 +24,7 @@
                             </div>
                             <div class="flex-grow-1">
                                 <label>@lang('Localité')</label>
-                                <select name="localite" class="form-control" id="localite">
+                                <select name="localite" class="form-control select2-basic" id="localite">
                                     <option value="">@lang('Toutes')</option>
                                     @foreach ($localites as $local)
                                         <option value="{{ $local->id }}" data-chained="{{ $local->section_id }}"
@@ -35,13 +35,23 @@
                             </div>
                             <div class="flex-grow-1">
                                 <label>@lang('Producteur')</label>
-                                <select name="producteur" class="form-control" id="producteur">
+                                <select name="producteur" class="form-control select2-basic" id="producteur">
                                     <option value="">@lang('Tous')</option>
                                     @foreach ($producteurs as $local)
                                         <option value="{{ $local->id }}" data-chained="{{ $local->localite_id }}"
                                             {{ request()->producteur == $local->id ? 'selected' : '' }}>
-                                            {{ $local->nom }} {{ $local->prenoms }} ({{ $local->codeProd }})</option>
+                                            {{ stripslashes($local->nom) }} {{ stripslashes($local->prenoms) }} ({{ $local->codeProd }})</option>
                                     @endforeach
+                                </select>
+                            </div>
+                            <div class="flex-grow-1">
+                                <label>@lang('Statut déclaration')</label>
+                                <select name="typedeclaration" class="form-control">
+                                    <option value="">@lang('Tous')</option>
+                                    <option value="GPS" {{ request()->typedeclaration == 'GPS' ? 'selected' : '' }}>
+                                        GPS</option>
+                                    <option value="Verbale" {{ request()->typedeclaration == 'Verbale' ? 'selected' : '' }}>
+                                        Verbale</option>
                                 </select>
                             </div>
                             <div class="flex-grow-1">
@@ -57,6 +67,30 @@
                     </form>
                 </div>
             </div>
+            <div class="card b-radius--10 mb-3">
+                <div class="card-body">
+                <div class="row">
+                            <div class="col-md-4">
+                                <div class="alert alert-success text-center">
+                                <div class="fw-bold">{{ $total_parcelle }}</div>
+                                    TOTAL PARCELLES
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="alert alert-info text-center">
+                                <div class="fw-bold">{{ $total_parcelle_gps }}</div>
+                                    TOTAL GPS
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="alert alert-warning text-center">
+                                <div class="fw-bold">{{ $total_parcelle - $total_parcelle_gps }}</div>
+                                    TOTAL VERBALES
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
             <div class="card b-radius--10 ">
                 <div class="card-body  p-0">
                     <div class="table-responsive--sm table-responsive">
@@ -67,11 +101,11 @@
                                     <th>@lang('Localite')</th>
                                     <th>@lang('Code Parcelle')</th>
                                     <th>@lang('Producteur')</th>
-                                    <th>@lang('Type de document')</th>
+                                    <th>@lang('Statut declaration')</th>
                                     <th>@lang('Superficie')</th>
                                     <th>@lang('Année de création')</th>
                                     <th>@lang('Ajoutée le')</th>
-                                    <th>@lang('Status')</th>
+                                    <th>@lang('Etat')</th>
                                     <th>@lang('Action')</th>
                                 </tr>
                             </thead>
@@ -96,12 +130,12 @@
                                         </td>
                                         <td>
                                             <span class="small">
-                                                {{ $parcelle->producteur->nom }} {{ $parcelle->producteur->prenoms }}
+                                                {{ stripslashes($parcelle->producteur->nom) }} {{ stripslashes($parcelle->producteur->prenoms) }}
                                             </span>
                                         </td>
 
                                         <td>
-                                            <span>{{ $parcelle->typeDoc }}</span>
+                                            <span>{{ $parcelle->typedeclaration }}</span>
                                         </td>
                                         <td>
                                             <span>{{ $parcelle->superficie }}</span>

@@ -54,15 +54,25 @@ class ParcelleController extends Controller
             ->latest('id')
             ->joinRelationship('producteur.localite.section')
             ->where('cooperative_id', $manager->cooperative_id)
-            ->where(function ($q) {
-                if (request()->localite != null) {
-                    $q->where('localite_id', request()->localite);
-                }
+            ->when(request()->section, function ($query, $section) {
+                $query->where('localites.section_id', $section);
             })
-            ->with(['producteur.localite.section']) // Charger les relations nécessaires
-            ->paginate(getPaginate());
-
-        return view('manager.parcelle.index', compact('pageTitle', 'sections', 'parcelles', 'localites', 'producteurs'));
+            ->when(request()->localite, function ($query, $localite) {
+                $query->where('producteurs.localite_id', $localite);
+            }) 
+            ->when(request()->producteur, function ($query, $producteur){
+                $query->where('producteur_id', $producteur);
+            }) 
+            ->when(request()->typedeclaration, function ($query, $typedeclaration){
+                $query->where('typedeclaration', $typedeclaration);
+            })
+            ->with(['producteur.localite.section']); // Charger les relations nécessaires
+        $parcellesFiltre = $parcelles;
+        $parcelles = $parcelles->with(['producteur.localite.section'])->paginate(getPaginate());
+        $total_parcelle = $parcellesFiltre->count();
+        $total_parcelle_gps = $parcellesFiltre->where('typedeclaration','GPS')->count(); 
+ 
+        return view('manager.parcelle.index', compact('pageTitle', 'sections', 'parcelles', 'localites', 'producteurs','total_parcelle','total_parcelle_gps'));
     }
 
     public function mapping()
