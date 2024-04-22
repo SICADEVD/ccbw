@@ -12,6 +12,7 @@
                                 <p class="text-white">{{ __($pageTitle) }} @lang("Tableau de bord")</p>
                             </div>
                             <div class="login-wrapper__body">
+                                
                                 <form action="{{ route('login') }}" method="POST"
                                     class="cmn-form mt-30 verify-gcaptcha login-form">
                                     @csrf

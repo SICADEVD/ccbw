@@ -180,8 +180,10 @@ class LoginController extends Controller
     protected function logout(Request $request)
     {
         $this->guard('web')->logout();
-        $request->session()->forget('guard.web');   
-        $request->session()->regenerate();
+        $request->session()->forget('guard.web');  
+        $request->session()->forget('cooperative');   
+        session()->flush();
+        //$request->session()->regenerate();
 
         return redirect('/login');
     }
