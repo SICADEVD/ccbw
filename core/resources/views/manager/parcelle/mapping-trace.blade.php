@@ -115,8 +115,10 @@ if(isset($parcelles) && count($parcelles)){
 
      $dataArray = explode(",", $data->waypoints);  
      $outputString = "0 ";  
-     for ($i = 0; $i < count($dataArray); $i += 3) {
-        $outputString .= trim($dataArray[$i]) . "," . trim($dataArray[$i + 1]) . "," . trim($dataArray[$i + 2]) . " ";
+    for ($i = 0; $i < count($dataArray); $i += 3) {
+        if (isset($dataArray[$i]) && isset($dataArray[$i + 1]) && isset($dataArray[$i + 2])) {
+            $outputString .= trim($dataArray[$i]) . "," . trim($dataArray[$i + 1]) . "," . trim($dataArray[$i + 2]) . " ";
+        }
     }
     $coords = rtrim($outputString, ", ");
     $coords = explode(" ", $coords); 
@@ -230,7 +232,16 @@ for (let i = 0; i < total; i++) {
     });
 
     polygon.setMap(map);
+          
 }
+// Calcul du centre du polygone
+const bounds = new google.maps.LatLngBounds();
+  for (let i = 0; i < total; i++) {
+    triangleCoords<?php echo $coopera->id; ?>[i].forEach((coord) => {
+      bounds.extend(new google.maps.LatLng(coord.lat, coord.lng));
+    });
+  }
+  map.fitBounds(bounds);
 
 @endforeach
  
