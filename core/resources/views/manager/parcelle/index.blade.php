@@ -84,7 +84,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="alert alert-warning text-center">
-                                <div class="fw-bold">{{ $total_parcelle - $total_parcelle_gps }}</div>
+                                <div class="fw-bold">{{ $total_parcelle_verbale }}</div>
                                     TOTAL VERBALES
                                 </div>
                             </div>

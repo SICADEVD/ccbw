@@ -66,6 +66,43 @@
                     </form>
                 </div>
             </div>
+            <div class="card b-radius--10 mb-3">
+                <div class="card-body">
+                <div class="row align-center">
+                            <div class="col-md-4">
+                                <div class="alert alert-success text-center">
+                                <div class="fw-bold">{{ $total_prod }}</div>
+                                    TOTAL PRODUCTEURS
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="alert alert-info text-center">
+                                <div class="fw-bold">{{ $total_prod_h }}</div>
+                                     HOMMES
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="alert alert-info text-center">
+                                <div class="fw-bold">{{ $total_prod - $total_prod_h }}</div>
+                                     FEMMES
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="alert alert-warning text-center">
+                                <div class="fw-bold">{{ $total_prod_cert }}</div>
+                                     CERTIFIES
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="alert alert-warning text-center">
+                                <div class="fw-bold">{{ $total_prod_cand }}</div>
+                                     CANDIDATS
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
             <div class="card b-radius--10 ">
                 <div class="card-body  p-0">
                     <div class="table-responsive--sm table-responsive">

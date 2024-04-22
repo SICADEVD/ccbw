@@ -66,8 +66,14 @@ class ProducteurController extends Controller
                 $query->where('producteurs.programme_id', $programme);
             })
             ->with('localite.section')
-            ->where([['cooperative_id', $manager->cooperative_id]])
-            ->paginate(getPaginate());
+            ->where([['cooperative_id', $manager->cooperative_id]]);
+            $producteursFiltre = $producteurs->get(); 
+        $producteurs = $producteurs->paginate(getPaginate());
+        $total_prod = $producteursFiltre->count();
+        $total_prod_h = $producteursFiltre->where('sexe','Homme')->count(); 
+        $total_prod_f = $producteursFiltre->where('sexe','Femme')->count(); 
+        $total_prod_cert = $producteursFiltre->where('statut','Certifie')->count();  
+        $total_prod_cand = $producteursFiltre->where('statut','Candidat')->count(); 
 
         if (request()->download) {
             $producteur = Producteur::find(decrypt(request()->download));
@@ -82,7 +88,7 @@ class ProducteurController extends Controller
                 ->download($producteurNameFile);
             // ->save(storage_path(). "/app/public/producteurs-pdf/".$producteurNameFile);
         }
-        return view('manager.producteur.index', compact('pageTitle', 'producteurs', 'localites', 'programmes'));
+        return view('manager.producteur.index', compact('pageTitle', 'producteurs', 'localites', 'programmes','total_prod','total_prod_h','total_prod_f','total_prod_cert','total_prod_cand'));
     }
 
     public function infos($id)

@@ -67,12 +67,13 @@ class ParcelleController extends Controller
                 $query->where('typedeclaration', $typedeclaration);
             })
             ->with(['producteur.localite.section']); // Charger les relations nécessaires
-        $parcellesFiltre = $parcelles;
-        $parcelles = $parcelles->with(['producteur.localite.section'])->paginate(getPaginate());
+        $parcellesFiltre = $parcelles->get();
+        $parcelles = $parcelles->paginate(getPaginate());
         $total_parcelle = $parcellesFiltre->count();
         $total_parcelle_gps = $parcellesFiltre->where('typedeclaration','GPS')->count(); 
+        $total_parcelle_verbale = $parcellesFiltre->where('typedeclaration','Verbale')->count(); 
  
-        return view('manager.parcelle.index', compact('pageTitle', 'sections', 'parcelles', 'localites', 'producteurs','total_parcelle','total_parcelle_gps'));
+        return view('manager.parcelle.index', compact('pageTitle', 'sections', 'parcelles', 'localites', 'producteurs','total_parcelle','total_parcelle_gps','total_parcelle_verbale'));
     }
 
     public function mapping()
