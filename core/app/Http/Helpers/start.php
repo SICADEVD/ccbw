@@ -44,7 +44,7 @@ if (!function_exists('user')) {
             return session('user');
         }
  
-        if (auth()->user()->id) {
+        if (auth()->user() !=null ) {
 
             if (session()->has('cooperative')) {
                 $user = User::where('id', auth()->user()->id)->where('status', 1)->first();
