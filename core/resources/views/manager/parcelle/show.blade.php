@@ -177,9 +177,12 @@
             </div>
         </div>
     </div>
+ 
     <?php
     use Illuminate\Support\Str;
     use Illuminate\Support\Arr; 
+    if($parcelle->waypoints !=null)
+    {
     $arrData = '';
     $newCoord = '';
     $lat = '';
@@ -286,14 +289,16 @@
         
     
     } 
-    
+}
     ?>
+
+ 
 @endsection
 
 @push('breadcrumb-plugins')
     <x-back route="{{ route('manager.traca.parcelle.index') }}" />
 @endpush
-
+@if($parcelle->waypoints !=null)
 @push('script')
 <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
  <script async src="https://maps.googleapis.com/maps/api/js?key={{env('GOOGLE_MAPS_KEY')}}" ></script>  
@@ -359,3 +364,5 @@ $('form select').on('change', function(){
 });
     </script>
 @endpush
+
+@endif
