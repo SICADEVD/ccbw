@@ -311,7 +311,7 @@ let infoWindow;
 
 window.onload = function () {
   map = new google.maps.Map(document.getElementById("map"), {
-    zoom: 10,
+    zoom: 8,
     center: { lat: 5.901176, lng: -4.837113 },
     mapTypeId: "terrain",
   });
@@ -349,6 +349,15 @@ for (let i = 0; i < total; i++) {
     });
 
     polygon.setMap(map);
+      // Calcul du centre du polygone
+  const bounds = new google.maps.LatLngBounds();
+  for (let i = 0; i < total; i++) {
+    triangleCoords<?php echo $coopera->id; ?>[i].forEach((coord) => {
+      bounds.extend(new google.maps.LatLng(coord.lat, coord.lng));
+    });
+  }
+  map.fitBounds(bounds);
+
 }
 
 @endforeach
