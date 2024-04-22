@@ -40,11 +40,11 @@
                                         <td>
                                             <span>{{ __($entreprise->adresse_entreprise) }}</span>
                                         </td>
-                                       <td>
+                                        <td>
                                             @php
                                                 echo $entreprise->statusBadge;
                                             @endphp
-                                        </td>  
+                                        </td>
 
                                         <td>
                                             <span class="d-block">{{ showDateTime($entreprise->updated_at) }}</span>
@@ -53,8 +53,7 @@
 
                                         <td>
                                             <button type="button" class="btn btn-sm btn-outline--primary  updateType"
-                                                data-id="{{ $entreprise->id }}" 
-                                                data-nom="{{ $entreprise->nom_entreprise }}" 
+                                                data-id="{{ $entreprise->id }}" data-nom="{{ $entreprise->nom_entreprise }}"
                                                 data-telephone = "{{ $entreprise->telephone_entreprise }}"
                                                 data-mail = "{{ $entreprise->mail_entreprise }}"
                                                 data-adresse = "{{ $entreprise->adresse_entreprise }}"><i
@@ -63,14 +62,14 @@
                                             @if ($entreprise->status == Status::DISABLE)
                                                 <button type="button"
                                                     class="btn btn-sm btn-outline--success confirmationBtn"
-                                                    data-action="}"
+                                                    data-action="{{ route('settings.entreprise.status', $entreprise->id) }}"
                                                     data-question="@lang('Etes-vous sûr de vouloir activer ce entreprise?')">
                                                     <i class="la la-eye"></i> @lang('Activé')
                                                 </button>
                                             @else
                                                 <button type="button"
                                                     class="btn btn-sm btn-outline--danger confirmationBtn"
-                                                    data-action=""
+                                                    data-action="{{ route('settings.entreprise.status', $entreprise->id) }}"
                                                     data-question="@lang('Etes-vous sûr de vouloir désactiver ce entreprise?')">
                                                     <i class="la la-eye-slash"></i>@lang('Désactivé')
                                                 </button>
@@ -105,38 +104,38 @@
                 </div>
                 <form action="{{ route('manager.settings.entreprise.store') }}" method="POST">
                     @csrf
-                    <div class="modal-body"> 
-                    <input type="hidden" name='id'>
-                    <div class="row">
-                <input type="hidden" value="true" name="page_reload" id="page_reload">
-                <div class="col-lg-12">
-                    <x-forms.text :fieldLabel="__('Nom de l\'entreprise')" :fieldPlaceholder="__('Nom de l\'entreprise')" fieldName="nom_entreprise"
-                        fieldId="nom_entreprise" fieldValue="" :fieldRequired="true" />
-                </div>
-            </div>
+                    <div class="modal-body">
+                        <input type="hidden" name='id'>
+                        <div class="row">
+                            <input type="hidden" value="true" name="page_reload" id="page_reload">
+                            <div class="col-lg-12">
+                                <x-forms.text :fieldLabel="__('Nom de l\'entreprise')" :fieldPlaceholder="__('Nom de l\'entreprise')" fieldName="nom_entreprise"
+                                    fieldId="nom_entreprise" fieldValue="" :fieldRequired="true" />
+                            </div>
+                        </div>
 
-            <div class="row">
-                <input type="hidden" value="true" name="page_reload" id="page_reload">
-                <div class="col-lg-12">
-                    <x-forms.text :fieldLabel="__('Adresse mail de l\'entreprise')" :fieldPlaceholder="__('Adresse mail de l\'entreprise')" fieldName="mail_entreprise"
-                        fieldId="mail_entreprise" fieldValue="" :fieldRequired="true" />
-                </div>
-            </div>
+                        <div class="row">
+                            <input type="hidden" value="true" name="page_reload" id="page_reload">
+                            <div class="col-lg-12">
+                                <x-forms.text :fieldLabel="__('Adresse mail de l\'entreprise')" :fieldPlaceholder="__('Adresse mail de l\'entreprise')" fieldName="mail_entreprise"
+                                    fieldId="mail_entreprise" fieldValue="" :fieldRequired="true" />
+                            </div>
+                        </div>
 
-            <div class="row">
-                <input type="hidden" value="true" name="page_reload" id="page_reload">
-                <div class="col-lg-12">
-                    <x-forms.number :fieldLabel="__('Téléphone de l\'entreprise')" :fieldPlaceholder="__('Téléphone de l\'entreprise')" fieldName="telephone_entreprise"
-                        fieldId="telephone_entreprise" fieldValue="" :fieldRequired="true" />
-                </div>
-            </div>
-            <div class="row">
-                <input type="hidden" value="true" name="page_reload" id="page_reload">
-                <div class="col-lg-12">
-                    <x-forms.text :fieldLabel="__('Adresse de l\'entreprise')" :fieldPlaceholder="__('Adresse de l\'entreprise')" fieldName="adresse_entreprise"
-                        fieldId="adresse_entreprise" fieldValue="" :fieldRequired="true" />
-                </div>
-            </div>
+                        <div class="row">
+                            <input type="hidden" value="true" name="page_reload" id="page_reload">
+                            <div class="col-lg-12">
+                                <x-forms.number :fieldLabel="__('Téléphone de l\'entreprise')" :fieldPlaceholder="__('Téléphone de l\'entreprise')" fieldName="telephone_entreprise"
+                                    fieldId="telephone_entreprise" fieldValue="" :fieldRequired="true" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <input type="hidden" value="true" name="page_reload" id="page_reload">
+                            <div class="col-lg-12">
+                                <x-forms.text :fieldLabel="__('Adresse de l\'entreprise')" :fieldPlaceholder="__('Adresse de l\'entreprise')" fieldName="adresse_entreprise"
+                                    fieldId="adresse_entreprise" fieldValue="" :fieldRequired="true" />
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn--primary w-100 h-45 ">@lang('Enregistrer')</button>
@@ -167,7 +166,7 @@
                 modal.find('input[name=nom_entreprise]').val($(this).data('nom'));
                 modal.find('input[name=telephone_entreprise]').val($(this).data('telephone'));
                 modal.find('input[name=mail_entreprise]').val($(this).data('mail'));
-                modal.find('input[name=adresse_entreprise]').val($(this).data('adresse')); 
+                modal.find('input[name=adresse_entreprise]').val($(this).data('adresse'));
                 modal.modal('show');
             });
         })(jQuery);
