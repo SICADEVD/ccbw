@@ -182,6 +182,7 @@ if(isset($parcelles) && count($parcelles)){
 @push('style-lib')
     <link rel="stylesheet" href="{{ asset('assets/fcadmin/css/vendor/datepicker.min.css') }}">
 @endpush
+
 @push('script')
 <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
  <script async src="https://maps.googleapis.com/maps/api/js?key={{env('GOOGLE_MAPS_KEY')}}" ></script>  
@@ -198,7 +199,7 @@ window.onload = function () {
     center: { lat: 6.8817026, lng: -5.5004615 },
     mapTypeId: "terrain",
   });
-
+  @if(isset($parcelles) && count($parcelles))
   // Define the LatLng coordinates for the polygon.
 @foreach($cooperatives as $coopera) 
 
@@ -244,7 +245,8 @@ const bounds = new google.maps.LatLngBounds();
   map.fitBounds(bounds);
 
 @endforeach
- 
+
+@endif
 
 } 
 function getInfoWindowContent(location) {

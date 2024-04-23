@@ -384,6 +384,8 @@ window.onload = function () {
   });
 
   // Affichage parcelles des producteurs
+  @if(isset($parcelles) && count($parcelles))
+
   @if(($fc==null && $zt==null && $pp==null) || $pp==1)
 
   @foreach($cooperatives as $coopera) 
@@ -430,7 +432,7 @@ const bounds = new google.maps.LatLngBounds();
 
 @endforeach
 @endif
-
+@endif
 
 // Afichage Forets Classées
 @if(($fc==null && $zt==null && $pp==null) || $fc==1)

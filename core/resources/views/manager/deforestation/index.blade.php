@@ -363,6 +363,8 @@ window.onload = function () {
   });
 
   // Affichage parcelles des producteurs
+  @if(isset($parcelles) && count($parcelles))
+
   @if(($fc==null && $zt==null && $pp==null) || $pp==1)
   const triangleCoords = <?php echo Str::replace('"','',json_encode($seriescoordonates)); ?>; 
   const polygons = [];
@@ -403,7 +405,7 @@ const bounds = new google.maps.LatLngBounds();
   }
   map.fitBounds(bounds);
 @endif
-
+@endif
 
 // Afichage Forets Classées
 @if(($fc==null && $zt==null && $pp==null) || $fc==1)

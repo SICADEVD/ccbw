@@ -351,6 +351,8 @@ window.onload = function () {
   });
  
 // Affichage des waypoints
+@if(isset($parcelles) && count($parcelles))
+
 @if(($fc==null && $zt==null && $pp==null) || $pp==1)
 var infowindow = new google.maps.InfoWindow();
 
@@ -387,7 +389,7 @@ var locations<?php echo $coopera->id; ?> = <?php echo Str::replace('"','',json_e
     @endforeach
 
 @endif
-
+@endif
 // Afichage Forets Classées
 @if(($fc==null && $zt==null && $pp==null) || $fc==1)
   const triangleCoordsF = <?php echo Str::replace('"','',json_encode($seriescoordonatesF)); ?>; 

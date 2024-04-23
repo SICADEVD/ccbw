@@ -206,7 +206,7 @@ window.onload = function () {
     center: { lat: 6.8817026, lng: -5.5004615 },
     mapTypeId: "terrain",
   });
-
+  @if(isset($parcelles) && count($parcelles))
   // Define the LatLng coordinates for the polygon.
 @foreach($cooperatives as $coopera) 
 
@@ -249,9 +249,9 @@ const bounds = new google.maps.LatLngBounds();
   }
   map.fitBounds(bounds);
 }
-
-
+ 
 @endforeach
+@endif
  
 
 } 
