@@ -403,21 +403,24 @@ for (let i = 0; i < total; i++) {
         strokeOpacity: 0.8,
         strokeWeight: 3,
         fillColor: "<?php echo $coopera->color; ?>",
-        fillOpacity: 0.35,
-        clickable: true
+        fillOpacity: 0.35, 
     });
 
     polygons<?php echo $coopera->id; ?>.push(polygon);
 
     // Event listener for each polygon
-    google.maps.event.addListener(polygon, 'click', function (event) {
-        const infoWindow = new google.maps.InfoWindow({
-            content: getInfoWindowContent(locations<?php echo $coopera->id; ?>[i])
-        });
+    const infoWindow = new google.maps.InfoWindow({
+        content: getInfoWindowContent(locations<?php echo $coopera->id; ?>[i]),
+    });
 
+    google.maps.event.addListener(polygon, 'click', function (event) {
         infoWindow.setPosition(event.latLng);
         infoWindow.open(map);
     });
+
+    google.maps.event.addListener(polygon, 'mouseout', function () {
+        infoWindow.close();
+    }); 
 
     polygon.setMap(map);
        // Calcul du centre du polygone
@@ -446,20 +449,24 @@ for (let i = 0; i < totalF; i++) {
         strokeOpacity: 1,
         strokeWeight: 2,
         fillColor: "#1A281A",
-        fillOpacity: 1,
-        clickable: true
+        fillOpacity: 1, 
     });
 
     polygonsF.push(polygon);
- 
-    google.maps.event.addListener(polygon, 'click', function (event) {
-        const infoWindow = new google.maps.InfoWindow({
-            content: getInfoWindowContentF(locationsF[i])
-        });
+    const infoWindow = new google.maps.InfoWindow({
+        content: getInfoWindowContentF(locationsF[i]),
+    });
 
+    google.maps.event.addListener(polygon, 'click', function (event) {
         infoWindow.setPosition(event.latLng);
         infoWindow.open(map);
     });
+
+    google.maps.event.addListener(polygon, 'mouseout', function () {
+        infoWindow.close();
+    });
+    
+    
 
     polygon.setMap(map);
 } 
