@@ -28,10 +28,8 @@
     <tr>
         <td>ID</td>
         <td>Localite</td> 
-        <td>Parcelle</td>
         <td>Nom</td>
         <td>Prenoms</td>
-        <td>Superficie</td>
         <td>Quantite</td> 
         <td>Date enreg</td> 
     </tr>
@@ -43,11 +41,8 @@
         <tbody>
         <tr>
             <td><?php echo $c->id; ?></td>
-            <td><?php echo $c->parcelle->producteur->localite->nom; ?></td> 
-            <td><?php echo $c->parcelle->codeParc; ?></td>
-            <td><?php echo $c->parcelle->producteur->nom; ?></td>
-            <td><?php echo $c->parcelle->producteur->prenoms; ?></td>
-            <td><?php echo $c->parcelle->superficie; ?></td> 
+            <td><?php echo $c->producteur->localite->nom; ?></td> 
+            <td><?php echo $c->producteur->prenoms; ?></td>
             <td><?php echo $c->quantite; ?></td> 
             <td><?php echo date('d-m-Y', strtotime($c->created_at)); ?></td>
         </tr>

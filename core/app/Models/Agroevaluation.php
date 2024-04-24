@@ -20,6 +20,4 @@ class Agroevaluation extends Model
     {
         return $this->belongsTo(Producteur::class);
     }
-    
-     
 }

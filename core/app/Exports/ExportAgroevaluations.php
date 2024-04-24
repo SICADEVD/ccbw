@@ -19,7 +19,7 @@ class ExportAgroevaluations implements FromView
     {
         // TODO: Implement view() method.
         return view('manager.agroevaluation.AgroevaluationAllExcel',[
-            'agroevaluations' => Agroevaluation::joinRelationship('parcelle.producteur.localite.section')->where('cooperative_id',auth()->user()->cooperative_id)->get()
+            'agroevaluations' => Agroevaluation::joinRelationship('producteur.localite.section')->where('cooperative_id',auth()->user()->cooperative_id)->get()
         ]);
     }
         
