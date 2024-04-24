@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\agroespeceabre_parcelle;
+use App\Models\DebugMobile;
 use App\Models\Parcelle_type_protection;
 
 class ApiparcelleController extends Controller
@@ -59,6 +60,10 @@ class ApiparcelleController extends Controller
    */
   public function store(Request $request)
   {
+    $debugp = new DebugMobile();
+    $debugp->content = json_encode($request->all());
+    $debugp->save();
+    
     if ($request->id) {
       $parcelle = Parcelle::find($request->id);
       $parcelle->codeParc = $parcelle->codeParc;
