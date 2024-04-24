@@ -94,21 +94,20 @@ class ApiparcelleController extends Controller
     $parcelle->existeMesureProtection  = $request->existeMesureProtection;
     $parcelle->existePente  = $request->existePente;
     $parcelle->typedeclaration  = $request->typedeclaration;
-    $parcelle->superficie  = $request->superficie;
-    $parcelle->latitude  = $request->latitude;
-    $parcelle->longitude  = $request->longitude;
     $parcelle->userid = $request->userid;
     $parcelle->nbCacaoParHectare  = $request->nbCacaoParHectare;
     $parcelle->erosion  = $request->erosion;
     $parcelle->autreCourDeau = $request->autreCourDeau;
     $parcelle->autreProtection = $request->autreProtection;
 
-    if (isset($request->waypoints) && count($request->waypoints) > 0) {
-      $parcelle->waypoints = implode(',', $request->waypoints);
-    } else {
-      $parcelle->waypoints = "";
-    }
-    if ($request->superficie) {
+    if($parcelle->typedeclaration =='GPS'){
+      $centroid = $this->calculateCentroid($request->waypoints); 
+      $parcelle->latitude = round($centroid['lat'], 6);
+      $parcelle->longitude = round($centroid['lng'], 6);
+      
+      $superficie = substr($this->calculatePolygonArea($request->waypoints), 0, 5);
+      $parcelle->superficie = round($superficie, 2);
+    }else{
       $superficie = Str::before($request->superficie, ' ');
       if (Str::contains($superficie, ",")) {
         $superficie = Str::replaceFirst(',', '.', $superficie);
@@ -116,11 +115,29 @@ class ApiparcelleController extends Controller
           $superficie = Str::replaceFirst('m²', '', $superficie);
         }
       }
-
-      $parcelle->superficie = $superficie;
-    } else {
-      $parcelle->superficie = 0;
+      $parcelle->superficie  = $superficie;
+      $parcelle->latitude  = $request->latitude;
+      $parcelle->longitude  = $request->longitude;
+      $parcelle->waypoints = "";
     }
+    // if (isset($request->waypoints) && count($request->waypoints) > 0) {
+    //   $parcelle->waypoints = implode(',', $request->waypoints);
+    // } else {
+    //   $parcelle->waypoints = "";
+    // }
+    // if($request->superficie) {
+    //   $superficie = Str::before($request->superficie, ' ');
+    //   if (Str::contains($superficie, ",")) {
+    //     $superficie = Str::replaceFirst(',', '.', $superficie);
+    //     if (Str::contains($superficie, ",")) {
+    //       $superficie = Str::replaceFirst('m²', '', $superficie);
+    //     }
+    //   }
+
+    //   $parcelle->superficie = $superficie;
+    // } else {
+    //   $parcelle->superficie = 0;
+    // }
     $parcelle->save();
     if ($parcelle != null) {
       $id = $parcelle->id;
@@ -189,6 +206,62 @@ class ApiparcelleController extends Controller
     return $codeParc;
   }
 
+  private function calculateCentroid($coordinates)
+  {
+      /*
+      Calcule le centroïde d'un polygone à partir de ses coordonnées.
+  
+      Args:
+          $coordinates (str): Les coordonnées du polygone.
+  
+      Returns:
+          str: Les coordonnées du centroïde.
+      */
+      // Convertir les coordonnées en une liste de tuples
+      $coords = array_map(function ($coord) {
+          return array_map('floatval', explode(',', $coord));
+      }, explode(' ', $coordinates));
+
+      // Calculer la somme des coordonnées
+      $sum_x = array_sum(array_column($coords, 0));
+      $sum_y = array_sum(array_column($coords, 1));
+
+      // Calculer le centroïde
+      $centroid_x = $sum_x / count($coords);
+      $centroid_y = $sum_y / count($coords);
+
+      // Retourner les coordonnées du centroïde
+
+      return array('lat' => number_format($centroid_y, 6), 'lng' => number_format($centroid_x, 6));
+  }
+
+  private function calculatePolygonArea($coordinates)
+  {
+      /*
+      Calcule l'aire d'un polygone à partir de ses coordonnées.
+  
+      Args:
+          $coordinates (str): Les coordonnées du polygone.
+  
+      Returns:
+          float: L'aire du polygone.
+      */
+      // Convertir les coordonnées en une liste de tuples
+      $coords = array_map(function ($coord) {
+          return array_map('floatval', explode(',', $coord));
+      }, explode(' ', $coordinates));
+
+      // Calculer l'aire
+      $area = 0.0;
+      for ($i = 0; $i < count($coords); $i++) {
+          $j = ($i + 1) % count($coords);
+          $area += $coords[$i][0] * $coords[$j][1] - $coords[$j][0] * $coords[$i][1];
+      }
+      $area /= 2.0;
+
+      // Retourner l'aire
+      return abs($area) * 0.0001;
+  }
   public function getparcelleUpdate(Request $request)
   {
 
