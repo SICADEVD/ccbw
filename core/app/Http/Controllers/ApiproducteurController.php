@@ -124,7 +124,7 @@ class ApiproducteurController extends Controller
         'numCMU' => 'required_if:carteCMU,==,oui',
         'phone2' => 'required_if:autreMembre,oui|regex:/^\d{10}$/',
         'phone2' => Rule::when($request->autreMembre == 'oui', function () use ($id) {
-          return ['required', 'regex:/^\d{10}$/', Rule::unique('producteurs', 'phone2')->ignore($id)];
+          return ['required', 'regex:/^\d{10}$/'];
         }),
       ];
       $messages = [
