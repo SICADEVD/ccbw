@@ -122,7 +122,7 @@ class ApiproducteurController extends Controller
         'certificat' => 'required_if:statut,==,Certifie',
         'autrePhone' => 'required_if:autreMembre,==,oui',
         'numCMU' => 'required_if:carteCMU,==,oui',
-        'phone2' => 'required_if:autreMembre,oui|regex:/^\d{10}$/',
+        // 'phone2' => 'required_if:autreMembre,oui|regex:/^\d{10}$/',
         'phone2' => Rule::when($request->autreMembre == 'oui', function () use ($id) {
           return ['required', 'regex:/^\d{10}$/'];
         }),
