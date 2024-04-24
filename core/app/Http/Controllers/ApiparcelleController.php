@@ -105,34 +105,16 @@ class ApiparcelleController extends Controller
     $parcelle->autreCourDeau = $request->autreCourDeau;
     $parcelle->autreProtection = $request->autreProtection;
 
-    if($parcelle->typedeclaration =='GPS'){
-      $waypoints = implode(',', $request->waypoints);
-      $centroid = $this->calculateCentroid($waypoints); 
-      $parcelle->latitude = round($centroid['lat'], 6);
-      $parcelle->longitude = round($centroid['lng'], 6);
+    // if($parcelle->typedeclaration =='GPS'){
+    //   $waypoints = implode(',', $request->waypoints);
+    //   $centroid = $this->calculateCentroid($waypoints); 
+    //   $parcelle->latitude = round($centroid['lat'], 6);
+    //   $parcelle->longitude = round($centroid['lng'], 6);
 
-      $superficie = substr($this->calculatePolygonArea($waypoints), 0, 5);
-      $parcelle->superficie = round($superficie, 2);
-      $parcelle->waypoints = $waypoints;
-    }else{
-      $superficie = Str::before($request->superficie, ' ');
-      if (Str::contains($superficie, ",")) {
-        $superficie = Str::replaceFirst(',', '.', $superficie);
-        if (Str::contains($superficie, ",")) {
-          $superficie = Str::replaceFirst('m²', '', $superficie);
-        }
-      }
-      $parcelle->superficie  = $superficie;
-      $parcelle->latitude  = $request->latitude;
-      $parcelle->longitude  = $request->longitude;
-      $parcelle->waypoints = "";
-    }
-    // if (isset($request->waypoints) && count($request->waypoints) > 0) {
-    //   $parcelle->waypoints = implode(',', $request->waypoints);
-    // } else {
-    //   $parcelle->waypoints = "";
-    // }
-    // if($request->superficie) {
+    //   $superficie = substr($this->calculatePolygonArea($waypoints), 0, 5);
+    //   $parcelle->superficie = round($superficie, 2);
+    //   $parcelle->waypoints = $waypoints;
+    // }else{
     //   $superficie = Str::before($request->superficie, ' ');
     //   if (Str::contains($superficie, ",")) {
     //     $superficie = Str::replaceFirst(',', '.', $superficie);
@@ -140,11 +122,33 @@ class ApiparcelleController extends Controller
     //       $superficie = Str::replaceFirst('m²', '', $superficie);
     //     }
     //   }
+    //   $parcelle->superficie  = $superficie;
+    //   $parcelle->latitude  = $request->latitude;
+    //   $parcelle->longitude  = $request->longitude;
+    //   $parcelle->waypoints = "";
+    // } 
 
-    //   $parcelle->superficie = $superficie;
-    // } else {
-    //   $parcelle->superficie = 0;
-    // }
+      $parcelle->latitude  = $request->latitude;
+      $parcelle->longitude  = $request->longitude;
+     
+    if (isset($request->waypoints) && count($request->waypoints) > 0) {
+      $parcelle->waypoints = implode(',', $request->waypoints);
+    } else {
+      $parcelle->waypoints = "";
+    }
+    if($request->superficie) {
+      $superficie = Str::before($request->superficie, ' ');
+      if (Str::contains($superficie, ",")) {
+        $superficie = Str::replaceFirst(',', '.', $superficie);
+        if (Str::contains($superficie, ",")) {
+          $superficie = Str::replaceFirst('m²', '', $superficie);
+        }
+      }
+
+      $parcelle->superficie = $superficie;
+    } else {
+      $parcelle->superficie = 0;
+    }
     $parcelle->save();
     if ($parcelle != null) {
       $id = $parcelle->id;
