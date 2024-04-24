@@ -732,7 +732,7 @@ class SettingController extends Controller
             ->where('cooperative_id', $manager->cooperative_id)
             ->select('id', DB::raw("CONCAT(lastname,' ', firstname) as nom"))
             ->get();
-        $magasinCentraux     = MagasinCentral::orderBy('id', 'desc')->paginate(getPaginate());
+        $magasinCentraux = MagasinCentral::where('cooperative_id',$manager->cooperative_id)->orderBy('id', 'desc')->paginate(getPaginate());
         $codemag = $this->generecodemagasincentral();
         return view('manager.config.magasinCentral', compact('pageTitle', 'magasinCentraux', 'activeSettingMenu', 'users', 'codemag'));
     }
