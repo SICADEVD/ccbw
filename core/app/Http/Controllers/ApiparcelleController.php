@@ -101,12 +101,14 @@ class ApiparcelleController extends Controller
     $parcelle->autreProtection = $request->autreProtection;
 
     if($parcelle->typedeclaration =='GPS'){
-      $centroid = $this->calculateCentroid($request->waypoints); 
+      $waypoints = implode(',', $request->waypoints);
+      $centroid = $this->calculateCentroid($waypoints); 
       $parcelle->latitude = round($centroid['lat'], 6);
       $parcelle->longitude = round($centroid['lng'], 6);
-      
-      $superficie = substr($this->calculatePolygonArea($request->waypoints), 0, 5);
+
+      $superficie = substr($this->calculatePolygonArea($waypoints), 0, 5);
       $parcelle->superficie = round($superficie, 2);
+      $parcelle->waypoints = $waypoints;
     }else{
       $superficie = Str::before($request->superficie, ' ');
       if (Str::contains($superficie, ",")) {
