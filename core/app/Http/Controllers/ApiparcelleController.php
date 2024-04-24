@@ -108,12 +108,20 @@ class ApiparcelleController extends Controller
     $parcelle->autreCourDeau = $request->autreCourDeau;
     $parcelle->autreProtection = $request->autreProtection;
 
-    if (isset($request->waypoints) && count($request->waypoints) > 0) {
-      $parcelle->waypoints = implode(',', $request->waypoints);
-    } else {
-      $parcelle->waypoints = "";
-    }
-    if ($request->superficie) {
+
+    // Traitement du centroide et des cooordonnées GPS latitude et longitude
+if($parcelle->typedeclaration =='GPS'){
+
+      $waypoints = implode(',', $request->waypoints);
+      $waypoints2 = $this->parse_waypoints($waypoints); 
+$centroid = $this->calculateCentroide($waypoints2);  
+      $parcelle->latitude = round($centroid[1], 6);
+      $parcelle->longitude = round($centroid[0], 6);
+
+      $superficie = substr($this->calculateArea($waypoints2),0,5); 
+      $parcelle->superficie = round($superficie, 2); 
+      $parcelle->waypoints = $waypoints;
+    }else{
       $superficie = Str::before($request->superficie, ' ');
       if (Str::contains($superficie, ",")) {
         $superficie = Str::replaceFirst(',', '.', $superficie);
@@ -121,11 +129,31 @@ class ApiparcelleController extends Controller
           $superficie = Str::replaceFirst('m²', '', $superficie);
         }
       }
+      $parcelle->superficie  = $superficie;
+      $parcelle->latitude  = $request->latitude;
+      $parcelle->longitude  = $request->longitude;
+      $parcelle->waypoints = "";
+    } 
+    /******* Fin de traitement */
 
-      $parcelle->superficie = $superficie;
-    } else {
-      $parcelle->superficie = 0;
-    }
+    // if (isset($request->waypoints) && count($request->waypoints) > 0) {
+    //   $parcelle->waypoints = implode(',', $request->waypoints);
+    // } else {
+    //   $parcelle->waypoints = "";
+    // }
+    // if ($request->superficie) {
+    //   $superficie = Str::before($request->superficie, ' ');
+    //   if (Str::contains($superficie, ",")) {
+    //     $superficie = Str::replaceFirst(',', '.', $superficie);
+    //     if (Str::contains($superficie, ",")) {
+    //       $superficie = Str::replaceFirst('m²', '', $superficie);
+    //     }
+    //   }
+
+    //   $parcelle->superficie = $superficie;
+    // } else {
+    //   $parcelle->superficie = 0;
+    // }
     $parcelle->save();
     if ($parcelle != null) {
       $id = $parcelle->id;
@@ -164,6 +192,66 @@ class ApiparcelleController extends Controller
 
     return response()->json($parcelle, 201);
   }
+
+  private function parse_waypoints($waypoints_str) {
+    /**
+     * Parse les waypoints sous forme de chaîne et renvoie une liste de tuples (x, y, z).
+     *
+     * @param string $waypoints_str Chaîne de waypoints au format "x1, y1, z1, x2, y2, z2, ..."
+     * @return array Liste de tuples (x, y, z)
+     */
+    
+    $waypoints_list = explode(",", $waypoints_str);
+     
+    $waypoints = [];
+    for ($i = 0; $i < count($waypoints_list); $i += 3) {
+        $x = floatval($waypoints_list[$i]);
+        $y = floatval($waypoints_list[$i + 1]);
+        $z = floatval($waypoints_list[$i + 2]);
+        $waypoints[] = [$x, $y, $z];
+    }
+    return $waypoints;
+}
+
+private function calculateCentroide($points) {
+    /**
+     * Calcule le centroïde d'un polygone défini par une liste de points.
+     * Chaque point est représenté sous forme de tuple (x, y, z).
+     *
+     * @param array $points Liste de points [(x1, y1, z1), (x2, y2, z2), ...]
+     * @return array Coordonnées du centroïde (x, y, z)
+     */
+    $numPoints = count($points);
+    $xSum = 0;
+    $ySum = 0;
+    $zSum = 0;
+
+    foreach ($points as $point) {
+        list($x, $y, $z) = $point;
+        $xSum += $x;
+        $ySum += $y;
+        $zSum += $z;
+    }
+
+    $centroidX = $xSum / $numPoints;
+    $centroidY = $ySum / $numPoints;
+    $centroidZ = $zSum / $numPoints;
+
+    return [$centroidX, $centroidY, $centroidZ];
+}
+private function calculateArea($points) {
+ 
+  $num_points = count($points);
+  $area = 0;
+
+  for ($i = 0; $i < $num_points; $i++) {
+      list($x1, $y1, $z1) = $points[$i];
+      list($x2, $y2, $z2) = $points[($i + 1) % $num_points];
+      $area += ($x1 * $y2 - $x2 * $y1);
+  }
+
+  return abs($area) / 2;
+}
 
   private function generecodeparc($idProd, $codeProd)
   {
@@ -243,7 +331,10 @@ class ApiparcelleController extends Controller
       $area = 0.0;
       for ($i = 0; $i < count($coords); $i++) {
           $j = ($i + 1) % count($coords);
-          $area += $coords[$i][0] * $coords[$j][1] - $coords[$j][0] * $coords[$i][1];
+          if(isset($coords[$i][0]) && isset($coords[$i][1]) && isset($coords[$j][1]) && isset($coords[$j][0]) ){
+            $area += $coords[$i][0] * $coords[$j][1] - $coords[$j][0] * $coords[$i][1];
+          }
+          
       }
       $area /= 2.0;
 
