@@ -60,10 +60,10 @@ class ApiparcelleController extends Controller
    */
   public function store(Request $request)
   {
-    $debugp = new DebugMobile();
-    $debugp->content = json_encode($request->all());
-    $debugp->save();
-    
+    // $debugp = new DebugMobile();
+    // $debugp->content = json_encode($request->all());
+    // $debugp->save();
+
     if ($request->id) {
       $parcelle = Parcelle::find($request->id);
       $parcelle->codeParc = $parcelle->codeParc;
