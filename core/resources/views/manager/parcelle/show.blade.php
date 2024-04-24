@@ -339,13 +339,17 @@ for (let i = 0; i < total; i++) {
     polygons<?php echo $coopera->id; ?>.push(polygon);
 
      
-    google.maps.event.addListener(polygon, 'click', function (event) {
-        const infoWindow = new google.maps.InfoWindow({
-            content: getInfoWindowContent(locations<?php echo $coopera->id; ?>[i])
-        });
+    const infoWindow = new google.maps.InfoWindow({
+        content: getInfoWindowContent(locations<?php echo $coopera->id; ?>[i]),
+    });
 
+    google.maps.event.addListener(polygon, 'click', function (event) {
         infoWindow.setPosition(event.latLng);
         infoWindow.open(map);
+    });
+
+    google.maps.event.addListener(polygon, 'mouseout', function () {
+        infoWindow.close();
     });
 
     polygon.setMap(map);
