@@ -41,7 +41,7 @@ class ApiproducteurController extends Controller
   {
     $userid = $request->userid;
     $manager = User::where('id', $userid)->first();
-    
+
 
     /**
      * Retrieve producteurs with their associated localites and certifications.
@@ -56,7 +56,10 @@ class ApiproducteurController extends Controller
     //   ->groupBy('producteurs.nom', 'producteurs.prenoms', 'localites.section_id', 'localites.id', 'producteurs.id', 'producteurs.codeProd', 'producteurs.statut')
     //   ->get();
 
-$producteurs = Producteur::where('cooperative_id', $manager->cooperative_id)
+
+    $producteurs = Producteur::whereHas('localite.section.cooperative', function ($query) use ($manager) {
+      $query->where('id', $manager->cooperative_id);
+    })
       ->join('localites', 'producteurs.localite_id', '=', 'localites.id')
       ->leftJoin('producteur_certifications', 'producteurs.id', '=', 'producteur_certifications.producteur_id')
       ->select('producteurs.*', 'localites.section_id as section_id', 'localites.id as localite_id', 'producteurs.id as id', 'producteurs.codeProd as codeProd', 'producteurs.statut')
