@@ -11,7 +11,6 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\agroespeceabre_parcelle;
-use App\Models\DebugMobile;
 use App\Models\Parcelle_type_protection;
 
 class ApiparcelleController extends Controller
@@ -60,10 +59,6 @@ class ApiparcelleController extends Controller
    */
   public function store(Request $request)
   {
-   $debug = new DebugMobile();
-   $debug->content = json_encode($request->all());
-   $debug->save();
-    
     if ($request->id) {
       $parcelle = Parcelle::find($request->id);
       $parcelle->codeParc = $parcelle->codeParc;
@@ -99,44 +94,21 @@ class ApiparcelleController extends Controller
     $parcelle->existeMesureProtection  = $request->existeMesureProtection;
     $parcelle->existePente  = $request->existePente;
     $parcelle->typedeclaration  = $request->typedeclaration;
+    $parcelle->superficie  = $request->superficie;
+    $parcelle->latitude  = $request->latitude;
+    $parcelle->longitude  = $request->longitude;
     $parcelle->userid = $request->userid;
     $parcelle->nbCacaoParHectare  = $request->nbCacaoParHectare;
     $parcelle->erosion  = $request->erosion;
     $parcelle->autreCourDeau = $request->autreCourDeau;
     $parcelle->autreProtection = $request->autreProtection;
 
-    // if($parcelle->typedeclaration =='GPS'){
-    //   $waypoints = implode(',', $request->waypoints);
-    //   $centroid = $this->calculateCentroid($waypoints); 
-    //   $parcelle->latitude = round($centroid['lat'], 6);
-    //   $parcelle->longitude = round($centroid['lng'], 6);
-
-    //   $superficie = substr($this->calculatePolygonArea($waypoints), 0, 5);
-    //   $parcelle->superficie = round($superficie, 2);
-    //   $parcelle->waypoints = $waypoints;
-    // }else{
-    //   $superficie = Str::before($request->superficie, ' ');
-    //   if (Str::contains($superficie, ",")) {
-    //     $superficie = Str::replaceFirst(',', '.', $superficie);
-    //     if (Str::contains($superficie, ",")) {
-    //       $superficie = Str::replaceFirst('m²', '', $superficie);
-    //     }
-    //   }
-    //   $parcelle->superficie  = $superficie;
-    //   $parcelle->latitude  = $request->latitude;
-    //   $parcelle->longitude  = $request->longitude;
-    //   $parcelle->waypoints = "";
-    // } 
-
-      $parcelle->latitude  = $request->latitude;
-      $parcelle->longitude  = $request->longitude;
-     
     if (isset($request->waypoints) && count($request->waypoints) > 0) {
       $parcelle->waypoints = implode(',', $request->waypoints);
     } else {
       $parcelle->waypoints = "";
     }
-    if($request->superficie) {
+    if ($request->superficie) {
       $superficie = Str::before($request->superficie, ' ');
       if (Str::contains($superficie, ",")) {
         $superficie = Str::replaceFirst(',', '.', $superficie);
