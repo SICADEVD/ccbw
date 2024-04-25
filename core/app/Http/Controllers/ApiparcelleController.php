@@ -63,7 +63,8 @@ class ApiparcelleController extends Controller
   {
 
     $debug = new DebugMobile();
-    $debug->content = json_encode($request->all());
+    //$debug->content = json_encode($request->all());
+    $debug->content = json_encode($request->header());
     $debug->save();
     // $carbon_debut = Carbon::createFromFormat('Y-m-d H:i:s', $parcelle->created_at);
     //                             $carbon_fin = Carbon::createFromFormat('Y-m-d H:i:s', now());
