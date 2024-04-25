@@ -99,7 +99,7 @@ class ApiproducteurController extends Controller
       $validationRule = [
         'programme_id' => ['required', 'exists:programmes,id'],
         'proprietaires' => 'required',
-        'certificats' => 'required',
+        // 'certificats' => 'required',
         'habitationProducteur' => 'required',
         'statut' => 'required',
         'statutMatrimonial' => 'required',
