@@ -6,10 +6,12 @@ use App\Traits\GlobalStatus;
 use App\Traits\Searchable;
 use Illuminate\Database\Eloquent\Model;
 use Kirschbaum\PowerJoins\PowerJoins;
+use Dp0\UserActivity\Traits\UserActivity;
 
 class Parcelle extends Model
 {
-    use Searchable, GlobalStatus, PowerJoins;
+    use Searchable, GlobalStatus, PowerJoins, UserActivity;
+    
     protected $guarded = ['section','localite',];
 
     public function producteur()

@@ -12,6 +12,7 @@
         "blade-ui-kit/blade-ui-kit": "^0.4.0",
         "brian2694/laravel-toastr": "^5.57",
         "coingate/coingate-php": "^3.0",
+        "dp-0/user-activity": "^1.0",
         "ezyang/htmlpurifier": "^4.13",
         "froiden/laravel-rest-api": "^10.0",
         "google/apiclient": "^2.15",
