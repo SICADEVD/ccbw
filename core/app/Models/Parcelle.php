@@ -5,12 +5,11 @@ namespace App\Models;
 use App\Traits\GlobalStatus;
 use App\Traits\Searchable;
 use Illuminate\Database\Eloquent\Model;
-use Kirschbaum\PowerJoins\PowerJoins;
-use Dp0\UserActivity\Traits\UserActivity;
+use Kirschbaum\PowerJoins\PowerJoins; 
 
 class Parcelle extends Model
 {
-    use Searchable, GlobalStatus, PowerJoins, UserActivity;
+    use Searchable, GlobalStatus, PowerJoins;
     
     protected $guarded = ['section','localite',];
 
