@@ -159,7 +159,7 @@
                                                                     data-id="{{ $producteur->id }}"
                                                                     data-price={{ getAmount($campagne->prix_achat) }}
                                                                     @selected($item->parcelle->producteur->id == $producteur->id)>
-                                                                    {{ __($producteur->nom) }}
+                                                                    {{ __(stripslashes($producteur->nom)) }}
                                                                     {{ __($producteur->prenom) }}
                                                                 </option>
                                                             @endforeach
@@ -355,7 +355,7 @@
                     <select class="form-control selected_type" name="items[${length}][producteur]" required id='producteur-${length}' onchange=getParcelle(${length})>
                         <option disabled selected value="">@lang('Producteur')</option>
                         @foreach ($producteurs as $producteur)
-                            <option value="{{ $producteur->id }}" data-id="{{ $producteur->id }}" data-price={{ getAmount($campagne->prix_achat) }} >{{ __($producteur->nom) }} {{ __($producteur->prenoms) }}</option>
+                            <option value="{{ $producteur->id }}" data-id="{{ $producteur->id }}" data-price={{ getAmount($campagne->prix_achat) }} >{{ __(stripslashes($producteur->nom)) }} {{ __(stripslashes($producteur->prenoms)) }}</option>
                         @endforeach
                     </select>
                 </div>

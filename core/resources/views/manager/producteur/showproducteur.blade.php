@@ -132,7 +132,7 @@
                             <td>Nom du producteur
                             </td>
                             <td>
-                                {{ @$producteur->nom }}
+                                {{ @stripslashes($producteur->nom) }}
                             </td>
                         </tr>
 
@@ -140,7 +140,7 @@
                             <td>Prenoms du producteur
                             </td>
                             <td>
-                                {{ @$producteur->prenoms }}
+                                {{ @stripslashes($producteur->prenoms) }}
                             </td>
                         </tr>
 

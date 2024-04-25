@@ -64,8 +64,8 @@
         <tr>
             <td><?php echo $c->id; ?></td>
             <td><?php echo $c->producteur->localite->nom; ?></td>
-            <td><?php echo $c->producteur->nom; ?></td>
-            <td><?php echo $c->producteur->prenoms; ?></td>
+            <td><?php echo stripslashes($c->producteur->nom); ?></td>
+            <td><?php echo stripslashes($c->producteur->prenoms); ?></td>
             <td><?php echo $c->quartier; ?></td>
             <td><?php echo $c->sources_energies; ?></td>
             <td><?php echo $c->boisChauffe; ?></td>

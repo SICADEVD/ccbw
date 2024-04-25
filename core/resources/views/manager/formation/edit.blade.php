@@ -35,7 +35,7 @@
                                 @foreach ($producteurs as $producteur)
                                     <option value="{{ $producteur->id }}" data-chained="{{ $producteur->localite->id }}"
                                         @selected(in_array($producteur->id, $dataProducteur))>
-                                        {{ $producteur->nom }} {{ $producteur->prenoms }}</option>
+                                        {{ stripslashes($producteur->nom) }} {{ stripslashes($producteur->prenoms) }}</option>
                                 @endforeach
                             </select>
                         </div>

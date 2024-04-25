@@ -23,7 +23,7 @@
 
                         <tr>
                             <td>Producteur</td>
-                            <td>{{ @$producteur->nom }} {{ @$producteur->prenoms }}</td>
+                            <td>{{ @stripslashes($producteur->nom) }} {{ @stripslashes($producteur->prenoms) }}</td>
                         </tr>
                         <tr>
                             <td>Type de déclaration superficie</td>

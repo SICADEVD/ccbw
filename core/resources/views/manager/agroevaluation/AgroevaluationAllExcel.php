@@ -42,7 +42,7 @@
         <tr>
             <td><?php echo $c->id; ?></td>
             <td><?php echo $c->producteur->localite->nom; ?></td> 
-            <td><?php echo $c->producteur->prenoms; ?></td>
+            <td><?php echo stripslashes($c->producteur->prenoms); ?></td>
             <td><?php echo $c->quantite; ?></td> 
             <td><?php echo date('d-m-Y', strtotime($c->created_at)); ?></td>
         </tr>

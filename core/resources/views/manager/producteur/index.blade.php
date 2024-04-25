@@ -151,12 +151,12 @@
                                         <td>
                                             <span class="small">
                                                 <a href="{{ route('manager.traca.producteur.edit', $producteur->id) }}">
-                                                    <span>@</span>{{ $producteur->nom }}
+                                                    <span>@</span>{{ stripslashes($producteur->nom) }}
                                                 </a>
                                             </span>
                                         </td>
                                         <td>
-                                            <span>{{ $producteur->prenoms }}</span>
+                                            <span>{{ stripslashes($producteur->prenoms) }}</span>
                                         </td>
                                         <td>
                                             <span>{{ $producteur->codeProd }}</span>

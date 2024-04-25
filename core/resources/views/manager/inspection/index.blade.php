@@ -25,7 +25,7 @@
                                 <select name="producteur" class="form-control" id="producteur">
                                     <option value="">@lang('Tous')</option>
                                     @foreach($producteurs as $producteur)
-                                    <option value="{{ $producteur->id }}" data-chained="{{ $producteur->localite->id }}">{{ $producteur->nom }} {{ $producteur->prenoms }}</option>
+                                    <option value="{{ $producteur->id }}" data-chained="{{ $producteur->localite->id }}">{{ stripslashes($producteur->nom) }} {{ stripslashes($producteur->prenoms) }}</option>
                                     @endforeach 
                                 </select>
                             </div> 

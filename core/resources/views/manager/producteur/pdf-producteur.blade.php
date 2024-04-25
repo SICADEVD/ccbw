@@ -163,7 +163,7 @@ tr:nth-child(odd) {
     <td>Nom du producteur
     </td>
 <td>
-        {{ @$producteur->nom }}
+        {{ @stripslashes($producteur->nom) }}
 </td>
 </tr>
 
@@ -171,7 +171,7 @@ tr:nth-child(odd) {
     <td>Prenoms du producteur
     </td>
 <td>
-        {{ @$producteur->prenoms }}
+        {{ @stripslashes($producteur->prenoms) }}
     </td>
 </tr>
 

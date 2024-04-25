@@ -284,7 +284,7 @@
                     <select class="form-control selected_type " name="items[${length}][producteur]" required id='producteur-${length}' onchange=getParcelle(${length})>
                         <option disabled selected value="">@lang('Producteur')</option>
                         @foreach($producteurs as $producteur)
-                            <option value="{{$producteur->id}}" data-id="{{$producteur->id}}" data-price={{ $periode->prix_champ}} >{{__($producteur->nom)}} {{__($producteur->prenoms)}}</option>
+                            <option value="{{$producteur->id}}" data-id="{{$producteur->id}}" data-price={{ $periode->prix_champ}} >{{__(stripslashes($producteur->nom))}} {{__(stripslashes($producteur->prenoms))}}</option>
                         @endforeach
                     </select>
                 </div>  

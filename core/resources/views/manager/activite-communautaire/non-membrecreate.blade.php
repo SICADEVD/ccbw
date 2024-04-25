@@ -52,7 +52,7 @@
                                     <option value="">@lang('Selectionner une option')</option>
                                     @foreach ($producteurs as $producteur)
                                         <option value="{{ $producteur->id }}" @selected(old('producteur'))>
-                                            {{ $producteur->nom }} {{ $producteur->prenoms }}</option>
+                                            {{ stripslashes($producteur->nom) }} {{ stripslashes($producteur->prenoms) }}</option>
                                     @endforeach
                                 </select>
                             </div>

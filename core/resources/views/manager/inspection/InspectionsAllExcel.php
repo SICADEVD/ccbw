@@ -51,8 +51,8 @@
             <td><?php echo implode(',',json_decode($c->certificat)); ?></td>
             <td><?php echo $c->producteur->localite->nom; ?></td>
             <td><?php echo $c->campagne->nom; ?></td>
-            <td><?php echo $c->producteur->nom; ?></td>
-            <td><?php echo $c->producteur->prenoms; ?></td>
+            <td><?php echo stripslashes($c->producteur->nom); ?></td>
+            <td><?php echo stripslashes($c->producteur->prenoms); ?></td>
             <td><?php echo $c->producteur->codeProd; ?></td>
             <td><?php echo $c->parcelle->codeParc ?? null; ?></td>
             <td><?php echo $c->user->lastname; ?> <?php echo $c->user->firstname; ?></td>

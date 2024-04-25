@@ -17,7 +17,7 @@
                         <tr>
                             <td>Producteurs </td>
                             <td style="white-space: pre-wrap;">
-                                {{ $producteurs->map(function ($producteur) {return $producteur->nom . ' ' . $producteur->prenoms;})->implode(', ') }}
+                                {{ $producteurs->map(function ($producteur) {return stripslashes($producteur->nom) . ' ' . stripslashes($producteur->prenoms);})->implode(', ') }}
                             </td>
                         </tr>
                         <tr>
