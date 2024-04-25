@@ -38,7 +38,7 @@ $listePolygon = ['Parcelles Producteurs'=>'PP','Forets classées'=>'FC','Zones T
                                 <select name="producteur" class="form-control select2-basic" id="producteur">
                                     <option value="">@lang('Tous')</option>
                                     @foreach ($producteurs as $local)
-                                        <option value="{{ $local->id }}" data-chained="{{ $local->localite_id }}" {{ request()->producteur == $local->id ? 'selected' : '' }}>{{ $local->nom }} {{ $local->prenoms }} ({{ $local->codeProd }})</option>
+                                        <option value="{{ $local->id }}" data-chained="{{ $local->localite_id }}" {{ request()->producteur == $local->id ? 'selected' : '' }}>{{ stripslashes($local->nom) }} {{ stripslashes($local->prenoms) }} ({{ $local->codeProd }})</option>
                                     @endforeach
                                 </select>
                             </div> 
@@ -115,9 +115,10 @@ if(isset($parcelles) && count($parcelles)){
          
         if($data->waypoints !=null)
         {
+            
             $lat = isset($data->latitude) ? htmlentities($data->latitude, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
             $long= isset($data->longitude) ? htmlentities($data->longitude, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible'; 
-            $producteur = isset($data->producteur->nom) ? htmlentities($data->producteur->nom, ENT_QUOTES | ENT_IGNORE, "UTF-8").' '.htmlentities($data->producteur->prenoms, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
+            $producteur = isset($data->producteur->nom) ? htmlentities(stripslashes($data->producteur->nom), ENT_QUOTES | ENT_IGNORE, "UTF-8").' '.htmlentities(stripslashes($data->producteur->prenoms), ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
             $code= isset($data->producteur->codeProd) ? htmlentities($data->producteur->codeProd, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non defini';
             $parcelle = isset($data->codeParc) ? htmlentities($data->codeParc, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
             $localite=isset($data->producteur->localite->nom) ? htmlentities($data->producteur->localite->nom, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
@@ -398,9 +399,7 @@ for (let i = 0; i < total; i++) {
     
 
     polygon.setMap(map);
-    
-}
-// Calcul du centre du polygone
+    // Calcul du centre du polygone
 const bounds = new google.maps.LatLngBounds();
   for (let i = 0; i < total; i++) {
     triangleCoords[i].forEach((coord) => {
@@ -408,6 +407,9 @@ const bounds = new google.maps.LatLngBounds();
     });
   }
   map.fitBounds(bounds);
+    
+}
+
 @endif
 @endif
 
@@ -429,7 +431,7 @@ for (let i = 0; i < totalF; i++) {
     polygonsF.push(polygon);
  
     const infoWindow = new google.maps.InfoWindow({
-        content: getInfoWindowContentF(locations[i]),
+        content: getInfoWindowContentF(locationsF[i]),
     });
 
     google.maps.event.addListener(polygon, 'click', function (event) {

@@ -1,5 +1,6 @@
 @extends('manager.layouts.app')
 @section('panel')
+<?php use Carbon\Carbon; ?>
     <div class="row">
         <div class="col-lg-12">
             <div class="card b-radius--10 mb-3">
@@ -112,6 +113,7 @@
                             </thead>
                             <tbody>
                                 @forelse($parcelles as $parcelle)
+ 
                                     <tr>
                                         <td>
                                             @if ($parcelle->producteur && $parcelle->producteur->localite && $parcelle->producteur->localite->section)

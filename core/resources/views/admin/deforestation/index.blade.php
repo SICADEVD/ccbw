@@ -466,8 +466,6 @@ for (let i = 0; i < totalF; i++) {
         infoWindow.close();
     });
     
-    
-
     polygon.setMap(map);
 } 
 

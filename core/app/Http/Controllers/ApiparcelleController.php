@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Localite;
 use App\Models\Parcelle;
@@ -59,6 +60,11 @@ class ApiparcelleController extends Controller
    */
   public function store(Request $request)
   {
+
+    // $carbon_debut = Carbon::createFromFormat('Y-m-d H:i:s', $parcelle->created_at);
+    //                             $carbon_fin = Carbon::createFromFormat('Y-m-d H:i:s', now());
+    //                             $diff = $carbon_fin->diff($carbon_debut);
+    //                             $minutes = $diff->h * 60 + $diff->i;
     if ($request->id) {
       $parcelle = Parcelle::find($request->id);
       $parcelle->codeParc = $parcelle->codeParc;
