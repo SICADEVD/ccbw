@@ -273,8 +273,7 @@ class ApiproducteurController extends Controller
         'autrePhone' => 'required_if:autreMembre,==,oui',
         'numCMU' => 'required_if:carteCMU,==,oui',
         'phone2' => Rule::when($request->autreMembre == 'oui', function () {
-          return ['required', 'regex:/^\d{10}$/'];
-        }),
+          return ['required', 'regex:/^\d{10}$/'];}),
       ];
       $message = [
         'programme_id.required' => 'Le programme est obligatoire',
