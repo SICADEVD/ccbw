@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\Manager\ImageController;
@@ -53,8 +55,11 @@ use App\Http\Controllers\Manager\CooperativeSettingController;
 use App\Http\Controllers\Manager\ActiviteCommunautaireController;
 use App\Http\Controllers\Manager\AgroapprovisionnementController;
 
+
+
 Route::namespace('Manager\Auth')->group(function () {
 
+   
     //Manager Login
     Route::controller('LoginController')->group(function () {
         Route::get('/login', 'showLoginForm')->name('login');
@@ -83,6 +88,8 @@ Route::controller('SiteController')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::middleware('manager')->group(function () {
+
+    
         //Home Controller
         Route::name('')->group(function () {
             Route::get('dashboard', [ManagerController::class, 'dashboard'])->name('dashboard');
