@@ -47,27 +47,9 @@ class ApiapplicationController extends Controller
      */
     public function store(Request $request)
     {
-        $validationRule = [
-            'pesticides.*.nom' => 'required|string',
-            'pesticides.*.nomCommercial' => 'required|string',
-            'pesticides.*.toxicicologie' => 'required|string',
-            'pesticides.*.frequence' => 'required|integer',
-            'pesticides.*.dosage' => 'required|integer',
-            'pesticides.*.doseUnite' => 'required|string',
-            'pesticides.*.quantite' => 'required|integer',
-            'pesticides.*.quantiteUnite' => 'required|string',
-        ];
-
-
-        $request->validate($validationRule);
+ 
         //dd(response()->json($request));
-
-        $localite = Localite::where('id', $request->localite)->first();
-
-        if ($localite->status == Status::NO) {
-            $notify[] = ['error', 'Cette localité est désactivée'];
-            return back()->withNotify($notify)->withInput();
-        }
+ 
 
         if ($request->id) {
             $application = Application::findOrFail($request->id);

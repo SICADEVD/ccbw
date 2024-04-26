@@ -54,18 +54,7 @@ class ApisuiviformationController extends Controller
         if (!file_exists(storage_path() . "/app/public/formations")) {
             File::makeDirectory(storage_path() . "/app/public/formations", 0777, true);
         }
-        $validationRule = [
-            'localite'    => 'required|exists:localites,id',
-            'staff' => 'required|exists:users,id',
-            'producteur' => 'required|max:255',
-            'lieu_formation'  => 'required|max:255',
-            'type_formation'  => 'required|max:255',
-            'formation_type'  => 'required|max:255',
-            'duree_formation' => 'required|date_format:H:i',
-            'theme'  => 'required|max:255',
-        ];
-
-        $request->validate($validationRule);
+     
         if ($request->id) {
             $formation = SuiviFormation::findOrFail($request->id);
         } else {

@@ -46,25 +46,7 @@ class ApievaluationController extends Controller
      */
     public function store(Request $request)
     {
-        $validationRule = [
-            'parcelle'    => 'required|exists:parcelles,id',
-            'producteur'    => 'required|exists:producteurs,id',
-            'encadreur' => 'required|exists:users,id',
-            'note'  => 'required|max:255',
-            'date_evaluation'  => 'required|max:255',
-        ];
-
-        $validator = Validator::make($request->all(), $validationRule);
-
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 400);
-        }
-
-        $localite = Localite::where('id', $request->localite)->first();
-
-        if ($localite->status == Status::NO) {
-            return response()->json(['error' => 'Cette localité est désactivé'], 400);
-        }
+   
 
         if ($request->id) {
             $inspection = Inspection::findOrFail($request->id);

@@ -41,14 +41,7 @@ class ApiestimationController extends Controller
      */
     public function store(Request $request)
     {
-      
-      $validationRule = [
-        'parcelle'    => 'required|exists:parcelles,id',
-        'campagne' => 'required|max:255',
-        'date_estimation'  => 'required|max:255', 
-    ]; 
-
-    $request->validate($validationRule); 
+     
 
     if($request->id) {
         $estimation = Estimation::find($request->id); 

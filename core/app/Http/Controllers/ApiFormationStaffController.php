@@ -24,14 +24,7 @@ class ApiFormationStaffController extends Controller
             File::makeDirectory(storage_path(). "/app/public/formationsStaff", 0777, true);
         }
        
-        $validationRule = [
-            'formateur' => 'required|max:255',
-            'lieu_formation'  => 'required|max:255',
-            'module_formation'  => 'required|max:255',
-            'theme'  => 'required',
-            'entreprise_id'  => 'required',
-        ];
-        $request->validate($validationRule);
+        
         if ($request->id) {
             $formation = FormationStaff::findOrFail($request->id);
         } else {

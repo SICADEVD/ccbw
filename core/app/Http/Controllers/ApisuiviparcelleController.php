@@ -52,50 +52,7 @@ class ApisuiviparcelleController extends Controller
      */
     public function store(Request $request)
     {
-        $validationRule = [
-            'parcelle_id'    => 'required|exists:parcelles,id',
-            'campagne_id' => 'required|max:255',
-            'dateVisite'  => 'required|max:255',
-            'items.*.arbre'     => 'required|integer',
-            'items.*.nombre'     => 'required|integer',
-
-            'pesticidesAnneDerniere.*.nom'     => 'required|string',
-            'pesticidesAnneDerniere.*.unite'     => 'required|string',
-            'pesticidesAnneDerniere.*.quantite'     => 'required|integer',
-            'pesticidesAnneDerniere.*.contenant'     => 'required|string',
-            'pesticidesAnneDerniere.*.frequence'     => 'required|string',
-
-            'intrantsAnneDerniere.*.nom'     => 'required|string',
-            'intrantsAnneDerniere.*.unite'     => 'required|string',
-            'intrantsAnneDerniere.*.quantite'     => 'required|integer',
-            'intrantsAnneDerniere.*.contenant'     => 'required|string',
-            'intrantsAnneDerniere.*.frequence'     => 'required|string',
-
-
-            'traitement.*.nom'     => 'required_if:traiterParcelle,oui',
-            'traitement.*.unite'     => 'required_if:traiterParcelle,oui',
-            'traitement.*.quantite'     => 'required_if:traiterParcelle,oui',
-            'traitement.*.contenant'     => 'required_if:traiterParcelle,oui',
-            'traitement.*.frequence'     => 'required_if:traiterParcelle,oui',
-
-            'presenceAutreInsecte.*.autreInsecteNom' => 'required_if:autreInsecte,oui',
-            'presenceAutreInsecte.*.nombreAutreInsectesParasites' => 'required_if:autreInsecte,oui',
-
-            'insectesParasites.*.nom' => 'required_if:presenceInsectesParasites,oui',
-            'insectesParasites.*.nombreinsectesParasites' => 'required_if:presenceInsectesParasites,oui',
-
-            'insectesAmis.*' => 'required_if:presenceInsectesAmis,oui',
-            'nombreinsectesAmis.*' => 'required_if:presenceInsectesAmis,oui',
-        ];
-
-        $request->validate($validationRule);
-
-        $localite = Localite::where('id', $request->localite)->first();
-
-        if ($localite->status == Status::NO) {
-            $notify[] = ['error', 'Cette localité est désactivée'];
-            return back()->withNotify($notify)->withInput();
-        }
+       
 
         if ($request->id) {
             $suivi_parcelle = SuiviParcelle::findOrFail($request->id);

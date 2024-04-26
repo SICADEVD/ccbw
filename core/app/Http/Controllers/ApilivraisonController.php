@@ -63,17 +63,7 @@ class ApilivraisonController extends Controller
     public function store(Request $request)
     {
 
-        $request->validate([
-            'sender_staff' => 'required|exists:users,id',
-            'magasin_section' =>  'required|exists:magasin_sections,id',
-            'items'            => 'required|array',
-            'items.*.type'     => 'required',
-            'items.*.producteur'     => 'required|integer',
-            'items.*.parcelle'     => 'required|integer',
-            'items.*.quantity' => 'required|numeric|gt:0',
-            'estimate_date'    => 'required|date|date_format:Y-m-d',
-        ]);
-
+        
 
         $campagne = Campagne::active()->first();
         $periode = CampagnePeriode::where([['campagne_id', $campagne->id], ['periode_debut', '<=', gmdate('Y-m-d')], ['periode_fin', '>=', gmdate('Y-m-d')]])->latest()->first();

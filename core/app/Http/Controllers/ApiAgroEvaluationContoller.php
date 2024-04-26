@@ -21,22 +21,7 @@ use App\Models\AgroapprovisionnementSectionEspece;
 class ApiAgroEvaluationContoller extends Controller
 {
     public function store(Request $request)
-    {
-        $validationRule = [
-            'localite'    => 'required|exists:localites,id',
-            'producteur'    => 'required|exists:producteurs,id',
-            'especesarbre'            => 'required|array',
-            'quantite'            => 'required|array',
-        ];
-
-        $request->validate($validationRule);
-
-        $localite = Localite::where('id', $request->localite)->first();
-
-        if ($localite->status == Status::NO) {
-            $notify[] = ['error', 'Cette localité est désactivée'];
-            return back()->withNotify($notify)->withInput();
-        }
+    { 
 
         if ($request->id) {
             $agroevaluation = Agroevaluation::findOrFail($request->id);
