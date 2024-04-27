@@ -19,10 +19,10 @@ class ApilocaliteController extends Controller
     public function index(Request $request)
     {
 
-        //$user = User::with('cooperative.sections.localites')->find($request->userid);
-        //$localites = $user->cooperative->sections->flatMap->localites; 
-        $localites = DB::table('user_localites as rl')->join('localites as l', 'rl.localite_id','=','l.id')->join('sections as sec', 'l.section_id','=','sec.id')->where('user_id', $request->userid)->select('l.id','l.nom','cooperative_id')->get();
-        
+        $user = User::with('cooperative.sections.localites')->find($request->userid);
+        $localites = $user->cooperative->sections->flatMap->localites; 
+       // $localites = DB::table('user_localites as rl')->join('localites as l', 'rl.localite_id','=','l.id')->join('sections as sec', 'l.section_id','=','sec.id')->where('user_id', $request->userid)->select('l.id','l.nom','cooperative_id')->get();
+
         return response()->json($localites, 201);
     }
 
