@@ -320,17 +320,13 @@
                 if (statut == 'Certifie') {
                     $('#statutCertifie').show('slow');
                     $('.certificat').show('slow');
-                    $('.codeProd').show('slow');
                     $('#certificat').prop('required', true);
-                    $('#codeProd').prop('required', true);
                     $('.certificats').show('slow');
                     $('.select2-multi-select.certificats').prop('required', true);
                 } else {
                     $('#statutCertifie').hide('slow');
                     $('#certificat').val('');
-                    $('#codeProd').val('');
                     $('#certificat').prop('required', false);
-                    $('#codeProd').prop('required', false);
                     $('.certificats').hide('slow');
                     var select2Element = $('.select2-multi-select.certificats');
                     select2Element.val(null).trigger('change');
