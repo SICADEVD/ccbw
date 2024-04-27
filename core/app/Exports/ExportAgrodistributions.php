@@ -22,7 +22,7 @@ class ExportAgrodistributions implements FromView
     {
         // TODO: Implement view() method.
         return view('manager.distribution.DistributionAllExcel',[
-            'distributions' => AgrodistributionEspece::joinRelationship('agrodistribution.parcelle.producteur','agroespecesarbre')->where('cooperative_id',auth()->user()->cooperative_id)->get()
+            'distributions' => AgrodistributionEspece::joinRelationship('agrodistribution.producteur','agroespecesarbre')->where('cooperative_id',auth()->user()->cooperative_id)->get()
         ]);
     }
         
