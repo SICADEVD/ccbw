@@ -33,11 +33,11 @@ use App\Http\Controllers\ApisuiviformationController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-DB::listen(function($sql){
-    Log::info($sql->sql);
-    Log::info($sql->bindings);
-    Log::info($sql->time);
-});
+// DB::listen(function($sql){
+//     Log::info($sql->sql);
+//     Log::info($sql->bindings);
+//     Log::info($sql->time);
+// });
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
