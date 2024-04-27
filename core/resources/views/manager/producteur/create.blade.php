@@ -61,12 +61,7 @@
                                 <?php echo Form::number('certificat', null, ['id' => 'certificat', 'class' => 'form-control certificat', 'min' => '1990']); ?>
                             </div>
                         </div>
-                        <div class="form-group row">
-                            <?php echo Form::label(__('Code producteur'), null, ['class' => 'col-sm-4 control-label']); ?>
-                            <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::text('codeProd', null, ['id' => 'codeProd', 'placeholder' => __('Code producteur'), 'class' => 'form-control codeProd']); ?>
-                            </div>
-                        </div>
+
                         {{-- Selectionner le Certificat --}}
 
                         <div class="form-group row">
@@ -93,6 +88,12 @@
                             <div class="col-xs-12 col-sm-8">
                                 <?php echo Form::text('autreCertificats', null, ['id' => 'autreCertificats', 'placeholder' => __('Autre certificat'), 'class' => 'form-control autreCertificats']); ?>
                             </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <?php echo Form::label(__('Code producteur'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-12 col-sm-8">
+                            <?php echo Form::text('codeProd', null, ['id' => 'codeProd', 'placeholder' => __('Code producteur'), 'class' => 'form-control codeProd']); ?>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -179,8 +180,7 @@
                     <div class="form-group row">
                         <?php echo Form::label(__('Nationalité'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <select class="form-control select2-basic" name="nationalite" id="nationalite"
-                                required>
+                            <select class="form-control select2-basic" name="nationalite" id="nationalite" required>
                                 <option value="">@lang('Selectionner une option')</option>
                                 @foreach ($countries as $nationalite)
                                     <option value="{{ $nationalite->id }}" @selected(old('nationalite'))>
@@ -335,18 +335,14 @@
             if (statut == 'Certifie') {
                 $('#statutCertifie').show('slow');
                 $('.certificat').show('slow');
-                $('.codeProd').show('slow');
                 $('#certificat').prop('required', true);
-                $('#codeProd').prop('required', true);
                 $('.certificats').show('slow');
                 $('.certificats').prop('required', true);
 
             } else {
                 $('#statutCertifie').hide('slow');
                 $('#certificat').val('');
-                $('#codeProd').val('');
                 $('#certificat').prop('required', false);
-                $('#codeProd').prop('required', false);
                 $('.certificats').prop('required', false);
                 $('.certificats').hide('slow');
                 var select2Element = $('#certificats');
