@@ -137,7 +137,7 @@ class ParcelleController extends Controller
             ->get();
         $parcelles = Parcelle::dateFilter()->latest('id')
             ->joinRelationship('producteur.localite.section')
-            ->where('cooperative_id', $manager->cooperative_id)
+            ->where([['cooperative_id', $manager->cooperative_id],['typedeclaration','GPS']]) 
             ->whereNotNull('waypoints')
             ->when(request()->section, function ($query, $section) {
                 $query->where('section_id', $section);

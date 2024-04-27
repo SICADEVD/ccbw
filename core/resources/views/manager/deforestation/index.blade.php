@@ -98,7 +98,7 @@ $newCoord = '';
 $lat = '';
 $long = '';
 $total = 0;
-$mappingparcellle = $polygonCoordinates = $proprietaire = '';
+$mappingparcellle = '';
 $pointsPolygon = array();
 $seriescoordonates=array();
 $a=1;
