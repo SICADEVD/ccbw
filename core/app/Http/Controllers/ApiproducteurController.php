@@ -307,7 +307,10 @@ class ApiproducteurController extends Controller
 
         if ($hasInfoProd) {
           $notify = "L'info existe déjà pour ce producteur. Veuillez apporter des mises à jour.";
-          return response()->json($notify, 201);
+          return response()->json([
+            'message'=>$notify,
+            'status'=>'refuse'
+          ]);
         }
       }
       $infoproducteur->producteur_id = $request->producteur_id;
