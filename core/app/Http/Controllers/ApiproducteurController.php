@@ -6,6 +6,7 @@ use Exception;
 use App\Models\User;
 use App\Constants\Status;
 use App\Models\Producteur;
+use App\Models\DebugMobile;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\Certification;
@@ -282,11 +283,15 @@ class ApiproducteurController extends Controller
   }
 
 
-  public function apiinfosproducteur(StoreInfoRequest $request)
+  public function apiinfosproducteur(Request $request)
   {
     DB::beginTransaction();
     try {
-      $request->validated();
+    
+    $debug = new DebugMobile();
+    $debug->content = json_encode($request->all());
+    $debug->save();
+
       $producteur = Producteur::where('id', $request->producteur_id)->first();
       if ($producteur->status == Status::NO) {
         $notify = 'Ce producteur est désactivé';
