@@ -35,7 +35,8 @@ class ApiAgroEvaluationContoller extends Controller
                 return response()->json("Ce producteur a déjà une évaluation de besoin enregistré", 501);
             }
         }
-
+        $campagne = Campagne::active()->first();
+        $agroevaluation->campagne_id  = $campagne->id;
         $agroevaluation->producteur_id  = $request->producteur;
         $agroevaluation->userid  = $request->userid;
         $agroevaluation->quantite  = array_sum($request->quantite);
