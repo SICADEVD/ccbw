@@ -27,6 +27,10 @@ class AgroapprovisionnementSection extends Model
         return $this->hasMany(AgroapprovisionnementSection::class, 'agroapprovisionnement_section_id', 'id');
     }
 
+    public function especesSection()
+    {
+        return $this->hasMany(AgroapprovisionnementSectionEspece::class, 'agroapprovisionnement_section_id', 'id');
+    }
   
 
 }

@@ -98,9 +98,9 @@ use Illuminate\Support\Arr;
                                         </td> 
                                         <td>
                                       
-                                        <a href="{{ route('manager.agro.approvisionnement.edit', $approvisionnement->id) }}"
+                                        <a href="{{ route('manager.agro.approvisionnement.show-section', encrypt($approvisionnement->id)) }}"
                                                 class="btn btn-sm btn-outline--primary"><i
-                                                    class="las la-pen"></i>@lang('Edit')</a>
+                                                    class="las la-pen"></i>@lang('Details')</a>
                                              
                                         </td>
                                         

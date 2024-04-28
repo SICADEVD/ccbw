@@ -45,6 +45,7 @@
                         <table class="table table--light style--two">
                             <thead>
                                 <tr> 
+                                <th>@lang('Section')</th> 
                                     <th>@lang('Localite')</th> 
                                     <th>@lang('Producteur')</th>  
                                     <th>@lang('Quantite')</th>  
@@ -55,6 +56,9 @@
                             <tbody>
                                 @forelse($agroevaluations as $agroevaluation)
                                     <tr>
+                                    <td>
+                                            <span class="fw-bold">{{ $agroevaluation->producteur->localite->section->libelle }}</span>
+                                        </td>
                                         <td>
                                             <span class="fw-bold">{{ $agroevaluation->producteur->localite->nom }}</span>
                                         </td>

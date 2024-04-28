@@ -254,16 +254,17 @@ class AgroapprovisionnementController extends Controller
         $pageTitle = "Mise à jour de la approvisionnement";
          
         $especesarbres  = Agroespecesarbre::orderby('strate','asc')->orderby('nom','asc')->get(); 
-        $approvisionnement   = Agroapprovisionnement::findOrFail($id);
+        $approvisionnement   = Agroapprovisionnement::find($id);
         return view('manager.approvisionnement.edit', compact('pageTitle', 'especesarbres', 'approvisionnement'));
     } 
-    public function edit_section($id)
+    public function show_section($id)
     {
         $pageTitle = "Mise à jour de l'approvisionnement";
          
         $especesarbres  = Agroespecesarbre::orderby('strate','asc')->orderby('nom','asc')->get(); 
-        $approvisionnement   = Agroapprovisionnement::findOrFail($id);
-        return view('manager.approvisionnement.edit-section', compact('pageTitle', 'especesarbres', 'approvisionnement'));
+        $approvisionnement   = AgroapprovisionnementSection::find(decrypt($id));
+
+        return view('manager.approvisionnement.show-section', compact('pageTitle', 'especesarbres', 'approvisionnement'));
     } 
 
     public function status($id)

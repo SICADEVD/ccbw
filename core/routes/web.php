@@ -485,7 +485,7 @@ Route::middleware('auth')->group(function () {
             Route::get('edit/{id}', [AgroapprovisionnementController::class,'edit'])->name('edit');
             Route::get('create-section', [AgroapprovisionnementController::class,'create_section'])->name('create-section');
             Route::post('store-section', [AgroapprovisionnementController::class,'store_section'])->name('store-section');
-            Route::get('edit-section/{id}', [AgroapprovisionnementController::class,'edit_section'])->name('edit-section');
+            Route::get('detail-section/{id}', [AgroapprovisionnementController::class,'show_section'])->name('show-section');
             Route::post('status/{id}', [AgroapprovisionnementController::class,'status'])->name('status');
             Route::post('delete/{id}', [AgroapprovisionnementController::class, 'delete'])->name('delete');
             Route::get('/exportApprovisionnementExcel', [AgroapprovisionnementController::class,'exportExcel'])->name('exportExcel.approvisionnementAll');
