@@ -36,7 +36,7 @@ tr:nth-child(odd) {
 </head>
 <body>
 <table>
-
+@if($producteur->consentement)
 <tr>
     <td>Accord de consentement du producteur
     </td>
@@ -45,7 +45,8 @@ tr:nth-child(odd) {
 		 
     </td>
 </tr> 
-
+@endif
+@if($producteur->proprietaires)
 <tr>
     <td>Comment vous vous definissez ?
     </td>
@@ -54,6 +55,8 @@ tr:nth-child(odd) {
  
     </td>
 </tr>
+@endif 
+@if($producteur->plantePartage)
 <tr>
     <td>
     </td>
@@ -62,7 +65,8 @@ tr:nth-child(odd) {
  
     </td>
 </tr>
- 
+@endif
+@if($producteur->anneeDemarrage)
     <tr>
         <td>Année de démarrage
         </td>
@@ -71,6 +75,8 @@ tr:nth-child(odd) {
  
         </td>
 </tr>
+@endif
+@if($producteur->anneeFin)
     <tr>
         <td>Année de fin
         </td>
@@ -80,6 +86,8 @@ tr:nth-child(odd) {
         
     </td>
 </tr>
+@endif
+@if($producteur->statut)
 <tr>
     <td>Statut
     </td>
@@ -88,7 +96,8 @@ tr:nth-child(odd) {
  
     </td>
 </tr>
-                
+@endif
+@if($producteur->certificat)          
     <tr>
         <td>Année de certification
         </td>
@@ -97,6 +106,8 @@ tr:nth-child(odd) {
  
         </td>
 </tr>
+@endif
+@if($producteur->codeProd)
     <tr>
         <td>Code producteur
         </td>
@@ -105,26 +116,21 @@ tr:nth-child(odd) {
  
         </td>
 </tr>
-   
+@endif
+@if(count($producteur->certifications))
     <tr>
-        <td>Certificat
+        <td>Certifications
 
         </td>
 <td>
-            {{ @$producteur->certificats }} 
-        
+@forelse($producteur->certifications as $data)
+           <span class="badge badge-info">{{ @$data->certification }} </span> <br>
+    @empty
+Aucune
+    @endforelse
     </td>
-</tr>
-
-    <tr>
-        <td>Autre Certificat
-        </td>
-<td>
-            {{ @$producteur->autreCertificats }} 
-        
-    </td>
-</tr>
-                  
+    @endif
+@if($producteur->localite_id)              
 <tr>
 <td>
     Section
@@ -143,7 +149,8 @@ tr:nth-child(odd) {
 {{ @$producteur->localite->nom }}
     </td>
 </tr>
- 
+@endif
+@if($producteur->programme_id)
 <tr>
 	<td>
     Programme
@@ -152,6 +159,8 @@ tr:nth-child(odd) {
 {{ @$producteur->programme->libelle }}
     </td>
 </tr> 
+@endif
+@if($producteur->habitationProducteur)
 <tr>
     <td>Habitez-vous dans un campement ou village ?
     </td>
@@ -159,6 +168,8 @@ tr:nth-child(odd) {
         {{ @$producteur->habitationProducteur }} 
     </td>
 </tr> 
+@endif
+@if($producteur->nom)
 <tr>
     <td>Nom du producteur
     </td>
@@ -166,7 +177,8 @@ tr:nth-child(odd) {
         {{ @stripslashes($producteur->nom) }}
 </td>
 </tr>
-
+@endif
+@if($producteur->prenoms)
 <tr>
     <td>Prenoms du producteur
     </td>
@@ -174,13 +186,16 @@ tr:nth-child(odd) {
         {{ @stripslashes($producteur->prenoms) }}
     </td>
 </tr>
-
+@endif
+@if($producteur->sexe)
 <tr>
     <td>Genre
     </td>
 <td>
         {{ @$producteur->sexe }}
 </td>
+@endif
+@if($producteur->statutMatrimonial)
 </tr>
                   
 <tr>
@@ -190,7 +205,8 @@ tr:nth-child(odd) {
         {{ @$producteur->statutMatrimonial }} 
     </td>
 </tr>
-
+@endif
+@if($producteur->nationalite)
 <tr>
     <td>Nationalité
     </td>
@@ -199,7 +215,8 @@ tr:nth-child(odd) {
         </select>
     </td>
 </tr>
-
+@endif
+@if($producteur->dateNaiss)
 <tr>
     <td>Date de naissance
     </td>
@@ -207,6 +224,8 @@ tr:nth-child(odd) {
         {{ @$producteur->dateNaiss }} 
     </td>
 </tr>
+@endif
+@if($producteur->phone1)
 <tr>
     <td>Numero de téléphone
     </td>
@@ -214,20 +233,8 @@ tr:nth-child(odd) {
         {{ @$producteur->phone1 }} 
     </td>
 </tr>
-
-<tr>
-    <td>Avez-vous un proche à contacter pour vous joindre
-    </td>
-<td>
-        {{ @$producteur->autreMembre }} </td>
-</tr> 
-    <tr>
-        <td>
-        </td>
-<td>
-            {{ @$producteur->autrePhone }} 
-        </td>
-</tr>
+@endif
+@if($producteur->phone2)
     <tr>
         <td>Numero de téléphone
         </td>
@@ -236,6 +243,25 @@ tr:nth-child(odd) {
         
     </td>
 </tr>
+@endif
+@if($producteur->autreMembre)
+<tr>
+    <td>Avez-vous un proche à contacter pour vous joindre
+    </td>
+<td>
+        {{ @$producteur->autreMembre }} </td>
+</tr> 
+@endif
+@if($producteur->autrePhone)
+    <tr>
+        <td>
+        </td>
+<td>
+            {{ @$producteur->autrePhone }} 
+        </td>
+</tr>
+@endif
+@if($producteur->niveau_etude)
 <tr>
    <td> Niveau d'étude 
     </td>
@@ -243,6 +269,8 @@ tr:nth-child(odd) {
         {{ @$producteur->niveau_etude }} 
     </td>
 </tr>
+@endif
+@if($producteur->type_piece)
 <tr>
     <td>Type de pièces
     </td>
@@ -250,36 +278,40 @@ tr:nth-child(odd) {
         {{ @$producteur->type_piece }} 
     </td>
 </tr>
-
+@endif
+@if($producteur->numPiece)
 <tr>
     <td>N° de la pièce
     </td>
 <td>
         {{ @$producteur->numPiece }} </td>
 </tr>
-         
-
+@endif
+@if($producteur->num_ccc)
 <tr>
     <td>N° de carte CCC
     </td>
 <td>
         {{ @$producteur->num_ccc }} </td>
 </tr>
-                
+@endif
+@if($producteur->carteCMU)             
 <tr>
     <td>Avez-vous une carte CMU ?
     </td>
 <td>
         {{ @$producteur->carteCMU }} </td>
 </tr>
-            
+@endif
+@if($producteur->numCMU)          
     <tr>
         <td>N° de la pièce CMU
         </td>
 <td>
             {{ @$producteur->numCMU }}  </td>
 </tr>
-
+@endif
+@if($producteur->typeCarteSecuriteSociale)      
 <tr>
     <td>Votre type de carte de sécurité social
     </td>
@@ -287,6 +319,8 @@ tr:nth-child(odd) {
         {{ @$producteur->typeCarteSecuriteSociale }} 
     </td>
 </tr> 
+@endif
+@if($producteur->numSecuriteSociale) 
     <tr>
         <td>N° de carte de sécurité sociale
         </td>
@@ -296,7 +330,7 @@ tr:nth-child(odd) {
         
     </td>
 </tr>
- 
+@endif
 </table>
 </body>
 </html>

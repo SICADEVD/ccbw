@@ -184,30 +184,23 @@
                                             <a href="{{ route('manager.traca.producteur.edit', $producteur->id) }}"
                                                 class="btn btn-sm btn-outline--warning"><i
                                                     class="la la-pen"></i>@lang('Editer')</a>
-                                            <button type="button" class="btn btn-sm btn-outline--primary"
-                                                data-bs-toggle="dropdown" aria-expanded="false"><i
-                                                    class="las la-ellipsis-v"></i>@lang('Action')
-                                            </button>
-                                            <div class="dropdown-menu p-0">
-
-                                                <a href="{{ route('manager.traca.producteur.showproducteur', $producteur->id) }}"
-                                                    class="dropdown-item"><i
+                                            <a href="{{ route('manager.traca.producteur.showproducteur', $producteur->id) }}"
+                                                    class="btn btn-sm btn-outline--primary"><i
                                                         class="las la-file-invoice"></i>@lang('Détails')</a>
-                                                @if ($producteur->status == Status::DISABLE)
-                                                    <button type="button" class="confirmationBtn  dropdown-item"
+                                        @if($producteur->status == Status::DISABLE)
+                                                    <button type="button" class="confirmationBtn  btn btn-sm btn-outline--danger"
                                                         data-action="{{ route('manager.traca.producteur.status', $producteur->id) }}"
                                                         data-question="@lang('Etes-vous sûr de vouloir activer ce producteur?')">
                                                         <i class="la la-eye"></i> @lang('Activé')
                                                     </button>
                                                 @else
-                                                    <button type="button" class="confirmationBtn dropdown-item"
+                                                    <button type="button" class="confirmationBtn btn btn-sm btn-outline--danger" 
                                                         data-action="{{ route('manager.traca.producteur.status', $producteur->id) }}"
                                                         data-question="@lang('Etes-vous sûr de vouloir désactiver ce producteur?')">
                                                         <i class="la la-eye-slash"></i> @lang('Désactivé')
                                                     </button>
                                                 @endif
-
-                                            </div>
+                                            
                                         </td>
                                     </tr>
                                 @empty
