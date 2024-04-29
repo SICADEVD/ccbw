@@ -100,7 +100,7 @@
                             </td>
 
                             <td>
-                                {{ @$producteur->section }}
+                                {{ @$producteur->localite->section->libelle }}
                             </td>
                         </tr>
 
@@ -109,7 +109,7 @@
                                 Localite
                             </td>
                             <td>
-                                {{ @$producteur->localite_id }}
+                                {{ @$producteur->localite->nom }}
                             </td>
                         </tr>
 
@@ -118,7 +118,7 @@
                                 Programme
                             </td>
                             <td>
-                                {{ @$producteur->programme_id }}
+                                {{ @$producteur->programme->libelle }}
                             </td>
                         </tr>
                         <tr>
@@ -164,7 +164,7 @@
                             <td>Nationalité
                             </td>
                             <td>
-                                {{ @$producteur->nationalite }}
+                                {{ @$producteur->country->nationalite }}
                                 </select>
                             </td>
                         </tr>

@@ -131,7 +131,7 @@ tr:nth-child(odd) {
     </td>
  
 <td>
-        {{ @$producteur->section }} 
+{{ @$producteur->localite->section->libelle }}
     </td>
 </tr>
  
@@ -140,7 +140,7 @@ tr:nth-child(odd) {
     Localite
     </td>
 <td>
-        {{ @$producteur->localite_id }} 
+{{ @$producteur->localite->nom }}
     </td>
 </tr>
  
@@ -149,7 +149,7 @@ tr:nth-child(odd) {
     Programme
     </td>
 <td>
-        {{ @$producteur->programme_id }} 
+{{ @$producteur->programme->libelle }}
     </td>
 </tr> 
 <tr>
@@ -195,7 +195,7 @@ tr:nth-child(odd) {
     <td>Nationalité
     </td>
 <td>
-        {{ @$producteur->nationalite }} 
+{{ @$producteur->country->nationalite }}
         </select>
     </td>
 </tr>
