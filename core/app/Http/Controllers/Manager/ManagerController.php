@@ -38,6 +38,9 @@ class ManagerController extends Controller
         $manager = auth()->user();
         $pageTitle = "Tableau de bord";  
         $nbcoop = Cooperative::count();
+        $totalparcelle = Parcelle::joinRelationship('producteur.localite.section')
+                                ->where('cooperative_id', auth()->user()->cooperative_id)
+                                ->count();
         $nbparcelle = Parcelle::joinRelationship('producteur.localite.section')
                                 ->where('cooperative_id', auth()->user()->cooperative_id)
                                 ->sum('superficie');  
@@ -150,7 +153,7 @@ $producteurparGenreCertification = Producteur_certification::joinRelationship('p
         }
     }
 
-        return view('manager.dashboard', compact('pageTitle','nbproducteur','nbparcelle','nbinspection','nbarbredistribue', 'genre','parcelle','formation','modules','parcellespargenre','producteurparcertification','producteurparGenreCertification'));
+        return view('manager.dashboard', compact('pageTitle','nbproducteur','nbparcelle','nbinspection','nbarbredistribue', 'genre','parcelle','formation','modules','parcellespargenre','producteurparcertification','producteurparGenreCertification','totalparcelle'));
     }
 
     public function changeLanguage($lang = null)
