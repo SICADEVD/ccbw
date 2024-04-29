@@ -788,18 +788,19 @@ class ParcelleController extends Controller
             if ($data != '') {
                 $nombreParcelles = $data->count();
                 $numero = $nombreParcelles + 1;
-                $codeProd = Str::beforeLast($codeProd, '-');
                 $codeParc = $codeProd . '-P' . $numero;
-                do {
-                    $verif = Parcelle::select('codeParc')->where('codeParc', $codeParc)->orderby('id', 'desc')->first();
-                    if ($verif == null) {
-                        $action = 'non';
-                    } else {
-                        $action = 'oui';
-                        $numero++;
-                        $codeParc = $codeProd . '-P' . $numero;
-                    }
-                } while ($action != 'non');
+                // $codeProd = Str::beforeLast($codeProd, '-');
+                // $codeParc = $codeProd . '-P' . $numero;
+                // do {
+                //     $verif = Parcelle::select('codeParc')->where('codeParc', $codeParc)->orderby('id', 'desc')->first();
+                //     if ($verif == null) {
+                //         $action = 'non';
+                //     } else {
+                //         $action = 'oui';
+                //         $numero++;
+                //         $codeParc = $codeProd . '-P' . $numero;
+                //     }
+                // } while ($action != 'non');
             } else {
                 $codeParc = $codeProd . '-P1';
             }
