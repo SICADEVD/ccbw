@@ -67,7 +67,7 @@ class AgroapprovisionnementController extends Controller
     {
         $pageTitle = "Ajouter un approvisionnement de section";
         $manager   = auth()->user();
-        $sections = Section::get();
+        $sections = Section::where('cooperative_id',$manager->cooperative_id)->get();
         $campagne = Campagne::active()->first();
         $approvSect = $dataSection = array();
         $idapprov = decrypt($request->id);
