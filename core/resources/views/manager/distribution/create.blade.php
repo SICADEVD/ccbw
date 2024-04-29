@@ -37,14 +37,15 @@
                                 <div class="col-xs-12 col-sm-8">
                                 <select class="form-control" name="producteur" id="producteur" required>
                                     <option value="">@lang('Selectionner une option')</option>
-                                    @foreach($producteurs as $producteur)
+                                    @foreach($producteurs as $data)
                                     <?php 
-                                    if(in_array($producteur->id,$producteurDistri)){
+                                     
+                                    if(in_array($data->producteur->id,$producteurDistri)){
                                         continue;
                                     }
                                     ?>
-                                        <option value="{{ $producteur->id }}" data-chained="{{ $producteur->localite->id }}" @selected(old('producteur'))>
-                                            {{ stripslashes($producteur->nom) }} {{ stripslashes($producteur->prenoms) }}</option>
+                                        <option value="{{ $data->producteur->id }}" data-chained="{{ $data->producteur->localite->id }}" @selected(old('producteur'))>
+                                            {{ stripslashes($data->producteur->nom) }} {{ stripslashes($data->producteur->prenoms) }}</option>
                                     @endforeach
                                 </select>
                                 </div>
