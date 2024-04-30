@@ -86,6 +86,9 @@ class CooperativeSettingController extends Controller
             $cooperative->numCompteContribuable = isset($request->numCompteContribuable) ? $request->numCompteContribuable : '';
             $cooperative->numRSC = isset($request->numRSC) ? $request->numRSC : '';
             $cooperative->secteurActivite = isset($request->secteurActivite) ? $request->secteurActivite : '';
+            $cooperative->historique = isset($request->historique) ? $request->historique : '';
+            $cooperative->mission = isset($request->mission) ? $request->mission : '';
+            $cooperative->vision = isset($request->vision) ? $request->vision : '';
             $cooperative->save();
             // if ($cooperative != null) {
             //     $id = $cooperative->id;

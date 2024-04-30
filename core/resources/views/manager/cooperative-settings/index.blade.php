@@ -42,12 +42,12 @@
                             </div>
                             <div class="form-group">
                                 <label>@lang('N°RSC')</label>
-                                <input type="number" class="form-control" name="numRSC" value="{{ $cooperative->numRSC }}"
+                                <input type="text" class="form-control" name="numRSC" value="{{ $cooperative->numRSC }}"
                                     required>
                             </div>
                             <div class="form-group">
                                 <label>@lang('N°Compte Contribuable ')</label>
-                                <input type="number" class="form-control" name="numCompteContribuable"
+                                <input type="text" class="form-control" name="numCompteContribuable"
                                     value="{{ $cooperative->numCompteContribuable }}" required>
                             </div> 
                             <div class="form-group">
