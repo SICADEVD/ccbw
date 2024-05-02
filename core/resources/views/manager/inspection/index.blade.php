@@ -34,9 +34,7 @@
                                 <select name="staff" class="form-control">
                                     <option value="">@lang('Tous')</option>
                                     @foreach($staffs as $staff)
-                                    @if($staff && $staff->user)
-                                        <option value="{{ $staff->id }}">{{ $staff ? $staff->lastname : '' }} {{ $staff ? $staff->firstname : '' }}</option>
-                                    @endif
+                                    <option value="{{ $staff->id }}">{{ $staff->lastname }} {{ $staff->firstname }}</option>
                                     @endforeach 
                                 </select>
                             </div> 
@@ -92,7 +90,7 @@
                                             <span class="fw-bold">{{ $inspection->parcelle->codeParc ?? null }}</span>
                                         </td> 
                                         <td>
-                                            <span>{{ $inspection->user->lastname }} {{ $inspection->user->firstname }}</span>
+                                            <span>{{ {{ $inspection->user ? $inspection->user->lastname : '' }} }} {{ $inspection->user ? $inspection->user->firstname : '' }}</span>
                                         </td>
                                         <td>
                                             <span>{{ $inspection->note }}%</span>
