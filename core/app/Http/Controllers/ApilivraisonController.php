@@ -270,7 +270,7 @@ class ApilivraisonController extends Controller
     public function getMagasinsection(Request $request)
     {
         $staff = User::where('id', $request->userid)->first();
-        $magasins = DB::table('magasin_sections')->get();
+        $magasins = MagasinSection::joinRelationship('section.cooperative')->where([['cooperative_id', $staff->cooperative_id]])->get();
         return response()->json($magasins, 201);
     }
     public function livraisonbroussebymagasinsection(){
