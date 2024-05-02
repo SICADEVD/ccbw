@@ -90,7 +90,7 @@
                                             <span class="fw-bold">{{ $inspection->parcelle->codeParc ?? null }}</span>
                                         </td> 
                                         <td>
-                                            <span>{{ {{ $inspection->user ? $inspection->user->lastname : '' }} }} {{ $inspection->user ? $inspection->user->firstname : '' }}</span>
+                                            <span>{{ $inspection->user ? $inspection->user->lastname : '' }} {{ $inspection->user ? $inspection->user->firstname : '' }}</span>
                                         </td>
                                         <td>
                                             <span>{{ $inspection->note }}%</span>
