@@ -48,7 +48,6 @@ class StoreProducteurRequest extends FormRequest
             'codeProd'=>'required_if:statut,==,Certifie',
             'certificat'=>'required_if:statut,==,Certifie',
             'autrePhone'=>'required_if:autreMembre,==,oui',
-            'numCMU'=>'required_if:carteCMU,==,oui',
             'phone2' => Rule::when($this->autreMembre == 'oui', function () {
                 return ['required', 'regex:/^\d{10}$/', Rule::unique('producteurs', 'phone2')];
             }),

@@ -271,6 +271,7 @@ class ProducteurController extends Controller
         $producteur->numPiece = $request->numPiece;
         $producteur->num_ccc = $request->num_ccc;
         $producteur->carteCMU = $request->carteCMU;
+        $producteur->carteCMUDispo = $request->carteCMUDispo;
         $producteur->typeCarteSecuriteSociale = $request->typeCarteSecuriteSociale;
         $producteur->numSecuriteSociale = $request->numSecuriteSociale;
         $producteur->numCMU = $request->numCMU;
@@ -369,7 +370,6 @@ class ProducteurController extends Controller
             'codeProd' => 'required_if:statut,==,Certifie',
             'certificat' => 'required_if:statut,==,Certifie',
             'autrePhone' => 'required_if:autreMembre,==,oui',
-            'numCMU' => 'required_if:carteCMU,==,oui',
             'phone2' => Rule::when($request->autreMembre == 'oui', function () use ($id) {
                 // return ['required', 'regex:/^\d{10}$/', Rule::unique('producteurs', 'phone2')->ignore($id)];
                 return ['required'];
