@@ -66,8 +66,8 @@
                                         </td>
                                         <td>
                                             <span> <a href="{{ route('manager.suivi.formation.edit', $formation->id) }}">
-                                                    <span>@</span>{{ $formation->user->lastname }}
-                                                    {{ $formation->user->firstname }}
+                                                    <span>@</span>{{ $formation->user ? $formation->user->lastname : '' }}
+                                                    {{ $formation->user ? $formation->user->firstname : ''}}
                                                 </a></span>
                                         </td>
                                         
