@@ -21,5 +21,4 @@ class MagasinCentral extends Model
     {
         return $this->belongsTo(Cooperative::class,'cooperative_id');
     }
- 
 }

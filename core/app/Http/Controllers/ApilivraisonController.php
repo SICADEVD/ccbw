@@ -10,9 +10,12 @@ use App\Models\Programme;
 use App\Models\Producteur;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use App\Models\Transporteur;
 use Illuminate\Http\Request;
 use App\Models\LivraisonInfo;
 use App\Models\LivraisonPrime;
+use App\Models\MagasinCentral;
+use App\Models\MagasinSection;
 use App\Models\ProgrammePrime;
 use App\Models\CampagnePeriode;
 use App\Models\LivraisonScelle;
@@ -25,10 +28,8 @@ use App\Models\StockMagasinSection;
 use Illuminate\Support\Facades\File;
 use App\Models\Livraisons_temporaire;
 use App\Models\LivraisonProductDetail;
-use App\Models\LivraisonMagasinCentralProducteur;
-use App\Models\MagasinSection;
-use App\Models\Transporteur;
 use Illuminate\Database\Query\JoinClause;
+use App\Models\LivraisonMagasinCentralProducteur;
 
 class ApilivraisonController extends Controller
 {
@@ -284,9 +285,11 @@ class ApilivraisonController extends Controller
             return response()->json($magasins, 201);
     }
 
-    public function getMagasincentraux()
+    public function getMagasincentraux(Request $request)
     {
-        $magasins = DB::table('magasin_centraux')->get();
+        $staff = User::where('id', $request->userid)->first();
+        $magasins = MagasinCentral::where('cooperative_id',$staff->cooperative_id)->get();
+
         return response()->json($magasins, 201);
     }
     public function gettransporteurs()
