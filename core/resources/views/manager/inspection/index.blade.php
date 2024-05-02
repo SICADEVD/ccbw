@@ -34,8 +34,8 @@
                                 <select name="staff" class="form-control">
                                     <option value="">@lang('Tous')</option>
                                     @foreach($staffs as $staff)
-                                    @if($staff)
-                                    <option value="{{ $staff->id }}">{{ $staff->lastname }} {{ $staff->firstname }}</option>
+                                    @if($staff && $staff->user)
+                                        <option value="{{ $staff->id }}">{{ $staff ? $staff->lastname : '' }} {{ $staff ? $staff->firstname : '' }}</option>
                                     @endif
                                     @endforeach 
                                 </select>
