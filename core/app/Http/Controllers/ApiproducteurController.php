@@ -148,9 +148,9 @@ class ApiproducteurController extends Controller
       $producteur->niveau_etude    = $request->niveau_etude;
       $producteur->type_piece    = $request->type_piece;
       $producteur->numPiece    = $request->numPiece;
-      $producteur->userid = auth()->user()->id;
       $producteur->codeProd = $request->codeProd;
       $producteur->plantePartage = $request->plantePartage;
+      $producteur->numeroAssocie = $request->numeroAssocie;
       $producteur->userid = $request->userid;
       if ($producteur->codeProdapp == null) {
         $coop = DB::table('localites as l')->join('cooperatives as c', 'l.cooperative_id', '=', 'c.id')->where('l.id', $request->localite)->select('c.codeApp')->first();
