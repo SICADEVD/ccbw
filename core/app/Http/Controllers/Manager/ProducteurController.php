@@ -294,6 +294,7 @@ class ProducteurController extends Controller
         $producteur->userid = auth()->user()->id;
         $producteur->codeProd = $request->codeProd;
         $producteur->plantePartage = $request->plantePartage;
+        $producteur->numeroAssocie = $request->numeroAssocie;
         if ($request->hasFile('picture')) {
             try {
                 $producteur->picture = $request->file('picture')->store('public/producteurs/photos');
@@ -374,6 +375,9 @@ class ProducteurController extends Controller
                 // return ['required', 'regex:/^\d{10}$/', Rule::unique('producteurs', 'phone2')->ignore($id)];
                 return ['required'];
             }),
+            'numeroAssocie' => Rule::when($this->proprietaires == 'Planté-partager', function () {
+                return ['required', 'regex:/^\d{10}$/'];
+            }),
             //'phone2' => 'required_if:autreMembre,oui|regex:/^\d{10}$/|unique:producteurs,phone2,' . $request->id,
         ];
         $messages = [
@@ -443,6 +447,7 @@ class ProducteurController extends Controller
         $producteur->userid = auth()->user()->id;
         $producteur->codeProd = $request->codeProd;
         $producteur->plantePartage = $request->plantePartage;
+        $producteur->numeroAssocie = $request->numeroAssocie;
         if ($request->hasFile('picture')) {
             try {
                 $producteur->picture = $request->file('picture')->store('public/producteurs/photos');

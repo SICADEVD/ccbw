@@ -43,6 +43,10 @@ class StoreProducteurRequest extends FormRequest
             'anneeDemarrage' =>'required_if:proprietaires,==,Garantie',
             'anneeFin' =>'required_if:proprietaires,==,Garantie',
             'plantePartage'=>'required_if:proprietaires,==,Planté-partager',
+            'numeroAssocie'=>'required_if:proprietaires,==,Planté-partager',
+            'numeroAssocie' => Rule::when($this->proprietaires == 'Planté-partager', function () {
+                return ['required', 'regex:/^\d{10}$/'];
+            }),
             'typeCarteSecuriteSociale'=>'required',
             'autreCertificats'=>'required_if:certificats,==,Autre',
             'codeProd'=>'required_if:statut,==,Certifie',

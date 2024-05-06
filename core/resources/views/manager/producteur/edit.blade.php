@@ -29,9 +29,13 @@
                     </div>
 
                     <div class="form-group row" id="plantePartager">
-                        <?php echo Form::label(__(''), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <?php echo Form::label(__('Quel est votre associé'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::text('plantePartage', null, ['id' => 'plantePartage', 'placeholder' => __('Précision'), 'class' => 'form-control plantePartage']); ?>
+                            <?php echo Form::text('plantePartage', null, ['id' => 'plantePartage', 'placeholder' => __('Saisissez le nom de votre associé'), 'class' => 'form-control mb-3 plantePartage']); ?>
+                        </div>
+                        <?php echo Form::label(__('Quel est le numero de votre associé'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-12 col-sm-8">
+                            <?php echo Form::text('numeroAssocie', null, ['id' => 'numeroAssocie', 'placeholder' => __('Saisissez le numero de téléphone votre associé'), 'class' => 'form-control numeroAssocie']); ?>
                         </div>
                     </div>
 
@@ -462,20 +466,29 @@
                 $('#plantePartager').show('slow');
                 $('.plantePartage').show('slow');
                 $("#plantePartage").prop("required", true);
+                $('.numeroAssocie').show('slow');
+                $("#numeroAssocie").prop("required", true);
             } else {
                 $('#plantePartager').hide('slow');
                 $('.plantePartage').val('');
                 $("#plantePartage").prop("required", false);
+                $('#numeroAssocie').hide('slow');
+                $('.numeroAssocie').val('');
             }
         });
         if ($('.proprietaires').val() == 'Planté-partager') {
             $('#plantePartager').show('slow');
             $('.plantePartage').show('slow');
             $("#plantePartage").prop("required", true);
+            $('.numeroAssocie').show('slow');
+            $("#numeroAssocie").prop("required", true);
+
         } else {
             $('#plantePartager').hide('slow');
             $('.plantePartage').val('');
             $("#plantePartage").prop("required", false);
+            $('#numeroAssocie').hide('slow');
+            $('.numeroAssocie').val('');
         }
 
         //afficher le champ de saisie du numero de la piece CMU
