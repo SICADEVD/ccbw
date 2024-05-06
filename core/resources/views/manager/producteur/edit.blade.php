@@ -175,7 +175,7 @@
                     <div class="form-group row">
                         <?php echo Form::label(__('Statut matrimonial'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('statutMatrimonial', ['Célibataire' => 'Célibataire', 'Concubinage' => 'Concubinage', 'Marié(mariage civil)' => 'Marié(mariage civil)', 'Mariage réligieux' => 'Mariage réligieux', 'Mariage réligieux' => 'Mariage réligieux', 'Divorcé' => 'Divorcé', 'Veuf(ve)' => 'Veuf(ve)'], null, ['class' => 'form-control', 'required']); ?>
+                            <?php echo Form::select('statutMatrimonial', ['Célibataire' => 'Célibataire', 'Concubinage' => 'Concubinage', 'Marié(mariage civil)' => 'Marié(mariage civil)', 'Mariage réligieux' => 'Mariage réligieux', 'Mariage réligieux' => 'Mariage réligieux','Mariage traditionnel' => 'Mariage traditionnel','Divorcé' => 'Divorcé', 'Veuf(ve)' => 'Veuf(ve)'], null, ['class' => 'form-control', 'required']); ?>
                         </div>
                     </div>
 
