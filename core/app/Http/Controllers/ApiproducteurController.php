@@ -97,7 +97,7 @@ class ApiproducteurController extends Controller
     if ($request->id) {
       $id = $request->id;
       $producteur = Producteur::findOrFail($request->id);
-      
+
       if ($request->picture) {
         $image = $request->picture;
         $image = Str::after($image, 'base64,');
@@ -128,6 +128,7 @@ class ApiproducteurController extends Controller
       $producteur->numPiece = $request->numPiece;
       $producteur->num_ccc = $request->num_ccc;
       $producteur->carteCMU = $request->carteCMU;
+      $producteur->carteCMUDispo = $request->carteCMUDispo;
       $producteur->typeCarteSecuriteSociale = $request->typeCarteSecuriteSociale;
       $producteur->numSecuriteSociale = $request->numSecuriteSociale;
       $producteur->numCMU = $request->numCMU;
@@ -147,9 +148,10 @@ class ApiproducteurController extends Controller
       $producteur->niveau_etude    = $request->niveau_etude;
       $producteur->type_piece    = $request->type_piece;
       $producteur->numPiece    = $request->numPiece;
-      $producteur->userid = $request->userid;
+      $producteur->userid = auth()->user()->id;
       $producteur->codeProd = $request->codeProd;
       $producteur->plantePartage = $request->plantePartage;
+      $producteur->userid = $request->userid;
       if ($producteur->codeProdapp == null) {
         $coop = DB::table('localites as l')->join('cooperatives as c', 'l.cooperative_id', '=', 'c.id')->where('l.id', $request->localite)->select('c.codeApp')->first();
         if ($coop != null) {
@@ -184,8 +186,6 @@ class ApiproducteurController extends Controller
 
       $message = "Le producteur a été mis à jour avec succès";
     } else {
-    
-
       $producteur = new Producteur();
       $producteur->proprietaires = $request->proprietaires;
       $producteur->statutMatrimonial = $request->statutMatrimonial;
@@ -197,6 +197,7 @@ class ApiproducteurController extends Controller
       $producteur->numPiece = $request->numPiece;
       $producteur->num_ccc = $request->num_ccc;
       $producteur->carteCMU = $request->carteCMU;
+      $producteur->carteCMUDispo = $request->carteCMUDispo;
       $producteur->typeCarteSecuriteSociale = $request->typeCarteSecuriteSociale;
       $producteur->numSecuriteSociale = $request->numSecuriteSociale;
       $producteur->numCMU = $request->numCMU;
@@ -216,10 +217,10 @@ class ApiproducteurController extends Controller
       $producteur->niveau_etude    = $request->niveau_etude;
       $producteur->type_piece    = $request->type_piece;
       $producteur->numPiece    = $request->numPiece;
-      $producteur->userid = $request->userid;
+      $producteur->userid = auth()->user()->id;
       $producteur->codeProd = $request->codeProd;
       $producteur->plantePartage = $request->plantePartage;
-      // dd($producteur);
+      $producteur->userid = $request->userid;
       if (!file_exists(storage_path() . "/app/public/producteurs/pieces")) {
         File::makeDirectory(storage_path() . "/app/public/producteurs/pieces", 0777, true);
       }
@@ -287,10 +288,10 @@ class ApiproducteurController extends Controller
   {
     DB::beginTransaction();
     try {
-    
-    $debug = new DebugMobile();
-    $debug->content = json_encode($request->all());
-    $debug->save();
+
+      $debug = new DebugMobile();
+      $debug->content = json_encode($request->all());
+      $debug->save();
 
       $producteur = Producteur::where('id', $request->producteur_id)->first();
       if ($producteur->status == Status::NO) {
@@ -308,8 +309,8 @@ class ApiproducteurController extends Controller
         if ($hasInfoProd) {
           $notify = "L'info existe déjà pour ce producteur. Veuillez apporter des mises à jour.";
           return response()->json([
-            'message'=>$notify, 
-          ],301);
+            'message' => $notify,
+          ], 301);
         }
       }
       $infoproducteur->producteur_id = $request->producteur_id;
