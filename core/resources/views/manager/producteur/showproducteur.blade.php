@@ -27,11 +27,16 @@
                         @endif
                         @if ($producteur->plantePartage)
                             <tr>
-                                <td>
-                                </td>
+                                <td>votre associé</td>
                                 <td>
                                     {{ @$producteur->plantePartage }}
 
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Numero de votre associé</td>
+                                <td>
+                                    {{ @$producteur->numeroAssocie }}
                                 </td>
                             </tr>
                         @endif
