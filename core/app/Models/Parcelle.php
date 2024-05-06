@@ -26,4 +26,8 @@ class Parcelle extends Model
     {
         return $this->hasMany(agroespeceabre_parcelle::class,'parcelle_id');
     }
+    public function varietes()
+    {
+        return $this->hasMany(VarieteParcelle::class,'parcelle_id');
+    }
 }

@@ -46,7 +46,8 @@
                                 @foreach ($producteurs as $producteur)
                                     <option value="{{ $producteur->id }}" data-chained="{{ $producteur->localite->id }}"
                                         @selected(old('producteur'))>
-                                        {{ stripslashes($producteur->nom) }} {{ stripslashes($producteur->prenoms) }}</option>
+                                        {{ stripslashes($producteur->nom) }} {{ stripslashes($producteur->prenoms) }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
@@ -54,14 +55,14 @@
                     <div class="form-group row">
                         <?php echo Form::label(__('Type de déclaration superficie'), null, ['class' => 'col-sm-4 control-label required']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('typedeclaration', [''=>'Selectionner une option','Verbale' => __('Verbale'), 'GPS' => __('GPS')], null, ['class' => 'form-control typedeclaration', 'id' => 'typedeclaration', 'required']); ?>
+                            <?php echo Form::select('typedeclaration', ['' => 'Selectionner une option', 'Verbale' => __('Verbale'), 'GPS' => __('GPS')], null, ['class' => 'form-control typedeclaration', 'id' => 'typedeclaration', 'required']); ?>
                         </div>
                     </div>
 
                     <div class="form-group row">
                         {{ Form::label(__('Quelle est l\'année de création de la parcelle'), null, ['class' => 'col-sm-4 control-label']) }}
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::number('anneeCreation', null, ['placeholder' => 'Année de création', 'class' => 'form-control', 'id' => 'anneeCreation', 'required', 'min' => 1990]); ?>
+                            <?php echo Form::number('anneeCreation', null, ['placeholder' => 'Année de création', 'class' => 'form-control', 'id' => 'anneeCreation', 'required']); ?>
                         </div>
                     </div>
 
@@ -94,10 +95,20 @@
                             </div>
                         </div>
                     </div>
+                    <div class="form-group row mt-3">
+                        <label class="col-sm-4 control-label">@lang('Quelles sont les variétés de culture ?')</label>
+                        <div class="col-xs-12 col-sm-8">
+                            <select class="form-control select-picker selectAll varietes" name="varietes[]" multiple required>
+                                <option value="">@lang('Selectionner le/les variétés')</option>
+                                <option value="CNRA">CNRA</option>
+                                <option value="Tout venant">Tout venant</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="form-group row">
                         {{ Form::label(__('Quel type de documents  possèdes-tu ?'), null, ['class' => 'col-sm-4 control-label']) }}
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('typeDoc', [''=>'Selectionner une option','Attestation de plantation' => 'Attestation de plantation', 'Attestation coutumières' => 'Attestation coutumières', 'Cadastre' => 'Cadastre', 'Certificat foncier' => 'Certificat foncier', 'Contrat agraire' => 'Contrat agraire', 'Aucun document' => 'Aucun document'], null, ['class' => 'form-control', 'required']); ?>
+                            <?php echo Form::select('typeDoc', ['' => 'Selectionner une option', 'Attestation de plantation' => 'Attestation de plantation', 'Attestation coutumières' => 'Attestation coutumières', 'Cadastre' => 'Cadastre', 'Certificat foncier' => 'Certificat foncier', 'Contrat agraire' => 'Contrat agraire', 'Aucun document' => 'Aucun document'], null, ['class' => 'form-control', 'required']); ?>
                         </div>
                     </div>
 
@@ -268,12 +279,13 @@
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-            {{ Form::label(__(''), null, ['class' => 'control-label col-sm-4']) }}
-            <div class="col-xs-12 col-sm-8 col-md-8">
-            <p id="status"></p>
-            <a href="javascript:void(0)" id="find-me" class="btn btn--info">Obtenir les coordonnées GPS</a>
-        </div>
-    </div>
+                                                {{ Form::label(__(''), null, ['class' => 'control-label col-sm-4']) }}
+                                                <div class="col-xs-12 col-sm-8 col-md-8">
+                                                    <p id="status"></p>
+                                                    <a href="javascript:void(0)" id="find-me"
+                                                        class="btn btn--info">Obtenir les coordonnées GPS</a>
+                                                </div>
+                                            </div>
                                             <div class="col-xs-12 col-sm-12">
                                                 <div class="form-group row">
                                                     {{ Form::label(__('Nombre de Cacao moyen / parcelle'), null, ['class' => 'col-sm-4 control-label']) }}
@@ -318,14 +330,13 @@
 @endpush
 
 @push('script')
-<script src="https://maps.googleapis.com/maps/api/js?key={{env('GOOGLE_MAPS_KEY')}}"></script> 
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_KEY') }}"></script>
     <script type="text/javascript">
         $("#localite").chained("#section");
         $("#producteur_id").chained("#localite");
     </script>
 
     <script type="text/javascript">
-        
         $(document).ready(function() {
             $('#anneeRegenerers,#courDeaus,#protection,#niveauPentes,#autreCourDeaus,#autreProtections').hide();
 
@@ -475,25 +486,29 @@
         })(jQuery);
 
         function geoFindMe() {
-  const status = document.querySelector("#status");
-  function success(position) {
-    const latitude = position.coords.latitude;
-    const longitude = position.coords.longitude;
+            const status = document.querySelector("#status");
 
-$('input[name=longitude]').val(longitude);
-$('input[name=latitude]').val(latitude);
-$("input[name=longitude], input[name=latitude]").attr({"readonly": 'readonly'})
-  }
-  function error() {
-    status.textContent = "Unable to retrieve your location";
-  }
-  if (!navigator.geolocation) {
-    status.textContent = "Geolocation is not supported by your browser";
-  } else {
-    // status.textContent = "Locating…";
-    navigator.geolocation.getCurrentPosition(success, error);
-  }
-}
-document.querySelector("#find-me").addEventListener("click", geoFindMe);
+            function success(position) {
+                const latitude = position.coords.latitude;
+                const longitude = position.coords.longitude;
+
+                $('input[name=longitude]').val(longitude);
+                $('input[name=latitude]').val(latitude);
+                $("input[name=longitude], input[name=latitude]").attr({
+                    "readonly": 'readonly'
+                })
+            }
+
+            function error() {
+                status.textContent = "Unable to retrieve your location";
+            }
+            if (!navigator.geolocation) {
+                status.textContent = "Geolocation is not supported by your browser";
+            } else {
+                // status.textContent = "Locating…";
+                navigator.geolocation.getCurrentPosition(success, error);
+            }
+        }
+        document.querySelector("#find-me").addEventListener("click", geoFindMe);
     </script>
 @endpush

@@ -14,6 +14,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\Certification;
 use App\Imports\ParcelleImport;
+use App\Models\VarieteParcelle;
 use App\Exports\ExportParcelles;
 use App\Models\Agroespecesarbre;
 use App\Http\Controllers\Controller;
@@ -59,21 +60,21 @@ class ParcelleController extends Controller
             })
             ->when(request()->localite, function ($query, $localite) {
                 $query->where('producteurs.localite_id', $localite);
-            }) 
-            ->when(request()->producteur, function ($query, $producteur){
+            })
+            ->when(request()->producteur, function ($query, $producteur) {
                 $query->where('producteur_id', $producteur);
-            }) 
-            ->when(request()->typedeclaration, function ($query, $typedeclaration){
+            })
+            ->when(request()->typedeclaration, function ($query, $typedeclaration) {
                 $query->where('typedeclaration', $typedeclaration);
             })
             ->with(['producteur.localite.section']); // Charger les relations nécessaires
         $parcellesFiltre = $parcelles->get();
         $parcelles = $parcelles->paginate(getPaginate());
         $total_parcelle = $parcellesFiltre->count();
-        $total_parcelle_gps = $parcellesFiltre->where('typedeclaration','GPS')->count(); 
-        $total_parcelle_verbale = $parcellesFiltre->where('typedeclaration','Verbale')->count(); 
- 
-        return view('manager.parcelle.index', compact('pageTitle', 'sections', 'parcelles', 'localites', 'producteurs','total_parcelle','total_parcelle_gps','total_parcelle_verbale'));
+        $total_parcelle_gps = $parcellesFiltre->where('typedeclaration', 'GPS')->count();
+        $total_parcelle_verbale = $parcellesFiltre->where('typedeclaration', 'Verbale')->count();
+
+        return view('manager.parcelle.index', compact('pageTitle', 'sections', 'parcelles', 'localites', 'producteurs', 'total_parcelle', 'total_parcelle_gps', 'total_parcelle_verbale'));
     }
 
     public function mapping()
@@ -137,7 +138,7 @@ class ParcelleController extends Controller
             ->get();
         $parcelles = Parcelle::dateFilter()->latest('id')
             ->joinRelationship('producteur.localite.section')
-            ->where([['cooperative_id', $manager->cooperative_id],['typedeclaration','GPS']]) 
+            ->where([['cooperative_id', $manager->cooperative_id], ['typedeclaration', 'GPS']])
             ->whereNotNull('waypoints')
             ->when(request()->section, function ($query, $section) {
                 $query->where('section_id', $section);
@@ -690,7 +691,6 @@ class ParcelleController extends Controller
                 return back()->withNotify($notify);
             }
         }
-
         $parcelle->save();
         if ($parcelle != null) {
             $id = $parcelle->id;
@@ -719,6 +719,16 @@ class ParcelleController extends Controller
                         'agroespeceabre_id' => $item['arbre'],
                     ];
                 }
+            }
+            if ($request->varietes != null) {
+                VarieteParcelle::where('parcelle_id', $id)->delete();
+                foreach ($request->varietes as $variete) {
+                    $data[] = [
+                        'parcelle_id' => $id,
+                        'variete' => $variete,
+                    ];
+                }
+                VarieteParcelle::insert($data);
             }
 
             Parcelle_type_protection::insert($datas);
