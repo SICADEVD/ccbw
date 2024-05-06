@@ -423,6 +423,7 @@ class ProducteurController extends Controller
         $producteur->typeCarteSecuriteSociale = $request->typeCarteSecuriteSociale;
         $producteur->numSecuriteSociale = $request->numSecuriteSociale;
         $producteur->numCMU = $request->numCMU;
+        $producteur->carteCMUDispo = $request->carteCMUDispo;
         $producteur->anneeDemarrage = $request->anneeDemarrage;
         $producteur->anneeFin = $request->anneeFin;
         $producteur->autreCertificats = $request->autreCertificats;

@@ -258,10 +258,16 @@
                     </div>
                     <div id="pieceCMU">
                         <div class="form-group row">
-                            <?php echo Form::label(__('N° de la pièce CMU'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <?php echo Form::label(__('Est elle disponible ?'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::text('numCMU', null, ['id' => 'numCMU', 'placeholder' => __('N° de la pièce CMU'), 'class' => 'form-control numCMU']); ?>
+                                <?php echo Form::select('carteCMUDispo', ['Null' => 'Selectionner un option', 'non' => 'Non', 'oui' => 'Oui'], null, ['class' => 'form-control carteCMUDispo']); ?>
                             </div>
+                        </div>
+                    </div>
+                    <div class="form-group row" id="carteCMUDispos">
+                        <?php echo Form::label(__('N° de la pièce CMU'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-12 col-sm-8">
+                            <?php echo Form::text('numCMU', null, ['id' => 'numCMU', 'placeholder' => __('N° de la pièce CMU'), 'class' => 'form-control numCMU']); ?>
                         </div>
                     </div>
                     {{-- quel est votre carte d'assurance  --}}
@@ -479,20 +485,51 @@
                 $('#pieceCMU').show('slow');
                 $('.numCMU').show('slow');
                 $("#numCMU").prop("required", true);
+                $('.carteCMUDispo').show('slow');
+                $("#carteCMUDispo").prop("required", true);
 
             } else {
                 $('#pieceCMU').hide('slow');
                 $('.numCMU').val('');
                 $("#numCMU").prop("required", false);
+                $('.carteCMUDispo').hide('slow');
+                $("#carteCMUDispo").prop("required", false);
+                $('.carteCMUDispo').val('');
+            }
+        });
+        $('.carteCMUDispo').change(function() {
+            var cmuDispo = $('.carteCMUDispo').val();
+            if (cmuDispo == 'oui') {
+                $('#carteCMUDispos').show('slow');
+                $('.numCMU').show('slow');
+                $("#numCMU").prop("required", true);
+            } else {
+                $('#carteCMUDispos').hide('slow');
+                $('.numCMU').val('');
+                $("#numCMU").prop("required", false);
+
             }
         });
         if ($('.carteCMU').val() == 'oui') {
             $('#pieceCMU').show('slow');
             $('.numCMU').show('slow');
             $("#numCMU").prop("required", true);
-
+            $('.carteCMUDispo').show('slow');
+            $("#carteCMUDispo").prop("required", true);
         } else {
             $('#pieceCMU').hide('slow');
+            $('.numCMU').val('');
+            $("#numCMU").prop("required", false);
+            $('.carteCMUDispo').hide('slow');
+            $("#carteCMUDispo").prop("required", false);
+            $('.carteCMUDispo').val('');
+        }
+        if ($('.carteCMUDispo').val() == 'oui') {
+            $('#carteCMUDispos').show('slow');
+            $('.numCMU').show('slow');
+            $("#numCMU").prop("required", true);
+        } else {
+            $('#carteCMUDispos').hide('slow');
             $('.numCMU').val('');
             $("#numCMU").prop("required", false);
         }
