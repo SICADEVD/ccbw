@@ -123,7 +123,7 @@
                         <div class="form-group row">
                             {{ Form::label(__('Quel est le cour ou plan d\'eau'), null, ['class' => 'col-sm-4 control-label']) }}
                             <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::select('courDeau', ['Bas-fond' => 'Bas-fond', 'Marigot' => 'Marigot', 'Rivière' => 'Rivière', 'Source d’eau' => 'Source d’eau','Puit'=>'Puit', 'Autre' => 'Autre'], null, ['id' => 'courDeau', 'class' => 'form-control courDeau']); ?>
+                                <?php echo Form::select('courDeau', ['Bas-fond' => 'Bas-fond', 'Marigot' => 'Marigot', 'Rivière' => 'Rivière', 'Source d’eau' => 'Source d’eau', 'Puit' => 'Puit', 'Autre' => 'Autre'], null, ['id' => 'courDeau', 'class' => 'form-control courDeau']); ?>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -474,12 +474,7 @@
             });
 
             $('#addedField').on('click', '.removeBtn', function(e) {
-                let length = $("#addedField").find('.single-item').length;
-                if (length <= 1) {
-                    notify('warning', "@lang('Au moins un élément est requis')");
-                } else {
-                    $(this).closest('.single-item').remove();
-                }
+                $(this).closest('.single-item').remove();
             });
 
         })(jQuery);

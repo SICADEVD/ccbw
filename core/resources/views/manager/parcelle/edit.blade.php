@@ -556,12 +556,7 @@
             });
 
             $('#addedField').on('click', '.removeBtn', function(e) {
-                let length = $("#addedField").find('.single-item').length;
-                if (length <= 1) {
-                    notify('warning', "@lang('Au moins un élément est requis')");
-                } else {
-                    $(this).closest('.single-item').remove();
-                }
+                $(this).closest('.single-item').remove();
             });
 
         })(jQuery);
