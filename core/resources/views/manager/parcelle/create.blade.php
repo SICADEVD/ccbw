@@ -192,7 +192,7 @@
                                             @foreach (old('items') as $item)
                                                 <div class="row single-item gy-2">
                                                     <div class="col-md-8">
-                                                        <select class="form-control selected_type"
+                                                        <select class="form-control select2-basic"
                                                             name="items[{{ $loop->index }}][arbre]"
                                                             id='producteur-<?php echo $i; ?>'
                                                             onchange=getParcelle(<?php echo $i; ?>) required>
@@ -231,6 +231,52 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-12">
+                        <table class="table table-striped table-bordered">
+                            <tbody id="insectesParasites_area">
+
+                                <tr>
+                                    <td class="row">
+                                        <div class="col-xs-12 col-sm-12 bg-success">
+                                            <badge class="btn  btn-outline--warning h-45 btn-sm text-white">
+                                                @lang('Autres arbres à ombrages ne figurant pas dans la liste précedente')
+                                            </badge>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6">
+                                            <div class="form-group row">
+                                                {{ Form::label(__('Nom'), null, ['class' => 'control-label']) }}
+                                                <input type="text" name="arbreStrate[0][nom]" id="nom-1"
+                                                    class="form-control" placeholder="Nom de l'arbre à ombrage">
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6">
+                                            <div class="form-group row">
+                                                <label>Strate</label>
+                                                <select class="form-control strate" name="arbreStrate[0][strate]"
+                                                    id="strate-1">
+                                                    <option value="">Selectionne une strate</option>
+                                                    <option value="1">Strate 1</option>
+                                                    <option value="2">Strate 2</option>
+                                                    <option value="3">Strate 3</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                            <tfoot style="background: #e3e3e3;">
+                                <tr>
+
+                                    <td colspan="3">
+                                        <button id="addRowinsectesParasites" type="button"
+                                            class="btn btn-success btn-sm"><i class="fa fa-plus"></i></button>
+                                    </td>
+                                <tr>
+                            </tfoot>
+                        </table>
                     </div>
 
                     <hr class="panel-wide">
@@ -427,6 +473,38 @@
                 $('#autreProtection').prop('required', false);
             }
         });
+        var insectesParasitesCount = $("#insectesParasites_area tr").length;
+        $(document).on('click', '#addRowinsectesParasites', function() {
+
+            var html_table = '<tr>';
+            html_table +=
+                '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm text-white">Autres arbres à ombrages ne figurant pas dans la liste précedente ' +
+                insectesParasitesCount +
+                '</badge></div><div class="col-xs-12 col-sm-6"><div class="form-group"><label class="">Nom</label><input class="form-control" id="nom-' +
+                insectesParasitesCount +
+                '" name="arbreStrate[' + insectesParasitesCount +
+                '][nom]"></div></div><div class="col-xs-12 col-sm-6"><div class="form-group"><label class="">Strate</label><select name="arbreStrate[' +
+                insectesParasitesCount +
+                '][strate]" class="form-control" id="strate-' +
+                insectesParasitesCount +
+                '" ><option value="">Selectionner une strate</option><option value="1">Strate 1</option><option value="2">Strate 2</option><option value="3">Strate 3</option></select></div></div><div class="col-xs-12 col-sm-8"><button type="button" id="' +
+                insectesParasitesCount +
+                '" class="removeRowinsectesParasites btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></div></td>';
+
+            html_table += '</tr>';
+            //---> End create table tr
+
+            insectesParasitesCount = parseInt(insectesParasitesCount) + 1;
+            $('#insectesParasites_area').append(html_table);
+
+        });
+        $(document).on('click', '.removeRowinsectesParasites', function() {
+            var row_id = $(this).attr('id');
+            if (row_id == $("#insectesParasites_area tr").length - 1) {
+                $(this).parents('tr').remove();
+                insectesParasitesCount = parseInt(insectesParasitesCount) - 1;
+            }
+        });
     </script>
     <script>
         "use strict";
@@ -442,7 +520,7 @@
                 let html = `
             <div class="row single-item gy-2">
                 <div class="col-md-8">
-                    <select class="form-control selected_type" name="items[${length}][arbre]" required id='arbre-${length}')>
+                    <select class="form-control select2-basic" name="items[${length}][arbre]" required id='arbre-${length}')>
                         <option disabled selected value="">@lang('Arbres d\'ombrages')</option>
                         @foreach ($arbres as $arbre)
                             <option value="{{ $arbre->id }}"  >{{ __($arbre->nom) }} </option>
