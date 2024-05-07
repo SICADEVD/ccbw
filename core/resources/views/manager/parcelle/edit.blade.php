@@ -47,7 +47,8 @@
                                 @foreach ($producteurs as $producteur)
                                     <option value="{{ $producteur->id }}" data-chained="{{ $producteur->localite->id }}"
                                         @selected($producteur->id == $parcelle->producteur->id)>
-                                        {{ stripslashes($producteur->nom) }} {{ stripslashes($producteur->prenoms) }}</option>
+                                        {{ stripslashes($producteur->nom) }} {{ stripslashes($producteur->prenoms) }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
@@ -56,14 +57,14 @@
                     <div class="form-group row">
                         <?php echo Form::label(__('Type de déclaration superficie'), null, ['class' => 'col-sm-4 control-label required']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('typedeclaration', [''=>'Selectionner une option','Verbale' => __('Verbale'), 'GPS' => __('GPS')], null, ['class' => 'form-control typedeclaration', 'id' => 'typedeclaration', 'required']); ?>
+                            <?php echo Form::select('typedeclaration', ['' => 'Selectionner une option', 'Verbale' => __('Verbale'), 'GPS' => __('GPS')], null, ['class' => 'form-control typedeclaration', 'id' => 'typedeclaration', 'required']); ?>
                         </div>
                     </div>
 
                     <div class="form-group row">
                         {{ Form::label(__('Quelle est l\'année de création de la parcelle'), null, ['class' => 'col-sm-4 control-label']) }}
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::number('anneeCreation', null, ['placeholder' => 'Année de création', 'class' => 'form-control', 'id' => 'anneeCreation', 'required', 'min' => 1990]); ?>
+                            <?php echo Form::number('anneeCreation', null, ['placeholder' => 'Année de création', 'class' => 'form-control', 'id' => 'anneeCreation', 'required']); ?>
                         </div>
                     </div>
 
@@ -96,10 +97,25 @@
                             </div>
                         </div>
                     </div>
+                    <div class="form-group row mt-3">
+                        <label class="col-sm-4 control-label">@lang('Quelles sont les variétés de culture ?')</label>
+                        <div class="col-xs-12 col-sm-8">
+                            <select class="form-control select-picker selectAll varietes" name="varietes[]" multiple
+                                required>
+                                <option value="">@lang('Selectionner le/les variétés')</option>
+                                <option value="CNRA"
+                                    {{ in_array('CNRA', old('varietes', $parcelle->varietes->pluck('variete')->toArray())) ? 'selected' : '' }}>
+                                    @lang('CNRA')</option>
+                                <option value="Tout venant"
+                                    {{ in_array('Tout venant', old('varietes', $parcelle->varietes->pluck('variete')->toArray())) ? 'selected' : '' }}>
+                                    @lang('Tout venant')</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="form-group row">
                         {{ Form::label(__('Quel type de documents  possèdes-tu ?'), null, ['class' => 'col-sm-4 control-label']) }}
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('typeDoc', [''=>'Selectionner une option','Attestation de plantation' => 'Attestation de plantation', 'Attestation coutumières' => 'Attestation coutumières', 'Cadastre' => 'Cadastre', 'Certificat foncier' => 'Certificat foncier', 'Contrat agraire' => 'Contrat agraire', 'Aucun document' => 'Aucun document'], null, ['class' => 'form-control', 'required']); ?>
+                            <?php echo Form::select('typeDoc', ['' => 'Selectionner une option', 'Attestation de plantation' => 'Attestation de plantation', 'Attestation coutumières' => 'Attestation coutumières', 'Cadastre' => 'Cadastre', 'Certificat foncier' => 'Certificat foncier', 'Contrat agraire' => 'Contrat agraire', 'Aucun document' => 'Aucun document'], null, ['class' => 'form-control', 'required']); ?>
                         </div>
                     </div>
 
@@ -110,12 +126,36 @@
                         </div>
                     </div>
                     <div id="courDeaus">
-                        <div class="form-group row" id="">
+                        <div class="form-group row">
                             {{ Form::label(__('Quel est le cour ou plan d\'eau'), null, ['class' => 'col-sm-4 control-label']) }}
                             <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::select('courDeau', ['Bas-fond' => 'Bas-fond', 'Marigot' => 'Marigot', 'Rivière' => 'Rivière', 'Source d’eau' => 'Source d’eau', 'Autre' => 'Autre'], null, ['id' => 'courDeau', 'class' => 'form-control courDeau']); ?>
+                                <?php echo Form::select('courDeau', ['Bas-fond' => 'Bas-fond', 'Marigot' => 'Marigot', 'Rivière' => 'Rivière', 'Source d’eau' => 'Source d’eau', 'Puit' => 'Puit', 'Autre' => 'Autre'], null, ['id' => 'courDeau', 'class' => 'form-control courDeau']); ?>
                             </div>
                         </div>
+                        <div class="form-group row">
+                            {{ Form::label(__('Est ce qu\'il existe des mésures de protection ?'), null, ['class' => 'col-sm-4 control-label']) }}
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::select('existeMesureProtection', ['non' => __('non'), 'oui' => __('oui')], null, ['class' => 'form-control existeMesureProtection', 'required']); ?>
+                            </div>
+                        </div>
+                        <div class="form-group row" id="protection">
+                            <label class="col-sm-4 control-label">@lang('Sélectionner les protections')</label>
+                            <div class="col-xs-12 col-sm-8">
+                                <select class="form-control select2-multi-select protections" name="protection[]" multiple>
+                                    <option value="">@lang('Selectionner les protections')</option>
+                                    <option value="barriere de végétation"
+                                        {{ in_array('barriere de végétation', $protections) ? 'selected' : '' }}>
+                                        Barrière de végétation</option>
+                                    <option value="zone tampon"
+                                        {{ in_array('zone tampon', $protections) ? 'selected' : '' }}>
+                                        Zone tampon
+                                    </option>
+                                    <option value="autre" {{ in_array('autre', $protections) ? 'selected' : '' }}>
+                                        Autre</option>
+                                </select>
+                            </div>
+                        </div>
+
                     </div>
 
                     <div class="form-group row" id="autreCourDeaus">
@@ -125,28 +165,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group row">
-                        {{ Form::label(__('Est ce qu\'il existe des mésures de protection ?'), null, ['class' => 'col-sm-4 control-label']) }}
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('existeMesureProtection', ['non' => __('non'), 'oui' => __('oui')], null, ['class' => 'form-control existeMesureProtection', 'required']); ?>
-                        </div>
-                    </div>
-                    <div class="form-group row" id="protection">
-                        <label class="col-sm-4 control-label">@lang('Sélectionner les protections')</label>
-                        <div class="col-xs-12 col-sm-8">
-                            <select class="form-control select2-multi-select protections" name="protection[]" multiple>
-                                <option value="">@lang('Selectionner les protections')</option>
-                                <option value="barriere de végétation"
-                                    {{ in_array('barriere de végétation', $protections) ? 'selected' : '' }}>
-                                    Barrière de végétation</option>
-                                <option value="zone tampon" {{ in_array('zone tampon', $protections) ? 'selected' : '' }}>
-                                    Zone tampon
-                                </option>
-                                <option value="autre" {{ in_array('autre', $protections) ? 'selected' : '' }}>
-                                    Autre</option>
-                            </select>
-                        </div>
-                    </div>
+
                     <div class="form-group row" id="autreProtections">
                         <?php echo Form::label(__('Autre Protection'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
@@ -272,12 +291,13 @@
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-            {{ Form::label(__(''), null, ['class' => 'control-label col-sm-4']) }}
-            <div class="col-xs-12 col-sm-8 col-md-8">
-            <p id="status"></p>
-            <a href="javascript:void(0)" id="find-me" class="btn btn--info">Obtenir les coordonnées GPS</a>
-        </div>
-    </div>
+                                                {{ Form::label(__(''), null, ['class' => 'control-label col-sm-4']) }}
+                                                <div class="col-xs-12 col-sm-8 col-md-8">
+                                                    <p id="status"></p>
+                                                    <a href="javascript:void(0)" id="find-me"
+                                                        class="btn btn--info">Obtenir les coordonnées GPS</a>
+                                                </div>
+                                            </div>
                                             <div class="col-xs-12 col-sm-12">
                                                 <div class="form-group row">
                                                     {{ Form::label(__('Nombre de Cacao moyen / parcelle'), null, ['class' => 'col-sm-4 control-label']) }}
@@ -322,7 +342,7 @@
 @endpush
 
 @push('script')
-<script src="https://maps.googleapis.com/maps/api/js?key={{env('GOOGLE_MAPS_KEY')}}"></script> 
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_KEY') }}"></script>
     <script type="text/javascript">
         $("#localite").chained("#section");
         $("#producteur_id").chained("#localite");
@@ -545,26 +565,31 @@
             });
 
         })(jQuery);
-        function geoFindMe() {
-  const status = document.querySelector("#status");
-  function success(position) {
-    const latitude = position.coords.latitude;
-    const longitude = position.coords.longitude;
 
-$('input[name=longitude]').val(longitude);
-$('input[name=latitude]').val(latitude);
-$("input[name=longitude], input[name=latitude]").attr({"readonly": 'readonly'})
-  }
-  function error() {
-    status.textContent = "Unable to retrieve your location";
-  }
-  if (!navigator.geolocation) {
-    status.textContent = "Geolocation is not supported by your browser";
-  } else {
-    // status.textContent = "Locating…";
-    navigator.geolocation.getCurrentPosition(success, error);
-  }
-}
-document.querySelector("#find-me").addEventListener("click", geoFindMe);
+        function geoFindMe() {
+            const status = document.querySelector("#status");
+
+            function success(position) {
+                const latitude = position.coords.latitude;
+                const longitude = position.coords.longitude;
+
+                $('input[name=longitude]').val(longitude);
+                $('input[name=latitude]').val(latitude);
+                $("input[name=longitude], input[name=latitude]").attr({
+                    "readonly": 'readonly'
+                })
+            }
+
+            function error() {
+                status.textContent = "Unable to retrieve your location";
+            }
+            if (!navigator.geolocation) {
+                status.textContent = "Geolocation is not supported by your browser";
+            } else {
+                // status.textContent = "Locating…";
+                navigator.geolocation.getCurrentPosition(success, error);
+            }
+        }
+        document.querySelector("#find-me").addEventListener("click", geoFindMe);
     </script>
 @endpush

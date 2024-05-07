@@ -64,6 +64,14 @@
                                 </td>
                             </tr>
                         @endif
+                        @if(@$parcelle->varietes)
+                        <tr>
+                            <td>Quelles sont les variétés de culture ?</td>
+                            <td>
+                                {{ implode(' ,', @$parcelle->varietes->pluck('variete')->toArray()) }}
+                            </td>
+                        @endif
+
                         <tr>
                             <td>Quel type de Document possèdes-tu ?</td>
                             <td>

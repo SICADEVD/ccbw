@@ -98,7 +98,8 @@
                     <div class="form-group row mt-3">
                         <label class="col-sm-4 control-label">@lang('Quelles sont les variétés de culture ?')</label>
                         <div class="col-xs-12 col-sm-8">
-                            <select class="form-control select-picker selectAll varietes" name="varietes[]" multiple required>
+                            <select class="form-control select-picker selectAll varietes" name="varietes[]" multiple
+                                required>
                                 <option value="">@lang('Selectionner le/les variétés')</option>
                                 <option value="CNRA">CNRA</option>
                                 <option value="Tout venant">Tout venant</option>
@@ -122,7 +123,24 @@
                         <div class="form-group row">
                             {{ Form::label(__('Quel est le cour ou plan d\'eau'), null, ['class' => 'col-sm-4 control-label']) }}
                             <div class="col-xs-12 col-sm-8">
-                                <?php echo Form::select('courDeau', ['Bas-fond' => 'Bas-fond', 'Marigot' => 'Marigot', 'Rivière' => 'Rivière', 'Source d’eau' => 'Source d’eau', 'Autre' => 'Autre'], null, ['id' => 'courDeau', 'class' => 'form-control courDeau']); ?>
+                                <?php echo Form::select('courDeau', ['Bas-fond' => 'Bas-fond', 'Marigot' => 'Marigot', 'Rivière' => 'Rivière', 'Source d’eau' => 'Source d’eau','Puit'=>'Puit', 'Autre' => 'Autre'], null, ['id' => 'courDeau', 'class' => 'form-control courDeau']); ?>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            {{ Form::label(__('Est ce qu\'il existe des mésures de protection ?'), null, ['class' => 'col-sm-4 control-label']) }}
+                            <div class="col-xs-12 col-sm-8">
+                                <?php echo Form::select('existeMesureProtection', ['non' => __('non'), 'oui' => __('oui')], null, ['class' => 'form-control existeMesureProtection', 'required']); ?>
+                            </div>
+                        </div>
+                        <div class="form-group row" id="protection">
+                            <label class="col-sm-4 control-label">@lang('Sélectionner les protections')</label>
+                            <div class="col-xs-12 col-sm-8">
+                                <select class="form-control select2-multi-select protections" name="protection[]" multiple>
+                                    <option value="">@lang('Selectionner les protections')</option>
+                                    <option value="barriere de végétation">Barrière de végétation</option>
+                                    <option value="zone tampon">Zone tampon</option>
+                                    <option value="autre">Autre</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -134,25 +152,6 @@
                         </div>
                     </div>
 
-                    <div class="form-group row">
-                        {{ Form::label(__('Est ce qu\'il existe des mésures de protection ?'), null, ['class' => 'col-sm-4 control-label']) }}
-                        <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::select('existeMesureProtection', ['non' => __('non'), 'oui' => __('oui')], null, ['class' => 'form-control existeMesureProtection', 'required']); ?>
-                        </div>
-                    </div>
-
-
-                    <div class="form-group row" id="protection">
-                        <label class="col-sm-4 control-label">@lang('Sélectionner les protections')</label>
-                        <div class="col-xs-12 col-sm-8">
-                            <select class="form-control select2-multi-select protections" name="protection[]" multiple>
-                                <option value="">@lang('Selectionner les protections')</option>
-                                <option value="barriere de végétation">Barrière de végétation</option>
-                                <option value="zone tampon">Zone tampon</option>
-                                <option value="autre">Autre</option>
-                            </select>
-                        </div>
-                    </div>
                     <div class="form-group row" id="autreProtections">
                         <?php echo Form::label(__('Autre Protection'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
