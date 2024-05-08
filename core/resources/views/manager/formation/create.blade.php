@@ -33,7 +33,8 @@
                                 @foreach ($producteurs as $producteur)
                                     <option value="{{ $producteur->id }}" data-chained="{{ $producteur->localite->id }}"
                                         @selected(old('producteur'))>
-                                        {{ stripslashes($producteur->nom) }} {{ stripslashes($producteur->prenoms) }}</option>
+                                        {{ stripslashes($producteur->nom) }} {{ stripslashes($producteur->prenoms) }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
@@ -82,11 +83,11 @@
                     <div class="form-group row">
                         <?php echo Form::label(__('Sous-thème de la formation'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <select class="form-control select2-multi-select" name="sous_theme[]" id="sous_theme"
-                                multiple>
+                            <select class="form-control select2-multi-select" name="sous_theme[]" id="sous_theme" multiple>
                                 <option value="">@lang('Selectionner une option')</option>
                                 @foreach ($sousThemes as $soustheme)
-                                    <option value="{{ $soustheme->id }}" data-chained="{{ $soustheme->theme_formation_id ?? '' }}"
+                                    <option value="{{ $soustheme->id }}"
+                                        data-chained="{{ $soustheme->theme_formation_id ?? '' }}"
                                         @selected(old('sous_theme'))>
                                         {{ $soustheme->nom }} </option>
                                 @endforeach
@@ -137,6 +138,12 @@
                             <input type="file" name="photo_formation" class="form-control dropify-fr">
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <?php echo Form::label(__('Photo de la fiche de présence'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-12 col-sm-8">
+                            <input type="file" name="photo_docListePresence" class="form-control dropify-fr">
+                        </div>
+                    </div>
 
                     <div class="form-group row">
                         <?php echo Form::label(__('Rapport de la formation'), null, ['class' => 'col-sm-4 control-label']); ?>
@@ -170,7 +177,7 @@
     <script src="{{ asset('assets/vendor/jquery/daterangepicker.min.js') }}"></script>
     <script type="text/javascript">
         $("#producteur").chained("#localite");
-       
+
         $('#duree_formation').timepicker({
             showMeridian: (false)
         });
@@ -215,7 +222,8 @@
 
             var optionParSousTheme = new Object();
             $("#sous_theme option").each(function() {
-                var curreentArray = optionParSousTheme[($(this).data('chained'))] ? optionParSousTheme[($(this)
+                var curreentArray = optionParSousTheme[($(this).data('chained'))] ? optionParSousTheme[($(
+                        this)
                     .data('chained'))] : [];
                 curreentArray[$(this).val()] = $(this).text().trim();
                 Object.assign(optionParSousTheme, {
@@ -233,7 +241,8 @@
                 window.optionSousTheme = "";
                 $(this).find('option:selected').each(function() {
                     //console.log($(this).val());
-                    optionsHtml2 = updateTheme(optionsHtml2, $(this).val(), optionParTheme, optionParSousTheme);
+                    optionsHtml2 = updateTheme(optionsHtml2, $(this).val(), optionParTheme,
+                        optionParSousTheme);
                 })
             });
 
@@ -242,7 +251,8 @@
                 window.optionSousTheme = "";
                 $(this).find('option:selected').each(function() {
                     //console.log($(this).val());
-                    window.optionSousTheme = updateSousTheme(window.optionSousTheme, $(this).val().split("-")[1], optionParSousTheme);
+                    window.optionSousTheme = updateSousTheme(window.optionSousTheme, $(this).val()
+                        .split("-")[1], optionParSousTheme);
                 })
             });
         });
@@ -251,19 +261,19 @@
             var optionsHtml = optionsHtml2
             if (id != '') {
                 optionParTheme[id].forEach(function(key, element) {
-                    optionsHtml += '<option value="'+id+'-' + element + '">' + key + '</option>';
+                    optionsHtml += '<option value="' + id + '-' + element + '">' + key + '</option>';
                     window.optionSousTheme = updateSousTheme(window.optionSousTheme, element, optionParSousTheme);
                 });
                 $("#theme").html(optionsHtml);
             }
             return optionsHtml;
         }
-        
+
         function updateSousTheme(optionsHtml2, id, optionParSousTheme) {
             var optionsHtml = optionsHtml2
             if (id != '' && optionParSousTheme[id] != undefined) {
                 optionParSousTheme[id].forEach(function(key, element) {
-                    optionsHtml += '<option value="'+id+'-' + element + '">' + key + '</option>';
+                    optionsHtml += '<option value="' + id + '-' + element + '">' + key + '</option>';
                 });
                 $("#sous_theme").html(optionsHtml);
             }
