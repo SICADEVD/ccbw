@@ -75,6 +75,8 @@ class ApisuiviformationController extends Controller
 
         $photo_fileNameExtension = Str::afterLast($request->photo_filename, '.');
         $rapport_fileNameExtension = Str::afterLast($request->rapport_filename, '.');
+        $photo_docListePresence_fileNameExtension = Str::afterLast($request->photo_docListePresence_filename, '.');
+        $docListePresence_fileNameExtension = Str::afterLast($request->docListePresence_filename, '.');
 
 
         if ($request->photo_formation) {
@@ -97,8 +99,27 @@ class ApisuiviformationController extends Controller
 
             $formation->rapport_formation = $rapport_formation;
         }
+        if ($request->photo_docListePresence) {
+            $photo_docListePresence = $request->photo_docListePresence;
+            $photo_docListePresence = Str::after($photo_docListePresence, 'base64,');
+            $photo_docListePresence = str_replace(' ', '+', $photo_docListePresence);
+            $photo_docListePresenceName = (string) Str::uuid() . '.' . $photo_docListePresence_fileNameExtension;
+            File::put(storage_path() . "/app/public/formations/" . $photo_docListePresenceName, base64_decode($photo_docListePresence));
+            $photo_docListePresence = "public/formations/$photo_docListePresenceName";
 
+            $formation->photo_docListePresence = $photo_docListePresence;
+        }
+        if($request->docListePresence){
+            $docListePresence = $request->docListePresence;
+            $docListePresence = Str::after($docListePresence, 'base64,');
+            $docListePresence = str_replace(' ', '+', $docListePresence);
+            $docListePresenceName = (string) Str::uuid() . '.' . $docListePresence_fileNameExtension;
+            File::put(storage_path() . "/app/public/formations/" . $docListePresenceName, base64_decode($docListePresence));
+            $docListePresence = "public/formations/$docListePresenceName";
 
+            $formation->docListePresence = $docListePresence;
+        }
+        
         $formation->save();
 
 
