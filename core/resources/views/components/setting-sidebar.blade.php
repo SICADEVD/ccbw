@@ -25,6 +25,7 @@
     <x-setting-menu-item :active="$activeMenu" menu="departement_settings" :href="route('manager.settings.departements.index')" :text="__('Départements')"/> 
     <x-setting-menu-item :active="$activeMenu" menu="designation_settings" :href="route('manager.settings.designations.index')" :text="__('Désignations')"/> 
     <x-setting-menu-item :active="$activeMenu" menu="entreprise_settings" :href="route('manager.settings.entreprise.index')" :text="__('Entreprise')"/> 
+    <x-setting-menu-item :active="$activeMenu" menu="formateur_settings" :href="route('manager.settings.formateurStaff.list')" :text="__('Formateur')"/>
     <x-setting-menu-item :active="$activeMenu" menu="designation_settings" :href="route('manager.settings.designations.index')" :text="__('Postes occupés')"/> 
     <x-setting-menu-item :active="$activeMenu" menu="attendance_settings" :href="route('manager.settings.attendance-settings.index')" :text="__('Présences')"/>
     <x-setting-menu-item :active="$activeMenu" menu="leave_settings" :href="route('manager.settings.leaves-settings.index')" :text="__('Congés')"/>

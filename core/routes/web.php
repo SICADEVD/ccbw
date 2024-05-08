@@ -234,6 +234,8 @@ Route::middleware('auth')->group(function () {
             Route::post('magasin-central/status/{id}', [SettingController::class, 'magasinCentralStatus'])->name('magasinCentral.status');
 
             Route::get('formateur-staff/', [SettingController::class, 'formateurStaffIndex'])->name('formateurStaff.index');
+            Route::get('formateur-staff-list/', [SettingController::class, 'formateurList'])->name('formateurStaff.list');
+            Route::post('formateur-staff/status/{id}', [SettingController::class, 'formateurStaffStatus'])->name('formateurStaff.status');
             Route::post('formateur-staff/store', [SettingController::class, 'formateurStaffStore'])->name('formateurStaff.store');
             Route::get('vehicule/', [SettingController::class, 'vehiculeIndex'])->name('vehicule.index');
             Route::post('vehicule/store', [SettingController::class, 'vehiculeStore'])->name('vehicule.store');

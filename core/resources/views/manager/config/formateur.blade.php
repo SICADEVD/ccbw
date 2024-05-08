@@ -15,62 +15,69 @@
                         <table class="table table--light style--two">
                             <thead>
                                 <tr>
+                                    <th>@lang('Entreprise')</th>
                                     <th>@lang('Nom')</th>
-                                    <th>@lang('Adresse mail')</th>
+                                    <th>@lang('Prénom')</th>
                                     <th>@lang('Téléphone')</th>
-                                    <th>@lang('Adresse')</th>
+                                    <th>@lang('Poste')</th>
                                     <th>@lang('Status')</th>
                                     <th>@lang('Last Update')</th>
                                     <th>@lang('Action')</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse($entreprises as $entreprise)
+                                @forelse($formateurs as $formateur)
                                     <tr>
                                         <td>
-                                            <span>{{ $entreprise->nom_entreprise }}</span>
+                                            <span>{{$formateur->entreprise->nom_entreprise}}</span>
+                                        </td>
+                                        <td>
+                                            <span>{{ $formateur->nom_formateur }}</span>
+                                        </td>
+                                        <td>
+                                            <span>{{ $formateur->prenom_formateur }}</span>
                                         </td>
 
                                         <td>
-                                            <span>{{ __($entreprise->telephone_entreprise) }}</span>
+                                            <span>{{ __($formateur->telephone_formateur) }}</span>
                                         </td>
                                         <td>
-                                            <span>{{ __($entreprise->mail_entreprise) }}</span>
-                                        </td>
-                                        <td>
-                                            <span>{{ __($entreprise->adresse_entreprise) }}</span>
+                                            <span>{{ __($formateur->poste_formateur) }}</span>
                                         </td>
                                         <td>
                                             @php
-                                                echo $entreprise->statusBadge;
+                                                echo $formateur->statusBadge;
                                             @endphp
                                         </td>
 
                                         <td>
-                                            <span class="d-block">{{ showDateTime($entreprise->updated_at) }}</span>
-                                            <span>{{ diffForHumans($entreprise->updated_at) }}</span>
+                                            <span class="d-block">{{ showDateTime($formateur->updated_at) }}</span>
+                                            <span>{{ diffForHumans($formateur->updated_at) }}</span>
                                         </td>
 
                                         <td>
                                             <button type="button" class="btn btn-sm btn-outline--primary  updateType"
-                                                data-id="{{ $entreprise->id }}" data-nom="{{ $entreprise->nom_entreprise }}"
-                                                data-telephone = "{{ $entreprise->telephone_entreprise }}"
-                                                data-mail = "{{ $entreprise->mail_entreprise }}"
-                                                data-adresse = "{{ $entreprise->adresse_entreprise }}"><i
+                                                data-id="{{ $formateur->id }}" 
+                                                data-entreprise="{{ $formateur->entreprise_id }}"
+                                                data-nom="{{ $formateur->nom_formateur }}"
+                                                data-prenom="{{ $formateur->prenom_formateur }}"
+                                                data-poste="{{ $formateur->poste_formateur }}"
+                                                data-telephone = "{{ $formateur->telephone_formateur }}"
+                                                ><i
                                                     class="las la-pen"></i>@lang('Edit')</button>
 
-                                            @if ($entreprise->status == Status::DISABLE)
+                                            @if ($formateur->status == Status::DISABLE)
                                                 <button type="button"
                                                     class="btn btn-sm btn-outline--success confirmationBtn"
-                                                    data-action="{{ route('settings.entreprise.status', $entreprise->id) }}"
-                                                    data-question="@lang('Etes-vous sûr de vouloir activer ce entreprise?')">
+                                                    data-action="{{ route('settings.formateurStaff.status', $formateur->id) }}"
+                                                    data-question="@lang('Etes-vous sûr de vouloir activer ce formateur?')">
                                                     <i class="la la-eye"></i> @lang('Activé')
                                                 </button>
                                             @else
                                                 <button type="button"
                                                     class="btn btn-sm btn-outline--danger confirmationBtn"
-                                                    data-action="{{ route('settings.entreprise.status', $entreprise->id) }}"
-                                                    data-question="@lang('Etes-vous sûr de vouloir désactiver ce entreprise?')">
+                                                    data-action="{{ route('settings.formateurStaff.status', $formateur->id) }}"
+                                                    data-question="@lang('Etes-vous sûr de vouloir désactiver ce formateur?')">
                                                     <i class="la la-eye-slash"></i>@lang('Désactivé')
                                                 </button>
                                             @endif
@@ -86,9 +93,9 @@
                         </table>
                     </div>
                 </div>
-                @if ($entreprises->hasPages())
+                @if ($formateurs->hasPages())
                     <div class="card-footer py-4">
-                        {{ paginateLinks($entreprises) }}
+                        {{ paginateLinks($formateurs) }}
                     </div>
                 @endif
             </div>
@@ -98,42 +105,54 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">@lang('Ajouter une entreprise')</h5>
+                    <h5 class="modal-title">@lang('Ajouter un formateur')</h5>
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <i class="las la-times"></i> </button>
                 </div>
-                <form action="{{ route('manager.settings.entreprise.store') }}" method="POST">
+                <form action="{{ route('manager.settings.formateurStaff.store') }}" method="POST">
                     @csrf
                     <div class="modal-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <label for="entreprise_id" class="control-label">@lang('Entreprise')</label>
+                                <select class="form-control" name="entreprise_id" id="entreprise_id" required>
+                                    <option value="">@lang('Choisir une entreprise')</option>
+                                    @foreach ($entreprises as $entreprise)
+                                        <option value="{{ $entreprise->id }}">{{ $entreprise->nom_entreprise }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                         <input type="hidden" name='id'>
                         <div class="row">
                             <input type="hidden" value="true" name="page_reload" id="page_reload">
                             <div class="col-lg-12">
-                                <x-forms.text :fieldLabel="__('Nom de l\'entreprise')" :fieldPlaceholder="__('Nom de l\'entreprise')" fieldName="nom_entreprise"
-                                    fieldId="nom_entreprise" fieldValue="" :fieldRequired="true" />
+                                <x-forms.text :fieldLabel="__('Nom')" :fieldPlaceholder="__('Nom ')" fieldName="nom_formateur"
+                                    fieldId="nom_formateur" fieldValue="" :fieldRequired="true" />
                             </div>
                         </div>
 
                         <div class="row">
                             <input type="hidden" value="true" name="page_reload" id="page_reload">
                             <div class="col-lg-12">
-                                <x-forms.text :fieldLabel="__('Adresse mail de l\'entreprise')" :fieldPlaceholder="__('Adresse mail de l\'entreprise')" fieldName="mail_entreprise"
-                                    fieldId="mail_entreprise" fieldValue="" :fieldRequired="true" />
+                                <x-forms.text :fieldLabel="__('Prénom')" :fieldPlaceholder="__('Prenom')" fieldName="prenom_formateur"
+                                    fieldId="prenom_formateur" fieldValue="" :fieldRequired="true" />
                             </div>
                         </div>
 
                         <div class="row">
                             <input type="hidden" value="true" name="page_reload" id="page_reload">
                             <div class="col-lg-12">
-                                <x-forms.number :fieldLabel="__('Téléphone de l\'entreprise')" :fieldPlaceholder="__('Téléphone de l\'entreprise')" fieldName="telephone_entreprise"
-                                    fieldId="telephone_entreprise" fieldValue="" :fieldRequired="true" />
+                                <x-forms.number :fieldLabel="__('Téléphone')" :fieldPlaceholder="__('Téléphone')" fieldName="telephone_formateur"
+                                    fieldId="telephone_formateur" fieldValue="" :fieldRequired="true" />
                             </div>
                         </div>
+
                         <div class="row">
                             <input type="hidden" value="true" name="page_reload" id="page_reload">
                             <div class="col-lg-12">
-                                <x-forms.text :fieldLabel="__('Adresse de l\'entreprise')" :fieldPlaceholder="__('Adresse de l\'entreprise')" fieldName="adresse_entreprise"
-                                    fieldId="adresse_entreprise" fieldValue="" :fieldRequired="true" />
+                                <x-forms.text :fieldLabel="__('Poste')" :fieldPlaceholder="__('Poste')" fieldName="poste_formateur"
+                                    fieldId="poste_formateur" fieldValue="" :fieldRequired="true" />
                             </div>
                         </div>
                     </div>
@@ -163,10 +182,11 @@
             $('.updateType').on('click', function() {
                 var modal = $('#typeModel');
                 modal.find('input[name=id]').val($(this).data('id'));
-                modal.find('input[name=nom_entreprise]').val($(this).data('nom'));
-                modal.find('input[name=telephone_entreprise]').val($(this).data('telephone'));
-                modal.find('input[name=mail_entreprise]').val($(this).data('mail'));
-                modal.find('input[name=adresse_entreprise]').val($(this).data('adresse'));
+                modal.find('input[name=nom_formateur]').val($(this).data('nom'));
+                modal.find('input[name=prenom_formateur]').val($(this).data('prenom'));
+                modal.find('input[name=telephone_formateur]').val($(this).data('telephone'));
+                modal.find('input[name=poste_formateur]').val($(this).data('poste'));
+                modal.find('select[name=entreprise_id]').val($(this).data('entreprise'));
                 modal.modal('show');
             });
         })(jQuery);

@@ -320,7 +320,7 @@ class SettingController extends Controller
     public function categorieQuestionnaireStore(Request $request)
     {
         $request->validate([
-            'titre'  => 'required', 
+            'titre'  => 'required',
         ]);
 
         if ($request->id) {
@@ -329,7 +329,7 @@ class SettingController extends Controller
         } else {
             $categorieQuestionnaire = new CategorieQuestionnaire();
         }
-        $categorieQuestionnaire->titre = trim($request->titre);  
+        $categorieQuestionnaire->titre = trim($request->titre);
         $categorieQuestionnaire->save();
         $notify[] = ['success', isset($message) ? $message  : 'Categorie Questionnaire a été ajouté avec succès.'];
         return back()->withNotify($notify);
@@ -342,7 +342,7 @@ class SettingController extends Controller
         $questionnaire     = Questionnaire::with('categorieQuestion')->orderBy('id', 'desc')->paginate(getPaginate());
         $categorieQuestion = CategorieQuestionnaire::get();
         $certifications = Certification::get();
-        return view('manager.config.questionnaire', compact('pageTitle', 'questionnaire', 'categorieQuestion', 'activeSettingMenu','certifications'));
+        return view('manager.config.questionnaire', compact('pageTitle', 'questionnaire', 'categorieQuestion', 'activeSettingMenu', 'certifications'));
     }
 
     public function questionnaireStore(Request $request)
@@ -465,7 +465,8 @@ class SettingController extends Controller
         $pageTitle = "Ajouter une entreprise";
         return view('manager.config.create-entreprise-modal', compact('pageTitle'));
     }
-    public function entrepriseIndex(){
+    public function entrepriseIndex()
+    {
         $manager = auth()->user();
         $pageTitle = "Manage des Entreprises";
         $manager = auth()->user();
@@ -474,10 +475,9 @@ class SettingController extends Controller
         // $countries = Countrie::get();
         // $niveaux = NiveauxEtude::get();
         //$entreprises = Entreprise::orderBy('id','desc')->paginate(getPaginate());
-        $entreprises = Entreprise::where('cooperative_id', $manager->cooperative_id)->paginate(getPaginate());
+        $entreprises = Entreprise::orderBy('id','desc')->where('cooperative_id', $manager->cooperative_id)->paginate(getPaginate());
 
         return view('manager.config.entreprise', compact('pageTitle', 'activeSettingMenu', 'entreprises'));
-
     }
     public function entrepriseStore(Request $request)
     {
@@ -487,9 +487,9 @@ class SettingController extends Controller
             'adresse_entreprise'  => 'required',
             'mail_entreprise'  => 'required',
         ]);
-      
+
         if ($request->id) {
-            $entreprise    = Entreprise::findOrFail($request->id); 
+            $entreprise    = Entreprise::findOrFail($request->id);
         } else {
             $entreprise = new Entreprise();
         }
@@ -499,13 +499,12 @@ class SettingController extends Controller
         $entreprise->telephone_entreprise = trim($request->telephone_entreprise);
         $entreprise->adresse_entreprise = trim($request->adresse_entreprise);
         $entreprise->save();
-        if(!request()->ajax()) {
+        if (!request()->ajax()) {
             $notify[] = ['success', 'Le contenu a été ajouté avec succès.'];
-        return back()->withNotify($notify);
-        }else{
+            return back()->withNotify($notify);
+        } else {
             return Reply::successWithData(__('L\'entreprise a été ajouté avec succès.'), ['page_reload' => $request->page_reload]);
         }
-        
     }
 
     public function formateurStaffIndex()
@@ -513,6 +512,15 @@ class SettingController extends Controller
         $pageTitle = "Ajouter un formateur staff";
         $entreprises = Entreprise::get();
         return view('manager.config.create-formateur-modal', compact('pageTitle', 'entreprises'));
+    }
+    public function formateurList(Request $request)
+    {
+        $pageTitle = "Manage des Formateurs";
+        $manager = auth()->user();
+        $activeSettingMenu = 'formateur_settings';
+        $entreprises = Entreprise::get();
+        $formateurs = FormateurStaff::orderBy('id','desc')->with('entreprise') ->paginate(getPaginate());
+        return view('manager.config.formateur', compact('formateurs', 'pageTitle', 'activeSettingMenu', 'entreprises'));
     }
     public function formateurStaffStore(Request $request)
     {
@@ -537,16 +545,19 @@ class SettingController extends Controller
         $formateurStaff->poste_formateur = trim($request->poste_formateur);
 
         $formateurStaff->save();
-        return Reply::successWithData(__('Formateur Staff a été ajouté avec succès.'), ['page_reload' => $request->page_reload]);
-        // $notify[] = ['success', isset($message) ? $message  : 'Formateur Staff a été ajouté avec succès.'];
-        // return back()->withNotify($notify);
+        if (!request()->ajax()) {
+            $notify[] = ['success', isset($message) ? $message  : 'Formateur Staff a été ajouté avec succès.'];
+            return back()->withNotify($notify);
+        } else {
+            return Reply::successWithData(__('Formateur Staff a été ajouté avec succès.'), ['page_reload' => $request->page_reload]);
+        }
     }
 
     public function departementIndex()
     {
         $pageTitle = "Manage Départements";
         $activeSettingMenu = 'departement_settings';
-        $departements     = Department::where('cooperative_id',auth()->user()->cooperative_id)->orderBy('id', 'desc')->paginate(getPaginate());
+        $departements     = Department::where('cooperative_id', auth()->user()->cooperative_id)->orderBy('id', 'desc')->paginate(getPaginate());
         return view('manager.config.departement', compact('pageTitle', 'departements', 'activeSettingMenu'));
     }
     public function departementStore(Request $request)
@@ -572,8 +583,8 @@ class SettingController extends Controller
     {
         $pageTitle = "Manage Désignations";
         $activeSettingMenu = 'designation_settings';
-        $departements = Department::where('cooperative_id',auth()->user()->cooperative_id)->get();
-        $designations     = Designation::where('cooperative_id',auth()->user()->cooperative_id)->orderBy('id', 'desc')->paginate(getPaginate());
+        $departements = Department::where('cooperative_id', auth()->user()->cooperative_id)->get();
+        $designations     = Designation::where('cooperative_id', auth()->user()->cooperative_id)->orderBy('id', 'desc')->paginate(getPaginate());
         return view('manager.config.designation', compact('pageTitle', 'departements', 'designations', 'activeSettingMenu'));
     }
     public function designationStore(Request $request)
@@ -612,20 +623,20 @@ class SettingController extends Controller
 
         $pageTitle = "Manage des Magasins de Section";
         $manager = auth()->user();
-        
+
         $activeSettingMenu = 'magasinSection_settings';
-         
+
         $users = User::whereHas('roles', function ($q) {
             $q->where('name', 'Magasinier');
         })
             ->where('cooperative_id', $manager->cooperative_id)
             ->select('id', DB::raw("CONCAT(lastname,' ', firstname) as nom"))
             ->get();
-         
-        
-        $usersId  = Arr::whereNotNull(Arr::pluck($users,'id'));
-        $sections = UserLocalite::whereIn('user_id',$usersId)->get();
-   
+
+
+        $usersId  = Arr::whereNotNull(Arr::pluck($users, 'id'));
+        $sections = UserLocalite::whereIn('user_id', $usersId)->get();
+
         //$magasinSections     = MagasinSection::orderBy('id', 'desc')->paginate(getPaginate());
         $magasinSections = MagasinSection::joinRelationship('section')->where('cooperative_id', $manager->cooperative_id)->paginate(getPaginate());
         $codemag = $this->generecodemagasin();
@@ -732,7 +743,7 @@ class SettingController extends Controller
             ->where('cooperative_id', $manager->cooperative_id)
             ->select('id', DB::raw("CONCAT(lastname,' ', firstname) as nom"))
             ->get();
-        $magasinCentraux = MagasinCentral::where('cooperative_id',$manager->cooperative_id)->orderBy('id', 'desc')->paginate(getPaginate());
+        $magasinCentraux = MagasinCentral::where('cooperative_id', $manager->cooperative_id)->orderBy('id', 'desc')->paginate(getPaginate());
         $codemag = $this->generecodemagasincentral();
         return view('manager.config.magasinCentral', compact('pageTitle', 'magasinCentraux', 'activeSettingMenu', 'users', 'codemag'));
     }
@@ -823,15 +834,15 @@ class SettingController extends Controller
         $remorque->cooperative_id = $manager->cooperative_id;
         $remorque->remorque_immat = trim($request->matricule);
         $remorque->save();
-        
+
         $notify[] = ['success', isset($message) ? $message  : 'Le contenu a été ajouté avec succès.'];
         return back()->withNotify($notify);
     }
-    
+
     public function transporteurModalIndex()
     {
         $pageTitle = "Ajouter un transporteur";
-        $entreprises = Entreprise::where('cooperative_id',auth()->user()->cooperative_id)->get();
+        $entreprises = Entreprise::where('cooperative_id', auth()->user()->cooperative_id)->get();
         $countries = Countrie::get();
         $niveaux = NiveauxEtude::get();
         return view('manager.config.create-transporteur-modal', compact('pageTitle', 'entreprises', 'countries', 'niveaux'));
@@ -842,10 +853,10 @@ class SettingController extends Controller
         $pageTitle = "Manage des Transporteurs";
         $manager = auth()->user();
         $activeSettingMenu = 'transporteur_settings';
-        $transporteurs = Transporteur::where('cooperative_id',auth()->user()->cooperative_id)->orderBy('id', 'desc')->paginate(getPaginate());
+        $transporteurs = Transporteur::where('cooperative_id', auth()->user()->cooperative_id)->orderBy('id', 'desc')->paginate(getPaginate());
         $countries = Countrie::get();
         $niveaux = NiveauxEtude::get();
-        $entreprises = Entreprise::where('cooperative_id',auth()->user()->cooperative_id)->get();
+        $entreprises = Entreprise::where('cooperative_id', auth()->user()->cooperative_id)->get();
         return view('manager.config.transporteur', compact('pageTitle', 'transporteurs', 'activeSettingMenu', 'countries', 'niveaux', 'entreprises'));
     }
     public function transporteurStore(Request $request)
@@ -1026,5 +1037,9 @@ class SettingController extends Controller
     public function entrepriseStatus($id)
     {
         return Entreprise::changeStatus($id);
+    }
+    public function formateurStaffStatus($id)
+    {
+        return FormateurStaff::changeStatus($id);
     }
 }

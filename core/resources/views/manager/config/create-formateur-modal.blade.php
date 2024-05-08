@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h5 class="modal-title">{{$pageTitle}}</h5>
+    <h5 class="modal-title">{{ $pageTitle }}</h5>
     <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">×</button>
 </div>
 <div class="modal-body">
@@ -9,9 +9,9 @@
             <div class="row">
                 <div class="col-lg-12">
                     <label for="entreprise_id" class="control-label">@lang('Entreprise')</label>
-                   <select class="form-control" name="entreprise_id" id="entreprise_id" required>
+                    <select class="form-control" name="entreprise_id" id="entreprise_id" required>
                         <option value="">@lang('Choisir une entreprise')</option>
-                        @foreach($entreprises as $entreprise)
+                        @foreach ($entreprises as $entreprise)
                             <option value="{{ $entreprise->id }}">{{ $entreprise->nom_entreprise }}</option>
                         @endforeach
                     </select>
@@ -28,22 +28,22 @@
             <div class="row">
                 <input type="hidden" value="true" name="page_reload" id="page_reload">
                 <div class="col-lg-12">
-                    <x-forms.text :fieldLabel="__('Prenoms du formateur')" :fieldPlaceholder="__('Prenom du formateur')" fieldName="prenom_formateur" fieldId="prenom_formateur"
-                        fieldValue="" :fieldRequired="true" />
+                    <x-forms.text :fieldLabel="__('Prenoms du formateur')" :fieldPlaceholder="__('Prenom du formateur')" fieldName="prenom_formateur"
+                        fieldId="prenom_formateur" fieldValue="" :fieldRequired="true" />
                 </div>
             </div>
             <div class="row">
                 <input type="hidden" value="true" name="page_reload" id="page_reload">
                 <div class="col-lg-12">
-                    <x-forms.number :fieldLabel="__('Téléphone du formateur')" :fieldPlaceholder="__('Téléphone du formateur')" fieldName="telephone_formateur" fieldId="telephone_formateur" minValue="10" maxValue="10"
-                        fieldValue="" :fieldRequired="true" />
+                    <x-forms.number :fieldLabel="__('Téléphone du formateur')" :fieldPlaceholder="__('Téléphone du formateur')" fieldName="telephone_formateur"
+                        fieldId="telephone_formateur" minValue="10" maxValue="10" fieldValue="" :fieldRequired="true" />
                 </div>
             </div>
             <div class="row">
                 <input type="hidden" value="true" name="page_reload" id="page_reload">
                 <div class="col-lg-12">
-                    <x-forms.text :fieldLabel="__('Domaine de compétence')" :fieldPlaceholder="__('Domaine de compétence')" fieldName="poste_formateur" fieldId="poste_formateur"
-                        fieldValue="" :fieldRequired="true" />
+                    <x-forms.text :fieldLabel="__('Domaine de compétence')" :fieldPlaceholder="__('Domaine de compétence')" fieldName="poste_formateur"
+                        fieldId="poste_formateur" fieldValue="" :fieldRequired="true" />
                 </div>
             </div>
         </x-form>
