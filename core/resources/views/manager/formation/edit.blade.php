@@ -35,7 +35,8 @@
                                 @foreach ($producteurs as $producteur)
                                     <option value="{{ $producteur->id }}" data-chained="{{ $producteur->localite->id }}"
                                         @selected(in_array($producteur->id, $dataProducteur))>
-                                        {{ stripslashes($producteur->nom) }} {{ stripslashes($producteur->prenoms) }}</option>
+                                        {{ stripslashes($producteur->nom) }} {{ stripslashes($producteur->prenoms) }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
@@ -143,196 +144,213 @@
                                 data-default-file="{{ asset('core/storage/app/' . $formation->photo_formation) }}">
                         </div>
                     </div>
-
                     <div class="form-group row">
-                        <?php echo Form::label(__('Rapport de la formation'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <?php echo Form::label(__('Photo de la fiche de présence'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <input type="file" name="rapport_formation" class="form-control dropify-fr"
-                                data-default-file="{{ asset('core/storage/app/' . $formation->rapport_formation) }}"
+                            <input type="file" name="photo_docListePresence" class="form-control dropify-fr"
+                                data-default-file="{{ asset('core/storage/app/' . $formation->photo_docListePresence) }}">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <?php echo Form::label(__('Document liste de présence'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-12 col-sm-8">
+                            <input type="file" name="docListePresence" class="form-control dropify-fr"
+                                data-default-file="{{ asset('core/storage/app/' . $formation->docListePresence) }}"
                                 data-allowed-file-extensions="pdf docx doc xls xlsx">
                         </div>
                     </div>
 
-                    <hr class="panel-wide">
-                    <input type="hidden" name="multiStartDate" id="multiStartDate"
-                        value="{{ Carbon::parse($formation->date_debut_formation)->format('Y-m-d') }}">
-                    <input type="hidden" name="multiEndDate" id="multiEndDate"
-                        value="{{ Carbon::parse($formation->date_fin_formation)->format('Y-m-d') }}">
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Rapport de la formation'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8">
+                                <input type="file" name="rapport_formation" class="form-control dropify-fr"
+                                    data-default-file="{{ asset('core/storage/app/' . $formation->rapport_formation) }}"
+                                    data-allowed-file-extensions="pdf docx doc xls xlsx">
+                            </div>
+                        </div>
 
-                    <div class="form-group">
-                        <button type="submit" class="btn btn--primary btn-block h-45 w-100">@lang('Envoyer')</button>
+                        <hr class="panel-wide">
+                        <input type="hidden" name="multiStartDate" id="multiStartDate"
+                            value="{{ Carbon::parse($formation->date_debut_formation)->format('Y-m-d') }}">
+                        <input type="hidden" name="multiEndDate" id="multiEndDate"
+                            value="{{ Carbon::parse($formation->date_fin_formation)->format('Y-m-d') }}">
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn--primary btn-block h-45 w-100">@lang('Envoyer')</button>
+                        </div>
+                        {!! Form::close() !!}
                     </div>
-                    {!! Form::close() !!}
                 </div>
             </div>
         </div>
-    </div>
-@endsection
+    @endsection
 
-@push('breadcrumb-plugins')
-    <x-back route="{{ route('manager.suivi.formation.index') }}" />
-@endpush
+    @push('breadcrumb-plugins')
+        <x-back route="{{ route('manager.suivi.formation.index') }}" />
+    @endpush
 
-@push('script')
-    <link rel="stylesheet" href="{{ asset('assets/vendor/css/daterangepicker.css') }}">
-    <script src="{{ asset('assets/vendor/jquery/daterangepicker.min.js') }}"></script>
-    <script type="text/javascript">
-        //$("#theme").chained("#typeformation");
-        //$("#producteur").chained("#localite");
-
+    @push('script')
+        <link rel="stylesheet" href="{{ asset('assets/vendor/css/daterangepicker.css') }}">
+        <script src="{{ asset('assets/vendor/jquery/daterangepicker.min.js') }}"></script>
+        <script type="text/javascript">
+            //$("#theme").chained("#typeformation");
+            //$("#producteur").chained("#localite");
 
 
-        $('#duree_formation').timepicker({
-            showMeridian: (false)
-        });
-        $('#multi_date').daterangepicker({
-            linkedCalendars: false,
-            multidate: true,
-            todayHighlight: true,
-            format: 'yyyy-mm-d'
-        });
-        $('#multi_date').change(function() {
-            var dates = $(this).val();
 
-            var startDate = moment(new Date(dates.split(' - ')[0]));
-            var endDate = moment(new Date(dates.split(' - ')[1]));
-            var totalDays = endDate.diff(startDate, 'days') + 1;
-
-            startDate = startDate.format('YYYY-MM-DD');
-
-            endDate = endDate.format('YYYY-MM-DD');
-
-            var multiDate = [];
-            multiDate = [startDate, endDate];
-            $('#multi_date').val(multiDate);
-
-            $('#multiStartDate').val(startDate);
-            $('#multiEndDate').val(endDate);
-            $('.date-range-days').html(totalDays + ' Jours sélectionnés');
-        });
-
-        $(document).ready(function() {
-            var themesSelected = "{{ implode(',', $themesSelected) }}";
-            var sousThemesSelected = "{{ implode(',', $sousThemesSelected) }}";
-            //idée de ce bloque de code c'est de remplire l'objet optionParTheme avec les themes provenant de la base de données
-            var optionParTheme = new Object();
-            $("#theme option").each(function() {
-                var curreentArray = optionParTheme[($(this).data('chained'))] ? optionParTheme[($(this)
-                    .data('chained'))] : [];
-                curreentArray[$(this).val()] = $(this).text().trim();
-                Object.assign(optionParTheme, {
-                    [$(this).data('chained')]: curreentArray
-                });
-                if (themesSelected.split(',').includes($(this).val()) && themesSelected != "") {
-                    $(this).val($(this).data('chained') + "-" + $(this).val());
-                    $(this).attr('selected', 'selected');
-                } else $(this).remove();
+            $('#duree_formation').timepicker({
+                showMeridian: (false)
             });
-            console.log(optionParTheme);
-
-            var optionParSousTheme = new Object();
-            $("#sous_theme option").each(function() {
-                var curreentArray = optionParSousTheme[($(this).data('chained'))] ? optionParSousTheme[($(
-                        this)
-                    .data('chained'))] : [];
-                curreentArray[$(this).val()] = $(this).text().trim();
-                Object.assign(optionParSousTheme, {
-                    [$(this).data('chained')]: curreentArray
-                });
-                if (sousThemesSelected.split(',').includes($(this).val()) && sousThemesSelected != "") {
-                    $(this).val($(this).data('chained') + "-" + $(this).val());
-                    $(this).attr('selected', 'selected');
-                } else $(this).remove();
+            $('#multi_date').daterangepicker({
+                linkedCalendars: false,
+                multidate: true,
+                todayHighlight: true,
+                format: 'yyyy-mm-d'
             });
-            console.log(optionParSousTheme);
+            $('#multi_date').change(function() {
+                var dates = $(this).val();
 
-            $('#typeformation').change(function() {
-                var typeformation = $(this).val();
-                $("#theme").empty();
-                $("#sous_theme").empty();
-                var optionsHtml2 = "";
-                window.optionSousTheme = "";
-                $(this).find('option:selected').each(function() {
-                    //console.log($(this).val());
-                    optionsHtml2 = updateTheme(optionsHtml2, $(this).val(), optionParTheme,
-                        optionParSousTheme);
-                })
+                var startDate = moment(new Date(dates.split(' - ')[0]));
+                var endDate = moment(new Date(dates.split(' - ')[1]));
+                var totalDays = endDate.diff(startDate, 'days') + 1;
+
+                startDate = startDate.format('YYYY-MM-DD');
+
+                endDate = endDate.format('YYYY-MM-DD');
+
+                var multiDate = [];
+                multiDate = [startDate, endDate];
+                $('#multi_date').val(multiDate);
+
+                $('#multiStartDate').val(startDate);
+                $('#multiEndDate').val(endDate);
+                $('.date-range-days').html(totalDays + ' Jours sélectionnés');
             });
 
-            $('#theme').change(function() {
-                $("#sous_theme").empty();
-                window.optionSousTheme = "";
-                $(this).find('option:selected').each(function() {
-                    //console.log($(this).val());
-                    window.optionSousTheme = updateSousTheme(window.optionSousTheme, $(this).val()
-                        .split("-")[1], optionParSousTheme);
-                })
+            $(document).ready(function() {
+                var themesSelected = "{{ implode(',', $themesSelected) }}";
+                var sousThemesSelected = "{{ implode(',', $sousThemesSelected) }}";
+                //idée de ce bloque de code c'est de remplire l'objet optionParTheme avec les themes provenant de la base de données
+                var optionParTheme = new Object();
+                $("#theme option").each(function() {
+                    var curreentArray = optionParTheme[($(this).data('chained'))] ? optionParTheme[($(this)
+                        .data('chained'))] : [];
+                    curreentArray[$(this).val()] = $(this).text().trim();
+                    Object.assign(optionParTheme, {
+                        [$(this).data('chained')]: curreentArray
+                    });
+                    if (themesSelected.split(',').includes($(this).val()) && themesSelected != "") {
+                        $(this).val($(this).data('chained') + "-" + $(this).val());
+                        $(this).attr('selected', 'selected');
+                    } else $(this).remove();
+                });
+                console.log(optionParTheme);
+
+                var optionParSousTheme = new Object();
+                $("#sous_theme option").each(function() {
+                    var curreentArray = optionParSousTheme[($(this).data('chained'))] ? optionParSousTheme[($(
+                            this)
+                        .data('chained'))] : [];
+                    curreentArray[$(this).val()] = $(this).text().trim();
+                    Object.assign(optionParSousTheme, {
+                        [$(this).data('chained')]: curreentArray
+                    });
+                    if (sousThemesSelected.split(',').includes($(this).val()) && sousThemesSelected != "") {
+                        $(this).val($(this).data('chained') + "-" + $(this).val());
+                        $(this).attr('selected', 'selected');
+                    } else $(this).remove();
+                });
+                console.log(optionParSousTheme);
+
+                $('#typeformation').change(function() {
+                    var typeformation = $(this).val();
+                    $("#theme").empty();
+                    $("#sous_theme").empty();
+                    var optionsHtml2 = "";
+                    window.optionSousTheme = "";
+                    $(this).find('option:selected').each(function() {
+                        //console.log($(this).val());
+                        optionsHtml2 = updateTheme(optionsHtml2, $(this).val(), optionParTheme,
+                            optionParSousTheme);
+                    })
+                });
+
+                $('#theme').change(function() {
+                    $("#sous_theme").empty();
+                    window.optionSousTheme = "";
+                    $(this).find('option:selected').each(function() {
+                        //console.log($(this).val());
+                        window.optionSousTheme = updateSousTheme(window.optionSousTheme, $(this).val()
+                            .split("-")[1], optionParSousTheme);
+                    })
+                });
             });
-        });
 
-        function updateTheme(optionsHtml2, id, optionParTheme, optionParSousTheme) {
-            var optionsHtml = optionsHtml2
-            if (id != '') {
-                optionParTheme[id].forEach(function(key, element) {
-                    optionsHtml += '<option value="' + id + '-' + element + '">' + key + '</option>';
-                    window.optionSousTheme = updateSousTheme(window.optionSousTheme, element, optionParSousTheme);
-                });
-                $("#theme").html(optionsHtml);
-            }
-            return optionsHtml;
-        }
-
-        function updateSousTheme(optionsHtml2, id, optionParSousTheme) {
-            var optionsHtml = optionsHtml2
-            if (id != '' && optionParSousTheme[id] != undefined) {
-                optionParSousTheme[id].forEach(function(key, element) {
-                    optionsHtml += '<option value="' + id + '-' + element + '">' + key + '</option>';
-                });
-                $("#sous_theme").html(optionsHtml);
-            }
-            return optionsHtml;
-        }
-
-        $(document).ready(function() {
-            var producteursSelected = "{{ implode(',', $producteursSelected) }}";
-            var optionParProducteur = new Object();
-            var varLocaliteId = $("#localite option:selected").get(0).value;
-            $("#producteur option").each(function() {
-                var currentArray = optionParProducteur[($(this).data('chained'))] ? optionParProducteur[($(this)
-                    .data('chained'))] : [];
-                currentArray[$(this).val()] = $(this).text().trim();
-                Object.assign(optionParProducteur, {
-                    [$(this).data('chained')]: currentArray
-                });
-
-                if(varLocaliteId != $(this).data('chained')) $(this).remove();
-
-                if (producteursSelected.split(',').includes($(this).val()) && producteursSelected != "") {
-                    $(this).val($(this).val());
-                    $(this).attr('selected', 'selected');
+            function updateTheme(optionsHtml2, id, optionParTheme, optionParSousTheme) {
+                var optionsHtml = optionsHtml2
+                if (id != '') {
+                    optionParTheme[id].forEach(function(key, element) {
+                        optionsHtml += '<option value="' + id + '-' + element + '">' + key + '</option>';
+                        window.optionSousTheme = updateSousTheme(window.optionSousTheme, element, optionParSousTheme);
+                    });
+                    $("#theme").html(optionsHtml);
                 }
-            });
-            console.log(optionParProducteur);
-
-            $('#localite').change(function() {
-                var localite = $(this).val();
-                $("#producteur").empty();
-                var optionsHtml2 = "";
-                $(this).find('option:selected').each(function() {
-                    optionsHtml2 = updateProducteur(optionsHtml2, $(this).val(), optionParProducteur);
-                })
-            });
-        });
-
-        function updateProducteur(optionsHtml2, id, optionParProducteur) {
-            var optionsHtml = optionsHtml2
-            if (id != '') {
-                optionParProducteur[id].forEach(function(key, element) {
-                    optionsHtml += '<option value="'  + element + '">' + key + '</option>';
-                });
-                $("#producteur").html(optionsHtml);
+                return optionsHtml;
             }
-            return optionsHtml;
-        }
-    </script>
-@endpush
+
+            function updateSousTheme(optionsHtml2, id, optionParSousTheme) {
+                var optionsHtml = optionsHtml2
+                if (id != '' && optionParSousTheme[id] != undefined) {
+                    optionParSousTheme[id].forEach(function(key, element) {
+                        optionsHtml += '<option value="' + id + '-' + element + '">' + key + '</option>';
+                    });
+                    $("#sous_theme").html(optionsHtml);
+                }
+                return optionsHtml;
+            }
+
+            $(document).ready(function() {
+                var producteursSelected = "{{ implode(',', $producteursSelected) }}";
+                var optionParProducteur = new Object();
+                var varLocaliteId = $("#localite option:selected").get(0).value;
+                $("#producteur option").each(function() {
+                    var currentArray = optionParProducteur[($(this).data('chained'))] ? optionParProducteur[($(
+                            this)
+                        .data('chained'))] : [];
+                    currentArray[$(this).val()] = $(this).text().trim();
+                    Object.assign(optionParProducteur, {
+                        [$(this).data('chained')]: currentArray
+                    });
+
+                    if (varLocaliteId != $(this).data('chained')) $(this).remove();
+
+                    if (producteursSelected.split(',').includes($(this).val()) && producteursSelected != "") {
+                        $(this).val($(this).val());
+                        $(this).attr('selected', 'selected');
+                    }
+                });
+                console.log(optionParProducteur);
+
+                $('#localite').change(function() {
+                    var localite = $(this).val();
+                    $("#producteur").empty();
+                    var optionsHtml2 = "";
+                    $(this).find('option:selected').each(function() {
+                        optionsHtml2 = updateProducteur(optionsHtml2, $(this).val(),
+                            optionParProducteur);
+                    })
+                });
+            });
+
+            function updateProducteur(optionsHtml2, id, optionParProducteur) {
+                var optionsHtml = optionsHtml2
+                if (id != '') {
+                    optionParProducteur[id].forEach(function(key, element) {
+                        optionsHtml += '<option value="' + element + '">' + key + '</option>';
+                    });
+                    $("#producteur").html(optionsHtml);
+                }
+                return optionsHtml;
+            }
+        </script>
+    @endpush

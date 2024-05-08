@@ -144,6 +144,13 @@
                             <input type="file" name="photo_docListePresence" class="form-control dropify-fr">
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <?php echo Form::label(__('Document liste de présence'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-12 col-sm-8">
+                            <input type="file" name="docListePresence" class="form-control dropify-fr"
+                                data-allowed-file-extensions="pdf docx doc xls xlsx">
+                        </div>
+                    </div>
 
                     <div class="form-group row">
                         <?php echo Form::label(__('Rapport de la formation'), null, ['class' => 'col-sm-4 control-label']); ?>

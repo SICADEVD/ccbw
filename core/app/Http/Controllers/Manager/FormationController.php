@@ -134,6 +134,15 @@ class FormationController extends Controller
             }
         }
 
+        if ($request->hasFile('docListePresence')) {
+            try {
+                $formation->rapport_formation = $request->file('docListePresence')->store('public/formations');
+            } catch (\Exception $exp) {
+                $notify[] = ['error', 'Impossible de télécharger votre image'];
+                return back()->withNotify($notify);
+            }
+        }
+
         if ($request->hasFile('rapport_formation')) {
             try {
                 $formation->rapport_formation = $request->file('rapport_formation')->store('public/formations');
