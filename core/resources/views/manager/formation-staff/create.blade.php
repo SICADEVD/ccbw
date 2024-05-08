@@ -268,6 +268,7 @@
                 Object.assign(optionParFormateur, {
                     [$(this).data('chained')]: curreentArray
                 });
+                console.log(optionParFormateur, $(this).data('chained'),$(this).val());
                 $(this).remove();
             });
 
@@ -276,7 +277,7 @@
                 $("#formateur").empty();
                 var optionsHtml2 = "";
                 $(this).find('option:selected').each(function() {
-                    console.log($(this).val());
+                    console.log($(this).val(), optionParFormateur);
                     optionsHtml2 = updateFormateur(optionsHtml2, $(this).val(), optionParFormateur);
                 })
             });
@@ -284,10 +285,13 @@
             function updateFormateur(optionsHtml2, id, optionParFormateur) {
                 var optionsHtml = optionsHtml2
                 if (id != '') {
-                    optionParFormateur[id].forEach(function(key, element) {
-                        optionsHtml += '<option value="' + id + '-' + element + '">' + key + '</option>';
-                    });
-                    $("#formateur").html(optionsHtml);
+                    if(optionParFormateur[id] != null){
+                        console.log(optionParFormateur[id], id);
+                        optionParFormateur[id].forEach(function(key, element) {
+                            optionsHtml += '<option value="' + id + '-' + element + '">' + key + '</option>';
+                        });
+                        $("#formateur").html(optionsHtml);
+                    }
                 }
                 return optionsHtml;
             }

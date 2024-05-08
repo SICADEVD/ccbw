@@ -475,7 +475,7 @@ class SettingController extends Controller
         // $countries = Countrie::get();
         // $niveaux = NiveauxEtude::get();
         //$entreprises = Entreprise::orderBy('id','desc')->paginate(getPaginate());
-        $entreprises = Entreprise::orderBy('id','desc')->where('cooperative_id', $manager->cooperative_id)->paginate(getPaginate());
+        $entreprises = Entreprise::orderBy('id','desc')->paginate(getPaginate());
 
         return view('manager.config.entreprise', compact('pageTitle', 'activeSettingMenu', 'entreprises'));
     }
