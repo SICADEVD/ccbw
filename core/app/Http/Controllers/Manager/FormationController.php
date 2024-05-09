@@ -8,10 +8,13 @@ use App\Models\User;
 use App\Models\Campagne;
 use App\Models\Localite;
 use App\Constants\Status;
+use App\Models\Entreprise;
 use App\Models\Producteur;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\TypeFormation;
+use App\Models\FormateurStaff;
 use App\Models\SuiviFormation;
 use App\Models\ThemeSousTheme;
 use App\Models\ThemesFormation;
@@ -24,7 +27,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use App\Models\SuiviFormationVisiteur;
 use App\Models\SuiviFormationProducteur;
-use Illuminate\Support\Arr;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx\Theme;
 
 class FormationController extends Controller
@@ -66,6 +68,8 @@ class FormationController extends Controller
         $typeformations  = TypeFormation::all();
         $themes  = ThemesFormation::with('typeFormation')->get();
         $sousThemes  = SousThemeFormation::with('themeFormation')->get();
+        $entreprises = Entreprise::all();
+        $formateurs = FormateurStaff::with('entreprise')->get();
 
         $staffs = User::whereHas('roles', function ($q) {
             $q->whereIn('name', ['Inspecteur', 'ADG']);
@@ -74,7 +78,7 @@ class FormationController extends Controller
             ->select('users.*')
             ->get();
 
-        return view('manager.formation.create', compact('pageTitle', 'producteurs', 'localites', 'typeformations', 'themes', 'staffs', 'sousThemes'));
+        return view('manager.formation.create', compact('pageTitle', 'producteurs', 'localites', 'typeformations', 'themes', 'staffs', 'sousThemes', 'entreprises', 'formateurs'));
     }
 
     public function store(Request $request)
