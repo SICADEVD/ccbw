@@ -323,40 +323,55 @@
         }
 
         var optionParFormateur = new Object();
-            $("#formateur option").each(function() {
-                //on assigne les themes à lobjet optionParTheme
-                var curreentArray = optionParFormateur[($(this).data('chained'))] ? optionParFormateur[($(this)
-                    .data('chained'))] : [];
-                curreentArray[$(this).val()] = $(this).text().trim();
-                Object.assign(optionParFormateur, {
-                    [$(this).data('chained')]: curreentArray
-                });
-                console.log(optionParFormateur, $(this).data('chained'),$(this).val());
-                $(this).remove();
+        $("#formateur option").each(function() {
+            //on assigne les themes à lobjet optionParTheme
+            var curreentArray = optionParFormateur[($(this).data('chained'))] ? optionParFormateur[($(this)
+                .data('chained'))] : [];
+            curreentArray[$(this).val()] = $(this).text().trim();
+            Object.assign(optionParFormateur, {
+                [$(this).data('chained')]: curreentArray
             });
+            console.log(optionParFormateur, $(this).data('chained'), $(this).val());
+            $(this).remove();
+        });
 
-            $('#entreprise_formateur').change(function() {
-                var entreprise_formateur = $(this).val();
-                $("#formateur").empty();
-                var optionsHtml2 = "";
-                $(this).find('option:selected').each(function() {
-                    console.log($(this).val(), optionParFormateur);
-                    optionsHtml2 = updateFormateur(optionsHtml2, $(this).val(), optionParFormateur);
-                })
-            });
+        $('#entreprise_formateur').change(function() {
+            var entreprise_formateur = $(this).val();
+            $("#formateur").empty();
+            var optionsHtml2 = "";
+            $(this).find('option:selected').each(function() {
+                console.log($(this).val(), optionParFormateur);
+                optionsHtml2 = updateFormateur(optionsHtml2, $(this).val(), optionParFormateur);
+            })
+        });
 
-            function updateFormateur(optionsHtml2, id, optionParFormateur) {
-                var optionsHtml = optionsHtml2
-                if (id != '') {
-                    if(optionParFormateur[id] != null){
-                        console.log(optionParFormateur[id], id);
-                        optionParFormateur[id].forEach(function(key, element) {
-                            optionsHtml += '<option value="' + id + '-' + element + '">' + key + '</option>';
-                        });
-                        $("#formateur").html(optionsHtml);
-                    }
+        function updateFormateur(optionsHtml2, id, optionParFormateur) {
+            var optionsHtml = optionsHtml2
+            if (id != '') {
+                if (optionParFormateur[id] != null) {
+                    console.log(optionParFormateur[id], id);
+                    optionParFormateur[id].forEach(function(key, element) {
+                        optionsHtml += '<option value="' + id + '-' + element + '">' + key + '</option>';
+                    });
+                    $("#formateur").html(optionsHtml);
                 }
-                return optionsHtml;
             }
+            return optionsHtml;
+        }
+
+        $('body').on('click', '.add-formateur', function() {
+            var url = "{{ route('manager.settings.formateurStaff.index') }}";
+
+            $(MODAL_XL + ' ' + MODAL_HEADING).html('...');
+            $.ajaxModal(MODAL_XL, url);
+            $(MODAL_XL).modal('show');
+        });
+        $('body').on('click', '.add-entreprise', function() {
+            var url = "{{ route('manager.settings.entrepriseModal.index') }}";
+
+            $(MODAL_XL + ' ' + MODAL_HEADING).html('...');
+            $.ajaxModal(MODAL_XL, url);
+            $(MODAL_XL).modal('show');
+        });
     </script>
 @endpush
