@@ -20,4 +20,9 @@ class FormateurStaff extends Model
     {
         return $this->belongsToMany(FormationStaff::class, 'formation_staff_formateurs', 'formateur_staff_id', 'formation_staff_id');
     }
+
+    public function formationProducteurs()
+    {
+        return $this->belongsToMany(FormationProducteurFormateur::class, 'formation_producteur_formateurs', 'suivi_formateur_id', 'formation_producteur_id');    
+    }
 }

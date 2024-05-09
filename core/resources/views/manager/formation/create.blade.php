@@ -109,6 +109,41 @@
                             </select>
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <?php echo Form::label(__('Entreprise du formateur'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-8 col-sm-8 input-group mb-3">
+                            <select class="form-control select2-multi-select" name="entreprise_formateur[]"
+                                id="entreprise_formateur" required multiple>
+                                <option value="">@lang('Selectionner une option')</option>
+                                @foreach ($entreprises as $entreprise)
+                                    <option value="{{ $entreprise->id }}" @selected(old('entreprise_formateur'))>
+                                        {{ $entreprise->nom_entreprise }}</option>
+                                @endforeach
+                            </select>
+                            <button type="button" class="btn btn-outline-secondary border-grey add-entreprise"
+                                data-toggle="tooltip" data-original-title="Ajouter un formateur"><i class="las la-plus"></i>
+                            </button>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group row">
+                        <?php echo Form::label(__('Formateur'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-12 col-sm-8 input-group mb-3">
+                            <select class="form-control select2-multi-select" name="formateur[]" id="formateur" required
+                                multiple>
+                                <option value="">@lang('Selectionner une option')</option>
+                                @foreach ($formateurs as $formateur)
+                                    <option value="{{ $formateur->id }}" data-chained="{{ $formateur->entreprise_id }}"
+                                        @selected(old('formateur'))>
+                                        {{ $formateur->nom_formateur }} {{ $formateur->prenom_formateur }}</option>
+                                @endforeach
+                            </select>
+                            <button type="button" class="btn btn-outline-secondary border-grey add-formateur"
+                                data-toggle="tooltip" data-original-title="Ajouter un formateur"><i
+                                    class="las la-plus"></i></button>
+                        </div>
+                    </div>
 
                     <div class="form-group row">
                         <?php echo Form::label(__('Date de Début & Fin de la formation'), null, ['class' => 'col-sm-4 control-label required']); ?>
@@ -286,5 +321,42 @@
             }
             return optionsHtml;
         }
+
+        var optionParFormateur = new Object();
+            $("#formateur option").each(function() {
+                //on assigne les themes à lobjet optionParTheme
+                var curreentArray = optionParFormateur[($(this).data('chained'))] ? optionParFormateur[($(this)
+                    .data('chained'))] : [];
+                curreentArray[$(this).val()] = $(this).text().trim();
+                Object.assign(optionParFormateur, {
+                    [$(this).data('chained')]: curreentArray
+                });
+                console.log(optionParFormateur, $(this).data('chained'),$(this).val());
+                $(this).remove();
+            });
+
+            $('#entreprise_formateur').change(function() {
+                var entreprise_formateur = $(this).val();
+                $("#formateur").empty();
+                var optionsHtml2 = "";
+                $(this).find('option:selected').each(function() {
+                    console.log($(this).val(), optionParFormateur);
+                    optionsHtml2 = updateFormateur(optionsHtml2, $(this).val(), optionParFormateur);
+                })
+            });
+
+            function updateFormateur(optionsHtml2, id, optionParFormateur) {
+                var optionsHtml = optionsHtml2
+                if (id != '') {
+                    if(optionParFormateur[id] != null){
+                        console.log(optionParFormateur[id], id);
+                        optionParFormateur[id].forEach(function(key, element) {
+                            optionsHtml += '<option value="' + id + '-' + element + '">' + key + '</option>';
+                        });
+                        $("#formateur").html(optionsHtml);
+                    }
+                }
+                return optionsHtml;
+            }
     </script>
 @endpush
