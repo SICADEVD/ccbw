@@ -98,6 +98,12 @@
                     <hr class="panel-wide">
 
                     <div class="form-group row">
+                        <?php echo Form::label(__('Cette formation a t-elle était dispensée par un formateur externe ?'), null, ['class' => 'col-sm-4 control-label']); ?>
+                        <div class="col-xs-12 col-sm-8">
+                            <?php echo Form::select('formateur_externe', ['' => 'Selectionner une option', 'non' => __('non'), 'oui' => __('oui')], null, ['class' => 'form-control formateur_externe']); ?>
+                        </div>
+                    </div>
+                    <div id="formateurInterne" class="form-group row">
                         <?php echo Form::label(__('Staff ayant dispensé la formation'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
                             <select class="form-control" name="staff" id="staff" required>
@@ -109,42 +115,42 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <?php echo Form::label(__('Entreprise du formateur'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-8 col-sm-8 input-group mb-3">
-                            <select class="form-control select2-multi-select" name="entreprise_formateur[]"
-                                id="entreprise_formateur" required multiple>
-                                <option value="">@lang('Selectionner une option')</option>
-                                @foreach ($entreprises as $entreprise)
-                                    <option value="{{ $entreprise->id }}" @selected(old('entreprise_formateur'))>
-                                        {{ $entreprise->nom_entreprise }}</option>
-                                @endforeach
-                            </select>
-                            <button type="button" class="btn btn-outline-secondary border-grey add-entreprise"
-                                data-toggle="tooltip" data-original-title="Ajouter un formateur"><i class="las la-plus"></i>
-                            </button>
+                    <div id="formateurExterne">
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Entreprise du formateur'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-8 col-sm-8 input-group mb-3">
+                                <select class="form-control select2-multi-select" name="entreprise_formateur[]"
+                                    id="entreprise_formateur" required multiple>
+                                    <option value="">@lang('Selectionner une option')</option>
+                                    @foreach ($entreprises as $entreprise)
+                                        <option value="{{ $entreprise->id }}" @selected(old('entreprise_formateur'))>
+                                            {{ $entreprise->nom_entreprise }}</option>
+                                    @endforeach
+                                </select>
+                                <button type="button" class="btn btn-outline-secondary border-grey add-entreprise"
+                                    data-toggle="tooltip" data-original-title="Ajouter un formateur"><i
+                                        class="las la-plus"></i>
+                                </button>
+                            </div>
                         </div>
-
-                    </div>
-
-                    <div class="form-group row">
-                        <?php echo Form::label(__('Formateur'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8 input-group mb-3">
-                            <select class="form-control select2-multi-select" name="formateur[]" id="formateur" required
-                                multiple>
-                                <option value="">@lang('Selectionner une option')</option>
-                                @foreach ($formateurs as $formateur)
-                                    <option value="{{ $formateur->id }}" data-chained="{{ $formateur->entreprise_id }}"
-                                        @selected(old('formateur'))>
-                                        {{ $formateur->nom_formateur }} {{ $formateur->prenom_formateur }}</option>
-                                @endforeach
-                            </select>
-                            <button type="button" class="btn btn-outline-secondary border-grey add-formateur"
-                                data-toggle="tooltip" data-original-title="Ajouter un formateur"><i
-                                    class="las la-plus"></i></button>
+                        <div class="form-group row">
+                            <?php echo Form::label(__('Formateur'), null, ['class' => 'col-sm-4 control-label']); ?>
+                            <div class="col-xs-12 col-sm-8 input-group mb-3">
+                                <select class="form-control select2-multi-select" name="formateur[]" id="formateur" required
+                                    multiple>
+                                    <option value="">@lang('Selectionner une option')</option>
+                                    @foreach ($formateurs as $formateur)
+                                        <option value="{{ $formateur->id }}"
+                                            data-chained="{{ $formateur->entreprise_id }}" @selected(old('formateur'))>
+                                            {{ $formateur->nom_formateur }} {{ $formateur->prenom_formateur }}</option>
+                                    @endforeach
+                                </select>
+                                <button type="button" class="btn btn-outline-secondary border-grey add-formateur"
+                                    data-toggle="tooltip" data-original-title="Ajouter un formateur"><i
+                                        class="las la-plus"></i></button>
+                            </div>
                         </div>
                     </div>
-
                     <div class="form-group row">
                         <?php echo Form::label(__('Date de Début & Fin de la formation'), null, ['class' => 'col-sm-4 control-label required']); ?>
                         <div class="col-xs-12 col-sm-8">
@@ -218,6 +224,7 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/css/daterangepicker.css') }}">
     <script src="{{ asset('assets/vendor/jquery/daterangepicker.min.js') }}"></script>
     <script type="text/javascript">
+        $('#formateurIterne,#formateurExterne').hide();
         $("#producteur").chained("#localite");
 
         $('#duree_formation').timepicker({
