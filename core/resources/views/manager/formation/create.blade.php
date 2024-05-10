@@ -127,10 +127,10 @@
                                             {{ $entreprise->nom_entreprise }}</option>
                                     @endforeach
                                 </select>
-                                <button type="button" class="btn btn-outline-secondary border-grey add-entreprise"
+                                {{-- <button type="button" class="btn btn-outline-secondary border-grey add-entreprise"
                                     data-toggle="tooltip" data-original-title="Ajouter un formateur"><i
                                         class="las la-plus"></i>
-                                </button>
+                                </button> --}}
                             </div>
                         </div>
                         <div class="form-group row">
@@ -145,9 +145,9 @@
                                             {{ $formateur->nom_formateur }} {{ $formateur->prenom_formateur }}</option>
                                     @endforeach
                                 </select>
-                                <button type="button" class="btn btn-outline-secondary border-grey add-formateur"
+                                {{-- <button type="button" class="btn btn-outline-secondary border-grey add-formateur"
                                     data-toggle="tooltip" data-original-title="Ajouter un formateur"><i
-                                        class="las la-plus"></i></button>
+                                        class="las la-plus"></i></button> --}}
                             </div>
                         </div>
                     </div>
@@ -227,11 +227,13 @@
         $('#formateurInterne,#formateurExterne').hide();
         $('.formateur_externe').change(function() {
             if ($(this).val() == 'oui') {
-                $('#formateurInterne').hide();
-                $('#formateurExterne').show();
+                $('#formateurInterne').hide('slow');
+                $('#formateurExterne').show('slow');
             } else {
-                $('#formateurInterne').show();
-                $('#formateurExterne').hide();
+                $('#formateurInterne').show('slow');
+                $('#formateurExterne').hide('slow');
+                $('#entreprise_formateur').val('').trigger('change'); // Ajouté cette ligne
+                $('#formateur').val('').trigger('change'); // Ajouté cette ligne
             }
         });
         $("#producteur").chained("#localite");

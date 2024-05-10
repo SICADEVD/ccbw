@@ -86,7 +86,7 @@ class FormationController extends Controller
 
         $validationRule = [
             'localite'    => 'required|exists:localites,id',
-            'staff' => 'required|exists:users,id',
+            // 'staff' => 'required|exists:users,id',
             'producteur' => 'required|max:255',
             'lieu_formation'  => 'required|max:255',
             'formation_type'  => 'required|max:255',
