@@ -224,7 +224,7 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/css/daterangepicker.css') }}">
     <script src="{{ asset('assets/vendor/jquery/daterangepicker.min.js') }}"></script>
     <script type="text/javascript">
-        $('#formateurIterne,#formateurExterne').hide();
+        $('#formateurInterne,#formateurExterne').hide();
         $("#producteur").chained("#localite");
 
         $('#duree_formation').timepicker({
