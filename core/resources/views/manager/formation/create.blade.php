@@ -225,6 +225,15 @@
     <script src="{{ asset('assets/vendor/jquery/daterangepicker.min.js') }}"></script>
     <script type="text/javascript">
         $('#formateurInterne,#formateurExterne').hide();
+        $('.formateur_externe').change(function() {
+            if ($(this).val() == 'oui') {
+                $('#formateurInterne').hide();
+                $('#formateurExterne').show();
+            } else {
+                $('#formateurInterne').show();
+                $('#formateurExterne').hide();
+            }
+        });
         $("#producteur").chained("#localite");
 
         $('#duree_formation').timepicker({
