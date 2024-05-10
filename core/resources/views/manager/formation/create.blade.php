@@ -229,6 +229,7 @@
             if ($(this).val() == 'oui') {
                 $('#formateurInterne').hide('slow');
                 $('#formateurExterne').show('slow');
+                $('#staff').prop('selectedIndex', 0); // Ajouté cette ligne
             } else {
                 $('#formateurInterne').show('slow');
                 $('#formateurExterne').hide('slow');
