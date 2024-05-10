@@ -73,7 +73,7 @@
                                     required>
                                     <option value="">@lang('Selectionner une option')</option>
                                     @foreach ($parcelles as $parcelle)
-                                        <option value="{{ $parcelle->id }}" data-chained="{{ $parcelle->producteur->id }}"
+                                        <option value="{{ $parcelle->id }}" data-chained="{{ $parcelle->producteur ? $parcelle->producteur->id : ''}}"
                                             @selected($parcelle->id == $suiviparcelle->parcelle->id)>
                                             {{ __('Parcelle') }} {{ $parcelle->codeParc }}</option>
                                     @endforeach

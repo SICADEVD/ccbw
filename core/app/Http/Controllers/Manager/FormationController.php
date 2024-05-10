@@ -275,7 +275,16 @@ class FormationController extends Controller
 
         $dataProducteur = $dataVisiteur = $dataTheme = array();
 
-        return view('manager.formation.edit', compact('pageTitle', 'localites', 'formation', 'producteurs', 'typeformations', 'themes', 'staffs', 'dataProducteur', 'dataTheme', 'modules', 'themesSelected', 'sousthemes', 'sousThemesSelected', 'producteursSelected'));
+        $entreprises = Entreprise::all();
+        $formateurs = FormateurStaff::with('entreprise')->get();
+
+        $entreprisess = $formateurSelected= array();
+        foreach ($formation->formationStaffEntrepriseFormateur as $item) {
+            $entreprisess[] = $item->entreprise_id;
+            $formateurSelected[] = $item->formateur_staff_id;
+        }
+
+        return view('manager.formation.edit', compact('pageTitle', 'localites', 'formation', 'producteurs', 'typeformations', 'themes', 'staffs', 'dataProducteur', 'dataTheme', 'modules', 'themesSelected', 'sousthemes', 'sousThemesSelected', 'producteursSelected', 'entreprisess', 'formateurSelected', 'entreprises', 'formateurs'));
     }
     public function show($id)
     {
