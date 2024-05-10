@@ -279,7 +279,7 @@ class FormationController extends Controller
         $formateurs = FormateurStaff::with('entreprise')->get();
 
         $entreprisess = $formateurSelected= array();
-        foreach ($formation->formationStaffEntrepriseFormateur as $item) {
+        foreach ($formation->formationProducteurEntreprise as $item) {
             $entreprisess[] = $item->entreprise_id;
             $formateurSelected[] = $item->formateur_staff_id;
         }
