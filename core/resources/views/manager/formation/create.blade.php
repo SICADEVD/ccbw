@@ -106,7 +106,7 @@
                     <div id="formateurInterne" class="form-group row">
                         <?php echo Form::label(__('Staff ayant dispensé la formation'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <select class="form-control" name="staff" id="staff" required>
+                            <select class="form-control" name="staff" id="staff">
                                 <option value="">@lang('Selectionner une option')</option>
                                 @foreach ($staffs as $staff)
                                     <option value="{{ $staff->id }}" @selected(old('staff'))>
@@ -120,7 +120,7 @@
                             <?php echo Form::label(__('Entreprise du formateur'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-8 col-sm-8 input-group mb-3">
                                 <select class="form-control select2-multi-select" name="entreprise_formateur[]"
-                                    id="entreprise_formateur" required multiple>
+                                    id="entreprise_formateur" multiple>
                                     <option value="">@lang('Selectionner une option')</option>
                                     @foreach ($entreprises as $entreprise)
                                         <option value="{{ $entreprise->id }}" @selected(old('entreprise_formateur'))>
@@ -136,8 +136,7 @@
                         <div class="form-group row">
                             <?php echo Form::label(__('Formateur'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8 input-group mb-3">
-                                <select class="form-control select2-multi-select" name="formateur[]" id="formateur" required
-                                    multiple>
+                                <select class="form-control select2-multi-select" name="formateur[]" id="formateur" multiple>
                                     <option value="">@lang('Selectionner une option')</option>
                                     @foreach ($formateurs as $formateur)
                                         <option value="{{ $formateur->id }}"
@@ -229,12 +228,16 @@
             if ($(this).val() == 'oui') {
                 $('#formateurInterne').hide('slow');
                 $('#formateurExterne').show('slow');
-                $('#staff').prop('selectedIndex', 0); // Ajouté cette ligne
+                $('#staff').prop('selectedIndex', 0);
+                $('#staff').prop('required', false);
+                $('#entreprise_formateur').prop('required', true);
             } else {
                 $('#formateurInterne').show('slow');
                 $('#formateurExterne').hide('slow');
-                $('#entreprise_formateur').val('').trigger('change'); // Ajouté cette ligne
-                $('#formateur').val('').trigger('change'); // Ajouté cette ligne
+                $('#entreprise_formateur').val('').trigger('change');
+                $('#formateur').val('').trigger('change');
+                $('#staff').prop('required', true);
+                $('#entreprise_formateur').prop('required', false);
             }
         });
         $("#producteur").chained("#localite");

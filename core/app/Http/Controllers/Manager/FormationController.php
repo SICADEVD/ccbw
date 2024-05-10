@@ -24,6 +24,7 @@ use App\Models\TypeFormationTheme;
 use Illuminate\Support\Facades\DB;
 use App\Models\SuiviFormationTheme;
 use App\Http\Controllers\Controller;
+use App\Models\FormationProducteurFormateur;
 use Illuminate\Support\Facades\Hash;
 use App\Models\SuiviFormationVisiteur;
 use App\Models\SuiviFormationProducteur;
@@ -86,7 +87,7 @@ class FormationController extends Controller
 
         $validationRule = [
             'localite'    => 'required|exists:localites,id',
-            // 'staff' => 'required|exists:users,id',
+            'staff' => 'exists:users,id',
             'producteur' => 'required|max:255',
             'lieu_formation'  => 'required|max:255',
             'formation_type'  => 'required|max:255',
@@ -159,6 +160,8 @@ class FormationController extends Controller
 
 
         $formation->save();
+        $selectedFormateurs = $request->formateur;
+        $selectedEntreprises = $request->entreprise_formateur;
 
         if ($formation != null) {
             $id = $formation->id;
@@ -206,6 +209,19 @@ class FormationController extends Controller
                     ];
                     ThemeSousTheme::insert($datas2);
                 }
+            }
+
+            if ($selectedFormateurs != null && $selectedEntreprises != null) {
+                FormationProducteurFormateur::where('suivi_formation_id', $id)->delete();
+                foreach ($selectedFormateurs as $formateurId) {
+                    list($entrepriseId, $formateurItemId) = explode('-', $formateurId);
+                    $datas4[] = [
+                        'suivi_formation_id' => $id,
+                        'entreprise_id' => $entrepriseId,
+                        'formateur_staff_id' => $formateurItemId,
+                    ];
+                }
+                FormationProducteurFormateur::insert($datas4);
             }
         }
         $notify[] = ['success', isset($message) ? $message : 'Le formation a été crée avec succès.'];
