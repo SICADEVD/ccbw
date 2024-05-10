@@ -29,6 +29,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\SuiviFormationVisiteur;
 use App\Models\SuiviFormationProducteur;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx\Theme;
+use Illuminate\Support\Facades\Validator;
 
 class FormationController extends Controller
 {
@@ -85,16 +86,25 @@ class FormationController extends Controller
     public function store(Request $request)
     {
 
+
         $validationRule = [
             'localite'    => 'required|exists:localites,id',
-            'staff' => 'exists:users,id',
             'producteur' => 'required|max:255',
             'lieu_formation'  => 'required|max:255',
             'formation_type'  => 'required|max:255',
             'duree_formation' => 'required|date_format:H:i',
         ];
 
-        $request->validate($validationRule);
+        $validator = Validator::make($request->all(), $validationRule);
+
+        $validator->sometimes('staff', 'exists:users,id', function ($input) {
+            return $input->formateur_externe == 'oui';
+        });
+
+        if ($validator->fails()) {
+            
+        }
+
 
         $localite = Localite::where('id', $request->localite)->first();
 
