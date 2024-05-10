@@ -16,7 +16,7 @@ class FormationProducteurFormateur extends Model
 
     public function formation()
     {
-        return $this->belongsTo(SuiviFormation::class, 'formation_id');
+        return $this->belongsTo(SuiviFormation::class, 'suivi_formation_id');
     }
 
     public function entreprise()
