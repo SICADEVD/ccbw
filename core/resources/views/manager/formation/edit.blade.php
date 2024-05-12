@@ -233,6 +233,7 @@
     <script type="text/javascript">
         //$("#theme").chained("#typeformation");
         //$("#producteur").chained("#localite");
+        $('#formateurInterne,#formateurExterne').hide();
 
 
 
@@ -346,8 +347,6 @@
             }
             return optionsHtml;
         }
-
-        $('#formateurInterne,#formateurExterne').hide();
 
         $(document).ready(function() {
 
