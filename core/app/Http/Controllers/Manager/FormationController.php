@@ -248,7 +248,6 @@ class FormationController extends Controller
         foreach ($formation->formationProducteur as $item) {
             $producteursSelected[] = $item->producteur_id;
         }
-        dd($producteursSelected);
         foreach ($formation->typeFormationTheme as $item) {
             $modules[] = $item->type_formation_id;
             $themesSelected[] = $item->theme_formation_id;
