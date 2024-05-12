@@ -102,7 +102,6 @@ class FormationController extends Controller
         });
 
         if ($validator->fails()) {
-            
         }
 
 
@@ -166,7 +165,6 @@ class FormationController extends Controller
                 return back()->withNotify($notify);
             }
         }
-        dd($request->all());
 
         $formation->save();
         $selectedFormateurs = $request->formateur;
@@ -178,16 +176,13 @@ class FormationController extends Controller
 
             if (($request->producteur != null)) {
                 SuiviFormationProducteur::where('suivi_formation_id', $id)->delete();
-                $i = 0;
                 foreach ($request->producteur as $data) {
-                    if ($data != null) {
-                        $datas[] = [
-                            'suivi_formation_id' => $id,
-                            'producteur_id' => $data,
-                        ];
-                    }
-                    $i++;
+                    $datas[] = [
+                        'suivi_formation_id' => $id,
+                        'producteur_id' => $data,
+                    ];
                 }
+                dd($datas);
                 SuiviFormationProducteur::insert($datas);
             }
 
@@ -277,7 +272,7 @@ class FormationController extends Controller
         $entreprises = Entreprise::all();
         $formateurs = FormateurStaff::with('entreprise')->get();
 
-        $entreprisess = $formateurSelected= array();
+        $entreprisess = $formateurSelected = array();
         foreach ($formation->formationProducteurEntreprise as $item) {
             $entreprisess[] = $item->entreprise_id;
             $formateurSelected[] = $item->formateur_staff_id;
