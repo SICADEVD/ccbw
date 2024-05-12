@@ -236,8 +236,6 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/css/daterangepicker.css') }}">
     <script src="{{ asset('assets/vendor/jquery/daterangepicker.min.js') }}"></script>
     <script type="text/javascript">
-        //$("#theme").chained("#typeformation");
-        //$("#producteur").chained("#localite");
         $('#formateurInterne,#formateurExterne').hide();
         $('.formateur_externe').change(function() {
             if ($(this).val() == 'oui') {
@@ -445,7 +443,6 @@
             optionsHtml2 = updateProducteur(optionsHtml2, $(this).val(),
                 optionParProducteur);
         })
-        });
         });
 
         function updateProducteur(optionsHtml2, id, optionParProducteur) {
