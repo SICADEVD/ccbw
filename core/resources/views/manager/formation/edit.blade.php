@@ -348,36 +348,6 @@
         }
 
         $('#formateurInterne,#formateurExterne').hide();
-        $('.formateur_externe').change(function() {
-            if ($(this).val() == 'oui') {
-                $('#formateurInterne').hide('slow');
-                $('#formateurExterne').show('slow');
-                $('#staff').prop('selectedIndex', 0);
-                $('#staff').prop('required', false);
-                $('#entreprise_formateur').prop('required', true);
-            } else {
-                $('#formateurInterne').show('slow');
-                $('#formateurExterne').hide('slow');
-                $('#entreprise_formateur').val('').trigger('change');
-                $('#formateur').val('').trigger('change');
-                $('#staff').prop('required', true);
-                $('#entreprise_formateur').prop('required', false);
-            }
-        });
-        if ($('.formateur_externe').val() == 'oui') {
-            $('#formateurInterne').hide();
-            $('#formateurExterne').show();
-            $('#staff').prop('selectedIndex', 0);
-            $('#staff').prop('required', false);
-            $('#entreprise_formateur').prop('required', true);
-        } else {
-            $('#formateurInterne').show();
-            $('#formateurExterne').hide();
-            $('#staff').prop('required', true);
-            $('#entreprise_formateur').prop('required', false);
-        }
-
-
 
         $(document).ready(function() {
 
