@@ -244,11 +244,11 @@ class FormationController extends Controller
         $themesSelected = array();
         $sousThemesSelected = array();
         $producteursSelected = array();
-        dd($formation->formationProducteur);
 
         foreach ($formation->formationProducteur as $item) {
             $producteursSelected[] = $item->producteur_id;
         }
+        dd($producteursSelected);
         foreach ($formation->typeFormationTheme as $item) {
             $modules[] = $item->type_formation_id;
             $themesSelected[] = $item->theme_formation_id;
@@ -267,7 +267,7 @@ class FormationController extends Controller
             ->select('users.*')
             ->get();
 
-        $dataProducteur = $dataVisiteur = $dataTheme = array();
+        $dataVisiteur = $dataTheme = array();
 
         $entreprises = Entreprise::all();
         $formateurs = FormateurStaff::with('entreprise')->get();
