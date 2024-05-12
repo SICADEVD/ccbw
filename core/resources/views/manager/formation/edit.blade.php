@@ -108,13 +108,13 @@
                         </div>
                     </div>
 
-                     <div id="formateurInterne" class="form-group row">
+                    <div id="formateurInterne" class="form-group row">
                         <?php echo Form::label(__('Staff ayant dispensé la formation'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <select class="form-control" name="staff" id="staff">
+                            <select class="form-control" name="staff" id="staff" required>
                                 <option value="">@lang('Selectionner une option')</option>
                                 @foreach ($staffs as $staff)
-                                    <option value="{{ $staff->id }}" @selected(old('staff'))>
+                                    <option value="{{ $staff->id }}" @selected($staff->id == $formation->user_id)>
                                         {{ $staff->lastname }} {{ $staff->firstname }}</option>
                                 @endforeach
                             </select>
@@ -141,7 +141,8 @@
                         <div class="form-group row">
                             <?php echo Form::label(__('Formateur'), null, ['class' => 'col-sm-4 control-label']); ?>
                             <div class="col-xs-12 col-sm-8 input-group mb-3">
-                                <select class="form-control select2-multi-select" name="formateur[]" id="formateur" multiple>
+                                <select class="form-control select2-multi-select" name="formateur[]" id="formateur"
+                                    multiple>
                                     <option value="">@lang('Selectionner une option')</option>
                                     @foreach ($formateurs as $formateur)
                                         <option value="{{ $formateur->id }}"
@@ -436,13 +437,13 @@
         console.log(optionParProducteur);
 
         $('#localite').change(function() {
-        var localite = $(this).val();
-        $("#producteur").empty();
-        var optionsHtml2 = "";
-        $(this).find('option:selected').each(function() {
-            optionsHtml2 = updateProducteur(optionsHtml2, $(this).val(),
-                optionParProducteur);
-        })
+            var localite = $(this).val();
+            $("#producteur").empty();
+            var optionsHtml2 = "";
+            $(this).find('option:selected').each(function() {
+                optionsHtml2 = updateProducteur(optionsHtml2, $(this).val(),
+                    optionParProducteur);
+            })
         });
 
         function updateProducteur(optionsHtml2, id, optionParProducteur) {
