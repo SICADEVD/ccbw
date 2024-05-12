@@ -167,7 +167,6 @@ class FormationController extends Controller
         }
 
         $formation->save();
-        dd($request->all());
         $selectedFormateurs = $request->formateur;
         $selectedEntreprises = $request->entreprise_formateur;
 
@@ -187,6 +186,7 @@ class FormationController extends Controller
             }
 
             $selectedThemes = $request->theme;
+            dd($selectedThemes);
             if ($selectedThemes != null) {
                 TypeFormationTheme::where('suivi_formation_id', $id)->delete();
 
