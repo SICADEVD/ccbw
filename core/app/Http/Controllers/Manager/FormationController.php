@@ -186,7 +186,6 @@ class FormationController extends Controller
             }
 
             $selectedThemes = $request->theme;
-            dd($selectedThemes);
             if ($selectedThemes != null) {
                 TypeFormationTheme::where('suivi_formation_id', $id)->delete();
 
