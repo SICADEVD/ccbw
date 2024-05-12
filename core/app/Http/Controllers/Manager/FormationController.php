@@ -263,7 +263,6 @@ class FormationController extends Controller
         $staffs = User::whereHas('roles', function ($q) {
             $q->whereIn('name', ['Inspecteur', 'ADG']);
         })->where('cooperative_id', $manager->cooperative_id)->select('users.*')->get();
-        dd($staffs);
 
         $dataVisiteur = $dataTheme = array();
 
