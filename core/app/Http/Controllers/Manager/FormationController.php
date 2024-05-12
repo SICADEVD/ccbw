@@ -276,7 +276,7 @@ class FormationController extends Controller
             $entreprisess[] = $item->entreprise_id;
             $formateurSelected[] = $item->formateur_staff_id;
         }
-        return view('manager.formation.edit', compact('pageTitle', 'localites', 'formation', 'producteurs', 'typeformations', 'themes', 'staffs', 'dataProducteur', 'dataTheme', 'modules', 'themesSelected', 'sousthemes', 'sousThemesSelected', 'producteursSelected', 'entreprisess', 'formateurSelected', 'entreprises', 'formateurs'));
+        return view('manager.formation.edit', compact('pageTitle', 'localites', 'formation', 'producteurs', 'typeformations', 'themes', 'staffs', 'dataTheme', 'modules', 'themesSelected', 'sousthemes', 'sousThemesSelected', 'producteursSelected', 'entreprisess', 'formateurSelected', 'entreprises', 'formateurs'));
     }
     public function show($id)
     {
