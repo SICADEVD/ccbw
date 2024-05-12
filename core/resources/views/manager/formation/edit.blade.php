@@ -114,7 +114,7 @@
                             <select class="form-control" name="staff" id="staff" required>
                                 <option value="">@lang('Selectionner une option')</option>
                                 @foreach ($staffs as $staff)
-                                    <option value="{{ $staff->id }}" @selected($staff->id == $formation->user_id)>
+                                    <option value="{{ $staff->id }}" @selected(in_array($staff->id,$formation->user_id))>
                                         {{ $staff->lastname }} {{ $staff->firstname }}</option>
                                 @endforeach
                             </select>
