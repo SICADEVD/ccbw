@@ -108,13 +108,13 @@
                         </div>
                     </div>
 
-                    {{-- <div class="form-group row" id="formateurInterne">
+                     <div id="formateurInterne" class="form-group row">
                         <?php echo Form::label(__('Staff ayant dispensé la formation'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <select class="form-control" name="staff" id="staff" required>
+                            <select class="form-control" name="staff" id="staff">
                                 <option value="">@lang('Selectionner une option')</option>
                                 @foreach ($staffs as $staff)
-                                    <option value="{{ $staff->id }}" @selected($staff->id == $formation->user_id)>
+                                    <option value="{{ $staff->id }}" @selected(old('staff'))>
                                         {{ $staff->lastname }} {{ $staff->firstname }}</option>
                                 @endforeach
                             </select>
@@ -123,33 +123,38 @@
                     <div id="formateurExterne">
                         <div class="form-group row">
                             <?php echo Form::label(__('Entreprise du formateur'), null, ['class' => 'col-sm-4 control-label']); ?>
-                            <div class="col-xs-12 col-sm-8">
+                            <div class="col-xs-8 col-sm-8 input-group mb-3">
                                 <select class="form-control select2-multi-select" name="entreprise_formateur[]"
-                                    id="entreprise_formateur" required multiple>
+                                    id="entreprise_formateur" multiple>
                                     <option value="">@lang('Selectionner une option')</option>
                                     @foreach ($entreprises as $entreprise)
-                                        <option value="{{ $entreprise->id }}" @selected(in_array($entreprise->id, $entreprisess))>
+                                        <option value="{{ $entreprise->id }}" @selected(old('entreprise_formateur'))>
                                             {{ $entreprise->nom_entreprise }}</option>
                                     @endforeach
                                 </select>
+                                {{-- <button type="button" class="btn btn-outline-secondary border-grey add-entreprise"
+                                    data-toggle="tooltip" data-original-title="Ajouter un formateur"><i
+                                        class="las la-plus"></i>
+                                </button> --}}
                             </div>
                         </div>
-
                         <div class="form-group row">
                             <?php echo Form::label(__('Formateur'), null, ['class' => 'col-sm-4 control-label']); ?>
-                            <div class="col-xs-12 col-sm-8">
-                                <select class="form-control select2-multi-select" name="formateur[]" id="formateur" required
-                                    multiple>
+                            <div class="col-xs-12 col-sm-8 input-group mb-3">
+                                <select class="form-control select2-multi-select" name="formateur[]" id="formateur" multiple>
                                     <option value="">@lang('Selectionner une option')</option>
                                     @foreach ($formateurs as $formateur)
                                         <option value="{{ $formateur->id }}"
-                                            data-chained="{{ $formateur->entreprise_id ?? '' }}">
+                                            data-chained="{{ $formateur->entreprise_id }}" @selected(old('formateur'))>
                                             {{ $formateur->nom_formateur }} {{ $formateur->prenom_formateur }}</option>
                                     @endforeach
                                 </select>
+                                {{-- <button type="button" class="btn btn-outline-secondary border-grey add-formateur"
+                                    data-toggle="tooltip" data-original-title="Ajouter un formateur"><i
+                                        class="las la-plus"></i></button> --}}
                             </div>
                         </div>
-                    </div> --}}
+                    </div>
                     <hr class="panel-wide">
                     <div class="form-group row">
                         <?php echo Form::label(__('Date de Début & Fin de la formation'), null, ['class' => 'col-sm-4 control-label required']); ?>
@@ -234,7 +239,36 @@
         //$("#theme").chained("#typeformation");
         //$("#producteur").chained("#localite");
         $('#formateurInterne,#formateurExterne').hide();
-
+        $('.formateur_externe').change(function() {
+            if ($(this).val() == 'oui') {
+                $('#formateurInterne').hide('slow');
+                $('#formateurExterne').show('slow');
+                $('#staff').prop('selectedIndex', 0);
+                $('#staff').prop('required', false);
+                $('#entreprise_formateur').prop('required', true);
+            } else {
+                $('#formateurInterne').show('slow');
+                $('#formateurExterne').hide('slow');
+                $('#entreprise_formateur').val('').trigger('change');
+                $('#formateur').val('').trigger('change');
+                $('#staff').prop('required', true);
+                $('#entreprise_formateur').prop('required', false);
+            }
+        });
+        if ($('.formateur_externe').val() == 'oui') {
+            $('#formateurInterne').hide();
+            $('#formateurExterne').show();
+            $('#staff').prop('selectedIndex', 0);
+            $('#staff').prop('required', false);
+            $('#entreprise_formateur').prop('required', true);
+        } else {
+            $('#formateurInterne').show();
+            $('#formateurExterne').hide();
+            $('#entreprise_formateur').val('').trigger('change');
+            $('#formateur').val('').trigger('change');
+            $('#staff').prop('required', true);
+            $('#entreprise_formateur').prop('required', false);
+        }
 
 
         $('#duree_formation').timepicker({
