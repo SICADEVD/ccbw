@@ -252,6 +252,7 @@ class FormationController extends Controller
             $modules[] = $item->type_formation_id;
             $themesSelected[] = $item->theme_formation_id;
         }
+        dd($modules, $themesSelected);
 
         foreach ($formation->themeSousTheme as $item) {
             $sousThemesSelected[] = $item->sous_theme_id;
