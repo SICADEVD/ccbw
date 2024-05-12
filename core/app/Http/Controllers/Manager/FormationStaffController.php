@@ -140,7 +140,6 @@ class FormationStaffController extends Controller
 
             $selectedFormateurs = $request->formateur;
             $selectedEntreprises = $request->entreprise_formateur;
-            dd($selectedThemes, $selectedModules, $selectedFormateurs, $selectedEntreprises);
 
             if ($selectedThemes != null && $selectedModules != null) {
                 FormationStaffModuleTheme::where('formation_staff_id', $id)->delete();
