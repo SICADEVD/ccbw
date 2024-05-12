@@ -110,15 +110,15 @@
 
                     <div class="form-group row" id="formateurInterne">
                         <?php echo Form::label(__('Staff ayant dispensé la formation'), null, ['class' => 'col-sm-4 control-label']); ?>
-                        <div class="col-xs-12 col-sm-8">
-                            <select class="form-control" name="staff" id="staff" required>
-                                <option value="">@lang('Selectionner une option')</option>
-                                @foreach ($staffs as $staff)
-                                    <option value="{{ $staff->id }}" @selected(in_array($staff->id,$formation->user_id))>
-                                        {{ $staff->lastname }} {{ $staff->firstname }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+                        <select class="form-control" name="staff" id="staff" required>
+                            <option value="">@lang('Selectionner une option')</option>
+                            @foreach ($staffs as $staff)
+                                <option value="{{ $staff->id }}"
+                                    {{ $staff->id == $formation->user_id ? 'selected' : '' }}>
+                                    {{ $staff->lastname }} {{ $staff->firstname }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
                     <div id="formateurExterne">
                         <div class="form-group row">
