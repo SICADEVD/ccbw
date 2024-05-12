@@ -108,7 +108,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group row" id="formateurInterne">
+                    {{-- <div class="form-group row" id="formateurInterne">
                         <?php echo Form::label(__('Staff ayant dispensé la formation'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
                             <select class="form-control" name="staff" id="staff" required>
@@ -149,7 +149,7 @@
                                 </select>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                     <hr class="panel-wide">
                     <div class="form-group row">
                         <?php echo Form::label(__('Date de Début & Fin de la formation'), null, ['class' => 'col-sm-4 control-label required']); ?>
