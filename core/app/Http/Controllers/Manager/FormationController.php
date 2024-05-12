@@ -166,8 +166,7 @@ class FormationController extends Controller
                 return back()->withNotify($notify);
             }
         }
-
-
+        dd($request->all());
 
         $formation->save();
         $selectedFormateurs = $request->formateur;
@@ -283,7 +282,6 @@ class FormationController extends Controller
             $entreprisess[] = $item->entreprise_id;
             $formateurSelected[] = $item->formateur_staff_id;
         }
-
         return view('manager.formation.edit', compact('pageTitle', 'localites', 'formation', 'producteurs', 'typeformations', 'themes', 'staffs', 'dataProducteur', 'dataTheme', 'modules', 'themesSelected', 'sousthemes', 'sousThemesSelected', 'producteursSelected', 'entreprisess', 'formateurSelected', 'entreprises', 'formateurs'));
     }
     public function show($id)
