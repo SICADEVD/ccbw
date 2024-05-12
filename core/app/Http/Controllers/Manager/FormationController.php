@@ -244,6 +244,7 @@ class FormationController extends Controller
         $themesSelected = array();
         $sousThemesSelected = array();
         $producteursSelected = array();
+        dd($formation->formationProducteur);
 
         foreach ($formation->formationProducteur as $item) {
             $producteursSelected[] = $item->producteur_id;
