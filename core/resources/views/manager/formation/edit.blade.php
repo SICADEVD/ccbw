@@ -178,7 +178,7 @@
                     <div class="form-group row">
                         <?php echo Form::label(__('Observation de la formation'), null, ['class' => 'col-sm-4 control-label required']); ?>
                         <div class="col-xs-12 col-sm-8">
-                            <?php echo Form::textarea('observation_formation', null, ['class' => 'form-control duree_formation', 'required' => 'required', 'rows' => 4]); ?>
+                            <?php echo Form::textarea('observation_formation', null, ['class' => 'form-control duree_formation', 'rows' => 4]); ?>
                         </div>
                     </div>
                     <div class="form-group row">
