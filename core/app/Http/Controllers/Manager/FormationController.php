@@ -128,6 +128,7 @@ class FormationController extends Controller
         $formation->formation_type = $request->formation_type;
         $formation->date_debut_formation = $request->multiStartDate;
         $formation->date_fin_formation = $request->multiEndDate;
+        $formation->formateur_externe = $request->formateur_externe;
         $formation->userid = auth()->user()->id;
 
         if ($request->hasFile('photo_formation')) {
@@ -238,7 +239,6 @@ class FormationController extends Controller
         $producteurs  = Producteur::joinRelationship('localite.section')->where([['cooperative_id', $manager->cooperative_id], ['producteurs.status', 1]])->with('localite')->get();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id', $manager->cooperative_id], ['localites.status', 1]])->get();
         $formation   = SuiviFormation::findOrFail($id);
-        dd($formation->formateur_externe);
         $typeformations  = TypeFormation::all();
 
         $modules = array();
