@@ -239,6 +239,7 @@ class FormationController extends Controller
         $producteurs  = Producteur::joinRelationship('localite.section')->where([['cooperative_id', $manager->cooperative_id], ['producteurs.status', 1]])->with('localite')->get();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id', $manager->cooperative_id], ['localites.status', 1]])->get();
         $formation   = SuiviFormation::findOrFail($id);
+        dd($formation);
         $typeformations  = TypeFormation::all();
 
         $modules = array();
@@ -271,6 +272,7 @@ class FormationController extends Controller
 
         $entreprises = Entreprise::all();
         $formateurs = FormateurStaff::with('entreprise')->get();
+
 
         $entreprisess = $formateurSelected = array();
         foreach ($formation->formationProducteurEntreprise as $item) {
