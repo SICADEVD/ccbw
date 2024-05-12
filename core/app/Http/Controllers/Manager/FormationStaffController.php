@@ -152,6 +152,7 @@ class FormationStaffController extends Controller
                         'theme_formation_staff_id' => $themeItemId,
                     ];
                 }
+                dd($datas3);
                 FormationStaffModuleTheme::insert($datas3);
             }
             if ($selectedFormateurs != null && $selectedEntreprises != null) {

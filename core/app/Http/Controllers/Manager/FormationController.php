@@ -182,7 +182,6 @@ class FormationController extends Controller
                         'producteur_id' => $data,
                     ];
                 }
-                dd($datas);
                 SuiviFormationProducteur::insert($datas);
             }
 
