@@ -140,6 +140,7 @@ class FormationStaffController extends Controller
 
             $selectedFormateurs = $request->formateur;
             $selectedEntreprises = $request->entreprise_formateur;
+            dd($selectedThemes, $selectedModules, $selectedFormateurs, $selectedEntreprises);
 
             if ($selectedThemes != null && $selectedModules != null) {
                 FormationStaffModuleTheme::where('formation_staff_id', $id)->delete();
@@ -152,7 +153,6 @@ class FormationStaffController extends Controller
                         'theme_formation_staff_id' => $themeItemId,
                     ];
                 }
-                dd($datas3);
                 FormationStaffModuleTheme::insert($datas3);
             }
             if ($selectedFormateurs != null && $selectedEntreprises != null) {
