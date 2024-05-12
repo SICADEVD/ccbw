@@ -167,6 +167,7 @@ class FormationController extends Controller
         }
 
         $formation->save();
+        dd($request->all());
         $selectedFormateurs = $request->formateur;
         $selectedEntreprises = $request->entreprise_formateur;
 
@@ -210,7 +211,6 @@ class FormationController extends Controller
                         'theme_id' => $themeFormationId,
                         'sous_theme_id' => $sousthemeItemId,
                     ];
-                    dd($datas2);
                     ThemeSousTheme::insert($datas2);
                 }
             }
