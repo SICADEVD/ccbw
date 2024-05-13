@@ -191,7 +191,6 @@ class ApisuiviformationController extends Controller
 
     public function storeVisiteur(Request $request)
     {
-        
         $visiteur = new SuiviFormationVisiteur();
         $visiteur->producteur_id  = $request->producteur ?? null;
         $visiteur->nom  = $request->nom;
