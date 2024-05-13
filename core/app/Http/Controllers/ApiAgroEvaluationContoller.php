@@ -245,7 +245,7 @@ class ApiAgroEvaluationContoller extends Controller
     }
     public function getApprovisionnementSection(Request $request)
     {
-        $approvisionnements = AgroapprovisionnementSectionEspece::joinRelationship('agroapprovisionnementSection', 'agroespecesarbre')->joinRelationship('section')->where([['cooperative_id', $request->cooperativeid]])->get();
+        $approvisionnements = AgroapprovisionnementSectionEspece::joinRelationship('agroapprovisionnementSection', 'agroespecesarbre')->joinRelationship('agroapprovisionnementSection.section')->where([['cooperative_id', $request->cooperativeid]])->select('agroapprovisionnement_section_especes.*','agroapprovisionnement_sections.section_id')->get();
 
         return response()->json($approvisionnements, 201);
     }
