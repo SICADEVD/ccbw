@@ -229,4 +229,103 @@ class AuthController extends Controller
             ]);
         }
     } 
+
+    public function getRoleUser(Request $request)
+    {
+	   
+            $user = User::active()->where('id', $request->userid)->first();
+            $cooperative = null;
+
+            if($user)
+            {
+                $cooperative = $user->cooperative()->first();
+                // dd($user->getAllPermissions()->map (function ($item, $key) {
+                //     return $item->name;
+                // })->toArray());
+                
+                if(($user->type_compte=='mobile') || ($user->type_compte=='mobile-web'))
+                {
+                $permissionsroles = array();
+                $menuliste = array();
+                $tokenResult = $user->createToken('authToken')->plainTextToken;
+            if(!empty($user->getAllPermissions()))
+            { 
+                foreach($user->getAllPermissions() as $v)
+                {
+                    $permissionsrolesName=Str::replace("manager.staff.","",$v->name);
+                    
+                    $permissionsrolesName=Str::replace("manager.suivi.","",$permissionsrolesName);
+                    $permissionsrolesName=Str::replace("manager.traca.","",$permissionsrolesName);
+                    //ajout de agro
+                    $permissionsrolesName=Str::replace("agro.","",$permissionsrolesName);
+                    $permissionsrolesName=Str::replace("manager.","",$permissionsrolesName);  
+                    $permissionsrolesName=Str::before($permissionsrolesName,".exportExcel");
+                    $permissionsrolesName=Str::before($permissionsrolesName,".code");
+                    $permissionsrolesName=Str::before($permissionsrolesName,".verify");
+                    $permissionsrolesName=Str::before($permissionsrolesName,".reset");
+                    $permissionsrolesName=Str::before($permissionsrolesName,".attendance-settings");
+                    $permissionsrolesName=Str::before($permissionsrolesName,".leaves-settings");
+                    $permissionsrolesName=Str::before($permissionsrolesName,".cooperative-settings");
+                    $permissionsrolesName=Str::before($permissionsrolesName,".durabilite-settings");
+                    $permissionsrolesName=Str::before($permissionsrolesName,".section-settings");
+                    $permissionsrolesName=Str::before($permissionsrolesName,".localite-settings");
+                    $permissionsrolesName=Str::before($permissionsrolesName,".campagne");
+                    $permissionsrolesName=Str::before($permissionsrolesName,".travauxDangereux");
+                    $permissionsrolesName=Str::before($permissionsrolesName,".travauxLegers");
+                    $permissionsrolesName=Str::before($permissionsrolesName,".arretEcole");
+                    $permissionsrolesName=Str::before($permissionsrolesName,".get");
+                    $permissionsrolesName=Str::before($permissionsrolesName,".mapping");
+                    $permissionsrolesName=Str::before($permissionsrolesName,".update");
+                    $permissionsrolesName=Str::before($permissionsrolesName,".usine");
+                    $permissionsrolesName=Str::before($permissionsrolesName,".magcentral");
+                    $permissionsrolesName=Str::before($permissionsrolesName,".section");
+                    $permissionsrolesName=Str::before($permissionsrolesName,".stock"); 
+                    
+                    $permissionsroles[]=Str::before($permissionsrolesName,".");
+
+                    $permissionsroles[]=Str::replace(".","_", Str::beforeLast($permissionsrolesName,".")); 
+                   
+                }
+            //dd($permissionsroles);
+                 
+
+                $permissionsroles = array_unique($permissionsroles);  
+                foreach($permissionsroles as $res){
+                     
+                     if($res !=""){
+                        $menuliste[] = strtoupper($res);
+                     }
+                    
+                }
+                
+                
+                
+            }
+            
+            asort($menuliste); 
+            return response()->json([
+                'menu' =>array_values(Arr::whereNotNull($menuliste)),
+                'results' => $user,
+                'cooperative' => $cooperative, 
+            'status_code' => 200,
+            'access_token' => $tokenResult,
+            'token_type' => 'Jularis',
+            ]);
+        }else{
+            return response()->json([
+                'status_code' => 500,
+                'message' => 'Vous n\'êtes pas autorisé à utiliser l\'application mobile.'
+            ]);
+        }
+            }else{
+                return response()->json([
+                    'status_code' => 500,
+                    'message' => 'Ce compte n\'existe pas ou a été désactivé par l\'administrateur. Veuillez contacter votre administrateur pour rétablir votre compte.'
+                ]);
+            }
+            
+            
+        
+    }
+
 }

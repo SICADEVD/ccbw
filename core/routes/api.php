@@ -46,6 +46,7 @@ Route::match(['POST'],'getdomain', [AuthController::class, 'getdomain']);
 Route::match(['POST'],'getdelegues', [AuthController::class, 'getdelegues']);
 Route::match(['POST'],'getapplicateurs', [AuthController::class, 'getapplicateurs']);
 Route::match(['POST'],'connexion', [AuthController::class, 'connexion']);
+Route::match(['POST'],'getroleuser', [AuthController::class, 'getRoleUser']);
 
 Route::match(['POST'],'apiproducteur', [ApiproducteurController::class, 'store']);
 Route::match(['POST'],'getproducteurs', [ApiproducteurController::class, 'getproducteurs']);
