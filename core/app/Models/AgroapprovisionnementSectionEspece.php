@@ -21,5 +21,8 @@ class AgroapprovisionnementSectionEspece extends Model
     {
         return $this->belongsTo(Agroespecesarbre::class,'agroespecesarbre_id');
     }
-     
+    public function section()
+    {
+        return $this->belongsTo(Section::class,'section_id');
+    }
 }
