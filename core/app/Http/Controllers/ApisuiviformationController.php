@@ -193,7 +193,7 @@ class ApisuiviformationController extends Controller
     {
         
         $visiteur = new SuiviFormationVisiteur();
-        $visiteur->producteur_id  = $request->producteur?? null;
+        $visiteur->producteur_id  = $request->producteur ?? null;
         $visiteur->nom  = $request->nom;
         $visiteur->prenom  = $request->prenom;
         $visiteur->sexe  = $request->sexe;
