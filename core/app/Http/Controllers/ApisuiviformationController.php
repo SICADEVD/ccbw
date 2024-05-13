@@ -191,19 +191,9 @@ class ApisuiviformationController extends Controller
 
     public function storeVisiteur(Request $request)
     {
-        $validationRule = [
-            'nom'  => 'required|max:255',
-            'prenom'  => 'required|max:255',
-            'sexe'  => 'required|max:255',
-            'telephone'  => 'required|regex:/^\d{10}$/|unique:suivi_formation_visiteurs,telephone',
-        ];
-        $request->validate($validationRule);
-        $localite = Localite::where('id', $request->localite)->first();
-        if ($localite->status == Status::NO) {
-            return response()->json(['message' => 'Cette localité est désactivée'], 401);
-        }
+        
         $visiteur = new SuiviFormationVisiteur();
-        $visiteur->producteur_id  = $request->producteur;
+        $visiteur->producteur_id  = $request->producteur?? null;
         $visiteur->nom  = $request->nom;
         $visiteur->prenom  = $request->prenom;
         $visiteur->sexe  = $request->sexe;
