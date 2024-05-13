@@ -233,7 +233,7 @@ class AuthController extends Controller
     public function getRoleUser(Request $request)
     {
 	   
-            $user = User::active()->where('id', $request->userid)->first();
+            $user = User::active()->where([['id', $request->userid],['cooperative_id',$request->cooperativeid]])->first();
             $cooperative = null;
 
             if($user)
