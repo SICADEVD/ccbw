@@ -243,9 +243,10 @@ class ApiAgroEvaluationContoller extends Controller
         }
         return response()->json([], 409);
     }
-    public function getApprovisionnementSection()
+    public function getApprovisionnementSection(Request $request)
     {
-        $approvisionnements = DB::table('agroapprovisionnement_sections')->get();
+        $approvisionnements = AgroapprovisionnementSectionEspece::joinRelationship('agroapprovisionnementSection', 'agroespecesarbre')->where([['section_id', $request->sectionid]])->get();
+
         return response()->json($approvisionnements, 201);
     }
     public function storePostPlanting(Request $request)
