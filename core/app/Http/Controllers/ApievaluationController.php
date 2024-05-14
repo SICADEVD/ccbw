@@ -130,13 +130,13 @@ class ApievaluationController extends Controller
             $inspection->reponse_non_conforme = InspectionQuestionnaire::where('inspection_id', $inspection->id)
                 ->where('notation', 'Pas Conforme')
                 ->where('statuts', 'Non Débuté')
-                ->select('id', 'questionnaire_id')
+                ->select('id', 'questionnaire_id','commentaire','recommandations','delai','date_verification')
                 ->get();
 
             $inspection->reponse_non_applicale = InspectionQuestionnaire::where('inspection_id', $inspection->id)
                 ->where('notation', 'Non Applicable')
                 ->where('statuts', 'Non Débuté')
-                ->select('id', 'questionnaire_id')
+                ->select('id', 'questionnaire_id','commentaire','recommandations','delai','date_verification')
                 ->get();
         });
 
