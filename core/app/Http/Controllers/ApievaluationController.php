@@ -7,12 +7,13 @@ use App\Models\Localite;
 use App\Constants\Status;
 use App\Models\Evaluation;
 use App\Models\Inspection;
-use Illuminate\Http\Request;
+use App\Models\DebugMobile;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\InspectionQuestionnaire;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
 
 class ApievaluationController extends Controller
 {
@@ -47,10 +48,12 @@ class ApievaluationController extends Controller
     public function store(Request $request)
     {
    
+    $debug = new DebugMobile();
+    $debug->content = json_encode($request->all());
+    $debug->save();
 
         if ($request->id) {
-            $inspection = Inspection::findOrFail($request->id);
-            $message = "L'inspection a été mise à jour avec succès";
+            $inspection = Inspection::find($request->id); 
         } else {
             $inspection = new Inspection();
         }
@@ -117,9 +120,9 @@ class ApievaluationController extends Controller
         ], 201);
     }
 
-    public function getInspectionsNonApplicableEtNonConforme()
+    public function getInspectionsNonApplicableEtNonConforme(Request $request)
     {
-        $inspections = Inspection::whereHas('reponsesInspection', function ($query) {
+        $inspections = Inspection::joinRelationship('producteur.localite.section')->where('cooperative_id', $request->cooperativeid)->whereHas('reponsesInspection', function ($query) {
             $query->whereIn('notation', ['Pas Conforme', 'Non Applicable']);
         })->get();
 

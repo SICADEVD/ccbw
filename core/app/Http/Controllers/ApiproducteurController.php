@@ -289,9 +289,9 @@ class ApiproducteurController extends Controller
     DB::beginTransaction();
     try {
 
-      $debug = new DebugMobile();
-      $debug->content = json_encode($request->all());
-      $debug->save();
+      // $debug = new DebugMobile();
+      // $debug->content = json_encode($request->all());
+      // $debug->save();
 
       $producteur = Producteur::where('id', $request->producteur_id)->first();
       if ($producteur->status == Status::NO) {
