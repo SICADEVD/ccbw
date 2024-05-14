@@ -11,6 +11,7 @@ use Illuminate\Routing\Controller;
 use App\Models\FormationStaffListe;
 use Illuminate\Support\Facades\File;
 use App\Models\FormationStaffVisiteur;
+use App\Models\SuiviFormationVisiteur;
 use App\Models\FormationStaffFormateur;
 use App\Models\FormationStaffModuleTheme;
 
@@ -125,4 +126,6 @@ class ApiFormationStaffController extends Controller
         }
         return response()->json($formation, 201);
     }
+
+    
 }

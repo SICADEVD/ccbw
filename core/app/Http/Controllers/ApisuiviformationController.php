@@ -181,7 +181,7 @@ class ApisuiviformationController extends Controller
 
         return response()->json($sousthemes, 201);
     }
-
+    
     public function getvisiteurs(Request $request)
     {
         $suivi_formation_id = $request->suivi_formation_id;
@@ -190,7 +190,7 @@ class ApisuiviformationController extends Controller
     }
 
     public function storeVisiteur(Request $request)
-    {
+    { 
         $visiteur = new SuiviFormationVisiteur();
         $visiteur->producteur_id  = $request->producteur ?? null;
         $visiteur->nom  = $request->nom;
