@@ -6,21 +6,22 @@ use App\Models\Menage;
 use App\Models\Localite;
 use App\Constants\Status;
 use App\Models\Producteur;
+use App\Models\DebugMobile;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use App\Http\Requests\StoreMenageRequest;
-
-
 use App\Models\Menage_ordure;
+
+
 use App\Exports\ExportMenages;
+use Illuminate\Support\Facades\DB;
 use App\Rules\Enfants0A5PasExtrait;
+use App\Rules\Enfants6A17Scolarise;
 use App\Http\Controllers\Controller;
 use App\Models\Menage_sourceEnergie;
 use App\Rules\Enfants6A17PasExtrait;
 use App\Rules\NbreEnft6A17Scolarise;
 use Illuminate\Support\Facades\Hash;
-use App\Rules\Enfants6A17Scolarise;
+use App\Http\Requests\StoreMenageRequest;
 
 class ApimenageController extends Controller
 {
@@ -54,7 +55,10 @@ class ApimenageController extends Controller
      */
     public function store(Request $request)
     {
-
+        $debug = new DebugMobile();
+        $debug->content = json_encode($request->all());
+        $debug->save();
+        
         if ($request->id != null) {
             $menage = Menage::find($request->id);
             

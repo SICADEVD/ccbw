@@ -76,9 +76,9 @@ class ApiparcelleController extends Controller
   public function store(Request $request)
   {
 
-    $debug = new DebugMobile();
-    $debug->content = json_encode($request->all());
-    $debug->save();
+    // $debug = new DebugMobile();
+    // $debug->content = json_encode($request->all());
+    // $debug->save();
     // $carbon_debut = Carbon::createFromFormat('Y-m-d H:i:s', $parcelle->created_at);
     //                             $carbon_fin = Carbon::createFromFormat('Y-m-d H:i:s', now());
     //                             $diff = $carbon_fin->diff($carbon_debut);
