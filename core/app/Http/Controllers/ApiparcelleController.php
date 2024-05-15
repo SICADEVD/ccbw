@@ -177,10 +177,10 @@ class ApiparcelleController extends Controller
       }
       if ($request->variete != null) {
         VarieteParcelle::where('parcelle_id', $id)->delete();
-        foreach ($request->varietes as $variete) {
+        foreach ($request->variete as $varie) {
             $datas3[] = [
                 'parcelle_id' => $id,
-                'variete' => $variete,
+                'variete' => $varie,
             ];
         }
         VarieteParcelle::insert($datas3);
