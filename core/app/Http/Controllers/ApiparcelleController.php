@@ -148,7 +148,7 @@ class ApiparcelleController extends Controller
     $parcelle->save();
     if ($parcelle != null) {
       $id = $parcelle->id;
-      $datas  = $data2 = [];
+      $datas  = $data2 = $datas3 = [];
       if (($request->protection != null)) {
         Parcelle_type_protection::where('parcelle_id', $id)->delete();
         $i = 0;
@@ -161,6 +161,7 @@ class ApiparcelleController extends Controller
           }
           $i++;
         }
+        Parcelle_type_protection::insert($datas);
       }
       if (($request->items != null)) {
         agroespeceabre_parcelle::where('parcelle_id', $id)->delete();
@@ -172,10 +173,22 @@ class ApiparcelleController extends Controller
             'agroespeceabre_id' => $item['arbre'],
           ];
         }
+        agroespeceabre_parcelle::insert($data2);
       }
+      if ($request->variete != null) {
+        VarieteParcelle::where('parcelle_id', $id)->delete();
+        foreach ($request->varietes as $variete) {
+            $datas3[] = [
+                'parcelle_id' => $id,
+                'variete' => $variete,
+            ];
+        }
+        VarieteParcelle::insert($datas3);
     }
-    Parcelle_type_protection::insert($datas);
-    agroespeceabre_parcelle::insert($data2);
+
+    }
+    
+    
     // Parcelle::find($id)->agroespeceabre()->sync($data2);
     if ($parcelle == null) {
       return response()->json("La parcelle n'a pas été enregistré", 501);

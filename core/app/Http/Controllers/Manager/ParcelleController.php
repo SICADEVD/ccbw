@@ -708,6 +708,7 @@ class ParcelleController extends Controller
 
                     $i++;
                 }
+                Parcelle_type_protection::insert($datas);
             }
             if (($request->items != null)) {
                 agroespeceabre_parcelle::where('parcelle_id', $id)->delete();
@@ -719,6 +720,7 @@ class ParcelleController extends Controller
                         'agroespeceabre_id' => $item['arbre'],
                     ];
                 }
+                agroespeceabre_parcelle::insert($data2);
             }
             if ($request->varietes != null) {
                 VarieteParcelle::where('parcelle_id', $id)->delete();
@@ -731,8 +733,8 @@ class ParcelleController extends Controller
                 VarieteParcelle::insert($data);
             }
 
-            Parcelle_type_protection::insert($datas);
-            agroespeceabre_parcelle::insert($data2);
+            
+            
         }
 
 
