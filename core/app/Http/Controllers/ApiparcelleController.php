@@ -24,10 +24,10 @@ class ApiparcelleController extends Controller
    */
   public function index(Request $request)
   {
-    $userid = $request->userid;
-    $staff = User::where('id', $userid)->first();
+    // $userid = $request->userid;
+    // $staff = User::where('id', $userid)->first();
 
-    $parcelles = Parcelle::joinRelationship('producteur.localite.section.cooperative')->where([['cooperative_id', $staff->cooperative_id], ['producteurs.status', 1]])
+    $parcelles = Parcelle::joinRelationship('producteur.localite.section.cooperative')->where([['cooperative_id', $request->cooperativeid], ['producteurs.status', 1]])
       ->where(function ($query) {
         $query->where('typedeclaration', '!=', 'GPS')
           ->orWhereNull('anneeCreation')
