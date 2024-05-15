@@ -8,11 +8,12 @@ use App\Models\Localite;
 use App\Models\Parcelle;
 use App\Constants\Status;
 use App\Models\Producteur;
+use App\Models\DebugMobile;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\VarieteParcelle;
 use Illuminate\Support\Facades\DB;
 use App\Models\agroespeceabre_parcelle;
-use App\Models\DebugMobile;
 use App\Models\Parcelle_type_protection;
 
 class ApiparcelleController extends Controller
@@ -38,6 +39,19 @@ class ApiparcelleController extends Controller
       })
       ->select('parcelles.*', 'producteurs.nom', 'producteurs.prenoms', 'producteurs.codeProd', 'localites.nom as localite', 'sections.libelle as section', 'cooperatives.name as cooperative')
       ->get();
+      $parcelles->each(function ($parcelle) {
+        $parcelle->protection = Parcelle_type_protection::where('parcelle_id', $parcelle->id)
+            ->select('id', 'parcelle_id','typeProtection')
+            ->get();
+
+        $parcelle->variete = VarieteParcelle::where('parcelle_id', $parcelle->id)
+            ->select('id', 'parcelle_id','variete')
+            ->get();
+        $parcelle->items = agroespeceabre_parcelle::where('parcelle_id', $parcelle->id)
+            ->select('id', 'parcelle_id','agroespeceabre_id','nombre')
+            ->get();
+    });
+
 
     return response()->json($parcelles, 200);
   }
