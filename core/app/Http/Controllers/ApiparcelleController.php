@@ -12,9 +12,11 @@ use App\Models\DebugMobile;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\VarieteParcelle;
+use App\Models\Agroespecesarbre;
 use Illuminate\Support\Facades\DB;
 use App\Models\agroespeceabre_parcelle;
 use App\Models\Parcelle_type_protection;
+use App\Models\AutreAgroespecesarbreParcelle;
 
 class ApiparcelleController extends Controller
 {
@@ -175,6 +177,22 @@ class ApiparcelleController extends Controller
         }
         agroespeceabre_parcelle::insert($data2);
       }
+      if($request->arbreStrate != null){
+        AutreAgroespecesarbreParcelle::where('parcelle_id', $id)->delete();
+        foreach ($request->arbreStrate as $arbreStrate) {
+            $agroespeceabre = Agroespecesarbre::firstOrCreate([
+                'nom' => $arbreStrate['nom'],
+                'strate' => $arbreStrate['strate'],
+            ]);
+            AutreAgroespecesarbreParcelle::create([
+                'agroespeceabre_id' => $agroespeceabre->id,
+                'parcelle_id' => $id,
+                'nom' => $arbreStrate['nom'],
+                'nombre' => $arbreStrate['qte'],
+                'strate' => $arbreStrate['strate'],
+            ]);
+        }
+    }
       if ($request->variete != null) {
         VarieteParcelle::where('parcelle_id', $id)->delete();
         foreach ($request->variete as $varie) {
