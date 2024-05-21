@@ -20,6 +20,7 @@ use App\Models\Agroespecesarbre;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\agroespeceabre_parcelle;
+use App\Models\AutreAgroespecesarbreParcelle;
 use App\Models\Parcelle_type_protection;
 use App\Models\Producteur_certification;
 
@@ -637,6 +638,7 @@ class ParcelleController extends Controller
 
         if ($request->id) {
             $parcelle = Parcelle::findOrFail($request->id);
+            AutreAgroespecesarbreParcelle::where('parcelle_id', $parcelle->id)->delete();
             $codeParc = $parcelle->codeParc;
             if ($codeParc == '') {
                 $produc = Producteur::joinRelationship('localite.section')
@@ -722,6 +724,22 @@ class ParcelleController extends Controller
                 }
                 agroespeceabre_parcelle::insert($data2);
             }
+            if($request->arbreStrate != null){
+                AutreAgroespecesarbreParcelle::where('parcelle_id', $id)->delete();
+                foreach ($request->arbreStrate as $arbreStrate) {
+                    $agroespeceabre = Agroespecesarbre::firstOrCreate([
+                        'nom' => $arbreStrate['nom'],
+                        'strate' => $arbreStrate['strate'],
+                    ]);
+                    AutreAgroespecesarbreParcelle::create([
+                        'agroespeceabre_id' => $agroespeceabre->id,
+                        'parcelle_id' => $id,
+                        'nom' => $arbreStrate['nom'],
+                        'nombre' => $arbreStrate['qte'],
+                        'strate' => $arbreStrate['strate'],
+                    ]);
+                }
+            }
             if ($request->varietes != null) {
                 VarieteParcelle::where('parcelle_id', $id)->delete();
                 foreach ($request->varietes as $variete) {
@@ -732,9 +750,6 @@ class ParcelleController extends Controller
                 }
                 VarieteParcelle::insert($data);
             }
-
-            
-            
         }
 
 
@@ -838,9 +853,9 @@ class ParcelleController extends Controller
         $protections = $parcelle->parcelleTypeProtections->pluck('typeProtection')->all();
         $arbres = Agroespecesarbre::all();
         $agroespeceabreParcelle = agroespeceabre_parcelle::where('parcelle_id', $id)->get();
+        $autreAgroespecesarbreParcelle = $parcelle->autreAgroespecesarbreParcelles;
 
-
-        return view('manager.parcelle.edit', compact('pageTitle', 'localites', 'parcelle', 'producteurs', 'sections', 'protections', 'arbres', 'agroespeceabreParcelle'));
+        return view('manager.parcelle.edit', compact('pageTitle', 'localites', 'parcelle', 'producteurs', 'sections', 'protections', 'arbres', 'agroespeceabreParcelle', 'autreAgroespecesarbreParcelle'));
     }
     public function show($id)
     {

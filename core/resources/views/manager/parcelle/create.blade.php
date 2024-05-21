@@ -243,14 +243,14 @@
                                                 @lang('Autres arbres à ombrages ne figurant pas dans la liste précedente')
                                             </badge>
                                         </div>
-                                        <div class="col-xs-12 col-sm-6">
+                                        <div class="col-xs-12 col-sm-4">
                                             <div class="form-group row">
                                                 {{ Form::label(__('Nom'), null, ['class' => 'control-label']) }}
                                                 <input type="text" name="arbreStrate[0][nom]" id="nom-1"
                                                     class="form-control" placeholder="Nom de l'arbre à ombrage">
                                             </div>
                                         </div>
-                                        <div class="col-xs-12 col-sm-6">
+                                        <div class="col-xs-12 col-sm-4">
                                             <div class="form-group row">
                                                 <label>Strate</label>
                                                 <select class="form-control strate" name="arbreStrate[0][strate]"
@@ -262,7 +262,13 @@
                                                 </select>
                                             </div>
                                         </div>
-
+                                        <div class="col-xs-12 col-sm-4">
+                                            <div class="form-group row">
+                                                {{ Form::label(__('Nombre'), null, ['class' => 'control-label']) }}
+                                                <input type="number" name="arbreStrate[0][qte]" id="qte-1"
+                                                    class="form-control" placeholder="Saisissez le nombre d' arbre observé">
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
 
@@ -480,14 +486,16 @@
             html_table +=
                 '<td class="row"><div class="col-xs-12 col-sm-12 bg-success"><badge class="btn  btn-outline--warning h-45 btn-sm text-white">Autres arbres à ombrages ne figurant pas dans la liste précedente ' +
                 insectesParasitesCount +
-                '</badge></div><div class="col-xs-12 col-sm-6"><div class="form-group"><label class="">Nom</label><input class="form-control" id="nom-' +
+                '</badge></div><div class="col-xs-12 col-sm-4"><div class="form-group"><label class="">Nom</label><input class="form-control" id="nom-' +
                 insectesParasitesCount +
                 '" name="arbreStrate[' + insectesParasitesCount +
-                '][nom]"></div></div><div class="col-xs-12 col-sm-6"><div class="form-group"><label class="">Strate</label><select name="arbreStrate[' +
+                '][nom]"></div></div><div class="col-xs-12 col-sm-4"><div class="form-group"><label class="">Strate</label><select name="arbreStrate[' +
                 insectesParasitesCount +
                 '][strate]" class="form-control" id="strate-' +
                 insectesParasitesCount +
-                '" ><option value="">Selectionner une strate</option><option value="1">Strate 1</option><option value="2">Strate 2</option><option value="3">Strate 3</option></select></div></div><div class="col-xs-12 col-sm-8"><button type="button" id="' +
+                '" ><option value="">Selectionner une strate</option><option value="1">Strate 1</option><option value="2">Strate 2</option><option value="3">Strate 3</option></select></div></div><div class="col-xs-12 col-sm-4"><div class="form-group"><label class="">Nombre</label><input type="number" class="form-control" placeholder="Saisissez le nombre d\' arbre observé" name="arbreStrate[' +
+                insectesParasitesCount +
+                '][qte]"></div></div><div class="col-xs-12 col-sm-8"><button type="button" id="' +
                 insectesParasitesCount +
                 '" class="removeRowinsectesParasites btn btn-danger btn-sm"><i class="fa fa-minus"></i></button></div></td>';
 

@@ -10,6 +10,7 @@ use Kirschbaum\PowerJoins\PowerJoins;
 class Agroespecesarbre extends Model
 {
     use Searchable, GlobalStatus, PowerJoins;
+    protected $guarded = [];
 
     public function agroespeceabre_parcelles()
     {
