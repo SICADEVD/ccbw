@@ -5,18 +5,19 @@ namespace App\Http\Controllers;
 use App\Models\Campagne;
 use App\Models\Localite;
 use App\Constants\Status;
-use App\Models\SousThemeFormation;
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use App\Models\SuiviFormation;
 use App\Models\ThemeSousTheme;
 use App\Models\Suivi_formation;
+use App\Models\SousThemeFormation;
 use App\Models\TypeFormationTheme;
 use Illuminate\Support\Facades\DB;
 use App\Models\SuiviFormationTheme;
 use Illuminate\Support\Facades\File;
 use App\Models\SuiviFormationVisiteur;
 use App\Models\SuiviFormationProducteur;
+use App\Models\FormationProducteurFormateur;
 
 class ApisuiviformationController extends Controller
 {
@@ -169,6 +170,20 @@ class ApisuiviformationController extends Controller
                     ];
                     ThemeSousTheme::insert($datas2);
                 }
+            }
+            $selectedFormateurs = $request->formateur;
+            $selectedEntreprises = $request->entreprise_formateur;
+            if ($selectedFormateurs != null && $selectedEntreprises != null) {
+                FormationProducteurFormateur::where('suivi_formation_id', $id)->delete();
+                foreach ($selectedFormateurs as $formateurId) {
+                    list($entrepriseId, $formateurItemId) = explode('-', $formateurId);
+                    $datas4[] = [
+                        'suivi_formation_id' => $id,
+                        'entreprise_id' => $entrepriseId,
+                        'formateur_staff_id' => $formateurItemId,
+                    ];
+                }
+                FormationProducteurFormateur::insert($datas4);
             }
         }
 
