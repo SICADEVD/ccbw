@@ -128,8 +128,8 @@
                                     id="entreprise_formateur" multiple>
                                     <option value="">@lang('Selectionner une option')</option>
                                     @foreach ($entreprises as $entreprise)
-                                        <option value="{{ $entreprise->id }}" @selected(old('entreprise_formateur'))>
-                                            {{ $entreprise->nom_entreprise }}</option>
+                                        <option value="{{ $entreprise->id }}" @selected(in_array($entreprise->id, $entreprisess))>
+                                        {{ $entreprise->nom_entreprise }}</option>
                                     @endforeach
                                 </select>
                                 {{-- <button type="button" class="btn btn-outline-secondary border-grey add-entreprise"
@@ -445,6 +445,17 @@
                     optionParProducteur);
             })
         });
+
+        function updateFormateur(optionsHtml2, id, optionParFormateur) {
+            var optionsHtml = optionsHtml2
+            if (id != '') {
+                optionParFormateur[id].forEach(function(key, element) {
+                    optionsHtml += '<option value="' + id + '-' + element + '">' + key + '</option>';
+                });
+                $("#formateur").html(optionsHtml);
+            }
+            return optionsHtml;
+        }
 
         function updateProducteur(optionsHtml2, id, optionParProducteur) {
             var optionsHtml = optionsHtml2

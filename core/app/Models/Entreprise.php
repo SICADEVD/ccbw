@@ -18,4 +18,8 @@ class Entreprise extends Model
     {
         return $this->hasMany(FormateurStaff::class, 'entreprise_id');
     }
+
+    public function formateurExternes(){
+        return $this->hasMany(FormateurStaff::class, 'entreprise_id');
+    }
 }

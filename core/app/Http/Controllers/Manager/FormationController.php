@@ -56,7 +56,7 @@ class FormationController extends Controller
                     });
                 }
             })
-            ->with('localite', 'campagne', 'user')
+            ->with('localite', 'campagne', 'user','entreprises','formateurs')
             ->paginate(getPaginate());
         return view('manager.formation.index', compact('pageTitle', 'formations', 'localites', 'modules'));
     }
@@ -271,7 +271,7 @@ class FormationController extends Controller
 
 
         $entreprisess = $formateurSelected = array();
-        foreach ($formation->formationProducteurEntreprise as $item) {
+        foreach ($formation->suiviFormationEntrepriseFormateur as $item) {
             $entreprisess[] = $item->entreprise_id;
             $formateurSelected[] = $item->formateur_staff_id;
         }

@@ -43,7 +43,15 @@ class SuiviFormation extends Model
     {
         return $this->hasMany(TypeFormationTheme::class, 'suivi_formation_id', 'id');
     }
-    public function formationProducteurEntreprise(){
-        return $this->hasMany(FormationProducteurFormateur::class, 'suivi_formation_id', 'id');
+
+    public function entreprises(){
+        return $this->belongsToMany(Entreprise::class,'formation_producteur_formateurs','suivi_formation_id','entreprise_id');
+        
+    }
+    public function formateurs(){
+        return $this->belongsToMany(FormateurStaff::class,'formation_producteur_formateurs','suivi_formation_id','formateur_staff_id');
+    }
+    public function suiviFormationEntrepriseFormateur(){
+        return $this->hasMany(FormationProducteurFormateur::class,'suivi_formation_id','id');
     }
 }

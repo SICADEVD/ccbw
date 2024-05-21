@@ -20,6 +20,7 @@
                                     @endforeach
                                 </select>
                             </div>
+                            
                             <div class="flex-grow-1">
                                 <label>@lang('Modules')</label>
                                 <select name="module" class="form-control">
@@ -49,7 +50,9 @@
                             <thead>
                                 <tr>
                                     <th>@lang('Localite')</th>
-                                    <th>@lang('Formateur')</th>
+                                    <th>@lang('Formateur Interne')</th>
+                                    <th>@lang('Entreprise')</th>
+                                    <th>@lang('Formateur Externe')</th>
                                     <th>@lang('Lieu')</th>
                                     <th> Modules</th>
                                     <th>@lang('Date formation')</th>
@@ -64,16 +67,50 @@
                                         <td>
                                             <span class="fw-bold">{{ $formation->localite->nom }}</span>
                                         </td>
+                                        @if($formation->user != null)
+                                            <td>
+                                                <span> <a href="{{ route('manager.suivi.formation.edit', $formation->id) }}">
+                                                        <span>@</span>{{ $formation->user ? $formation->user->lastname : '' }}
+                                                        {{ $formation->user ? $formation->user->firstname : ''}}
+                                                    </a></span>
+                                            </td>
+                                        @else
+                                            <td>Pas de formateur interne pour cette formation</td>
+                                        @endif
+                                        @if($formation->formateur_externe == 'oui')
                                         <td>
-                                            <span> <a href="{{ route('manager.suivi.formation.edit', $formation->id) }}">
-                                                    <span>@</span>{{ $formation->user ? $formation->user->lastname : '' }}
-                                                    {{ $formation->user ? $formation->user->firstname : ''}}
-                                                </a></span>
+                                            <span>
+                                                @foreach ($formation->entreprises->unique('nom_entreprise') as $entreprise)
+                                                    {{ $entreprise->nom_entreprise }}
+                                                    @if (!$loop->last)
+                                                        ,
+                                                    @endif
+                                                @endforeach
+                                            </span>
                                         </td>
-                                        
+                                        @else
+                                        <td>Pas d'entreprise externe pour cette formation</td>
+                                        @endif
+
+                                        @if($formation->formateur_externe == 'oui')
+                                        <td>
+                                            <span>@</span>
+                                                    @foreach ($formation->formateurs as $formateur)
+                                                        {{ $formateur->nom_formateur }}
+                                                        {{ $formateur->prenom_formateur }}
+
+                                                        @if (!$loop->last)
+                                                            ,
+                                                        @endif
+                                                    @endforeach
+                                        @else
+                                        <td>Pas de formateur externe pour cette formation</td>
+                                        @endif
+
                                         <td>
                                             <span>{{ $formation->lieu_formation }}</span>
                                         </td>
+
                                         <td>
                                         @if (!empty($formation->typeFormationTheme()))
                                          @php
@@ -95,7 +132,7 @@
                                         </td>
                                         <td>
                                             <span class="d-block">{{ showDateTime($formation->date_formation) }}</span>
-                                            <span>{{ diffForHumans($formation->date_formation) }}</span>
+                                            {{-- <span>{{ diffForHumans($formation->date_formation) }}</span> --}}
                                         </td>
                                         <td>
                                             <span class="d-block">{{ showDateTime($formation->created_at) }}</span>

@@ -14,12 +14,12 @@ class FormationProducteurFormateur extends Model
 
     protected $table = "formation_producteur_formateurs";
 
-    public function formation()
+    public function suivi_formation()
     {
         return $this->belongsTo(SuiviFormation::class, 'suivi_formation_id');
     }
 
-    public function entreprise()
+    public function suivi_entreprise()
     {
         return $this->belongsTo(Entreprise::class, 'entreprise_id');
     }
