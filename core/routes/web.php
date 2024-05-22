@@ -84,6 +84,7 @@ Route::namespace('Manager\Auth')->group(function () {
 Route::controller('SiteController')->group(function () {
     Route::get('placeholder-image/{size}', 'placeholderImage')->name('placeholder.image');
     Route::get('/', 'index')->name('home');
+    Route::get('/privacy', 'politique')->name('politique');
 });
 
 Route::middleware('auth')->group(function () {

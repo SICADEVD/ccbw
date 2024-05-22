@@ -22,6 +22,10 @@ class SiteController extends Controller
         return redirect('/login');
     }
  
+    public function politique()
+    { 
+        return view('politique');
+    }
     
     public function placeholderImage($size = null)
     {
