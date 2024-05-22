@@ -3,45 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Politique de confidentialité de CCB</title>
+    <title>Politique de Confidentialité - Programme Bandama</title>
     <style>
-        /* Styles CSS */
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
             margin: 20px;
         }
-        h1 {
-            font-size: 24px;
-            color: #333;
-        }
-        p {
-            color: #666;
+        h1, h2 {
+            color: #2F4F4F;
         }
     </style>
 </head>
 <body>
-    <h1>Politique de confidentialité de Poulet Bini</h1>
-    <p><strong>Dernière mise à jour :</strong> 30 avril 2024</p>
-    <p>Bienvenue dans l'application mobile Poulet Bini (ci-après dénommée "Poulet Bini"). Chez Poulet Bini, nous nous engageons à protéger votre vie privée et à garantir la sécurité de vos informations personnelles. Cette politique de confidentialité explique comment nous collectons, utilisons et protégeons vos données lorsque vous utilisez notre application mobile.</p>
-    <h2>1. Collecte et utilisation des informations</h2>
-    <p>Lorsque vous utilisez l'application Poulet Bini, nous collectons certaines informations personnelles vous concernant, y compris mais sans s'y limiter :</p>
+    <h1>Politique de Confidentialité du Programme Bandama</h1>
+    
+    <p><strong>Introduction</strong></p>
+    <p>Le Programme Bandama s'engage à protéger la vie privée de ses utilisateurs et des producteurs de cacao. Cette Politique de Confidentialité explique quelles informations nous collectons, comment nous les utilisons, les partageons et les protégeons, ainsi que les choix que vous avez concernant vos informations personnelles.</p>
+
+    <h2>1. Informations Collectées</h2>
+    <p>Nous collectons les types d'informations suivants :</p>
     <ul>
-        <li>Les informations que vous fournissez volontairement, telles que votre nom, votre adresse e-mail, votre numéro de téléphone et votre adresse de livraison lorsque vous vous inscrivez à notre service.</li>
-        <li>Les informations de localisation lorsque vous utilisez la fonction de géolocalisation pour trouver des restaurants ou suivre votre livraison.</li>
-        <li>Les informations de paiement, y compris les détails de votre carte de crédit ou d'autres informations de paiement lorsque vous effectuez des transactions à travers notre application.</li>
+        <li><strong>Informations des Producteurs :</strong>
+            <ul>
+                <li><em>Nom et coordonnées :</em> Incluant le nom complet, l'adresse, le numéro de téléphone et l'adresse e-mail.</li>
+                <li><em>Localisation des plantations :</em> Coordonnées GPS et description de la localisation.</li>
+                <li><em>Conditions de travail :</em> Informations sur les conditions de travail et le bien-être des travailleurs.</li>
+            </ul>
+        </li>
+        <li><strong>Données Agricoles :</strong>
+            <ul>
+                <li><em>Méthodes de culture :</em> Techniques agricoles utilisées, types de cultures et rotations.</li>
+                <li><em>Pratiques agricoles :</em> Utilisation de fertilisants, pesticides et autres intrants agricoles.</li>
+                <li><em>Récolte :</em> Dates et volumes de récolte, pratiques de cueillette.</li>
+            </ul>
+        </li>
+        <li><strong>Estimations et Suivi :</strong>
+            <ul>
+                <li><em>Estimation de la production :</em> Prévisions des volumes de cacao, qualité attendue.</li>
+                <li><em>Suivi de la parcelle :</em> État des cultures, pratiques de gestion durable, conditions de croissance.</li>
+            </ul>
+        </li>
+        <li><strong>Formation et Assistance :</strong>
+            <ul>
+                <li><em>Données de formation :</em> Participation aux formations, compétences acquises.</li>
+                <li><em>Besoins en arbres à ombrage :</em> Nombre et type d'arbres nécessaires, plans de plantation.</li>
+            </ul>
+        </li>
+        <li><strong>Logistique et Documentation :</strong>
+            <ul>
+                <li><em>Magasin de section et central :</em> Capacités de stockage, gestion des stocks, conditions de conservation.</li>
+                <li><em>Connaissement usine :</em> Documents de transport, détails sur les quantités et la qualité du cacao.</li>
+            </ul>
+        </li>
+        <li><strong>Enquête Ménage :</strong>
+            <ul>
+                <li><em>Conditions de vie :</em> Taille du ménage, logement, accès aux services de base.</li>
+                <li><em>Pratiques agricoles :</em> Méthodes utilisées par les membres du ménage.</li>
+                <li><em>Besoins économiques et sociaux :</em> Revenus, éducation, besoins en formation.</li>
+            </ul>
+        </li>
+        <li><strong>SSRTE-CLMRS :</strong>
+            <ul>
+                <li><em>Données sur la surveillance et la remédiation du travail des enfants :</em> Incidents rapportés, actions correctives, suivi des cas.</li>
+            </ul>
+        </li>
     </ul>
-    <p>Nous utilisons ces informations pour fournir nos services, traiter vos commandes, vous envoyer des mises à jour sur vos livraisons, améliorer notre service client et personnaliser votre expérience avec Poulet Bini.</p>
-    <h2>2. Protection des informations</h2>
-    <p>Nous prenons des mesures de sécurité appropriées pour protéger vos informations personnelles contre tout accès non autorisé, altération, divulgation ou destruction. Nous utilisons des protocoles de sécurité standard de l'industrie pour garantir la sécurité de vos données.</p>
-    <h2>3. Partage des informations</h2>
-    <p>Nous ne vendons pas, n'échangeons pas et ne louons pas vos informations personnelles à des tiers à des fins commerciales. Cependant, nous pouvons partager vos informations avec des partenaires de confiance qui nous aident à exploiter notre application et à fournir nos services, tels que les fournisseurs de services de paiement et les prestataires de services de livraison. Nous exigeons que ces tiers respectent la confidentialité de vos informations et utilisent ces informations uniquement dans le but de vous fournir des services pour Poulet Bini.</p>
-    <h2>4. Cookies et technologies similaires</h2>
-    <p>Nous utilisons des cookies et d'autres technologies de suivi pour collecter des informations sur votre utilisation de l'application Poulet Bini et pour améliorer notre service. Vous pouvez configurer votre navigateur pour refuser tous les cookies ou pour vous avertir lorsque des cookies sont envoyés. Toutefois, si vous désactivez les cookies, certaines fonctionnalités de Poulet Bini peuvent ne pas fonctionner correctement.</p>
-    <h2>5. Modifications de la politique de confidentialité</h2>
-    <p>Nous nous réservons le droit de mettre à jour ou de modifier cette politique de confidentialité à tout moment. Toute modification de cette politique sera publiée sur cette page avec une date de révision mise à jour. Nous vous encourageons à consulter régulièrement cette politique de confidentialité pour rester informé de la manière dont nous protégeons vos informations.</p>
-    <h2>6. Contactez-nous</h2>
-    <p>Si vous avez des questions ou des préoccupations concernant notre politique de confidentialité ou nos pratiques en matière de confidentialité, veuillez nous contacter à l'adresse suivante : <a href="mailto:info@pouletbini.com">info@pouletbini.com</a>.</p>
-    <p>En utilisant l'application Poulet Bini, vous acceptez les termes de cette politique de confidentialité.</p>
+
+    <h2>2. Utilisation des Informations</h2>
+    <p>Les informations collectées sont utilisées pour :</p>
+    <ul>
+        <li><em>Traçabilité :</em> Suivre le parcours du cacao de la plantation au produit fini pour assurer transparence et qualité.</li>
+        <li><em>Durabilité :</em> Promouvoir des pratiques agricoles responsables et durables.</li>
+        <li><em>Productivité :</em> Améliorer les techniques agricoles et accroître la productivité des producteurs.</li>
+        <li><em>Logistique :</em> Optimiser la gestion des stocks et la logistique.</li>
+        <li><em>Incitations :</em> Fournir des primes pour la qualité et les pratiques durables.</li>
+        <li><em>Sécurité des Produits :</em> Assurer l'utilisation contrôlée et responsable des produits phytosanitaires.</li>
+        <li><em>Biodiversité :</em> Soutenir la biodiversité et la gestion durable des plantations.</li>
+        <li><em>Bien-être des Ménages :</em> Évaluer l'impact des interventions agricoles sur le bien-être des ménages producteurs.</li>
+    </ul>
+
+    <h2>3. Partage des Informations</h2>
+    <p>Nous partageons vos informations avec :</p>
+    <ul>
+        <li><em>Partenaires Certifiés :</em> Pour assurer la conformité aux normes de certification et réglementations internationales.</li>
+        <li><em>Organismes de Formation :</em> Pour améliorer les techniques agricoles des producteurs.</li>
+        <li><em>Autorités Réglementaires :</em> Si requis par la loi ou pour protéger les droits et la sécurité des utilisateurs.</li>
+        <li><em>Institutions Financières :</em> Pour faciliter l'accès à des financements ou des primes.</li>
+        <li><em>Entités Logistiques :</em> Pour optimiser le transport et le stockage du cacao.</li>
+    </ul>
+
+    <h2>4. Protection des Informations</h2>
+    <p>Nous mettons en œuvre des mesures de sécurité techniques et organisationnelles appropriées pour protéger vos informations contre l'accès non autorisé, la divulgation, la modification ou la destruction. Cela inclut :</p>
+    <ul>
+        <li><em>Chiffrement des données :</em> Utilisation de protocoles de chiffrement pour protéger les données sensibles.</li>
+        <li><em>Contrôles d'accès :</em> Restrictions d'accès aux informations basées sur des autorisations.</li>
+        <li><em>Sauvegardes régulières :</em> Sauvegardes régulières des données pour éviter toute perte.</li>
+    </ul>
+
+    <h2>5. Vos Droits</h2>
+    <p>Vous avez le droit de :</p>
+    <ul>
+        <li><em>Accéder à vos informations personnelles :</em> Vous pouvez demander une copie des informations que nous détenons sur vous.</li>
+        <li><em>Correction des informations :</em> Vous pouvez demander la correction de toute information inexacte.</li>
+        <li><em>Suppression des informations :</em> Vous pouvez demander la suppression de vos informations personnelles, sous réserve des obligations légales.</li>
+        <li><em>Opposition au traitement :</em> Vous pouvez vous opposer au traitement de vos données personnelles dans certaines circonstances.</li>
+        <li><em>Portabilité des données :</em> Vous pouvez demander le transfert de vos informations personnelles à un autre service.</li>
+    </ul>
+
+    <h2>6. Modifications de la Politique de Confidentialité</h2>
+    <p>Nous pouvons mettre à jour cette Politique de Confidentialité de temps en temps. Nous vous informerons de tout changement en publiant la nouvelle Politique sur notre application et en vous envoyant une notification si nécessaire.</p>
+
+    <h2>7. Contactez-Nous</h2>
+    <p>Pour toute question ou demande concernant cette Politique de Confidentialité, veuillez nous contacter à :</p>
+    <p><strong>Programme Bandama</strong><br>
+    Adresse : [Votre adresse]<br>
+    Email : info@programmebandama.com<br>
+    Téléphone : [Votre numéro de téléphone]</p>
+
+    <p><strong>Date d'effet : 22/05/2024</strong></p>
+    <p>Cette Politique de Confidentialité est en vigueur à partir de la date indiquée ci-dessus.</p>
 </body>
-</html>
+</html> 
