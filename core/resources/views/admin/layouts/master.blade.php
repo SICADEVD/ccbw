@@ -86,7 +86,7 @@ $('.dropify-fr').dropify({
 });
 
             @if($general->ln) 
-                $(".langChanage").on("change", function () {
+                $(".langChange").on("change", function () {
                     window.location.href = "{{ route('admin.lang') }}/" + $('#lang').val();
                 });
             @endif 

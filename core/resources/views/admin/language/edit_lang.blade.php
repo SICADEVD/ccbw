@@ -37,10 +37,10 @@
                                 </thead>
                                 <tbody>
 
-                                @forelse($json as $k => $language)
+                                @forelse($json as $k => $langua)
                                     <tr>
                                         <td class="white-space-wrap">{{$k}}</td>
-                                        <td class="text-left white-space-wrap">{{$language}}</td>
+                                        <td class="text-left white-space-wrap">{{$langua}}</td>
 
 
                                         <td>
@@ -49,14 +49,14 @@
                                                data-bs-toggle="modal"
                                                data-title="{{$k}}"
                                                data-key="{{$k}}"
-                                               data-value="{{$language}}"
+                                               data-value="{{$langua}}"
                                                class="editModal btn btn-sm btn-outline--primary">
                                                 <i class="la la-pencil"></i>@lang('Edit')
                                             </a>
 
                                             <a href="javascript:void(0)"
                                                data-key="{{$k}}"
-                                               data-value="{{$language}}"
+                                               data-value="{{$langua}}"
                                                data-bs-toggle="modal" data-bs-target="#DelModal"
                                                class="btn btn-sm btn-outline--danger deleteKey">
                                                 <i class="la la-trash"></i> @lang('Remove')

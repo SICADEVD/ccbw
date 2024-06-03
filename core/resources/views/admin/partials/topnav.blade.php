@@ -51,7 +51,7 @@
             </li>
             <li>
             @if($general->ln) 
-            <x-forms.select fieldName="lang" fieldId="lang" class="lang-select ms-auto langChanage">
+            <x-forms.select fieldName="lang" fieldId="lang" class="lang-select ms-auto langChange">
                             @foreach ($language as $item)
                                 <option  data-content="<span class='flag-icon flag-icon-{{ strtolower($item->code) }} flag-icon-squared'></span> {{ $item->name }}"
                                     value="{{ $item->code }}"

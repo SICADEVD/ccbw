@@ -8,7 +8,7 @@
 						<div class="card-body">
 							<div class="d-flex align-items-center">
 								<div>
-									<p class="mb-0 text-secondary">Total Producteurs</p>
+									<p class="mb-0 text-secondary">@lang('Total Producteurs')</p>
 									<h4 class="my-1 text-info">{{ number_format(@$nbproducteur,0,'',' ')}}</h4>
 									<p class="mb-0 font-13"></p>
 								</div>
