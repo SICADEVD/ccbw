@@ -25,7 +25,7 @@
 					   <div class="card-body">
 						   <div class="d-flex align-items-center">
 							   <div>
-								   <p class="mb-0 text-secondary">Total Superficie Parcelles</p>
+								   <p class="mb-0 text-secondary">@lang('Total Superficie Parcelles')</p>
 								   <h4 class="my-1 text-danger">{{ number_format(@$nbparcelle,0,'',' ')}} ha</h4>
 								   <p class="mb-0 font-13"></p>
 							   </div>
@@ -42,7 +42,7 @@
 					   <div class="card-body">
 						   <div class="d-flex align-items-center">
 							   <div>
-								   <p class="mb-0 text-secondary">Total Arbres distribués</p>
+								   <p class="mb-0 text-secondary">@lang('Total Arbres distribues')</p>
 								   <h4 class="my-1 text-success">{{ number_format(@$nbarbredistribue,0,'',' ')}}</h4>
 								   <p class="mb-0 font-13"></p>
 							   </div>
@@ -65,7 +65,7 @@
                   $taux = round(($nbinspection / $totalparcelle)*100,2);
                  } 
                  ?>
-								   <p class="mb-0 text-secondary">Total Inspection</p>
+								   <p class="mb-0 text-secondary">@lang('Total Inspection')</p>
 								   <h4 class="my-1 text-warning"> {{ $taux }} %</h4>
 								   <p class="mb-0 font-13"></p>
 							   </div>
