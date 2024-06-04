@@ -97,7 +97,7 @@
                             <div class="col-md-2">
                                 <div class="alert alert-warning text-center">
                                 <div class="fw-bold">{{ $total_prod_cand }}</div>
-                                     CANDIDATS
+                                    @lang('CANDIDATS')
                                 </div>
                             </div>
                     </div>
@@ -317,18 +317,18 @@
         <i class="las la-plus"></i>@lang('Ajouter nouveau')
     </a> 
     <button type="button" class="btn btn-outline--danger h-45" data-bs-toggle="dropdown" aria-expanded="false"><i
-            class="las la-cloud-upload-alt"></i>Importation
+            class="las la-cloud-upload-alt"></i>@lang('Importation')
     </button>
     <div class="dropdown-menu p-0">
-        <a class="dropdown-item addType">Importer des Producteurs</a>
-        <a class="dropdown-item updateType">Importer Mise à jour des Producteurs</a> 
+        <a class="dropdown-item addType">@lang('Importer des Producteurs')</a>
+        <a class="dropdown-item updateType">@lang('Importer Mise à jour des Producteurs')</a> 
     </div>
     <button type="button" class="btn btn-outline--warning h-45" data-bs-toggle="dropdown" aria-expanded="false"><i
-            class="las la-cloud-download-alt"></i>Exportation
+            class="las la-cloud-download-alt"></i>@lang('Exportation')
     </button>
     <div class="dropdown-menu p-0"> 
-        <a href="{{ route('manager.traca.producteur.exportExcel.producteurAll') }}" class="btn  btn-outline--warning h-45"> Uniquement liste Producteurs</a> 
-        <a href="{{ route('manager.traca.producteur.exportExcel.producteurAllList') }}" class="btn  btn-outline--warning h-45"> Tous les Producteurs avec autres Infos</a> 
+        <a href="{{ route('manager.traca.producteur.exportExcel.producteurAll') }}" class="btn  btn-outline--warning h-45"> @lang('Uniquement liste Producteurs')</a> 
+        <a href="{{ route('manager.traca.producteur.exportExcel.producteurAllList') }}" class="btn  btn-outline--warning h-45"> @lang('Tous les Producteurs avec autres Infos')</a> 
     </div>
     
 @endpush
