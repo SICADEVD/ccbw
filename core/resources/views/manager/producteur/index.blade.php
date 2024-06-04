@@ -8,11 +8,11 @@
                         <div class="d-flex flex-wrap gap-4">
                             <input type="hidden" name="table" value="producteurs" />
                             <div class="flex-grow-1">
-                                <label>@lang('Recherche par Mot(s) clé(s)')</label>
+                                <label>@lang('Recherche par Mot(s) cle(s)')</label>
                                 <input type="text" name="search" value="{{ request()->search }}" class="form-control">
                             </div>
                             <div class="flex-grow-1">
-                                <label>@lang('Localité')</label>
+                                <label>@lang('Localite')</label>
                                 <select name="localite" class="form-control">
                                     <option value="">@lang('Toutes')</option>
                                     @foreach ($localites as $local)
@@ -72,26 +72,26 @@
                             <div class="col-md-4">
                                 <div class="alert alert-success text-center">
                                 <div class="fw-bold">{{ $total_prod }}</div>
-                                    TOTAL PRODUCTEURS
+                                    @lang('TOTAL PRODUCTEURS')
                                 </div>
                             </div>
                             <div class="col-md-2">
                                 <div class="alert alert-info text-center">
                                 <div class="fw-bold">{{ $total_prod_h }}</div>
-                                     HOMMES
+                                    @lang('HOMMES')
                                 </div>
                             </div>
                             <div class="col-md-2">
                                 <div class="alert alert-info text-center">
                                 <div class="fw-bold">{{ $total_prod - $total_prod_h }}</div>
-                                     FEMMES
+                                    @lang('FEMMES')
                                 </div>
                             </div>
 
                             <div class="col-md-2">
                                 <div class="alert alert-warning text-center">
                                 <div class="fw-bold">{{ $total_prod_cert }}</div>
-                                     CERTIFIES
+                                    @lang('CERTIFIES')
                                 </div>
                             </div>
                             <div class="col-md-2">
