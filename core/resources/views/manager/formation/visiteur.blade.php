@@ -50,7 +50,7 @@
                                 <tr>
                                     <th>@lang('Visiteur')</th>
                                     <th>@lang('Sexe')</th>
-                                    <th>@lang('Téléphone')</th>
+                                    <th>@lang('Telephone')</th>
                                     <th>@lang('Represente un producteur')</th>
                                     <th>@lang('Ajoutée le')</th>
                                     <th>@lang('Action')</th>
@@ -118,7 +118,7 @@
         <i class="las la-plus"></i>@lang('Ajouter nouveau')
     </a>
     <a href="{{ route('manager.suivi.formation.exportExcel.formationAll') }}" class="btn  btn-outline--warning h-45"><i
-            class="las la-cloud-download-alt"></i> Exporter en Excel</a>
+            class="las la-cloud-download-alt"></i>@lang('Exporter en Excel') </a>
 @endpush
 @push('breadcrumb-plugins')
     <x-back route="{{route('manager.suivi.formation.index')}}" />

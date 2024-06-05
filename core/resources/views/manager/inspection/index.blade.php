@@ -8,11 +8,11 @@
                         <div class="d-flex flex-wrap gap-4">
                             <input type="hidden" name="table" value="inspections"/>
                             <div class="flex-grow-1">
-                                <label>@lang('Recherche par Mot(s) clé(s)')</label>
+                                <label>@lang('Recherche par Mot(s) cle(s)')</label>
                                 <input type="text" name="search" value="{{ request()->search }}" class="form-control">
                             </div>
                             <div class="flex-grow-1">
-                                <label>@lang('Localité')</label>
+                                <label>@lang('Localite')</label>
                                 <select name="localite" class="form-control" id="localite">
                                     <option value="">@lang('Toutes')</option>
                                     @foreach($localites as $local)
@@ -40,7 +40,7 @@
                             </div> 
                             <div class="flex-grow-1">
                                 <label>@lang('Date')</label>
-                                <input name="date" type="text" class="dates form-control" placeholder="@lang('Date de début - Date de fin')" autocomplete="off" value="{{ request()->date }}">
+                                <input name="date" type="text" class="dates form-control" placeholder="@lang('Date de debut - Date de fin')" autocomplete="off" value="{{ request()->date }}">
                             </div>
                             <div class="flex-grow-1 align-self-end">
                                 <button class="btn btn--primary w-100 h-45"><i class="fas fa-filter"></i> @lang('Filter')</button>
@@ -61,9 +61,9 @@
                                     <th>@lang('Parcelle')</th>
                                     <th>@lang('Inspecteur')</th>
                                     <th>@lang('Note')</th>
-                                    <th>@lang('Date d\'inspection')</th> 
+                                    <th>@lang('Date inspection')</th> 
                                     <th>@lang('Approbation')</th> 
-                                    <th>@lang('Date d\'approbation')</th> 
+                                    <th>@lang('Date approbation')</th> 
                                     <th>@lang('Ajoutée le')</th> 
                                     <th>@lang('Action')</th>
                                 </tr>
@@ -99,15 +99,15 @@
                                         <span class="d-block">{{ date('d/m/Y', strtotime($inspection->date_evaluation)) }}</span> 
                                         </td> 
                                         <td>  @if($inspection->approbation==1)
-                                                <span class="badge badge-success">Approuvé</span>
+                                                <span class="badge badge-success">@lang('Approuve')</span>
                                                 @endif
 
                                                 @if($inspection->approbation==2)
-                                                <span class="badge badge-info">Non Approuvé</span>
+                                                <span class="badge badge-info">@lang('Non Approuve')</span>
                                                 @endif
 
                                                 @if($inspection->approbation==3)
-                                                <span class="badge badge-danger">Exclu</span>
+                                                <span class="badge badge-danger">@lang('Exclu')</span>
                                                 @endif
                                         </td>
                                         <td>
@@ -119,7 +119,7 @@
                                         </td>
                                         
                                         <td>
-                                        <a href="{{ route('manager.suivi.inspection.exportExcel.inspectionAll',['id'=>encrypt($inspection->id)]) }}" class="btn  btn-outline--info ml-1"><i class="las la-cloud-download-alt"></i> Exporter</a>
+                                        <a href="{{ route('manager.suivi.inspection.exportExcel.inspectionAll',['id'=>encrypt($inspection->id)]) }}" class="btn  btn-outline--info ml-1"><i class="las la-cloud-download-alt"></i>@lang('Exporter')</a>
                                         <a href="{{ route('manager.suivi.inspection.show', $inspection->id) }}"
                                                     class="btn btn-outline--warning ml-1"><i class="la la-file"></i>@lang('Details')</a>
                                            
@@ -150,7 +150,7 @@
     <a href="{{ route('manager.suivi.inspection.create') }}" class="btn  btn-outline--primary h-45 addNewCooperative">
         <i class="las la-plus"></i>@lang("Ajouter nouveau")
     </a>
-    <a href="{{ route('manager.suivi.inspection.exportExcel.inspectionAll') }}" class="btn  btn-outline--warning h-45"><i class="las la-cloud-download-alt"></i> Exporter en Excel</a>
+    <a href="{{ route('manager.suivi.inspection.exportExcel.inspectionAll') }}" class="btn  btn-outline--warning h-45"><i class="las la-cloud-download-alt"></i> @lang('Exporter en Excel')</a>
 @endpush
 @push('style')
     <style>

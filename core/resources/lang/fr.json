@@ -132,6 +132,19 @@
     "Entreprise": "Entreprise",
     "Pas de formateur interne pour cette formation": "Pas de formateur interne pour cette formation",
     "Pas d'entreprise externe pour cette formation": "Pas d'entreprise externe pour cette formation",
-    "Are you sure to enable this formation?": "Etes-vous sûr d'activer cette formation?"
+    "Are you sure to enable this formation?": "Etes-vous sûr d'activer cette formation?",
+    "Visiteur": "Visiteur",
+    "Visiteurs": "Visiteurs",
+    "Represente un producteur": "Représente un producteur",
+    "Inspecteur": "Inspecteur",
+    "Parcelle": "Parcelle",
+    "Note": "Note",
+    "Notes": "Notes",
+    "Date inspection": "Date d'inspection",
+    "Approbation": "Approbation",
+    "Date approbation": "Date d'approbation",
+    "Approuve": "Approuvé",
+    "Non approuve": "Non approuvé",
+    "Exclu": "Exclu"
 
 }
