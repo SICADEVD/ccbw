@@ -108,7 +108,18 @@
     "Exporter en Excel": "Exporter en Excel",
     "Waypoints": "Waypoints",
     "Polygones": "Polygones",
-    "Voir Mapping": "Voir Mapping"
-
-
+    "Voir Mapping": "Voir Mapping",
+    "Rendement des 3 carres A, B, C": "Rendement des 3 carrés A, B, C",
+    "Rendement final": "Rendement final",
+    "Estimation de production": "Estimation de production",
+    "Production annuelle": "Production annuelle",
+    "Date d'estimation": "Date d'estimation",
+    "Détail": "Détail",
+    "Détails": "Détails",
+    "Atteint": "Atteint",
+    "Non atteint": "Non atteint",
+    "Importer des estimations": "Importer des estimations",
+    "Fichier d'exemple à utiliser": "Fichier d'exemple à utiliser",
+    "estimation-import-exemple.xlsx": "estimation-import-exemple.xlsx",
+    "Importer des Estimations": "Importer des Estimations",
 }

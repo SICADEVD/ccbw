@@ -8,11 +8,11 @@
                         <div class="d-flex flex-wrap gap-4">
                             <input type="hidden" name="table" value="estimations" />
                             <div class="flex-grow-1">
-                                <label>@lang('Recherche par Mot(s) clé(s)')</label>
+                                <label>@lang('Recherche par Mot(s) cle(s)')</label>
                                 <input type="text" name="search" value="{{ request()->search }}" class="form-control">
                             </div>
                             <div class="flex-grow-1">
-                                <label>@lang('Localité')</label>
+                                <label>@lang('Localite')</label>
                                 <select name="localite" class="form-control">
                                     <option value="">@lang('Toutes')</option>
                                     @foreach ($localites as $local)
@@ -51,7 +51,7 @@
                                     <th>@lang('Producteur')</th>
                                     <th>@lang('Code Parcelle')</th>
                                     <th>@lang('Superficie')</th>
-                                    <th>@lang('Rendement des 3 carrés A, B, C')</th>
+                                    <th>@lang('Rendement des 3 carres A, B, C')</th>
                                     <th>@lang('Rendement final')</th>
                                     <th>@lang('Estimation de production')</th>
                                     <th>@lang('Production annuelle')</th>
@@ -158,7 +158,7 @@
                     enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
-                        <p>Fichier d'exemple à utiliser :<a href="{{ asset('assets/estimation-import-exemple.xlsx') }}"
+                        <p>@lang("Fichier d'exemple à utiliser") :<a href="{{ asset('assets/estimation-import-exemple.xlsx') }}"
                                 target="_blank">@lang('estimation-import-exemple.xlsx')</a></p>
 
 
@@ -187,7 +187,7 @@
     <a href="{{ route('manager.traca.estimation.create') }}" class="btn  btn-outline--primary h-45 addNewCooperative">
         <i class="las la-plus"></i>@lang('Ajouter nouveau')
     </a>
-    <a class="btn  btn-outline--info h-45 addType"><i class="las la-cloud-upload-alt"></i> Importer des Estimations</a>
+    <a class="btn  btn-outline--info h-45 addType"><i class="las la-cloud-upload-alt"></i> @lang('Importer des Estimations')</a>
     <a href="{{ route('manager.traca.estimation.exportExcel.estimationAll') }}" class="btn  btn-outline--warning h-45"><i
             class="las la-cloud-download-alt"></i> Exporter en Excel</a>
 @endpush
