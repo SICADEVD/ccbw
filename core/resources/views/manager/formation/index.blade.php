@@ -21,7 +21,7 @@
                                 </select>
                             </div>
                             
-                            {{-- <div class="flex-grow-1">
+                            <div class="flex-grow-1">
                                 <label>@lang('Modules')</label>
                                 <select name="module" class="form-control">
                                     <option value="">@lang('Tous')</option>
@@ -29,7 +29,7 @@
                                         <option value="{{ $module->id }}">{{ $module->nom }}</option>
                                     @endforeach
                                 </select>
-                            </div> --}}
+                            </div>
                             <div class="flex-grow-1">
                                 <label>@lang('Date')</label>
                                 <input name="date" type="text" class="dates form-control"
