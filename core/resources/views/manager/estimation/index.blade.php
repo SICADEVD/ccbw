@@ -189,7 +189,7 @@
     </a>
     <a class="btn  btn-outline--info h-45 addType"><i class="las la-cloud-upload-alt"></i> @lang('Importer des Estimations')</a>
     <a href="{{ route('manager.traca.estimation.exportExcel.estimationAll') }}" class="btn  btn-outline--warning h-45"><i
-            class="las la-cloud-download-alt"></i> Exporter en Excel</a>
+            class="las la-cloud-download-alt"></i> @lang('Exporter en Excel')</a>
 @endpush
 @push('style')
     <style>
