@@ -120,14 +120,14 @@
                         <div
                             class="sidebar-submenu {{ menuActive(['manager.livraison.*', 'manager.livraison.magcentral.*'], 2) }} ">
                             <ul>
-                                <!-- <li
+                                <!-- <
                                 class="sidebar-menu-item {{ menuActive(['manager.livraison.index']) }}">
                                 <a href="{{ route('manager.livraison.index') }}" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>
                                     <span class="menu-title">@lang('Livraison Magasins de Section')</span>
                                 </a>
 
-                            </li> -->
+                            </> -->
                                 @can('manager.livraison.stock.section')
                                     <li class="sidebar-menu-item {{ menuActive(['manager.livraison.stock.*']) }}">
                                         <a href="{{ route('manager.livraison.stock.section') }}" class="nav-link">
@@ -194,7 +194,7 @@
                                     <li class="sidebar-menu-item {{ menuActive('manager.suivi.menage.index') }}">
                                         <a href="{{ route('manager.suivi.menage.index') }}" class="nav-link">
                                             <i class="menu-icon las la-dot-circle"></i>
-                                            <span class="menu-title">@lang('Enquête Ménage')</span>
+                                            <span class="menu-title">@lang('Enquete Menage')</span>
                                         </a>
                                     </li>
                                 @endcan
@@ -271,7 +271,7 @@
                         <a href="javascript:void(0)"
                             class="{{ menuActive(['manager.hr.*', 'manager.employees.index', 'manager.departments.*', 'manager.designations.*', 'manager.leaves.*', 'manager.archivages.*', 'manager.formation-staff.*', 'presentation-coop.*'], 3) }}">
                             <i class="menu-icon las la-users"></i>
-                            <span class="menu-title">@lang('Gouvernance Ameliorée') </span>
+                            <span class="menu-title">@lang('Gouvernance Amelioree') </span>
                         </a>
                         <div
                             class="sidebar-submenu {{ menuActive(['manager.hr.*', 'manager.employees.*', 'manager.departments.*', 'manager.designations.*', 'manager.leaves.*', 'manager.archivages.*', 'manager.formation-staff.*', 'presentation-coop.*'], 2) }} ">
@@ -280,7 +280,7 @@
                                     <li class="sidebar-menu-item {{ menuActive('manager.presentation-coop.index') }}">
                                         <a href="{{ route('manager.presentation-coop.index') }}" class="nav-link">
                                             <i class="menu-icon las la-dot-circle"></i>
-                                            <span class="menu-title">@lang('Présentation de la coopérative')</span>
+                                            <span class="menu-title">@lang('Presentation de la cooperative')</span>
                                         </a>
                                     </li>
                                 @endcan
@@ -288,7 +288,7 @@
                                     <li class="sidebar-menu-item {{ menuActive('manager.employees.index') }}">
                                         <a href="{{ route('manager.employees.index') }}" class="nav-link">
                                             <i class="menu-icon las la-dot-circle"></i>
-                                            <span class="menu-title">@lang('Tous les employés')</span>
+                                            <span class="menu-title">@lang('Tous les employes')</span>
                                         </a>
                                     </li>
                                 @endcan
@@ -296,7 +296,7 @@
                                     <li class="sidebar-menu-item {{ menuActive('manager.hr.attendances.index') }}">
                                         <a href="{{ route('manager.hr.attendances.index') }}" class="nav-link">
                                             <i class="menu-icon las la-dot-circle"></i>
-                                            <span class="menu-title">@lang('Présences')</span>
+                                            <span class="menu-title">@lang('Presences')</span>
                                         </a>
                                     </li>
                                 @endcan
@@ -304,7 +304,7 @@
                                     <li class="sidebar-menu-item {{ menuActive('manager.leaves.index') }}">
                                         <a href="{{ route('manager.leaves.index') }}" class="nav-link">
                                             <i class="menu-icon las la-dot-circle"></i>
-                                            <span class="menu-title">@lang('Congés')</span>
+                                            <span class="menu-title">@lang('Conges')</span>
                                         </a>
                                     </li>
                                 @endcan 
@@ -336,7 +336,7 @@
                         <a href="javascript:void(0)"
                             class="{{ menuActive(['manager.communaute.action.sociale.*', 'manager.communaute.activite.communautaire.*'], 3) }}">
                             <i class=" menu-icon las la-universal-access"></i>
-                            <span class="menu-title">@lang('Communauté résiliente') </span>
+                            <span class="menu-title">@lang('Communaute resiliente') </span>
                         </a>
                         <div
                             class="sidebar-submenu {{ menuActive(['manager.communaute.action.sociale.*', 'manager.communaute.activite.communautaire.*'], 2) }} ">
@@ -354,7 +354,7 @@
                                     <a href="{{ route('manager.communaute.activite.communautaire.index') }}"
                                         class="nav-link">
                                         <i class="menu-icon las la-dot-circle"></i>
-                                        <span class="menu-title">@lang('Activités Communautaires')</span>
+                                        <span class="menu-title">@lang('Activites Communautaires')</span>
                                     </a>
                                 </li>
                             </ul>
@@ -374,7 +374,7 @@
                         <li class="sidebar-menu-item {{ menuActive(['manager.settings.*', 'manager.holidays.*']) }}">
                             <a href="{{ route('manager.settings.cooperative-settings.index') }}" class="nav-link">
                                 <i class="menu-icon las la-cogs"></i>
-                                <span class="menu-title">@lang('Paramètres')</span>
+                                <span class="menu-title">@lang('Parametres')</span>
                             </a>
                         </li>
                     @endcan
