@@ -9,7 +9,7 @@
                         <div class="d-flex flex-wrap gap-4">
                             <input type="hidden" name="table" value="parcelles" />
                             <div class="flex-grow-1">
-                                <label>@lang('Recherche par Mot(s) clé(s)')</label>
+                                <label>@lang('Recherche par Mot(s) cle(s)')</label>
                                 <input type="text" name="search" value="{{ request()->search }}" class="form-control">
                             </div>
                             <div class="flex-grow-1">
@@ -46,7 +46,7 @@
                                 </select>
                             </div>
                             <div class="flex-grow-1">
-                                <label>@lang('Statut déclaration')</label>
+                                <label>@lang('Statut declaration')</label>
                                 <select name="typedeclaration" class="form-control">
                                     <option value="">@lang('Tous')</option>
                                     <option value="GPS" {{ request()->typedeclaration == 'GPS' ? 'selected' : '' }}>
@@ -58,7 +58,7 @@
                             <div class="flex-grow-1">
                                 <label>@lang('Date')</label>
                                 <input name="date" type="text" class="dates form-control"
-                                    placeholder="@lang('Date de début - Date de fin')" autocomplete="off" value="{{ request()->date }}">
+                                    placeholder="@lang('Date de debut - Date de fin')" autocomplete="off" value="{{ request()->date }}">
                             </div>
                             <div class="flex-grow-1 align-self-end">
                                 <button class="btn btn--primary w-100 h-45"><i class="fas fa-filter"></i>
@@ -75,19 +75,20 @@
                             <div class="col-md-4">
                                 <div class="alert alert-success text-center">
                                 <div class="fw-bold">{{ $total_parcelle }}</div>
-                                    TOTAL PARCELLES
+                                    @lang('TOTAL PARCELLES')
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="alert alert-info text-center">
                                 <div class="fw-bold">{{ $total_parcelle_gps }}</div>
-                                    TOTAL GPS
+                                    @lang('TOTAL GPS')
+                                    
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="alert alert-warning text-center">
                                 <div class="fw-bold">{{ $total_parcelle_verbale }}</div>
-                                    TOTAL VERBALES
+                                    @lang('TOTAL VERBALES')
                                 </div>
                             </div>
                     </div>
@@ -105,7 +106,7 @@
                                     <th>@lang('Producteur')</th>
                                     <th>@lang('Statut declaration')</th>
                                     <th>@lang('Superficie')</th>
-                                    <th>@lang('Année de création')</th>
+                                    <th>@lang('Annee de creation')</th>
                                     <th>@lang('Ajoutée le')</th>
                                     <th>@lang('Etat')</th>
                                     <th>@lang('Action')</th>
@@ -161,13 +162,13 @@
                                                     <button type="button" class="btn btn-sm btn-outline--success confirmationBtn"
                                                         data-action="{{ route('manager.traca.parcelle.status', $parcelle->id) }}"
                                                         data-question="@lang('Êtes-vous sûr de vouloir activer cette parcelle?')">
-                                                        <i class="la la-eye"></i> @lang('Activé')
+                                                        <i class="la la-eye"></i> @lang('Active')
                                                     </button>
                                                 @else
                                                     <button type="button" class="btn btn-sm btn-outline--warning confirmationBtn"
                                                         data-action="{{ route('manager.traca.parcelle.status', $parcelle->id) }}"
                                                         data-question="@lang('Êtes-vous sûr de vouloir désactiver cette parcelle?')">
-                                                        <i class="la la-eye-slash"></i> @lang('Désactivé')
+                                                        <i class="la la-eye-slash"></i> @lang('Désactive')
                                                     </button>
                                                 @endif
                                                 
@@ -239,17 +240,17 @@
     <a href="{{ route('manager.traca.parcelle.create') }}" class="btn  btn-outline--primary h-45 addNewCooperative">
         <i class="las la-plus"></i>@lang('Ajouter nouveau')
     </a>
-    <a class="btn btn-outline--info h-45 addType"><i class="las la-cloud-upload-alt"></i> Importer des Parcelles</a>
+    <a class="btn btn-outline--info h-45 addType"><i class="las la-cloud-upload-alt"></i> @lang('Importer des Parcelles')</a>
     <a href="{{ route('manager.traca.parcelle.uploadkml') }}" class="btn btn-danger h-45"><i
-            class="las la-cloud-upload-alt"></i> Importer un Fichier KML</a>
+            class="las la-cloud-upload-alt"></i> @lang('Importer un Fichier KML')</a>
     <a href="{{ route('manager.traca.parcelle.exportExcel.parcelleAll') }}" class="btn  btn-outline--warning h-45"><i
-            class="las la-cloud-download-alt"></i> Exporter en Excel</a>
+            class="las la-cloud-download-alt"></i> @lang('Exporter en Excel')</a>
     <button type="button" class="btn btn-outline--primary h-45" data-bs-toggle="dropdown" aria-expanded="false"><i
-            class="las la-map-marker"></i>Voir Mapping
+            class="las la-map-marker"></i>@lang('Voir Mapping')
     </button>
     <div class="dropdown-menu p-0">
-        <a class="dropdown-item" href="{{ route('manager.traca.parcelle.mapping') }}">Waypoints</a>
-        <a class="dropdown-item" href="{{ route('manager.traca.parcelle.mapping.polygone') }}">Polygones</a>
+        <a class="dropdown-item" href="{{ route('manager.traca.parcelle.mapping') }}">@lang('Waypoints')</a>
+        <a class="dropdown-item" href="{{ route('manager.traca.parcelle.mapping.polygone') }}">@lang('Polygones')</a>
 
     </div>
 @endpush
