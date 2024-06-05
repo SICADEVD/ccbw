@@ -8,11 +8,11 @@
                         <div class="d-flex flex-wrap gap-4">
                             <input type="hidden" name="table" value="applications"/>
                             <div class="flex-grow-1">
-                                <label>@lang('Recherche par Mot(s) clé(s)')</label>
+                                <label>@lang('Recherche par Mot(s) cle(s)')</label>
                                 <input type="text" name="search" value="{{ request()->search }}" class="form-control">
                             </div>
                             <div class="flex-grow-1">
-                                <label>@lang('Localité')</label>
+                                <label>@lang('Localite')</label>
                                 <select name="localite" class="form-control">
                                     <option value="">@lang('Toutes')</option>
                                     @foreach($localites as $local)
@@ -22,7 +22,7 @@
                             </div> 
                             <div class="flex-grow-1">
                                 <label>@lang('Date')</label>
-                                <input name="date" type="text" class="dates form-control" placeholder="@lang('Date de début - Date de fin')" autocomplete="off" value="{{ request()->date }}">
+                                <input name="date" type="text" class="dates form-control" placeholder="@lang('Date de debut - Date de fin')" autocomplete="off" value="{{ request()->date }}">
                             </div>
                             <div class="flex-grow-1 align-self-end">
                                 <button class="btn btn--primary w-100 h-45"><i class="fas fa-filter"></i> @lang('Filter')</button>
@@ -40,7 +40,7 @@
                                     <th>@lang('Localite')</th> 
                                     <th>@lang('Producteur')</th>
                                     <th>@lang('Parcelle')</th> 
-                                    <th>@lang("Date d'application")</th>
+                                    <th>@lang("Date application")</th>
                                     <th>@lang('Status')</th>
                                     <th>@lang('Action')</th>
                                 </tr>
@@ -124,7 +124,7 @@
                     enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
-                        <p>Fichier d'exemple à utiliser :<a href="{{ asset('assets/phyto-import-exemple.xlsx') }}"
+                        <p>@lang('Fichier dexemple à utiliser') :<a href="{{ asset('assets/phyto-import-exemple.xlsx') }}"
                                 target="_blank">@lang('phyto-import-exemple.xlsx')</a></p>
 
                         <div class="form-group row">
@@ -153,8 +153,8 @@
     <a href="{{ route('manager.suivi.application.create') }}" class="btn  btn-outline--primary h-45 addNewCooperative">
         <i class="las la-plus"></i>@lang("Ajouter nouveau")
     </a>
-    <a class="btn btn-outline--danger h-45 addType"><i class="las la-cloud-upload-alt"></i> Importation Phyto</a>
-    <a href="{{ route('manager.suivi.application.exportExcel.applicationAll') }}" class="btn  btn-outline--warning h-45"><i class="las la-cloud-download-alt"></i> Exporter en Excel</a>
+    <a class="btn btn-outline--danger h-45 addType"><i class="las la-cloud-upload-alt"></i>@lang('Importation Phyto')</a>
+    <a href="{{ route('manager.suivi.application.exportExcel.applicationAll') }}" class="btn  btn-outline--warning h-45"><i class="las la-cloud-download-alt"></i> @lang('Exporter en Excel')</a>
 @endpush
 @push('style')
     <style>
