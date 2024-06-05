@@ -8,11 +8,11 @@
                         <div class="d-flex flex-wrap gap-4">
                             <input type="hidden" name="table" value="suivi_formaions" />
                             <div class="flex-grow-1">
-                                <label>@lang('Recherche par Mot(s) clé(s)')</label>
+                                <label>@lang('Recherche par Mot(s) cle(s)')</label>
                                 <input type="text" name="search" value="{{ request()->search }}" class="form-control">
                             </div>
                             <div class="flex-grow-1">
-                                <label>@lang('Localités')</label>
+                                <label>@lang('Localites')</label>
                                 <select name="localite" class="form-control">
                                     <option value="">@lang('Toutes')</option>
                                     @foreach ($localites as $local)
@@ -21,7 +21,7 @@
                                 </select>
                             </div>
                             
-                            <div class="flex-grow-1">
+                            {{-- <div class="flex-grow-1">
                                 <label>@lang('Modules')</label>
                                 <select name="module" class="form-control">
                                     <option value="">@lang('Tous')</option>
@@ -29,11 +29,11 @@
                                         <option value="{{ $module->id }}">{{ $module->nom }}</option>
                                     @endforeach
                                 </select>
-                            </div>
+                            </div> --}}
                             <div class="flex-grow-1">
                                 <label>@lang('Date')</label>
                                 <input name="date" type="text" class="dates form-control"
-                                    placeholder="@lang('Date de début - Date de fin')" autocomplete="off" value="{{ request()->date }}">
+                                    placeholder="@lang('Date de debut - Date de fin')" autocomplete="off" value="{{ request()->date }}">
                             </div>
                             <div class="flex-grow-1 align-self-end">
                                 <button class="btn btn--primary w-100 h-45"><i class="fas fa-filter"></i>
@@ -54,7 +54,7 @@
                                     <th>@lang('Entreprise')</th>
                                     <th>@lang('Formateur Externe')</th>
                                     <th>@lang('Lieu')</th>
-                                    <th> Modules</th>
+                                    <th>@lang('Modules') </th>
                                     <th>@lang('Date formation')</th>
                                     <th>@lang('Ajoutée le')</th>
                                     <th>@lang('Status')</th>
@@ -75,7 +75,7 @@
                                                     </a></span>
                                             </td>
                                         @else
-                                            <td>Pas de formateur interne pour cette formation</td>
+                                            <td>@lang('Pas de formateur interne pour cette formation')</td>
                                         @endif
                                         @if($formation->formateur_externe == 'oui')
                                         <td>
@@ -89,7 +89,7 @@
                                             </span>
                                         </td>
                                         @else
-                                        <td>Pas d'entreprise externe pour cette formation</td>
+                                        <td>@lang("Pas d'entreprise externe pour cette formation")</td>
                                         @endif
 
                                         @if($formation->formateur_externe == 'oui')
@@ -104,7 +104,7 @@
                                                         @endif
                                                     @endforeach
                                         @else
-                                        <td>Pas de formateur externe pour cette formation</td>
+                                        <td>@lang('Pas de formateur externe pour cette formation')</td>
                                         @endif
 
                                         <td>
@@ -143,7 +143,7 @@
                                             <a href="{{ route('manager.suivi.formation.visiteur.visiteurs',$formation->id) }}"
                                                 class="icon-btn btn--info ml-1">@lang('Visiteurs')</a>
                                                 <a href="{{ route('manager.suivi.formation.exportExcel.formationAll',['id'=>encrypt($formation->id)]) }}" class="btn  btn-outline--success ml-1"><i
-            class="las la-cloud-download-alt"></i> Exporter</a>
+            class="las la-cloud-download-alt"></i> @lang('Exporter')</a>
                                             <button type="button" class="btn btn-sm btn-outline--primary"
                                                 data-bs-toggle="dropdown" aria-expanded="false"><i
                                                     class="las la-ellipsis-v"></i>@lang('Action')
@@ -159,13 +159,13 @@
                                                     <button type="button" class="confirmationBtn  dropdown-item"
                                                         data-action="{{ route('manager.suivi.formation.status', $formation->id) }}"
                                                         data-question="@lang('Are you sure to enable this formation?')">
-                                                        <i class="la la-eye"></i> @lang('Activé')
+                                                        <i class="la la-eye"></i> @lang('Active')
                                                     </button>
                                                 @else
                                                     <button type="button" class="confirmationBtn dropdown-item"
                                                         data-action="{{ route('manager.suivi.formation.status', $formation->id) }}"
                                                         data-question="@lang('Are you sure to disable this formation?')">
-                                                        <i class="la la-eye-slash"></i> @lang('Désactivé')
+                                                        <i class="la la-eye-slash"></i> @lang('Désactive')
                                                     </button>
                                                 @endif
 
@@ -199,7 +199,7 @@
         <i class="las la-plus"></i>@lang('Ajouter nouveau')
     </a>
     <a href="{{ route('manager.suivi.formation.exportExcel.formationAll') }}" class="btn  btn-outline--warning h-45"><i
-            class="las la-cloud-download-alt"></i> Exporter en Excel</a>
+            class="las la-cloud-download-alt"></i> @lang('Exporter en Excel')</a>
 @endpush
 @push('style')
     <style>

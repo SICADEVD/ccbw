@@ -121,5 +121,17 @@
     "Importer des estimations": "Importer des estimations",
     "Fichier d'exemple à utiliser": "Fichier d'exemple à utiliser",
     "estimation-import-exemple.xlsx": "estimation-import-exemple.xlsx",
-    "Importer des Estimations": "Importer des Estimations"
+    "Importer des Estimations": "Importer des Estimations",
+    "Date de visite": "Date de visite",
+    "Are you sure to enable this suivi parcelle?": "Etes-vous sûr d'activer cette suivi parcelle?",
+    "Localites": "Localités",
+    "Modules": "Modules",
+    "Module": "Module",
+    "Formateur Interne": "Formateur Interne",
+    "Formateur Externe": "Formateur Externe",
+    "Entreprise": "Entreprise",
+    "Pas de formateur interne pour cette formation": "Pas de formateur interne pour cette formation",
+    "Pas d'entreprise externe pour cette formation": "Pas d'entreprise externe pour cette formation",
+    "Are you sure to enable this formation?": "Etes-vous sûr d'activer cette formation?"
+
 }
