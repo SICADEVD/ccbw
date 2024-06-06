@@ -7,7 +7,7 @@
                     <form action="">
                         <div class="d-flex flex-wrap gap-4"> 
                             <div class="flex-grow-1">
-                                <label>@lang('Recherche par Mot(s) clé(s)')</label>
+                                <label>@lang('Recherche par Mot(s) cle(s)')</label>
                                 <input type="text" name="search"  value="{{ request()->search }}" class="form-control">
                             </div>
                             <div class="flex-grow-1">
@@ -218,7 +218,7 @@
 
 @push('breadcrumb-plugins') 
  
-<a href="{{ route('manager.livraison.exportExcel.livraisonAll') }}" class="btn  btn-outline--warning h-45"><i class="las la-cloud-download-alt"></i> Exporter en Excel</a>
+<a href="{{ route('manager.livraison.exportExcel.livraisonAll') }}" class="btn  btn-outline--warning h-45"><i class="las la-cloud-download-alt"></i> @lang('Exporter en Excel')</a>
 @endpush
 
 @push('style-lib')

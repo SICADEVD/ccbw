@@ -7,7 +7,7 @@
                     <form action="">
                         <div class="d-flex flex-wrap gap-4"> 
                             <div class="flex-grow-1">
-                                <label>@lang('Recherche par Mot(s) clé(s)')</label>
+                                <label>@lang('Recherche par Mot(s) cle(s)')</label>
                                 <input type="text" name="search"  value="{{ request()->search }}" class="form-control">
                             </div>
                             <div class="flex-grow-1">
@@ -22,7 +22,7 @@
                             <div class="flex-grow-1">
                                 <label>@lang('Date')</label>
                                 <input name="date" type="text" class="form-control dates"
-                                    placeholder="@lang('Date de début - Date de fin')" autocomplete="off" value="{{ request()->date }}">
+                                    placeholder="@lang('Date de debut - Date de fin')" autocomplete="off" value="{{ request()->date }}">
                             </div>
                             <div class="flex-grow-1 align-self-end">
                                 <button class="btn btn--primary w-100 h-45"><i class="fas fa-filter"></i>
