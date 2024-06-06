@@ -185,6 +185,17 @@
     "Payé": "Payé",
     "Confirmer le paiement": "Confirmer le paiement",
     "Confirmation de reception": "Confirmation de réception",
-    "Etre-vous sûr de vouloir confirmer le paiement de ce producteur?": "Etre-vous sûr de vouloir confirmer le paiement de ce producteur?"
+    "Etre-vous sûr de vouloir confirmer le paiement de ce producteur?": "Etre-vous sûr de vouloir confirmer le paiement de ce producteur?",
+    "Code du membre": "Code du membre",
+    "Nom du membre": "Nom du membre",
+    "Prenoms du membre": "Prénoms du membre",
+    "Genre": "Genre",
+    "Lien de parente": "Lien de parenté",
+    "Date Enquete": "Date d'Enquête",
+    "Are you sure to enable this ssrteclmrs?": "Etes-vous sûr d'activer ce ssrteclmrs?",
+    "Are you sure to disable this ssrteclmrs?": "Etes-vous sûr de désactiver ce ssrteclmrs?",
+    "Quartier": "Quartier",
+    "Are you sure to enable this menage?": "Etes-vous sûr d'activer ce ménage?",
+    "Are you sure to disable this menage?": "Etes-vous sûr de désactiver ce ménage?"
 
 }

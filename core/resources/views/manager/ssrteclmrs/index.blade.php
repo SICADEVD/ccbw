@@ -8,11 +8,11 @@
                         <div class="d-flex flex-wrap gap-4">
                             <input type="hidden" name="table" value="ssrteclmrs"/>
                             <div class="flex-grow-1">
-                                <label>@lang('Recherche par Mot(s) clé(s)')</label>
+                                <label>@lang('Recherche par Mot(s) cle(s)')</label>
                                 <input type="text" name="search" value="{{ request()->search }}" class="form-control">
                             </div>
                             <div class="flex-grow-1">
-                                <label>@lang('Localité')</label>
+                                <label>@lang('Localite')</label>
                                 <select name="localite" class="form-control">
                                     <option value="">@lang('Toutes')</option>
                                     @foreach($localites as $local)
@@ -22,7 +22,7 @@
                             </div> 
                             <div class="flex-grow-1">
                                 <label>@lang('Date')</label>
-                                <input name="date" type="text" class="dates form-control" placeholder="@lang('Date de début - Date de fin')" autocomplete="off" value="{{ request()->date }}">
+                                <input name="date" type="text" class="dates form-control" placeholder="@lang('Date de debut - Date de fin')" autocomplete="off" value="{{ request()->date }}">
                             </div>
                             <div class="flex-grow-1 align-self-end">
                                 <button class="btn btn--primary w-100 h-45"><i class="fas fa-filter"></i> @lang('Filter')</button>
@@ -43,8 +43,8 @@
                                     <th>@lang('Nom du membre')</th>
                                     <th>@lang('Prenoms du membre')</th> 
                                     <th>@lang('Genre')</th>
-                                    <th>@lang('Lien de parenté')</th> 
-                                    <th>@lang("Date d'Enquête")</th>
+                                    <th>@lang('Lien de parente')</th> 
+                                    <th>@lang("Date Enquete")</th>
                                     <th>@lang('Status')</th>
                                     <th>@lang('Action')</th>
                                 </tr>
@@ -96,13 +96,13 @@
                                                     <button type="button" class="confirmationBtn  dropdown-item"
                                                         data-action="{{ route('manager.suivi.ssrteclmrs.status', $data->id) }}"
                                                         data-question="@lang('Are you sure to enable this ssrteclmrs?')">
-                                                        <i class="la la-eye"></i> @lang('Activé')
+                                                        <i class="la la-eye"></i> @lang('Active')
                                                     </button>
                                                 @else
                                                     <button type="button" class="confirmationBtn dropdown-item"
                                                         data-action="{{ route('manager.suivi.ssrteclmrs.status', $data->id) }}"
                                                         data-question="@lang('Are you sure to disable this ssrteclmrs?')">
-                                                        <i class="la la-eye-slash"></i> @lang('Désactivé')
+                                                        <i class="la la-eye-slash"></i> @lang('Désactive')
                                                     </button>
                                                 @endif 
                                                 
@@ -135,7 +135,7 @@
     <a href="{{ route('manager.suivi.ssrteclmrs.create') }}" class="btn  btn-outline--primary h-45 addNewCooperative">
         <i class="las la-plus"></i>@lang("Ajouter nouveau")
     </a>
-    <a href="{{ route('manager.suivi.ssrteclmrs.exportExcel.ssrteclmrsAll') }}" class="btn  btn-outline--warning h-45"><i class="las la-cloud-download-alt"></i> Exporter en Excel</a>
+    <a href="{{ route('manager.suivi.ssrteclmrs.exportExcel.ssrteclmrsAll') }}" class="btn  btn-outline--warning h-45"><i class="las la-cloud-download-alt"></i> @lang('Exporter en Excel')</a>
 @endpush
 @push('style')
     <style>
