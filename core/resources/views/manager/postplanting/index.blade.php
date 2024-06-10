@@ -8,7 +8,7 @@
                         <div class="d-flex flex-wrap gap-4">
                             <input type="hidden" name="table" value="distributions"/>
                             <div class="flex-grow-1">
-                                <label>@lang('Recherche par Mot(s) clé(s)')</label>
+                                <label>@lang('Recherche par Mot(s) cle(s)')</label>
                                 <input type="text" name="search" value="{{ request()->search }}" class="form-control">
                             </div>
                             <div class="flex-grow-1">
@@ -39,9 +39,9 @@
                                 <tr> 
                                     <th>@lang('Localite')</th> 
                                     <th>@lang('Producteur')</th>
-                                    <th>@lang('Quantite réçue')</th> 
-                                    <th>@lang('Quantite plantée')</th> 
-                                    <th>@lang('Quantite survécue')</th> 
+                                    <th>@lang('Quantite reçue')</th> 
+                                    <th>@lang('Quantite plantee')</th> 
+                                    <th>@lang('Quantite survecue')</th> 
                                     <th>@lang('Ajoutée le')</th> 
                                     <th>@lang('Action')</th>
                                 </tr>
@@ -104,7 +104,7 @@
     <a href="{{ route('manager.agro.postplanting.create') }}" class="btn  btn-outline--primary h-45 addNewCooperative">
         <i class="las la-plus"></i>@lang("Ajouter une évaluation Post-Planting")
     </a>
-    <a href="{{ route('manager.agro.postplanting.exportExcel.postplantingAll') }}" class="btn  btn-outline--warning h-45"><i class="las la-cloud-download-alt"></i> Exporter en Excel</a>
+    <a href="{{ route('manager.agro.postplanting.exportExcel.postplantingAll') }}" class="btn  btn-outline--warning h-45"><i class="las la-cloud-download-alt"></i> @lang('Exporter en Excel')</a>
 @endpush
 @push('style')
     <style>

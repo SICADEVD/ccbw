@@ -196,6 +196,25 @@
     "Are you sure to disable this ssrteclmrs?": "Etes-vous sûr de désactiver ce ssrteclmrs?",
     "Quartier": "Quartier",
     "Are you sure to enable this menage?": "Etes-vous sûr d'activer ce ménage?",
-    "Are you sure to disable this menage?": "Etes-vous sûr de désactiver ce ménage?"
+    "Are you sure to disable this menage?": "Etes-vous sûr de désactiver ce ménage?",
+    "Delete": "Supprimer",
+    "Edit": "Editer",
+    "Cooperative": "Coopérative",
+    "Bon de livraison": "Bon de livraison",
+    "Approv par Section": "Approv par Section",
+    "TOTAL ARBRES": "TOTAL ARBRES",
+    "TOTAL ARBRES DISTRIBUES": "TOTAL ARBRES DISTRIBUES",
+    "TOTAL ARBRES RESTANTS": "TOTAL ARBRES RESTANTS",
+    "Details": "Détails",
+    "Quantite reçue": "Quantité réçue",
+    "Quantite plantee": "Quantité plantée",
+    "Quantite survecue": "Quantité survécue",
+    "Ajouter une évaluation Post-Planting": "Ajouter une évaluation Post-Planting",
+    "Filtre General": "Filtre Général",
+    "Filtre par Type de Polygones": "Filtre par Type de Polygones",
+    "Type de Polygone": "Type de Polygone",
+    "Parcelles Producteurs": "Parcelles Producteurs",
+    "Forêts Classées": "Forêts Classées",
+    "Risque de Deforestation par Waypoints": "Risque de Déforestation par Waypoints"
 
 }

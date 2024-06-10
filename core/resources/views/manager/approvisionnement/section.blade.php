@@ -41,19 +41,19 @@ use Illuminate\Support\Arr;
                             <div class="col-md-4">
                                 <div class="alert alert-success text-center">
                                 <div class="fw-bold">{{ $total }}</div>
-                                    TOTAL ARBRES
+                                    @lang('TOTAL ARBRES')
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="alert alert-info text-center">
                                 <div class="fw-bold">{{ $total_section }}</div>
-                                    TOTAL ARBRES DISTRIBUES
+                                    @lang('TOTAL ARBRES DISTRIBUES')
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="alert alert-warning text-center">
                                 <div class="fw-bold">{{ $total-$total_section }}</div>
-                                    TOTAL ARBRES RESTANTS
+                                    @lang('TOTAL ARBRES RESTANTS')
                                 </div>
                             </div>
                     </div>
@@ -69,7 +69,7 @@ use Illuminate\Support\Arr;
                                 <tr> 
                                     <th>@lang('Cooperative')</th> 
                                     <th>@lang('Section')</th>
-                                    <th>@lang('Quantité')</th>
+                                    <th>@lang('Quantite')</th>
                                     <th>@lang('Bon de livraison')</th> 
                                     <th>@lang('Ajoutée le')</th> 
                                     <th>@lang('Action')</th>
@@ -135,7 +135,7 @@ use Illuminate\Support\Arr;
         <i class="las la-plus"></i>@lang("Ajouter nouveau")
     </a>
      
-    <a href="{{ route('manager.agro.approvisionnement.exportExcel.approvisionnementAll') }}" class="btn  btn-outline--warning h-45"><i class="las la-cloud-download-alt"></i> Exporter en Excel</a>
+    <a href="{{ route('manager.agro.approvisionnement.exportExcel.approvisionnementAll') }}" class="btn  btn-outline--warning h-45"><i class="las la-cloud-download-alt"></i> @lang('Exporter en Excel')</a>
     <x-back route="{{ route('manager.agro.approvisionnement.index') }}" class="btn  btn-outline--warning h-45" />
 @endpush
 @push('style')

@@ -11,11 +11,11 @@ use Illuminate\Support\Arr;
                         <div class="d-flex flex-wrap gap-4">
                             <input type="hidden" name="table" value="approvisionnements"/>
                             <div class="flex-grow-1">
-                                <label>@lang('Recherche par Mot(s) clé(s)')</label>
+                                <label>@lang('Recherche par Mot(s) cle(s)')</label>
                                 <input type="text" name="search" value="{{ request()->search }}" class="form-control">
                             </div>
                             <div class="flex-grow-1">
-                                <label>@lang('Localité')</label>
+                                <label>@lang('Localite')</label>
                                 <select name="localite" class="form-control">
                                     <option value="">@lang('Toutes')</option>
                                     @foreach($localites as $local)
@@ -25,7 +25,7 @@ use Illuminate\Support\Arr;
                             </div> 
                             <div class="flex-grow-1">
                                 <label>@lang('Date')</label>
-                                <input name="date" type="text" class="dates form-control" placeholder="@lang('Date de début - Date de fin')" autocomplete="off" value="{{ request()->date }}">
+                                <input name="date" type="text" class="dates form-control" placeholder="@lang('Date de debut - Date de fin')" autocomplete="off" value="{{ request()->date }}">
                             </div>
                             <div class="flex-grow-1 align-self-end">
                                 <button class="btn btn--primary w-100 h-45"><i class="fas fa-filter"></i> @lang('Filter')</button>
@@ -41,7 +41,7 @@ use Illuminate\Support\Arr;
                             <thead>
                                 <tr> 
                                     <th>@lang('Cooperative')</th> 
-                                    <th>@lang('Quantité')</th>
+                                    <th>@lang('Quantite')</th>
                                     <th>@lang('Bon de livraison')</th> 
                                     <th>@lang('Ajoutée le')</th> 
                                     <th>@lang('Action')</th>
@@ -104,7 +104,7 @@ use Illuminate\Support\Arr;
         <i class="las la-plus"></i>@lang("Ajouter nouveau")
     </a>
      
-    <a href="{{ route('manager.agro.approvisionnement.exportExcel.approvisionnementAll') }}" class="btn  btn-outline--warning h-45"><i class="las la-cloud-download-alt"></i> Exporter en Excel</a>
+    <a href="{{ route('manager.agro.approvisionnement.exportExcel.approvisionnementAll') }}" class="btn  btn-outline--warning h-45"><i class="las la-cloud-download-alt"></i>@lang('Exporter en Excel')</a>
 @endpush
 @push('style')
     <style>

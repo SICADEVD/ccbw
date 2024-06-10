@@ -9,7 +9,7 @@ $listePolygon = ['Parcelles Producteurs'=>'PP','Forets classées'=>'FC','Zones T
         <div class="col-lg-12">
         <div class="card b-radius--10 mb-3">
         <div class="card-header bg--warning">
-            Filtre Général
+            @lang('Filtre General')
           </div>
                 <div class="card-body">
                     <form action="">
@@ -44,7 +44,7 @@ $listePolygon = ['Parcelles Producteurs'=>'PP','Forets classées'=>'FC','Zones T
                             </div> 
                             <div class="flex-grow-1 align-self-end">
                                 <button class="btn btn--primary w-100 h-45"><i class="fas fa-filter"></i>
-                                    @lang('Filtrer')</button>
+                                    @lang('Filter')</button>
                             </div>
                         </div>
                     </form>
@@ -54,7 +54,7 @@ $listePolygon = ['Parcelles Producteurs'=>'PP','Forets classées'=>'FC','Zones T
             <div class="col-lg-12">
         <div class="card b-radius--10 mb-3 ">
         <div class="card-header bg--primary">
-            Filtre par Type de Polygones
+            @lang('Filtre par Type de Polygones')
           </div>
                 <div class="card-body">
                     
@@ -72,7 +72,7 @@ $listePolygon = ['Parcelles Producteurs'=>'PP','Forets classées'=>'FC','Zones T
                                 </div> 
                             <div class="flex-grow-1 align-self-end">
                                 <button class="btn btn--primary w-100 h-45"><i class="fas fa-filter"></i>
-                                    @lang('Filtrer')</button>
+                                    @lang('Filter')</button>
                             </div>
                         </div>
                     </form>
@@ -318,11 +318,11 @@ if(isset(request()->typepolygone) && (in_array('PP',request()->typepolygone)))
 
 @push('breadcrumb-plugins')   
             <div class="btn-group h-45" role="group" aria-label="Basic example">
-  <button type="button" style="background-color:#FF0000;" class="btn text-white">Parcelles Producteurs</button>
-  <button type="button" style="background-color:#FFFF00;" class="btn">Forêts Classées</button> 
+  <button type="button" style="background-color:#FF0000;" class="btn text-white">@lang('Parcelles Producteurs')</button>
+  <button type="button" style="background-color:#FFFF00;" class="btn">@lang('Forêts Classées')</button> 
 </div>
 <a href="{{ route('manager.agro.deforestation.waypoints') }}" class="btn  btn-outline--primary h-45"><i
-            class="las la-map-marker"></i> Risque de Deforestation par Waypoints</a>
+            class="las la-map-marker"></i> @lang('Risque de Deforestation par Waypoints')</a>
 @endpush
 @push('style')
     <style>
