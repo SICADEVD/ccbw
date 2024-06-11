@@ -64,14 +64,14 @@
                                                     class="btn btn-sm btn-outline--success confirmationBtn"
                                                     data-action="{{ route('manager.settings.vehicule.status', $vehicule->id) }}"
                                                     data-question="@lang('Etes-vous sûr de vouloir activer ce vehicule?')">
-                                                    <i class="la la-eye"></i> @lang('Activé')
+                                                    <i class="la la-eye"></i> @lang('Active')
                                                 </button>
                                             @else
                                                 <button type="button"
                                                     class="btn btn-sm btn-outline--danger confirmationBtn"
                                                     data-action="{{ route('manager.settings.vehicule.status', $vehicule->id) }}"
                                                     data-question="@lang('Etes-vous sûr de vouloir désactiver ce vehicule?')">
-                                                    <i class="la la-eye-slash"></i>@lang('Désactivé')
+                                                    <i class="la la-eye-slash"></i>@lang('Désactive')
                                                 </button>
                                             @endif
                                         </td>

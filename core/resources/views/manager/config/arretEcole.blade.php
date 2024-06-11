@@ -49,15 +49,15 @@
                                                 <button type="button"
                                                     class="btn btn-sm btn-outline--success confirmationBtn"
                                                     data-action="{{ route('manager.settings.arretEcole.status', $arret->id) }}"
-                                                    data-question="@lang('Etes-vous sûr de vouloir activer ce travail legers?')">
-                                                    <i class="la la-eye"></i> @lang('Activé')
+                                                    data-question="@lang('Etes-vous sûr de vouloir activer?')">
+                                                    <i class="la la-eye"></i> @lang('Active')
                                                 </button>
                                             @else
                                                 <button type="button"
                                                     class="btn btn-sm btn-outline--danger confirmationBtn"
                                                     data-action="{{ route('manager.settings.arretEcole.status', $arret->id) }}"
-                                                    data-question="@lang('Etes-vous sûr de vouloir désactiver ce travail legers?')">
-                                                    <i class="la la-eye-slash"></i>@lang('Désactivé')
+                                                    data-question="@lang('Etes-vous sûr de vouloir désactiver?')">
+                                                    <i class="la la-eye-slash"></i>@lang('Désactive')
                                                 </button>
                                             @endif
                                         </td>
@@ -84,7 +84,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">@lang('Ajouter un travail Legers')</h5>
+                    <h5 class="modal-title">@lang('Ajouter nouveau')</h5>
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <i class="las la-times"></i> </button>
                 </div>
@@ -94,9 +94,9 @@
 
                     <input type="hidden" name='id'>     
         <div class="form-group row">
-            {{ Form::label(__('Nom du travail Legers'), null, ['class' => 'control-label col-sm-4']) }}
+            {{ Form::label(__('Nom'), null, ['class' => 'control-label col-sm-4']) }}
             <div class="col-xs-12 col-sm-8 col-md-8">
-            {!! Form::text('nom', null, array('placeholder' => __('Nom du travail legers'),'class' => 'form-control','required')) !!}
+            {!! Form::text('nom', null, array('class' => 'form-control','required')) !!}
         </div>
     </div>
  
