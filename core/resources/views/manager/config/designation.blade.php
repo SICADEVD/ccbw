@@ -15,7 +15,7 @@
                         <table class="table table--light style--two">
                             <thead>
                                 <tr>
-                                    <th>@lang('Département')</th>
+                                    <th>@lang('Departement')</th>
                                     <th>@lang('Nom du poste')</th>
                                     <th>@lang('Status')</th>
                                     <th>@lang('Last Update')</th>
@@ -61,7 +61,7 @@
                                                     class="btn btn-sm btn-outline--danger confirmationBtn"
                                                     data-action="{{ route('manager.settings.designations.status', $designation->id) }}"
                                                     data-question="@lang('Etes-vous sûr de vouloir désactiver ce designation de formation?')">
-                                                    <i class="la la-eye-slash"></i>@lang('Désactivé')
+                                                    <i class="la la-eye-slash"></i>@lang('Désactive')
                                                 </button>
                                             @endif
                                         </td>
@@ -97,7 +97,7 @@
                     <div class="modal-body"> 
                     <input type="hidden" name='id'>
                     <div class="form-group row">
-                                <label class="col-sm-4 control-label">@lang('Département')</label>
+                                <label class="col-sm-4 control-label">@lang('Departement')</label>
                                 <div class="col-xs-12 col-sm-8">
                                 <select class="form-control" name="departement_id" required>
                                     <option value="">@lang('Selectionner une option')</option>

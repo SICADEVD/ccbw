@@ -23,20 +23,20 @@
                                 <select name="statut_juridique" class="form-control">
                                     <option value="">@lang('Tous')</option>
                                     <option value="SCOOPS"
-                                        {{ $cooperative->statut_juridique == 'SCOOPS' ? 'selected' : '' }}>SCOOPS</option>
+                                        {{ $cooperative->statut_juridique == 'SCOOPS' ? 'selected' : '' }}>@lang('SCOOPS')</option>
                                     <option value="COOP CA"
-                                        {{ $cooperative->statut_juridique == 'COOP CA' ? 'selected' : '' }}>COOP CA</option>
+                                        {{ $cooperative->statut_juridique == 'COOP CA' ? 'selected' : '' }}>@lang('COOP CA')</option>
 
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>@lang('Nom de la cooperative')</label>
+                                <label>@lang('Nom coop')</label>
                                 <input type="text" class="form-control" name="name" value="{{ $cooperative->name }}"
                                     readonly required>
                             </div>
 
                             <div class="form-group">
-                                <label>@lang('Sigle de la cooperative')</label>
+                                <label>@lang('Sigle coop')</label>
                                 <input type="text" class="form-control" name="codeCoop"
                                     value="{{ $cooperative->codeCoop }}" required>
                             </div>
@@ -46,19 +46,19 @@
                                     required>
                             </div>
                             <div class="form-group">
-                                <label>@lang('N°Compte Contribuable ')</label>
+                                <label>@lang('Compte Contribuable ')</label>
                                 <input type="text" class="form-control" name="numCompteContribuable"
                                     value="{{ $cooperative->numCompteContribuable }}" required>
                             </div> 
                             <div class="form-group">
-                                <label>@lang('Secteur d\'activité')</label>
+                                <label>@lang('Secteur activite')</label>
                                 <select name="secteurActivite" class="form-control">
                                     <option value="">@lang('Selectionner une option')</option>
                                     <option value="collecte"
-                                        {{ $cooperative->secteurActivite == 'collecte' ? 'selected' : '' }}>Collecte
+                                        {{ $cooperative->secteurActivite == 'collecte' ? 'selected' : '' }}>@lang('Collecte')
                                     </option>
                                     <option value="Achat vente"
-                                        {{ $cooperative->secteurActivite == 'Achat vente' ? 'selected' : '' }}>Achat vente
+                                        {{ $cooperative->secteurActivite == 'Achat vente' ? 'selected' : '' }}>@lang('Achat vente')
                                     </option>
                                     <select>
                             </div>
@@ -79,7 +79,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label>@lang('Adresse Email de la coopérative')</label>
+                                <label>@lang('Adresse Email coop')</label>
                                 <input type="email" class="form-control" value="{{ $cooperative->email }}" name="email"
                                     required>
                             </div>
@@ -136,12 +136,12 @@
                                     value="{{ $cooperative->code_ccc }}" required>
                             </div>
                             <div class="form-group">
-                                <label>@lang('Nombre de membres à la creation')</label>
+                                <label>@lang('Nombre sections creation')</label>
                                 <input type="number" class="form-control" name="nb_membres_creation"
                                     value="{{ $cooperative->nb_membres_creation }}">
                             </div>
                             <div class="form-group">
-                                <label>@lang('Nombre de sections à la creation')</label>
+                                <label>@lang('Nombre sections creation')</label>
                                 <input type="text" class="form-control" name="nb_sections_creation"
                                     value="{{ $cooperative->nb_sections_creation }}">
                             </div>

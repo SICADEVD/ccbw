@@ -62,13 +62,13 @@
                                                     <button type="button" class="confirmationBtn  dropdown-item"
                                                         data-action="{{ route('manager.settings.localite-settings.status', $localite->id) }}"
                                                         data-question="@lang('Are you sure to enable this localite?')">
-                                                        <i class="la la-eye"></i> @lang('Activé')
+                                                        <i class="la la-eye"></i> @lang('Active')
                                                     </button>
                                                 @else
                                                     <button type="button" class=" confirmationBtn   dropdown-item"
                                                         data-action="{{ route('manager.settings.localite-settings.status', $localite->id) }}"
                                                         data-question="@lang('Are you sure to disable this localite?')">
-                                                        <i class="la la-eye-slash"></i> @lang('Désactivé')
+                                                        <i class="la la-eye-slash"></i> @lang('Désactive')
                                                     </button>
                                                 @endif
                         </div>

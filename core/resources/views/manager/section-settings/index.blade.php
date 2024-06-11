@@ -17,7 +17,7 @@
                                 <tr>
                                     <th>@lang('Cooperative')</th>
                                     <th>@lang('Section')</th>
-                                    <th>@lang('Sous-préfecture')</th>
+                                    <th>@lang('Sous-prefecture')</th>
                                     <th>@lang('Ajoutée le')</th>
                                     <th>@lang('Action')</th>
                                 </tr>
@@ -90,7 +90,7 @@
                 <form action="{{ route('manager.settings.section-settings.uploadcontent')}}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">   
-                    <p>Fichier d'exemple à utiliser :
+                    <p>@lang("Fichier d'exemple à utiliser") :
                             <a href="{{ asset('assets/section-import-exemple.xlsx') }}" target="_blank">@lang('section-import-exemple.xlsx')</a>
                         </p>
                     </div>    
@@ -116,7 +116,7 @@
     <a href="{{ route('manager.settings.section-settings.create') }}" class="btn  btn-outline--primary h-45 addNewCooperative">
         <i class="las la-plus"></i>@lang("Ajouter nouveau")
     </a>
-    <a class="btn  btn-outline--info h-45 addType"><i class="las la-cloud-upload-alt"></i> Importer des Sections</a>
+    <a class="btn  btn-outline--info h-45 addType"><i class="las la-cloud-upload-alt"></i> @lang('Importer des Sections')</a>
 @endpush
 @push('style')
     <style>

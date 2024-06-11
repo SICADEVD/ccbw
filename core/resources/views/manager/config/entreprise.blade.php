@@ -17,7 +17,7 @@
                                 <tr>
                                     <th>@lang('Nom')</th>
                                     <th>@lang('Adresse mail')</th>
-                                    <th>@lang('Téléphone')</th>
+                                    <th>@lang('Telephone')</th>
                                     <th>@lang('Adresse')</th>
                                     <th>@lang('Status')</th>
                                     <th>@lang('Last Update')</th>
@@ -117,7 +117,7 @@
                         <div class="row">
                             <input type="hidden" value="true" name="page_reload" id="page_reload">
                             <div class="col-lg-12">
-                                <x-forms.text :fieldLabel="__('Adresse mail de l\'entreprise')" :fieldPlaceholder="__('Adresse mail de l\'entreprise')" fieldName="mail_entreprise"
+                                <x-forms.text :fieldLabel="__('Adresse mail de entreprise')" :fieldPlaceholder="__('Adresse mail de l\'entreprise')" fieldName="mail_entreprise"
                                     fieldId="mail_entreprise" fieldValue="" :fieldRequired="true" />
                             </div>
                         </div>
@@ -125,7 +125,7 @@
                         <div class="row">
                             <input type="hidden" value="true" name="page_reload" id="page_reload">
                             <div class="col-lg-12">
-                                <x-forms.number :fieldLabel="__('Téléphone de l\'entreprise')" :fieldPlaceholder="__('Téléphone de l\'entreprise')" fieldName="telephone_entreprise"
+                                <x-forms.number :fieldLabel="__('Téléphone de entreprise')" :fieldPlaceholder="__('Téléphone de l\'entreprise')" fieldName="telephone_entreprise"
                                     fieldId="telephone_entreprise" fieldValue="" :fieldRequired="true" />
                             </div>
                         </div>
