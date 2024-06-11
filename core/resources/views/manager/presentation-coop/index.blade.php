@@ -15,10 +15,10 @@
                         <!-- <div class="flex-grow-1">
                                                                                     <label>@lang('Date')</label>
                                                                                     <input name="date" type="text" class="dates form-control"
-                                                                                        placeholder="@lang('Date de début - Date de fin')" autocomplete="off" value="{{ request()->date }}">
+                                                                                        placeholder="@lang('Date de debut - Date de fin')" autocomplete="off" value="{{ request()->date }}">
                                                                                 </div> -->
                         <div class="flex-grow-1">
-                            <label>@lang("Année d'activité")</label>
+                            <label>@lang("Annee activite")</label>
                             <select name="date" class="form-control">
                                 <option value="">@lang('Selectionner une date')</option>
                                 @for ($i = gmdate('Y'); $i >= 2023; $i--)
@@ -29,7 +29,7 @@
                         </div>
                         <div class="flex-grow-1 align-self-end">
                             <button class="btn btn--primary w-100 h-45"><i class="fas fa-filter"></i>
-                                @lang('Filtrer')</button>
+                                @lang('Filter')</button>
                         </div>
                     </div>
                 </form>
@@ -37,7 +37,7 @@
         </div>
         <div class="row">
             <div class="col-md-6">
-                <h3>Evalution des membres</h3>
+                <h3>@lang('Evalution des membres')</h3>
 
 
 
@@ -53,21 +53,21 @@
 
                     <thead class="bg--primary ">
                         <tr>
-                            <th class="text-white">Membre-Adhérent</th>
+                            <th class="text-white">@lang('Membre-Adherent')</th>
                             <th class="text-white text-center">{{ request()->date ? request()->date : gmdate('Y') }}</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>Homme</td>
+                            <td>@lang('Hommes')</td>
                             <td class="text-center">{{ $sexe['Homme'] }}</td>
                         </tr>
                         <tr>
-                            <td>Femmes</td>
+                            <td>@lang('Femmes')</td>
                             <td class="text-center">{{ $sexe['Femme'] }}</td>
                         </tr>
                         <tr>
-                            <td>Total</td>
+                            <td>@lang('Total')</td>
                             <td class="text-center">{{ array_sum(array_values($sexe)) }}</td>
                         </tr>
                     </tbody>
@@ -75,7 +75,7 @@
                 <table class="table table-striped table-bordered">
                     <thead class="bg--primary ">
                         <tr>
-                            <th class="text-white">Membres Ordinaire</th>
+                            <th class="text-white">@lang('Membres Ordinaires')</th>
                             <th class="text-white text-center">{{ request()->date ? request()->date : gmdate('Y') }}</th>
                         </tr>
                     </thead>
@@ -85,15 +85,15 @@
                         $sexe = array_count_values(Arr::pluck($producteursOrdinaires, 'sexe'));
                         ?>
                         <tr>
-                            <td>Homme</td>
+                            <td>@lang('Homme')</td>
                             <td>{{ @$sexe['Homme'] ? @$sexe['Homme'] : 0 }} </td>
                         </tr>
                         <tr>
-                            <td>Femme</td>
+                            <td>@lang('Femme')</td>
                             <td>{{ @$sexe['Femme'] ? @$sexe['Femme'] : 0 }}</td>
                         </tr>
                         <tr>
-                            <td>Total</td>
+                            <td>@lang('Total')</td>
                             <td>{{ array_sum(array_values($sexe)) }}</td>
                         </tr>
                     </tbody>
@@ -101,7 +101,7 @@
                 <table class="table table-striped table-bordered">
                     <thead class="bg--primary ">
                         <tr>
-                            <th class="text-white">Répartition des membres par programme </th>
+                            <th class="text-white">@lang('Repartition des membres par programme') </th>
                             <th class="text-white text-center">{{ request()->date ? request()->date : gmdate('Y') }}</th>
                         </tr>
                     </thead>
@@ -121,15 +121,15 @@
                                         <td> </td>
                                     </tr>
                                     <tr>
-                                        <td>Homme</td>
+                                        <td>@ang('Hommes')</td>
                                         <td class="text-center"> {{ @$sexe['Homme'] ? @$sexe['Homme'] : 0 }} </td>
                                     </tr>
                                     <tr>
-                                        <td>Femmes</td>
+                                        <td>@lang('Femmes')</td>
                                         <td class="text-center"> {{ @$sexe['Femme'] ? @$sexe['Femme'] : 0 }} </td>
                                     </tr>
                                     <tr>
-                                        <td>Total</td>
+                                        <td>@lang('Total')</td>
                                         <td class="text-center"> {{ array_sum(array_values($sexe)) }} </td>
                                     </tr>
                                 @endif
@@ -141,7 +141,7 @@
 
             </div>
             <div class="col-md-6">
-                <h3>Evolution de la production des membres</h3>
+                <h3>@lang('Evolution de la production des membres')</h3>
 
 
                 <?php
@@ -160,13 +160,13 @@
                 <table class="table table-striped table-bordered">
                     <thead class="bg--primary">
                         <tr>
-                            <th class="text-white">Cacao</th>
+                            <th class="text-white">@lang('Cacao')</th>
                             <th class="text-white text-right">{{ request()->date ? request()->date : gmdate('Y') }}</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>Superficie(Ha)</td>
+                            <td>@lang('Superficie ')(Ha)</td>
                             <td> {{ @$parcelle ? @$parcelle : 0 }} </td>
                         </tr>
                     </tbody>
@@ -174,7 +174,7 @@
                 <table class="table table-striped table-bordered">
                     <thead class="bg--primary ">
                         <tr>
-                            <th class="text-white">Cacao Production (Kg) </th>
+                            <th class="text-white">@lang('Cacao Production') (Kg) </th>
                             <th class="text-white text-center">{{ request()->date ? request()->date : gmdate('Y') }}</th>
                         </tr>
                     </thead>
@@ -185,18 +185,18 @@
                             ?>
                             @if ($productioncert)
                                 <tr>
-                                    <td>Certifié {{ $data->nom }}</td>
+                                    <td>@lang('Certifie') {{ $data->nom }}</td>
                                     <td>{{ $productioncert }}</td>
                                 </tr>
                             @endif
                         @endforeach
 
                         <tr>
-                            <td>Programme Durabilité </td>
+                            <td>@lang('Programme Durabilite') </td>
                             <td>{{ @$productionProgramme ? @$productionProgramme : 0 }}</td>
                         </tr>
                         <tr>
-                            <td>Conventionnel/Ordinaire</td>
+                            <td>@lang('Conventionnel/Ordinaire')</td>
                             <td>{{ @$productionOrdinaire ? @$productionOrdinaire : 0 }}</td>
                         </tr>
                     </tbody>
@@ -204,7 +204,7 @@
                 <table class="table table-striped table-bordered">
                     <thead class="bg--primary ">
                         <tr>
-                            <th class="text-white">Cacao Vendu à CCB (Kg) </th>
+                            <th class="text-white">@lang('Cacao Vendu à CCB') (Kg) </th>
                             <th class="text-white text-center">{{ request()->date ? request()->date : gmdate('Y') }}</th>
                         </tr>
                     </thead>
@@ -215,22 +215,22 @@
                             ?>
                             @if ($ventecert)
                                 <tr>
-                                    <td>Certifié {{ $data->nom }}</td>
+                                    <td>@lang('Certifie') {{ $data->nom }}</td>
                                     <td>{{ $ventecert }}</td>
                                 </tr>
                             @endif
                         @endforeach
 
                         <tr>
-                            <td>Programme Durabilité </td>
+                            <td>@lang('Programme Durabilite') </td>
                             <td>{{ @$productionVenteProgramme ? @$productionVenteProgramme : 0 }}</td>
                         </tr>
                         <tr>
-                            <td>Conventionnel/Ordinaire</td>
+                            <td>@lang('Conventionnel/Ordinaire')</td>
                             <td>{{ @$productionVenteOrdinaire ? @$productionVenteOrdinaire : 0 }}</td>
                         </tr>
                         <tr>
-                            <td>Chiffre d'affaire (F CFA)</td>
+                            <td>@lang("Chiffre d'affaire (F CFA)")</td>
                             <td><input id="chiffreCcb" type="number" name="chiffreCcb" value="{{ getChiffreCcb($date) }}">
                             </td>
                         </tr>
@@ -239,146 +239,23 @@
                 <table class="table table-striped table-bordered">
                     <thead class="bg--primary ">
                         <tr>
-                            <th class="text-white">Cacao Vendu aux autres partenaires (Kg) </th>
+                            <th class="text-white">@lang('Cacao Vendu aux autres partenaires') (Kg) </th>
                             <th class="text-white text-center">{{ request()->date ? request()->date : gmdate('Y') }}</th>
                         </tr>
                     </thead>
                     <tbody>
 
                         <tr>
-                            <td>Cacao </td>
+                            <td>@lang('Cacao') </td>
                             <td> {{ $productionAntrePartenaire }} </td>
                         </tr>
                         <tr>
-                            <td>Chiffre d'affaire (F CFA)</td>
+                            <td>@lang("Chiffre d'affaire") (F CFA)</td>
                             <td><input id="chiffreAutrePartenaire" type="number" name="chiffreAutrePartenaire"
                                     value="{{ getChiffreAutrePartenaire($date) }}"></td>
                         </tr>
                     </tbody>
                 </table>
-                {{-- <h3 class="mt-5">Performance financière</h3> --}}
-                {{-- <table class="table table-striped table-bordered">
-                    <thead class="bg--primary ">
-                        <tr>
-                            <th class="text-white">Chiffre d'affaire (F CFA) </th>
-                            <th class="text-white text-center">{{ request()->date ? request()->date : gmdate('Y') }}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Cacao</td>
-                            <td>0</td>
-                        </tr>
-                    </tbody>
-                </table> --}}
-
-                {{-- <table class="table table-striped table-bordered">
-                    <thead class="bg--primary ">
-                        <tr>
-                            <th class="text-white">Marge Brute d'exploitation (F CFA) </th>
-                            <th class="text-white text-center">{{ request()->date ? request()->date : gmdate('Y') }}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Cacao</td>
-                            <td>0</td>
-                        </tr>
-                    </tbody>
-                </table> --}}
-
-                {{-- <table class="table table-striped table-bordered">
-                    <thead class="bg--primary ">
-                        <tr>
-                            <th class="text-white">Marge Brute d'exploitation (F CFA) </th>
-                            <th class="text-white text-center">{{ request()->date ? request()->date : gmdate('Y') }}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Cacao</td>
-                            <td>0</td>
-                        </tr>
-                    </tbody>
-                </table> --}}
-
-            </div>
-
-        </div>
-        <div class="row mt-4">
-            <div class="col-md-6">
-                {{-- <table>
-                    <caption>Statistiques des Membres</caption>
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>2023</th>
-                            <th>2024</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Membres-Adhérent</td>
-                            <td>Insertion des données ici</td>
-                            <td>Insertion des données ici</td>
-                        </tr>
-                        <tr>
-                            <td>Homme</td>
-                            <td>Insertion des données ici</td>
-                            <td>Insertion des données ici</td>
-                        </tr>
-                        <tr>
-                            <td>Femme</td>
-                            <td>Insertion des données ici</td>
-                            <td>Insertion des données ici</td>
-                        </tr>
-                        <tr>
-                            <td>Total</td>
-                            <td>Insertion des données ici</td>
-                            <td>Insertion des données ici</td>
-                        </tr>
-                        <tr>
-                            <td>Répartition des membres par programme </td>
-                            <td>Insertion d</td>
-                            <td>Insertion des données ici</td>
-                            <td>Insertion des données ici</td>
-                        </tr>
-                    </tbody>
-                </table> --}}
-            </div>
-            <div class="col-md-6">
-                {{-- <table>
-                    <caption>Statistiques des Membres</caption>
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>2023</th>
-                            <th>2024</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Membres-Adhérent</td>
-                            <td>Insertion des données ici</td>
-                            <td>Insertion des données ici</td>
-                        </tr>
-                        <tr>
-                            <td>Homme</td>
-                            <td>Insertion des données ici</td>
-                            <td>Insertion des données ici</td>
-                        </tr>
-                        <tr>
-                            <td>Femme</td>
-                            <td>Insertion des données ici</td>
-                            <td>Insertion des données ici</td>
-                        </tr>
-                        <tr>
-                            <td>Total</td>
-                            <td>Insertion des données ici</td>
-                            <td>Insertion des données ici</td>
-                        </tr>
-                    </tbody>
-                </table> --}}
             </div>
         </div>
         <x-confirmation-modal />

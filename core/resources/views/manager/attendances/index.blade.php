@@ -21,12 +21,12 @@
 <div id="filter-bloc">
     <x-filters.filter-box>
         <div class="select-box d-flex py-2 pr-2 border-right-grey border-right-grey-sm-0" style="width: 20%;">
-            <p class="mb-0 pr-2 f-14 text-dark-grey d-flex align-items-center">Employé</p>
+            <p class="mb-0 pr-2 f-14 text-dark-grey d-flex align-items-center">@lang('Employé')</p>
             <div class="select-status">
                 <select class="form-control select-picker" name="user_id" id="user_id" data-live-search="true"
                         data-size="8">
                   
-                        <option value="all">Tous</option>
+                        <option value="all">@lang('Tous')</option>
                  
                     @forelse ($employees as $item)
                         <x-user-option :user="$item" :selected="request('employee_id') == $item->id"></x-user-option>
@@ -39,11 +39,11 @@
 
         
             <div class="select-box d-flex py-2 px-lg-2 px-md-2 px-0 border-right-grey border-right-grey-sm-0" style="width: 20%;">
-                <p class="mb-0 pr-2 f-14 text-dark-grey d-flex align-items-center">Département</p>
+                <p class="mb-0 pr-2 f-14 text-dark-grey d-flex align-items-center">@lang('Departement')</p>
                 <div class="select-status">
                     <select class="form-control select-picker" name="department" id="department" data-live-search="true"
                             data-size="8">
-                        <option value="all">Tous</option>
+                        <option value="all">@lang('Tous')</option>
                         @foreach ($departments as $department)
                             <option value="{{ $department->id }}">{{ $department->department }}</option>
                         @endforeach
@@ -51,7 +51,7 @@
                 </div>
             </div>
             <div class="select-box d-flex py-2 px-lg-2 px-md-2 px-0 border-right-grey border-right-grey-sm-0" style="width: 20%;">
-                <p class="mb-0 pr-2 f-14 text-dark-grey d-flex align-items-center">Désignation</p>
+                <p class="mb-0 pr-2 f-14 text-dark-grey d-flex align-items-center">@lang('Designation')</p>
                 <div class="select-status">
                     <select class="form-control select-picker" name="designation" id="designation" data-live-search="true"
                             data-size="8">
@@ -65,7 +65,7 @@
         
 
         <div class="select-box d-flex py-2 px-lg-2 px-md-2 px-0 border-right-grey border-right-grey-sm-0" style="width: 15%;">
-            <p class="mb-0 pr-2 f-14 text-dark-grey d-flex align-items-center">Mois</p>
+            <p class="mb-0 pr-2 f-14 text-dark-grey d-flex align-items-center">@lang('Mois')</p>
             <div class="select-status">
                 <select class="form-control select-picker" name="month" id="month" data-live-search="true"
                         data-size="8">
@@ -75,7 +75,7 @@
         </div>
 
         <div class="select-box d-flex py-2 px-lg-2 px-md-2 px-0 border-right-grey border-right-grey-sm-0" style="width: 15%;">
-            <p class="mb-0 pr-2 f-14 text-dark-grey d-flex align-items-center">Année</p>
+            <p class="mb-0 pr-2 f-14 text-dark-grey d-flex align-items-center">@lang('Annee')</p>
             <div class="select-status">
                 <select class="form-control select-picker" name="year" id="year" data-live-search="true" data-size="8">
                     @for ($i = $year; $i >= $year - 4; $i--)
@@ -88,7 +88,7 @@
         <!-- RESET START -->
         <div class="select-box d-flex py-1 px-lg-2 px-md-2 px-0" style="width: 10%;">
             <x-forms.button-secondary class="btn-xs d-none" id="reset-filters" icon="times-circle">
-                Effacer
+                @lang('Effacer')
             </x-forms.button-secondary>
         </div>
         <!-- RESET END -->
@@ -106,11 +106,11 @@
                  
                     <x-forms.link-primary :link="route('manager.hr.attendances.create')" class="mr-3 float-left"
                                           icon="plus">
-                        Marquer une Présence
+                        @lang('Marquer une Presence')
                     </x-forms.link-primary>
                 
                 <x-forms.button-secondary id="export-all" class="mr-3 mb-2 mb-lg-0" icon="file-export">
-                    Exporter
+                    @lang('Exporter')
                 </x-forms.button-secondary>
                   
             </div>
@@ -140,20 +140,20 @@
         <x-cards.data class="mt-3">
             <div class="row">
                <div class="col-md-12">
-                <span class="f-w-500 mr-1">Note:</span> <i class="fa fa-star text-warning"></i> <i
-                    class="fa fa-arrow-right text-lightest f-11 mx-1"></i> Férié &nbsp;|&nbsp;<i
+                <span class="f-w-500 mr-1">@lang('Note'):</span> <i class="fa fa-star text-warning"></i> <i
+                    class="fa fa-arrow-right text-lightest f-11 mx-1"></i> @lang('Ferie') &nbsp;|&nbsp;<i
                     class="fa fa-calendar-week text-red"></i> <i class="fa fa-arrow-right text-lightest f-11 mx-1"></i>
-                Jours off &nbsp;|&nbsp;
+                @lang('Jours off') &nbsp;|&nbsp;
                 <i class="fa fa-check text-primary"></i> <i class="fa fa-arrow-right text-lightest f-11 mx-1"></i>
-                Présence &nbsp;|&nbsp; <i class="fa fa-star-half-alt text-red"></i> <i
+                @lang('Presence') &nbsp;|&nbsp; <i class="fa fa-star-half-alt text-red"></i> <i
                     class="fa fa-arrow-right text-lightest f-11 mx-1"></i>
-                Demi-Journée &nbsp;|&nbsp; <i class="fa fa-exclamation-circle text-primary"></i> <i
+                @lang('Demi-Journee') &nbsp;|&nbsp; <i class="fa fa-exclamation-circle text-primary"></i> <i
                     class="fa fa-arrow-right text-lightest f-11 mx-1"></i>
-                Tard &nbsp;|&nbsp; <i class="fa fa-times text-lightest"></i> <i
+                @lang('Tard') &nbsp;|&nbsp; <i class="fa fa-times text-lightest"></i> <i
                     class="fa fa-arrow-right text-lightest f-11 mx-1"></i>
-                Absence &nbsp;|&nbsp; <i class="fa fa-plane-departure text-danger"></i> <i
+                @lang('Absence') &nbsp;|&nbsp; <i class="fa fa-plane-departure text-danger"></i> <i
                     class="fa fa-arrow-right text-lightest f-11 mx-1"></i>
-                Voyage
+                @lang('Voyage')
 
             </div>
             </div>

@@ -8,7 +8,7 @@
                         <div class="d-flex flex-wrap gap-4">
                             <input type="hidden" name="table" value="archivages" />
                             <div class="flex-grow-1">
-                                <label>@lang('Recherche par Mot(s) clé(s)')</label>
+                                <label>@lang('Recherche par Mot(s) cle(s)')</label>
                                 <input type="text" name="search" value="{{ request()->search }}" class="form-control">
                             </div>
                             <div class="flex-grow-1">
@@ -47,7 +47,7 @@
                                     <th>@lang('Document')</th> 
 									 <th>@lang('Status')</th> 
                                     <th>@lang('Ajoutée le')</th>
-                                   <th>@lang('Mise à jour')</th>
+                                   <th>@lang('Mise a jour')</th>
                                     <th>@lang('Action')</th>
                                 </tr>
                             </thead>
@@ -59,7 +59,7 @@
                                         </td> 
 
                                         <td>
-                                            <span class=" fw-bold"">
+                                            <span class="fw-bold">
                                                 <a href="{{ route('manager.archivages.edit', $archivage->id) }}">
                                                     <span>@</span>{{ $archivage->titre }}
                                                 </a>
@@ -97,13 +97,13 @@
                                                     <button type="button" class="confirmationBtn  dropdown-item"
                                                         data-action="{{ route('manager.archivages.status', $archivage->id) }}"
                                                         data-question="@lang('Are you sure to enable this archivage?')">
-                                                        <i class="la la-eye"></i> @lang('Activé')
+                                                        <i class="la la-eye"></i> @lang('Active')
                                                     </button>
                                                 @else
                                                     <button type="button" class="confirmationBtn dropdown-item"
                                                         data-action="{{ route('manager.archivages.status', $archivage->id) }}"
                                                         data-question="@lang('Are you sure to disable this archivage?')">
-                                                        <i class="la la-eye-slash"></i> @lang('Désactivé')
+                                                        <i class="la la-eye-slash"></i> @lang('Désactive')
                                                     </button>
                                                 @endif
 
@@ -138,7 +138,7 @@
         <i class="las la-plus"></i>@lang('Ajouter une archive')
     </a> 
     <a href="{{ route('manager.archivages.export') }}" class="btn  btn-outline--warning h-45"><i
-            class="las la-cloud-download-alt"></i> Exporter en Excel</a>
+            class="las la-cloud-download-alt"></i> @lang('Exporter en Excel')</a>
 @endpush
 @push('style')
     <style>
