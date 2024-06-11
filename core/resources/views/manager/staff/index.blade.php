@@ -67,14 +67,14 @@
                                                     class="btn btn-sm btn-outline--success confirmationBtn"
                                                     data-action="{{ route('manager.staff.status', $staff->id) }}"
                                                     data-question="@lang('Êtes-vous sûr d\'activer ce staff?')">
-                                                    <i class="la la-eye"></i> @lang('Activer')
+                                                    <i class="la la-eye"></i> @lang('Active')
                                                 </button>
                                             @else
                                                 <button type="button"
                                                     class="btn btn-sm btn-outline--danger  confirmationBtn"
                                                     data-action="{{ route('manager.staff.status', $staff->id) }}"
                                                     data-question="@lang('Êtes-vous sûr de désactiver ce staff?')">
-                                                    <i class="la la-eye-slash"></i> @lang('Désactiver')
+                                                    <i class="la la-eye-slash"></i> @lang('Désactive')
                                                 </button>
                                             @endif
                                             <a href="javascript:void();"
@@ -82,7 +82,7 @@
                                                 data-action="{{ route('manager.staff.delete', encrypt($staff->id)) }}"
                                                 data-question="@lang('Êtes-vous sûr de supprimer ce staff?')"
                                                 ><i
-                                                    class="las la-trash"></i>@lang('Supprimer')</a>
+                                                    class="las la-trash"></i>@lang('Delete')</a>
                                             <a href="{{ route('manager.staff.stafflogin', $staff->id) }}"
                                                 class="btn btn-sm btn-outline--success " 
                                                 target="_blank"><i
@@ -116,6 +116,6 @@
     <x-search-form placeholder="Search here" />
     <a href="{{ route('manager.staff.create') }}" class="btn  btn-outline--primary h-45 addNewCooperative"><i
             class="las la-plus"></i>@lang("Ajouter nouveau")</a>
-    <a href="{{ route('manager.staff.exportExcel.staffAll') }}" class="btn  btn-outline--warning h-45"><i class="las la-cloud-download-alt"></i> Exporter en Excel</a>
+    <a href="{{ route('manager.staff.exportExcel.staffAll') }}" class="btn  btn-outline--warning h-45"><i class="las la-cloud-download-alt"></i> @lang('Exporter en Excel')</a>
     
 @endpush

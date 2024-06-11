@@ -257,5 +257,22 @@
     "Mise a jour": "Mise à jour",
     "Are you sure to enable this archivage?": "Etes-vous sûr d'activer cet archivage?",
     "Ajouter une archive": "Ajouter une archive",
-    "Titre": "Titre"
+    "Titre": "Titre",
+    "Code": "Code",
+    "Type projet": "Type projet",
+    "Date demarrage": "Date démarrage",
+    "Date fin projet": "Date fin projet",
+    "Coût projet": "Coût projet",
+    "Niveau realisation": "Niveau réalisation",
+    "activite": "Activité",
+    "Non membres": "Non membres",
+    "Staff": "Staff",
+    "Role": "Rôle",
+    "Type de compte": "Type de compte",
+    "Email": "Email",
+    "Adresse": "Adresse",
+    "Activer": "Activer",
+    "Connexion": "Connexion",
+    "Êtes-vous sûr de désactiver ce staff?": "Êtes-vous sûr de désactiver ce staff?",
+    "Êtes-vous sûr de supprimer ce staff?": "Êtes-vous sûr de supprimer ce staff?"
 }
