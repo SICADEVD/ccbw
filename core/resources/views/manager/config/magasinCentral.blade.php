@@ -19,7 +19,7 @@
                                     <th>@lang('Staff')</th> 
                                     <th>@lang('Nom magasin')</th>
                                     <th>@lang('Code')</th>
-                                    <th>@lang('Coordonnées GPS')</th>
+                                    <th>@lang('Coordonnees GPS')</th>
                                     <th>@lang('Status')</th>
                                     <th>@lang('Last Update')</th>
                                     <th>@lang('Action')</th>
@@ -43,7 +43,7 @@
                                         </td> 
                                         <td>
                                         @if($magasin->latitude)
-                                            <span><a href="https://www.openstreetmap.org/directions?from={{$magasin->latitude}}%2C{{$magasin->longitude}}&to=" target="_blank">Voir la position</a></span>
+                                            <span><a href="https://www.openstreetmap.org/directions?from={{$magasin->latitude}}%2C{{$magasin->longitude}}&to=" target="_blank">@lang('Voir la position')</a></span>
                                             @endif
                                         </td> 
                                         <td>
@@ -71,15 +71,15 @@
                                                 <button type="button"
                                                     class="btn btn-sm btn-outline--success confirmationBtn"
                                                     data-action="{{ route('manager.settings.magasinCentral.status', $magasin->id) }}"
-                                                    data-question="@lang('Etes-vous sûr de vouloir activer ce magasin de formation?')">
-                                                    <i class="la la-eye"></i> @lang('Activé')
+                                                    data-question="@lang('Etes-vous sûr de vouloir activer ce magasin?')">
+                                                    <i class="la la-eye"></i> @lang('Active')
                                                 </button>
                                             @else
                                                 <button type="button"
                                                     class="btn btn-sm btn-outline--danger confirmationBtn"
                                                     data-action="{{ route('manager.settings.magasinCentral.status', $magasin->id) }}"
-                                                    data-question="@lang('Etes-vous sûr de vouloir désactiver ce magasin de formation?')">
-                                                    <i class="la la-eye-slash"></i>@lang('Désactivé')
+                                                    data-question="@lang('Etes-vous sûr de vouloir désactiver ce magasin?')">
+                                                    <i class="la la-eye-slash"></i>@lang('Désactive')
                                                 </button>
                                             @endif
                                         </td>
@@ -156,7 +156,7 @@
             {{ Form::label(__(''), null, ['class' => 'control-label col-sm-4']) }}
             <div class="col-xs-12 col-sm-8 col-md-8">
             <p id="status"></p>
-            <a href="javascript:void(0)" id="find-me" class="btn btn--info">Obtenir les coordonnées GPS</a>
+            <a href="javascript:void(0)" id="find-me" class="btn btn--info">@lang('Obtenir les coordonnees GPS')</a>
         </div>
     </div>
                     </div>

@@ -86,14 +86,14 @@
                                                     class="btn btn-sm btn-outline--success confirmationBtn"
                                                     data-action="{{ route('manager.settings.transporteur.status', $transporteur->id) }}"
                                                     data-question="@lang('Etes-vous sûr de vouloir activer ce transporteur?')">
-                                                    <i class="la la-eye"></i> @lang('Activé')
+                                                    <i class="la la-eye"></i> @lang('Active')
                                                 </button>
                                             @else
                                                 <button type="button"
                                                     class="btn btn-sm btn-outline--danger confirmationBtn"
                                                     data-action="{{ route('manager.settings.transporteur.status', $transporteur->id) }}"
                                                     data-question="@lang('Etes-vous sûr de vouloir désactiver ce transporteur?')">
-                                                    <i class="la la-eye-slash"></i>@lang('Désactivé')
+                                                    <i class="la la-eye-slash"></i>@lang('Désactive')
                                                 </button>
                                             @endif
                                         </td>

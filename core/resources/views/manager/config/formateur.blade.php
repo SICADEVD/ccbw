@@ -17,8 +17,8 @@
                                 <tr>
                                     <th>@lang('Entreprise')</th>
                                     <th>@lang('Nom')</th>
-                                    <th>@lang('Prénom')</th>
-                                    <th>@lang('Téléphone')</th>
+                                    <th>@lang('Prenom')</th>
+                                    <th>@lang('Telephone')</th>
                                     <th>@lang('Poste')</th>
                                     <th>@lang('Status')</th>
                                     <th>@lang('Last Update')</th>
@@ -78,7 +78,7 @@
                                                     class="btn btn-sm btn-outline--danger confirmationBtn"
                                                     data-action="{{ route('settings.formateurStaff.status', $formateur->id) }}"
                                                     data-question="@lang('Etes-vous sûr de vouloir désactiver ce formateur?')">
-                                                    <i class="la la-eye-slash"></i>@lang('Désactivé')
+                                                    <i class="la la-eye-slash"></i>@lang('Désactive')
                                                 </button>
                                             @endif
                                         </td>
