@@ -38,9 +38,9 @@
                                 <select name="etat" class="form-control">
                                     <option value="">@lang('Tous')</option>
                                     <option value="Candidat" {{ request()->etat == 'Candidat' ? 'selected' : '' }}>
-                                        Candidat</option>
+                                        @lang('Candidat')</option>
                                     <option value="Certifie" {{ request()->etat == 'Certifie' ? 'selected' : '' }}>
-                                        Certifie</option>
+                                        @lang('Certifie')</option>
                                 </select>
                             </div>
                             <div class="flex-grow-1">
@@ -48,9 +48,9 @@
                                 <select name="status" class="form-control">
                                     <option value="">@lang('Tous')</option>
                                     <option value="2" {{ request()->status == '2' ? 'selected' : '' }}>
-                                    Désactivé</option>
+                                    @lang('Désactive')</option>
                                     <option value="1" {{ request()->status == '1' ? 'selected' : '' }}>
-                                        Activé</option>
+                                        @lang('Active')</option>
                                 </select>
                             </div>
                             <div class="flex-grow-1">
@@ -191,13 +191,13 @@
                                                     <button type="button" class="confirmationBtn  btn btn-sm btn-outline--danger"
                                                         data-action="{{ route('manager.traca.producteur.status', $producteur->id) }}"
                                                         data-question="@lang('Etes-vous sûr de vouloir activer ce producteur?')">
-                                                        <i class="la la-eye"></i> @lang('Activé')
+                                                        <i class="la la-eye"></i> @lang('Active')
                                                     </button>
                                                 @else
                                                     <button type="button" class="confirmationBtn btn btn-sm btn-outline--danger" 
                                                         data-action="{{ route('manager.traca.producteur.status', $producteur->id) }}"
                                                         data-question="@lang('Etes-vous sûr de vouloir désactiver ce producteur?')">
-                                                        <i class="la la-eye-slash"></i> @lang('Désactivé')
+                                                        <i class="la la-eye-slash"></i> @lang('Désactive')
                                                     </button>
                                                 @endif
                                             

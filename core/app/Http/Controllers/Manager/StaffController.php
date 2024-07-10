@@ -37,7 +37,7 @@ class StaffController extends Controller
 
     public function index()
     {
-        $pageTitle = "Tous les Staff";
+        $pageTitle = __("Tous les Staff");
         $manager   = auth()->user();
         $staffs    = User::searchable(['username','firstname','lastname','email'])->where(function ($query) use ($manager) {
             $query->staff()->where('cooperative_id', $manager->cooperative_id);

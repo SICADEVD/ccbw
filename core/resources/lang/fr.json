@@ -123,7 +123,7 @@
     "estimation-import-exemple.xlsx": "estimation-import-exemple.xlsx",
     "Importer des Estimations": "Importer des Estimations",
     "Date de visite": "Date de visite",
-    "Are you sure to enable this suivi parcelle?": "Etes-vous sûr d'activer cette suivi parcelle?",
+    "Are you sure to enable this suivi parcelle?": "Etes-vous sûr d'activer ce suivi parcelle?",
     "Localites": "Localités",
     "Modules": "Modules",
     "Module": "Module",
@@ -379,7 +379,10 @@
     "Strate": "Strate",
     "Etes-vous sûr de vouloir activer cet élément?": "Etes-vous sûr de vouloir activer cet élément ?",
     "Etes-vous sûr de vouloir désactiver cet élément?": "Etes-vous sûr de vouloir désactiver cet élément ?",
-    "Ajouter un type archive": "Ajouter un type archive"
-
-
+    "Ajouter un type archive": "Ajouter un type archive",
+    "Ajouté le": "Ajouté le",
+    "Tous les Staff": "Tous les Staffs",
+    "Candidat": "Candidat",
+    "Verbale": "Verbale",
+    "GPS": "GPS"
 }

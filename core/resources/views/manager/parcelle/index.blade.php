@@ -50,9 +50,9 @@
                                 <select name="typedeclaration" class="form-control">
                                     <option value="">@lang('Tous')</option>
                                     <option value="GPS" {{ request()->typedeclaration == 'GPS' ? 'selected' : '' }}>
-                                        GPS</option>
+                                        @lang('GPS')</option>
                                     <option value="Verbale" {{ request()->typedeclaration == 'Verbale' ? 'selected' : '' }}>
-                                        Verbale</option>
+                                        @lang('Verbale')</option>
                                 </select>
                             </div>
                             <div class="flex-grow-1">
