@@ -44,6 +44,11 @@ class GeneralSettingController extends Controller
         $notify[] = ['success', 'General setting updated successfully'];
         return back()->withNotify($notify);
     }
+    public function systemSetting()
+    {
+        $pageTitle = 'System Setting';
+        return view('admin.setting.system', compact('pageTitle'));
+    }
 
     public function systemConfiguration()
     {

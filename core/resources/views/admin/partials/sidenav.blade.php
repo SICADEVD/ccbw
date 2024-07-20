@@ -201,110 +201,18 @@
                         </ul>
                     </div>
                 </li>
-
-                <li class="sidebar__menu-header">@lang('Settings')</li>
-
-               
-
-                <li class="sidebar-menu-item {{ menuActive('admin.setting.index') }}">
-                    <a href="{{ route('admin.setting.index') }}" class="nav-link">
-                        <i class="menu-icon las la-life-ring"></i>
-                        <span class="menu-title">@lang('General Setting')</span>
-                    </a>
-                </li>
-
-                <li class="sidebar-menu-item {{ menuActive('admin.setting.system.configuration') }}">
-                    <a href="{{ route('admin.setting.system.configuration') }}" class="nav-link">
-                        <i class="menu-icon las la-cog"></i>
-                        <span class="menu-title">@lang('System Configuration')</span>
-                    </a>
-                </li>
-
-                <li class="sidebar-menu-item {{ menuActive('admin.setting.logo.icon') }}">
-                    <a href="{{ route('admin.setting.logo.icon') }}" class="nav-link">
-                        <i class="menu-icon las la-images"></i>
-                        <span class="menu-title">@lang('Logo & Favicon')</span>
-                    </a>
-                </li>
-
-                <li class="sidebar-menu-item {{ menuActive('admin.extensions.index') }}">
-                    <a href="{{ route('admin.extensions.index') }}" class="nav-link">
-                        <i class="menu-icon las la-cogs"></i>
-                        <span class="menu-title">@lang('Extensions')</span>
-                    </a>
-                </li>
-
-                <li class="sidebar-menu-item  {{ menuActive(['admin.language.manage', 'admin.language.key']) }}">
-                    <a href="{{ route('admin.language.manage') }}" class="nav-link">
-                        <i class="menu-icon las la-language"></i>
-                        <span class="menu-title">@lang('Langues') </span>
-                    </a>
-                </li>
-
-                <li class="sidebar-menu-item {{ menuActive('admin.seo') }}">
-                    <a href="{{ route('admin.seo') }}" class="nav-link">
-                        <i class="menu-icon las la-globe"></i>
-                        <span class="menu-title">@lang('SEO Manager')</span>
-                    </a>
-                </li>
-                <li class="sidebar-menu-item sidebar-dropdown">
-                    <a href="javascript:void(0)" class="{{ menuActive('admin.setting.notification*', 3) }}">
-                        <i class="menu-icon las la-bell"></i>
-                        <span class="menu-title">@lang('Notification Setting')</span>
-                    </a>
-                    <div class="sidebar-submenu {{ menuActive('admin.setting.notification*', 2) }} ">
-                        <ul>
-                            <li class="sidebar-menu-item {{ menuActive('admin.setting.notification.global') }} ">
-                                <a href="{{ route('admin.setting.notification.global') }}" class="nav-link">
-                                    <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('Global Template')</span>
-                                </a>
-                            </li>
-                            <li class="sidebar-menu-item {{ menuActive('admin.setting.notification.email') }} ">
-                                <a href="{{ route('admin.setting.notification.email') }}" class="nav-link">
-                                    <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('Email Setting')</span>
-                                </a>
-                            </li>
-                            <li class="sidebar-menu-item {{ menuActive('admin.setting.notification.sms') }} ">
-                                <a href="{{ route('admin.setting.notification.sms') }}" class="nav-link">
-                                    <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('SMS Setting')</span>
-                                </a>
-                            </li>
-                            <li class="sidebar-menu-item {{ menuActive('admin.setting.notification.templates') }} ">
-                                <a href="{{ route('admin.setting.notification.templates') }}" class="nav-link">
-                                    <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('Notification Templates')</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-
-             
-
-                <li class="sidebar__menu-header">@lang('Extra')</li>
-
-
-                <li class="sidebar-menu-item {{ menuActive('admin.maintenance.mode') }}">
-                    <a href="{{ route('admin.maintenance.mode') }}" class="nav-link">
-                        <i class="menu-icon las la-robot"></i>
-                        <span class="menu-title">@lang('Maintenance Mode')</span>
-                    </a>
-                </li>
-
-                <li class="sidebar-menu-item {{ menuActive('admin.setting.cookie') }}">
-                    <a href="{{ route('admin.setting.cookie') }}" class="nav-link">
-                        <i class="menu-icon las la-cookie-bite"></i>
-                        <span class="menu-title">@lang('GDPR Cookie')</span>
-                    </a>
-                </li>
-
+                
+                <li class="sidebar-menu-item {{ menuActive('admin.setting.*') }}">
+                        <a href="{{ route('admin.setting.system.setting') }}" class="nav-link ">
+                            <i class="menu-icon las la-life-ring"></i>
+                            <span class="menu-title">System Setting</span>
+                        </a>
+                    </li> 
+                    
                 <li class="sidebar-menu-item sidebar-dropdown">
                     <a href="javascript:void(0)" class="{{ menuActive('admin.system*', 3) }}">
                         <i class="menu-icon la la-server"></i>
-                        <span class="menu-title">@lang('System')</span>
+                        <span class="menu-title">@lang('Extra')</span>
                     </a>
                     <div class="sidebar-submenu {{ menuActive('admin.system*', 2) }} ">
                         <ul>
@@ -335,14 +243,7 @@
                         </ul>
                     </div>
                 </li>
-
-                <li class="sidebar-menu-item {{ menuActive('admin.setting.custom.css') }}">
-                    <a href="{{ route('admin.setting.custom.css') }}" class="nav-link">
-                        <i class="menu-icon lab la-css3-alt"></i>
-                        <span class="menu-title">@lang('Custom CSS')</span>
-                    </a>
-                </li>
-
+ 
                 <li class="sidebar-menu-item  {{ menuActive('admin.request.report') }}">
                     <a href="{{ route('admin.request.report') }}" class="nav-link">
                         <i class="menu-icon las la-bug"></i>
