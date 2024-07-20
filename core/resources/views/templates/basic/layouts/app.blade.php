@@ -25,11 +25,11 @@
 
     @stack('fbComment')
 
-    <div class="overlay"></div>
+    <!-- <div class="overlay"></div>
     <a href="#0" class="scrollToTop"><i class="las la-angle-up"></i></a>
     <div class="preloader">
         <div class="loader"></div>
-    </div>
+    </div> -->
 
     @yield('panel')
 

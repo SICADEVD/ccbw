@@ -5,7 +5,7 @@
 /*process-box*/
 #flocal .form-control {
     background-color: #fff;
-    border: 1px solid #ffffff;
+    border: 1px solid #c1c1c1;
 }
 .process-box{
     background: #fff;
@@ -186,9 +186,9 @@
                             </div>
                         </div>
                         <div class="col-md-7">
-                            <h5>What is Lorem Ipsum?</h5>
-                            <p><small>. 
-                            <?php echo  Form::textarea('step1', @$suivi->step1, ['id' => 'resume','placeholder'=>"Lorem Ipsum is simply dummy text of the printing and typesetting industry", 'rows' => 4, 'cols' => 54, 'style' => 'resize:none','required'=>'required','id'=>'step1','class' => 'form-control resume','maxlength' => 500]); ?>
+                            <h5>Pont Bascule</h5>
+                            <p><small>Quantité livrée(Tonne)
+                            <?php echo  Form::number('step1', @$suivi->step1, ['id' => 'resume','placeholder'=>"12452", 'style' => 'resize:none','required'=>'required','id'=>'step1','class' => 'form-control resume','maxlength' => 500]); ?>
                             </small></p>
                         </div>
                     </div>
@@ -217,7 +217,7 @@
                             </div>
                         </div>
                         <div class="col-md-7">
-                            <h5>What is Lorem Ipsum?</h5>
+                            <h5>Magasin Brousse</h5>
                             <p><small><?php echo  Form::textarea('step2', @$suivi->step2, ['id' => 'resume','placeholder'=>"Lorem Ipsum is simply dummy text of the printing and typesetting industry", 'rows' => 4, 'cols' => 54,'id'=>'step2', 'style' => 'resize:none','class' => 'form-control resume','maxlength' => 500]); ?> </small></p>
                         </div>
                     </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Constants\Status;
 use App\Models\AdminNotification;
+use App\Models\Connaissement;
 use App\Models\CourierInfo;
 use App\Models\Frontend;
 use App\Models\Language;
@@ -26,7 +27,23 @@ class SiteController extends Controller
     { 
         return view('politique');
     }
-    
+    public function orderTracking(Request $request)
+    {
+        $pageTitle   = "Order Tracking";
+        return view('templates.basic.order_tracking', compact('pageTitle'));
+    }
+    public function findOrder(Request $request)
+    {
+        $request->validate([
+            'order_number' => 'required|exists:connaissements,numeroCU',
+        ], [
+            'order_number.exists' => "Invalid Order Number"
+        ]);
+        $pageTitle   = "Order Tracking";
+        $orderNumber = Connaissement::where('numeroCU', $request->order_number)->first();
+
+        return view('templates.basic.order_tracking', compact('pageTitle', 'orderNumber'));
+    }
     public function placeholderImage($size = null)
     {
         $imgWidth  = explode('x', $size)[0];
