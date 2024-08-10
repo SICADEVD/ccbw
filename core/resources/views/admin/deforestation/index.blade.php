@@ -185,8 +185,11 @@ if(isset($parcelles) && count($parcelles)){
         $polygonCoordinates ='['.$polygon.']';
         $nb++;
         } 
-        $seriescoord[]= $polygonCoordinates;
-        $pointsPol[] = "['".$proprietaire."']";
+        if(isset($polygonCoordinates)){
+            $seriescoord[]= $polygonCoordinates;
+            $pointsPol[] = "['".$proprietaire."']";
+        }
+        
     }
     $nombreTotal[$coop->id] = $nb; 
      $seriescoordonates[$coop->id] = $seriescoord;  
