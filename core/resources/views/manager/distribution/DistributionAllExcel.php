@@ -44,9 +44,11 @@
         <tr>
             <td><?php echo $c->id; ?></td> 
             <td><?php echo $c->agrodistribution->cooperative->name; ?></td>
-            <td><?php echo $c->agrodistribution->parcelle->codeParc; ?></td>
-            <td><?php echo $c->agrodistribution->parcelle->producteur->nom; ?></td>
-            <td><?php echo $c->agrodistribution->parcelle->producteur->prenoms; ?></td>
+            <td><?php echo $c->agrodistribution && $c->agrodistribution->parcelle 
+                ? $c->agrodistribution->parcelle->codeParc 
+                : 'N/A';  ?></td>
+            <td><?php echo $c->agrodistribution->producteur->nom; ?></td>
+            <td><?php echo $c->agrodistribution->producteur->prenoms; ?></td>
             <td><?php echo $c->agroespecesarbre->nom; ?></td>
             <td><?php echo $c->total; ?></td>  
             <td><?php echo date('d-m-Y', strtotime($c->agrodistribution->created_at)); ?></td>
