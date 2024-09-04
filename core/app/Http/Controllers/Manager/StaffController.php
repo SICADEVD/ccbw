@@ -80,11 +80,13 @@ class StaffController extends Controller
         $dataLocalite = $staff->userLocalites;
         
         if ($dataLocalite->count()) {
+            
             foreach ($dataLocalite as $data) {
-                $userLocalite[] = $data->localite_id;
+                $userLocalite[] = @$data->localite_id;
             }
             foreach ($dataLocalite as $data) {
-                $userSection[] = $data->localite->section->id;
+               
+                $userSection[] = @$data->localite->section->id;
             }
         }
         

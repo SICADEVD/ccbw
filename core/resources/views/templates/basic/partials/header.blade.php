@@ -35,7 +35,7 @@
     <div class="header-bottom">
         <div class="container">
             <div class="header__wrapper">
-                <div class="logo">
+                <div class="logo" style="background: #FFFFFF;">
                     <a href="{{ route('home') }}">
                         <img src="{{ getImage(getFilePath('logoIcon') . '/logo.png') }}" alt="@lang('logo')">
                     </a>

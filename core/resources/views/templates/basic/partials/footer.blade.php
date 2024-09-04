@@ -13,9 +13,9 @@
             <div class="row gy-5 justify-content-between">
                 <div class="col-lg-3 col-md-6 col-sm-6">
                     <div class="footer__widget">
-                        <div class="logo">
+                        <div class="logo" style="background: #FFFFFF;">
                             <a href="{{ route('home') }}">
-                                <img src="{{ getImage(getFilePath('logoIcon') . '/logo.png') }}" alt="@lang('logo')">
+                                <img src="{{ getImage(getFilePath('logoIcon') . '/logo.png') }}" alt="@lang('logo')" width="200">
                             </a>
                         </div>
                         <p>
@@ -99,20 +99,4 @@
         </div>
     </div>
 </footer>
-
-@php
-$cookie = App\Models\Frontend::where('data_keys', 'cookie.data')->first();
-@endphp
-@if ($cookie->data_values->status == Status::YES && !\Cookie::get('gdpr_cookie'))
-<div class="cookies-card text-center hide">
-    <div class="cookies-card__icon bg--base">
-        <i class="las la-cookie-bite"></i>
-    </div>
-    <p class="mt-4 cookies-card__content">{{ $cookie->data_values->short_desc }} <a
-            href="{{ route('cookie.policy') }}" target="_blank">@lang('learn more')</a></p>
-    <div class="cookies-card__btn mt-4">
-        <button class="cmn--btn btn--lg w-100 policy">@lang('Allow')</button>
-    </div>
-</div>
-@endif
-
+ 

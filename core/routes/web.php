@@ -85,6 +85,17 @@ Route::controller('SiteController')->group(function () {
     Route::get('placeholder-image/{size}', 'placeholderImage')->name('placeholder.image');
     Route::get('/', 'index')->name('home');
     Route::get('/privacy', 'politique')->name('politique');
+    Route::get('/order/tracking', 'orderTracking')->name('order.tracking');
+    Route::post('/order/tracking', 'findOrder')->name('order.tracking');
+    Route::get('/page/{slug}', 'pages')->name('pages');
+    Route::get('policy/{slug}/{id}', 'policyPages')->name('policy.pages');
+    Route::get('/contact', 'contact')->name('contact');
+    Route::post('/contact', 'contactSubmit');
+    Route::get('/change/{lang?}', 'changeLanguage')->name('lang');
+    Route::get('cookie-policy', 'cookiePolicy')->name('cookie.policy');
+    Route::get('/cookie/accept', 'cookieAccept')->name('cookie.accept');
+    Route::get('/blog', 'blog')->name('blog');
+    Route::get('blog/{slug}/{id}', 'blogDetails')->name('blog.details');
 });
 
 Route::middleware('auth')->group(function () {

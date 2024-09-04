@@ -164,8 +164,11 @@ if(isset($parcelles) && count($parcelles)){
         $polygonCoordinates ='['.$polygon.']';
         
         }
-        $seriescoordonates[]= $polygonCoordinates;
-        $pointsPolygon[] = "['".$proprietaire."']";
+        if(isset($polygonCoordinates)){
+            $seriescoordonates[]= $polygonCoordinates;
+            $pointsPolygon[] = "['".$proprietaire."']";
+        }
+        
     }
    
 $pointsPolygon = Str::replace('"','',json_encode($pointsPolygon));
