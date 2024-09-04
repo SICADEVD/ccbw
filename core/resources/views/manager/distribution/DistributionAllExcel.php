@@ -44,9 +44,7 @@
         <tr>
             <td><?php echo $c->id; ?></td> 
             <td><?php echo $c->agrodistribution->cooperative->name; ?></td>
-            <td><?php echo $c->agrodistribution && $c->agrodistribution->parcelle 
-                ? $c->agrodistribution->parcelle->codeParc 
-                : 'N/A';  ?></td>
+            <td><?php echo $c->agrodistribution->producteur->parcelles->first()->codeParc ?? 'N/A'  ?></td>
             <td><?php echo $c->agrodistribution->producteur->nom; ?></td>
             <td><?php echo $c->agrodistribution->producteur->prenoms; ?></td>
             <td><?php echo $c->agroespecesarbre->nom; ?></td>
