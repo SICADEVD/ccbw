@@ -41,6 +41,25 @@
                     </form>
                 </div>
             </div>
+            <div class="card b-radius--10 mb-3">
+                <div class="card-body">
+                  
+                <div class="row">
+                            <div class="col-md-6">
+                                <div class="alert alert-success text-center">
+                                <div class="fw-bold">{{ $total_estimation_calculee }}</div>
+                                    @lang('TOTAL ESTIMATION CALCULEE')
+                                </div>
+                            </div> 
+                            <div class="col-md-6">
+                                <div class="alert alert-warning text-center">
+                                <div class="fw-bold">{{ $total_estimation_estimee }}</div>
+                                    @lang('TOTAL DECLARATION ESTIMEE')
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
             <div class="card b-radius--10 ">
                 <div class="card-body  p-0">
                     <div class="table-responsive--sm table-responsive">

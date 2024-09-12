@@ -32,9 +32,14 @@ class EstimationController extends Controller
             if(request()->status != null){
                 $q->where('estimations.status',request()->status);
             }
-        })->with('parcelle')->paginate(getPaginate());
-         
-        return view('manager.estimation.index', compact('pageTitle', 'estimations','localites'));
+        })->with('parcelle');
+
+        $estimationsFiltre = $estimations->get();
+        $estimations = $estimations->paginate(getPaginate());
+        $total_estimation_calculee = $estimationsFiltre->where('typeEstimation', 'Estimation calculée')->count();
+        $total_estimation_estimee = $estimationsFiltre->where('typeEstimation','!=', 'Estimation calculée')->count();
+
+        return view('manager.estimation.index', compact('pageTitle', 'estimations','localites','total_estimation_calculee','total_estimation_estimee'));
     }
  
     public function create()
