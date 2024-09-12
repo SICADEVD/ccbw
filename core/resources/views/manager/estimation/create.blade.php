@@ -50,7 +50,17 @@
              <?php echo Form::select('campagne', $campagnes, null, array('class' => 'form-control campagnes', 'id'=>'campagnes','required'=>'required')); ?>
         </div>
     </div>
-
+    <div class="form-group row">
+        <?php echo Form::label(__('Quel type d\'estimation réalisez-vous?'), null, ['class' => 'col-sm-4 control-label required']); ?>
+        <div class="col-xs-12 col-sm-8">
+        <select class="form-control typeEstimation" name="typeEstimation" id="typeEstimation" required> 
+                                    @foreach($typeEstimation as $type)
+                                        <option value="{{ $type }}"  @selected(old('typeEstimation'))>
+                                            {{ $type }}</option>
+                                    @endforeach
+                                </select> 
+        </div>
+    </div>
     <hr class="panel-wide">
     <div class="form-group row determe">
     <table border="1" class="table-bordered table-striped table-responsive" id="myTable">
@@ -119,6 +129,14 @@
 
 </table>
             </div>
+            <div class="form-group estimationProd">
+            <div class="form-group row">
+            {{ Form::label(__("Estimation de production"), null, ['class' => 'col-sm-4 control-label']) }}
+            <div class="col-xs-12 col-sm-8">
+            <?php echo Form::number('estimationProd', null,array('class' => 'form-control','id'=>'estimationProd') ); ?>
+        </div>
+    </div>
+            </div>
 
 <hr class="panel-wide">
 
@@ -151,6 +169,10 @@
     input:not([type="radio"]), textarea {
     padding: 0px;
     }
+    #myTable input {
+    border-color: var(--main-color);
+    box-shadow: 0 3px 9px rgba(50, 50, 9, 0.05), 3px 4px 8px rgba(115, 103, 240, 0.1);
+}
     </style>
 @endpush
 @push('script')
@@ -161,14 +183,75 @@
     }
     $("#parcelle").chained("#producteur");
     $("#producteur").chained("#localite"); 
+    $('.determe').show();
+    $('#EA1').prop('required', true);
+                  $('#EA2').prop('required', true);
+                  $('#EA3').prop('required', true);
 
+                  $('#EB1').prop('required', true);
+                  $('#EB2').prop('required', true);
+                  $('#EB3').prop('required', true);
+                  
+                  $('#EC1').prop('required', true);
+                  $('#EC2').prop('required', true);
+                  $('#EC3').prop('required', true);
+    $('.estimationProd').hide();
+    $('#typeEstimation').change(function() {
+                var typeEstimation = $('#typeEstimation').val();
+               
+                if (typeEstimation == 'Déclaration estimée') {  
+                    $('.determe').hide('slow'); 
+                    $('.estimationProd').show('slow');
+                    $('#estimationProd').prop('required', true); 
+                  $('#EA1').val('');
+                  $('#EA2').val('');
+                  $('#EA3').val('');
+
+                  $('#EB1').val('');
+                  $('#EB2').val('');
+                  $('#EB3').val('');
+                  
+                  $('#EC1').val('');
+                  $('#EC2').val('');
+                  $('#EC3').val('');
+                  $('#EA1').prop('required', false);
+                  $('#EA2').prop('required', false);
+                  $('#EA3').prop('required', false);
+
+                  $('#EB1').prop('required', false);
+                  $('#EB2').prop('required', false);
+                  $('#EB3').prop('required', false);
+                  
+                  $('#EC1').prop('required', false);
+                  $('#EC2').prop('required', false);
+                  $('#EC3').prop('required', false);
+                } else {
+                  $('.determe').show('slow'); 
+                  $('.estimationProd').hide('slow');
+                  $('#estimationProd').prop('required', false);
+                  $('.estimationProd').val(''); 
+                  $('#EA1').prop('required', true);
+                  $('#EA2').prop('required', true);
+                  $('#EA3').prop('required', true);
+
+                  $('#EB1').prop('required', true);
+                  $('#EB2').prop('required', true);
+                  $('#EB3').prop('required', true);
+                  
+                  $('#EC1').prop('required', true);
+                  $('#EC2').prop('required', true);
+                  $('#EC3').prop('required', true);
+                }
+            });
     $('#EA1,#EA2,#EA3,#EB1,#EB2,#EB3,#EC1,#EC2,#EC3').keyup(function(){
     var EA1= $('#EA1').val();
     var EA2= $('#EA2').val();
     var EA3= $('#EA3').val();
+
     var EB1= $('#EB1').val();
     var EB2= $('#EB2').val();
     var EB3= $('#EB3').val();
+
     var EC1= $('#EC1').val();
     var EC2= $('#EC2').val();
     var EC3= $('#EC3').val();

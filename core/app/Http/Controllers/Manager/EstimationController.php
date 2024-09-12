@@ -45,9 +45,10 @@ class EstimationController extends Controller
         ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->with('localite')->get();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->get();
         $campagnes = Campagne::active()->pluck('nom','id');
+        $typeEstimation = array('Estimation calculée','Déclaration estimée');
         $parcelles  = Parcelle::joinRelationship('producteur.localite.section')
         ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->with('producteur')->get();
-        return view('manager.estimation.create', compact('pageTitle', 'producteurs','localites','campagnes','parcelles'));
+        return view('manager.estimation.create', compact('pageTitle', 'producteurs','localites','campagnes','parcelles','typeEstimation'));
     }
 
     public function store(Request $request)
