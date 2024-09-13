@@ -48,13 +48,13 @@
                             <div class="col-md-6">
                                 <div class="alert alert-success text-center">
                                 <div class="fw-bold">{{ $total_estimation_calculee }}</div>
-                                    @lang('TOTAL ESTIMATION CALCULEE')
+                                    @lang('TOTAL RENDEMENT CALCULE')
                                 </div>
                             </div> 
                             <div class="col-md-6">
                                 <div class="alert alert-warning text-center">
                                 <div class="fw-bold">{{ $total_estimation_estimee }}</div>
-                                    @lang('TOTAL DECLARATION ESTIMEE')
+                                    @lang('TOTAL RENDEMENT ESTIME')
                                 </div>
                             </div>
                     </div>

@@ -34,10 +34,13 @@ class EstimationController extends Controller
             }
         })->with('parcelle');
 
+        $campagne = Campagne::active()->latest()->first();
+   
         $estimationsFiltre = $estimations->get();
         $estimations = $estimations->paginate(getPaginate());
-        $total_estimation_calculee = $estimationsFiltre->where('typeEstimation', 'Estimation calculée')->count();
-        $total_estimation_estimee = $estimationsFiltre->where('typeEstimation','!=', 'Estimation calculée')->count();
+        $total_estimation_calculee = $estimationsFiltre->where('campagne_id',$campagne->id)->where('typeEstimation', 'Rendement calculé')->count();
+
+        $total_estimation_estimee = $estimationsFiltre->where('campagne_id',$campagne->id)->where('typeEstimation', '!=','Rendement calculé')->count();
 
         return view('manager.estimation.index', compact('pageTitle', 'estimations','localites','total_estimation_calculee','total_estimation_estimee'));
     }
@@ -50,7 +53,7 @@ class EstimationController extends Controller
         ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->with('localite')->get();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id',$manager->cooperative_id],['localites.status',1]])->get();
         $campagnes = Campagne::active()->pluck('nom','id');
-        $typeEstimation = array('Estimation calculée','Déclaration estimée');
+        $typeEstimation = array('Rendement calculé','Rendement estimé');
         $parcelles  = Parcelle::joinRelationship('producteur.localite.section')
         ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->with('producteur')->get();
         return view('manager.estimation.create', compact('pageTitle', 'producteurs','localites','campagnes','parcelles','typeEstimation'));
@@ -60,8 +63,7 @@ class EstimationController extends Controller
     {
         $validationRule = [
             'parcelle'    => 'required|exists:parcelles,id',
-            'campagne' => 'required|max:255',
-            'Q'  => 'required|max:255',
+            'campagne' => 'required|max:255', 
             'RF'  => 'required|max:255',
             'EsP'  => 'required|max:255', 
             'date_estimation'  => 'required|max:255', 
@@ -108,8 +110,11 @@ class EstimationController extends Controller
         $estimation->VM2    = $request->VM2;
         $estimation->VM3    = $request->VM3;
         $estimation->Q    = $request->Q;
+        $estimation->RT    = $request->RT;
         $estimation->RF    = $request->RF;
         $estimation->EsP    = $request->EsP;
+        $estimation->ajustement    = $request->ajustement;
+        $estimation->typeEstimation    = $request->typeEstimation;
         $estimation->date_estimation    = $request->date_estimation; 
 
         $estimation->save(); 

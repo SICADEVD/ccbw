@@ -65,7 +65,7 @@
     <div class="form-group row determe">
     <table border="1" class="table-bordered table-striped table-responsive" id="myTable">
   <tr>
-    <td align="center" valign="middle"><strong>@lang("Repartition des Carrés(3 carrés de 20 m de coté chacun)")</strong></td>
+    <td align="center" valign="middle"><strong>@lang("Repartition des Carrés(3 carrés de 10 m de coté chacun)")</strong></td>
     <td align="center" valign="middle"><strong>@lang("Nombre d'arbres compté Carré A")</strong></td>
     <td align="center" valign="middle"><strong>@lang("Nombre d'arbres compté Carré B")</strong></td>
     <td align="center" valign="middle"><strong>@lang("Nombre d'arbres compté Carré C")</strong></td>
@@ -75,7 +75,7 @@
     <td align="center" valign="middle"><strong>@lang("Calcul de l'estimation")</strong></td>
   </tr>
   <tr>
-    <td>@lang("Sup à 20 Cab")</td>
+    <td>@lang("Sup à 20 Cabosses")</td>
     <td>
 
       <input type="number" name="EA1" value="{{ old('EA1') }}" id="EA1" style="width: 60px;" min="1" />
@@ -94,7 +94,7 @@
     <input name="Q" value="{{ old('Q') }}" type="number" id="Q" readonly="readonly" style="width: 60px;" min="1" /><br>@lang("Rendement des 3 carrés A, B, C")<br>Q=T1+T2+T3</td>
   </tr>
   <tr>
-    <td>@lang("De 11 à 20 Cab")</td>
+    <td>@lang("De 11 à 20 Cabosses")</td>
     <td>
       <input type="number" name="EA2" value="{{ old('Q') }}"  id="EA2" style="width: 60px;" min="1" />
     </td>
@@ -107,10 +107,10 @@
       <input name="V2" type="number" value="{{ old('V2') }}"  id="V2" readonly="readonly" style="width: 60px;" min="1" /></td>
     <td>
     <input name="VM2" type="number" value="{{ old('VM2') }}"  id="VM2" readonly="readonly" style="width: 60px;" min="1" />T2=V1:3</td>
-    <td><input name="RF" value="{{ old('RF') }}"  type="number" id="RF" readonly="readonly" style="width: 60px;" min="1" /><br>@lang("Rendement final")<br>RF=Q*25</td>
+    <td><input name="RT" value="{{ old('RT') }}"  type="number" id="RT" readonly="readonly" style="width: 60px;" min="1" /><br>@lang("Rendement théorique")<br>RT=Q*100</td>
   </tr>
   <tr>
-    <td>@lang("De 0 à 10 Cab")</td>
+    <td>@lang("De 0 à 10 Cabosses")</td>
     <td>
       <input type="number" name="EA3" value="{{ old('EA3') }}"  id="EA3" style="width: 60px;" min="1" />
     </td>
@@ -123,20 +123,35 @@
     <td>
     <input name="VM3" value="{{ old('VM3') }}"  type="number" id="VM3" readonly="readonly" style="width: 60px;" min="1" />T3=V1:3</td>
     <td>
-    <input name="EsP" value="{{ old('EsP') }}"  type="number" id="EsP" readonly="readonly" style="width: 60px;" min="1" /><br>@lang("Estimation de production")<br>@lang("Q * Superficie")</td>
+    <input name="ajustement" value="{{ old('ajustement') }}"  type="number" id="ajustement" style="width: 60px;" min="-20" max="20" />%<br>@lang("Pourcentage d'ajustement")</td>
   </tr>
 </table>
 
 </table>
+ 
             </div>
-            <div class="form-group estimationProd">
-            <div class="form-group row">
-            {{ Form::label(__("Estimation de production"), null, ['class' => 'col-sm-4 control-label']) }}
+
+<p></p>
+<p></p>
+<div class="form-group row"> 
+            {{ Form::label(__("Rendement Final(RT + RT * % Ajustement)"), null, ['class' => 'col-sm-4 control-label']) }}
             <div class="col-xs-12 col-sm-8">
-            <?php echo Form::number('estimationProd', null,array('class' => 'form-control','id'=>'estimationProd') ); ?>
+            <?php echo Form::number('RF', null,array('class' => 'form-control','id'=>'RF', 'required', 'style'=>'width: 300px;') ); ?>Kg/Ha
         </div>
-    </div>
-            </div>
+        </div>
+<div class="form-group row"> 
+            {{ Form::label(__("Superficie"), null, ['class' => 'col-sm-4 control-label']) }}
+            <div class="col-xs-12 col-sm-8">
+            <?php echo Form::number('superf', null,array('class' => 'form-control','id'=>'superf', 'readonly','style'=>'width: 300px;') ); ?>Ha
+        </div>
+        </div>
+
+<div class="form-group row"> 
+            {{ Form::label(__("Recolte Estimée(RF * Superficie)"), null, ['class' => 'col-sm-4 control-label']) }}
+            <div class="col-xs-12 col-sm-8">
+            <?php echo Form::number('EsP', null,array('class' => 'form-control','id'=>'EsP', 'required', 'readonly','style'=>'width: 300px;') ); ?>Kg
+        </div>
+        </div>
 
 <hr class="panel-wide">
 
@@ -195,14 +210,17 @@
                   $('#EC1').prop('required', true);
                   $('#EC2').prop('required', true);
                   $('#EC3').prop('required', true);
+                  $('#ajustement').prop('required', true);
+                  $('#RF').prop('readonly', true); 
     $('.estimationProd').hide();
     $('#typeEstimation').change(function() {
                 var typeEstimation = $('#typeEstimation').val();
                
-                if (typeEstimation == 'Déclaration estimée') {  
+                if (typeEstimation == 'Rendement estimé') {  
                     $('.determe').hide('slow'); 
                     $('.estimationProd').show('slow');
-                    $('#estimationProd').prop('required', true); 
+                    $('#RF').prop('readonly', false); 
+                    
                   $('#EA1').val('');
                   $('#EA2').val('');
                   $('#EA3').val('');
@@ -214,6 +232,7 @@
                   $('#EC1').val('');
                   $('#EC2').val('');
                   $('#EC3').val('');
+                  $('#ajustement').val('');
                   $('#EA1').prop('required', false);
                   $('#EA2').prop('required', false);
                   $('#EA3').prop('required', false);
@@ -225,10 +244,11 @@
                   $('#EC1').prop('required', false);
                   $('#EC2').prop('required', false);
                   $('#EC3').prop('required', false);
+                   $('#ajustement').prop('required', false);
                 } else {
                   $('.determe').show('slow'); 
                   $('.estimationProd').hide('slow');
-                  $('#estimationProd').prop('required', false);
+                 $('#RF').prop('readonly', true); 
                   $('.estimationProd').val(''); 
                   $('#EA1').prop('required', true);
                   $('#EA2').prop('required', true);
@@ -241,9 +261,10 @@
                   $('#EC1').prop('required', true);
                   $('#EC2').prop('required', true);
                   $('#EC3').prop('required', true);
+                  $('#ajustement').prop('required', true);
                 }
             });
-    $('#EA1,#EA2,#EA3,#EB1,#EB2,#EB3,#EC1,#EC2,#EC3').keyup(function(){
+    $('#EA1,#EA2,#EA3,#EB1,#EB2,#EB3,#EC1,#EC2,#EC3,#ajustement').keyup(function(){
     var EA1= $('#EA1').val();
     var EA2= $('#EA2').val();
     var EA3= $('#EA3').val();
@@ -258,8 +279,8 @@
     var coefV1=1;
     var coefV2=0.6;
     var coefV3=0.2;
-    var supT=$('#superficie').val();
-
+    var supT=$('#superficie').val(); 
+    $('#superf').val($('#superficie').val());
 if(EA1 && EB1 && EC1){
    $('#T1').val(parseInt(EA1)+parseInt(EB1)+parseInt(EC1));
 }
@@ -298,15 +319,24 @@ if($('#VM1').val() && $('#VM2').val() && $('#VM3').val())
 }
 
 if($('#Q').val()){
-  var Q = parseFloat($('#Q').val())*25;
-  $('#RF').val(Q.toFixed(2));
+  var Q = parseFloat($('#Q').val())*100;
+  $('#RT').val(Q.toFixed(2));
+}
+if($('#ajustement').val()){
+  var RF = parseFloat($('#RT').val()) + parseFloat($('#RT').val())*(parseFloat($('#ajustement').val())/100); 
+  $('#RF').val(RF.toFixed(2));
 }
 if($('#RF').val()){
-  var RF = parseFloat($('#RF').val())*supT;
-  $('#EsP').val(RF.toFixed(2));
+  var EsP = parseFloat($('#RF').val())*supT;
+  $('#EsP').val(EsP.toFixed(2));
 }
-
 });
+
+ $('#RF').keyup(function(){
+  $('#superf').val($('#superficie').val());
+  var EsP = parseFloat($('#RF').val())*$('#superficie').val();
+  $('#EsP').val(EsP.toFixed(2));
+ });
  </script>
 @endpush
 <style>
