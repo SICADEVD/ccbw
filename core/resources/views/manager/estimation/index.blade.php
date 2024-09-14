@@ -70,12 +70,13 @@
                                     <th>@lang('Producteur')</th>
                                     <th>@lang('Code Parcelle')</th>
                                     <th>@lang('Superficie')</th>
-                                    <th>@lang('Rendement des 3 carres A, B, C')</th>
+                                    <th>@lang('Type d\'estimation')</th>
                                     <th>@lang('Rendement final')</th>
-                                    <th>@lang('Estimation de production')</th>
-                                    <th>@lang('Production annuelle')</th>
-                                    <th>@lang("Date d'estimation")</th>
+                                    <th>@lang('Recolte Estimée')</th>
+                                    <th>@lang('Livraison annuelle')</th>
                                     <th>@lang('Status')</th>
+                                    <th>@lang("Date d'estimation")</th>
+                                    
                                     <th>@lang('Action')</th>
                                 </tr>
                             </thead>
@@ -102,7 +103,7 @@
                                             <span>{{ $estimation->parcelle->superficie }}</span>
                                         </td>
                                         <td>
-                                            <span>{{ $estimation->Q }}</span>
+                                            <span>{{ $estimation->typeEstimation }}</span>
                                         </td>
                                         <td>
                                             <span>{{ $estimation->RF }}</span>
@@ -113,11 +114,12 @@
                                         <td>
                                             <span>{{ $estimation->productionAnnuelle }}</span>
                                         </td>
+                                        <td> @php echo $estimation->statusEstim; @endphp </td>
                                         <td>
                                             <span class="d-block">{{ showDateTime($estimation->date_estimation) }}</span>
                                             <span>{{ diffForHumans($estimation->date_estimation) }}</span>
                                         </td>
-                                        <td> @php echo $estimation->statusEstim; @endphp </td>
+                                        
                                         <td>
 
                                             <button type="button" class="btn btn-sm btn-outline--primary"
