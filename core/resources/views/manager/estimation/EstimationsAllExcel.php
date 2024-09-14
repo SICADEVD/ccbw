@@ -35,12 +35,12 @@
         <td>Code Producteur</td>
         <td>Code Parcelle</td>
         <td>Superficie</td>
-        <td>Rendement des 3 carrés A, B, C</td> 
+        <td>Type d'estimation</td> 
         <td>Rendement final</td>
-        <td>Estimation de production</td>
-        <td>Production annuelle</td>
-        <td>Date d'estimation</td>
+        <td>Recolte Estimee</td>
+        <td>Livraison annuelle</td>
         <td>Status</td>
+        <td>Date d'estimation</td> 
         <td>Date enreg</td> 
     </tr>
     </thead> 
@@ -59,12 +59,13 @@
             <td><?php echo $c->parcelle->producteur->codeProd; ?></td> 
             <td><?php echo $c->parcelle->codeParc; ?></td>
             <td><?php echo $c->parcelle->superficie; ?></td>
-            <td><?php echo $c->Q; ?></td>
+            <td><?php echo $c->typeEstimation; ?></td>
             <td><?php echo $c->RF; ?></td>
             <td><?php echo $c->EsP; ?></td>
             <td><?php echo $c->productionAnnuelle; ?></td>
-            <td><?php echo date('d-m-Y', strtotime($c->date_estimation)); ?></td>
             <td><?php echo $c->statusEstim; ?></td> 
+            <td><?php echo date('d-m-Y', strtotime($c->date_estimation)); ?></td>
+            
             <td><?php echo date('d-m-Y', strtotime($c->created_at)); ?></td>
         </tr>
         </tbody>
