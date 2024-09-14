@@ -136,20 +136,38 @@
 <div class="form-group row"> 
             {{ Form::label(__("Rendement Final(RT + RT * % Ajustement)"), null, ['class' => 'col-sm-4 control-label']) }}
             <div class="col-xs-12 col-sm-8">
-            <?php echo Form::number('RF', null,array('class' => 'form-control','id'=>'RF', 'required', 'style'=>'width: 300px;') ); ?>Kg/Ha
+           
+            <div class="input-group">
+            <?php echo Form::number('RF', null,array('class' => 'form-control','id'=>'RF', 'required', 'style'=>'width: 300px;') ); ?>
+                            <div class="input-group-append">
+                                <span class="input-group-text" style="height: 45px;border-radius: 0;">Kg/Ha</span>
+                            </div>
+                        </div>
         </div>
         </div>
 <div class="form-group row"> 
             {{ Form::label(__("Superficie"), null, ['class' => 'col-sm-4 control-label']) }}
             <div class="col-xs-12 col-sm-8">
-            <?php echo Form::number('superf', null,array('class' => 'form-control','id'=>'superf', 'readonly','style'=>'width: 300px;') ); ?>Ha
+            
+            <div class="input-group">
+            <?php echo Form::number('superf', null,array('class' => 'form-control','id'=>'superf', 'readonly','style'=>'width: 300px;') ); ?>
+                            <div class="input-group-append">
+                                <span class="input-group-text" style="height: 45px;border-radius: 0;">Ha</span>
+                            </div>
+                        </div>
         </div>
         </div>
 
 <div class="form-group row"> 
             {{ Form::label(__("Recolte Estimée(RF * Superficie)"), null, ['class' => 'col-sm-4 control-label']) }}
             <div class="col-xs-12 col-sm-8">
-            <?php echo Form::number('EsP', null,array('class' => 'form-control','id'=>'EsP', 'required', 'readonly','style'=>'width: 300px;') ); ?>Kg
+            
+            <div class="input-group">
+            <?php echo Form::number('EsP', null,array('class' => 'form-control','id'=>'EsP', 'required', 'readonly','style'=>'width: 300px;') ); ?>
+                            <div class="input-group-append">
+                                <span class="input-group-text" style="height: 45px;border-radius: 0;">Kg</span>
+                            </div>
+                        </div>
         </div>
         </div>
 
