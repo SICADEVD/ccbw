@@ -26,12 +26,12 @@
 <table id="categories" width="100%">
     <thead>
     <tr>
-        <td>ID</td>
         <td>Localite</td> 
+        <td>Code producteur</td>
         <td>Nom</td>
         <td>Prenoms</td>
         <td>Quantite</td> 
-        <td>Date enreg</td> 
+        <td>Date enregistrement</td>
     </tr>
     </thead> 
     <?php
@@ -40,8 +40,9 @@
     ?>
         <tbody>
         <tr>
-            <td><?php echo $c->id; ?></td>
-            <td><?php echo $c->producteur->localite->nom; ?></td> 
+            <td><?php echo $c->producteur->localite->nom; ?></td>
+            <td><?php echo $c->producteur->codeProd; ?></td>
+            <td><?php echo stripslashes($c->producteur->nom); ?></td>
             <td><?php echo stripslashes($c->producteur->prenoms); ?></td>
             <td><?php echo $c->quantite; ?></td> 
             <td><?php echo date('d-m-Y', strtotime($c->created_at)); ?></td>
