@@ -65,6 +65,8 @@ class ProducteurImport implements ToCollection, WithHeadingRow, WithValidation
 
 if($verification ==null)
 {
+    dd($verification);
+    exit();
   $producteur = new Producteur();
   $nationalite = $programme = null;
  if($row['numpiece']){
