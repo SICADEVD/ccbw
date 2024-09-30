@@ -36,38 +36,38 @@ class ProducteurImport implements ToCollection, WithHeadingRow, WithValidation
         $j=0;
         $k='';
         if(count($collection)){
- 
+
         foreach($collection as $row)
          {
-          
+
       $local_nom = trim($row['localites']); //Get user names
-  $localite = DB::table('localites')->where('nom',$local_nom)->first();
+  $localite = DB::table('localites')->where('codeLocal',$local_nom)->first();
   if($localite !=null)
   {
   $localites_id = $localite->id;
   $coop = DB::table('cooperatives')->where('id', $cooperatives_id)->select('codeApp')->first();
         if($coop !=null)
-        { 
-          
-    
+        {
+
+
         $codeProdapp = $this->generecodeProdApp($row['nom'],$row['prenoms'], $coop->codeApp);
 
         }else{
           $codeProdapp = '';
         }
   $codeProd = $row['codeproducteur']; //Get the user emails
-  
+
   if(is_null($codeProd))
   {
     $verification ='';
   }else{
     $verification = DB::table('producteurs')->where('codeProd',$codeProd)->first();
   }
- 
+
 if($verification ==null)
-{  
+{
   $producteur = new Producteur();
-  $nationalite = $programme = null; 
+  $nationalite = $programme = null;
  if($row['numpiece']){
   $nationalite = Str::limit($row['numpiece'], 2, "");
   if($nationalite=='C0'){
@@ -90,7 +90,7 @@ $nationalite = Country::where('iso',$nationalite)->first();
 
   $agent = DB::table('user_localites')->select('user_id')->where('localite_id', $localites_id)->inRandomOrder()->first();
   if($agent !=null){
-     
+
       $producteur->localite_id = $localites_id;
       $producteur->codeProd = $row['codeproducteur'];
       $producteur->codeProdapp = $codeProdapp;
@@ -98,14 +98,14 @@ $nationalite = Country::where('iso',$nationalite)->first();
       $producteur->prenoms = $row['prenoms'];
       $producteur->sexe = ucfirst($row['genre']);
       //$producteur->dateNaiss = Date::excelToDateTimeObject($row['datenaissance'])->format('Y-m-d');
-      $producteur->dateNaiss = date('Y-m-d', strtotime($row['datenaissance'])); 
+      $producteur->dateNaiss = date('Y-m-d', strtotime($row['datenaissance']));
       $producteur->phone1 = $row['phone1'];
       $producteur->phone2 = $row['phone2'];
       $producteur->nationalite = $nationalite;
       $producteur->consentement = $row['consentement'];
-      $producteur->statut = $row['statut']; 
+      $producteur->statut = $row['statut'];
       $producteur->certificat = $row['anneecertification'];
-      $producteur->numPiece = $row['numpiece']; 
+      $producteur->numPiece = $row['numpiece'];
       $producteur->programme_id = $programme;
       $producteur->save();
 
@@ -120,9 +120,9 @@ $nationalite = Country::where('iso',$nationalite)->first();
         $prodcertif->save();
         }
       }
-      $j++; 
+      $j++;
   }else{
-     
+
       $producteur->localite_id = $localites_id;
       $producteur->codeProd = $row['codeproducteur'];
       $producteur->codeProdapp = $codeProdapp;
@@ -130,7 +130,7 @@ $nationalite = Country::where('iso',$nationalite)->first();
       $producteur->prenoms = $row['prenoms'];
       $producteur->sexe = ucfirst($row['genre']);
       //$producteur->dateNaiss = Date::excelToDateTimeObject($row['datenaissance'])->format('Y-m-d');
-      $producteur->dateNaiss = date('Y-m-d', strtotime($row['datenaissance'])); 
+      $producteur->dateNaiss = date('Y-m-d', strtotime($row['datenaissance']));
       $producteur->phone1 = $row['phone1'];
       $producteur->phone2 = $row['phone2'];
       $producteur->consentement = $row['consentement'];
@@ -139,7 +139,7 @@ $nationalite = Country::where('iso',$nationalite)->first();
       $producteur->numPiece = $row['numpiece'];
       $producteur->nationalite = $nationalite;
       $producteur->programme_id = $programme;
-      $producteur->userid = auth()->user()->id; 
+      $producteur->userid = auth()->user()->id;
       $producteur->save();
       if($producteur !=null)
       {
@@ -150,14 +150,14 @@ $nationalite = Country::where('iso',$nationalite)->first();
           $prodcertif->certification = $certification->nom;
           $prodcertif->save();
         }
-       
+
       }
       $j++;
   }
- 
-    
+
+
  }else{
-  $k .=$local_nom.' , ';  
+  $k .=$local_nom.' , ';
   $notify[] = ['error',"Les Localites dont les noms suivent : $k n'existent pas dans la base."];
         return back()->withNotify($notify);
  }
@@ -171,14 +171,14 @@ $nationalite = Country::where('iso',$nationalite)->first();
   }else{
     $notify[] = ['error',"Aucun Producteur n'a été ajouté à la base car ils existent déjà."];
     return back()->withNotify($notify);
- } 
-    
+ }
+
 }else{
   $notify[] = ['error',"Il n'y a aucune données dans le fichier"];
-      return back()->withNotify($notify); 
+      return back()->withNotify($notify);
 }
 
-   
+
   }
     private function generecodeProdApp($nom,$prenoms,$codeApp)
     {
@@ -219,5 +219,5 @@ $nationalite = Country::where('iso',$nationalite)->first();
 
       return $codeP;
     }
-    
+
 }
