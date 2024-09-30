@@ -163,7 +163,6 @@ $nationalite = Country::where('iso',$nationalite)->first();
 
   }
   if(!empty($K)){
-    $k .=$codeProd.' , ';
     $notify[] = ['error',"Les producteurs dont les codes suivent : $k existent déjà dans la base."];
           return back()->withNotify($notify);
    }
