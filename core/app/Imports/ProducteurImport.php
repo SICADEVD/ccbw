@@ -157,8 +157,8 @@ $nationalite = Country::where('iso',$nationalite)->first();
 
 
  }else{
-  $k .=$local_nom.' , ';
-  $notify[] = ['error',"Les Localites dont les noms suivent : $k n'existent pas dans la base."];
+  $k .=$codeProd.' , ';
+  $notify[] = ['error',"Les producteurs dont les codes suivent : $k existent déjà dans la base."];
         return back()->withNotify($notify);
  }
 
