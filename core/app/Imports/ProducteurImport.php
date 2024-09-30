@@ -45,8 +45,7 @@ class ProducteurImport implements ToCollection, WithHeadingRow, WithValidation
   if($localite !=null)
   {
   $localites_id = $localite->id;
-  dd($cooperatives_id);
-  exit();
+
   $coop = DB::table('cooperatives')->where('id', $cooperatives_id)->select('codeApp')->first();
         if($coop !=null)
         {
@@ -63,7 +62,8 @@ class ProducteurImport implements ToCollection, WithHeadingRow, WithValidation
   }else{
     $verification = DB::table('producteurs')->where('codeProd',$codeProd)->first();
   }
-
+  dd($verification);
+  exit();
 if($verification ==null)
 {
   $producteur = new Producteur();
