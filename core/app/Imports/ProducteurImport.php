@@ -62,8 +62,7 @@ class ProducteurImport implements ToCollection, WithHeadingRow, WithValidation
   }else{
     $verification = DB::table('producteurs')->where('codeProd',$codeProd)->first();
   }
-  dd($verification);
-  exit();
+
 if($verification ==null)
 {
   $producteur = new Producteur();
