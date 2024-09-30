@@ -45,11 +45,11 @@ class ProducteurImport implements ToCollection, WithHeadingRow, WithValidation
   if($localite !=null)
   {
   $localites_id = $localite->id;
+  dd($cooperatives_id);
+  exit();
   $coop = DB::table('cooperatives')->where('id', $cooperatives_id)->select('codeApp')->first();
         if($coop !=null)
         {
-
-
         $codeProdapp = $this->generecodeProdApp($row['nom'],$row['prenoms'], $coop->codeApp);
 
         }else{
