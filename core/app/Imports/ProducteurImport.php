@@ -56,15 +56,15 @@ class ProducteurImport implements ToCollection, WithHeadingRow, WithValidation
           $codeProdapp = '';
         }
   $codeProd = $row['codeproducteur']; //Get the user emails
-  dd($codeProd);
-  exit();
+
   if(is_null($codeProd))
   {
     $verification ='';
   }else{
     $verification = DB::table('producteurs')->where('codeProd',$codeProd)->first();
   }
-
+  dd($verification);
+  exit();
 if($verification ==null)
 {
 
