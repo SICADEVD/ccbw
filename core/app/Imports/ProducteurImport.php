@@ -42,6 +42,8 @@ class ProducteurImport implements ToCollection, WithHeadingRow, WithValidation
 
       $local_nom = trim($row['localites']); //Get user names
   $localite = DB::table('localites')->where('codeLocal',$local_nom)->first();
+  dd($localite);
+  exit();
   if($localite !=null)
   {
   $localites_id = $localite->id;
@@ -65,8 +67,7 @@ class ProducteurImport implements ToCollection, WithHeadingRow, WithValidation
 
 if($verification ==null)
 {
-    dd($verification);
-    exit();
+
   $producteur = new Producteur();
   $nationalite = $programme = null;
  if($row['numpiece']){
