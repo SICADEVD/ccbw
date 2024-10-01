@@ -106,21 +106,8 @@ class AgrodeforestationController extends Controller
         $i=1;
         foreach($parcelles as $data)
         {
-            $lat = isset($data->latitude) ? htmlentities($data->latitude, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
-            $long= isset($data->longitude) ? htmlentities($data->longitude, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
-            $producteur = isset($data->producteur->nom) ? htmlentities(stripslashes($data->producteur->nom), ENT_QUOTES | ENT_IGNORE, "UTF-8").' '.htmlentities(stripslashes($data->producteur->prenoms), ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
-            $code= isset($data->producteur->codeProd) ? htmlentities($data->producteur->codeProd, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non defini';
-            $parcelle = isset($data->codeParc) ? htmlentities($data->codeParc, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
-            $localite=isset($data->producteur->localite->nom) ? htmlentities($data->producteur->localite->nom, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
-            $section=isset($data->producteur->localite->section->libelle) ? htmlentities($data->producteur->localite->section->libelle, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
-            $cooperative=isset($data->producteur->localite->section->cooperative->name) ? htmlentities($data->producteur->localite->section->cooperative->name, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
-            $annee = isset($data->anneeCreation) ? htmlentities($data->anneeCreation, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
-            $culture= isset($data->culture) ? htmlentities($data->culture, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
-            $superficie= isset($data->superficie) ? htmlentities($data->superficie, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
-            $proprietaire = "Coopérative: $cooperative \n\n Section: $section \n\n Localite: $localite \n\n Producteur : $producteur \n\n Code producteur: $code \n\n Code Parcelle: $parcelle \n\n Année creation: $annee \n\n Latitude: $lat \n\n Longitude: $long \n\n Superficie: $superficie ha";
 
             $datakml .= '<Placemark>
-            <name>'.$proprietaire.'</name>
             <Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
             <ExtendedData><SchemaData schemaUrl="#programmeband_1">
                 <SimpleData name="N°">'.$i.'</SimpleData>
