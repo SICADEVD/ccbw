@@ -83,7 +83,7 @@
                             </div>
                             <div class="col-md-2">
                                 <div class="alert alert-info text-center">
-                                <div class="fw-bold">{{ $total_prod - $total_prod_h }}</div>
+                                <div class="fw-bold">{{ $total_prod_f }}</div>
                                     @lang('FEMMES')
                                 </div>
                             </div>
@@ -111,10 +111,10 @@
                                 <tr>
                                     {{-- <th>@lang('Photo')</th> --}}
                                     <th>@lang('Section')</th>
-                                    <th>@lang('Localite')</th> 
+                                    <th>@lang('Localite')</th>
                                     <th>@lang('Nom')</th>
                                     <th>@lang('Prenoms')</th>
-                                    <th>@lang('Code Producteur')</th> 
+                                    <th>@lang('Code Producteur')</th>
                                     <th>@lang('Sexe')</th>
                                     <th>@lang('Nationalite')</th>
                                     <th>@lang('Telephone')</th>
@@ -133,18 +133,18 @@
                                                 <img src="{{ asset('assets/images/default.png') }}"
                                                     alt="image" style = " width: 100px;">
                                             @endif
-                                        </td> --}} 
+                                        </td> --}}
                                         <td>
-                                         
+
                                         @if ($producteur->localite && $producteur->localite->section)
                                         <span class="fw-bold">{{ __($producteur->localite->section->libelle) }}</span>
                                             @else
                                                 <span class="fw-bold">Pas de section</span>
                                             @endif
-                                        
+
                                         </td>
                                         <td>
-                                            
+
                                             <span class="fw-bold">{{ __($producteur->localite->nom) }}</span>
                                         </td>
 
@@ -194,13 +194,13 @@
                                                         <i class="la la-eye"></i> @lang('Active')
                                                     </button>
                                                 @else
-                                                    <button type="button" class="confirmationBtn btn btn-sm btn-outline--danger" 
+                                                    <button type="button" class="confirmationBtn btn btn-sm btn-outline--danger"
                                                         data-action="{{ route('manager.traca.producteur.status', $producteur->id) }}"
                                                         data-question="@lang('Etes-vous sûr de vouloir désactiver ce producteur?')">
                                                         <i class="la la-eye-slash"></i> @lang('Désactive')
                                                     </button>
                                                 @endif
-                                            
+
                                         </td>
                                     </tr>
                                 @empty
@@ -280,13 +280,13 @@
                     enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
-                       
+
                         <div class="alert alert-warning">
                             <p><i class="las la-exclamation-triangle"></i> Consignes à respecter avant de charger le
                                 fichier
                                 :</p>
                             <ul>
-                                <li>Télécharger la liste de tous les Producteurs en cliquant sur le bouton "Exporter en  Excel". Apportez vos modification puis importer le fichier modifié. Aucun nouveau producteur ne sera prise en compte lors de cette mise à jour.</li> 
+                                <li>Télécharger la liste de tous les Producteurs en cliquant sur le bouton "Exporter en  Excel". Apportez vos modification puis importer le fichier modifié. Aucun nouveau producteur ne sera prise en compte lors de cette mise à jour.</li>
                             </ul>
                         </div>
 
@@ -315,22 +315,22 @@
 @push('breadcrumb-plugins')
     <a href="{{ route('manager.traca.producteur.create') }}" class="btn  btn-outline--primary h-45">
         <i class="las la-plus"></i>@lang('Ajouter nouveau')
-    </a> 
+    </a>
     <button type="button" class="btn btn-outline--danger h-45" data-bs-toggle="dropdown" aria-expanded="false"><i
             class="las la-cloud-upload-alt"></i>@lang('Importation')
     </button>
     <div class="dropdown-menu p-0">
         <a class="dropdown-item addType">@lang('Importer des Producteurs')</a>
-        <a class="dropdown-item updateType">@lang('Importer Mise à jour des Producteurs')</a> 
+        <a class="dropdown-item updateType">@lang('Importer Mise à jour des Producteurs')</a>
     </div>
     <button type="button" class="btn btn-outline--warning h-45" data-bs-toggle="dropdown" aria-expanded="false"><i
             class="las la-cloud-download-alt"></i>@lang('Exportation')
     </button>
-    <div class="dropdown-menu p-0"> 
-        <a href="{{ route('manager.traca.producteur.exportExcel.producteurAll') }}" class="btn  btn-outline--warning h-45"> @lang('Uniquement liste Producteurs')</a> 
-        <a href="{{ route('manager.traca.producteur.exportExcel.producteurAllList') }}" class="btn  btn-outline--warning h-45"> @lang('Tous les Producteurs avec autres Infos')</a> 
+    <div class="dropdown-menu p-0">
+        <a href="{{ route('manager.traca.producteur.exportExcel.producteurAll') }}" class="btn  btn-outline--warning h-45"> @lang('Uniquement liste Producteurs')</a>
+        <a href="{{ route('manager.traca.producteur.exportExcel.producteurAllList') }}" class="btn  btn-outline--warning h-45"> @lang('Tous les Producteurs avec autres Infos')</a>
     </div>
-    
+
 @endpush
 @push('style')
     <style>

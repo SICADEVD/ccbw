@@ -43,37 +43,37 @@ class ProducteurController extends Controller
     public function index()
     {
         $pageTitle      = "Gestion des producteurs";
-        $manager   = auth()->user(); 
+        $manager   = auth()->user();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id', $manager->cooperative_id]])->get();
-        
+
         $programmes = Programme::all();
 
         $producteurs = Producteur::dateFilter()
             ->searchable(["nationalite", "type_piece", "codeProd", "codeProdapp", "producteurs.nom", "prenoms", "sexe", "dateNaiss", "phone1", "niveau_etude", "numPiece", "consentement", "statut", "certificat"])
             ->latest('id')
-            ->joinRelationship('localite.section') 
+            ->joinRelationship('localite.section')
             ->when(request()->localite, function ($query, $localite) {
                 $query->where('producteurs.localite_id', $localite);
             })
             ->when(request()->status, function ($query, $status){
                 if($status==2) $status = 0;
                 $query->where('producteurs.status', $status);
-            }) 
+            })
             ->when(request()->etat, function ($query, $etat){
                 $query->where('producteurs.statut', $etat);
-            }) 
+            })
             ->when(request()->programme, function ($query, $programme){
                 $query->where('producteurs.programme_id', $programme);
             })
             ->with('localite.section')
             ->where([['cooperative_id', $manager->cooperative_id]]);
-            $producteursFiltre = $producteurs->get(); 
+            $producteursFiltre = $producteurs->get();
         $producteurs = $producteurs->paginate(getPaginate());
         $total_prod = $producteursFiltre->count();
-        $total_prod_h = $producteursFiltre->where('sexe','Homme')->count(); 
-        $total_prod_f = $producteursFiltre->where('sexe','Femme')->count(); 
-        $total_prod_cert = $producteursFiltre->where('statut','Certifie')->count();  
-        $total_prod_cand = $producteursFiltre->where('statut','Candidat')->count(); 
+        $total_prod_h = $producteursFiltre->where('sexe','Homme')->count();
+        $total_prod_f = $producteursFiltre->where('sexe','Femme')->count();
+        $total_prod_cert = $producteursFiltre->where('statut','Certifie')->count();
+        $total_prod_cand = $producteursFiltre->where('statut','Candidat')->count();
 
         if (request()->download) {
             $producteur = Producteur::find(decrypt(request()->download));
@@ -576,17 +576,17 @@ class ProducteurController extends Controller
         return Excel::download(new ExportProducteursAll, $filename);
     }
     public function  uploadContent(Request $request)
-    { 
+    {
         Excel::import(new ProducteurImport, $request->file('uploaded_file'));
         return back();
     }
     public function  updateUploadContent(Request $request)
-    { 
+    {
         Excel::import(new ProducteurUpdateImport, $request->file('uploaded_file_update'));
         return back();
     }
     public function delete($id)
-    { 
+    {
         Producteur::where('id', decrypt($id))->delete();
         $notify[] = ['success', 'Le contenu supprimé avec succès'];
         return back()->withNotify($notify);
