@@ -69,8 +69,8 @@ if($verification ==null)
 
   $producteur = new Producteur();
   $nationalite = $programme = null;
- if($row['numpiece']){
-  $nationalite = Str::limit($row['numpiece'], 2, "");
+ if(trim($row['numpiece'])){
+  $nationalite = Str::limit(trim($row['numpiece']), 2, "");
   if($nationalite=='C0'){
     $nationalite="CI";
   }
@@ -82,9 +82,9 @@ $nationalite = Country::where('iso',$nationalite)->first();
   }
  }
 
- if($row['programme'])
+ if(trim($row['programme']))
  {
-  $programme = Programme::where('libelle', $row['programme'])->first();
+  $programme = Programme::where('libelle', trim($row['programme']))->first();
   $programme = $programme->id;
 
  }
@@ -93,27 +93,27 @@ $nationalite = Country::where('iso',$nationalite)->first();
   if($agent !=null){
 
       $producteur->localite_id = $localites_id;
-      $producteur->codeProd = $row['codeproducteur'];
+      $producteur->codeProd = trim($row['codeproducteur']);
       $producteur->codeProdapp = $codeProdapp;
-      $producteur->nom = $row['nom'];
-      $producteur->prenoms = $row['prenoms'];
-      $producteur->sexe = ucfirst($row['genre']);
+      $producteur->nom = trim($row['nom']);
+      $producteur->prenoms = trim($row['prenoms']);
+      $producteur->sexe = trim(ucfirst($row['genre']);
       //$producteur->dateNaiss = Date::excelToDateTimeObject($row['datenaissance'])->format('Y-m-d');
-      $producteur->dateNaiss = date('Y-m-d', strtotime($row['datenaissance']));
-      $producteur->phone1 = $row['phone1'];
-      $producteur->phone2 = $row['phone2'];
+      $producteur->dateNaiss = date('Y-m-d', strtotime(trim($row['datenaissance'])));
+      $producteur->phone1 = trim($row['phone1']);
+      $producteur->phone2 = trim($row['phone2']);
       $producteur->nationalite = $nationalite;
-      $producteur->consentement = $row['consentement'];
-      $producteur->statut = $row['statut'];
-      $producteur->certificat = $row['anneecertification'];
-      $producteur->numPiece = $row['numpiece'];
+      $producteur->consentement = trim($row['consentement']);
+      $producteur->statut = trim($row['statut']);
+      $producteur->certificat = trim($row['anneecertification']);
+      $producteur->numPiece = trim($row['numpiece']);
       $producteur->programme_id = $programme;
       $producteur->save();
 
       if($producteur !=null)
       {
-        if($row['statut'] !='Candidat'){
-        $certification = Certification::where('nom', $row['certification'])->first();
+        if(trim($row['statut']) !='Candidat'){
+        $certification = Certification::where('nom', trim($row['certification']))->first();
 
         $prodcertif = new Producteur_certification();
         $prodcertif->producteur_id = $producteur->id;
@@ -125,27 +125,27 @@ $nationalite = Country::where('iso',$nationalite)->first();
   }else{
 
       $producteur->localite_id = $localites_id;
-      $producteur->codeProd = $row['codeproducteur'];
+      $producteur->codeProd = trim($row['codeproducteur']);
       $producteur->codeProdapp = $codeProdapp;
-      $producteur->nom = $row['nom'];
-      $producteur->prenoms = $row['prenoms'];
-      $producteur->sexe = ucfirst($row['genre']);
-      //$producteur->dateNaiss = Date::excelToDateTimeObject($row['datenaissance'])->format('Y-m-d');
-      $producteur->dateNaiss = date('Y-m-d', strtotime($row['datenaissance']));
-      $producteur->phone1 = $row['phone1'];
-      $producteur->phone2 = $row['phone2'];
-      $producteur->consentement = $row['consentement'];
-      $producteur->statut = $row['statut'];
-      $producteur->certificat = $row['anneecertification'];
-      $producteur->numPiece = $row['numpiece'];
+      $producteur->nom = trim($row['nom']);
+      $producteur->prenoms = trim($row['prenoms']);
+      $producteur->sexe = ucfirst(trim($row['genre']));
+      //$producteur->dateNaiss = Date::excelToDateTimeObject(trim($row['datenaissance'])->format('Y-m-d');
+      $producteur->dateNaiss = date('Y-m-d', strtotime(trim($row['datenaissance'])));
+      $producteur->phone1 = trim($row['phone1']);
+      $producteur->phone2 = trim($row['phone2']);
+      $producteur->consentement = trim($row['consentement']);
+      $producteur->statut = trim($row['statut']);
+      $producteur->certificat = trim($row['anneecertification']);
+      $producteur->numPiece = trim($row['numpiece']);
       $producteur->nationalite = $nationalite;
       $producteur->programme_id = $programme;
       $producteur->userid = auth()->user()->id;
       $producteur->save();
       if($producteur !=null)
       {
-        if($row['statut'] !='Candidat'){
-          $certification = Certification::where('nom', $row['certification'])->first();
+        if(trim($row['statut']) !='Candidat'){
+          $certification = Certification::where('nom', trim($row['certification']))->first();
           $prodcertif = new Producteur_certification();
           $prodcertif->producteur_id = $producteur->id;
           $prodcertif->certification = $certification->nom;
