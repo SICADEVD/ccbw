@@ -105,13 +105,17 @@ $a=1;
 
 if(isset($parcelles) && count($parcelles)){
 
-    $total = count($parcelles);
+    //$total = count($parcelles);
 
     foreach ($parcelles as $data) {
 
         if($data->latitude==0 || $data->latitude==null || $data->latitude==1){
             continue;
         }
+
+        $polygonCoordinates = "";
+        $proprietaire = "";
+        $pointsCoordinates = "";
 
         if($data->waypoints !=null)
         {
@@ -128,7 +132,8 @@ if(isset($parcelles) && count($parcelles)){
             $culture= isset($data->culture) ? htmlentities($data->culture, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
             $superficie= isset($data->superficie) ? htmlentities($data->superficie, ENT_QUOTES | ENT_IGNORE, "UTF-8") : 'Non Disponible';
             $proprietaire = 'Coopérative:'. $cooperative.'<br>Section:'. $section.'<br>Localite:'. $localite.'<br>Producteur : '.$producteur.'<br>Code producteur:'. $code.'<br>Code Parcelle:'. $parcelle.'<br>Année creation:'. $annee.'<br>Latitude:'. $lat.'<br>Longitude:'. $long.'<br>Superficie:'. $superficie.' ha';
-     $polygon ='';
+
+     $polygon = "";
 
      $dataArray = explode(",", $data->waypoints);
      $outputString = "0 ";
@@ -143,11 +148,11 @@ if(isset($parcelles) && count($parcelles)){
 
          $nombre = count($coords);
          $i=0;
-        foreach($coords as $data2) {
+         foreach($coords as $data2) {
 
-                $i++;
-                $coords2 = explode(',', $data2);
-                if(count($coords2)==3)
+            $i++;
+            $coords2 = explode(',', $data2);
+            if(count($coords2)==3)
                 {
 
                     $coordo1 = isset($coords2[1]) ? $coords2[1] : null;
@@ -159,19 +164,18 @@ if(isset($parcelles) && count($parcelles)){
                     }
                 }
 
+            }
+
+        //$polygonCoordinates ='['.$polygon.']';
+        $seriescoordonates[]= '['.$polygon.']';
+        $pointsPolygon[] = "['".$proprietaire."']";
+        $total ++;
         }
 
-        $polygonCoordinates ='['.$polygon.']';
-
-        }
-        if(isset($polygonCoordinates)){
-            $seriescoordonates[]= $polygonCoordinates;
-            $pointsPolygon[] = "['".$proprietaire."']";
-        }
 
     }
 
-$pointsPolygon = Str::replace('"','',json_encode($pointsPolygon));
+ $pointsPolygon = Str::replace('"','',json_encode($pointsPolygon));
  $pointsPolygon = Str::replace("''","'Non Disponible'",$pointsPolygon);
 
 }
@@ -347,9 +351,9 @@ if(isset(request()->typepolygone) && (in_array('PP',request()->typepolygone)))
     <script>
     let map;
 let infoWindow;
-@if(!is_array($pointsPolygon))
-var locations = <?php echo $pointsPolygon; ?>;
 var total = <?php echo $total; ?>;
+@if($total > 0)
+var locations = <?php echo $pointsPolygon; ?>;
 @endif
 
 @if(!is_array($pointsPolygonF))

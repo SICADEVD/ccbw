@@ -93,6 +93,9 @@ if(isset($parcelles) && count($parcelles)){
                 }
              }
         }
+        $polygonCoordinates = "";
+        $proprietaire = "";
+        $pointsCoordinates = "";
 
         if($data->waypoints !=null)
         {
