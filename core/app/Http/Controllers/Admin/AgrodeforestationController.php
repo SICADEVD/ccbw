@@ -106,7 +106,8 @@ class AgrodeforestationController extends Controller
         $i=1;
         foreach($parcelles as $data)
         {
-
+            if($data->waypoints !="")
+            {
             $datakml .= '<Placemark>
             <Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
             <ExtendedData><SchemaData schemaUrl="#programmeband_1">
@@ -138,6 +139,7 @@ class AgrodeforestationController extends Controller
             </MultiGeometry>
           </Placemark>';
           $i++;
+        }
         }
         $datakml .= '</Folder>
         </Document></kml>';
