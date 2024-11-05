@@ -49,6 +49,7 @@ class AgrodeforestationController extends Controller
 
         $parcelles = Parcelle::dateFilter()->latest('id')
             ->joinRelationship('producteur.localite.section')
+            ->where([['typedeclaration','GPS'],['waypoints','!=',""]])
             ->whereNotNull('waypoints')
             ->when(request()->cooperative, function ($query, $cooperative) {
                 $query->where('cooperative_id', $cooperative);

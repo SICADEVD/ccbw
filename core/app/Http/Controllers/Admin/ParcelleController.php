@@ -90,6 +90,7 @@ class ParcelleController extends Controller
             ->when(request()->cooperative, function ($query, $cooperative) {
                 $query->where('cooperative_id', $cooperative);
             })
+            ->where([['typedeclaration','GPS'],['waypoints','!=',""]])
             ->whereNotNull('waypoints')
             ->when(request()->section, function ($query, $section) {
                 $query->where('section_id', $section);
