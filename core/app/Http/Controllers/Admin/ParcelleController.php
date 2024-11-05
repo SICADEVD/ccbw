@@ -142,7 +142,7 @@ class ParcelleController extends Controller
         $i=1;
         foreach($parcelles as $data)
         {
-            if(count($data->waypoints)>1)
+            if($data->waypoints !="" || $data->waypoints !=null)
             {
 
             $datakml .= '<Placemark>

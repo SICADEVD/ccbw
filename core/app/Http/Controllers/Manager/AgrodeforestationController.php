@@ -99,7 +99,7 @@ class AgrodeforestationController extends Controller
 $i=1;
 foreach($parcelles as $data)
 {
-    if(count($data->waypoints !="" || $data->waypoints !=null)
+    if($data->waypoints !="" || $data->waypoints !=null)
     {
 
     $datakml .= '<Placemark>
