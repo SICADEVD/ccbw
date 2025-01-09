@@ -31,13 +31,13 @@ class ParcelleImport implements ToCollection, WithHeadingRow, WithValidation
 
     $j = 0;
     $k = '';
-    dd($collection);
     if (count($collection)) {
 
       foreach ($collection as $row) {
 
         $codeProd = $row['codeproducteur']; //Get the user emails
         $verification = DB::table('producteurs')->orWhere('codeProd', $codeProd)->orWhere('codeProdapp', $codeProd)->first();
+        dd($verification);
         if ($verification != null) {
           if ($row['codeparcelle']) {
             $codeParc = $row['codeparcelle'];
