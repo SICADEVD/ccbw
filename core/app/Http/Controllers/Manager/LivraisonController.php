@@ -94,6 +94,7 @@ class LivraisonController extends Controller
         $campagne = Campagne::active()->first();
 
         $periode = CampagnePeriode::where([['campagne_id', $campagne->id], ['periode_debut', '<=', gmdate('Y-m-d')], ['periode_fin', '>=', gmdate('Y-m-d')]])->latest()->first();
+        dd($periode);
 
         $cooperatives = Cooperative::active()->where('id', $staff->cooperative_id)->orderBy('name')->get();
         $magasins = MagasinSection::join('users', 'magasin_sections.staff_id', '=', 'users.id')->where([['cooperative_id', $staff->cooperative_id], ['magasin_sections.status', 1]])->with('user')->orderBy('nom')->select('magasin_sections.*')->get();
