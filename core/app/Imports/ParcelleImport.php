@@ -37,7 +37,6 @@ class ParcelleImport implements ToCollection, WithHeadingRow, WithValidation
 
         $codeProd = $row['codeproducteur']; //Get the user emails
         $verification = DB::table('producteurs')->orWhere('codeProd', $codeProd)->orWhere('codeProdapp', $codeProd)->first();
-        dd($verification);
         if ($verification != null) {
           if ($row['codeparcelle']) {
             $codeParc = $row['codeparcelle'];
