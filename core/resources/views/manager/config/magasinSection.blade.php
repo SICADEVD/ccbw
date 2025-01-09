@@ -134,8 +134,10 @@
                                 <select class="form-control" name="section" id="section" required>
                                     <option value="">@lang('Selectionner une option')</option>
                                     @foreach($sections as $section)
-                                        <option value="{{ $section->localite->section->id }}"  data-chained="{{ $section->user_id }}">
-                                            {{ __($section->localite->section->libelle) }}</option>
+                                        @if($section->localite && $section->localite->section)
+                                            <option value="{{ $section->localite->section->id }}"  data-chained="{{ $section->user_id }}">
+                                                {{ __($section->localite->section->libelle) }}</option>
+                                        @endif
                                     @endforeach
                                 </select>
                                 </div>
