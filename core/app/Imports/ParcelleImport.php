@@ -31,9 +31,8 @@ class ParcelleImport implements ToCollection, WithHeadingRow, WithValidation
 
     $j = 0;
     $k = '';
+    dd($collection);
     if (count($collection)) {
-
-      dd($collection);
 
       foreach ($collection as $row) {
 
