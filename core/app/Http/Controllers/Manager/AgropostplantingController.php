@@ -58,7 +58,7 @@ class AgropostplantingController extends Controller
         }
         $producteurs = Producteur::joinRelationship('localite.section')
         ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->whereIn('producteurs.id',$producteurDist)->get();
-         
+
         $sections = Section::get();
         $localites = Localite::joinRelationship('section')->where([['cooperative_id', $manager->cooperative_id], ['localites.status', 1]])->orderBy('nom')->get();
         return view('manager.postplanting.create', compact('pageTitle', 'producteurs', 'localites', 'sections'));
@@ -70,7 +70,7 @@ class AgropostplantingController extends Controller
             'quantite' => 'required|array',
         ];
 
-        
+
         $request->validate($validationRule);
 
         if ($request->id) {
@@ -80,12 +80,12 @@ class AgropostplantingController extends Controller
             $distribution = new Agropostplanting();
         }
         $manager   = auth()->user();
-        $campagne = Campagne::active()->first();
+        $campagne = Campagne::active()->where('cooperative_id',auth()->user()->cooperative_id)->first();
         $distribution->cooperative_id = $manager->cooperative_id;
         $distribution->producteur_id = $request->producteur;
-        $distribution->quantite =  $request->total; 
-        $distribution->quantitePlantee =  $request->qteplante; 
-        $distribution->quantiteSurvecue =  $request->qtesurvecue; 
+        $distribution->quantite =  $request->total;
+        $distribution->quantitePlantee =  $request->qteplante;
+        $distribution->quantiteSurvecue =  $request->qtesurvecue;
         $distribution->date_planting =  $request->date_planting;
         $distribution->save();
 
@@ -93,7 +93,7 @@ class AgropostplantingController extends Controller
         $k = 0;
         $i = 0;
         $nb = 0;
-        
+
         if ($distribution->id) {
 
             $distributionID = $distribution->id;
@@ -103,11 +103,11 @@ class AgropostplantingController extends Controller
             $commentaire = $request->commentaire;
 
             foreach ($request->quantite as $producteurid => $agroespeces) {
- 
+
                 $agroespeces = array_filter($agroespeces);
-                
+
                 foreach($agroespeces as $agroespecesarbresid => $total) {
-                    
+
                     $find = AgropostplantingEspece::where([
                         ['agropostplanting_id', $distributionID],
                         ['agroespecesarbre_id', $agroespecesarbresid]
@@ -151,7 +151,7 @@ class AgropostplantingController extends Controller
     {
         $pageTitle = "Mise à jour de la distribution";
         $manager   = auth()->user();
-        $campagne = Campagne::active()->first();
+        $campagne = Campagne::active()->where('cooperative_id',auth()->user()->cooperative_id)->first();
         $distribution   = Agropostplanting::findOrFail($id);
         $total = Agroevaluation::where('producteur_id', $distribution->producteur_id)->sum('quantite');
         $evaluation = Agroevaluation::where('producteur_id', $distribution->producteur_id)->first();
@@ -221,7 +221,7 @@ class AgropostplantingController extends Controller
         $request->validate($validationRule);
 
         $manager   = auth()->user();
-        $campagne = Campagne::active()->first();
+        $campagne = Campagne::active()->where('cooperative_id',auth()->user()->cooperative_id)->first();
 
         $k = 0;
         $i = 0;
@@ -284,23 +284,23 @@ class AgropostplantingController extends Controller
 
     public function getAgroParcellesArbres()
     {
-        $input = request()->all(); 
+        $input = request()->all();
         $totalrecu = 0;
-        $producteurId = request()->producteur; 
-        
+        $producteurId = request()->producteur;
+
         if(request()->producteur !=null){
 
-        $especes = AgrodistributionEspece::joinRelationship('agrodistribution')->joinRelationship('agroespecesarbre')->where('producteur_id', request()->producteur)->get(); 
- 
+        $especes = AgrodistributionEspece::joinRelationship('agrodistribution')->joinRelationship('agroespecesarbre')->where('producteur_id', request()->producteur)->get();
+
 
         if (count($especes)) {
             $existe = Agropostplanting::where('producteur_id', request()->producteur)->latest('id')->first();
-           
+
             if($existe !=null)
             {
             $especes2 = AgropostplantingEspece::joinRelationship('agropostplanting')->joinRelationship('agroespecesarbre')->where('agropostplanting_id', $existe->id)->get();
                 if(count($especes2)) {
-                    $especes = $especes2; 
+                    $especes = $especes2;
                 }
             }
                         $somme = 0;
@@ -316,11 +316,11 @@ class AgropostplantingController extends Controller
                         $i = 0;
                         $k = 1;
                         $totalrecu = 0;
-                         
-                        foreach($especes as $data) { 
+
+                        foreach($especes as $data) {
 
                             $s = 1;
-                                $totalespece = isset($data->total_survecue) ? $data->total_survecue : $data->total;  
+                                $totalespece = isset($data->total_survecue) ? $data->total_survecue : $data->total;
                                 if($totalespece==0){
                                     continue;
                                 }
@@ -334,7 +334,7 @@ class AgropostplantingController extends Controller
                                 $s++;
                                 $i++;
                                 $results .= '</tr>';
-                           
+
                         }
 
                         $results .= '</tbody></table>';
@@ -370,7 +370,7 @@ class AgropostplantingController extends Controller
     }
 
     public function delete($id)
-    { 
+    {
         Agropostplanting::where('id', decrypt($id))->delete();
         $notify[] = ['success', 'Le contenu supprimé avec succès'];
         return back()->withNotify($notify);

@@ -64,7 +64,7 @@ class AgrodistributionController extends Controller
             $distribution = new Agrodistribution();
         }
         $manager   = auth()->user();
-        $campagne = Campagne::active()->first();
+        $campagne = Campagne::active()->where('cooperative_id',auth()->user()->cooperative_id)->first();
 
         $datas = [];
         $k = 0;
@@ -129,7 +129,7 @@ class AgrodistributionController extends Controller
     {
         $pageTitle = "Mise à jour de la distribution";
         $manager   = auth()->user();
-        $campagne = Campagne::active()->first();
+        $campagne = Campagne::active()->where('cooperative_id',auth()->user()->cooperative_id)->first();
         $distribution   = Agrodistribution::findOrFail($id);
         $total = Agroevaluation::where('parcelle_id', $distribution->parcelle_id)->sum('quantite');
         $somme = AgrodistributionEspece::where([['agrodistribution_id', $id]])->sum('total');
@@ -189,7 +189,7 @@ class AgrodistributionController extends Controller
         $request->validate($validationRule);
 
         $manager   = auth()->user();
-        $campagne = Campagne::active()->first();
+        $campagne = Campagne::active()->where('cooperative_id',auth()->user()->cooperative_id)->first();
 
         $k = 0;
         $i = 0;
@@ -253,7 +253,7 @@ class AgrodistributionController extends Controller
     public function getAgroParcellesArbres()
     {
         $input = request()->all();
-        $campagne = Campagne::active()->first();
+        $campagne = Campagne::active()->where('cooperative_id',auth()->user()->cooperative_id)->first();
         $manager = auth()->user();
         $somme = 0;
         $producteurId = $input['producteur'];
@@ -344,7 +344,7 @@ class AgrodistributionController extends Controller
     }
 
     public function delete($id)
-    { 
+    {
         Agrodistribution::where('id', decrypt($id))->delete();
         $notify[] = ['success', 'Le contenu supprimé avec succès'];
         return back()->withNotify($notify);

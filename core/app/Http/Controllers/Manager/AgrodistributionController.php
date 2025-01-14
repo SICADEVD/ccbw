@@ -48,9 +48,11 @@ class AgrodistributionController extends Controller
         $producteurDistri = array();
         // $producteurs  = Producteur::joinRelationship('localite.section')
         // ->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1]])->with('localite')->get();
-        $campagne = Campagne::active()->first();
+        $campagne = Campagne::active()->where('cooperative_id',auth()->user()->cooperative_id)->first();
+
+
         $producteurs = Agroevaluation::joinRelationship('producteur.localite.section')->where([['cooperative_id', $manager->cooperative_id],['producteurs.status', 1],['campagne_id',$campagne->id]])->with('producteur')->get();
- 
+
         $produc = Agrodistribution::select('producteur_id')->get();
         if ($produc) {
             foreach ($produc as $data) {
@@ -68,7 +70,7 @@ class AgrodistributionController extends Controller
             'quantite' => 'required|array',
         ];
 
-        
+
         $request->validate($validationRule);
 
         if ($request->id) {
@@ -78,13 +80,13 @@ class AgrodistributionController extends Controller
             $distribution = new Agrodistribution();
         }
         $manager   = auth()->user();
-        $campagne = Campagne::active()->first();
+        $campagne = Campagne::active()->where('cooperative_id',auth()->user()->cooperative_id)->first();
 
         $datas = [];
         $k = 0;
         $i = 0;
         $nb = 0;
-        
+
         if ($request->quantite) {
             foreach ($request->quantite as $producteurid => $agroespeces) {
 
@@ -145,7 +147,7 @@ class AgrodistributionController extends Controller
     {
         $pageTitle = "Mise à jour de la distribution";
         $manager   = auth()->user();
-        $campagne = Campagne::active()->first();
+        $campagne = Campagne::active()->where('cooperative_id',auth()->user()->cooperative_id)->first();
         $distribution   = Agrodistribution::findOrFail($id);
         $total = Agroevaluation::where('producteur_id', $distribution->producteur_id)->sum('quantite');
         $evaluation = Agroevaluation::where('producteur_id', $distribution->producteur_id)->first();
@@ -215,7 +217,7 @@ class AgrodistributionController extends Controller
         $request->validate($validationRule);
 
         $manager   = auth()->user();
-        $campagne = Campagne::active()->first();
+        $campagne = Campagne::active()->where('cooperative_id',auth()->user()->cooperative_id)->first();
 
         $k = 0;
         $i = 0;
@@ -279,7 +281,7 @@ class AgrodistributionController extends Controller
     public function getAgroParcellesArbres()
     {
         $input = request()->all();
-        $campagne = Campagne::active()->first();
+        $campagne = Campagne::active()->where('cooperative_id',auth()->user()->cooperative_id)->first();
         $manager = auth()->user();
         $somme = 0;
         $producteurId = $input['producteur'];

@@ -151,7 +151,7 @@ class LivraisonCentraleController extends Controller
         $remorques = Remorque::all();
         $producteurs  = Producteur::joinRelationship('localite.section')->where([['sections.cooperative_id', $staff->cooperative_id],['producteurs.status',1]])->select('producteurs.*')->orderBy('producteurs.nom')->get();
 
-        $campagne = Campagne::active()->first();
+        $campagne = Campagne::active()->where('cooperative_id',auth()->user()->cooperative_id)->first();
         $nomCamp = $campagne->nom;
         $campagne = CampagnePeriode::where([['campagne_id', $campagne->id], ['periode_debut', '<=', gmdate('Y-m-d')], ['periode_fin', '>=', gmdate('Y-m-d')]])->latest()->first();
 
@@ -219,7 +219,7 @@ class LivraisonCentraleController extends Controller
 
         $manager = auth()->user();
         $livraison = new Connaissement();
-        $campagne = Campagne::active()->first();
+        $campagne = Campagne::active()->where('cooperative_id',auth()->user()->cooperative_id)->first();
         $periode = CampagnePeriode::where([['campagne_id', $campagne->id], ['periode_debut', '<=', gmdate('Y-m-d')], ['periode_fin', '>=', gmdate('Y-m-d')]])->latest()->first();
 
         $livraison->cooperative_id   = $manager->cooperative_id;
@@ -294,7 +294,7 @@ class LivraisonCentraleController extends Controller
         $input = request()->all();
 
 
-        $campagne = Campagne::active()->first();
+        $campagne = Campagne::active()->where('cooperative_id',auth()->user()->cooperative_id)->first();
         $periode = CampagnePeriode::where([['campagne_id', $campagne->id]])->latest()->first();
         $contents = '';
         if (request()->type || request()->magasin_central || request()->certificat) {
@@ -327,7 +327,7 @@ class LivraisonCentraleController extends Controller
         $results = '';
         $total = 0;
         $totalsacs = 0;
-        $campagne = Campagne::active()->first();
+        $campagne = Campagne::active()->where('cooperative_id',auth()->user()->cooperative_id)->first();
         if(request()->connaissement_id) {
             $stock = LivraisonMagasinCentralProducteur::joinRelationship('stockMagasinCentral')->where([['livraison_magasin_central_producteurs.campagne_id', $campagne->id], ['stocks_mag_entrant', '>', 0], ['quantite', '>', 0]])
             ->when(request()->magasin_central, function ($query, $magasin_central) {
@@ -342,27 +342,27 @@ class LivraisonCentraleController extends Controller
             ->whereIn('stock_magasin_central_id', request()->connaissement_id)
             ->select('livraison_magasin_central_producteurs.*')
             ->get();
- 
+
             if($stock->count()) {
-                 
+
                 $v = 1;
                 $tv = count($stock);
                 foreach ($stock as $data) {
-                    
-                    $results .= '<tr><td colspan="2"><h5>' . $data->producteur->nom . ' ' . $data->producteur->prenoms . '(' . $data->producteur->codeProdapp . ')</h5><input type="hidden" name="producteurs[]" value="' . $data->producteur_id . '"/><input type="hidden" name="parcelle[]" value="' . $data->parcelle_id . '"/></td> 
+
+                    $results .= '<tr><td colspan="2"><h5>' . $data->producteur->nom . ' ' . $data->producteur->prenoms . '(' . $data->producteur->codeProdapp . ')</h5><input type="hidden" name="producteurs[]" value="' . $data->producteur_id . '"/><input type="hidden" name="parcelle[]" value="' . $data->parcelle_id . '"/></td>
                     <td style="width: 300px;"><input type="hidden" name="typeproduit[]" value="' . $data->type_produit . '"/>' . $data->type_produit . '<input type="hidden" name="stock_magasin_central[]" value="' . $data->stock_magasin_central_id . '"/></td>
                     <td style="width: 400px;"> <input type="number" name="quantite[]" value="' . $data->quantite . '" min="0" max="' . $data->quantite . '"  class="form-control quantity" style="width: 115px;"/></td></tr>';
-         
+
                     $total = $total + $data->quantite;
                     // $totalsacs = $totalsacs+$data->nb_sacs_entrant;
                     $v++;
                 }
-               
+
             }else{
                 $results = '<span style="text-align:center;color:#FF0000;">Aucune donnée</span>';
             }
         }
-        
+
         $contents['results'] = $results;
         $contents['total'] = $total;
         $contents['totalsacs'] = $totalsacs;

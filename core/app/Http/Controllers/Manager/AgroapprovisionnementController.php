@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Manager;
 
 use Excel;
 use App\Models\Campagne;
-use App\Models\Section; 
+use App\Models\Section;
 use App\Constants\Status;
-use App\Models\Localite; 
-use App\Models\Producteur; 
+use App\Models\Localite;
+use App\Models\Producteur;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\Agroevaluation;
@@ -37,7 +37,7 @@ class AgroapprovisionnementController extends Controller
                 $q->where('localite_id',request()->localite);
             }
         })->with('cooperative')->paginate(getPaginate());
-         
+
         return view('manager.approvisionnement.index', compact('pageTitle', 'approvisionnements','localites'));
     }
     public function section(Request $request)
@@ -60,7 +60,7 @@ class AgroapprovisionnementController extends Controller
     {
         $pageTitle = "Ajouter un approvisionnement";
         $manager   = auth()->user();
-        $especesarbres  = Agroespecesarbre::orderby('strate','asc')->orderby('nom','asc')->get(); 
+        $especesarbres  = Agroespecesarbre::orderby('strate','asc')->orderby('nom','asc')->get();
         return view('manager.approvisionnement.create', compact('pageTitle', 'especesarbres'));
     }
     public function create_section(Request $request)
@@ -68,7 +68,7 @@ class AgroapprovisionnementController extends Controller
         $pageTitle = "Ajouter un approvisionnement de section";
         $manager   = auth()->user();
         $sections = Section::where('cooperative_id',$manager->cooperative_id)->get();
-        $campagne = Campagne::active()->first();
+        $campagne = Campagne::active()->where('cooperative_id',auth()->user()->cooperative_id)->first();
         $approvSect = $dataSection = array();
         $idapprov = decrypt($request->id);
         if($campagne !=null && $idapprov)
@@ -91,9 +91,9 @@ class AgroapprovisionnementController extends Controller
                 }
             }
         }
-         
+
     }
-        $especesarbres  = Agroespecesarbre::orderby('strate','asc')->orderby('nom','asc')->get(); 
+        $especesarbres  = Agroespecesarbre::orderby('strate','asc')->orderby('nom','asc')->get();
         return view('manager.approvisionnement.create-section', compact('pageTitle', 'especesarbres','sections','dataEspece','dataQuantite','dataSection'));
     }
 
@@ -102,21 +102,21 @@ class AgroapprovisionnementController extends Controller
     {
         $validationRule = [
             'especesarbre'            => 'required|array',
-            'quantite'            => 'required|array',  
+            'quantite'            => 'required|array',
         ];
- 
+
 
         $request->validate($validationRule);
- 
+
         if($request->id) {
-            $approvisionnement = Agroapprovisionnement::findOrFail($request->id); 
+            $approvisionnement = Agroapprovisionnement::findOrFail($request->id);
             $message = "La approvisionnement a été mise à jour avec succès";
 
         } else {
-            $approvisionnement = new Agroapprovisionnement();  
-        } 
+            $approvisionnement = new Agroapprovisionnement();
+        }
         $manager   = auth()->user();
-        $campagne = Campagne::active()->first(); 
+        $campagne = Campagne::active()->where('cooperative_id',auth()->user()->cooperative_id)->first();
 
         // if(!$request->id) {
         //     $hasCooperative = Agroapprovisionnement::where([['cooperative_id', $manager->cooperative_id],['campagne_id', $campagne->id]])->exists();
@@ -124,12 +124,12 @@ class AgroapprovisionnementController extends Controller
         //         $notify[] = ['error', 'Cette coopérative a déjà été approvisionnée pour cette campagne.'];
         //         return back()->withNotify($notify)->withInput();
         //     }
-        // } 
+        // }
 
         $approvisionnement->campagne_id = $campagne->id;
         $approvisionnement->total = array_sum($request->quantite);
         $approvisionnement->cooperative_id = $manager->cooperative_id;
-         
+
         if($request->hasFile('bon_livraison')) {
             try {
                 $approvisionnement->bon_livraison = $request->file('bon_livraison')->store('public/approvisionnements');
@@ -137,61 +137,61 @@ class AgroapprovisionnementController extends Controller
                 $notify[] = ['error', 'Impossible de télécharger votre image'];
                 return back()->withNotify($notify);
             }
-        } 
+        }
         $approvisionnement->save();
 
         $datas = [];
         $k=0;
         $i=0;
-        
+
         if($approvisionnement !=null ){
             $id = $approvisionnement->id;
-        if($request->especesarbre !=null) {  
+        if($request->especesarbre !=null) {
             AgroapprovisionnementEspece::where('agroapprovisionnement_id',$id)->delete();
             $quantite = $request->quantite;
             foreach($request->especesarbre as $key => $data){
-                 
-                $total = $quantite[$key];  
+
+                $total = $quantite[$key];
                      if($total !=null)
-                    {   
-                    $datas[] = [ 
+                    {
+                    $datas[] = [
                         'agroapprovisionnement_id'=>$id,
-                        'agroespecesarbre_id' => $data,  
-                        'total' => $total,  
-                    ]; 
+                        'agroespecesarbre_id' => $data,
+                        'total' => $total,
+                    ];
                     $i++;
                     }else{
                         $k++;
                     }
-                      
-            } 
-            AgroapprovisionnementEspece::insert($datas); 
+
+            }
+            AgroapprovisionnementEspece::insert($datas);
         }
     }
     $notify[] = ['success', isset($message) ? $message : "$i nouveau(x) types d'arbres à ombrage ont été ajoutés."];
-         
+
         return back()->withNotify($notify);
-    } 
+    }
     public function store_section(Request $request)
     {
         $validationRule = [
             'especesarbre'            => 'required|array',
-            'quantite'            => 'required|array',  
+            'quantite'            => 'required|array',
             'section' => 'required',
         ];
- 
+
 
         $request->validate($validationRule);
- 
+
         if($request->id) {
-            $approvisionnement = AgroapprovisionnementSection::findOrFail($request->id); 
+            $approvisionnement = AgroapprovisionnementSection::findOrFail($request->id);
             $message = "La approvisionnement a été mise à jour avec succès";
 
         } else {
-            $approvisionnement = new AgroapprovisionnementSection();  
-        } 
+            $approvisionnement = new AgroapprovisionnementSection();
+        }
         $manager   = auth()->user();
-        $campagne = Campagne::active()->first(); 
+        $campagne = Campagne::active()->where('cooperative_id',auth()->user()->cooperative_id)->first();
 
         if(!$request->id) {
             $hasSection = AgroapprovisionnementSection::where([['section_id', $request->section],['campagne_id', $campagne->id]])->exists();
@@ -199,13 +199,13 @@ class AgroapprovisionnementController extends Controller
                 $notify[] = ['error', 'Cette section a déjà été approvisionnée pour cette campagne.'];
                 return back()->withNotify($notify)->withInput();
             }
-        } 
+        }
 
         $approvisionnement->campagne_id = $campagne->id;
         $approvisionnement->agroapprovisionnement_id = $request->agroapprovisionnement;
         $approvisionnement->total = array_sum($request->quantite);
         $approvisionnement->section_id = $request->section;
-         
+
         if($request->hasFile('bon_livraison')) {
             try {
                 $approvisionnement->bon_livraison = $request->file('bon_livraison')->store('public/approvisionnements');
@@ -213,59 +213,59 @@ class AgroapprovisionnementController extends Controller
                 $notify[] = ['error', 'Impossible de télécharger votre image'];
                 return back()->withNotify($notify);
             }
-        } 
+        }
         $approvisionnement->save();
 
         $datas = [];
         $k=0;
         $i=0;
-        
+
         if($approvisionnement !=null ){
             $id = $approvisionnement->id;
-        if($request->especesarbre !=null) {  
+        if($request->especesarbre !=null) {
             AgroapprovisionnementSectionEspece::where('agroapprovisionnement_section_id',$id)->delete();
             $quantite = $request->quantite;
             foreach($request->especesarbre as $key => $data){
-                 
-                $total = $quantite[$key];  
+
+                $total = $quantite[$key];
                      if($total !=null)
-                    {   
-                    $datas[] = [ 
+                    {
+                    $datas[] = [
                         'agroapprovisionnement_section_id'=>$id,
-                        'agroespecesarbre_id' => $data,  
-                        'total' => $total,  
-                    ]; 
+                        'agroespecesarbre_id' => $data,
+                        'total' => $total,
+                    ];
                     $i++;
                     }else{
                         $k++;
                     }
-                      
-            } 
-            AgroapprovisionnementSectionEspece::insert($datas); 
+
+            }
+            AgroapprovisionnementSectionEspece::insert($datas);
         }
     }
     $notify[] = ['success', isset($message) ? $message : "$i nouveau(x) types d'arbres à ombrage ont été ajoutés."];
-         
+
         return back()->withNotify($notify);
-    } 
+    }
 
     public function edit($id)
     {
         $pageTitle = "Mise à jour de la approvisionnement";
-         
-        $especesarbres  = Agroespecesarbre::orderby('strate','asc')->orderby('nom','asc')->get(); 
+
+        $especesarbres  = Agroespecesarbre::orderby('strate','asc')->orderby('nom','asc')->get();
         $approvisionnement   = Agroapprovisionnement::find($id);
         return view('manager.approvisionnement.edit', compact('pageTitle', 'especesarbres', 'approvisionnement'));
-    } 
+    }
     public function show_section($id)
     {
         $pageTitle = "Mise à jour de l'approvisionnement";
-         
-        $especesarbres  = Agroespecesarbre::orderby('strate','asc')->orderby('nom','asc')->get(); 
+
+        $especesarbres  = Agroespecesarbre::orderby('strate','asc')->orderby('nom','asc')->get();
         $approvisionnement   = AgroapprovisionnementSection::find(decrypt($id));
 
         return view('manager.approvisionnement.show-section', compact('pageTitle', 'especesarbres', 'approvisionnement'));
-    } 
+    }
 
     public function status($id)
     {
@@ -283,7 +283,7 @@ class AgroapprovisionnementController extends Controller
         return back();
     }
     public function delete($id)
-    { 
+    {
         Agroapprovisionnement::where('id', decrypt($id))->delete();
         $notify[] = ['success', 'Le contenu supprimé avec succès'];
         return back()->withNotify($notify);

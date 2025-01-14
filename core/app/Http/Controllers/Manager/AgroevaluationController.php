@@ -89,7 +89,7 @@ class AgroevaluationController extends Controller
         } else {
             $agroevaluation = new Agroevaluation();
         }
-        $campagne = Campagne::active()->first();
+        $campagne = Campagne::active()->where('cooperative_id',auth()->user()->cooperative_id)->first();
         $agroevaluation->campagne_id  = $campagne->id;
         $agroevaluation->producteur_id  = $request->producteur;
         $agroevaluation->quantite  = array_sum($request->quantite);
@@ -188,7 +188,7 @@ class AgroevaluationController extends Controller
     }
 
     public function delete($id)
-    { 
+    {
         Agroevaluation::where('id', decrypt($id))->delete();
         $notify[] = ['success', 'Le contenu supprimé avec succès'];
         return back()->withNotify($notify);

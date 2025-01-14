@@ -104,7 +104,7 @@ class ApplicationController extends Controller
         } else {
             $application = new Application();
         }
-        $campagne = Campagne::active()->first();
+        $campagne = Campagne::active()->where('cooperative_id',auth()->user()->cooperative_id)->first();
         $application->campagne_id  = $campagne->id;
         $application->applicateur_id  = $request->applicateur;
         $application->parcelle_id  = $request->parcelle_id;
@@ -257,7 +257,7 @@ class ApplicationController extends Controller
     }
 
     public function delete($id)
-    { 
+    {
         Application::where('id', decrypt($id))->delete();
         $notify[] = ['success', 'Le contenu supprimé avec succès'];
         return back()->withNotify($notify);

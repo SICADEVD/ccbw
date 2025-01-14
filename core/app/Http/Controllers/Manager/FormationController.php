@@ -118,7 +118,7 @@ class FormationController extends Controller
         } else {
             $formation = new SuiviFormation();
         }
-        $campagne = Campagne::active()->first();
+        $campagne = Campagne::active()->where('cooperative_id',auth()->user()->cooperative_id)->first();
         $formation->localite_id  = $request->localite;
         $formation->campagne_id  = $campagne->id;
         $formation->user_id  = $request->staff;

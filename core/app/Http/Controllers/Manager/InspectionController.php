@@ -7,9 +7,9 @@ use App\Models\Campagne;
 use App\Models\Notation;
 use App\Models\Parcelle;
 use App\Constants\Status;
-use App\Models\Localite; 
+use App\Models\Localite;
 use App\Models\Inspection;
-use App\Models\Producteur; 
+use App\Models\Producteur;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Exports\ExportInspections;
@@ -48,10 +48,10 @@ class InspectionController extends Controller
                 $q->where('formateur_id',request()->staff);
             }
         })->with('producteur','user')->paginate(getPaginate());
-         
+
         return view('manager.inspection.index', compact('pageTitle', 'inspections','localites','staffs','producteurs'));
     }
- 
+
     public function create()
     {
         $pageTitle = "Ajouter une inspection";
@@ -73,11 +73,11 @@ class InspectionController extends Controller
         $validationRule = [
             'parcelle'    => 'required|exists:parcelles,id',
             'producteur'    => 'required|exists:producteurs,id',
-            'encadreur' => 'required|exists:users,id', 
+            'encadreur' => 'required|exists:users,id',
             'note'  => 'required|max:255',
-            'date_evaluation'  => 'required|max:255', 
+            'date_evaluation'  => 'required|max:255',
         ];
- 
+
 
         $request->validate($validationRule);
 
@@ -87,49 +87,49 @@ class InspectionController extends Controller
             $notify[] = ['error', 'Cette localité est désactivé'];
             return back()->withNotify($notify)->withInput();
         }
-        
+
         if($request->id) {
-            $inspection = Inspection::findOrFail($request->id); 
+            $inspection = Inspection::findOrFail($request->id);
             $message = "L'inspection a été mise à jour avec succès";
 
         } else {
-            $inspection = new Inspection();  
-        } 
-        $campagne = Campagne::active()->first();
-        
-        $inspection->parcelle_id  = $request->parcelle; 
-        $inspection->producteur_id  = $request->producteur;  
+            $inspection = new Inspection();
+        }
+        $campagne = Campagne::active()->where('cooperative_id',auth()->user()->cooperative_id)->first();
+
+        $inspection->parcelle_id  = $request->parcelle;
+        $inspection->producteur_id  = $request->producteur;
         $inspection->campagne_id  = $campagne->id;
         $inspection->formateur_id  = $request->encadreur;
         $inspection->certificat  = json_encode($request->certificat);
-        $inspection->note  = $request->note; 
+        $inspection->note  = $request->note;
         $inspection->total_question  = $request->total_question;
         $inspection->total_question_conforme  = $request->total_question_conforme;
         $inspection->total_question_non_conforme  = $request->total_question_non_conforme;
         $inspection->total_question_non_applicable  = $request->total_question_non_applicable;
         $inspection->production = $request->production;
-        
-        $inspection->date_evaluation     = $request->date_evaluation; 
 
-        $inspection->save(); 
+        $inspection->date_evaluation     = $request->date_evaluation;
+
+        $inspection->save();
         if($inspection !=null ){
             $id = $inspection->id;
-            $datas = []; 
-           
-            if(count($request->reponse)) { 
+            $datas = [];
+
+            if(count($request->reponse)) {
                 $commentaire = $request->commentaire;
                 InspectionQuestionnaire::where('inspection_id',$id)->delete();
-                $i=0; 
+                $i=0;
                 foreach($request->reponse as $key=>$value){
-                     
+
                         $datas[] = [
-                        'inspection_id' => $id, 
-                        'questionnaire_id' => $key, 
+                        'inspection_id' => $id,
+                        'questionnaire_id' => $key,
                         'notation' => $value,
-                        'commentaire' => $commentaire[$key], 
-                        'statuts' => 'Non Débuté', 
-                    ];  
-                } 
+                        'commentaire' => $commentaire[$key],
+                        'statuts' => 'Non Débuté',
+                    ];
+                }
             }
             InspectionQuestionnaire::insert($datas);
         }
@@ -137,7 +137,7 @@ class InspectionController extends Controller
         $notify[] = ['success', isset($message) ? $message : 'L\'inspection a été crée avec succès.'];
        return back()->withNotify($notify);
     }
- 
+
     public function edit($id)
     {
         $pageTitle = "Mise à jour de l'inspection";
@@ -147,9 +147,9 @@ class InspectionController extends Controller
         $staffs  = User::staff()->get();
         $categoriequestionnaire = CategorieQuestionnaire::with('questions')->get();
         $notations = Notation::get();
-        $inspection   = Inspection::findOrFail($id); 
+        $inspection   = Inspection::findOrFail($id);
         return view('manager.inspection.edit', compact('pageTitle', 'localites', 'inspection','producteurs','staffs','categoriequestionnaire','notations'));
-    } 
+    }
     public function show($id)
     {
         $pageTitle = "Détails de l'inspection";
@@ -160,30 +160,30 @@ class InspectionController extends Controller
         $staffs  = User::staff()->get();
         $categoriequestionnaire = CategorieQuestionnaire::with('questions')->get();
         $notations = Notation::get();
-        $inspection   = Inspection::findOrFail($id); 
+        $inspection   = Inspection::findOrFail($id);
         return view('manager.inspection.show', compact('pageTitle', 'localites', 'inspection','producteurs','staffs','categoriequestionnaire','notations'));
-    } 
+    }
 
     public function suiviStore(Request $request)
     {
-         
+
         $recommandations = $request->recommandations;
         $delai = $request->delai;
         $date_verification = $request->date_verification;
         $statuts = $request->statuts;
-    
+
         foreach($recommandations as $key => $recomm){
             if($recomm==null){
                 continue;
             }
-        $suivi = InspectionQuestionnaire::where('id', $key)->first();  
+        $suivi = InspectionQuestionnaire::where('id', $key)->first();
         $suivi->recommandations = $recomm;
         $suivi->delai = isset($delai[$key]) ? $delai[$key] : null;
         $suivi->date_verification = isset($date_verification[$key]) ? $date_verification[$key] : null;
-        $suivi->statuts = $statuts[$key]; 
+        $suivi->statuts = $statuts[$key];
         $suivi->save();
         }
-       
+
 
         return $suivi;
     }
@@ -202,21 +202,21 @@ class InspectionController extends Controller
     }
     public function getQuestionnaire(Request $request){
         $contents='';
-        
+
         $notations = Notation::get();
         $total=0;
         $datas = array();
         if($request->certificat !=null)
         {
         $categoriequestionnaire = CategorieQuestionnaire::joinRelationship('questions')->whereIn('certificat',$request->certificat)->with('questions')->groupBy('categorie_questionnaires.id')->get();
-        if($categoriequestionnaire->count()){ 
+        if($categoriequestionnaire->count()){
 
             $note = 0;
-           
-            foreach($categoriequestionnaire as $catquest){ 
+
+            foreach($categoriequestionnaire as $catquest){
 $contents .='<tr><td colspan="4"><strong>'. $catquest->titre.'</strong></td></tr>';
-           
-            foreach($catquest->questions as $q) { 
+
+            foreach($catquest->questions as $q) {
                 if(!in_array($q->certificat, $request->certificat)){
                     continue;
                 }
@@ -228,24 +228,24 @@ $contents .='<tr><td colspan="4"><strong>'. $catquest->titre.'</strong></td></tr
             </td>
             <td><select class="form-control" class="notation" id="reponse-'. $q->id.'" name="reponse['. $q->id.']" required>
                     <option value=""> </option>';
-                          $a = 1;             
+                          $a = 1;
                         foreach($notations as $not)
-                        { 
+                        {
                             $contents .= '<option value="'. $not->nom.'" class="colorSelect_'.$a.'">'. $not->nom.'</option>';
                            $a++;
-                        } 
+                        }
                         $contents .='</select>
                  </td>
                  <td>
                  <textarea class="comment" name="commentaire['. $q->id.']" cols="10" style="display:none;"></textarea>
                  </td>
                  </tr>';
- 
-                } 
-            } 
+
+                }
+            }
         }else{
             $contents ="<div class='text-center'><span style='color:red;text-align:center'>Aucun questionnaire n'est disponible pour ce certificat.</span></div>";
-        } 
+        }
     }
          $datas['total'] = $total;
          $datas['contents'] = $contents;
@@ -266,7 +266,7 @@ $contents .='<tr><td colspan="4"><strong>'. $catquest->titre.'</strong></td></tr
     }
 
     public function delete($id)
-    { 
+    {
         Inspection::where('id', decrypt($id))->delete();
         $notify[] = ['success', 'Le contenu supprimé avec succès'];
         return back()->withNotify($notify);

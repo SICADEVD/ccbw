@@ -3,9 +3,9 @@
     <div class="row mb-none-30">
         <div class="col-lg-12 mb-30">
             <div class="card">
-                <div class="card-body"> 
-                    {!! Form::open(array('route' => ['manager.agro.distribution.store'],'method'=>'POST','class'=>'form-horizontal', 'id'=>'flocal', 'enctype'=>'multipart/form-data','style'=>'margin-bottom:200px;')) !!} 
-                        
+                <div class="card-body">
+                    {!! Form::open(array('route' => ['manager.agro.distribution.store'],'method'=>'POST','class'=>'form-horizontal', 'id'=>'flocal', 'enctype'=>'multipart/form-data','style'=>'margin-bottom:200px;')) !!}
+
                     <div class="form-group row">
                                 <label class="col-sm-4 control-label">@lang('Selectionner une section')</label>
                                 <div class="col-xs-12 col-sm-8">
@@ -17,7 +17,7 @@
                                     @endforeach
                                 </select>
                                 </div>
-                            </div> 
+                            </div>
 
                             <div class="form-group row">
                                 <label class="col-sm-4 control-label">@lang('Selectionner une localite')</label>
@@ -30,16 +30,17 @@
                                     @endforeach
                                 </select>
                                 </div>
-                            </div>  
-                       
+                            </div>
+
                             <div class="form-group row">
+
                                 <label class="col-sm-4 control-label">@lang('Selectionner un producteur')</label>
                                 <div class="col-xs-12 col-sm-8">
                                 <select class="form-control" name="producteur" id="producteur" required>
                                     <option value="">@lang('Selectionner une option')</option>
                                     @foreach($producteurs as $data)
-                                    <?php 
-                                     
+                                    <?php
+
                                     if(in_array($data->producteur->id,$producteurDistri)){
                                         continue;
                                     }
@@ -51,7 +52,7 @@
                                 </div>
                             </div>
      <hr class="panel-wide">
-     
+
      <div class="form-group">
      <?php echo Form::label(__('ESPECES D\'ARBRE'), null, ['class' => 'col-sm-12 control-label', 'style'=>'font-weight:bold;font-size:20px;']); ?>
      <div class="col-xs-12 col-sm-12">
@@ -84,11 +85,11 @@
       </div>
       </div>
 <hr class="panel-wide">
- 
+
                         <div class="form-group row">
                             <button type="submit" class="btn btn--primary w-100 h-45"> @lang('Envoyer')</button>
                         </div>
-                     
+
                         {!! Form::close() !!}
                 </div>
             </div>
@@ -116,69 +117,69 @@ var urlsend='{{ route("manager.agro.distribution.getAgroParcellesArbres") }}';
             $('#listeespece').html(html.tableau);
             $("#total").val(html.total);
             $("#qtelivre").val(0);
-            
+
             }
 
         });
 });
- 
+
 $('#flocal').change('keyup change blur',function() {
   var total= $('#total').val();
 });
 function getQuantite(id,k,s)
-  { 
+  {
     update_amounts(id,k,s);
   }
 
 function update_amounts(id,k,s)
 {
     let total= $('#total').val();
-    var sum= 0;  
-    let qtelivre = parseInt($('#qtelivre').val()); 
-    let max = $('.quantity-'+id).attr('max'); 
-   
+    var sum= 0;
+    let qtelivre = parseInt($('#qtelivre').val());
+    let max = $('.quantity-'+id).attr('max');
+
     let quantite = 0;
     $('.quantity-'+id).each(function() {
     var qty = $(this).val();
      quantite = parseInt(quantite) + parseInt(qty);
     //  if(quantite>max){
-    //     $('#qte-'+k).val(0); 
-    //     } 
-    });
-     
-    $('.totaux').each(function() {
-        var nb = $(this).val(); 
-            sum = parseInt(sum) + parseInt(nb);  
+    //     $('#qte-'+k).val(0);
+    //     }
     });
 
-    if(sum > total){ 
-        $('#qte-'+k).val(0); 
+    $('.totaux').each(function() {
+        var nb = $(this).val();
+            sum = parseInt(sum) + parseInt(nb);
+    });
+
+    if(sum > total){
+        $('#qte-'+k).val(0);
         $('.totaux').each(function() {
-        var nb = $(this).val(); 
-            sum = parseInt(sum) + parseInt(nb);  
+        var nb = $(this).val();
+            sum = parseInt(sum) + parseInt(nb);
              });
         }else{
             $('#qtelivre').val(sum);
         }
         for(let i = 1; i < 6; i++) {
-            var soustotal = 0; 
-             
+            var soustotal = 0;
+
             $('.st-'+i).each(function() {
-        var nb = $(this).val(); 
-        soustotal = parseInt(soustotal) + parseInt(nb);  
-                
+        var nb = $(this).val();
+        soustotal = parseInt(soustotal) + parseInt(nb);
+
             });
-            $('#soustotal-'+i).val(soustotal); 
-            
-        }  
-    
+            $('#soustotal-'+i).val(soustotal);
+
+        }
+
     $("#qtelivre").attr({
-              "max" : total,       
-              "min" : 1      
+              "max" : total,
+              "min" : 1
             });
 }
 $("#localite").chained("#section");
     $("#producteur").chained("#localite");
-    
+
  </script>
 @endpush

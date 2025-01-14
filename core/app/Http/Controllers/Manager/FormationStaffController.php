@@ -76,7 +76,7 @@ class FormationStaffController extends Controller
         } else {
             $formation = new FormationStaff();
         }
-        $campagne = Campagne::active()->first();
+        $campagne = Campagne::active()->where('cooperative_id',auth()->user()->cooperative_id)->first();
         $formation->cooperative_id  = $manager->cooperative_id;
         $formation->campagne_id  = $campagne->id;
         $formation->lieu_formation  = $request->lieu_formation;
@@ -225,7 +225,7 @@ class FormationStaffController extends Controller
     }
 
     public function delete($id)
-    { 
+    {
         FormationStaff::where('id', decrypt($id))->delete();
         $notify[] = ['success', 'Le contenu supprimé avec succès'];
         return back()->withNotify($notify);
