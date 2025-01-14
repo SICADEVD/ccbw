@@ -565,6 +565,7 @@ class LivraisonController extends Controller
         $id                  = decrypt($id);
         $pageTitle           = "Facture";
         $livraisonInfo         = LivraisonInfo::with('payment')->findOrFail($id);
+
         return view('manager.livraison.invoice', compact('pageTitle', 'livraisonInfo'));
     }
 

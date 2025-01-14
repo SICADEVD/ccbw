@@ -8,11 +8,11 @@
                     <h3>
                         @lang('N° connaissement brousse'):
                         <small>{{ $livraisonInfo->code }}</small>
-                        <br> 
+                        <br>
                         @lang('Date de livraison: ') {{ showDateTime($livraisonInfo->estimate_date, 'd/m/Y') }}
                         <br>
                             <b>@lang('Cooperative de reception'):</b> {{ __($livraisonInfo->receiverCooperative->name) }}
-                         
+
                     </h3>
                 </div>
                     <div style="width:30%;">
@@ -22,16 +22,16 @@
                             <?php $numeroProducteurs .= $prodc->parcelle->producteur->nom.' '.$prodc->parcelle->producteur->prenoms.'('.$prodc->parcelle->producteur->codeProdapp.')'."\n"; ?>
                             @endforeach
                             <?php
-                            
+
                             $textQR = 'N° CONNAISSEMENT BROUSSE: '.$livraisonInfo->code."\n".'Date de livraison:'.showDateTime($livraisonInfo->estimate_date, 'd/m/Y')."\n".'COOPERATIVE:'.$livraisonInfo->receiverCooperative->name."\n".'PRODUCTEURS :'."\n".$numeroProducteurs;
                             ?>
                         {!! QrCode::size(150)->generate($textQR) !!}
-                             
+
                     </div>
                     </div>
                 </div>
 
-                <div class="invoice"> 
+                <div class="invoice">
                     <hr>
                     <div class=" invoice-info d-flex justify-content-between">
                         <div style="width:30%;">
@@ -42,7 +42,7 @@
                                 @lang('Contact'): {{ $livraisonInfo->sender_phone }}<br>
                                 @lang('Email'): {{ $livraisonInfo->sender_email }}
                             </address>
-                        </div> 
+                        </div>
                         <div style="width:30%;">
                         @lang('A')
                             <address>
@@ -65,13 +65,13 @@
                                         <th>@lang('Producteur')</th>
                                         <th>@lang('Parcelle')</th>
                                         <th>@lang('Certificat')</th>
-                                        <th>@lang('Type produit')</th> 
+                                        <th>@lang('Type produit')</th>
                                         <th>@lang('Qte')</th>
-                                        <th>@lang('Sous-total')</th> 
+                                        <th>@lang('Sous-total')</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                     
+
                                     @foreach ($livraisonInfo->products as $livraisonProductInfo)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
@@ -79,8 +79,8 @@
                                             <td>{{ $livraisonProductInfo->parcelle->producteur->nom }} {{ $livraisonProductInfo->parcelle->producteur->prenoms }}</td>
                                             <td>{{ $livraisonProductInfo->parcelle->codeParc }}</td>
                                             <td>{{ __(@$livraisonProductInfo->certificat) }}</td>
-                                            <td>{{ __(@$livraisonProductInfo->type_produit) }}</td> 
-                                            <td>{{ $livraisonProductInfo->qty }} </td>
+                                            <td>{{ __(@$livraisonProductInfo->type_produit) }}</td>
+                                            <td>{{ $livraisonProductInfo->qty_sortant }} </td>
                                             <td>
                                                 {{ getAmount($livraisonProductInfo->fee) }} {{ $general->cur_sym }}</td>
                                         </tr>
@@ -95,7 +95,7 @@
                             <div class="table-responsive">
                                 <table class="table">
                                     <tbody>
-                                        
+
                                         <tr>
                                             <th>@lang('Total'):</th>
                                             <td>{{ showAmount(@$livraisonInfo->payment->final_amount) }} {{ $general->cur_sym }}
