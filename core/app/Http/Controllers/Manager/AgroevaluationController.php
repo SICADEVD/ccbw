@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Manager;
 
-use Excel;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Campagne;
 use App\Constants\Status;
 use App\Models\Localite;
@@ -184,9 +184,9 @@ class AgroevaluationController extends Controller
 
     public function exportExcel()
     {
-        return (new ExportAgroevaluations())->download('agroevaluations.xlsx');
+        $filename = 'agroevaluation-' . gmdate('dmYhms') . '.xlsx';
+        return Excel::download(new ExportAgroevaluations, $filename);
     }
-
     public function delete($id)
     {
         Agroevaluation::where('id', decrypt($id))->delete();

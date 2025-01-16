@@ -8,19 +8,20 @@ use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromView;
 
-class ExportAgroevaluations implements FromView
-{
-    /**
-    * @return \Illuminate\Support\Collection
-    */
-    use Exportable;
+use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 
-    public function view(): View
+class ExportAgroevaluations implements WithMultipleSheets
+{
+
+    public function sheets(): array
     {
-        // TODO: Implement view() method.
-        return view('manager.agroevaluation.AgroevaluationAllExcel',[
-            'agroevaluations' => Agroevaluation::joinRelationship('producteur.localite.section')->where('cooperative_id',auth()->user()->cooperative_id)->get()
-        ]);
+        $feuilles = array();
+       $feuilles[] = new AgroEvaluationEspeceArbreExport();
+        $sheets = [new AgroEvaluationExport,];
+        $sheets = array_merge($sheets, $feuilles);
+
+
+        return $sheets;
     }
-        
 }
+
