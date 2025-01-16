@@ -8,8 +8,8 @@
                         <table class="table table--light style--two">
                             <thead>
                                 <tr>
-                                    <th>@lang('Programme')</th> 
-                                    <th>@lang('Prime(FCFA/Kg)')</th> 
+                                    <th>@lang('Programme')</th>
+                                    <th>@lang('Prime(FCFA/Kg)')</th>
                                     <th>@lang('Status')</th>
                                     <th>@lang('Last Update')</th>
                                     <th>@lang('Action')</th>
@@ -18,13 +18,13 @@
                             <tbody>
                                 @forelse($primes as $prime)
                                     <tr>
-                                    <td>
+                                        <td>
                                             <span class="fw-bold">{{ __($prime->programme->libelle) }}</span>
                                         </td>
 
-                                        <td> 
+                                        <td>
                                             <span>{{ $prime->prime }} {{ __($general->cur_text) }}</span>
-                                        </td> 
+                                        </td>
                                         <td>
                                             @php
                                                 echo $prime->statusBadge;
@@ -37,10 +37,9 @@
                                         </td>
 
                                         <td>
-                                     
                                             <button type="button" class="btn btn-sm btn-outline--primary  updateCampagne"
-                                                data-id="{{ $prime->id }}"   
-                                                data-prime="{{ $prime->prime }}" ><i
+                                                data-id="{{ $prime->id }}"
+                                                data-prime="{{ $prime->prime }}"><i
                                                  class="las la-pen"></i>@lang('Edit')</button>
 
                                             @if ($prime->status == Status::DISABLE)
@@ -82,22 +81,22 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">@lang('Ajouter une Période de Campagne')</h5>
+                    <h5 class="modal-title">@lang('Ajouter une prime')</h5>
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <i class="las la-times"></i> </button>
                 </div>
                 <form action="{{ route('admin.config.programme.primeStore') }}" method="POST">
                     @csrf
-                    <div class="modal-body"> 
-        <input type="hidden" name="programme" value="{{ request()->idcamp}}">
+                    <div class="modal-body">
+
                         <div class="col-xs-12 col-sm-12 col-md-12">
-         
-    <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="form-group">
-            {{ Form::label(__("Prime"), null, ['class' => 'control-label']) }}
+           {{ Form::label(__("Prime"), null, ['class' => 'control-label']) }}
             {!! Form::number('prime', null, array('class' => 'form-control','required')) !!}
         </div>
-    </div> 
+    </div>
+
+
 
                     </div>
                     <div class="modal-footer">
@@ -113,7 +112,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">@lang('Mise à jour de la Période de Campagne')</h5>
+                    <h5 class="modal-title">@lang('Mise à jour de la prime')</h5>
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <i class="las la-times"></i>
                     </button>
@@ -121,17 +120,16 @@
                 <form action="{{ route('admin.config.programme.primeStore') }}" method="POST">
                     @csrf
                     <input type="hidden" name="id">
+					<input type="hidden" name="programme" value="{{ request()->idcamp}}">
                     <div class="modal-body">
-                    <input type="hidden" name="programme" value="{{ request()->idcamp}}">
 
                         <div class="col-xs-12 col-sm-12 col-md-12">
-     
-    <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="form-group">
             {{ Form::label(__("Prime"), null, ['class' => 'control-label']) }}
             {!! Form::number('prime', null, array('class' => 'form-control','required')) !!}
         </div>
-    </div>  
+    </div>
+
 
                     </div>
                     <div class="modal-footer">
@@ -160,9 +158,9 @@
 
             $('.updateCampagne').on('click', function() {
                 var modal = $('#updateCampagneModel');
-                 
-                modal.find('input[name=id]').val($(this).data('id')); 
-                modal.find('input[name=prime]').val($(this).data('prime')); 
+
+                modal.find('input[name=id]').val($(this).data('id'));
+                modal.find('input[name=prime]').val($(this).data('prime'));
                 modal.modal('show');
             });
         })(jQuery);
