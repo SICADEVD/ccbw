@@ -12,6 +12,8 @@
                         'enctype' => 'multipart/form-data',
                     ]) !!}
                     <input type="hidden" name="id" value="{{ $approvisionnement->id }}">
+                    <input type="hidden" name="section" value="{{ $approvisionnement->section_id }}">
+                    <input type="hidden" name="agroapprovisionnement" value="{{ $approvisionnement->agroapprovisionnement_id }}">
                     <div class="form-group row">
                         <label class="col-sm-4 control-label">@lang('Coopérative')</label>
                         <div class="col-xs-12 col-sm-8">
@@ -44,7 +46,7 @@
                                 <tbody>
 
                                     <?php
-                                    
+
                                     use Illuminate\Support\Arr;
                                     $somme = 0;
                                     //$filtered = Arr::pluck($approvisionnement->especesSection,'agroespecesarbre_id');
@@ -57,16 +59,18 @@
                                         ?>
                                         @php $somme = $somme + $data->total; @endphp
                                         <tr>
+
                                             <td>
-                                                {!! Form::hidden('especesarbre[]', $data->id, array()) !!} 
-                                                {{ $data->agroespecesarbre->nom }}
+                                                {!! Form::hidden('especesarbre[]', $data->agroespecesarbre->id, array()) !!}
+                                                {{ $data->agroespecesarbre->nom ?? '' }}
                                             </td>
                                             <td>
-                                                strate {{ $data->agroespecesarbre->strate }}
+                                                strate {{ $data->agroespecesarbre->strate ?? '' }}
                                             </td>
+
                                             <td>
-                                             
-                                               
+
+
 
                                                  {!! Form::number('quantite[]', $data->total, [
                                                     'placeholder' => __('Qté'),

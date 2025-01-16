@@ -263,16 +263,63 @@ class AgroapprovisionnementController extends Controller
         $pageTitle = "Modification de l'approvisionnement";
 
         $approvisionnement   = AgroapprovisionnementSection::find(decrypt($request->id));
-        
+
+
         return view('manager.approvisionnement.edit-section', compact('pageTitle','approvisionnement'));
     }
     public function update_section(Request $request){
-        $validationRule = [
-            'especesarbre'            => 'required|array',
-            'quantite'            => 'required|array',
-        ];
+        // $validationRule = [
+        //     'especesarbre'            => 'required|array',
+        //     'quantite'            => 'required|array',
+        // ];
 
-        dd(request()->all());
+        if ($request->id) {
+            $approvisionnement = AgroapprovisionnementSection::findOrFail($request->id);
+            $message = "La approvisionnement a été mise à jour avec succès";
+        } else {
+            $notify[] = ['error', 'Impossible de faire la mise à jour du contenu actuellement.'];
+                return back()->withNotify($notify);
+        }
+        $manager   = auth()->user();
+        $campagne = Campagne::active()->where('cooperative_id', auth()->user()->cooperative_id)->first();
+
+
+        $approvisionnement->campagne_id = $campagne->id;
+        $approvisionnement->agroapprovisionnement_id = $request->agroapprovisionnement;
+        $approvisionnement->total = array_sum($request->quantite);
+        $approvisionnement->section_id = $request->section;
+        $approvisionnement->save();
+
+        $datas = [];
+        $k = 0;
+        $i = 0;
+
+
+            $id = $request->id;
+            if ($request->especesarbre != null) {
+                AgroapprovisionnementSectionEspece::where('agroapprovisionnement_section_id', $id)->delete();
+                $quantite = $request->quantite;
+                foreach ($request->especesarbre as $key => $data) {
+
+                    $total = $quantite[$key];
+                    if ($total != null) {
+                        $datas[] = [
+                            'agroapprovisionnement_section_id' => $id,
+                            'agroespecesarbre_id' => $data,
+                            'total' => $total,
+                            'created_at' => now()
+                        ];
+                        $i++;
+                    } else {
+                        $k++;
+                    }
+                }
+                AgroapprovisionnementSectionEspece::insert($datas);
+            }
+
+        $notify[] = ['success', isset($message) ? $message : "$i nouveau(x) types d'arbres à ombrage ont été mise à jour."];
+
+        return back()->withNotify($notify);
     }
 
     public function status($id)
