@@ -152,8 +152,13 @@ class AgrodistributionController extends Controller
         $total = Agroevaluation::where('producteur_id', $distribution->producteur_id)->sum('quantite');
         $evaluation = Agroevaluation::where('producteur_id', $distribution->producteur_id)->first();
         $somme = AgrodistributionEspece::where([['agrodistribution_id', $id]])->sum('total');
+        // $approvionnement = Agroapprovisionnement::where('cooperative_id',auth()->user()->cooperative_id)->select('id')->get();
 
-        $especes = AgroapprovisionnementEspece::joinRelationship('agroapprovisionnement', 'agroespecesarbre')->where([['cooperative_id', $manager->cooperative_id], ['campagne_id', $campagne->id]])->get();
+        $approvisionnementId = Agroapprovisionnement::where('cooperative_id', auth()->user()->cooperative_id)
+    ->value('id');
+
+
+        $especes = AgroapprovisionnementEspece::joinRelationship('agroapprovisionnement', 'agroespecesarbre')->where([['agroapprovisionnement_id',$approvisionnementId]])->get();
 
         if ($distribution != null && count($especes)) {
 
@@ -218,6 +223,8 @@ class AgrodistributionController extends Controller
 
         $manager   = auth()->user();
         $campagne = Campagne::active()->where('cooperative_id', auth()->user()->cooperative_id)->first();
+        $approvisionnementId = Agroapprovisionnement::where('cooperative_id', auth()->user()->cooperative_id)
+        ->value('id');
 
         $k = 0;
         $i = 0;
@@ -255,7 +262,7 @@ class AgrodistributionController extends Controller
                                 'created_at' => NOW()
                             ]);
 
-                            $agroapprov = AgroapprovisionnementEspece::joinRelationship('agroapprovisionnement')->where([['cooperative_id', $manager->cooperative_id], ['campagne_id', $campagne->id], ['agroespecesarbre_id', $agroespecesarbresid]])->first();
+                            $agroapprov = AgroapprovisionnementEspece::joinRelationship('agroapprovisionnement')->where([['agroapprovisionnement_id',$approvisionnementId]])->first();
                             if ($agroapprov != null) {
                                 $agroapprov->total_restant = $agroapprov->total_restant + $total;
                                 $agroapprov->save();
