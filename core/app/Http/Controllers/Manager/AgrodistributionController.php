@@ -152,7 +152,6 @@ class AgrodistributionController extends Controller
         $total = Agroevaluation::where('producteur_id', $distribution->producteur_id)->sum('quantite');
         $evaluation = Agroevaluation::where('producteur_id', $distribution->producteur_id)->first();
         $somme = AgrodistributionEspece::where([['agrodistribution_id', $id]])->sum('total');
-        $results = ''; // Initialisation de la variable $results
 
         $especes = AgroapprovisionnementEspece::joinRelationship('agroapprovisionnement', 'agroespecesarbre')->where([['cooperative_id', $manager->cooperative_id], ['campagne_id', $campagne->id]])->get();
 
