@@ -155,6 +155,8 @@ class AgrodistributionController extends Controller
 
         $especes = AgroapprovisionnementEspece::joinRelationship('agroapprovisionnement', 'agroespecesarbre')->where([['cooperative_id', $manager->cooperative_id], ['campagne_id', $campagne->id]])->get();
 
+        dd($distribution );
+
         if ($distribution != null && count($especes)) {
 
             $agroevaluationEspece  = AgroevaluationEspece::joinRelationship('agroevaluation')->where('producteur_id', $distribution->producteur_id)->get();
