@@ -229,12 +229,13 @@ class AgrodistributionController extends Controller
         $k = 0;
         $i = 0;
         $distributionID = $request->id;
+        //'agroapprovisionnement_id',$approvisionnementId
 
         if ($request->quantite) {
             $updateappro = AgrodistributionEspece::where('agrodistribution_id', $distributionID)->get();
             if ($updateappro->count()) {
                 foreach ($updateappro as $appro) {
-                    $agroapprov = AgroapprovisionnementEspece::joinRelationship('agroapprovisionnement')->where([['cooperative_id', $manager->cooperative_id], ['campagne_id', $campagne->id], ['agroespecesarbre_id', $appro->agroespecesarbre_id]])->first();
+                    $agroapprov = AgroapprovisionnementEspece::joinRelationship('agroapprovisionnement')->where([['agroapprovisionnement_id',$approvisionnementId], ['agroespecesarbre_id', $appro->agroespecesarbre_id]])->first();
                     if ($agroapprov != null) {
                         $agroapprov->total_restant = $agroapprov->total_restant - $appro->total;
                         $agroapprov->save();
