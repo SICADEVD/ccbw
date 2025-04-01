@@ -33,23 +33,23 @@
         <td>Nom</td>
         <td>Prenoms</td>
         <td>Code Prod</td>
-        <td>Type Culture</td> 
-        <td>Superficie Culture</td> 
+        <td>Type Culture</td>
+        <td>Superficie Culture</td>
     </tr>
-    </thead> 
+    </thead>
     <?php
     foreach($typecultures as $c)
     {
     ?>
         <tbody>
         <tr>
-            <td><?php echo $c->id; ?></td> 
-            <td><?php echo $c->producteurInfo->localite->section->cooperative->name; ?></td>
+            <td><?php echo $c->id; ?></td>
+            <td><?php echo $c->producteurInfo->localite->section->cooperative->name ?? ""; ?></td>
             <td><?php echo $c->producteurInfo->localite->section->libelle; ?></td>
             <td><?php echo $c->producteurInfo->localite->nom; ?></td>
-            <td><?php echo $c->producteurInfo->nom; ?></td> 
-            <td><?php echo $c->producteurInfo->prenoms; ?></td> 
-            <td><?php echo $c->producteurInfo->codeProd; ?></td>  
+            <td><?php echo $c->producteurInfo->nom; ?></td>
+            <td><?php echo $c->producteurInfo->prenoms; ?></td>
+            <td><?php echo $c->producteurInfo->codeProd; ?></td>
             <td><?php echo $c->typeculture; ?></td>
             <td><?php echo $c->superficieculture; ?></td>
         </tr>
