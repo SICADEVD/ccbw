@@ -47,11 +47,11 @@
             <td><?php echo $c->producteurInfo->localite->section->cooperative->name ?? ""; ?></td>
             <td><?php echo $c->producteurInfo->localite->section->libelle  ?? ""; ?></td>
             <td><?php echo $c->producteurInfo->localite->nom  ?? ""; ?></td>
-            <td><?php echo $c->producteurInfo->nom; ?></td>
-            <td><?php echo $c->producteurInfo->prenoms; ?></td>
-            <td><?php echo $c->producteurInfo->codeProd; ?></td>
-            <td><?php echo $c->typeculture; ?></td>
-            <td><?php echo $c->superficieculture; ?></td>
+            <td><?php echo $c->producteurInfo->nom  ?? ""; ?></td>
+            <td><?php echo $c->producteurInfo->prenoms  ?? ""; ?></td>
+            <td><?php echo $c->producteurInfo->codeProd  ?? ""; ?></td>
+            <td><?php echo $c->typeculture  ?? ""; ?></td>
+            <td><?php echo $c->superficieculture  ?? ""; ?></td>
         </tr>
         </tbody>
         <?php
