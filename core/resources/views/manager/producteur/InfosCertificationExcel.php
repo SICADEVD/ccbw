@@ -46,8 +46,8 @@
             <td><?php echo $c->producteur->localite->section->cooperative->name  ?? ""; ?></td>
             <td><?php echo $c->producteur->localite->section->libelle  ?? ""; ?></td>
             <td><?php echo $c->producteur->localite->nom  ?? ""; ?></td>
-            <td><?php echo stripslashes($c->producteur->nom)  ?? "" ; ?></td>
-            <td><?php echo stripslashes($c->producteur->prenoms)  ?? "" ; ?></td>
+            <td><?php echo $c->producteur->nom  ?? "" ; ?></td>
+            <td><?php echo $c->producteur->prenoms  ?? "" ; ?></td>
             <td><?php echo $c->producteur->codeProd  ?? "" ; ?></td>
             <td><?php echo $c->certification  ?? "" ; ?></td>
         </tr>
