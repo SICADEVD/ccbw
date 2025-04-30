@@ -18,6 +18,7 @@
                             <p>Fichier d'exemple à utiliser :<a href="{{ asset('assets/Nomenclature_kml.kml') }}"
                                 target="_blank">@lang('Nomenclature_kml.kml')</a></p>
                                 <p></p>
+                                <br><br>
                             <input type="file" name="fichier_kml" class="form-control dropify">
                         </div>
                     </div>
