@@ -11,11 +11,13 @@
                         'id' => 'flocal',
                         'enctype' => 'multipart/form-data',
                     ]) !!}
- 
                     <div class="form-group row">
 
                         <?php echo Form::label(__('Charger un Fichier KML'), null, ['class' => 'col-sm-4 control-label']); ?>
                         <div class="col-xs-12 col-sm-8">
+                            <p>Fichier d'exemple à utiliser :<a href="{{ asset('assets/Nomenclature_kml.kml') }}"
+                                target="_blank">@lang('Nomenclature_kml.kml')</a></p>
+                                <p></p>
                             <input type="file" name="fichier_kml" class="form-control dropify">
                         </div>
                     </div>
