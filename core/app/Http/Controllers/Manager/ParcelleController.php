@@ -411,8 +411,10 @@ class ParcelleController extends Controller
             $supHa = 0;
             $cooperative = (string)$placemark->ExtendedData->SchemaData->SimpleData[1];
             $codeCCC = (string)$placemark->ExtendedData->SchemaData->SimpleData[2];
-            $codeProducteur = Str::before((string)$placemark->ExtendedData->SchemaData->SimpleData[3], " ");
-            $codeParcelle = Str::before((string)$placemark->ExtendedData->SchemaData->SimpleData[4], " ");
+            // $codeProducteur = Str::before((string)$placemark->ExtendedData->SchemaData->SimpleData[3], " ");
+            // $codeParcelle = Str::before((string)$placemark->ExtendedData->SchemaData->SimpleData[4], " ");
+            $codeProducteur = (string)$placemark->ExtendedData->SchemaData->SimpleData[3];
+            $codeParcelle = (string)$placemark->ExtendedData->SchemaData->SimpleData[4];
             $section = (string)$placemark->ExtendedData->SchemaData->SimpleData[5];
             $localite = (string)$placemark->ExtendedData->SchemaData->SimpleData[6];
             $sousPrefecture = (string)$placemark->ExtendedData->SchemaData->SimpleData[7];
