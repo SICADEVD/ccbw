@@ -60,7 +60,8 @@ class AgroevaluationController extends Controller
                 $dataProd[] = $data->producteur_id;
             }
         }
-        $producteurs = Producteur::joinRelationship('localite.section')->where([['cooperative_id', $manager->cooperative_id],['producteurs.status',1]])->whereNotIn('producteurs.id', $dataProd)->get();
+        // $producteurs = Producteur::joinRelationship('localite.section')->where([['cooperative_id', $manager->cooperative_id],['producteurs.status',1]])->whereNotIn('producteurs.id', $dataProd)->get();
+        $producteurs = Producteur::joinRelationship('localite.section')->where([['cooperative_id', $manager->cooperative_id],['producteurs.status',1]])->get();
 
         return view('manager.agroevaluation.create', compact('pageTitle', 'producteurs', 'localites', 'campagnes', 'especesarbres'));
     }

@@ -17,9 +17,9 @@
                                     <option value="">@lang('Toutes')</option>
                                     @foreach($localites as $local)
                                     <option value="{{ $local->id }}">{{ $local->nom }}</option>
-                                    @endforeach 
+                                    @endforeach
                                 </select>
-                            </div> 
+                            </div>
                             {{-- <div class="flex-grow-1">
                                 <label>@lang('Statut')</label>
                                 <select name="status" class="form-control">
@@ -44,36 +44,40 @@
                     <div class="table-responsive--sm table-responsive">
                         <table class="table table--light style--two">
                             <thead>
-                                <tr> 
-                                <th>@lang('Section')</th> 
-                                    <th>@lang('Localite')</th> 
-                                    <th>@lang('Producteur')</th>  
-                                    <th>@lang('Quantite')</th>  
-                                    <th>@lang("Date")</th> 
+                                <tr>
+                                    <th>@lang('Campagne')</th>
+                                <th>@lang('Section')</th>
+                                    <th>@lang('Localite')</th>
+                                    <th>@lang('Producteur')</th>
+                                    <th>@lang('Quantite')</th>
+                                    <th>@lang("Date")</th>
                                     <th>@lang('Action')</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse($agroevaluations as $agroevaluation)
                                     <tr>
+                                        <td>
+                                            <span class="fw-bold">{{ $agroevaluation->campagne->nom }}</span>
+                                        </td>
                                     <td>
                                             <span class="fw-bold">{{ $agroevaluation->producteur->localite->section->libelle }}</span>
                                         </td>
                                         <td>
                                             <span class="fw-bold">{{ $agroevaluation->producteur->localite->nom }}</span>
                                         </td>
-                                        <td> 
+                                        <td>
                                             <span class="small">
                                             {{ $agroevaluation->producteur->nom }} {{ $agroevaluation->producteur->prenoms }}
                                             </span>
-                                        </td> 
+                                        </td>
                                         <td>
                                             <span>{{ $agroevaluation->quantite }}</span>
                                         </td>
                                         <td>
                                             <span class="d-block">{{ showDateTime($agroevaluation->created_at) }}</span>
                                             <span>{{ diffForHumans($agroevaluation->created_at) }}</span>
-                                        </td> 
+                                        </td>
                                         <td>
                                         <button type="button" class="btn btn-sm btn-outline--primary"
                                                 data-bs-toggle="dropdown" aria-expanded="false"><i
@@ -89,8 +93,8 @@
                                                     class="las la-trash"></i>@lang('Delete')</a>
 
                                             </div>
-                                        
-                                            
+
+
                                         </td>
                                     </tr>
                                 @empty
@@ -111,7 +115,7 @@
             </div>
         </div>
     </div>
-     
+
     <x-confirmation-modal />
 @endsection
 
@@ -119,7 +123,7 @@
     <x-search-form placeholder="Search here..." />
     <a href="{{ route('manager.agro.evaluation.create') }}" class="btn  btn-outline--primary h-45 addNewCooperative">
         <i class="las la-plus"></i>@lang("Ajouter nouveau")
-    </a> 
+    </a>
     <a href="{{ route('manager.agro.evaluation.exportExcel.evaluationsAll') }}" class="btn  btn-outline--warning h-45"><i class="las la-cloud-download-alt"></i> @lang('Exporter en Excel')</a>
 @endpush
 @push('style')
@@ -145,7 +149,7 @@
             $('.addType').on('click', function() {
                 $('#typeModel').modal('show');
             });
-            
+
             $('.dates').datepicker({
                 maxDate:new Date(),
                 range:true,

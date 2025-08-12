@@ -54,6 +54,7 @@ class AgrodistributionController extends Controller
         $producteurs = Agroevaluation::joinRelationship('producteur.localite.section')->where([['cooperative_id', $manager->cooperative_id], ['producteurs.status', 1], ['campagne_id', $campagne->id]])->with('producteur')->get();
 
         $produc = Agrodistribution::select('producteur_id')->get();
+
         if ($produc) {
             foreach ($produc as $data) {
                 $producteurDistri[] = $data->producteur_id;
