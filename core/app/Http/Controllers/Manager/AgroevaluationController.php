@@ -90,7 +90,8 @@ class AgroevaluationController extends Controller
         } else {
             $agroevaluation = new Agroevaluation();
         }
-        $campagne = Campagne::active()->where('cooperative_id',auth()->user()->cooperative_id)->first();
+       // $campagne = Campagne::active()->where('cooperative_id',auth()->user()->cooperative_id)->first();
+        $campagne = Campagne::active()->first();
         $agroevaluation->campagne_id  = $campagne->id;
         $agroevaluation->producteur_id  = $request->producteur;
         $agroevaluation->quantite  = array_sum($request->quantite);

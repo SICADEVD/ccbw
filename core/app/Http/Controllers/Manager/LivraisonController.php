@@ -91,7 +91,7 @@ class LivraisonController extends Controller
     {
         $pageTitle = 'Enregistrement de livraison';
         $staff = auth()->user();
-        $campagne = Campagne::active()->where('cooperative_id',auth()->user()->cooperative_id)->first();
+        $campagne = Campagne::active()->first();
 
         $periode = CampagnePeriode::where([['campagne_id', $campagne->id], ['periode_debut', '<=', gmdate('Y-m-d')], ['periode_fin', '>=', gmdate('Y-m-d')]])->latest()->first();
 
@@ -126,7 +126,7 @@ class LivraisonController extends Controller
         $vehicules = Vehicule::with('marque')->get();
         $producteurs  = Producteur::joinRelationship('localite.section')->where([['sections.cooperative_id', $staff->cooperative_id], ['producteurs.status', 1]])->select('producteurs.*')->orderBy('producteurs.nom')->get();
 
-        $campagne = Campagne::active()->where('cooperative_id',auth()->user()->cooperative_id)->first();
+        $campagne = Campagne::active()->first();
         $campagne = CampagnePeriode::where([['campagne_id', $campagne->id], ['periode_debut', '<=', gmdate('Y-m-d')], ['periode_fin', '>=', gmdate('Y-m-d')]])->latest()->first();
         $code = $this->generecodeConnais();
         $parcelles  = Parcelle::with('producteur')->get();
@@ -154,7 +154,7 @@ class LivraisonController extends Controller
         ]);
 
         $manager = auth()->user();
-        $campagne = Campagne::active()->where('cooperative_id',auth()->user()->cooperative_id)->first();
+        $campagne = Campagne::active()->first();
         $periode = CampagnePeriode::where([['campagne_id', $campagne->id], ['periode_debut', '<=', gmdate('Y-m-d')], ['periode_fin', '>=', gmdate('Y-m-d')]])->latest()->first();
 
         $sender                      = auth()->user();
@@ -299,7 +299,7 @@ class LivraisonController extends Controller
 
         $manager = auth()->user();
         $livraison = new StockMagasinCentral();
-        $campagne = Campagne::active()->where('cooperative_id',auth()->user()->cooperative_id)->first();
+        $campagne = Campagne::active()->first();
         $periode = CampagnePeriode::where([['campagne_id', $campagne->id], ['periode_debut', '<=', gmdate('Y-m-d')], ['periode_fin', '>=', gmdate('Y-m-d')]])->latest()->first();
 
         $livraison->cooperative_id   = $manager->cooperative_id;
@@ -408,7 +408,7 @@ class LivraisonController extends Controller
         $input = request()->all();
 
         $id = $input['sender_magasin'];
-        $campagne = Campagne::active()->where('cooperative_id',auth()->user()->cooperative_id)->first();
+        $campagne = Campagne::active()->first();
         $periode = CampagnePeriode::where([['campagne_id', $campagne->id]])->latest()->first();
 
 
@@ -469,7 +469,7 @@ class LivraisonController extends Controller
         $results = '';
         $total = 0;
         $totalsacs = 0;
-        $campagne = Campagne::active()->where('cooperative_id',auth()->user()->cooperative_id)->first();
+        $campagne = Campagne::active()->first();
         if (request()->type && request()->producteur_id) {
             $stock = LivraisonProduct::joinRelationship('livraisonInfo')
                 ->joinRelationship('parcelle')

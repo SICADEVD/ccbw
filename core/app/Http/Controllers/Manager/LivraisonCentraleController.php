@@ -151,7 +151,7 @@ class LivraisonCentraleController extends Controller
         $remorques = Remorque::all();
         $producteurs  = Producteur::joinRelationship('localite.section')->where([['sections.cooperative_id', $staff->cooperative_id],['producteurs.status',1]])->select('producteurs.*')->orderBy('producteurs.nom')->get();
 
-        $campagne = Campagne::active()->where('cooperative_id',auth()->user()->cooperative_id)->first();
+        $campagne = Campagne::active()->first();
         $nomCamp = $campagne->nom;
         $campagne = CampagnePeriode::where([['campagne_id', $campagne->id], ['periode_debut', '<=', gmdate('Y-m-d')], ['periode_fin', '>=', gmdate('Y-m-d')]])->latest()->first();
 
@@ -219,7 +219,7 @@ class LivraisonCentraleController extends Controller
 
         $manager = auth()->user();
         $livraison = new Connaissement();
-        $campagne = Campagne::active()->where('cooperative_id',auth()->user()->cooperative_id)->first();
+        $campagne = Campagne::active()->first();
         $periode = CampagnePeriode::where([['campagne_id', $campagne->id], ['periode_debut', '<=', gmdate('Y-m-d')], ['periode_fin', '>=', gmdate('Y-m-d')]])->latest()->first();
 
         $livraison->cooperative_id   = $manager->cooperative_id;
@@ -294,7 +294,7 @@ class LivraisonCentraleController extends Controller
         $input = request()->all();
 
 
-        $campagne = Campagne::active()->where('cooperative_id',auth()->user()->cooperative_id)->first();
+        $campagne = Campagne::active()->first();
         $periode = CampagnePeriode::where([['campagne_id', $campagne->id]])->latest()->first();
         $contents = '';
         if (request()->type || request()->magasin_central || request()->certificat) {
@@ -327,7 +327,7 @@ class LivraisonCentraleController extends Controller
         $results = '';
         $total = 0;
         $totalsacs = 0;
-        $campagne = Campagne::active()->where('cooperative_id',auth()->user()->cooperative_id)->first();
+        $campagne = Campagne::active()->first();
         if(request()->connaissement_id) {
             $stock = LivraisonMagasinCentralProducteur::joinRelationship('stockMagasinCentral')->where([['livraison_magasin_central_producteurs.campagne_id', $campagne->id], ['stocks_mag_entrant', '>', 0], ['quantite', '>', 0]])
             ->when(request()->magasin_central, function ($query, $magasin_central) {

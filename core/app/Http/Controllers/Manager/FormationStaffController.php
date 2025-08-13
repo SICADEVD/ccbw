@@ -76,7 +76,7 @@ class FormationStaffController extends Controller
         } else {
             $formation = new FormationStaff();
         }
-        $campagne = Campagne::active()->where('cooperative_id',auth()->user()->cooperative_id)->first();
+        $campagne = Campagne::active()->first();
         $formation->cooperative_id  = $manager->cooperative_id;
         $formation->campagne_id  = $campagne->id;
         $formation->lieu_formation  = $request->lieu_formation;

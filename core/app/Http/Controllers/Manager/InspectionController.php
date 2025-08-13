@@ -95,7 +95,7 @@ class InspectionController extends Controller
         } else {
             $inspection = new Inspection();
         }
-        $campagne = Campagne::active()->where('cooperative_id',auth()->user()->cooperative_id)->first();
+        $campagne = Campagne::active()->first();
 
         $inspection->parcelle_id  = $request->parcelle;
         $inspection->producteur_id  = $request->producteur;

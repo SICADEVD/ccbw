@@ -104,7 +104,7 @@ class ApplicationController extends Controller
         } else {
             $application = new Application();
         }
-        $campagne = Campagne::active()->where('cooperative_id',auth()->user()->cooperative_id)->first();
+        $campagne = Campagne::active()->first();
         $application->campagne_id  = $campagne->id;
         $application->applicateur_id  = $request->applicateur;
         $application->parcelle_id  = $request->parcelle_id;

@@ -80,7 +80,7 @@ class AgropostplantingController extends Controller
             $distribution = new Agropostplanting();
         }
         $manager   = auth()->user();
-        $campagne = Campagne::active()->where('cooperative_id',auth()->user()->cooperative_id)->first();
+        $campagne = Campagne::active()->first();
         $distribution->cooperative_id = $manager->cooperative_id;
         $distribution->producteur_id = $request->producteur;
         $distribution->quantite =  $request->total;
@@ -151,7 +151,7 @@ class AgropostplantingController extends Controller
     {
         $pageTitle = "Mise à jour de la distribution";
         $manager   = auth()->user();
-        $campagne = Campagne::active()->where('cooperative_id',auth()->user()->cooperative_id)->first();
+        $campagne = Campagne::active()->first();
         $distribution   = Agropostplanting::findOrFail($id);
         $total = Agroevaluation::where('producteur_id', $distribution->producteur_id)->sum('quantite');
         $evaluation = Agroevaluation::where('producteur_id', $distribution->producteur_id)->first();
@@ -221,7 +221,7 @@ class AgropostplantingController extends Controller
         $request->validate($validationRule);
 
         $manager   = auth()->user();
-        $campagne = Campagne::active()->where('cooperative_id',auth()->user()->cooperative_id)->first();
+        $campagne = Campagne::active()->first();
 
         $k = 0;
         $i = 0;
