@@ -470,12 +470,13 @@ class SettingController extends Controller
         $manager = auth()->user();
         $pageTitle = "Manage des Entreprises";
         $manager = auth()->user();
+
         $activeSettingMenu = 'entreprise_settings';
         // $transporteurs = Entreprise::orderBy('id', 'desc')->paginate(getPaginate());
         // $countries = Countrie::get();
         // $niveaux = NiveauxEtude::get();
         //$entreprises = Entreprise::orderBy('id','desc')->paginate(getPaginate());
-        $entreprises = Entreprise::orderBy('id','desc')->paginate(getPaginate());
+        $entreprises = Entreprise::where([['cooperative_id', $manager->cooperative_id]])->orderBy('id','desc')->paginate(getPaginate());
 
         return view('manager.config.entreprise', compact('pageTitle', 'activeSettingMenu', 'entreprises'));
     }
