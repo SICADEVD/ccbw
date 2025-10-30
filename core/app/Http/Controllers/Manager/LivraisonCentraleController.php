@@ -151,12 +151,17 @@ class LivraisonCentraleController extends Controller
         $remorques = Remorque::all();
         $producteurs  = Producteur::joinRelationship('localite.section')->where([['sections.cooperative_id', $staff->cooperative_id],['producteurs.status',1]])->select('producteurs.*')->orderBy('producteurs.nom')->get();
 
-        $campagne = Campagne::active()->first();
+        $campagne = Campagne::active()->first() ?? null;
+        if($campagne != null)
+        {
         $nomCamp = $campagne->nom;
         $campagne = CampagnePeriode::where([['campagne_id', $campagne->id], ['periode_debut', '<=', gmdate('Y-m-d')], ['periode_fin', '>=', gmdate('Y-m-d')]])->latest()->first();
 
         $codeCoop = cooperative()->codeCoop;
         $code = $codeCoop . '-' . Str::before(Str::after($nomCamp, 'Campagne '), '-') . '-2-';
+        }else{
+            $code = null;
+        }
         $lastnumber = Connaissement::latest()->first();
         if ($lastnumber != null) {
             $lastnumber = Str::afterLast($lastnumber->numeroCU, '-');
