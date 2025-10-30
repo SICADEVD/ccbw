@@ -158,13 +158,9 @@ class LivraisonCentraleController extends Controller
         $campagne = CampagnePeriode::where([['campagne_id', $campagne->id], ['periode_debut', '<=', gmdate('Y-m-d')], ['periode_fin', '>=', gmdate('Y-m-d')]])->latest()->first();
 
         $codeCoop = cooperative()->codeCoop ?? null;
-        if($codeCoop !=null)
-        {
-        $code = $codeCoop . '-' . Str::before(Str::after($nomCamp, 'Campagne '), '-') . '-2-';
-        }
-        else{
-            $code =null;
-        }
+
+        $code = $codeCoop ?? null . '-' . Str::before(Str::after($nomCamp, 'Campagne '), '-') . '-2-';
+
         }else{
             $code = null;
         }
