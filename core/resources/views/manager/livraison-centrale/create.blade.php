@@ -14,8 +14,7 @@
                                 <label for="">@lang('N° Connaissement USINE')</label>
                                 <div class="input-group">
                                     <span class="input-group-text">{{ $code }}</span>
-                                    <input name="lastcode" value="" type="number" min="{{ $lastnumber }}"
-                                        autocomplete="off" class="form-control" placeholder="{{ $lastnumber }}" required>
+                                    <input name="lastcode" value="" type="number" autocomplete="off" class="form-control" required>
 
                                 </div>
                             </div>
@@ -214,7 +213,7 @@
                                                     <table class="table table-striped table-bordered">
                                                         <thead>
                                                             <tr>
-                                                                <th colspan="2">@lang('Producteur')</th> 
+                                                                <th colspan="2">@lang('Producteur')</th>
                                                                 <th>@lang('Type')</th>
                                                                 <th>@lang('Quantité(Kg)')</th>
                                                             </tr>
@@ -332,7 +331,7 @@
             var typecert = $('#type').val();
             if(typecert=='Ordinaire'){
             $("#certificat").attr('hidden', 'hidden');
-            $(".certif").attr('hidden', 'hidden'); 
+            $(".certif").attr('hidden', 'hidden');
         }else{
             $("#certificat").removeAttr('hidden');
             $(".certif").removeAttr('hidden');
@@ -359,7 +358,7 @@
                 success: function(html) {
                     $('#listeprod').html(html.results);
                     $('#poidsnet').val(html.total);
-                     
+
                 }
             });
         });
@@ -395,8 +394,8 @@
             $('#poidsnet').val(sum);
             /*$('#nombresacs').val(sumsacs);
             $("#nombresacs").attr({
-                "max": sumsacs, 
-                "min": 0 
+                "max": sumsacs,
+                "min": 0
             }); */
         }
 
