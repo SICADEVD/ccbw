@@ -10,7 +10,7 @@
                         @csrf
                         <div class="row">
                             <input type="hidden" name="code" value="{{ $code }}">
-                            <div class="col-lg-6 form-group">
+                            <div class="col-lg-3 form-group">
                                 <label for="">@lang('Date de livraison')</label>
                                 <div class="input-group">
                                     <input name="estimate_date" value="{{ old('estimate_date') }}" type="text"
@@ -19,8 +19,33 @@
                                     <span class="input-group-text"><i class="las la-calendar"></i></span>
                                 </div>
                             </div>
-
-                            <div class="col-lg-6 form-group">
+  <div class="col-lg-3">
+                            <label for="">@lang("Campagne")</label>
+                                <select class="form-control" id="campagne" name="campagne">
+                                    <option value="">@lang('Selectionner une campagne')</option>
+                                    @foreach ($allcampagnes as $campagne)
+                                        <option value="{{ $campagne->id }}"  @selected(old('campagne')==$campagne->id)>
+                                            {{ __($campagne->nom) }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+<div class="col-lg-3">
+                            <label for="">@lang("Période")</label>
+                                <select class="form-control" id="periode" name="periode">
+                                    <option value="">@lang('Selectionner une periode')</option>
+                                    @foreach ($allperiodes as $periode)
+                                        <option value="{{ $periode->id }}"
+                                            data-debut="{{$periode->periode_debut}}"
+                                            data-fin="{{$periode->periode_fin}}"
+                                            data-prix="{{$periode->prix_champ }}"
+                                             @selected(old('periode')==$periode->id)
+                                            data-chained="{{ $periode->campagne_id}}"
+                                            >
+                                            {{ __($periode->nom) }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-lg-3 form-group">
                                 <label for="">@lang('Types de produit')</label>
                                 <div class="input-group">
                                     <select class="form-control select-picker" name="type[]" id="type" multiple
@@ -280,7 +305,11 @@
     </div>
 @endsection
 
-
+@push('script')
+    <script type="text/javascript">
+        $("#periode").chained("#campagne");
+    </script>
+@endpush
 
 @push('script')
     <script src="{{ asset('assets/fcadmin/js/vendor/datepicker.min.js') }}"></script>
@@ -387,15 +416,15 @@
             $('#poidsnet').val(sum);
             /*$('#nombresacs').val(sumsacs);
             $("#nombresacs").attr({
-                "max": sumsacs, 
-                "min": 0 
+                "max": sumsacs,
+                "min": 0
             }); */
         }
 
         $('.dates').datepicker({
             language: 'fr',
-            dateFormat: 'yyyy-mm-dd',
-            minDate: new Date()
+            dateFormat: 'yyyy-mm-dd'
+            //maxDate: new Date()
         });
     </script>
 @endpush
