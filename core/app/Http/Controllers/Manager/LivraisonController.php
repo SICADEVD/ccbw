@@ -186,7 +186,7 @@ $campagne = Campagne::where('id', $request->campagne)->first();
         $prod = new StockMagasinSection();
         $prod->livraison_info_id = $livraison->id;
         $prod->magasin_section_id = $request->magasin_section;
-        $prod->campagne_id = $campagne->id;
+        $prod->campagne_id = $request->campagne;
         $prod->campagne_periode_id = $periode->id;
         $prod->stocks_entrant = array_sum(Arr::pluck($request->items, 'quantity'));
         $prod->save();
@@ -201,14 +201,14 @@ $campagne = Campagne::where('id', $request->campagne)->first();
             if ($item['type'] == 'Ordinaire') {
                 $item['certificat'] = null;
             }
-            $productExists = LivraisonProduct::where([['campagne_id', $campagne->id], ['parcelle_id', $item['parcelle']], ['certificat', $item['certificat']], ['type_produit', $item['type']]])->first();
+            $productExists = LivraisonProduct::where([['campagne_id', $request->campagne], ['parcelle_id', $item['parcelle']], ['certificat', $item['certificat']], ['type_produit', $item['type']]])->first();
             if ($productExists == null) {
                 $productExists = new LivraisonProduct();
             }
             $productExists->livraison_info_id = $livraison->id;
             $productExists->parcelle_id = $item['parcelle'];
-            $productExists->campagne_id = $campagne->id;
-            $productExists->campagne_periode_id = $periode->id;
+            $productExists->campagne_id = $request->campagne;
+            $productExists->campagne_periode_id = $request->periode;
             $productExists->qty = $item['quantity'] + $productExists->qty;
             $productExists->type_produit = $item['type'];
             $productExists->certificat = isset($item['certificat']) ? $item['certificat'] : null;
@@ -218,8 +218,8 @@ $campagne = Campagne::where('id', $request->campagne)->first();
             $data[] = [
                 'livraison_info_id' => $livraison->id,
                 'parcelle_id' => $item['parcelle'],
-                'campagne_id' => $campagne->id,
-                'campagne_periode_id' => $periode->id,
+                'campagne_id' => $request->campagne,
+                'campagne_periode_id' => $request->periode,
                 'qty'             => $item['quantity'],
                 'type_produit'     => $item['type'],
                 'certificat' => isset($item['certificat']) ? $item['certificat'] : null,
@@ -228,7 +228,7 @@ $campagne = Campagne::where('id', $request->campagne)->first();
                 'created_at'      => now(),
             ];
 
-            $estimation = Estimation::where([['campagne_id', $campagne->id], ['parcelle_id', $item['parcelle']]])->first();
+            $estimation = Estimation::where([['campagne_id', $request->campagne], ['parcelle_id', $item['parcelle']]])->first();
 
             if ($estimation != null) {
                 $estima_prod = $estimation->EsP;
@@ -250,8 +250,8 @@ $campagne = Campagne::where('id', $request->campagne)->first();
                 $data3[] = [
                     'livraison_info_id' => $livraison->id,
                     'parcelle_id' => $item['parcelle'],
-                    'campagne_id' => $campagne->id,
-                    'campagne_periode_id' => $periode->id,
+                    'campagne_id' => $request->campagne,
+                    'campagne_periode_id' => $request->periode,
                     'quantite'             => $item['quantity'],
                     'montant'             => $price_prime,
                     'prime_campagne'      => $prime->prime,
@@ -267,7 +267,7 @@ $campagne = Campagne::where('id', $request->campagne)->first();
 
         $livraisonPayment                  = new LivraisonPayment();
         $livraisonPayment->livraison_info_id = $livraison->id;
-        $livraisonPayment->campagne_id  = $campagne->id;
+        $livraisonPayment->campagne_id  = $request->campagne;
         $livraisonPayment->amount          = $subTotal;
         $livraisonPayment->final_amount    = $totalAmount;
         $livraisonPayment->save();
@@ -312,8 +312,8 @@ $campagne = Campagne::where('id', $request->campagne)->first();
         $periode = CampagnePeriode::where([['campagne_id', $campagne->id], ['periode_debut', '<=', gmdate('Y-m-d')], ['periode_fin', '>=', gmdate('Y-m-d')]])->latest()->first();
 
         $livraison->cooperative_id   = $manager->cooperative_id;
-        $livraison->campagne_id    = $campagne->id;
-        $livraison->campagne_periode_id = $periode->id;
+        $livraison->campagne_id    = $request->campagne;
+        $livraison->campagne_periode_id = $request->periode;
         $livraison->magasin_centraux_id = $request->magasin_central;
         $livraison->magasin_section_id = $request->sender_magasin;
         $livraison->numero_connaissement = $request->code;
@@ -343,15 +343,15 @@ $campagne = Campagne::where('id', $request->campagne)->first();
                 $data[] = [
                     'stock_magasin_central_id' => $livraison->id,
                     'producteur_id' => $item,
-                    'campagne_id' => $campagne->id,
-                    'campagne_periode_id' => $periode->id,
+                    'campagne_id' => $request->campagne,
+                    'campagne_periode_id' => $request->periode,
                     'quantite' => $quantite[$i],
                     'type_produit' => $typeproduit[$i],
                     'parcelle_id' => $parcelle[$i],
                     'certificat' => $certificat[$i],
                     'created_at'      => now(),
                 ];
-                $product = LivraisonProduct::where([['campagne_id', $campagne->id], ['parcelle_id', $parcelle[$i]], ['certificat', $certificat[$i]], ['type_produit', $typeproduit[$i]]])->first();
+                $product = LivraisonProduct::where([['campagne_id', $request->campagne], ['parcelle_id', $parcelle[$i]], ['certificat', $certificat[$i]], ['type_produit', $typeproduit[$i]]])->first();
                 if ($product != null) {
                     $productinfo = $product->livraison_info_id;
                     $product->qty = $product->qty - $quantite[$i];
