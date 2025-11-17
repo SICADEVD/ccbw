@@ -5,7 +5,7 @@
         <div class="card b-radius--10 mb-3">
                 <div class="card-body">
                     <form action="">
-                        <div class="d-flex flex-wrap gap-4"> 
+                        <div class="d-flex flex-wrap gap-4">
                             <div class="flex-grow-1">
                                 <label>@lang('Recherche par Mot(s) cle(s)')</label>
                                 <input type="text" name="search"  value="{{ request()->search }}" class="form-control">
@@ -38,16 +38,16 @@
                         <table class="table table--light style--two">
                             <thead>
                                 <tr>
-                                <th>@lang("Livraison")</th> 
-                                <th>@lang("Campagne")</th> 
+                                <th>@lang("Livraison")</th>
+                                <th>@lang("Campagne")</th>
                                 <th>@lang("Periode")</th>
                                     <th>@lang('Magasin Section')</th>
                                     <th>@lang('Magasin Central')</th>
                                     <th>@lang('Transporteur')</th>
                                     <th>@lang('Vehicule')</th>
-                                    <th>@lang('Type Produit')</th> 
-                                    <th>@lang('Stock entrant')</th> 
-                                    <th>@lang('Stock sortant')</th> 
+                                    <th>@lang('Type Produit')</th>
+                                    <th>@lang('Stock entrant')</th>
+                                    <th>@lang('Stock sortant')</th>
                                     <th>@lang('Statut')</th>
                                     <th>@lang('Action')</th>
                                 </tr>
@@ -56,15 +56,15 @@
                                 @forelse($stocks as $produit)
                                     <tr>
                                     <td>
-                                            {{ $produit->numero_connaissement }} 
+                                            {{ $produit->numero_connaissement }}
                                         </td>
                                     <td>
-                                            {{ $produit->campagne->nom }} 
-                                        </td> 
+                                            {{ $produit->campagne->nom }}
+                                        </td>
                                         <td>
-                                            {{ $produit->campagnePeriode->nom }} 
-                                        </td> 
-                                        <td> 
+                                            {{ $produit->campagnePeriode->nom }}
+                                        </td>
+                                        <td>
                                             @if(@$produit->magasin_section_id)
                                                 <span class="text--primary">{{ __($produit->magasinSection->nom) }}</span>
                                             @else
@@ -79,25 +79,25 @@
                                             @endif
                                         </td>
                                         <td>
-                                            {{ @$produit->transporteur->nom }} {{ @$produit->transporteur->prenoms }} 
+                                            {{ @$produit->transporteur->nom }} {{ @$produit->transporteur->prenoms }}
                                         </td>
                                         <td>
                                             {{ @$produit->vehicule->marque->nom }}({{ @$produit->vehicule->vehicule_immat }} )
                                         </td>
                                         <td>
-                                             
+
                                             @foreach(json_decode($produit->type_produit) as $data)
                                                 <span class="btn btn-sm btn-outline--success">{{ $data }}</span>
                                             @endforeach
                                         </td>
-                                         
+
                                         <td>
-                                            {{ showAmount($produit->stocks_mag_entrant) }} 
+                                            {{ showAmount($produit->stocks_mag_entrant) }}
                                         </td>
                                         <td>
-                                            {{ showAmount($produit->stocks_mag_sortant) }} 
-                                        </td> 
-                                        <td> 
+                                            {{ showAmount($produit->stocks_mag_sortant) }}
+                                        </td>
+                                        <td>
                                             @if($produit->status == Status::COURIER_DISPATCH)
                                                 <span class="badge badge--dark">@lang('En attente de reception')</span>
                                             @else($produit->status == Status::COURIER_DELIVERYQUEUE)
@@ -162,7 +162,7 @@
     </div>
 @endsection
 
-@push('breadcrumb-plugins') 
+@push('breadcrumb-plugins')
 
 <a href="{{ route('manager.livraison.magcentral.create') }}" class="btn  btn-outline--primary h-45 addNewCooperative">
         <i class="las la-plus"></i>@lang("Enregistrer un Connaissement vers Usine")
@@ -172,20 +172,20 @@
 
 @push('style-lib')
     <link rel="stylesheet" href="{{ asset('assets/fcadmin/css/vendor/datepicker.min.css') }}">
-@endpush 
+@endpush
 @push('script')
 <script src="{{ asset('assets/fcadmin/js/vendor/datepicker.min.js') }}"></script>
     <script src="{{ asset('assets/fcadmin/js/vendor/datepicker.fr.js') }}"></script>
 <script src="{{ asset('assets/fcadmin/js/vendor/datepicker.en.js') }}"></script>
     <script>
-         (function($) { 
+         (function($) {
             $('.delivery').on('click', function() {
                 var modal = $('#deliveryBy');
                 modal.find('input[name=code]').val($(this).data('code'))
                 modal.modal('show');
             });
         })(jQuery)
-        
+
         (function($) {
             "use strict";
 

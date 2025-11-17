@@ -304,6 +304,10 @@ $campagne = Campagne::where('id', $request->campagne)->first();
 
         $manager = auth()->user();
         $livraison = new StockMagasinCentral();
+        $staff = auth()->user();
+        $campagne = Campagne::active()->first();
+        $allcampagnes  = Campagne::where('cooperative_id', $staff->cooperative_id)->get();
+        $allperiodes  = CampagnePeriode::get();
         $campagne = Campagne::active()->first();
         $periode = CampagnePeriode::where([['campagne_id', $campagne->id], ['periode_debut', '<=', gmdate('Y-m-d')], ['periode_fin', '>=', gmdate('Y-m-d')]])->latest()->first();
 

@@ -86,7 +86,9 @@ class LivraisonCentraleController extends Controller
         $pageTitle    = "Stock des Magasins Centraux (" . showAmount($total) . ") Kg";
         $magasins  = MagasinCentral::where('cooperative_id', $staff->cooperative_id)->with('cooperative')->get();
         $sections = Section::get();
-        return view('manager.livraison-centrale.stock', compact('pageTitle', 'stocks', 'total', 'sections', 'magasins'));
+        $allcampagnes  = Campagne::where('cooperative_id', $staff->cooperative_id)->get();
+        $allperiodes  = CampagnePeriode::get();
+        return view('manager.livraison-centrale.stock', compact('pageTitle', 'stocks', 'total', 'sections', 'magasins','allcampagnes','allperiodes'));
     }
 
     public function connaissement()
@@ -147,8 +149,8 @@ class LivraisonCentraleController extends Controller
         $magSections = MagasinSection::joinRelationship('section')->where([['cooperative_id', $staff->cooperative_id]])->with('user')->orderBy('nom')->get();
 
         $transporteurs = Transporteur::where([['cooperative_id', $staff->cooperative_id]])->with('cooperative', 'entreprise')->get();
-        $vehicules = Vehicule::with('marque')->get();
-        $remorques = Remorque::all();
+        $vehicules = Vehicule::where('cooperative_id', $staff->cooperative_id)->with('marque')->get();
+        $remorques = Remorque::where('cooperative_id', $staff->cooperative_id)->get();
         $producteurs  = Producteur::joinRelationship('localite.section')->where([['sections.cooperative_id', $staff->cooperative_id],['producteurs.status',1]])->select('producteurs.*')->orderBy('producteurs.nom')->get();
 
         $campagne = Campagne::active()->first() ?? null;
@@ -173,11 +175,12 @@ class LivraisonCentraleController extends Controller
         }
         $parcelles  = Parcelle::with('producteur')->get();
         $pageTitle = 'Connaissement vers Usine';
-        $entreprises = Entreprise::all()->pluck('nom_entreprise', 'id');
+        $entreprises = Entreprise::where('cooperative_id', $staff->cooperative_id)->pluck('nom_entreprise', 'id');
         $formateurs = FormateurStaff::with('entreprise')->get();
+        $allcampagnes  = Campagne::where('cooperative_id', $staff->cooperative_id)->get();
+        $allperiodes  = CampagnePeriode::get();
 
-
-        return view('manager.livraison-centrale.create', compact('pageTitle', 'cooperatives', 'magSections', 'magCentraux', 'producteurs', 'transporteurs', 'parcelles', 'campagne', 'vehicules', 'code', 'entreprises', 'formateurs', 'lastnumber', 'remorques'));
+        return view('manager.livraison-centrale.create', compact('pageTitle', 'cooperatives', 'magSections', 'magCentraux', 'producteurs', 'transporteurs', 'parcelles', 'campagne', 'vehicules', 'code', 'entreprises', 'formateurs', 'lastnumber', 'remorques','allcampagnes','allperiodes'));
     }
     private function generecodeConnais()
     {
@@ -230,8 +233,8 @@ class LivraisonCentraleController extends Controller
         $periode = CampagnePeriode::where([['campagne_id', $campagne->id], ['periode_debut', '<=', gmdate('Y-m-d')], ['periode_fin', '>=', gmdate('Y-m-d')]])->latest()->first();
 
         $livraison->cooperative_id   = $manager->cooperative_id;
-        $livraison->campagne_id    = $campagne->id;
-        $livraison->campagne_periode_id = $periode->id;
+        $livraison->campagne_id    = $request->campagne;
+        $livraison->campagne_periode_id = $request->periode;
         $livraison->magasin_centraux_id = $request->magasin_central;
         $livraison->numeroCU = $request->code . $request->lastcode;
         $livraison->type_produit = $request->type;
@@ -259,8 +262,8 @@ class LivraisonCentraleController extends Controller
                 $data[] = [
                     'connaissement_id' => $livraison->id,
                     'producteur_id' => $item,
-                    'campagne_id' => $campagne->id,
-                    'campagne_periode_id' => $periode->id,
+                    'campagne_id' => $request->campagne,
+                    'campagne_periode_id' => $request->periode,
                     'quantite' => $quantite[$i],
                     'stock_magasin_central_id' => $stock_magasin_central[$i],
                     'type_produit' => $typeproduit,
@@ -268,7 +271,7 @@ class LivraisonCentraleController extends Controller
                     'parcelle_id' => $parcelle[$i],
                     'created_at'      => now(),
                 ];
-                $prod = LivraisonMagasinCentralProducteur::where([['campagne_id', $campagne->id], ['stock_magasin_central_id', $stock_magasin_central[$i]], ['producteur_id', $item], ['type_produit', $typeproduit]])->first();
+                $prod = LivraisonMagasinCentralProducteur::where([['campagne_id', $request->campagne], ['stock_magasin_central_id', $stock_magasin_central[$i]], ['producteur_id', $item], ['type_produit', $typeproduit]])->first();
                 if ($prod != null) {
 
                     $prod->quantite = $prod->quantite - $quantite[$i];
@@ -305,7 +308,7 @@ class LivraisonCentraleController extends Controller
         $periode = CampagnePeriode::where([['campagne_id', $campagne->id]])->latest()->first();
         $contents = '';
         if (request()->type || request()->magasin_central || request()->certificat) {
-            $stocks = LivraisonMagasinCentralProducteur::joinRelationship('stockMagasinCentral')->where([['livraison_magasin_central_producteurs.campagne_id', $campagne->id], ['stocks_mag_entrant', '>', 0], ['quantite', '>', 0]])
+            $stocks = LivraisonMagasinCentralProducteur::joinRelationship('stockMagasinCentral')->where([['livraison_magasin_central_producteurs.campagne_id', $input['campagne']], ['stocks_mag_entrant', '>', 0], ['quantite', '>', 0]])
             ->when(request()->magasin_central, function ($query, $magasin_central) {
                 $query->where('stock_magasin_centraux.magasin_centraux_id', $magasin_central);
             })

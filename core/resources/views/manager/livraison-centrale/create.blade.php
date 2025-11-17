@@ -41,8 +41,7 @@
                                     </select>
                                 </div>
                             </div>
-
-                            <div class="col-lg-3 form-group certif">
+                             <div class="col-lg-3 form-group certif">
                                 <label for="">@lang('Certificat')</label>
                                 <div class="input-group">
                                 <select class="form-control" name="certificat" id="certificat"
@@ -63,6 +62,34 @@
                             </select>
                                 </div>
                             </div>
+
+                              <div class="col-lg-6">
+                            <label for="">@lang("Campagne")</label>
+                                <select class="form-control" id="campagne" name="campagne" required>
+                                    <option value="">@lang('Selectionner une campagne')</option>
+                                    @foreach ($allcampagnes as $campagne)
+                                        <option value="{{ $campagne->id }}"  @selected(old('campagne')==$campagne->id)>
+                                            {{ __($campagne->nom) }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-lg-6">
+                            <label for="">@lang("Période")</label>
+                                <select class="form-control" id="periode" name="periode" required>
+                                    <option value="">@lang('Selectionner une periode')</option>
+                                    @foreach ($allperiodes as $periode)
+                                        <option value="{{ $periode->id }}"
+                                            data-debut="{{$periode->periode_debut}}"
+                                            data-fin="{{$periode->periode_fin}}"
+                                            data-prix="{{$periode->prix_champ }}"
+                                             @selected(old('periode')==$periode->id)
+                                            data-chained="{{ $periode->campagne_id}}"
+                                            >
+                                            {{ __($periode->nom) }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
 
 
                         </div>
@@ -265,7 +292,11 @@
     </div>
 @endsection
 
-
+@push('script')
+    <script type="text/javascript">
+        $("#periode").chained("#campagne");
+    </script>
+@endpush
 
 @push('script')
     <script src="{{ asset('assets/fcadmin/js/vendor/datepicker.min.js') }}"></script>
@@ -401,8 +432,8 @@
 
         $('.dates').datepicker({
             language: 'fr',
-            dateFormat: 'yyyy-mm-dd',
-            minDate: new Date()
+            dateFormat: 'yyyy-mm-dd'
+            //minDate: new Date()
         });
     </script>
 @endpush
