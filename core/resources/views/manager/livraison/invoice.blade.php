@@ -80,7 +80,7 @@
                                             <td>{{ $livraisonProductInfo->parcelle->codeParc }}</td>
                                             <td>{{ __(@$livraisonProductInfo->certificat) }}</td>
                                             <td>{{ __(@$livraisonProductInfo->type_produit) }}</td>
-                                            <td>{{ $livraisonProductInfo->qty_sortant }} </td>
+                                            <td>{{ $livraisonProductInfo->qty }} </td>
                                             <td>
                                                 {{ getAmount($livraisonProductInfo->fee) }} {{ $general->cur_sym }}</td>
                                         </tr>

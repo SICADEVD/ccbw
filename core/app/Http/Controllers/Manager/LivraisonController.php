@@ -92,7 +92,8 @@ class LivraisonController extends Controller
         $pageTitle = 'Enregistrement de livraison';
         $staff = auth()->user();
         $campagne = Campagne::active()->first();
-
+        $allcampagnes  = Campagne::where('cooperative_id', $staff->cooperative_id)->get();
+        $allperiodes  = CampagnePeriode::get();
         $periode = CampagnePeriode::where([['campagne_id', $campagne->id], ['periode_debut', '<=', gmdate('Y-m-d')], ['periode_fin', '>=', gmdate('Y-m-d')]])->latest()->first();
 
         $cooperatives = Cooperative::active()->where('id', $staff->cooperative_id)->orderBy('name')->get();
@@ -110,10 +111,10 @@ class LivraisonController extends Controller
         $certification = Producteur_certification::joinRelationship('producteur.localite.section')->where('cooperative_id', $staff->cooperative_id)->groupby('certification')->get();
         $parcelles  = Parcelle::joinRelationship('producteur.localite.section')->where('cooperative_id', $staff->cooperative_id)->with('producteur')->get();
 
-        return view('manager.livraison.create', compact('pageTitle', 'cooperatives', 'staffs', 'magasins', 'producteurs', 'parcelles', 'campagne', 'periode', 'certification'));
+        return view('manager.livraison.create', compact('pageTitle', 'cooperatives', 'staffs', 'magasins', 'producteurs', 'parcelles', 'campagne', 'periode', 'certification','allcampagnes','allperiodes'));
     }
 
-    public function stockSectionCreate()
+    public function stockSectionCreate(Request $request)
     {
 
         $staff = auth()->user();
@@ -126,8 +127,11 @@ class LivraisonController extends Controller
         $vehicules = Vehicule::with('marque')->get();
         $producteurs  = Producteur::joinRelationship('localite.section')->where([['sections.cooperative_id', $staff->cooperative_id], ['producteurs.status', 1]])->select('producteurs.*')->orderBy('producteurs.nom')->get();
 
-        $campagne = Campagne::active()->first();
-        $campagne = CampagnePeriode::where([['campagne_id', $campagne->id], ['periode_debut', '<=', gmdate('Y-m-d')], ['periode_fin', '>=', gmdate('Y-m-d')]])->latest()->first();
+        $allcampagnes  = Campagne::where('cooperative_id', $staff->cooperative_id)->get();
+        //$campagne = Campagne::active()->first();
+       // $campagne = CampagnePeriode::where([['campagne_id', $campagne->id], ['periode_debut', '<=', gmdate('Y-m-d')], ['periode_fin', '>=', gmdate('Y-m-d')]])->latest()->first();
+       $campagne = Campagne::where('id', $request->campagne)->first();
+        $periode = CampagnePeriode::where('id', $request->periode)->latest()->first();
         $code = $this->generecodeConnais();
         $parcelles  = Parcelle::with('producteur')->get();
         $pageTitle = 'Connaissement vers le Magasin Central N° ' . $code;
@@ -135,7 +139,7 @@ class LivraisonController extends Controller
         $formateurs = FormateurStaff::with('entreprise')->get();
         $remorques = Remorque::all();
 
-        return view('manager.livraison.section-create', compact('pageTitle', 'cooperatives', 'magSections', 'magCentraux', 'producteurs', 'transporteurs', 'parcelles', 'campagne', 'vehicules', 'code', 'entreprises', 'formateurs', 'remorques'));
+        return view('manager.livraison.section-create', compact('pageTitle', 'cooperatives', 'magSections', 'magCentraux', 'producteurs', 'transporteurs', 'parcelles', 'campagne', 'vehicules', 'code', 'entreprises', 'formateurs', 'remorques','allcampagnes'));
     }
 
     public function store(Request $request)
@@ -154,8 +158,10 @@ class LivraisonController extends Controller
         ]);
 
         $manager = auth()->user();
-        $campagne = Campagne::active()->first();
-        $periode = CampagnePeriode::where([['campagne_id', $campagne->id], ['periode_debut', '<=', gmdate('Y-m-d')], ['periode_fin', '>=', gmdate('Y-m-d')]])->latest()->first();
+        // $campagne = Campagne::active()->first();
+        // $periode = CampagnePeriode::where([['campagne_id', $campagne->id], ['periode_debut', '<=', gmdate('Y-m-d')], ['periode_fin', '>=', gmdate('Y-m-d')]])->latest()->first();
+$campagne = Campagne::where('id', $request->campagne)->first();
+        $periode = CampagnePeriode::where('id', $request->periode)->latest()->first();
 
         $sender                      = auth()->user();
         $livraison                     = new LivraisonInfo();

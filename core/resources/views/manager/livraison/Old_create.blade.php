@@ -31,11 +31,7 @@
                                 <select class="form-control" id="periode" name="periode">
                                     <option value="">@lang('Selectionner une periode')</option>
                                     @foreach ($allperiodes as $periode)
-                                        <option value="{{ $periode->id }}"
-                                            data-debut="{{$periode->periode_debut}}"
-                                            data-fin="{{$periode->periode_fin}}"
-                                            data-prix="{{$periode->prix_champ }}"
-                                             @selected(old('periode')==$periode->id)
+                                        <option value="{{ $periode->id }}"  @selected(old('periode')==$periode->id)
                                             data-chained="{{ $periode->campagne_id}}"
                                             >
                                             {{ __($periode->nom) }}</option>
@@ -396,7 +392,7 @@
             quantity=parseFloat(quantity);
 
             let parent   = $(this).closest('.single-item');
-            let price    = parseFloat($("#periode").find(':selected').data('prix') || 0);
+            let price    = parseFloat($(parent).find('.selected_type option:selected').data('price') || 0);
             let subTotal = price*quantity;
 
             $(parent).find('.single-item-amount').val(subTotal.toFixed(0));
@@ -409,7 +405,7 @@
             let subTotal = 0;
 
             $.each(items, function (i, item) {
-                let price = parseFloat($("#periode").find(':selected').data('prix') || 0);
+                let price = parseFloat($(item).find('.selected_type option:selected').data('price') || 0);
                 let quantity = parseFloat($(item).find('.quantity').val() || 0);
                 subTotal+=price*quantity;
             });
