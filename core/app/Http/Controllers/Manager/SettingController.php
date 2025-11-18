@@ -780,7 +780,7 @@ class SettingController extends Controller
         $manager = auth()->user();
         $activeSettingMenu = 'vehicule_settings';
         $marques = Marque::get();
-        $vehicules = Vehicule::orderBy('id', 'desc')->paginate(getPaginate());
+        $vehicules = Vehicule::where('cooperative_id', auth()->user()->cooperative_id)->orderBy('id', 'desc')->paginate(getPaginate());
 
         return view('manager.config.vehicule', compact('pageTitle', 'vehicules', 'activeSettingMenu', 'marques'));
     }
@@ -815,7 +815,7 @@ class SettingController extends Controller
         $pageTitle = "Manage des Remorques";
         $manager = auth()->user();
         $activeSettingMenu = 'remorque_settings';
-        $remorques = Remorque::orderBy('id', 'desc')->paginate(getPaginate());
+        $remorques = Remorque::where('cooperative_id', auth()->user()->cooperative_id)->orderBy('id', 'desc')->paginate(getPaginate());
 
         return view('manager.config.remorque', compact('pageTitle', 'remorques', 'activeSettingMenu'));
     }
